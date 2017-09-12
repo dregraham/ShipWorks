@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new WalmartOrderIdentifier((order as IWalmartOrderEntity)?.PurchaseOrderID);
 
         /// <summary>

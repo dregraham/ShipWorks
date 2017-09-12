@@ -11,13 +11,14 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -80,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity );
+            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity);
 
             ElementOutline outline = container.AddElement("Etsy");
             outline.AddElement("TransactionID", () => item.Value?.TransactionID.ToString() ?? string.Empty);
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get the identifier object that is used to uniquely identify the specified order for the store.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 

@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Filters;
@@ -123,9 +124,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create the identifier to uniquely identify the order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            YahooOrderEntity yahooOrder = order as YahooOrderEntity;
+            IYahooOrderEntity yahooOrder = order as IYahooOrderEntity;
 
             if (yahooOrder == null)
             {

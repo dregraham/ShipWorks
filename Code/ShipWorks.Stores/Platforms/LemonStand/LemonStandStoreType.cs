@@ -9,6 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -72,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 7, MaxDaysBack = 30 };
-        
+
         /// <summary>
         ///     Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
@@ -158,9 +159,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Creates the OrderIdentifier for locating orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID);
+            return new LemonStandOrderIdentifier(((ILemonStandOrderEntity) order).LemonStandOrderID);
         }
 
         /// <summary>

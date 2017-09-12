@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
@@ -50,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => new OrderNumberIdentifier(order.OrderNumber);
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) => new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
         /// Creates the store instance

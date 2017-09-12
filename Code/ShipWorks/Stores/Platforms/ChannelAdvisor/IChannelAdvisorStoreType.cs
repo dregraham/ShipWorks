@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        OrderIdentifier CreateOrderIdentifier(OrderEntity order);
+        OrderIdentifier CreateOrderIdentifier(IOrderEntity order);
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks

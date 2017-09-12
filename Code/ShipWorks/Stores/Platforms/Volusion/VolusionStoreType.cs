@@ -3,6 +3,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Volusion.WizardPages;
@@ -75,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             return new OrderNumberIdentifier(order.OrderNumber);
         }

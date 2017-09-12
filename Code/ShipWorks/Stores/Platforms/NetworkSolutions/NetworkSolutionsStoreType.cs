@@ -7,6 +7,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
@@ -69,9 +70,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Creates the order identifier for locating orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            NetworkSolutionsOrderEntity orderEntity = order as NetworkSolutionsOrderEntity;
+            INetworkSolutionsOrderEntity orderEntity = order as INetworkSolutionsOrderEntity;
             if (orderEntity == null)
             {
                 throw new InvalidCastException("A non NetworkSolutions order was passed to the NetworkSolutionsStoreType.");

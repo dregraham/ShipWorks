@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
@@ -114,9 +115,9 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Identifies orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            PayPalOrderEntity payPalOrder = order as PayPalOrderEntity;
+            IPayPalOrderEntity payPalOrder = order as IPayPalOrderEntity;
             if (payPalOrder == null)
             {
                 throw new InvalidOperationException("A non PayPal Order was passed to CreateOrderIdentifier");
@@ -128,7 +129,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Create the setup wizard pages
         /// </summary>
-        /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>()

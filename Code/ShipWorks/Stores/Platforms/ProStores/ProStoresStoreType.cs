@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Properties;
@@ -105,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create the OrderIdentifier instance used to uniquely identify this prostores order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>

@@ -4,6 +4,7 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento;
@@ -171,7 +172,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento.WizardPages
                 }
             }
 
-            public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+            public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
             {
                 throw new NotImplementedException();
             }

@@ -6,6 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Email.Accounts;
 using ShipWorks.FileTransfer;
@@ -16,8 +17,8 @@ using ShipWorks.Stores.Platforms.GenericFile.Formats.Excel;
 using ShipWorks.Stores.Platforms.GenericFile.Formats.Xml;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
 using ShipWorks.Stores.Platforms.GenericFile.WizardPages;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {
@@ -145,7 +146,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Create an identifier that uniquely identifies the order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }

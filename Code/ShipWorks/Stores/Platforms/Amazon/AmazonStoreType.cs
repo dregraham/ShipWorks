@@ -11,6 +11,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -296,9 +297,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the identifier for locating amazon orders in the SW database
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new AmazonOrderIdentifier(((AmazonOrderEntity) order).AmazonOrderID);
+            return new AmazonOrderIdentifier(((IAmazonOrderEntity) order).AmazonOrderID);
         }
 
         /// <summary>

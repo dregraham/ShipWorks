@@ -6,6 +6,7 @@ using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Creates an order identifier that will locate the order provided in the database.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             string[] splitCompleteOrderNumber = order.OrderNumberComplete.Split(new[] { order.OrderNumber.ToString() }, StringSplitOptions.None);
 

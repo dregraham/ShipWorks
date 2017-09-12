@@ -7,6 +7,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Infopia.WizardPages;
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Returns an identifier for finding infopia orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>

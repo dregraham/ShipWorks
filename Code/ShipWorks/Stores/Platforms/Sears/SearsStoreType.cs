@@ -4,6 +4,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -66,9 +67,9 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Create an identifier to uniquely identify a sears order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            SearsOrderEntity searsOrder = order as SearsOrderEntity;
+            ISearsOrderEntity searsOrder = order as ISearsOrderEntity;
             if (searsOrder == null)
             {
                 throw new InvalidOperationException("A non sears order was passed to the SearsStoreType.");

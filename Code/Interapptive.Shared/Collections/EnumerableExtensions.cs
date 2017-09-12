@@ -177,7 +177,7 @@ namespace Interapptive.Shared.Collections
         /// <returns></returns>
         public static string Combine(this IEnumerable<string> source, string separator)
         {
-            return source == null || !source.Any() ? string.Empty : source.Aggregate((x, y) => x + separator + y);
+            return source == null || !source.Any() ? string.Empty : string.Join(separator, source);
         }
 
         /// <summary>

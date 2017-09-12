@@ -5,6 +5,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
@@ -66,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public override Content.OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override Content.OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             if (order == null)
             {

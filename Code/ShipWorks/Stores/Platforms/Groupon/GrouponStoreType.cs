@@ -9,6 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -163,8 +164,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
-            new GrouponOrderIdentifier(((GrouponOrderEntity) order).GrouponOrderID);
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
+            new GrouponOrderIdentifier(((IGrouponOrderEntity) order).GrouponOrderID);
 
         /// <summary>
         /// Indicates what basic grid fields we support hyper linking for

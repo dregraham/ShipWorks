@@ -310,9 +310,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Creates the identifier to locate a particular order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            EbayOrderEntity ebayOrder = order as EbayOrderEntity;
+            IEbayOrderEntity ebayOrder = order as IEbayOrderEntity;
             if (ebayOrder == null)
             {
                 throw new InvalidOperationException("A non Ebay order was passed to the EbayStoreType.");
@@ -324,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (ebayOrderId == 0)
             {
-                EbayOrderItemEntity orderItem = ebayOrder.OrderItems.FirstOrDefault() as EbayOrderItemEntity;
+                IEbayOrderItemEntity orderItem = ebayOrder.OrderItems.FirstOrDefault() as IEbayOrderItemEntity;
                 if (orderItem != null)
                 {
                     itemId = orderItem.EbayItemID;

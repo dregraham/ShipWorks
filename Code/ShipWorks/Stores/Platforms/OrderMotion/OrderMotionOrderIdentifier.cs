@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     /// <summary>
     /// Order Identifier that identifies orders by Order Number and Order Number Postfix
     /// </summary>
-    class OrderMotionOrderIdentifier : OrderIdentifier
+    public class OrderMotionOrderIdentifier : OrderIdentifier
     {
         // order number
         long orderNumber;

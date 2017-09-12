@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -88,11 +89,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Get the identifier object that is used to uniquely identify the specified order for the store.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
-            return new ShopifyOrderIdentifier(((ShopifyOrderEntity) order).ShopifyOrderID);
+            return new ShopifyOrderIdentifier(((IShopifyOrderEntity) order).ShopifyOrderID);
         }
 
         /// <summary>

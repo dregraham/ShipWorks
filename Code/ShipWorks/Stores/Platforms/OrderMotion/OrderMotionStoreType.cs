@@ -4,6 +4,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -81,9 +82,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Create the order identifier to locate orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            OrderMotionOrderEntity omOrder = order as OrderMotionOrderEntity;
+            IOrderMotionOrderEntity omOrder = order as IOrderMotionOrderEntity;
 
             return new OrderMotionOrderIdentifier(omOrder.OrderNumber, omOrder.OrderMotionShipmentID);
         }

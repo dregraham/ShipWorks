@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
@@ -62,9 +63,9 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Creates order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            ClickCartProOrderEntity ccpOrder = order as ClickCartProOrderEntity;
+            IClickCartProOrderEntity ccpOrder = order as IClickCartProOrderEntity;
             if (ccpOrder == null)
             {
                 throw new InvalidOperationException("A non ClickCartPro order was provided to CreateOrderIdentifier");

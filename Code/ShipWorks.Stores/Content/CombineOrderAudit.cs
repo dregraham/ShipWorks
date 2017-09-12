@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
@@ -17,12 +18,14 @@ namespace ShipWorks.Stores.Content
     {
         private readonly IAuditUtility auditUtility;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrderAudit(IAuditUtility auditUtility, ISqlAdapterFactory sqlAdapterFactory)
+        public CombineOrderAudit(IAuditUtility auditUtility, ISqlAdapterFactory sqlAdapterFactory, IStoreTypeManager storeTypeManager)
         {
+            this.storeTypeManager = storeTypeManager;
             this.auditUtility = auditUtility;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
@@ -32,7 +35,10 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public async Task Audit(long survivingOrderID, IEnumerable<IOrderEntity> orders)
         {
-            string reason = $"Combined from orders : {string.Join(", ", orders.Select(o => o.OrderNumberComplete))}";
+            var identifiers = orders.Select(GetOrderIdentifier)
+                .Select(x => x.ToString())
+                .Combine(", ");
+            string reason = $"Combined from orders : {identifiers}";
             reason = reason.Truncate(100);
 
             AuditReason auditReason = new AuditReason(AuditReasonType.CombineOrder, reason);
@@ -40,5 +46,11 @@ namespace ShipWorks.Stores.Content
             await auditUtility.AuditAsync(survivingOrderID, AuditActionType.CombineOrder, auditReason, sqlAdapterFactory.Create())
                 .ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Get an order identifier from an order
+        /// </summary>
+        private object GetOrderIdentifier(IOrderEntity order) =>
+            storeTypeManager.GetType(order.StoreID).CreateOrderIdentifier(order);
     }
 }
