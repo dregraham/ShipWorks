@@ -145,6 +145,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.Amosoft, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceOrderIdentifier) },
             { StoreTypeCode.Brightpearl, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.BuyDotCom, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Cart66Lite, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Cart66Pro, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.ChannelSale, typeof(AlphaNumericOrderIdentifier) },
