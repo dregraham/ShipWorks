@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
                 .Returns(response);
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();

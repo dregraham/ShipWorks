@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             GetEligibleShippingServicesResponse response = ResponseWithService(new ShippingService());
 
             mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
                     .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 .Returns(filteredRate);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
                 .Returns(response);
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
                     .Returns(ResponseWithService(new ShippingService()));
 
                 AmazonRatingService testObject = mock.Create<AmazonRatingService>();
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 testObject.GetRates(shipment);
 
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<IAmazonMwsWebClientSettings>()));
+                    .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<AmazonShipmentEntity>()));
             }
         }
 

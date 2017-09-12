@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IAmazonRateGroupFactory amazonRateGroupFactory;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
@@ -26,14 +25,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         public AmazonRatingService(IAmazonShippingWebClient webClient,
             IOrderManager orderManager,
             IAmazonShipmentRequestDetailsFactory requestFactory,
-            IAmazonRateGroupFactory amazonRateGroupFactory,
-            IAmazonMwsWebClientSettingsFactory settingsFactory)
+            IAmazonRateGroupFactory amazonRateGroupFactory)
         {
             this.webClient = webClient;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.amazonRateGroupFactory = amazonRateGroupFactory;
-            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -83,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private RateGroup GetRates(AmazonShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
         {
             GetEligibleShippingServicesResponse response =
-                webClient.GetRates(requestDetails, settingsFactory.Create(amazonShipment));
+                webClient.GetRates(requestDetails, amazonShipment);
             return amazonRateGroupFactory.GetRateGroupFromResponse(response);
         }
     }

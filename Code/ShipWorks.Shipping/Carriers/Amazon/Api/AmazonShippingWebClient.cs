@@ -25,15 +25,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly Func<IHttpVariableRequestSubmitter> createVariableRequestSubmitter;
         private readonly IEncryptionProvider encryptionProvider;
         private readonly ILogEntryFactory createApiLogEntry;
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonShippingWebClient(IEncryptionProviderFactory encryptionFactory,
             Func<IHttpVariableRequestSubmitter> createVariableRequestSubmitter,
-            ILogEntryFactory createApiLogEntry)
+            ILogEntryFactory createApiLogEntry, IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             this.createApiLogEntry = createApiLogEntry;
+            this.settingsFactory = settingsFactory;
             this.createVariableRequestSubmitter = createVariableRequestSubmitter;
             encryptionProvider = encryptionFactory.CreateSecureTextEncryptionProvider("Interapptive");
         }
@@ -59,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets rates for the given ShipmentRequestDetails
         /// </summary>
-        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonShipmentEntity shipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
 
@@ -69,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             AddShipmentRequestDetails(request, requestDetails);
 
             // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(shipment));
 
             // Deserialize
             return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
@@ -78,20 +80,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
-        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings, string shippingServiceId)
+        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonShipmentEntity shipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
             IHttpVariableRequestSubmitter request = createVariableRequestSubmitter();
 
             // Add the service
-            request.Variables.Add("ShippingServiceId", shippingServiceId);
+            request.Variables.Add("ShippingServiceId", shipment.ShippingServiceID);
 
             // Add Shipment Information XML
             AddShipmentRequestDetails(request, requestDetails);
 
             // Get Response
-            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(shipment));
 
             // Deserialize
             CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
@@ -102,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Cancel Shipment
         /// </summary>
-        public CancelShipmentResponse CancelShipment(IAmazonMwsWebClientSettings mwsSettings, AmazonShipmentEntity amazonShipment)
+        public CancelShipmentResponse CancelShipment(AmazonShipmentEntity amazonShipment)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CancelShipment;
 
@@ -114,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             try
             {
                 // Get Response
-                IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+                IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(amazonShipment));
 
                 // Deserialize
                 return DeserializeResponse<CancelShipmentResponse>(response.ReadResult());
