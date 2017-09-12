@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     EbayOrderSearchFields.OriginalOrderID,
                     EbayOrderSearchFields.EbayOrderID == EbayOrderID);
             }
-            
+
             // For non-ebay combined orders we have to check the order item fields to see if it's been downloaded
             // already.
             var from = factory.EbayOrderSearch
@@ -127,5 +127,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             return string.Format("eBay:{0} ({1}:{2})", EbayItemID, EbayOrderID, TransactionID);
         }
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => EbayOrderID.ToString();
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System;
-using ShipWorks.Tests.Shared;
-using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Jet;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet
 {
-    public class JetOrderIdentifierTest 
+    public class JetOrderIdentifierTest
     {
         [Fact]
         public void ApplyToOrder_AppliesMerchantOrderId()
@@ -15,7 +13,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = new JetOrderIdentifier("merchID");
 
             var jetOrderEntity = new JetOrderEntity();
-            
+
             testObject.ApplyTo(jetOrderEntity);
 
             Assert.Equal("merchID", jetOrderEntity.MerchantOrderId);
@@ -47,6 +45,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             var testObject = new JetOrderIdentifier("merchID");
             Assert.Equal("JetMerchantOrderId:merchID", testObject.ToString());
+        }
+
+        [Fact]
+        public void AuditValue_ReturnsJetMerchantOrderID()
+        {
+            var testObject = new JetOrderIdentifier("ABC-123");
+            Assert.Equal("ABC-123", testObject.AuditValue);
         }
     }
 }

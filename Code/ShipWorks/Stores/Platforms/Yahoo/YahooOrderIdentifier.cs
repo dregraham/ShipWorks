@@ -61,5 +61,10 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// String representation
         /// </summary>
         public override string ToString() => $"YahooOrderID:{yahooOrderID}";
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => yahooOrderID;
     }
 }

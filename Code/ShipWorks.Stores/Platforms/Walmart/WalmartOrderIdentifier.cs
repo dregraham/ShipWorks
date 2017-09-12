@@ -65,5 +65,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// String representation
         /// </summary>
         public override string ToString() => $"WalmartPurchaseOrderID:{purchaseOrderId}";
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => purchaseOrderId;
     }
 }

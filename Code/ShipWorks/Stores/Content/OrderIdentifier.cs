@@ -28,6 +28,14 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public abstract QuerySpec CreateCombinedSearchQuery(QueryFactory factory);
 
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public abstract string AuditValue { get; }
+
+        /// <summary>
+        /// Create the combined search query
+        /// </summary>
         protected QuerySpec CreateCombinedSearchQueryInternal<T>(QueryFactory factory,
             EntityQuery<T> entityQuery, EntityField2 originalOrderIDField, IPredicate predicate)
             where T : IEntityCore

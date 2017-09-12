@@ -60,5 +60,10 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         {
             return string.Format("ClickCartProOrderID:{0}", clickCartProOrderId);
         }
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => clickCartProOrderId;
     }
 }

@@ -73,5 +73,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// String representation
         /// </summary>
         public override string ToString() => $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => lemonStandStoreOrderID;
     }
 }

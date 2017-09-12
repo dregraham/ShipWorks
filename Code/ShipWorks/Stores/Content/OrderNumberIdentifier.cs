@@ -49,5 +49,10 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
             factory.OrderSearch.Where(OrderSearchFields.OrderNumber == OrderNumber);
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => OrderNumber.ToString();
     }
 }

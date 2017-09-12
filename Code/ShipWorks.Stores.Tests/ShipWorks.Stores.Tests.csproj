@@ -182,6 +182,7 @@
     <Compile Include="Content\CombineOrdersViewModelTest.cs" />
     <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonStoreTypeTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
@@ -204,7 +205,10 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoaderTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClientTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayOrderIdentifierTest.cs" />
     <Compile Include="Platforms\GenericFile\GenericFileDownloaderFactoryTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\Jet\JetAuthenticatedRequestTest.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdaterTest.cs" />
@@ -231,6 +235,7 @@
     <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactoryTest.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
@@ -279,9 +284,13 @@
     <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
+    <Compile Include="Platforms\OrderMotion\OrderMotionOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Paypal\XmlDeserializeTest.cs" />
+    <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\ShopSite\Responses\ShopSiteResponseHelper.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthAccessTokenWebClientTest.cs" />

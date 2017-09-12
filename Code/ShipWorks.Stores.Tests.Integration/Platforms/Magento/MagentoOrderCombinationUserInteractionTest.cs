@@ -53,17 +53,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             var order1 = Create.Order<MagentoOrderEntity>(store, context.Customer)
                 .Set(x => x.MagentoOrderID, 1000)
                 .Set(x => x.OrderNumber, 10)
-                .Set(x => x.OrderNumberComplete, "100")
+                .Set(x => x.OrderNumberComplete, "100-1")
                 .Save();
             var order2 = Create.Order<MagentoOrderEntity>(store, context.Customer)
                 .Set(x => x.MagentoOrderID, 2000)
                 .Set(x => x.OrderNumber, 20)
-                .Set(x => x.OrderNumberComplete, "200")
+                .Set(x => x.OrderNumberComplete, "200-1")
                 .Save();
             var order3 = Create.Order<MagentoOrderEntity>(store, context.Customer)
                 .Set(x => x.MagentoOrderID, 3000)
                 .Set(x => x.OrderNumber, 30)
-                .Set(x => x.OrderNumberComplete, "300")
+                .Set(x => x.OrderNumberComplete, "300-3")
                 .Save();
 
             orders = new Dictionary<long, OrderEntity> { { 1, order1 }, { 2, order2 }, { 3, order3 } };

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -35,9 +36,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public async Task Audit(long survivingOrderID, IEnumerable<IOrderEntity> orders)
         {
-            var identifiers = orders.Select(GetOrderIdentifier)
-                .Select(x => x.ToString())
-                .Combine(", ");
+            var identifiers = orders.Select(GetOrderIdentifier).Combine(", ");
             string reason = $"Combined from orders : {identifiers}";
             reason = reason.Truncate(100);
 
@@ -50,7 +49,9 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Get an order identifier from an order
         /// </summary>
-        private object GetOrderIdentifier(IOrderEntity order) =>
-            storeTypeManager.GetType(order.StoreID).CreateOrderIdentifier(order);
+        private string GetOrderIdentifier(IOrderEntity order) =>
+            order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+                order.OrderNumberComplete :
+                storeTypeManager.GetType(order.StoreID).CreateOrderIdentifier(order).AuditValue;
     }
 }
