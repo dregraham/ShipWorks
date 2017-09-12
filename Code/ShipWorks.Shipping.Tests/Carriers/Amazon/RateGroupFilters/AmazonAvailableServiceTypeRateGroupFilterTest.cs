@@ -56,6 +56,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         {
             mock.Dispose();
         }
-
     }
 }
