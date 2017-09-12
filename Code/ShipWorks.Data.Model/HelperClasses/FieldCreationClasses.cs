@@ -979,6 +979,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>
+	public partial class AmazonServiceTypeFields
+	{
+		/// <summary>Creates a new AmazonServiceTypeEntity.AmazonServiceTypeID field instance</summary>
+		public static EntityField2 AmazonServiceTypeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.AmazonServiceTypeID);}
+		}
+		/// <summary>Creates a new AmazonServiceTypeEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new AmazonServiceTypeEntity.ApiValue field instance</summary>
+		public static EntityField2 ApiValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.ApiValue);}
+		}
+		/// <summary>Creates a new AmazonServiceTypeEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.Description);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AmazonShipmentEntity</summary>
 	public partial class AmazonShipmentFields
 	{

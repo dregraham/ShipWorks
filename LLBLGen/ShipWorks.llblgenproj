@@ -266,6 +266,14 @@
           <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="8" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="AmazonServiceType" ObjectID="46c2dbbc-35a6-4057-8998-6be9b1e2385e">
+        <Fields>
+          <Field Name="AmazonServiceTypeID" Type="int" IsReadOnly="true" Precision="10" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ApiValue" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="AmazonShipment" ObjectID="ce150d7f-235a-4903-8fd6-874ee4b91c1b">
         <Fields>
           <Field Name="AmazonUniqueShipmentID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="13" />
@@ -3769,7 +3777,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-07T13:54:25.628217Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-12T20:05:55.8783761Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3909,6 +3917,15 @@
                     <Field Name="DeliveryExperience" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Weight" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
                     <Field Name="ShippingServiceID" Ordinal="10" IsOptional="true" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="AmazonServiceType">
+                  <PkConstraintName Name="PK_AmazonServiceTypeID" />
+                  <Fields>
+                    <Field Name="AmazonServiceTypeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="8" Precision="10" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="ApiValue" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="Description" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonShipment">
@@ -9344,6 +9361,14 @@
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AmazonServiceType" TargetName="ShipWorksLocal:dbo:AmazonServiceType">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonServiceTypeID" TargetFieldName="AmazonServiceTypeID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ApiValue" TargetFieldName="ApiValue" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonShipment" TargetName="ShipWorksLocal:dbo:AmazonShipment">

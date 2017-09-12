@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (191 + 0));
+			this.InitClass( (192 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonOrderEntityInfos();
 			InitAmazonOrderItemEntityInfos();
 			InitAmazonProfileEntityInfos();
+			InitAmazonServiceTypeEntityInfos();
 			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
@@ -384,6 +385,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
 			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
+		}
+		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
+		private void InitAmazonServiceTypeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonServiceTypeFieldIndex), "AmazonServiceTypeEntity");
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "AmazonServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonServiceTypeFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.ApiValue, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.Description, 50, 0, 0);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()

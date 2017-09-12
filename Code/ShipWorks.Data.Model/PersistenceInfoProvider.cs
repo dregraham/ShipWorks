@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(191);
+			this.InitClass(192);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -57,6 +57,7 @@ namespace ShipWorks.Data.Model
 			InitAmazonOrderEntityMappings();
 			InitAmazonOrderItemEntityMappings();
 			InitAmazonProfileEntityMappings();
+			InitAmazonServiceTypeEntityMappings();
 			InitAmazonShipmentEntityMappings();
 			InitAmazonStoreEntityMappings();
 			InitAmeriCommerceStoreEntityMappings();
@@ -388,6 +389,16 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AmazonProfileEntity", "DeliveryExperience", "DeliveryExperience", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("AmazonProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
 			this.AddElementFieldMapping("AmazonProfileEntity", "ShippingServiceID", "ShippingServiceID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
+		}
+
+		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>
+		private void InitAmazonServiceTypeEntityMappings()
+		{
+			this.AddElementMapping("AmazonServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonServiceType", 4, 0);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "AmazonServiceTypeID", "AmazonServiceTypeID", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>

@@ -437,6 +437,20 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonServiceType.</summary>
+	public enum AmazonServiceTypeFieldIndex
+	{
+		///<summary>AmazonServiceTypeID. </summary>
+		AmazonServiceTypeID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ApiValue. </summary>
+		ApiValue,
+		///<summary>Description. </summary>
+		Description,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.</summary>
 	public enum AmazonShipmentFieldIndex
 	{
@@ -11251,6 +11265,8 @@ namespace ShipWorks.Data.Model
 		AmazonOrderItemEntity,
 		///<summary>AmazonProfile</summary>
 		AmazonProfileEntity,
+		///<summary>AmazonServiceType</summary>
+		AmazonServiceTypeEntity,
 		///<summary>AmazonShipment</summary>
 		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
