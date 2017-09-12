@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         private void InitializeComponent()
         {
             this.amazonOptionsControl1 = new ShipWorks.Shipping.Carriers.Amazon.AmazonOptionsControl();
+            this.servicePicker = new ShipWorks.Shipping.UI.Carriers.Amazon.AmazonServicePickerControl();
             this.SuspendLayout();
             // 
             // amazonOptionsControl1
@@ -41,18 +42,28 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             this.amazonOptionsControl1.Size = new System.Drawing.Size(377, 46);
             this.amazonOptionsControl1.TabIndex = 25;
             // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 60);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(421, 200);
+            this.servicePicker.TabIndex = 12;
+            // 
             // AmazonSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.amazonOptionsControl1);
+            this.Controls.Add(this.servicePicker);
             this.Name = "AmazonSettingsControl";
-            this.Size = new System.Drawing.Size(445, 119);
+            this.Size = new System.Drawing.Size(445, 272);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private AmazonOptionsControl amazonOptionsControl1;
+        private AmazonServicePickerControl servicePicker;
     }
 }
