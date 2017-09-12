@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -89,6 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;
+            UpdateServiceTypes(LoadedShipments);
 
             using (new MultiValueScope())
             {
@@ -109,6 +114,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             //Load the dimensions
             dimensionsControl.LoadDimensions(dimensions);
+        }
+
+        /// <summary>
+        /// Update the available choices for services
+        /// </summary>
+        private void UpdateServiceTypes(List<ShipmentEntity> shipments)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.Amazon)
+                    .BuildServiceTypeDictionary(shipments);
+
+                service.BindToEnumAndPreserveSelection<AmazonServiceType>(x => availableServices.ContainsKey((int)x));
+            }
         }
 
         /// <summary>
