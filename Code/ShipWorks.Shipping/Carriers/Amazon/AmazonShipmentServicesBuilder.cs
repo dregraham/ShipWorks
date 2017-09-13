@@ -31,19 +31,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
         {
-            // Get all of the amazon services
-            List<AmazonServiceTypeEntity> allServiceTypes = amazonServiceTypeRepository.Get();
-
             // Get all of the services from the shipments
             IEnumerable<string> shipmentsServices = shipments.Select(s => s.Amazon.ShippingServiceID).Distinct();
 
+            // Get all of the amazon services
+            List<AmazonServiceTypeEntity> allServiceTypes = amazonServiceTypeRepository.Get();
+
             // Build a dictionary of all of AmazonServiceTypeID and Description values using the given shipments ShippingServiceID
-            Dictionary<int, string> shipmentsServiceTypes = allServiceTypes
+            Dictionary<int, string> shipmentsServiceTypes = allServiceTypes?
                 .Where(s => shipmentsServices.Contains(s.ApiValue))
-                .ToDictionary(s => s.AmazonServiceTypeID, s => s.Description);
+                .ToDictionary(s => s.AmazonServiceTypeID, s => s.Description) ?? new Dictionary<int, string>();
 
             // combine that with a a dictionary of available services
-            return shipmentsServiceTypes.Union(GetAvailableServiceTypes(allServiceTypes))
+            return GetAvailableServiceTypes(allServiceTypes).Union(shipmentsServiceTypes)
                 .ToDictionary(service => service.Key, service => service.Value);
         }
 
