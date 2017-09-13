@@ -337,6 +337,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order)
+        {
+            var ebayOrder = order as IEbayOrderEntity;
+
+            if (ebayOrder == null)
+            {
+                return string.Empty;
+            }
+
+            return ebayOrder.SellingManagerRecord.HasValue ?
+                    ebayOrder.SellingManagerRecord.Value.ToString() :
+                    ebayOrder.EbayOrderID.ToString();
+        }
+
+        /// <summary>
         /// Returns the order field(s) that uniquely identifies a customer
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)

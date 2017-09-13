@@ -52,6 +52,6 @@ namespace ShipWorks.Stores.Content
         private string GetOrderIdentifier(IOrderEntity order) =>
             order.CombineSplitStatus == CombineSplitStatusType.Combined || order.IsManual ?
                 order.OrderNumberComplete :
-                storeTypeManager.GetType(order.StoreID).CreateOrderIdentifier(order).AuditValue;
+                storeTypeManager.GetType(order.StoreID).GetAuditDescription(order);
     }
 }

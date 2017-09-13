@@ -55,10 +55,5 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         public override string ToString() => $"JetMerchantOrderId:{merchantOrderId}";
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => merchantOrderId;
     }
 }

@@ -193,6 +193,11 @@ namespace ShipWorks.Stores
         public abstract OrderIdentifier CreateOrderIdentifier(IOrderEntity order);
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public virtual string GetAuditDescription(IOrderEntity order) => order?.OrderNumberComplete ?? string.Empty;
+
+        /// <summary>
         /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
         /// as the eBay User ID or the osCommerce CustomerID.  If a particular store does not have any concept
         /// of a unique online customer, than this can return null.  If multiple fields are returned, they

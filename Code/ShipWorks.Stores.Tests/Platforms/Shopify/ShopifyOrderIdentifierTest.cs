@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Shopify
             Assert.Equal("ShopifyOrderID:123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsShopifyOrderID()
-        {
-            var testObject = new ShopifyOrderIdentifier(123);
-            Assert.Equal("123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

@@ -57,10 +57,5 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// String representation
         /// </summary>
         public override string ToString() => $"NetworkSolutionsOrderID:{networkSolutionsOrderID}";
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => networkSolutionsOrderID.ToString();
     }
 }

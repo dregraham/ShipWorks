@@ -65,6 +65,12 @@ namespace ShipWorks.Stores.Platforms.Jet
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IJetOrderEntity)?.MerchantOrderId ?? string.Empty;
+
+        /// <summary>
         /// Create the CA order entity
         /// </summary>
         protected override OrderEntity CreateOrderInstance()

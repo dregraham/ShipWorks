@@ -67,10 +67,5 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         {
             return string.Format("OrderMotion:{0} - {1}", orderNumber, orderMotionShipmentId);
         }
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => $"{orderNumber} - {orderMotionShipmentId}";
     }
 }

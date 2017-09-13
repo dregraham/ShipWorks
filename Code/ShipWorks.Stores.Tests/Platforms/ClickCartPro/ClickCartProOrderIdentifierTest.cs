@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ClickCartPro
             Assert.Equal("ClickCartProOrderID:ABC-123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsClickCartProOrderID()
-        {
-            var testObject = new ClickCartProOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

@@ -63,6 +63,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
             new WalmartOrderIdentifier((order as IWalmartOrderEntity)?.PurchaseOrderID);
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IWalmartOrderEntity)?.PurchaseOrderID ?? string.Empty;
+
+        /// <summary>
         /// Creates a Walmart Order Entity
         /// </summary>
         protected override OrderEntity CreateOrderInstance() => new WalmartOrderEntity();

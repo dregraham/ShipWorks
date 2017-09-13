@@ -49,10 +49,5 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             order.ApplyOrderNumberPostfix(orderPostfix);
         }
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => OrderNumber.ToString() + OrderPostfix;
     }
 }

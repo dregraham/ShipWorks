@@ -4,7 +4,6 @@ using Autofac.Extras.Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 using ShipWorks.Tests.Shared;
@@ -50,6 +49,30 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(mock.Container, store).FirstOrDefault();
 
             Assert.Equal(typeof(WalmartShipmentUploadTask), actionTask.GetType());
+        }
+
+        [Fact]
+        public void GetAuditDescription_ReturnsValueWhenOrderIsCorrectType()
+        {
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(new WalmartOrderEntity { PurchaseOrderID = "ABC-123" });
+            Assert.Equal("ABC-123", identifier);
+        }
+
+        [Fact]
+        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNull()
+        {
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(null);
+            Assert.Empty(identifier);
+        }
+
+        [Fact]
+        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNotCorrectType()
+        {
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(new OrderEntity());
+            Assert.Empty(identifier);
         }
     }
 }

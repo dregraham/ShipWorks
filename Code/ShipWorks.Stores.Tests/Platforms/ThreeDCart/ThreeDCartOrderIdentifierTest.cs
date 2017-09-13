@@ -20,11 +20,5 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         {
             Assert.Equal("pre-1-post", testObject.ToString());
         }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectString()
-        {
-            Assert.Equal("pre-1-post", testObject.AuditValue);
-        }
     }
 }

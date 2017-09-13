@@ -19,13 +19,6 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
 
         [Fact]
-        public void AuditValue_ReturnsLemonStandStoreOrderID()
-        {
-            var testObject = new LemonStandOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
-
-        [Fact]
         public void ToString_ReturnsWithoutException_WhenLemonStandOrderIDIsNull_Test1()
         {
             var testObject = new LemonStandOrderIdentifier(null);

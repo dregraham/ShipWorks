@@ -62,10 +62,5 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// String representation
         /// </summary>
         public override string ToString() => $"ConfirmationNumber:{confirmationNumber};PoNumber:{poNumber}";
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => $"{confirmationNumber};{poNumber}";
     }
 }

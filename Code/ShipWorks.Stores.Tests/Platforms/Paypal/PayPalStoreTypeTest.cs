@@ -2,42 +2,42 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Amazon
+namespace ShipWorks.Stores.Tests.Platforms.PayPal
 {
-    public class AmazonStoreTypeTest : IDisposable
+    public class PayPalStoreTypeTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly AmazonStoreType testObject;
-        private readonly AmazonOrderEntity order;
+        private readonly PayPalStoreType testObject;
+        private readonly PayPalOrderEntity order;
 
-        public AmazonStoreTypeTest()
+        public PayPalStoreTypeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            order = new AmazonOrderEntity { AmazonOrderID = "ABC-123" };
-            testObject = mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(null));
+            order = new PayPalOrderEntity { TransactionID = "ABC-123" };
+            testObject = mock.Create<PayPalStoreType>(TypedParameter.From<StoreEntity>(null));
         }
 
         [Fact]
         public void CreateOrderIdentifier_ReturnsCorrectType()
         {
             var identifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<AmazonOrderIdentifier>(identifier);
+            Assert.IsType<PayPalOrderIdentifier>(identifier);
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsNullReferenceException_WhenOrderIsNull()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNull()
         {
-            Assert.Throws<NullReferenceException>(() => testObject.CreateOrderIdentifier(null));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(null));
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsInvalidCastException_WhenOrderIsNotAmazon()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNotPayPal()
         {
-            Assert.Throws<InvalidCastException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
         }
 
         [Fact]

@@ -127,6 +127,12 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IPayPalOrderEntity)?.TransactionID ?? string.Empty;
+
+        /// <summary>
         /// Create the setup wizard pages
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)

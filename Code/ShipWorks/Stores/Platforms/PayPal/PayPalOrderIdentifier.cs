@@ -63,10 +63,5 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         public override string ToString() =>
             string.Format("PayPalTransactionID:{0}", transactionID);
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => transactionID;
     }
 }

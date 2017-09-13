@@ -60,10 +60,5 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// String representation
         /// </summary>
         public override string ToString() => $"AmazonOrderID:{amazonOrderID}";
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => amazonOrderID;
     }
 }

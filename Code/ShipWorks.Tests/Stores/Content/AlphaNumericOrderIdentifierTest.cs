@@ -39,26 +39,5 @@ namespace ShipWorks.Tests.Stores.Content
             Assert.Equal(long.MinValue, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
         }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorLongStringString()
-        {
-            var testObject = new AlphaNumericOrderIdentifier(1, "a", "b");
-            Assert.Equal("a1b", testObject.AuditValue);
-        }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorStringStringString()
-        {
-            var testObject = new AlphaNumericOrderIdentifier("1", "a", "b");
-            Assert.Equal("a1b", testObject.AuditValue);
-        }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorString()
-        {
-            var testObject = new AlphaNumericOrderIdentifier("a1b");
-            Assert.Equal("a1b", testObject.AuditValue);
-        }
     }
 }

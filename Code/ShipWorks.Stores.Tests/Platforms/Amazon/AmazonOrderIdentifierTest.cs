@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
             Assert.Equal("AmazonOrderID:ABC-123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsAmazonOrderID()
-        {
-            var testObject = new AmazonOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

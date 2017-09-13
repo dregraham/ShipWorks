@@ -18,13 +18,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void AuditValue_ReturnsWalmartPurchaseOrderID()
-        {
-            var testObject = new WalmartOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
-
-        [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonWalmartOrderEntity()
         {
             var testObject = new WalmartOrderIdentifier("1");

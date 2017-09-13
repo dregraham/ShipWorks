@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Groupon)]
     [Component(RegistrationType.Self)]
-    class GrouponStoreType : StoreType
+    public class GrouponStoreType : StoreType
     {
         // Logger
         private readonly ILog log;
@@ -166,6 +166,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new GrouponOrderIdentifier(((IGrouponOrderEntity) order).GrouponOrderID);
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IGrouponOrderEntity)?.GrouponOrderID ?? string.Empty;
 
         /// <summary>
         /// Indicates what basic grid fields we support hyper linking for

@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.PayPal
             Assert.Equal("PayPalTransactionID:ABC-123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsPayPalOrderID()
-        {
-            var testObject = new PayPalOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

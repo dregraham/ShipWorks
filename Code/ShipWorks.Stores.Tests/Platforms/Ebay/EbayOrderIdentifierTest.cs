@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Ebay
             Assert.Equal("eBay:456 (123:789)", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsEbayOrderID()
-        {
-            var testObject = new EbayOrderIdentifier(123, 456, 789);
-            Assert.Equal("123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

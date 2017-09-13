@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.NetworkSolutions
             Assert.Equal("NetworkSolutionsOrderID:123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsNetworkSolutionsOrderID()
-        {
-            var testObject = new NetworkSolutionsOrderIdentifier(123);
-            Assert.Equal("123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

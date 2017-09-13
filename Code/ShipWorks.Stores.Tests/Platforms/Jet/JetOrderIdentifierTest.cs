@@ -46,12 +46,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             var testObject = new JetOrderIdentifier("merchID");
             Assert.Equal("JetMerchantOrderId:merchID", testObject.ToString());
         }
-
-        [Fact]
-        public void AuditValue_ReturnsJetMerchantOrderID()
-        {
-            var testObject = new JetOrderIdentifier("ABC-123");
-            Assert.Equal("ABC-123", testObject.AuditValue);
-        }
     }
 }

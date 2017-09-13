@@ -21,12 +21,5 @@ namespace ShipWorks.Tests.Stores.Content
             Assert.Equal(1, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
         }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorLongStringString()
-        {
-            var testObject = new MagentoOrderIdentifier(1, "a", "b");
-            Assert.Equal("a1b", testObject.AuditValue);
-        }
     }
 }

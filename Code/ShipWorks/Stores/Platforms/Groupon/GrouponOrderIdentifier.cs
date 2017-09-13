@@ -59,10 +59,5 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// String representation
         /// </summary>
         public override string ToString() => $"GrouponStoreOrderID:{grouponStoreOrderId}";
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => grouponStoreOrderId;
     }
 }

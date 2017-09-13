@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms
             Assert.Equal("OrderNumber:123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsOrderID()
-        {
-            var testObject = new OrderNumberIdentifier(123);
-            Assert.Equal("123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

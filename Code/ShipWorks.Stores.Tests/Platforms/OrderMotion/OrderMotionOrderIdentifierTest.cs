@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.OrderMotion
             Assert.Equal("OrderMotion:123 - 4", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsOrderMotionOrderID()
-        {
-            var testObject = new OrderMotionOrderIdentifier(123, 4);
-            Assert.Equal("123 - 4", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

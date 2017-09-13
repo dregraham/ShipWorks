@@ -25,13 +25,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
             Assert.Equal("ConfirmationNumber:456;PoNumber:ABC-123", testObject.ToString());
         }
 
-        [Fact]
-        public void AuditValue_ReturnsSearsOrderID()
-        {
-            var testObject = new SearsOrderIdentifier(456, "ABC-123");
-            Assert.Equal("456;ABC-123", testObject.AuditValue);
-        }
-
         public void Dispose()
         {
             mock.Dispose();

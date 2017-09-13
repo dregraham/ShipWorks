@@ -21,12 +21,5 @@ namespace ShipWorks.Tests.Stores.Content
             Assert.Equal(1, order.OrderNumber);
             Assert.Equal("1b", order.OrderNumberComplete);
         }
-
-        [Fact]
-        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorLongString()
-        {
-            var testObject = new BigCommerceOrderIdentifier(1, "b");
-            Assert.Equal("1b", testObject.AuditValue);
-        }
     }
 }

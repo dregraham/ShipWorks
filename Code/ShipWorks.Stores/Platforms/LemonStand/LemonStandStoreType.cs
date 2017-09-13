@@ -165,6 +165,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as ILemonStandOrderEntity)?.LemonStandOrderID ?? string.Empty;
+
+        /// <summary>
         ///     Indicates what basic grid fields we support hyperlinking for
         /// </summary>
         public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)

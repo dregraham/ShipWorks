@@ -79,6 +79,12 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as ISearsOrderEntity)?.PoNumber ?? string.Empty;
+
+        /// <summary>
         /// Create the wizard pages for adding sears.com stores to ShipWorks
         /// </summary>
         /// <param name="scope"></param>

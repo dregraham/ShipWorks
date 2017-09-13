@@ -2,49 +2,49 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Ebay;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Amazon
+namespace ShipWorks.Stores.Tests.Platforms.Ebay
 {
-    public class AmazonStoreTypeTest : IDisposable
+    public class EbayStoreTypeTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly AmazonStoreType testObject;
-        private readonly AmazonOrderEntity order;
+        private readonly EbayStoreType testObject;
+        private readonly EbayOrderEntity order;
 
-        public AmazonStoreTypeTest()
+        public EbayStoreTypeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            order = new AmazonOrderEntity { AmazonOrderID = "ABC-123" };
-            testObject = mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(null));
+            order = new EbayOrderEntity { EbayOrderID = 456, SellingManagerRecord = 123 };
+            testObject = mock.Create<EbayStoreType>(TypedParameter.From<StoreEntity>(null));
         }
 
         [Fact]
         public void CreateOrderIdentifier_ReturnsCorrectType()
         {
             var identifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<AmazonOrderIdentifier>(identifier);
+            Assert.IsType<EbayOrderIdentifier>(identifier);
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsNullReferenceException_WhenOrderIsNull()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNull()
         {
-            Assert.Throws<NullReferenceException>(() => testObject.CreateOrderIdentifier(null));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(null));
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsInvalidCastException_WhenOrderIsNotAmazon()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNotEbay()
         {
-            Assert.Throws<InvalidCastException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
         }
 
         [Fact]
         public void GetAuditDescription_ReturnsValueWhenOrderIsCorrectType()
         {
             var identifier = testObject.GetAuditDescription(order);
-            Assert.Equal("ABC-123", identifier);
+            Assert.Equal("123", identifier);
         }
 
         [Fact]

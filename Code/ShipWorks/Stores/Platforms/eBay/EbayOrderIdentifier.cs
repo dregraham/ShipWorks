@@ -127,10 +127,5 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             return string.Format("eBay:{0} ({1}:{2})", EbayItemID, EbayOrderID, TransactionID);
         }
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => EbayOrderID.ToString();
     }
 }

@@ -32,11 +32,5 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         {
             Assert.Equal("YahooOrderID:1", testObject.ToString());
         }
-
-        [Fact]
-        public void AuditValue_ReturnsYahooOrderID()
-        {
-            Assert.Equal("1", testObject.AuditValue);
-        }
     }
 }

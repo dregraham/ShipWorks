@@ -2,42 +2,42 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.ClickCartPro;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Amazon
+namespace ShipWorks.Stores.Tests.Platforms.ClickCartPro
 {
-    public class AmazonStoreTypeTest : IDisposable
+    public class ClickCartProStoreTypeTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly AmazonStoreType testObject;
-        private readonly AmazonOrderEntity order;
+        private readonly ClickCartProStoreType testObject;
+        private readonly ClickCartProOrderEntity order;
 
-        public AmazonStoreTypeTest()
+        public ClickCartProStoreTypeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            order = new AmazonOrderEntity { AmazonOrderID = "ABC-123" };
-            testObject = mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(null));
+            order = new ClickCartProOrderEntity { ClickCartProOrderID = "ABC-123" };
+            testObject = mock.Create<ClickCartProStoreType>(TypedParameter.From<StoreEntity>(null));
         }
 
         [Fact]
         public void CreateOrderIdentifier_ReturnsCorrectType()
         {
             var identifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<AmazonOrderIdentifier>(identifier);
+            Assert.IsType<ClickCartProOrderIdentifier>(identifier);
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsNullReferenceException_WhenOrderIsNull()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNull()
         {
-            Assert.Throws<NullReferenceException>(() => testObject.CreateOrderIdentifier(null));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(null));
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsInvalidCastException_WhenOrderIsNotAmazon()
+        public void CreateOrderIdentifier_ThrowsInvalidOperationException_WhenOrderIsNotClickCartPro()
         {
-            Assert.Throws<InvalidCastException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
         }
 
         [Fact]

@@ -178,11 +178,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
+    <Compile Include="Content\CombineOrderAuditTest.cs" />
     <Compile Include="Content\CombineOrdersGatewayTest.cs" />
     <Compile Include="Content\CombineOrdersViewModelTest.cs" />
     <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
@@ -287,8 +291,10 @@
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Paypal\PayPalStoreTypeTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Paypal\XmlDeserializeTest.cs" />
+    <Compile Include="Platforms\Sears\SearsStoreTypeTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
@@ -436,7 +442,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Platforms\AmeriCommerce\" />
-    <Folder Include="Platforms\NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

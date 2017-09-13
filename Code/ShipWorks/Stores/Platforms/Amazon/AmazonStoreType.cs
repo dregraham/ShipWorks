@@ -303,6 +303,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IAmazonOrderEntity)?.AmazonOrderID ?? string.Empty;
+
+        /// <summary>
         /// Create the fields that can be used to compare for the same amazon customer
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)

@@ -75,6 +75,12 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IClickCartProOrderEntity)?.ClickCartProOrderID ?? string.Empty;
+
+        /// <summary>
         /// ClickCartPro identifies orders by the ClickCartProID
         /// </summary>
         public override string GetOnlineOrderIdentifier(OrderEntity order)

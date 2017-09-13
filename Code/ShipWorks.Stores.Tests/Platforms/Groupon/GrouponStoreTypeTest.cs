@@ -2,30 +2,30 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Platforms.Amazon
+namespace ShipWorks.Stores.Tests.Platforms.Groupon
 {
-    public class AmazonStoreTypeTest : IDisposable
+    public class GrouponStoreTypeTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly AmazonStoreType testObject;
-        private readonly AmazonOrderEntity order;
+        private readonly GrouponStoreType testObject;
+        private readonly GrouponOrderEntity order;
 
-        public AmazonStoreTypeTest()
+        public GrouponStoreTypeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            order = new AmazonOrderEntity { AmazonOrderID = "ABC-123" };
-            testObject = mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(null));
+            order = new GrouponOrderEntity { GrouponOrderID = "ABC-123" };
+            testObject = mock.Create<GrouponStoreType>(TypedParameter.From<StoreEntity>(null));
         }
 
         [Fact]
         public void CreateOrderIdentifier_ReturnsCorrectType()
         {
             var identifier = testObject.CreateOrderIdentifier(order);
-            Assert.IsType<AmazonOrderIdentifier>(identifier);
+            Assert.IsType<GrouponOrderIdentifier>(identifier);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Amazon
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ThrowsInvalidCastException_WhenOrderIsNotAmazon()
+        public void CreateOrderIdentifier_ThrowsInvalidCastException_WhenOrderIsNotGroupon()
         {
             Assert.Throws<InvalidCastException>(() => testObject.CreateOrderIdentifier(new OrderEntity()));
         }

@@ -71,10 +71,5 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         public override string ToString() =>
             string.Format("ShopifyOrderID:{0}", shopifyOrderIdentifier);
-
-        /// <summary>
-        /// Value to use when auditing
-        /// </summary>
-        public override string AuditValue => shopifyOrderIdentifier.ToString();
     }
 }
