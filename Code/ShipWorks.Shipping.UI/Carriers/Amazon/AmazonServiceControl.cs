@@ -48,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             dimensionsControl.DimensionsChanged += (s, e) => RaiseShipSenseFieldChanged();
             weight.WeightChanged += (s, e) => RaiseShipSenseFieldChanged();
 
+            service.SelectedValueChanged += OnServiceChanged;
+
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
@@ -232,7 +234,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                AmazonRateTag selectedRateTag = service.SelectedItem as AmazonRateTag;
+                AmazonServiceType selectedRateTag = (AmazonServiceType) service.SelectedValue;
+                string selectedRateId = EnumHelper.GetApiValue(selectedRateTag);
 
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
@@ -242,7 +245,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         return false;
                     }
 
-                    return rateTag.ShippingServiceId == selectedRateTag?.ShippingServiceId;
+                    return rateTag.ShippingServiceId == selectedRateId;
                 });
 
                 RateControl.SelectRate(matchingRate);
