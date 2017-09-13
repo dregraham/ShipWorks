@@ -99,6 +99,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
                 IEntityCollection2 types = sqlAdapter.FetchQueryAsync(query).Result;
                 serviceTypes = types.OfType<AmazonServiceTypeEntity>().ToList();
+
+                serviceTypes.Insert(0, new AmazonServiceTypeEntity()
+                {
+                    AmazonServiceTypeID = 0,
+                    ApiValue = string.Empty,
+                    Description = "Best Rate"
+                });
             }
         }
     }
