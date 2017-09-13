@@ -24,9 +24,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The ReceiptItemID property of the Entity BuyDotComOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "BuyDotComOrderItem"."ReceiptItemID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int64 ReceiptItemID { get; }
+        System.String ReceiptItemID { get; }
         /// <summary> The ListingID property of the Entity BuyDotComOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "BuyDotComOrderItem"."ListingID"<br/>

@@ -1312,7 +1312,7 @@ GO
 CREATE TABLE [dbo].[BuyDotComOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[ReceiptItemID] [bigint] NOT NULL,
+[ReceiptItemID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ListingID] [int] NOT NULL,
 [Shipping] [money] NOT NULL,
 [Tax] [money] NOT NULL,

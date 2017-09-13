@@ -406,7 +406,7 @@
           <Field Name="Commission" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
           <Field Name="ItemFee" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="ListingID" Type="int" FieldIndex="1" />
-          <Field Name="ReceiptItemID" Type="long" FieldIndex="0" />
+          <Field Name="ReceiptItemID" Type="string" MaxLength="100" FieldIndex="0" />
           <Field Name="Shipping" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
           <Field Name="Tax" Type="decimal" Precision="19" Scale="4" FieldIndex="3" />
         </Fields>
@@ -3769,7 +3769,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-08-22T20:57:40.4795986Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-12T21:10:41.0794692Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4126,7 +4126,7 @@
                   <PkConstraintName Name="PK_BuyDotComOrderItem" />
                   <Fields>
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ReceiptItemID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="ReceiptItemID" Ordinal="2" DbType="12" Length="100" />
                     <Field Name="ListingID" Ordinal="3" DbType="8" Precision="10" />
                     <Field Name="Shipping" Ordinal="4" DbType="9" Precision="19" Scale="4" />
                     <Field Name="Tax" Ordinal="5" DbType="9" Precision="19" Scale="4" />
@@ -4171,7 +4171,7 @@
                     <Field Name="IsFBA" Ordinal="8" DbType="2" />
                     <Field Name="MPN" Ordinal="9" DbType="12" Length="50" />
                     <Field Name="DistributionCenterID" Ordinal="10" DbType="0" Precision="19" />
-                    <Field Name="DistributionCenterName" Ordinal="12" DbType="12" Length="100" />
+                    <Field Name="DistributionCenterName" Ordinal="11" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="ChannelAdvisorStore">
