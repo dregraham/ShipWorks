@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Content
         /// Get an order identifier from an order
         /// </summary>
         private string GetOrderIdentifier(IOrderEntity order) =>
-            order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+            order.CombineSplitStatus == CombineSplitStatusType.Combined || order.IsManual ?
                 order.OrderNumberComplete :
                 storeTypeManager.GetType(order.StoreID).CreateOrderIdentifier(order).AuditValue;
     }
