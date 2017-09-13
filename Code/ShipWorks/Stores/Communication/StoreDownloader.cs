@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory) :
+        protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory) :
             this(store, storeType, configuration, sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
         {
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Communication
         /// Constructor
         /// </summary>
         protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
-        this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
+            this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
         {
         }
 
@@ -1201,19 +1201,19 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
             InstantiateOrderItemAttribute(item);
-        
+
         /// <summary>
         /// Create an item attribute for the given item
         /// </summary>
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item, string name,
             string description, decimal unitPrice,
             bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
-        
+
         /// <summary>
         /// Create an order charge for the given order
         /// </summary>
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
-        
+
         /// <summary>
         /// Create an order charge for the given order
         /// </summary>
@@ -1235,7 +1235,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Create a payment for the given order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => 
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
 
         #endregion

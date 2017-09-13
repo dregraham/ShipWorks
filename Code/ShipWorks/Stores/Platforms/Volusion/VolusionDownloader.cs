@@ -13,6 +13,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -41,8 +42,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Constructor
         /// </summary>
-        public VolusionDownloader(StoreEntity store, IVolusionWebClient webClient, Func<Type, ILog> createLogger)
-            : base(store)
+        public VolusionDownloader(StoreEntity store, IVolusionWebClient webClient, IStoreTypeManager storeTypeManager, Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store), ConfigurationData.FetchReadOnly(), new SqlAdapterFactory())
         {
             this.webClient = webClient;
             log = createLogger(GetType());
