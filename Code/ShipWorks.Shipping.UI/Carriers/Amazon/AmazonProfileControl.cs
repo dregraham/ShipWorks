@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Profiles;
 
@@ -57,7 +60,16 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// </summary>
         private void LoadServices()
         {
-            List<KeyValuePair<string, string>> services = EnumHelper.GetEnumList<AmazonServiceType>().Select(x => new KeyValuePair<string, string>(x.Description, x.ApiValue)).ToList();
+            List<KeyValuePair<string, string>> services;
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IAmazonServiceTypeRepository amazonServiceTypeRepository = scope.Resolve<IAmazonServiceTypeRepository>();
+                services = amazonServiceTypeRepository.Get()
+                    .Select(serviceTypeEntity => new KeyValuePair<string, string>(serviceTypeEntity.Description, serviceTypeEntity.ApiValue))
+                    .ToList();
+            }
+            
             service.DisplayMember = "Key";
             service.ValueMember = "Value";
             service.DataSource = services;
