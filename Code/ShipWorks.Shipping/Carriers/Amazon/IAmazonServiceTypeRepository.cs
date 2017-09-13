@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -12,11 +12,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Gets a list of service types from the repository
         /// </summary>
         /// <returns></returns>
-        List<AmazonServiceType> Get();
+        List<AmazonServiceTypeEntity> Get();
 
         /// <summary>
         /// Creates and adds a new service to the repository
         /// </summary>
-        AmazonServiceType CreateNewService(string name, string description);
+        AmazonServiceTypeEntity CreateNewService(string name, string description);
     }
 }
