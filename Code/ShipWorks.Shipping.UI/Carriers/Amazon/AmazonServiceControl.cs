@@ -96,7 +96,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     weight.ApplyMultiWeight(shipment.ContentWeight);
 
-                    AmazonServiceType serviceType = EnumHelper.GetEnumByApiValue<AmazonServiceType>(shipment.Amazon.ShippingServiceID);
+                    AmazonServiceType serviceType = string.IsNullOrWhiteSpace(shipment.Amazon.ShippingServiceID) ?
+                        AmazonServiceType.BestRate :
+                        EnumHelper.GetEnumByApiValue<AmazonServiceType>(shipment.Amazon.ShippingServiceID);
+
                     service.ApplyMultiValue(serviceType);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.Amazon));
