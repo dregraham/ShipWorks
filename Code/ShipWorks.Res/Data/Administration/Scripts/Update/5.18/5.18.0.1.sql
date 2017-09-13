@@ -44,3 +44,8 @@ VALUES
 ('UPS_PTP_NEXT_DAY_AIR_SAVER', 'UPS Next Day Air Saver'),
 ('UPS_PTP_NEXT_DAY_AIR', 'UPS Next Day Air');
 GO
+
+PRINT N'Creating index [IX_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
+GO

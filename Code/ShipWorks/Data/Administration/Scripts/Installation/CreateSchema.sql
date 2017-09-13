@@ -33,6 +33,10 @@ PRINT N'Creating primary key [PK_AmazonServiceTypeID] on [dbo].[AmazonServiceTyp
 GO
 ALTER TABLE [dbo].[AmazonServiceType] ADD CONSTRAINT [PK_AmazonServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonServiceTypeID])
 GO
+PRINT N'Creating index [IX_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
+GO
 
 PRINT N'Creating [dbo].[FedExPackage]'
 GO

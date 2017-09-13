@@ -161,6 +161,7 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\Enums\AmazonServiceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
