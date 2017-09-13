@@ -67,5 +67,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Returns a string version of the identifier
         /// </summary>
         public override string ToString() => $"{OrderPrefix}{OrderNumber}{orderPostfix}";
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => ToString();
     }
 }

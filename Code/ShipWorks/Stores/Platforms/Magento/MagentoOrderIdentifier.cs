@@ -44,5 +44,10 @@ namespace ShipWorks.Stores.Platforms.Magento
                 order.ApplyOrderNumberPrefix(prefix);
             }
         }
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => prefix + OrderNumber.ToString() + postfix;
     }
 }
