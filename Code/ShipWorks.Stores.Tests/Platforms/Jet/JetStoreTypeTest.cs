@@ -65,30 +65,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.IsType<JetOrderIdentifier>(orderIdentifier);
         }
 
-        [Fact]
-        public void GetAuditDescription_ReturnsValueWhenOrderIsCorrectType()
-        {
-            var testObject = mock.Create<JetStoreType>(TypedParameter.From<StoreEntity>(null));
-            var identifier = testObject.GetAuditDescription(new JetOrderEntity { MerchantOrderId = "ABC-123" });
-            Assert.Equal("ABC-123", identifier);
-        }
-
-        [Fact]
-        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNull()
-        {
-            var testObject = mock.Create<JetStoreType>(TypedParameter.From<StoreEntity>(null));
-            var identifier = testObject.GetAuditDescription(null);
-            Assert.Empty(identifier);
-        }
-
-        [Fact]
-        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNotCorrectType()
-        {
-            var testObject = mock.Create<JetStoreType>(TypedParameter.From<StoreEntity>(null));
-            var identifier = testObject.GetAuditDescription(new OrderEntity());
-            Assert.Empty(identifier);
-        }
-
         public void Dispose()
         {
             mock.Dispose();
