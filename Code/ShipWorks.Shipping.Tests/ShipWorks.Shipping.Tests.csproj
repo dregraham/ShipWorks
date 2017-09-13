@@ -152,6 +152,7 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequestTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepositoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />

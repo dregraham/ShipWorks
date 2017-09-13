@@ -17,10 +17,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     [Component(SingleInstance = true)]
     public class AmazonServiceTypeRepository : IAmazonServiceTypeRepository
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly object lockObject = new object();
-        private List<AmazonServiceTypeEntity> serviceTypes;
         private readonly ILog log;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private List<AmazonServiceTypeEntity> serviceTypes;
 
         /// <summary>
         /// Constructor
@@ -38,27 +38,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             lock (lockObject)
             {
-                if (serviceTypes==null)
+                if (serviceTypes == null)
                 {
                     RefreshServiceTypes();
                 }
 
                 return serviceTypes;
-            }
-           
-        }
-
-        /// <summary>
-        /// Refetch service types from the database
-        /// </summary>
-        private void RefreshServiceTypes()
-        {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-            {
-                EntityQuery<AmazonServiceTypeEntity> query = new QueryFactory().AmazonServiceType;
-
-                IEntityCollection2 types = sqlAdapter.FetchQueryAsync(query).Result;
-                serviceTypes = types.OfType<AmazonServiceTypeEntity>().ToList();
             }
         }
 
@@ -99,6 +84,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     }
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Refetch service types from the database
+        /// </summary>
+        private void RefreshServiceTypes()
+        {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                EntityQuery<AmazonServiceTypeEntity> query = new QueryFactory().AmazonServiceType;
+
+                IEntityCollection2 types = sqlAdapter.FetchQueryAsync(query).Result;
+                serviceTypes = types.OfType<AmazonServiceTypeEntity>().ToList();
             }
         }
     }
