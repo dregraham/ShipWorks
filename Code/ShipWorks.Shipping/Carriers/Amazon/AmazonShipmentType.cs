@@ -33,8 +33,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
-        private readonly IEditionManager editionManager;
         private readonly ILicenseService licenseService;
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Constructor for tests
@@ -46,13 +46,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager, ILicenseService licenseService)
+        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, ILicenseService licenseService, IAmazonServiceTypeRepository serviceTypeRepository)
         {
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
-            this.editionManager = editionManager;
             this.licenseService = licenseService;
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -200,13 +200,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         ///
         /// Overridden to use dependency
-        public override bool IsShipmentTypeRestricted
-        {
-            get
-            {
-                return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
-            }
-        }
+        public override bool IsShipmentTypeRestricted =>
+            licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
 
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
@@ -347,14 +342,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
         /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not
-        /// been excluded). The integer values are intended to correspond to the appropriate
-        /// enumeration values of the specific shipment type (i.e. the integer values would
-        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// been excluded).
         /// </summary>
-        /// <param name="repository">The repository from which the service types are fetched.</param>
+        /// <param name="repository">The repository from which the excluded service types are fetched.</param>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            IEnumerable<int> allServices = EnumHelper.GetEnumList<AmazonServiceType>().Select(x => x.Value).Cast<int>();
+            IEnumerable<int> allServices = serviceTypeRepository.Get().Select(x => x.AmazonServiceTypeID);
             return allServices.Except(GetExcludedServiceTypes(repository));
         }
     }
