@@ -1,5 +1,4 @@
 ﻿using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -78,5 +77,10 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
             factory.OrderSearch.Where(OrderSearchFields.OrderNumberComplete == orderNumberString);
+
+        /// <summary>
+        /// Value to use when auditing
+        /// </summary>
+        public override string AuditValue => orderPrefix + orderNumberString + orderPostfix;
     }
 }

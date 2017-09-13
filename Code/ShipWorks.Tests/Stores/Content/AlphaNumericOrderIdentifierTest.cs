@@ -1,6 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.Content
@@ -39,6 +38,27 @@ namespace ShipWorks.Tests.Stores.Content
             testObject.ApplyTo(order);
             Assert.Equal(long.MinValue, order.OrderNumber);
             Assert.Equal("a1b", order.OrderNumberComplete);
+        }
+
+        [Fact]
+        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorLongStringString()
+        {
+            var testObject = new AlphaNumericOrderIdentifier(1, "a", "b");
+            Assert.Equal("a1b", testObject.AuditValue);
+        }
+
+        [Fact]
+        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorStringStringString()
+        {
+            var testObject = new AlphaNumericOrderIdentifier("1", "a", "b");
+            Assert.Equal("a1b", testObject.AuditValue);
+        }
+
+        [Fact]
+        public void AuditValue_ReturnsCorrectValue_WhenUsingCtorString()
+        {
+            var testObject = new AlphaNumericOrderIdentifier("a1b");
+            Assert.Equal("a1b", testObject.AuditValue);
         }
     }
 }
