@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
@@ -21,10 +23,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         [Fact]
         public void Filter_IncludesRateWithAvailableService()
         {
-            mock.FromFactory<IShipmentTypeManager>()
-                .Mock(x => x.Get(ShipmentTypeCode.Amazon))
-                .Setup(x => x.GetAvailableServiceTypes())
-                .Returns(new List<int>{1});
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(r => r.Get())
+                .Returns(new List<AmazonServiceTypeEntity>{new AmazonServiceTypeEntity()
+                {
+                    ApiValue = "FEDEX_PTP_SECOND_DAY_AM"
+                } });
 
             RateResult rate = new RateResult("Foo", "1", 1,
                 new AmazonRateTag { ShippingServiceId = "FEDEX_PTP_SECOND_DAY_AM" });
@@ -38,10 +42,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         [Fact]
         public void Filter_ExcludesRateWithExcludedService()
         {
-            mock.FromFactory<IShipmentTypeManager>()
-                .Mock(x => x.Get(ShipmentTypeCode.Amazon))
-                .Setup(x => x.GetAvailableServiceTypes())
-                .Returns(new List<int> { 1 });
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(r => r.Get())
+                .Returns(new List<AmazonServiceTypeEntity>{new AmazonServiceTypeEntity()
+                {
+                    ApiValue = "FEDEX_PTP_SECOND_DAY_AM"
+                } });
 
             RateResult rate = new RateResult("Foo", "1", 1,
                 new AmazonRateTag { ShippingServiceId = "Ground" });

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
@@ -13,16 +11,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
     /// </summary>
     public class AmazonAvailableServiceTypeRateGroupFilter : IAmazonRateGroupFilter
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
         private readonly Lazy<List<string>> availableServices;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="shipmentTypeManager"></param>
-        public AmazonAvailableServiceTypeRateGroupFilter(IShipmentTypeManager shipmentTypeManager)
+        public AmazonAvailableServiceTypeRateGroupFilter(IAmazonServiceTypeRepository serviceTypeRepository)
         {
-            this.shipmentTypeManager = shipmentTypeManager;
+            this.serviceTypeRepository = serviceTypeRepository;
             availableServices = new Lazy<List<string>>(GetAvailableServices);
         }
 
@@ -59,8 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
         /// </summary>
         private List<string> GetAvailableServices()
         {
-            ShipmentType amazonShipmentType = shipmentTypeManager.Get(ShipmentTypeCode.Amazon);
-            return amazonShipmentType.GetAvailableServiceTypes().Select(service => EnumHelper.GetApiValue((AmazonServiceType) service)).ToList();
+            return serviceTypeRepository.Get().Select(s => s.ApiValue).ToList();
         }
     }
 }
