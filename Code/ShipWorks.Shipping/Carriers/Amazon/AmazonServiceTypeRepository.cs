@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                     {
                         sqlAdapter.SaveAndRefetch(newType);
+                        serviceTypes.Add(newType);
                         return newType;
                     }
                 }
