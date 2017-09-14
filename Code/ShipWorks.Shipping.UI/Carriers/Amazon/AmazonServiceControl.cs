@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
@@ -20,15 +22,30 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public partial class AmazonServiceControl : ServiceControlBase
     {
+        private readonly IMessenger messenger;
+        private List<AmazonServiceTypeEntity> allServices;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonServiceControl"/> class.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public AmazonServiceControl(RateControl rateControl)
+        /// <param name="serviceTypeRepository">Repository of Amazon service types</param>
+        public AmazonServiceControl(RateControl rateControl, IAmazonServiceTypeRepository serviceTypeRepository, IMessenger messenger)
             : base(ShipmentTypeCode.Amazon, rateControl)
         {
+            this.messenger = messenger;
             InitializeComponent();
+            allServices = serviceTypeRepository.Get();
+
+            this.messenger.OfType<RatesRetrievedMessage>()
+                .Subscribe(x =>
+                {
+                    if (x.Success)
+                    {
+                        UpdateServiceTypes(new List<ShipmentEntity> {x.ShipmentAdapter.Shipment});
+                    }
+                });
         }
 
         /// <summary>
@@ -37,7 +54,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         protected override void Initialize()
         {
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryConfirmation);
-            EnumHelper.BindComboBox<AmazonServiceType>(service);
+
+            InitializeServiceComboBox();
 
             originControl.Initialize(ShipmentTypeCode.Amazon);
             dimensionsControl.Initialize();
@@ -59,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             };
         }
 
+
         /// <summary>
         /// Load the shipment entity data into the control
         /// </summary>
@@ -68,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             SuspendShipSenseFieldChangeEvent();
 
             originControl.DestinationChanged -= OnOriginDestinationChanged;
-            
+
             List<ShipmentEntity> shipmentsAsList = shipments.ToList();
             base.LoadShipments(shipmentsAsList, enableEditing, enableShippingAddress);
 
@@ -80,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
-        
+
         /// <summary>
         /// Load shipment details
         /// </summary>
@@ -101,8 +120,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     weight.ApplyMultiWeight(shipment.ContentWeight);
 
-                    AmazonServiceType serviceType = EnumHelper.GetEnumByApiValue<AmazonServiceType>(shipment.Amazon.ShippingServiceID);
-                    service.ApplyMultiValue(serviceType);
+                    AmazonServiceTypeEntity serviceType = allServices.FirstOrDefault(s => s.ApiValue == shipment.Amazon.ShippingServiceID);
+                    if (serviceType != null)
+                    {
+                        service.ApplyMultiText(serviceType.Description);
+                    }
+
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.Amazon));
 
@@ -126,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.Amazon)
                     .BuildServiceTypeDictionary(shipments);
 
-                service.BindToEnumAndPreserveSelection<AmazonServiceType>(x => availableServices.ContainsKey((int)x));
+                service.BindDataSourceAndPreserveSelection(allServices.Where(s => availableServices.ContainsKey(s.AmazonServiceTypeID)).ToList());
             }
         }
 
@@ -136,6 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void OnServiceChanged(object sender, EventArgs e)
         {
             SyncSelectedRate();
+            UpdateSectionDescription();
         }
 
         /// <summary>
@@ -167,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
         }
-        
+
         /// <summary>
         /// Save the content of the control to the entities
         /// </summary>
@@ -190,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // Save the other fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = EnumHelper.GetApiValue((AmazonServiceType) v));
+                service.ReadMultiValue(v => shipment.Amazon.ShippingServiceID = v.ToString());
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
 
                 deliveryConfirmation.ReadMultiValue(v => shipment.Amazon.DeliveryExperience = (int) v);
@@ -215,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void UpdateSectionDescription()
         {
-            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : service.Text;
+            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : (service.SelectedItem as AmazonServiceTypeEntity).Description;
         }
 
         /// <summary>
@@ -231,9 +255,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return;
             }
 
-            AmazonServiceType serviceType = EnumHelper.GetEnumByApiValue<AmazonServiceType>(rateTag.ShippingServiceId);
+            AmazonServiceTypeEntity selectedService = allServices.FirstOrDefault(s => s.ApiValue == rateTag.ShippingServiceId);
 
-            service.SelectedValue = serviceType;
+            service.SelectedItem = selectedService;
             if (service.SelectedIndex == -1 && oldIndex != -1)
             {
                 service.SelectedIndex = oldIndex;
@@ -248,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 // Update the selected rate in the rate control to coincide with the service change
-                AmazonRateTag selectedRateTag = service.SelectedItem as AmazonRateTag;
+                string apiValue = service.SelectedValue as string;
 
                 RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
                 {
@@ -258,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                         return false;
                     }
 
-                    return rateTag.ShippingServiceId == selectedRateTag?.ShippingServiceId;
+                    return rateTag.ShippingServiceId == apiValue;
                 });
 
                 RateControl.SelectRate(matchingRate);
@@ -267,6 +291,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 RateControl.SelectRate(RateControl.RateGroup.Rates.FirstOrDefault());
             }
+        }
+
+        /// <summary>
+        /// Initializes the service ComboBox.
+        /// </summary>
+        private void InitializeServiceComboBox()
+        {
+            service.DataSource = null;
+            service.DisplayMember = "Description";
+            service.ValueMember = "ApiValue";
+            service.DataSource = allServices;
         }
     }
 }
