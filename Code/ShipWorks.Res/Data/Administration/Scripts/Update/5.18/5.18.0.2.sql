@@ -7,5 +7,5 @@ GO
 PRINT N'Altering [dbo].[Configuration]'
 GO
 ALTER TABLE [dbo].[Configuration] ADD
-[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((0))
+[AllowEbayCombineLocally] [bit] NOT NULL CONSTRAINT [DF_Configuration_AllowEbayCombineLocally] DEFAULT ((1))
 GO
