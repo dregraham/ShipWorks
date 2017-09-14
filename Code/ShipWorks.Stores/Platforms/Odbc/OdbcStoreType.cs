@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OrderIdentifier CreateOrderIdentifier(string orderNumber)
         {
-            return new GenericOrderIdentifier(orderNumber);
+            return new AlphaNumericOrderIdentifier(orderNumber);
         }
 
         /// <summary>

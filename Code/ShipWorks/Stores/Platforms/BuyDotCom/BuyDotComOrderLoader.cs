@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         {
             BuyDotComOrderItemEntity buyItem = (BuyDotComOrderItemEntity) item;
 
-            buyItem.ReceiptItemID = csv.ReadField("BuyDotComItem.ReceiptItemID", 0L);
+            buyItem.ReceiptItemID = csv.ReadField("BuyDotComItem.ReceiptItemID", "");
             buyItem.ListingID = csv.ReadField("BuyDotComItem.ListingID", 0);
             buyItem.Shipping = csv.ReadField("BuyDotComItem.Shipping", 0m);
             buyItem.Tax = csv.ReadField("BuyDotComItem.Tax", 0m);

@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment
             OrderLines = new List<BuyDotComShipConfirmationLine>();
         }
 
-        public long ReceiptID
+        public string ReceiptID
         {
             get; set;
         }

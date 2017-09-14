@@ -539,7 +539,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(BuyDotComOrderItemFieldIndex), "BuyDotComOrderItemEntity");
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)BuyDotComOrderItemFieldIndex.OrderItemID, 0, 0, 19);
-			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "ReceiptItemID", typeof(System.Int64), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.ReceiptItemID, 0, 0, 19);
+			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "ReceiptItemID", typeof(System.String), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.ReceiptItemID, 100, 0, 0);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "ListingID", typeof(System.Int32), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.ListingID, 0, 0, 10);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Shipping", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Shipping, 0, 4, 19);
 			this.AddElementFieldInfo("BuyDotComOrderItemEntity", "Tax", typeof(System.Decimal), false, false, false, false,  (int)BuyDotComOrderItemFieldIndex.Tax, 0, 4, 19);
