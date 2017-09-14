@@ -400,11 +400,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ReceiptItemID property of the Entity BuyDotComOrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "BuyDotComOrderItem"."ReceiptItemID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 ReceiptItemID
+		public virtual System.String ReceiptItemID
 		{
-			get { return (System.Int64)GetValue((int)BuyDotComOrderItemFieldIndex.ReceiptItemID, true); }
+			get { return (System.String)GetValue((int)BuyDotComOrderItemFieldIndex.ReceiptItemID, true); }
 			set	{ SetValue((int)BuyDotComOrderItemFieldIndex.ReceiptItemID, value); }
 		}
 
