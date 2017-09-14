@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     AmazonServiceTypeID = 0,
                     ApiValue = string.Empty,
-                    Description = "Best Rate"
+                    Description = "Least Expensive Rate"
                 });
             }
         }
