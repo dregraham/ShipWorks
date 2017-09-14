@@ -70,6 +70,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             dimensionsControl.DimensionsChanged += (s, e) => RaiseShipSenseFieldChanged();
             weight.WeightChanged += (s, e) => RaiseShipSenseFieldChanged();
 
+            service.SelectedValueChanged += OnServiceChanged;
+
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
