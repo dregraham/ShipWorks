@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
             var dummyOrder = Create.Order(store, context.Customer)
-                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, 900L))
+                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, "900"))
                 .Save();
 
             Create.Shipment(dummyOrder)
@@ -77,8 +77,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "10" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == 200) &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == 300)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == "200") &&
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == "300")))));
         }
 
         [Fact]
@@ -93,8 +93,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "10" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == 200) &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == 300)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == "200") &&
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == "300")))));
         }
 
         [Fact]
@@ -108,10 +108,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "20" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == 200)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == "200")))));
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "30" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == 300)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == "300")))));
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "30" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == 300)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == "300")))));
         }
 
         [Fact]
@@ -140,14 +140,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-123" && i.ReceiptID == "10" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == 200) &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == 300)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(2) && z.ReceiptItemID == "200") &&
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(3) && z.ReceiptItemID == "300")))));
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-456" && i.ReceiptID == "50" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(5) && z.ReceiptItemID == 500)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(5) && z.ReceiptItemID == "500")))));
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-456" && i.ReceiptID == "60" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(6) && z.ReceiptItemID == 600)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(6) && z.ReceiptItemID == "600")))));
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
 
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-456" && i.ReceiptID == "60" &&
-                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(6) && z.ReceiptItemID == 600)))));
+                    i.OrderLines.Any(z => z.Quantity.IsEquivalentTo(6) && z.ReceiptItemID == "600")))));
             webClient.Verify(x => x.UploadShipConfirmation(It.Is<List<BuyDotComShipConfirmation>>(c =>
                 c.Any(i => i.TrackingNumber == "track-789" && i.ReceiptID == "70"))));
         }
@@ -176,9 +176,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
         private OrderEntity CreateNormalOrder(int orderRoot, int item1Root, int item2Root, string trackingNumber, bool manual)
         {
             var order = Create.Order(store, context.Customer)
-                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, item1Root * 100L)
+                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, (item1Root * 100L).ToString())
                     .Set(x => x.ListingID, item1Root * 1000).Set(x => x.Quantity, item1Root))
-                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, item2Root * 100L)
+                .WithItem<BuyDotComOrderItemEntity>(i => i.Set(x => x.ReceiptItemID, (item2Root * 100L).ToString())
                     .Set(x => x.ListingID, item2Root * 1000).Set(x => x.Quantity, item2Root))
                 .Set(x => x.OrderNumberComplete, (orderRoot * 10).ToString())
                 .Set(x => x.CombineSplitStatus, CombineSplitStatusType.None)
@@ -222,7 +222,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
             combinedOrderDetails.Aggregate(
                 Modify.Order(order),
                 (o, d) => o.WithItem<BuyDotComOrderItemEntity>(i => i
-                    .Set(x => x.ReceiptItemID, d.Item1 * 100L)
+                    .Set(x => x.ReceiptItemID, (d.Item1 * 100L).ToString())
                     .Set(x => x.OriginalOrderID, d.Item1 * -1006)
                     .Set(x => x.ListingID, d.Item1 * 1000)
                     .Set(x => x.Quantity, d.Item1)))

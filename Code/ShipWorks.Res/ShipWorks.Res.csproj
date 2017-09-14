@@ -418,7 +418,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.14.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.1.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.16\5.16.2.0.sql" />
@@ -428,6 +427,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.3.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.5.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.3.sql" />
