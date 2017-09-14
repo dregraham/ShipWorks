@@ -220,7 +220,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             base.ConfigurePrimaryProfile(profile);
 
             AmazonProfileEntity amazon = profile.Amazon;
-            amazon.ShippingServiceID = "Best Rate";
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.Weight = 0;
 
@@ -249,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             IAmazonProfileEntity amazonProfile = profile.Amazon;
 
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
             if (amazonProfile.Weight.GetValueOrDefault() > 0)
@@ -264,8 +264,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsHeight, amazonShipment, AmazonShipmentFields.DimsHeight);
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsWeight, amazonShipment, AmazonShipmentFields.DimsWeight);
                 ShippingProfileUtility.ApplyProfileValue(amazonProfile.DimsAddWeight, amazonShipment, AmazonShipmentFields.DimsAddWeight);
-
-                ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             }
         }
 
