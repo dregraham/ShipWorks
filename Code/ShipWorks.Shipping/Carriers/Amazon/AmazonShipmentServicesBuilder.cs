@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             List<KeyValuePair<int, string>> uspsServices = serviceTypes.Where(s => s.Value.ToUpper().StartsWith("USPS")).ToList();
 
-            IEnumerable<KeyValuePair<int, string>> everythingElse = serviceTypes.Where(s => !uspsServices.Contains(s)).OrderBy(v => v.Value);
+            IEnumerable<KeyValuePair<int, string>> everythingElse = serviceTypes.Where(s => !uspsServices.Contains(s)).OrderBy(v => v.Value.Split(' ')[0]);
 
             uspsServices.AddRange(everythingElse);
             

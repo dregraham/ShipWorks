@@ -134,6 +134,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             amazonServiceTypes.Add(new AmazonServiceTypeEntity()
             {
+                AmazonServiceTypeID = 4,
+                Description = "UPS - Express",
+                ApiValue = "4"
+            });
+
+            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            {
                 AmazonServiceTypeID = 3,
                 Description = "USPS - Priority",
                 ApiValue = "3"
@@ -149,7 +156,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             expectedResult.Add(1, "USPS - First");
             expectedResult.Add(3, "USPS - Priority");
             expectedResult.Add(2, "UPS - Ground");
-            
+            expectedResult.Add(4, "UPS - Express");
+
             Assert.True(result.All(r => expectedResult[r.Key] == r.Value));
         }
 
