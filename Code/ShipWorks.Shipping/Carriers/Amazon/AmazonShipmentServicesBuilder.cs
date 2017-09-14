@@ -2,6 +2,8 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
+using Interapptive.Shared.Collections;
+using System.Collections.Specialized;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -43,8 +45,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 .ToDictionary(s => s.AmazonServiceTypeID, s => s.Description) ?? new Dictionary<int, string>();
 
             // combine that with a a dictionary of available services
-            return GetAvailableServiceTypes(allServiceTypes).Union(shipmentsServiceTypes)
-                .ToDictionary(service => service.Key, service => service.Value);
+            IEnumerable<KeyValuePair<int, string>> services = GetAvailableServiceTypes(allServiceTypes).Union(shipmentsServiceTypes);
+
+            return GetSortedServiceTypeDictionary(services);
+        }
+
+        /// <summary>
+        /// Get a sorted Dictionary from the serviceTypes
+        /// </summary>
+        private Dictionary<int, string> GetSortedServiceTypeDictionary(IEnumerable<KeyValuePair<int, string>> serviceTypes)
+        {
+            List<KeyValuePair<int, string>> uspsServices = serviceTypes.Where(s => s.Value.ToUpper().StartsWith("USPS")).ToList();
+
+            IEnumerable<KeyValuePair<int, string>> everythingElse = serviceTypes.Where(s => !uspsServices.Contains(s)).OrderBy(v => v.Value);
+
+            uspsServices.AddRange(everythingElse);
+            
+            return uspsServices.ToDictionary(s => s.Key, s => s.Value);
         }
 
         /// <summary>

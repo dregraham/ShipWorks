@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Settings;
 using Xunit;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -112,6 +113,44 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.False(result.ContainsKey(1));
             Assert.True(result.ContainsKey(2));
             Assert.True(result.ContainsKey(3));
+        }
+
+        [Fact]
+        public void BuildServiceTypeDictionary_ReturnsServices_WithUSPSFirst()
+        {
+            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            {
+                AmazonServiceTypeID = 1,
+                Description = "USPS - First",
+                ApiValue = "1"
+            });
+
+            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            {
+                AmazonServiceTypeID = 2,
+                Description = "UPS - Ground",
+                ApiValue = "2"
+            });
+
+            amazonServiceTypes.Add(new AmazonServiceTypeEntity()
+            {
+                AmazonServiceTypeID = 3,
+                Description = "USPS - Priority",
+                ApiValue = "3"
+            });
+
+            excludedServices.Add(new ExcludedServiceTypeEntity { ServiceType = 1, ShipmentType = (int)ShipmentTypeCode.Amazon });
+
+            ShipmentEntity[] shipments = { new ShipmentEntity { Amazon = new AmazonShipmentEntity() { ShippingServiceID = "some random service" } } };
+
+            Dictionary<int, string> result = testObject.BuildServiceTypeDictionary(shipments);
+            
+            var expectedResult = new Dictionary<int, string>();
+            expectedResult.Add(1, "USPS - First");
+            expectedResult.Add(3, "USPS - Priority");
+            expectedResult.Add(2, "UPS - Ground");
+            
+            Assert.True(result.All(r => expectedResult[r.Key] == r.Value));
         }
 
         public void Dispose()
