@@ -43,8 +43,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         /// </summary>
         private void InitializeServicePicker(AmazonShipmentType shipmentType)
         {
-            servicePicker.DisplayMember = "Description";
-            servicePicker.ValueMember = "AmazonServiceTypeID";
+            servicePicker.DisplayMember = "Key";
+            servicePicker.ValueMember = "Value";
 
             List<int> excludedServices = shipmentType.GetExcludedServiceTypes().ToList();
 
@@ -52,7 +52,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             foreach (AmazonServiceTypeEntity service in amazonServices)
             {
-                servicePicker.Items.Add(service, !excludedServices.Contains(service.AmazonServiceTypeID));
+                servicePicker.Items
+                    .Add(new KeyValuePair<string, int>(service.Description, service.AmazonServiceTypeID), !excludedServices.Contains(service.AmazonServiceTypeID));
             }
         }
 
@@ -63,10 +64,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         {
             // Checked list box only exposes checked items or all items. Since we want unchecked, we'll just take the difference
             // between all services and checked services.
-            List<int> includedServices = servicePicker.CheckedItems.Cast<AmazonServiceTypeEntity>().Select(s => s.AmazonServiceTypeID).ToList();
+            List<int> includedServices = servicePicker.CheckedItems.Cast<KeyValuePair<string, int>>().Select(s => s.Value).ToList();
 
-            return servicePicker.Items.Cast<AmazonServiceTypeEntity>()
-                .Select(serviceType => serviceType.AmazonServiceTypeID)
+            return servicePicker.Items.Cast<KeyValuePair<string, int>>()
+                .Select(serviceType => serviceType.Value)
                 .Where(serviceTypeID => !includedServices.Contains(serviceTypeID));
         }
     }
