@@ -24,7 +24,6 @@ GO
 CREATE TABLE [dbo].[AmazonServiceType]
 (
 [AmazonServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
-[RowVersion] [timestamp] NOT NULL,
 [ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
