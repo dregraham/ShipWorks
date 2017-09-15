@@ -8,6 +8,7 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -52,13 +53,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void SaveNewService(string apiValue, string description)
         {
+            // if for some reason the api value is greater than what we can store in the database ignore it
+            if (apiValue.Length > AmazonServiceTypeFields.ApiValue.MaxLength)
+            {
+                return;
+            }
+            
             lock (lockObject)
             {
                 // We don't know about this type, create a new one and attempt to save it.
                 AmazonServiceTypeEntity newType = new AmazonServiceTypeEntity
                 {
                     ApiValue = apiValue,
-                    Description = description
+                    //keep the descripton truncated to whatever length we support in the database
+                    Description = description.Substring(0, AmazonServiceTypeFields.Description.MaxLength)
                 };
 
                 try
@@ -67,7 +75,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     {
                         sqlAdapter.SaveAndRefetch(newType);
                         serviceTypes.Add(newType);
-                        return newType;
                     }
                 }
                 catch (ORMQueryExecutionException ex)
@@ -81,7 +88,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     if (newType != null)
                     {
                         log.Info($"apiValue found already in database. Using this new value.");
-                        return newType;
                     }
                     throw;
                 }
