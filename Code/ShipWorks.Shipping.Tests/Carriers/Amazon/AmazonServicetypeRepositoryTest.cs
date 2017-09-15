@@ -72,16 +72,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void CreateNewService_SavesServiceType()
+        public void SaveNewService_SavesServiceType()
         {
             var testObject = mock.Create<AmazonServiceTypeRepository>();
-            testObject.CreateNewService("val", "desc");
+            testObject.SaveNewService("val", "desc");
 
-            sqlAdapter.Verify(a=>a.SaveAndRefetch(It.Is<AmazonServiceTypeEntity>(t=>t.ApiValue=="val" && t.Description=="desc")), Times.Once);
+            sqlAdapter.Verify(
+                a => a.SaveAndRefetch(
+                    It.Is<AmazonServiceTypeEntity>(t => t.ApiValue == "val" && t.Description == "desc")), Times.Once);
         }
 
         [Fact]
-        public void CreateNewService_RefreshesServicesIfOrmQueryExecutionExceptionIsThrown()
+        public void SaveNewService_RefreshesServicesIfOrmQueryExecutionExceptionIsThrown()
         {
             Mock<IEntityCollection2> typesCollection = SetupIEntityCollection(new List<AmazonServiceTypeEntity>()
             {
@@ -98,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Throws(new ORMQueryExecutionException("", "", null, null, null));
 
             var testObject = mock.Create<AmazonServiceTypeRepository>();
-            testObject.CreateNewService("val", "desc");
+            testObject.SaveNewService("val", "desc");
 
             sqlAdapter.Verify(a => a.FetchQueryAsync(It.IsAny<EntityQuery<AmazonServiceTypeEntity>>()), Times.Once);
 

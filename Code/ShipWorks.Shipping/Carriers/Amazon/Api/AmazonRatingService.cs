@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 {
                     if (knownServiceTypes.None(s => s.ApiValue == service.ShippingServiceId))
                     {
-                        serviceTypeRepository.CreateNewService(service.ShippingServiceId, service.ShippingServiceName);
+                        serviceTypeRepository.SaveNewService(service.ShippingServiceId, service.ShippingServiceName);
                     }
                 }
             }

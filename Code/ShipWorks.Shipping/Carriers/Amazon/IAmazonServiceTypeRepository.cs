@@ -17,6 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Creates and adds a new service to the repository
         /// </summary>
-        AmazonServiceTypeEntity CreateNewService(string apiValue, string description);
+        void SaveNewService(string apiValue, string description);
     }
 }

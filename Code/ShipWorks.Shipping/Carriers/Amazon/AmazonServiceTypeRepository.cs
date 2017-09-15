@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonServiceTypeRepository(ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> logFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            log = logFactory(typeof(IAmazonServiceTypeRepository));
+            log = logFactory(typeof(AmazonServiceTypeRepository));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Creates a new service type
         /// </summary>
-        public AmazonServiceTypeEntity CreateNewService(string apiValue, string description)
+        public void SaveNewService(string apiValue, string description)
         {
             lock (lockObject)
             {
