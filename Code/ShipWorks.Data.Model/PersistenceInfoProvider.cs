@@ -394,11 +394,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AmazonServiceTypeEntity's mappings</summary>
 		private void InitAmazonServiceTypeEntityMappings()
 		{
-			this.AddElementMapping("AmazonServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonServiceType", 4, 0);
+			this.AddElementMapping("AmazonServiceTypeEntity", @"ShipWorksLocal", @"dbo", "AmazonServiceType", 3, 0);
 			this.AddElementFieldMapping("AmazonServiceTypeEntity", "AmazonServiceTypeID", "AmazonServiceTypeID", false, "Int", 0, 10, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int32), 0);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("AmazonServiceTypeEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "ApiValue", "ApiValue", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("AmazonServiceTypeEntity", "Description", "Description", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits AmazonShipmentEntity's mappings</summary>

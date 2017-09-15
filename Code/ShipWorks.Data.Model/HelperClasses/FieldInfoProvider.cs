@@ -391,9 +391,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(AmazonServiceTypeFieldIndex), "AmazonServiceTypeEntity");
 			this.AddElementFieldInfo("AmazonServiceTypeEntity", "AmazonServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonServiceTypeEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonServiceTypeFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("AmazonServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.ApiValue, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.Description, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.Description, 100, 0, 0);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()

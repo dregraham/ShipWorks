@@ -269,9 +269,8 @@
       <EntityDefinition Name="AmazonServiceType" ObjectID="46c2dbbc-35a6-4057-8998-6be9b1e2385e">
         <Fields>
           <Field Name="AmazonServiceTypeID" Type="int" IsReadOnly="true" Precision="10" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="ApiValue" Type="string" MaxLength="50" FieldIndex="2" />
-          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ApiValue" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Description" Type="string" MaxLength="100" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonShipment" ObjectID="ce150d7f-235a-4903-8fd6-874ee4b91c1b">
@@ -3777,7 +3776,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-12T20:05:55.8783761Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-15T14:50:23.1744377Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -3923,9 +3922,8 @@
                   <PkConstraintName Name="PK_AmazonServiceTypeID" />
                   <Fields>
                     <Field Name="AmazonServiceTypeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="8" Precision="10" />
-                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ApiValue" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="Description" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="ApiValue" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="Description" Ordinal="3" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonShipment">
@@ -9368,7 +9366,6 @@
             <FieldMapping FieldName="AmazonServiceTypeID" TargetFieldName="AmazonServiceTypeID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="ApiValue" TargetFieldName="ApiValue" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
-            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonShipment" TargetName="ShipWorksLocal:dbo:AmazonShipment">

@@ -442,8 +442,6 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>AmazonServiceTypeID. </summary>
 		AmazonServiceTypeID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
 		///<summary>ApiValue. </summary>
 		ApiValue,
 		///<summary>Description. </summary>

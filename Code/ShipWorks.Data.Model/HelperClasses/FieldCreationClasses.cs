@@ -987,11 +987,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.AmazonServiceTypeID);}
 		}
-		/// <summary>Creates a new AmazonServiceTypeEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.RowVersion);}
-		}
 		/// <summary>Creates a new AmazonServiceTypeEntity.ApiValue field instance</summary>
 		public static EntityField2 ApiValue
 		{

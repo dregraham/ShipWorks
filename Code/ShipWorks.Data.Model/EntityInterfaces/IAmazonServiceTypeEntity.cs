@@ -27,12 +27,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
         System.Int32 AmazonServiceTypeID { get; }
-        /// <summary> The RowVersion property of the Entity AmazonServiceType<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonServiceType"."RowVersion"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Byte[] RowVersion { get; }
         /// <summary> The ApiValue property of the Entity AmazonServiceType<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonServiceType"."ApiValue"<br/>
@@ -42,7 +36,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Description property of the Entity AmazonServiceType<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonServiceType"."Description"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Description { get; }
         
