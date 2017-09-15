@@ -92,6 +92,8 @@ namespace ShipWorks.Shipping
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
+        private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private bool closing;
         private bool applyingProfile;
 
@@ -102,12 +104,15 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager)
+            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
             this.customsManager = customsManager;
+            this.rateHashingServiceFactory = rateHashingServiceFactory;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
@@ -1968,17 +1973,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void SendRatesRetrievedMessage(RateGroup rateGroup, ShipmentEntity shipment)
         {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                string ratingHash = scope.ResolveKeyed<IRateHashingService>(shipment.ShipmentTypeCode).GetRatingHash(shipment);
+            GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
+                GenericResult.FromSuccess(rateGroup) :
+                GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
 
-                GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
-                    GenericResult.FromSuccess(rateGroup) :
-                    GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+            string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
 
-                scope.Resolve<IMessenger>().Send(new RatesRetrievedMessage(this, ratingHash, rates,
-                    lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment)));
-            }
+            messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates,
+                shipmentAdapterFactory.Get(shipment)));
         }
 
         /// <summary>
