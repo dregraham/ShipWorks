@@ -1487,15 +1487,15 @@ CREATE NONCLUSTERED INDEX [IX_DownloadDetail_DownloadID] ON [dbo].[DownloadDetai
 GO
 PRINT N'Creating index [IX_DownloadDetail_OrderNumber] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber], [ExtraStringData1]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_BigIntIndex] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_OrderID] on [dbo].[DownloadDetail]'
 GO
