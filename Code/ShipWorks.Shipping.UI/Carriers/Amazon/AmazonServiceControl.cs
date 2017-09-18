@@ -151,8 +151,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.Amazon)
                     .BuildServiceTypeDictionary(shipments);
 
-                service.BindDataSourceAndPreserveSelection(allServices.Where(s => availableServices.ContainsKey(s.AmazonServiceTypeID)).ToList());
+                service.BindDataSourceAndPreserveSelection(allServices.Where(service => IsAvailableServiceType(service, shipments, availableServices)).ToList());
             }
+        }
+
+        /// <summary>
+        /// Is available service type
+        /// </summary>
+        /// <returns>If service is in list of available services or is a service for the selected shipment, return true. Else false.</returns>
+        private static bool IsAvailableServiceType(AmazonServiceTypeEntity service, List<ShipmentEntity> shipments, Dictionary<int, string> availableServices)
+        {
+            return availableServices.ContainsKey(service.AmazonServiceTypeID) || shipments.Any(shipment => shipment.Amazon.ShippingServiceID == service.ApiValue);
         }
 
         /// <summary>
