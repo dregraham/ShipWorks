@@ -64,6 +64,14 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
+        protected StoreDownloader(StoreEntity store, StoreType storeType) :
+            this(store, storeType, ConfigurationData.FetchReadOnly(), new SqlAdapterFactory())
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory) :
             this(store, storeType, configuration, sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
         {
@@ -1188,7 +1196,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         #region Order Element Factory
-        // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without 
+        // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
 
         /// <summary>
