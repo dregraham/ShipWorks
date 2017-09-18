@@ -9,7 +9,7 @@ using ShipWorks.Data.Model;
 namespace ShipWorks.Data.Administration
 {
     /// <summary>
-    /// Utility class for determining disk usages for the current datababase
+    /// Utility class for determining disk usages for the current database
     /// </summary>
     public static class SqlDiskUsage
     {
@@ -25,52 +25,20 @@ namespace ShipWorks.Data.Administration
                         EntityType.ResourceEntity
                     };
 
-        static List<EntityType> orderList = new List<EntityType>
-                    {
-                        EntityType.AmazonOrderEntity,
-                        EntityType.AmazonOrderItemEntity,
-                        EntityType.BigCommerceOrderItemEntity,
-                        EntityType.BuyDotComOrderItemEntity,
-                        EntityType.ChannelAdvisorOrderEntity,
-                        EntityType.ChannelAdvisorOrderItemEntity,
-                        EntityType.ClickCartProOrderEntity,
-                        EntityType.CommerceInterfaceOrderEntity,
-                        EntityType.EbayOrderEntity,
-                        EntityType.EbayOrderItemEntity,
-                        EntityType.EtsyOrderEntity,
-                        EntityType.InfopiaOrderItemEntity,
-                        EntityType.MagentoOrderEntity,
-                        EntityType.MarketplaceAdvisorOrderEntity,
-                        EntityType.MivaOrderItemAttributeEntity,
-                        EntityType.NetworkSolutionsOrderEntity,
-                        EntityType.NeweggOrderEntity,
-                        EntityType.NeweggOrderItemEntity,
-                        EntityType.OrderEntity,
-                        EntityType.OrderItemEntity,
-                        EntityType.OrderItemAttributeEntity,
-                        EntityType.OrderChargeEntity,
-                        EntityType.OrderMotionOrderEntity,
-                        EntityType.OrderPaymentDetailEntity,
-                        EntityType.PayPalOrderEntity,
-                        EntityType.ProStoresOrderEntity,
-                        EntityType.SearsOrderEntity,
-                        EntityType.SearsOrderItemEntity,
-                        EntityType.ShopifyOrderEntity,
-                        EntityType.ShopifyOrderItemEntity,
-                        EntityType.ThreeDCartOrderItemEntity,
-                        EntityType.YahooOrderEntity,
-                        EntityType.YahooOrderItemEntity
-                    };
+        // We're getting the list of order related tables dynamically so that we don't have to remember to add
+        // to the list when we add new store types
+        static Lazy<List<EntityType>> orderList = new Lazy<List<EntityType>>(() =>
+            Enum.GetValues(typeof(EntityType))
+                .OfType<EntityType>()
+                .Where(IsOrderType)
+                .ToList());
 
         private static List<EntityType> shipSenseList = new List<EntityType> { EntityType.ShipSenseKnowledgebaseEntity };
 
         /// <summary>
         /// Indicates how much space the order/order item tables use
         /// </summary>
-        public static long OrdersUsage
-        {
-            get { return GetTableSpaceUsed(orderList); }
-        }
+        public static long OrdersUsage => GetTableSpaceUsed(orderList);
 
         /// <summary>
         /// Indicates how much space the audit logs take
@@ -159,6 +127,20 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Is the entity type associated with orders
+        /// </summary>
+        private static bool IsOrderType(EntityType entityType)
+        {
+            var entityName = entityType.ToString();
+
+            return entityName.EndsWith(EntityType.OrderEntity.ToString()) ||
+                entityName.EndsWith(EntityType.OrderItemEntity.ToString()) ||
+                entityName.EndsWith(EntityType.OrderSearchEntity.ToString()) ||
+                entityName.EndsWith(EntityType.OrderItemAttributeEntity.ToString()) ||
+                entityName.EndsWith(EntityType.OrderChargeEntity.ToString());
+        }
+
+        /// <summary>
         /// Indicates if the running version of SQL server is the express version
         /// </summary>
         private static bool IsExpress
@@ -194,6 +176,12 @@ namespace ShipWorks.Data.Administration
                 return size * 1024L;
             }
         }
+
+        /// <summary>
+        /// Get the space used by the given list of entities.
+        /// </summary>
+        private static long GetTableSpaceUsed(Lazy<List<EntityType>> entityList) =>
+            GetTableSpaceUsed(entityList.Value);
 
         /// <summary>
         /// Get the space used by the given list of entities.
