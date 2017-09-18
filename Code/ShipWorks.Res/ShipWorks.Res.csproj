@@ -460,6 +460,8 @@
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Labels\Standard 4x6\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Standard 4x6\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Thermal\settings.xml" />

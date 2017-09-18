@@ -52,7 +52,7 @@ namespace ShipWorks.Templates.Distribution
             if (swVersion.Major == 0)
             {
                 // Has to be set to the biggest number we check below
-                swVersion = new Version("5.17.0.0000");
+                swVersion = new Version("5.18.0.0000");
             }
 
             // No default templates are installed yet - we are safe to do the initial install
@@ -91,6 +91,13 @@ namespace ShipWorks.Templates.Distribution
                     InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
                     
+                    UpdateDatabaseTemplateVersion(swVersion);
+                }
+
+                if (installed < new Version("5.18.0.0000"))
+                {
+                    InstallTemplate(@"Labels\Standard 4x6", TemplateManager.Tree.CreateEditableClone());
+
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
             }
