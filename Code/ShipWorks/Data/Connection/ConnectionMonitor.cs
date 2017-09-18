@@ -502,7 +502,7 @@ namespace ShipWorks.Data.Connection
         public static bool IsDbConnectionException(Exception ex)
         {
             IEnumerable<Exception> exceptions = ex.GetAllExceptions();
-            IEnumerable<SqlException> sqlExceptions = exceptions.Where(e => e is SqlException).Cast<SqlException>();
+            IEnumerable<SqlException> sqlExceptions = exceptions.OfType<SqlException>();
             
             if (sqlExceptions.Any())
             {
