@@ -6,6 +6,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -91,21 +92,46 @@ namespace ShipWorks.Stores.Content
         {
             GenericResult<long> result;
 
-            using (new AuditBehaviorScope(configurationData.FetchReadOnly().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Combined"))
             {
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+                using (new AuditBehaviorScope(configurationData.FetchReadOnly().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
                 {
-                    SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("CombineOrder.Combine for new order number {0}", newOrderNumber));
-                    result = await sqlDeadlockRetry.ExecuteWithRetryAsync(() => PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter)).ConfigureAwait(false);
+                    using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+                    {
+                        SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("CombineOrder.Combine for new order number {0}", newOrderNumber));
+                        result = await sqlDeadlockRetry.ExecuteWithRetryAsync(() => PerformCombination(survivingOrderID, newOrderNumber, orders, progress, sqlAdapter)).ConfigureAwait(false);
+                    }
                 }
-            }
 
-            if (result.Success)
-            {
-                await combinedOrderAuditor.Audit(result.Value, orders);
+                if (result.Success)
+                {
+                    await combinedOrderAuditor.Audit(result.Value, orders);
+                }
+
+                AddTelemetryProperties(trackedDurationEvent, orders, result.Success);
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Add telemetry properties
+        /// </summary>
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, IEnumerable<IOrderEntity> orders, bool result)
+        {
+            try
+            {
+                IOrderEntity order = orders.First();
+                trackedDurationEvent.AddProperty("Orders.Combined.Result", result ? "Success" : "Failed");
+                trackedDurationEvent.AddProperty("Orders.Combined.Quantity", orders.Count().ToString());
+                trackedDurationEvent.AddProperty("Orders.Combined.StoreType", storeTypeManager.GetType(order.StoreID).StoreTypeName);
+                trackedDurationEvent.AddProperty("Orders.Combined.StoreId", order.StoreID.ToString());
+                trackedDurationEvent.AddProperty("Orders.Combined.Strategy", "Standard");
+            }
+            catch
+            {
+                // Just continue...we don't want to stop the combine if telemetry has an issue.
+            }
         }
 
         /// <summary>
