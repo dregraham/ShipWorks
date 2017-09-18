@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public Dictionary<int, string> BuildServiceTypeDictionary(IEnumerable<ShipmentEntity> shipments)
         {
             // Get all of the services from the shipments
-            IEnumerable<string> shipmentsServices = shipments.Select(s => s.Amazon.ShippingServiceID).Distinct();
+            IEnumerable<string> shipmentsServices = shipments.Select(s => s.Amazon?.ShippingServiceID).Distinct();
 
             // Get all of the amazon services
             List<AmazonServiceTypeEntity> allServiceTypes = amazonServiceTypeRepository.Get();
