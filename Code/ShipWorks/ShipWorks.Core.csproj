@@ -1748,7 +1748,7 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
-    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />

@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         private readonly Dictionary<StoreTypeCode, Type> specificUploaders = new Dictionary<StoreTypeCode, Type>
         {
             { StoreTypeCode.Amazon, typeof(AmazonOnlineUpdateCommandCreator) },
-            { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceCommandCreator) },
+            { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceOnlineUpdateCommandCreator) },
             { StoreTypeCode.Amosoft, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceCommandCreator) },
             { StoreTypeCode.Brightpearl, typeof(GenericModuleOnlineUpdateCommandCreator) },

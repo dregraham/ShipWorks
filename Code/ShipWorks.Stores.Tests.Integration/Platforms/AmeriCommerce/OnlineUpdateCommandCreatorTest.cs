@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         private readonly AmeriCommerceStoreEntity store;
         private Mock<IAmeriCommerceWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly AmeriCommerceCommandCreator commandCreator;
+        private readonly AmeriCommerceOnlineUpdateCommandCreator commandCreator;
 
         public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.AmeriCommerce) as AmeriCommerceCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.AmeriCommerce) as AmeriCommerceOnlineUpdateCommandCreator;
 
             webClient.Setup(x => x.UpdateOrderStatus(AnyLong, AnyInt)).Returns(Result.FromSuccess());
             webClient.Setup(x => x.UploadShipmentDetails(AnyLong, It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess());
