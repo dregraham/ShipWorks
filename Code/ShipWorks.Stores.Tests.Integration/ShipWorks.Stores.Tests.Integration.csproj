@@ -175,13 +175,13 @@
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
-    <Compile Include="Platforms\Amazon\OnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\Amazon\OrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
-    <Compile Include="Platforms\AmeriCommerce\OnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
-    <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
-    <Compile Include="Platforms\BigCommerce\OnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceDataAccessTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BuyDotCom\BuyDotComDataAccessTest.cs" />
     <Compile Include="Platforms\BuyDotCom\BuyDotComOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\GenericModule\MultiCombineTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleMultiCombineTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />

@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class OnlineUpdateCommandCreatorTest : IDisposable
+    public class BigCommerceOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
         private readonly BigCommerceOnlineUpdateCommandCreator commandCreator;
 
-        public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
+        public BigCommerceOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>

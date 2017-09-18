@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class OnlineUpdateCommandCreatorTest : IDisposable
+    public class AmeriCommerceOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
         private readonly AmeriCommerceOnlineUpdateCommandCreator commandCreator;
 
-        public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
+        public AmeriCommerceOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>

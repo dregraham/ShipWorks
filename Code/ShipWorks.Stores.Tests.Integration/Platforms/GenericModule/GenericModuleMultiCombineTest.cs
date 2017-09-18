@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class MultiCombineTest : IDisposable
+    public class GenericModuleMultiCombineTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
         private readonly OrderEntity order3;
         private readonly Dictionary<long, OrderEntity> orders;
 
-        public MultiCombineTest(DatabaseFixture db, ITestOutputHelper output)
+        public GenericModuleMultiCombineTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>

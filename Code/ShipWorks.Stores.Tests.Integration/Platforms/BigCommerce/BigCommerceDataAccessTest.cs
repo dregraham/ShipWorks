@@ -13,13 +13,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class DataAccessTest : IDisposable
+    public class BigCommerceDataAccessTest : IDisposable
     {
         private readonly DataContext context;
         private readonly BigCommerceStoreEntity store;
         private readonly OrderEntity order;
 
-        public DataAccessTest(DatabaseFixture db)
+        public BigCommerceDataAccessTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
 
