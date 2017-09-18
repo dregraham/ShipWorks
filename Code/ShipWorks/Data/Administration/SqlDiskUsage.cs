@@ -136,8 +136,10 @@ namespace ShipWorks.Data.Administration
             return entityName.EndsWith(EntityType.OrderEntity.ToString()) ||
                 entityName.EndsWith(EntityType.OrderItemEntity.ToString()) ||
                 entityName.EndsWith(EntityType.OrderSearchEntity.ToString()) ||
-                entityName.EndsWith(EntityType.OrderItemAttributeEntity.ToString()) ||
-                entityName.EndsWith(EntityType.OrderChargeEntity.ToString());
+                entityType == EntityType.OrderItemAttributeEntity ||
+                entityType == EntityType.OrderChargeEntity ||
+                entityType == EntityType.OrderPaymentDetailEntity ||
+                entityType == EntityType.EbayCombinedOrderRelationEntity;
         }
 
         /// <summary>
