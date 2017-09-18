@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
+using Autofac.Features.Indexed;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
 {
@@ -13,14 +15,21 @@ namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
     {
         private readonly IAmazonServiceTypeRepository serviceTypeRepository;
         private readonly Lazy<List<string>> availableServices;
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
+
+        public IIndex<ShipmentTypeCode, ShipmentType> ShipmentTypeFactory { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonAvailableServiceTypeRateGroupFilter(IAmazonServiceTypeRepository serviceTypeRepository)
+        public AmazonAvailableServiceTypeRateGroupFilter(IAmazonServiceTypeRepository serviceTypeRepository, 
+            IExcludedServiceTypeRepository excludedServiceTypeRepository, 
+            IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             this.serviceTypeRepository = serviceTypeRepository;
             availableServices = new Lazy<List<string>>(GetAvailableServices);
+            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            ShipmentTypeFactory = shipmentTypeFactory;
         }
 
         /// <summary>
@@ -56,7 +65,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
         /// </summary>
         private List<string> GetAvailableServices()
         {
-            return serviceTypeRepository.Get().Select(s => s.ApiValue).ToList();
+            IEnumerable<int> availableServiceTypes = ShipmentTypeFactory[ShipmentTypeCode.Amazon].GetAvailableServiceTypes();
+            return serviceTypeRepository.Get()
+                .Where(knownServiceType => availableServiceTypes.Contains(knownServiceType.AmazonServiceTypeID))
+                .Select(s => s.ApiValue).ToList();
         }
     }
 }
