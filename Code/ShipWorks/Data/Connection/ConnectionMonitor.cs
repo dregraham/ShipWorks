@@ -13,6 +13,9 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Connection
 {
@@ -37,6 +40,38 @@ namespace ShipWorks.Data.Connection
 
         // Synchronization between threads for Database Reconnecting
         static ManualResetEvent reconnectEvent = new ManualResetEvent(false);
+
+        // https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqlerror.number(v=vs.110).aspx
+        // https://msdn.microsoft.com/en-us/library/cc231199.aspx
+        private static readonly Lazy<List<int>> connectionErrorNumbers = new Lazy<List<int>>(() => new List<int> {
+                232,   // Win32: The pipe is being closed.
+                233,   // Win32: No process is on the other end of the pipe.
+                10053, // Win32: A transport-level error has occurred when sending the request to the server. (provider: TCP Provider, error: 0 - An established connection was aborted by the software in your host machine.)
+                10054, // Win32: An existing connection was forcibly closed by the remote host.
+                17142, // SQL: SQL Server service has been paused. No new connections will be allowed. To resume the service, use SQL Computer Manager or the Services application in Control Panel.
+                64,    // Win32: The specified network name is no longer available
+                -2,    // SQL: The wait operation timed out.
+                258,   // Win32: The wait operation timed out.
+                121,   // Win32: The semaphore time-out period has expired.
+                109,   // Win32: The pipe has been ended.
+                1236,  // Win32: The network connection was aborted by the local system.
+                -1,    // SQL: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found
+                0,     // SQL: The connection is broken and recovery is not possible.  The connection is marked by the server as unrecoverable.  No attempt was made to restore the connection.
+                596,   // SQL: Cannot continue the execution because the session is in the kill state
+                59,    // SQL: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - An unexpected network error occurred.)
+                1130,  // Win32: A transport-level error has occurred when sending the request to the server. (provider: Named Pipes Provider, error: 0 - Not enough server storage is available to process this command.)
+            });
+
+        /// <summary>
+        /// List of connection error numbers
+        /// </summary>
+        public static List<int> ConnectionErrorNumbers
+        {
+            get
+            {
+                return connectionErrorNumbers.Value;
+            }
+        }
 
         /// <summary>
         /// The total number of connections made since ShipWorks started
@@ -464,25 +499,24 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Indicates if the exception is due to a failed sql connection
         /// </summary>
-        private static bool IsDbConnectionException(Exception ex)
+        public static bool IsDbConnectionException(Exception ex)
         {
-            int[] connectionErrors = {
-                232,   // Win32: The pipe is being closed.
-                233,   // Win32: No process is on the other end of the pipe.
-                10054, // Win32: An existing connection was forcibly closed by the remote host.
-                17142  // SQL: SQL Server service has been paused. No new connections will be allowed. To resume the service, use SQL Computer Manager or the Services application in Control Panel.
-            };
-
-            ORMException ormException = ex as ORMException;
-            if (ormException != null)
+            IEnumerable<Exception> exceptions = ex.GetAllExceptions();
+            IEnumerable<SqlException> sqlExceptions = exceptions.Where(e => e is SqlException).Cast<SqlException>();
+            
+            if (sqlExceptions.Any())
             {
-                ex = ormException.InnerException;
-            }
+                List<int> errors = sqlExceptions.Select(e => e.Number).ToList();
 
-            SqlException sqlException = ex as SqlException;
-            if (sqlException != null)
-            {
-                if (Array.IndexOf<int>(connectionErrors, sqlException.Number) >= 0)
+                foreach (SqlErrorCollection errorCollection in sqlExceptions.Select(e => e.Errors))
+                {
+                    foreach (SqlError sqlError in errorCollection)
+                    {
+                        errors.Add(sqlError.Number);
+                    }
+                }
+
+                if (errors.Intersect(ConnectionErrorNumbers).Any())
                 {
                     return true;
                 }

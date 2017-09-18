@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Interapptive.Shared.Utility
@@ -14,6 +15,20 @@ namespace Interapptive.Shared.Utility
         public static bool IsExceptionType(this Exception value, params Type[] exceptions)
         {
             return exceptions.Contains(value.GetType());
+        }
+
+        /// <summary>
+        /// Return a list of all exceptions/inner exceptions down the line
+        /// </summary>
+        public static IEnumerable<Exception> GetAllExceptions(this Exception ex)
+        {
+            Exception currentEx = ex;
+            yield return currentEx;
+            while (currentEx.InnerException != null)
+            {
+                currentEx = currentEx.InnerException;
+                yield return currentEx;
+            }
         }
     }
 }
