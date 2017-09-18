@@ -18,16 +18,16 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.OnlineUpdating
     /// Create online update commands for CommerceInterface
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.CommerceInterface)]
-    public class CommerceInterfaceCommandCreator : IOnlineUpdateCommandCreator
+    public class CommerceInterfaceOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(CommerceInterfaceCommandCreator));
+        private readonly ILog log = LogManager.GetLogger(typeof(CommerceInterfaceOnlineUpdateCommandCreator));
         private readonly IMessageHelper messageHelper;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommerceInterfaceCommandCreator(IMessageHelper messageHelper, IOrderManager orderManager)
+        public CommerceInterfaceOnlineUpdateCommandCreator(IMessageHelper messageHelper, IOrderManager orderManager)
         {
             this.messageHelper = messageHelper;
             this.orderManager = orderManager;

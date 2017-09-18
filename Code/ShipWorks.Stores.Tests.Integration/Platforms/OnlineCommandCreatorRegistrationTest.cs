@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.Choxi, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.ClickCartPro, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CloudConversion, typeof(GenericModuleOnlineUpdateCommandCreator) },
-            { StoreTypeCode.CommerceInterface, typeof(CommerceInterfaceCommandCreator) },
+            { StoreTypeCode.CommerceInterface, typeof(CommerceInterfaceOnlineUpdateCommandCreator) },
             { StoreTypeCode.CreLoaded, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.CsCart, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Ebay, typeof(EbayOnlineUpdateCommandCreator) },

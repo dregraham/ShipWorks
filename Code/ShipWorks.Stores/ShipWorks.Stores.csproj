@@ -257,7 +257,7 @@
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
-    <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceCommandCreator.cs" />
+    <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
