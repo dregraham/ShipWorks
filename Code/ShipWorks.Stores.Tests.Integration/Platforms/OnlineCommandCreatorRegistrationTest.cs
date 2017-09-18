@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.InstaStore, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Jet, typeof(JetUpdateOnlineCommandCreator) },
             { StoreTypeCode.Jigoshop, typeof(GenericModuleOnlineUpdateCommandCreator) },
-            { StoreTypeCode.LemonStand, typeof(LemonStandCommandCreator) },
+            { StoreTypeCode.LemonStand, typeof(LemonStandOnlineUpdateCommandCreator) },
             { StoreTypeCode.LimeLightCRM, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.LiveSite, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.LoadedCommerce, typeof(GenericModuleOnlineUpdateCommandCreator) },

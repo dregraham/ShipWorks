@@ -17,16 +17,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
     /// Create online update commands for LemonStand
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.LemonStand)]
-    public class LemonStandCommandCreator : IOnlineUpdateCommandCreator
+    public class LemonStandOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(LemonStandCommandCreator));
+        private readonly ILog log = LogManager.GetLogger(typeof(LemonStandOnlineUpdateCommandCreator));
         private readonly IMessageHelper messageHelper;
         private readonly Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LemonStandCommandCreator(IMessageHelper messageHelper, Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory)
+        public LemonStandOnlineUpdateCommandCreator(IMessageHelper messageHelper, Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory)
         {
             this.messageHelper = messageHelper;
             this.onlineUpdaterFactory = onlineUpdaterFactory;

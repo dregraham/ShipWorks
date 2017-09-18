@@ -392,7 +392,7 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
-    <Compile Include="Platforms\LemonStand\OnlineUpdating\LemonStandCommandCreator.cs" />
+    <Compile Include="Platforms\LemonStand\OnlineUpdating\LemonStandOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Magento\IMagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Magento\MagentoDownloaderFactory.cs" />
