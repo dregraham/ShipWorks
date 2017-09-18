@@ -26,22 +26,22 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BuyDotCom
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "CombinedOrderUpdates")]
-    public class OnlineUpdateCommandCreatorTest : IDisposable
+    public class BuyDotComOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
         private readonly BuyDotComStoreEntity store;
-        private Mock<IFtpClient> webClient;
+        private Mock<IBuyDotComFtpClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
         private readonly BuyDotComOnlineUpdateCommandCreator commandCreator;
 
-        public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
+        public BuyDotComOnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
             {
-                webClient = mock.Override<IFtpClient>();
-                mock.Override<IFtpClientFactory>()
+                webClient = mock.Override<IBuyDotComFtpClient>();
+                mock.Override<IBuyDotComFtpClientFactory>()
                     .Setup(x => x.LoginAsync(It.IsAny<IBuyDotComStoreEntity>()))
                     .ReturnsAsync(webClient.Object);
 

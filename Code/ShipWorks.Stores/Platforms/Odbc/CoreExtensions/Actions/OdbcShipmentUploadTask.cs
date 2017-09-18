@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
@@ -7,9 +10,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
         /// <summary>
         /// Runs this upload task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
             }
 
             // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>)d).ToList();
+            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
 
             // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
             if (context.CanPostpone && postponedKeys.Count < MaxBatchSize)

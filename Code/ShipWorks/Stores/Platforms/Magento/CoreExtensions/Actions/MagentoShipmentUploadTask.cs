@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -9,7 +10,6 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 {
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

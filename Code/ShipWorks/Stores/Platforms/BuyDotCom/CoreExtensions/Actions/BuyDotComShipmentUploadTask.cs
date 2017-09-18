@@ -8,6 +8,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
@@ -19,13 +20,15 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
     public class BuyDotComShipmentUploadTask : StoreInstanceTaskBase
     {
         const long maxBatchSize = 300;
-        private readonly IShipmentDetailsUpdater shipmentDetailsUpdater;
+        private readonly IBuyDotComShipmentDetailsUpdater shipmentDetailsUpdater;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComShipmentUploadTask(IShipmentDetailsUpdater shipmentDetailsUpdater)
+        public BuyDotComShipmentUploadTask(IBuyDotComShipmentDetailsUpdater shipmentDetailsUpdater, IStoreManager storeManager)
         {
+            this.storeManager = storeManager;
             this.shipmentDetailsUpdater = shipmentDetailsUpdater;
         }
 
@@ -69,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (context == null)
             {
@@ -81,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            BuyDotComStoreEntity store = StoreManager.GetStore(StoreID) as BuyDotComStoreEntity;
+            IBuyDotComStoreEntity store = storeManager.GetStore(StoreID) as IBuyDotComStoreEntity;
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -107,11 +110,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private async Task UploadShipmentDetails(BuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UploadShipmentDetails(IBuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                await shipmentDetailsUpdater.UploadShipmentDetails(store, shipmentKeys).ConfigureAwait(false);
+                await shipmentDetailsUpdater.UploadShipmentDetailsForShipments(store, shipmentKeys).ConfigureAwait(false);
             }
             catch (BuyDotComException ex)
             {

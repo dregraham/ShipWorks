@@ -184,6 +184,7 @@
     <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
     <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />

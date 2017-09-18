@@ -78,7 +78,7 @@ namespace ShipWorks.Actions.Tasks
         /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
         ///
         /// </summary>
-        public virtual Task RunAsync(List<long> inputKeys, ActionStepContext context) => RunAsync(inputKeys);
+        public virtual Task RunAsync(List<long> inputKeys, IActionStepContext context) => RunAsync(inputKeys);
 
         /// <summary>
         /// Run the task for tasks that require input but don't need the context

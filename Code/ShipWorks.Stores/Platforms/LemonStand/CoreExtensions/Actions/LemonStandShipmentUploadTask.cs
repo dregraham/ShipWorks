@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using Autofac;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
 {
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         ///     Instantiates the editor for the action
         /// </summary>
         public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
-        
+
         /// <summary>
         ///     Indicates if the task is supported for the specified store
         /// </summary>
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         /// <summary>
         ///     Run the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

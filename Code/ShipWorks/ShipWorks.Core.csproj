@@ -442,6 +442,7 @@
     <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
     <Compile Include="Actions\IActionProcessorFactory.cs" />
+    <Compile Include="Actions\IActionStepContext.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -1749,9 +1750,9 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
-    <Compile Include="Stores\Platforms\BuyDotCom\IFtpClient.cs" />
-    <Compile Include="Stores\Platforms\BuyDotCom\IFtpClientFactory.cs" />
-    <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IBuyDotComShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

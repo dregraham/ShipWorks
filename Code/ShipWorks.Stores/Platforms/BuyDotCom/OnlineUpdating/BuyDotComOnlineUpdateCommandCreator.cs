@@ -20,13 +20,13 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     public class BuyDotComOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
         private readonly IMessageHelper messageHelper;
-        private readonly IShipmentDetailsUpdater updater;
+        private readonly IBuyDotComShipmentDetailsUpdater updater;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BuyDotComOnlineUpdateCommandCreator(IShipmentDetailsUpdater updater, IMessageHelper messageHelper, Func<Type, ILog> createLogger)
+        public BuyDotComOnlineUpdateCommandCreator(IBuyDotComShipmentDetailsUpdater updater, IMessageHelper messageHelper, Func<Type, ILog> createLogger)
         {
             this.updater = updater;
             this.messageHelper = messageHelper;
@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         {
             try
             {
-                await updater.UploadShipmentDetails(store, orderKeys).ConfigureAwait(false);
+                await updater.UploadShipmentDetailsForOrders(store, orderKeys).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
             catch (BuyDotComException ex)

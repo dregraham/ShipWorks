@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.CoreExtensions.Actions
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             MethodConditions.EnsureArgumentIsNotNull(inputKeys, nameof(inputKeys));
             MethodConditions.EnsureArgumentIsNotNull(context, nameof(context));

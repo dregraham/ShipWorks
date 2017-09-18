@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
     public class BuyDotComOnlineUpdaterTest
     {
         private BuyDotComStoreEntity store;
-        private ShipmentDetailsUpdater updater;
+        private BuyDotComShipmentDetailsUpdater updater;
 
         private OrderEntity orderEntity;
         private FedExShipmentEntity fedExEntity;
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             store = new BuyDotComStoreEntity();
-            updater = mock.Create<ShipmentDetailsUpdater>();
+            updater = mock.Create<BuyDotComShipmentDetailsUpdater>();
 
             orderEntity = new OrderEntity { OrderNumber = 123456 };
             fedExEntity = new FedExShipmentEntity { Service = (int) FedExServiceType.FedExGround };

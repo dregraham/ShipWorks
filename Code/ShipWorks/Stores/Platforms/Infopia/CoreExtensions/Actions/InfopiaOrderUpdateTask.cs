@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

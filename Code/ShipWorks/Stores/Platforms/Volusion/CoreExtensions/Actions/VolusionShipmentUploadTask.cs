@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             foreach (long entityID in inputKeys)
             {

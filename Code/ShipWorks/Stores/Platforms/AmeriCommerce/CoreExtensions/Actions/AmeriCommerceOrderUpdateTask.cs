@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac;
-using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
 {
@@ -55,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -65,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

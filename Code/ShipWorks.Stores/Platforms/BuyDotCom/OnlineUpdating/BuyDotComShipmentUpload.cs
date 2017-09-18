@@ -7,12 +7,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// <summary>
     /// Shipment details for status upload
     /// </summary>
-    public class ShipmentUpload
+    public class BuyDotComShipmentUpload
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentUpload(IShipmentEntity shipment, IEnumerable<ShipmentUploadOrder> shipmentOrders)
+        public BuyDotComShipmentUpload(IShipmentEntity shipment, IEnumerable<BuyDotComShipmentUploadOrder> shipmentOrders)
         {
             Shipment = shipment;
             Orders = shipmentOrders.ToReadOnly();
@@ -26,6 +26,6 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Orders associated with the shipment
         /// </summary>
-        public IEnumerable<ShipmentUploadOrder> Orders { get; }
+        public IEnumerable<BuyDotComShipmentUploadOrder> Orders { get; }
     }
 }

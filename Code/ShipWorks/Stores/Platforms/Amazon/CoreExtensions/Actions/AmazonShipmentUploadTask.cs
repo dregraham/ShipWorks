@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

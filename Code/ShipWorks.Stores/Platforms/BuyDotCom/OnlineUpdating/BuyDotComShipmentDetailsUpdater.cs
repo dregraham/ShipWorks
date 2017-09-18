@@ -18,16 +18,16 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// Uploads tracking information on Buy.com
     /// </summary>
     [Component]
-    public class ShipmentDetailsUpdater : IShipmentDetailsUpdater
+    public class BuyDotComShipmentDetailsUpdater : IBuyDotComShipmentDetailsUpdater
     {
         private readonly ILog log;
-        private readonly IFtpClientFactory ftpClientFactory;
-        private readonly IDataAccess dataAccess;
+        private readonly IBuyDotComFtpClientFactory ftpClientFactory;
+        private readonly IBuyDotComDataAccess dataAccess;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDetailsUpdater(IFtpClientFactory ftpClientFactory, IDataAccess dataAccess, Func<Type, ILog> createLogger)
+        public BuyDotComShipmentDetailsUpdater(IBuyDotComFtpClientFactory ftpClientFactory, IBuyDotComDataAccess dataAccess, Func<Type, ILog> createLogger)
         {
             this.dataAccess = dataAccess;
             this.ftpClientFactory = ftpClientFactory;
@@ -37,16 +37,25 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Upload ship confirmation to buy.com for shipment IDs
         /// </summary>
-        public async Task UploadShipmentDetails(IBuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
+        public async Task UploadShipmentDetailsForOrders(IBuyDotComStoreEntity store, IEnumerable<long> orderKeys)
         {
-            var shipmentData = await dataAccess.GetShipmentDataAsync(shipmentKeys).ConfigureAwait(false);
+            var shipmentData = await dataAccess.GetShipmentDataByOrderAsync(orderKeys).ConfigureAwait(false);
+            await UploadShipmentDetails(store, shipmentData).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Upload ship confirmation to buy.com for shipment IDs
+        /// </summary>
+        public async Task UploadShipmentDetailsForShipments(IBuyDotComStoreEntity store, IEnumerable<long> shipmentKeys)
+        {
+            var shipmentData = await dataAccess.GetShipmentDataByShipmentAsync(shipmentKeys).ConfigureAwait(false);
             await UploadShipmentDetails(store, shipmentData).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Uploads shipment details for the given shipments
         /// </summary>
-        private async Task UploadShipmentDetails(IBuyDotComStoreEntity store, IEnumerable<ShipmentUpload> shipmentData)
+        private async Task UploadShipmentDetails(IBuyDotComStoreEntity store, IEnumerable<BuyDotComShipmentUpload> shipmentData)
         {
             List<BuyDotComShipConfirmation> confirmations = new List<BuyDotComShipConfirmation>();
 
@@ -82,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             }
 
             // Upload the confirmation details
-            using (IFtpClient ftpClient = await ftpClientFactory.LoginAsync(store).ConfigureAwait(false))
+            using (IBuyDotComFtpClient ftpClient = await ftpClientFactory.LoginAsync(store).ConfigureAwait(false))
             {
                 await ftpClient.UploadShipConfirmation(confirmations).ConfigureAwait(false);
             }

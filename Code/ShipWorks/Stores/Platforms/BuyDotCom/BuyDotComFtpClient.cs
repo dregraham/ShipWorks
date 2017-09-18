@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// Wraps all FTP operations for dealing with buy.com
     /// </summary>
     [Component]
-    public class BuyDotComFtpClient : IFtpClient
+    public class BuyDotComFtpClient : IBuyDotComFtpClient
     {
         private readonly ILog log;
         private IFtp ftp;

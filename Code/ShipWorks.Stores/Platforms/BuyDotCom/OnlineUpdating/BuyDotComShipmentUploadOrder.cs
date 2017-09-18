@@ -7,9 +7,9 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// <summary>
     /// Order data needed for uploading shipment details
     /// </summary>
-    public class ShipmentUploadOrder
+    public class BuyDotComShipmentUploadOrder
     {
-        public ShipmentUploadOrder(string orderNumberComplete, bool isManual, IEnumerable<IBuyDotComOrderItemEntity> items)
+        public BuyDotComShipmentUploadOrder(string orderNumberComplete, bool isManual, IEnumerable<IBuyDotComOrderItemEntity> items)
         {
             OrderNumberComplete = orderNumberComplete;
             IsManual = isManual;

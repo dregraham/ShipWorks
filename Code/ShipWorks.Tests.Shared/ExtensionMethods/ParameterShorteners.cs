@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Collections;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -49,5 +51,11 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         /// </summary>
         public static ShipmentEntity ShipmentWithTrackingNumber(string trackingNumber) =>
             It.Is<ShipmentEntity>(s => s.TrackingNumber == trackingNumber);
+
+        /// <summary>
+        /// Checks that a parameter is an enumerable that contains the specified items in any order
+        /// </summary>
+        public static IEnumerable<T> UnorderedEnumerable<T>(params T[] actual) =>
+            It.Is<IEnumerable<T>>(l => l.UnorderedSequenceEquals(actual));
     }
 }

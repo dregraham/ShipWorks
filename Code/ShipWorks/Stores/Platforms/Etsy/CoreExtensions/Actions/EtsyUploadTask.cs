@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             MethodConditions.EnsureArgumentIsNotNull(context, nameof(context));
             MethodConditions.EnsureArgumentIsNotNull(inputKeys, nameof(inputKeys));

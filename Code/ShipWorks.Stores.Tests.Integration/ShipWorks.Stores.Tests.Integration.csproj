@@ -182,8 +182,8 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
     <Compile Include="Platforms\BigCommerce\DataAccessTest.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdateCommandCreatorTest.cs" />
-    <Compile Include="Platforms\BuyDotCom\DataAccessTest.cs" />
-    <Compile Include="Platforms\BuyDotCom\OnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComDataAccessTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />

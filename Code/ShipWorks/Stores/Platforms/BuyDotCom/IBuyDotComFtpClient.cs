@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// <summary>
     /// FTP Client for Buy.com
     /// </summary>
-    public interface IFtpClient : IDisposable
+    public interface IBuyDotComFtpClient : IDisposable
     {
         /// <summary>
         /// Gets list of order files queued for process

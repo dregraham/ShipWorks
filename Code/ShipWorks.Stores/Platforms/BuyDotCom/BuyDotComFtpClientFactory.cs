@@ -11,14 +11,14 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     /// Factory for Buy.com FTP client
     /// </summary>
     [Component]
-    public class FtpClientFactory : IFtpClientFactory
+    public class BuyDotComFtpClientFactory : IBuyDotComFtpClientFactory
     {
-        private readonly Func<IFtp, IFtpClient> createFtpClient;
+        private readonly Func<IFtp, IBuyDotComFtpClient> createFtpClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FtpClientFactory(Func<IFtp, IFtpClient> createFtpClient)
+        public BuyDotComFtpClientFactory(Func<IFtp, IBuyDotComFtpClient> createFtpClient)
         {
             this.createFtpClient = createFtpClient;
         }
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Login to an FTP client for the given store
         /// </summary>
-        public async Task<IFtpClient> LoginAsync(IBuyDotComStoreEntity store)
+        public async Task<IBuyDotComFtpClient> LoginAsync(IBuyDotComStoreEntity store)
         {
             try
             {

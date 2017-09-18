@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
     /// Data access for uploading Buy.com shipment data
     /// </summary>
     [Component]
-    public class DataAccess : IDataAccess
+    public class BuyDotComDataAccess : IBuyDotComDataAccess
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingManager shippingManager;
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataAccess(ISqlAdapterFactory sqlAdapterFactory, IShippingManager shippingManager, Func<Type, ILog> createLogger)
+        public BuyDotComDataAccess(ISqlAdapterFactory sqlAdapterFactory, IShippingManager shippingManager, Func<Type, ILog> createLogger)
         {
             this.shippingManager = shippingManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -42,12 +42,24 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Get shipment data needed for uploading
         /// </summary>
-        public async Task<IEnumerable<ShipmentUpload>> GetShipmentDataAsync(IEnumerable<long> orderKeys)
+        public Task<IEnumerable<BuyDotComShipmentUpload>> GetShipmentDataByShipmentAsync(IEnumerable<long> shipmentKeys) =>
+            GetShipmentDataAsync(ShipmentFields.ShipmentID.In(shipmentKeys));
+
+        /// <summary>
+        /// Get shipment data needed for uploading
+        /// </summary>
+        public Task<IEnumerable<BuyDotComShipmentUpload>> GetShipmentDataByOrderAsync(IEnumerable<long> orderKeys) =>
+            GetShipmentDataAsync(ShipmentFields.OrderID.In(orderKeys));
+
+        /// <summary>
+        /// Get shipment data needed for uploading
+        /// </summary>
+        private async Task<IEnumerable<BuyDotComShipmentUpload>> GetShipmentDataAsync(IPredicate shipmentPredicate)
         {
             QueryFactory factory = new QueryFactory();
 
-            IEnumerable<IShipmentEntity> shipments = await GetShipmentsAsync(orderKeys, factory).ConfigureAwait(false);
-            IEnumerable<IOrderEntity> orders = await GetOrdersAsync(orderKeys, factory).ConfigureAwait(false);
+            IEnumerable<IShipmentEntity> shipments = await GetShipmentsAsync(shipmentPredicate, factory).ConfigureAwait(false);
+            IEnumerable<IOrderEntity> orders = await GetOrdersAsync(shipments.Select(x => x.OrderID), factory).ConfigureAwait(false);
             var ordersByOriginalOrderID = await GetCombinedOrdersAsync(orders, factory);
             var itemsByOrder = await GetItemsAsync(orders, factory);
 
@@ -59,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Create shipment upload instance
         /// </summary>
-        private ShipmentUpload CreateShipmentUpload(IOrderEntity order, IShipmentEntity shipment,
+        private BuyDotComShipmentUpload CreateShipmentUpload(IOrderEntity order, IShipmentEntity shipment,
             IDictionary<long, IEnumerable<CombinedOrder>> ordersByOriginalOrderID,
             IDictionary<long, IEnumerable<IBuyDotComOrderItemEntity>> itemsByOrder)
         {
@@ -69,19 +81,19 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
 
             var shipmentOrders = newOrders.Select(x => CreateShipmentUploadOrders(x, itemsByOrder));
 
-            return new ShipmentUpload(shipment, shipmentOrders);
+            return new BuyDotComShipmentUpload(shipment, shipmentOrders);
         }
 
         /// <summary>
         /// Create a shipment upload orders instance
         /// </summary>
-        private ShipmentUploadOrder CreateShipmentUploadOrders(CombinedOrder orderDetail, IDictionary<long, IEnumerable<IBuyDotComOrderItemEntity>> itemsByOrder)
+        private BuyDotComShipmentUploadOrder CreateShipmentUploadOrders(CombinedOrder orderDetail, IDictionary<long, IEnumerable<IBuyDotComOrderItemEntity>> itemsByOrder)
         {
             var items = itemsByOrder.ContainsKey(orderDetail.OrderID) ?
                         itemsByOrder[orderDetail.OrderID] :
                         Enumerable.Empty<IBuyDotComOrderItemEntity>();
 
-            return new ShipmentUploadOrder(orderDetail.OrderNumberComplete, orderDetail.IsManual, items);
+            return new BuyDotComShipmentUploadOrder(orderDetail.OrderNumberComplete, orderDetail.IsManual, items);
         }
 
         /// <summary>
@@ -115,9 +127,9 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Get shipments
         /// </summary>
-        private async Task<IEnumerable<IShipmentEntity>> GetShipmentsAsync(IEnumerable<long> orderKeys, QueryFactory factory)
+        private async Task<IEnumerable<IShipmentEntity>> GetShipmentsAsync(IPredicate shipmentPredicate, QueryFactory factory)
         {
-            var query = factory.Shipment.Where(ShipmentFields.OrderID.In(orderKeys));
+            var query = factory.Shipment.Where(shipmentPredicate);
 
             using (var sqlAdapter = sqlAdapterFactory.Create())
             {

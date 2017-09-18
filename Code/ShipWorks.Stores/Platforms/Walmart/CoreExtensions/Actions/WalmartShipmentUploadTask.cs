@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {

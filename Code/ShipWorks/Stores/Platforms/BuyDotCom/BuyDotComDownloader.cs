@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
         GenericCsvMap csvMap;
-        private readonly IFtpClientFactory ftpClientFactory;
+        private readonly IBuyDotComFtpClientFactory ftpClientFactory;
 
         /// <summary>
         /// Constructor
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         public BuyDotComDownloader(StoreEntity store,
             Func<StoreEntity, BuyDotComStoreType> getStoreType,
             IConfigurationData configurationData,
-            IFtpClientFactory ftpClientFactory,
+            IBuyDotComFtpClientFactory ftpClientFactory,
             ISqlAdapterFactory sqlAdapterFactory)
             : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 }
                 else
                 {
-                    using (IFtpClient ftpClient = await ftpClientFactory.LoginAsync(Store as IBuyDotComStoreEntity).ConfigureAwait(false))
+                    using (IBuyDotComFtpClient ftpClient = await ftpClientFactory.LoginAsync(Store as IBuyDotComStoreEntity).ConfigureAwait(false))
                     //using (BuyDotComFtpClient ftpClient = new BuyDotComFtpClient((BuyDotComStoreEntity) Store))
                     {
                         List<string> fileNames = await ftpClient.GetOrderFileNames().ConfigureAwait(false);
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Download File and process orders
         /// </summary>
-        private async Task<bool> DownloadFtpFile(string fileName, IFtpClient ftpClient)
+        private async Task<bool> DownloadFtpFile(string fileName, IBuyDotComFtpClient ftpClient)
         {
             try
             {

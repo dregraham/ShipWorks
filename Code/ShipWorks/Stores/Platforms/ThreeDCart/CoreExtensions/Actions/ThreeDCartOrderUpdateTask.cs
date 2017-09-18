@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Actions.Tasks.Common;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
-using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 using System.Threading.Tasks;
 using Autofac;
+using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {

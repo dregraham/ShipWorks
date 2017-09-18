@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (inputKeys == null)
             {
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// <summary>
         /// Shipment upload task for API integration
         /// </summary>
-        private async Task ApiShipmentUploadTask(List<long> inputKeys, ActionStepContext context, YahooStoreEntity store)
+        private async Task ApiShipmentUploadTask(List<long> inputKeys, IActionStepContext context, YahooStoreEntity store)
         {
             // Get any postponed data we've previously stored away
             List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// </summary>
         /// <param name="inputKeys">The input keys.</param>
         /// <param name="context">The context.</param>
-        private async Task EmailShipmentUploadTask(List<long> inputKeys, ActionStepContext context)
+        private async Task EmailShipmentUploadTask(List<long> inputKeys, IActionStepContext context)
         {
             foreach (long entityID in inputKeys)
             {
