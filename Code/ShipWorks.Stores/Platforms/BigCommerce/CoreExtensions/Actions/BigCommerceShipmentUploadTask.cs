@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IShipmentDetailsUpdater updater = lifetimeScope.Resolve<IShipmentDetailsUpdater>();
+                IBigCommerceShipmentDetailsUpdater updater = lifetimeScope.Resolve<IBigCommerceShipmentDetailsUpdater>();
                 IStoreManager storeManager = lifetimeScope.Resolve<IStoreManager>();
 
                 foreach (long entityID in inputKeys)

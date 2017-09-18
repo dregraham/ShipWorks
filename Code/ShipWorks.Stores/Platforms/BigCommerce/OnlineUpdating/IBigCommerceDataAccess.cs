@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Data access for the BigCommerce online updater
     /// </summary>
-    public interface IDataAccess
+    public interface IBigCommerceDataAccess
     {
         /// <summary>
         /// Get a unit of work
@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Get order details for uploading
         /// </summary>
-        Task<OnlineOrder> GetOrderDetailsAsync(long orderID);
+        Task<BigCommerceOnlineOrder> GetOrderDetailsAsync(long orderID);
 
         /// <summary>
         /// Get the latest active shipment

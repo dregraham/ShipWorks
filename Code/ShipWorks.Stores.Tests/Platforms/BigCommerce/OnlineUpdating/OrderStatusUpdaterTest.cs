@@ -14,14 +14,14 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
     public class OrderStatusUpdaterTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly OrderStatusUpdater testObject;
+        private readonly BigCommerceOrderStatusUpdater testObject;
         private readonly BigCommerceStoreEntity store;
 
         public OrderStatusUpdaterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new BigCommerceStoreEntity { StoreTypeCode = StoreTypeCode.BigCommerce };
-            testObject = mock.Create<OrderStatusUpdater>();
+            testObject = mock.Create<BigCommerceOrderStatusUpdater>();
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
         {
             await testObject.UpdateOrderStatus(store, 1006, 1);
 
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Verify(x => x.GetUnitOfWork());
         }
 
@@ -38,16 +38,16 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
         {
             await testObject.UpdateOrderStatus(store, 1006, 1);
 
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Verify(x => x.GetOrderDetailsAsync(1006));
         }
 
         [Fact]
         public async Task UpdateOrderStatus_LogsWarning_WhenOrderDetailsCannotBeFound()
         {
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Setup(x => x.GetOrderDetailsAsync(It.IsAny<long>()))
-                .ReturnsAsync((OnlineOrder) null);
+                .ReturnsAsync((BigCommerceOnlineOrder) null);
 
             await testObject.UpdateOrderStatus(store, 1006, 1);
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
         [Fact]
         public async Task UpdateOrderStatus_LogsInfo_WhenOrderIsManual()
         {
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Setup(x => x.GetOrderDetailsAsync(It.IsAny<long>()))
                 .ReturnsAsync(CreateOnlineUpdateOrder(1006, true, 1, string.Empty));
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
         [Fact]
         public async Task UpdateOrderStatus_DelegatesToWebClient()
         {
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Setup(x => x.GetOrderDetailsAsync(It.IsAny<long>()))
                 .ReturnsAsync(CreateOnlineUpdateOrder(1006, false, 123, string.Empty));
 
@@ -90,10 +90,10 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
                 .Setup(x => x.GetCodeName(1))
                 .Returns("Bar");
 
-            var unitOfWork = mock.FromFactory<IDataAccess>()
+            var unitOfWork = mock.FromFactory<IBigCommerceDataAccess>()
                 .Mock(x => x.GetUnitOfWork());
 
-            mock.Mock<IDataAccess>()
+            mock.Mock<IBigCommerceDataAccess>()
                 .Setup(x => x.GetOrderDetailsAsync(It.IsAny<long>()))
                 .ReturnsAsync(CreateOnlineUpdateOrder(1006, false, 1, string.Empty));
 
@@ -102,8 +102,8 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerceOnlineUpdating
             unitOfWork.Verify(x => x.AddForSave(It.Is<OrderEntity>(o => o.OrderID == 1006 && (int) o.OnlineStatusCode == 1 && o.OnlineStatus == "Bar")));
         }
 
-        private OnlineOrder CreateOnlineUpdateOrder(int orderID, bool isManual, int orderNumber, string empty) =>
-            new OnlineOrder(new OnlineOrderDetails(orderID, isManual, orderNumber, empty));
+        private BigCommerceOnlineOrder CreateOnlineUpdateOrder(int orderID, bool isManual, int orderNumber, string empty) =>
+            new BigCommerceOnlineOrder(new BigCommerceOnlineOrderDetails(orderID, isManual, orderNumber, empty));
 
         public void Dispose()
         {

@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         private readonly BigCommerceStoreEntity store;
         private Mock<IBigCommerceWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly BigCommerceCommandCreator commandCreator;
+        private readonly BigCommerceOnlineUpdateCommandCreator commandCreator;
 
         public OnlineUpdateCommandCreatorTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.BigCommerce) as BigCommerceCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.BigCommerce) as BigCommerceOnlineUpdateCommandCreator;
 
             store = Create.Store<BigCommerceStoreEntity>(StoreTypeCode.BigCommerce)
                 .Set(x => x.ApiUrl, "http://www.example.com")

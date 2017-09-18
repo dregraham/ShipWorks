@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [Fact]
         public async Task GetLatestActiveShipmentAsync_DelegatesToOrderManager()
         {
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             await testObject.GetLatestActiveShipmentAsync(1006);
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 .Setup(x => x.GetLatestActiveShipmentAsync(It.IsAny<long>()))
                 .ReturnsAsync(shipment);
 
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             var result = await testObject.GetLatestActiveShipmentAsync(1006);
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         public void GetOverriddenServiceUsed_DelegatesToShippingManager()
         {
             var shipment = new ShipmentEntity();
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             testObject.GetOverriddenServiceUsed(shipment);
 
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 .Setup(x => x.GetOverriddenServiceUsed(It.IsAny<ShipmentEntity>()))
                 .Returns("Foo");
 
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             var result = testObject.GetOverriddenServiceUsed(new ShipmentEntity());
 
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         [Fact]
         public async Task GetShipmentAsync_DelegatesToShippingManager()
         {
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             await testObject.GetShipmentAsync(1031);
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 .Setup(x => x.GetShipmentAsync(It.IsAny<long>()))
                 .ReturnsAsync(adapter.Object);
 
-            var testObject = mock.Create<DataAccess>();
+            var testObject = mock.Create<BigCommerceDataAccess>();
 
             var result = await testObject.GetShipmentAsync(1006);
 

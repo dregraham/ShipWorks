@@ -16,18 +16,18 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Updates BigCommerce order status/shipments
     /// </summary>
     [Component]
-    public class OrderStatusUpdater : IOrderStatusUpdater
+    public class BigCommerceOrderStatusUpdater : IBigCommerceOrderStatusUpdater
     {
         private readonly ILog log;
         private readonly IBigCommerceWebClientFactory webClientFactory;
         private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
-        private readonly IDataAccess dataAccess;
+        private readonly IBigCommerceDataAccess dataAccess;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderStatusUpdater(
-            IDataAccess dataAccess,
+        public BigCommerceOrderStatusUpdater(
+            IBigCommerceDataAccess dataAccess,
             IBigCommerceWebClientFactory webClientFactory,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
             Func<Type, ILog> createLogger)
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
         /// </summary>
-        public async Task UpdateOrderStatus(BigCommerceStoreEntity store, OnlineOrder orderDetails, int statusCode)
+        public async Task UpdateOrderStatus(BigCommerceStoreEntity store, BigCommerceOnlineOrder orderDetails, int statusCode)
         {
             IUnitOfWorkCore unitOfWork = dataAccess.GetUnitOfWork();
             await UpdateOrderStatus(orderDetails, statusCode, store, unitOfWork).ConfigureAwait(false);
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
         /// </summary>
-        private async Task UpdateOrderStatus(OnlineOrder orderDetails, int statusCode, BigCommerceStoreEntity store, IUnitOfWorkCore unitOfWork)
+        private async Task UpdateOrderStatus(BigCommerceOnlineOrder orderDetails, int statusCode, BigCommerceStoreEntity store, IUnitOfWorkCore unitOfWork)
         {
             if (orderDetails.AreAllManual)
             {

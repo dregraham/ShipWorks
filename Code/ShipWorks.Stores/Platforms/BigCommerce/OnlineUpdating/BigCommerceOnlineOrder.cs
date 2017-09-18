@@ -8,12 +8,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Order information used for uploading
     /// </summary>
-    public class OnlineOrder
+    public class BigCommerceOnlineOrder
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineOrder(OnlineOrderDetails baseOrder) :
+        public BigCommerceOnlineOrder(BigCommerceOnlineOrderDetails baseOrder) :
             this(baseOrder, new[] { baseOrder })
         {
 
@@ -22,15 +22,15 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineOrder(OrderEntity order) :
-            this(new OnlineOrderDetails(order))
+        public BigCommerceOnlineOrder(OrderEntity order) :
+            this(new BigCommerceOnlineOrderDetails(order))
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineOrder(OnlineOrderDetails baseOrder, IEnumerable<OnlineOrderDetails> ordersToUpload)
+        public BigCommerceOnlineOrder(BigCommerceOnlineOrderDetails baseOrder, IEnumerable<BigCommerceOnlineOrderDetails> ordersToUpload)
         {
             OrderID = baseOrder.OrderID;
             OrderNumberComplete = baseOrder.OrderNumberComplete;
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Orders to use for uploading to BigCommerce
         /// </summary>
-        public IEnumerable<OnlineOrderDetails> OrdersToUpload { get; }
+        public IEnumerable<BigCommerceOnlineOrderDetails> OrdersToUpload { get; }
 
         /// <summary>
         /// Are all the orders manual

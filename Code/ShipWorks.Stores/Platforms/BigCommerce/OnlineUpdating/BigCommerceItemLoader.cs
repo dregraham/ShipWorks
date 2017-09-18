@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Item loader for BigCommerce online updater
     /// </summary>
     [Component]
-    public class ItemLoader : IItemLoader
+    public class BigCommerceItemLoader : IBigCommerceItemLoader
     {
         // Valid list of providers from https://developer.bigcommerce.com/api/stores/v2/orders/shipments#create-a-shipment
         private static readonly Dictionary<ShipmentTypeCode, string> validProviders = new Dictionary<ShipmentTypeCode, string>
@@ -31,13 +31,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         };
 
         private readonly ILog log;
-        private readonly IDataAccess dataAccess;
+        private readonly IBigCommerceDataAccess dataAccess;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="createLogger"></param>
-        public ItemLoader(IDataAccess dataAccess, Func<Type, ILog> createLogger)
+        public BigCommerceItemLoader(IBigCommerceDataAccess dataAccess, Func<Type, ILog> createLogger)
         {
             this.dataAccess = dataAccess;
             log = createLogger(GetType());
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Load items
         /// </summary>
-        public async Task<GenericResult<OnlineItems>> LoadItems(
+        public async Task<GenericResult<BigCommerceOnlineItems>> LoadItems(
             IEnumerable<IOrderItemEntity> orderItems,
             string orderNumberComplete,
             long orderNumber,
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
             // So we'll skip uploading shipment info, and inform the user to use the website to finish.
             if (!hasBigCommerceRequiredShippingFields && orderNumberComplete.IndexOf("-", 0, StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                return GenericResult.FromError<OnlineItems>($"Order number {orderNumberComplete} was downloaded prior to the new BigCommerce API upgrade.  Uploading shipment information is not supported for orders with multiple ship-to addresses that were downloaded before the upgrade. Please enter shipping information using the BigCommerce admin website.");
+                return GenericResult.FromError<BigCommerceOnlineItems>($"Order number {orderNumberComplete} was downloaded prior to the new BigCommerce API upgrade.  Uploading shipment information is not supported for orders with multiple ship-to addresses that were downloaded before the upgrade. Please enter shipping information using the BigCommerce admin website.");
             }
 
             if (!hasBigCommerceRequiredShippingFields)
@@ -83,11 +83,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
             // If we couldn't find an order address id, the order is not supposed to be shipped, so just return
             if (bigCommerceOrderAddressId == BigCommerceConstants.InvalidOrderAddressID)
             {
-                return GenericResult.FromError<OnlineItems>($"Not processing shipment for order {orderNumberComplete} since it has no BigCommerce shipping order address.  The order probably has only digital items.");
+                return GenericResult.FromError<BigCommerceOnlineItems>($"Not processing shipment for order {orderNumberComplete} since it has no BigCommerce shipping order address.  The order probably has only digital items.");
             }
 
             var items = GetOrderItems(orderItems, orderProducts);
-            return GenericResult.FromSuccess(new OnlineItems(bigCommerceOrderAddressId, items));
+            return GenericResult.FromSuccess(new BigCommerceOnlineItems(bigCommerceOrderAddressId, items));
         }
 
         /// <summary>

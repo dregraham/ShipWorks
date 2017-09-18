@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         [Fact]
         public async Task GetOrderDetailsAsync_ReturnsDetails_WhenOrderExists()
         {
-            var testObject = context.Mock.Create<DataAccess>();
+            var testObject = context.Mock.Create<BigCommerceDataAccess>();
 
             var orderDetails = await testObject.GetOrderDetailsAsync(order.OrderID);
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         [Fact]
         public async Task GetOrderDetailsAsync_ReturnsNull_WhenOrderDoesNotExist()
         {
-            var testObject = context.Mock.Create<DataAccess>();
+            var testObject = context.Mock.Create<BigCommerceDataAccess>();
 
             var orderDetails = await testObject.GetOrderDetailsAsync(-100);
 
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                 .Set(x => x.OrderNumberComplete, "789B")
                 .Save();
 
-            var testObject = context.Mock.Create<DataAccess>();
+            var testObject = context.Mock.Create<BigCommerceDataAccess>();
 
             var orderDetails = await testObject.GetOrderDetailsAsync(order.OrderID);
 
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         [Fact]
         public async Task GetOrderItemsAsync_ReturnsItemCollection_WhenItemsExist()
         {
-            var testObject = context.Mock.Create<DataAccess>();
+            var testObject = context.Mock.Create<BigCommerceDataAccess>();
 
             var orderItems = await testObject.GetOrderItemsAsync(order.OrderID);
 
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
         [Fact]
         public async Task GetOrderItemsAsync_ReturnsEmptyCollection_WhenItemsDoNotExist()
         {
-            var testObject = context.Mock.Create<DataAccess>();
+            var testObject = context.Mock.Create<BigCommerceDataAccess>();
 
             var orderItems = await testObject.GetOrderItemsAsync(-100);
 

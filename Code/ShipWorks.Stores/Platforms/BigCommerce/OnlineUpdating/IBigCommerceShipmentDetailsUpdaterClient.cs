@@ -8,13 +8,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Web client for updating shipment details online
     /// </summary>
-    public interface IShipmentDetailsUpdaterClient
+    public interface IBigCommerceShipmentDetailsUpdaterClient
     {
         /// <summary>
         /// Update shipment details for a single order
         /// </summary>
         Task UpdateOnline(IBigCommerceStoreEntity store,
-            OnlineOrderDetails orderDetail,
+            BigCommerceOnlineOrderDetails orderDetail,
             string orderNumberComplete,
             ShipmentEntity shipment,
             IDictionary<long, IEnumerable<IBigCommerceOrderItemEntity>> allItems);

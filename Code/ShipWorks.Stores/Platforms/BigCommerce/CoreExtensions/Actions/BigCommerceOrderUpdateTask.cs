@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IOrderStatusUpdater updater = lifetimeScope.Resolve<IOrderStatusUpdater>(TypedParameter.From(store));
+                    IBigCommerceOrderStatusUpdater updater = lifetimeScope.Resolve<IBigCommerceOrderStatusUpdater>(TypedParameter.From(store));
                     foreach (long orderID in inputKeys)
                     {
                         await updater.UpdateOrderStatus(store, orderID, StatusCode, context.CommitWork).ConfigureAwait(false);

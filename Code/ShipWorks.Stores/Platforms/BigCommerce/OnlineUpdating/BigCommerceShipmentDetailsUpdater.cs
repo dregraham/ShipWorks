@@ -15,22 +15,22 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Updates BigCommerce order status/shipments
     /// </summary>
     [Component]
-    public class ShipmentDetailsUpdater : IShipmentDetailsUpdater
+    public class BigCommerceShipmentDetailsUpdater : IBigCommerceShipmentDetailsUpdater
     {
         private readonly ILog log;
-        private readonly IDataAccess dataAccess;
-        private readonly IItemLoader productLoader;
-        private readonly IOrderStatusUpdater orderUpdater;
-        private readonly IShipmentDetailsUpdaterClient updateClient;
+        private readonly IBigCommerceDataAccess dataAccess;
+        private readonly IBigCommerceItemLoader productLoader;
+        private readonly IBigCommerceOrderStatusUpdater orderUpdater;
+        private readonly IBigCommerceShipmentDetailsUpdaterClient updateClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDetailsUpdater(
-            IDataAccess dataAccess,
-            IShipmentDetailsUpdaterClient updateClient,
-            IItemLoader productLoader,
-            IOrderStatusUpdater orderUpdater,
+        public BigCommerceShipmentDetailsUpdater(
+            IBigCommerceDataAccess dataAccess,
+            IBigCommerceShipmentDetailsUpdaterClient updateClient,
+            IBigCommerceItemLoader productLoader,
+            IBigCommerceOrderStatusUpdater orderUpdater,
             Func<Type, ILog> createLogger)
         {
             this.updateClient = updateClient;
@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Push the online status for an shipment.
         /// </summary>
-        private async Task UpdateShipmentDetails(BigCommerceStoreEntity store, ShipmentEntity shipment, OnlineOrder orderDetails)
+        private async Task UpdateShipmentDetails(BigCommerceStoreEntity store, ShipmentEntity shipment, BigCommerceOnlineOrder orderDetails)
         {
             if (orderDetails.AreAllManual)
             {

@@ -6,7 +6,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Updates BigCommerce order status/shipments
     /// </summary>
-    public interface IShipmentDetailsUpdater
+    public interface IBigCommerceShipmentDetailsUpdater
     {
         /// <summary>
         /// Push the online status for an order.

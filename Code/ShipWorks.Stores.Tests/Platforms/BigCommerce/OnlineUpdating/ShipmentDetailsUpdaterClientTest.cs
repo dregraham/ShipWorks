@@ -19,27 +19,27 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
     public class ShipmentDetailsUpdaterClientTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly ShipmentDetailsUpdaterClient testObject;
+        private readonly BigCommerceShipmentDetailsUpdaterClient testObject;
         private readonly Mock<IBigCommerceStoreEntity> store;
-        private readonly OnlineOrderDetails orderDetail;
+        private readonly BigCommerceOnlineOrderDetails orderDetail;
         private readonly ShipmentEntity shipment;
         private readonly Dictionary<long, IEnumerable<IBigCommerceOrderItemEntity>> allItems;
 
         public ShipmentDetailsUpdaterClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<ShipmentDetailsUpdaterClient>();
+            testObject = mock.Create<BigCommerceShipmentDetailsUpdaterClient>();
             store = mock.CreateMock<IBigCommerceStoreEntity>();
 
-            mock.Mock<IItemLoader>()
+            mock.Mock<IBigCommerceItemLoader>()
                 .Setup(x => x.LoadItems(It.IsAny<IEnumerable<IBigCommerceOrderItemEntity>>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<IBigCommerceWebClient>()))
-                .ReturnsAsync(GenericResult.FromSuccess(new OnlineItems(456, new[] { new BigCommerceItem() })));
+                .ReturnsAsync(GenericResult.FromSuccess(new BigCommerceOnlineItems(456, new[] { new BigCommerceItem() })));
 
-            mock.Mock<IItemLoader>()
+            mock.Mock<IBigCommerceItemLoader>()
                 .Setup(x => x.GetShippingMethod(It.IsAny<ShipmentEntity>()))
                 .Returns(Tuple.Create("carrier", "service"));
 
-            orderDetail = new OnlineOrderDetails(1006, false, 123, "123");
+            orderDetail = new BigCommerceOnlineOrderDetails(1006, false, 123, "123");
             shipment = new ShipmentEntity();
             allItems = new Dictionary<long, IEnumerable<IBigCommerceOrderItemEntity>>
             {
@@ -77,9 +77,9 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
         [Fact]
         public async Task UpdateOnline_LogsWarning_WhenProductLoadFails()
         {
-            mock.Mock<IItemLoader>()
+            mock.Mock<IBigCommerceItemLoader>()
                 .Setup(x => x.LoadItems(It.IsAny<IEnumerable<IBigCommerceOrderItemEntity>>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<IBigCommerceWebClient>()))
-                .ReturnsAsync(GenericResult.FromError<OnlineItems>("Foo"));
+                .ReturnsAsync(GenericResult.FromError<BigCommerceOnlineItems>("Foo"));
 
             await testObject.UpdateOnline(store.Object, orderDetail, "123", shipment, allItems);
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
         {
             await testObject.UpdateOnline(store.Object, orderDetail, "123", shipment, allItems);
 
-            mock.Mock<IItemLoader>()
+            mock.Mock<IBigCommerceItemLoader>()
                 .Verify(x => x.GetShippingMethod(shipment));
         }
 
@@ -102,9 +102,9 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
             shipment.TrackingNumber = "track";
             var items = new[] { new BigCommerceItem() };
 
-            mock.Mock<IItemLoader>()
+            mock.Mock<IBigCommerceItemLoader>()
                 .Setup(x => x.LoadItems(It.IsAny<IEnumerable<IBigCommerceOrderItemEntity>>(), It.IsAny<string>(), It.IsAny<long>(), It.IsAny<IBigCommerceWebClient>()))
-                .ReturnsAsync(GenericResult.FromSuccess(new OnlineItems(456, items)));
+                .ReturnsAsync(GenericResult.FromSuccess(new BigCommerceOnlineItems(456, items)));
 
             var client = mock.FromFactory<IBigCommerceWebClientFactory>()
                 .Mock(x => x.Create(store.Object));
