@@ -9,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -61,12 +62,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             
             lock (lockObject)
             {
+                if (serviceTypes == null)
+                {
+                    RefreshServiceTypes();
+                }
+
                 // We don't know about this type, create a new one and attempt to save it.
                 AmazonServiceTypeEntity newType = new AmazonServiceTypeEntity
                 {
                     ApiValue = apiValue,
                     //keep the descripton truncated to whatever length we support in the database
-                    Description = description.Substring(0, AmazonServiceTypeFields.Description.MaxLength)
+                    Description = description.Truncate(AmazonServiceTypeFields.Description.MaxLength)
                 };
 
                 try
@@ -85,11 +91,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
                     RefreshServiceTypes();
                     newType = serviceTypes.FirstOrDefault(service => service.ApiValue == apiValue);
-                    if (newType != null)
+                    if (newType == null)
                     {
-                        log.Info($"apiValue found already in database. Using this new value.");
+                        log.Error($"apiValue not found after refresh. Rethrowing.");
+                        throw;
                     }
-                    throw;
+                    log.Info($"apiValue found already in database. Using this new value.");
                 }
             }
         }

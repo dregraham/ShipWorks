@@ -42,7 +42,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Get_ReturnsAmazonServiceTypesFromDatabase()
         {
-            var serviceTypes = new List<AmazonServiceTypeEntity>();
+            var serviceTypes = new List<AmazonServiceTypeEntity>()
+            {
+                new AmazonServiceTypeEntity()
+                {
+                    AmazonServiceTypeID = 42,
+                    ApiValue = "API",
+                    Description = "From Data Base"
+                }
+            };
+
             Mock<IEntityCollection2> typesCollection = SetupIEntityCollection(serviceTypes);
 
             sqlAdapter.Setup(a => a.FetchQueryAsync(It.IsAny<EntityQuery<AmazonServiceTypeEntity>>()))
@@ -51,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonServiceTypeRepository>();
             var results = testObject.Get();
 
-            Assert.Equal(serviceTypes, results);
+            Assert.Contains(results, entity => entity.AmazonServiceTypeID == 42 && entity.ApiValue == "API" && entity.Description == "From Data Base");
         }
 
         [Fact]
@@ -74,12 +83,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void SaveNewService_SavesServiceType()
         {
+            Mock<IEntityCollection2> typesCollection = SetupIEntityCollection(new List<AmazonServiceTypeEntity>()
+            {
+                new AmazonServiceTypeEntity()
+                {
+                    ApiValue = "val1",
+                    Description = "description"
+                }
+            });
+
+            sqlAdapter.Setup(a => a.FetchQueryAsync(It.IsAny<EntityQuery<AmazonServiceTypeEntity>>()))
+                .ReturnsAsync(typesCollection.Object);
+
             var testObject = mock.Create<AmazonServiceTypeRepository>();
-            testObject.SaveNewService("val", "desc");
+            testObject.SaveNewService("val2", "desc");
 
             sqlAdapter.Verify(
                 a => a.SaveAndRefetch(
-                    It.Is<AmazonServiceTypeEntity>(t => t.ApiValue == "val" && t.Description == "desc")), Times.Once);
+                    It.Is<AmazonServiceTypeEntity>(t => t.ApiValue == "val2" && t.Description == "desc")), Times.Once);
         }
 
         [Fact]
@@ -89,7 +110,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             {
                 new AmazonServiceTypeEntity()
                 {
-                    ApiValue = "val"
+                    ApiValue = "val",
+                    Description = "description"
                 }
             });
 
@@ -102,8 +124,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonServiceTypeRepository>();
             testObject.SaveNewService("val", "desc");
 
-            sqlAdapter.Verify(a => a.FetchQueryAsync(It.IsAny<EntityQuery<AmazonServiceTypeEntity>>()), Times.Once);
-
+            sqlAdapter.Verify(a => a.FetchQueryAsync(It.IsAny<EntityQuery<AmazonServiceTypeEntity>>()), Times.Exactly(2));
         }
 
         private Mock<IEntityCollection2> SetupIEntityCollection(IEnumerable<AmazonServiceTypeEntity> serviceTypes)
