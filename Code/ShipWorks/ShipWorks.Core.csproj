@@ -4307,7 +4307,7 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\CoreExtensions\Actions\AmeriCommerceOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>AmeriCommerceOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AmeriCommerce\ExtensionMethods.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceExtensionMethods.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
