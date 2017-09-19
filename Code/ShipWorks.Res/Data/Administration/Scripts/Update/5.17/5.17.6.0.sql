@@ -1,5 +1,4 @@
-﻿
-PRINT N'Dropping index [IX_DownloadDetail_BigIntIndex] from [dbo].[DownloadDetail]'
+﻿PRINT N'Dropping index [IX_DownloadDetail_BigIntIndex] from [dbo].[DownloadDetail]'
 GO
 DROP INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail]
 GO
