@@ -21,3 +21,9 @@ GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderItem] DROP
 COLUMN [HarmonizedCode]
 GO
+
+
+PRINT N'Altering [dbo].[ShipmentCustomsItem]'
+GO
+ALTER table [ShipmentCustomsItem] alter column [HarmonizedCode] nvarchar(20)
+GO
