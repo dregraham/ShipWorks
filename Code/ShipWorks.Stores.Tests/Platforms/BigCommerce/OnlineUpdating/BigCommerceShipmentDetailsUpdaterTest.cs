@@ -13,7 +13,7 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
 {
-    public class ShipmentDetailsUpdaterTest : IDisposable
+    public class BigCommerceShipmentDetailsUpdaterTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly BigCommerceShipmentDetailsUpdater testObject;
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.OnlineUpdating
         private readonly ShipmentEntity shipment;
         private readonly IDictionary<long, IEnumerable<IBigCommerceOrderItemEntity>> allItems;
 
-        public ShipmentDetailsUpdaterTest()
+        public BigCommerceShipmentDetailsUpdaterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new BigCommerceStoreEntity { StoreTypeCode = StoreTypeCode.BigCommerce };
