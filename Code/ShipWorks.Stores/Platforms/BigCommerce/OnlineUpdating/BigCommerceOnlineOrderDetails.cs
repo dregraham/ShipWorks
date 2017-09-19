@@ -5,12 +5,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Order details for performing an online update
     /// </summary>
-    public class OnlineOrderDetails
+    public class BigCommerceOnlineOrderDetails
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineOrderDetails(IOrderEntity order)
+        public BigCommerceOnlineOrderDetails(IOrderEntity order)
         {
             OrderID = order.OrderID;
             IsManual = order.IsManual;
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnlineOrderDetails(long orderID, bool isManual, long orderNumber, string orderNumberComplete)
+        public BigCommerceOnlineOrderDetails(long orderID, bool isManual, long orderNumber, string orderNumberComplete)
         {
             OrderID = orderID;
             IsManual = isManual;

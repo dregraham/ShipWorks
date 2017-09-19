@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
                     .Set(x => x.OrderDate, DateTime.UtcNow)
                     .Save();
 
-                var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IOrderStatusUpdater>(TypedParameter.From(store));
+                var updater = IoC.UnsafeGlobalLifetimeScope.Resolve<IBigCommerceOrderStatusUpdater>(TypedParameter.From(store));
                 await updater.UpdateOrderStatus(store, order.OrderID, BigCommerceConstants.OrderStatusCompleted);
             }
         }

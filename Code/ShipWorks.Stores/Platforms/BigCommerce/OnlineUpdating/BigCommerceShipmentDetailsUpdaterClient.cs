@@ -16,16 +16,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Web client for updating shipment details online
     /// </summary>
     [Component]
-    public class ShipmentDetailsUpdaterClient : IShipmentDetailsUpdaterClient
+    public class BigCommerceShipmentDetailsUpdaterClient : IBigCommerceShipmentDetailsUpdaterClient
     {
         private readonly IBigCommerceWebClientFactory webClientFactory;
-        private readonly IItemLoader productLoader;
+        private readonly IBigCommerceItemLoader productLoader;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDetailsUpdaterClient(IBigCommerceWebClientFactory webClientFactory, IItemLoader productLoader,
+        public BigCommerceShipmentDetailsUpdaterClient(IBigCommerceWebClientFactory webClientFactory, IBigCommerceItemLoader productLoader,
             Func<Type, ILog> createLogger)
         {
             this.productLoader = productLoader;
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// Update shipment details for a single order
         /// </summary>
         public async Task UpdateOnline(IBigCommerceStoreEntity store,
-            OnlineOrderDetails orderDetail,
+            BigCommerceOnlineOrderDetails orderDetail,
             string orderNumberComplete,
             ShipmentEntity shipment,
             IDictionary<long, IEnumerable<IBigCommerceOrderItemEntity>> allItems)
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
                 return;
             }
 
-            GenericResult<OnlineItems> updateDetailsResult = await productLoader
+            GenericResult<BigCommerceOnlineItems> updateDetailsResult = await productLoader
                 .LoadItems(orderItems, orderNumberComplete, orderDetail.OrderNumber, webClient)
                 .ConfigureAwait(false);
             if (updateDetailsResult.Failure)

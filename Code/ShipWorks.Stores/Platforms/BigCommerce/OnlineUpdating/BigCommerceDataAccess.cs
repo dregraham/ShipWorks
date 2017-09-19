@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// Data access for the BigCommerce online updater
     /// </summary>
     [Component]
-    public class DataAccess : IDataAccess
+    public class BigCommerceDataAccess : IBigCommerceDataAccess
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IShippingManager shippingManager;
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataAccess(IShippingManager shippingManager, IOrderManager orderManager, ISqlAdapterFactory sqlAdapterFactory)
+        public BigCommerceDataAccess(IShippingManager shippingManager, IOrderManager orderManager, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
@@ -67,12 +67,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Get order details for uploading
         /// </summary>
-        public async Task<OnlineOrder> GetOrderDetailsAsync(long orderID)
+        public async Task<BigCommerceOnlineOrder> GetOrderDetailsAsync(long orderID)
         {
             QueryFactory factory = new QueryFactory();
             var query = factory.Order
                 .Select(() => Tuple.Create(
-                    new OnlineOrderDetails(
+                    new BigCommerceOnlineOrderDetails(
                         orderID,
                         OrderFields.IsManual.ToValue<bool>(),
                         OrderFields.OrderNumber.ToValue<long>(),
@@ -90,11 +90,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
 
                 if (baseOrder.Item2 != CombineSplitStatusType.Combined)
                 {
-                    return new OnlineOrder(baseOrder.Item1);
+                    return new BigCommerceOnlineOrder(baseOrder.Item1);
                 }
 
                 var combinedOrders = await GetCombinedOrderDetailsAsync(orderID, sqlAdapter).ConfigureAwait(false);
-                return new OnlineOrder(baseOrder.Item1, combinedOrders);
+                return new BigCommerceOnlineOrder(baseOrder.Item1, combinedOrders);
             }
         }
 
@@ -139,11 +139,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Get combined order details
         /// </summary>
-        private async Task<IEnumerable<OnlineOrderDetails>> GetCombinedOrderDetailsAsync(long orderID, ISqlAdapter sqlAdapter)
+        private async Task<IEnumerable<BigCommerceOnlineOrderDetails>> GetCombinedOrderDetailsAsync(long orderID, ISqlAdapter sqlAdapter)
         {
             QueryFactory factory = new QueryFactory();
             var query = factory.OrderSearch
-                .Select(() => new OnlineOrderDetails(
+                .Select(() => new BigCommerceOnlineOrderDetails(
                         OrderSearchFields.OriginalOrderID.ToValue<long>(),
                         OrderSearchFields.IsManual.ToValue<bool>(),
                         OrderSearchFields.OrderNumber.ToValue<long>(),

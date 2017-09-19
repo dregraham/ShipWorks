@@ -1,35 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using System;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
+namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
 {
     /// <summary>
-    /// Create online update commands for LemonStand
+    /// Create online update commands for BigCommerce
     /// </summary>
-    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.LemonStand)]
-    public class LemonStandCommandCreator : IOnlineUpdateCommandCreator
+    [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.BigCommerce)]
+    public class BigCommerceOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(LemonStandCommandCreator));
+        private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
         private readonly IMessageHelper messageHelper;
-        private readonly Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory;
+        private readonly ILog log;
+        private readonly IBigCommerceOrderStatusUpdater statusUpdater;
+        private readonly IBigCommerceShipmentDetailsUpdater shipmentDetailsUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LemonStandCommandCreator(IMessageHelper messageHelper, Func<LemonStandStoreEntity, LemonStandOnlineUpdater> onlineUpdaterFactory)
+        public BigCommerceOnlineUpdateCommandCreator(
+            IMessageHelper messageHelper,
+            IBigCommerceOrderStatusUpdater statusUpdater,
+            IBigCommerceShipmentDetailsUpdater shipmentDetailsUpdater,
+            Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider,
+            Func<Type, ILog> createLogger)
         {
+            this.shipmentDetailsUpdater = shipmentDetailsUpdater;
+            this.statusUpdater = statusUpdater;
             this.messageHelper = messageHelper;
-            this.onlineUpdaterFactory = onlineUpdaterFactory;
+            this.createStatusCodeProvider = createStatusCodeProvider;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -39,16 +49,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
             Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
-        /// Create online update commands
+        /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
         public IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands(StoreEntity store)
         {
-            LemonStandStoreEntity typedStore = (LemonStandStoreEntity) store;
+            BigCommerceStoreEntity typedStore = (BigCommerceStoreEntity) store;
 
             // get possible status codes from the provider
-            LemonStandStatusCodeProvider codeProvider = new LemonStandStatusCodeProvider(typedStore);
+            IBigCommerceStatusCodeProvider codeProvider = createStatusCodeProvider(typedStore);
 
-            List<IMenuCommand> commands = codeProvider.CodeNames
+            List<IMenuCommand> commands = createStatusCodeProvider(typedStore).CodeNames
+                .Where(codeName => codeName != BigCommerceConstants.OnlineStatusDeletedName)
                 .Select(x =>
                     new AsyncMenuCommand(x, context => OnSetOnlineStatus(context, typedStore))
                     {
@@ -67,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Command handler for uploading shipment details
         /// </summary>
-        public async Task OnUploadDetails(IMenuCommandExecutionContext context, LemonStandStoreEntity store)
+        public async Task OnUploadDetails(IMenuCommandExecutionContext context, BigCommerceStoreEntity store)
         {
             var results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper, "Upload Shipment Details", "ShipWorks is uploading shipment information.", "Updating order {0} of {1}...",
@@ -81,17 +92,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, LemonStandStoreEntity store)
+        private async Task<IResult> UploadShipmentDetailsCallback(long orderID, BigCommerceStoreEntity store)
         {
-            // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                LemonStandOnlineUpdater updater = onlineUpdaterFactory(store);
-
-                await updater.UpdateShipmentDetails(new []{ orderID }).ConfigureAwait(false);
+                await shipmentDetailsUpdater.UpdateShipmentDetailsForOrder(store, orderID).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
-            catch (LemonStandException ex)
+            catch (BigCommerceException ex)
             {
                 log.ErrorFormat("Error uploading shipment information for orders.  Error message: {0}", ex.Message);
                 return Result.FromError(ex);
@@ -101,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Command handler for setting online order status
         /// </summary>
-        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, LemonStandStoreEntity store)
+        public async Task OnSetOnlineStatus(IMenuCommandExecutionContext context, BigCommerceStoreEntity store)
         {
             int statusCode = (int) context.MenuCommand.Tag;
 
@@ -117,15 +125,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.OnlineUpdating
         /// <summary>
         /// Worker thread method for updating online order status
         /// </summary>
-        private async Task<IResult> SetOnlineStatusCallback(long orderID, int statusCode, LemonStandStoreEntity store)
+        private async Task<IResult> SetOnlineStatusCallback(long orderID, int statusCode, BigCommerceStoreEntity store)
         {
             try
             {
-                LemonStandOnlineUpdater updater = onlineUpdaterFactory(store);
-                await updater.UpdateOrderStatus(orderID, statusCode).ConfigureAwait(false);
+                await statusUpdater.UpdateOrderStatus(store, orderID, statusCode).ConfigureAwait(false);
                 return Result.FromSuccess();
             }
-            catch (LemonStandException ex)
+            catch (BigCommerceException ex)
             {
                 log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
                 return Result.FromError(ex);

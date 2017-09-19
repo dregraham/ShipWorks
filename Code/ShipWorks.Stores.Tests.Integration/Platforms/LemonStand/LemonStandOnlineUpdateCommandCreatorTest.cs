@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
         private readonly LemonStandStoreEntity store;
         private Mock<ILemonStandWebClient> webClient;
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
-        private readonly LemonStandCommandCreator commandCreator;
+        private readonly LemonStandOnlineUpdateCommandCreator commandCreator;
 
         private static int NewStatus = 1;
         private static int ProcessingStatus = 2;
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
             });
             
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
-            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.LemonStand) as LemonStandCommandCreator;
+            commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.LemonStand) as LemonStandOnlineUpdateCommandCreator;
 
             store = Create.Store<LemonStandStoreEntity>(StoreTypeCode.LemonStand)
                 .Set(x => x.Token, "999999")

@@ -7,7 +7,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Updates BigCommerce order status/shipments
     /// </summary>
-    public interface IOrderStatusUpdater
+    public interface IBigCommerceOrderStatusUpdater
     {
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
@@ -22,6 +22,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
         /// <summary>
         /// Changes the status of an BigCommerce order to that specified
         /// </summary>
-        Task UpdateOrderStatus(BigCommerceStoreEntity store, OnlineOrder orderDetails, int orderStatusCompleted);
+        Task UpdateOrderStatus(BigCommerceStoreEntity store, BigCommerceOnlineOrder orderDetails, int orderStatusCompleted);
     }
 }

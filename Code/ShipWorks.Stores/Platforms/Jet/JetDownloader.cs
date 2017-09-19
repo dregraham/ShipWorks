@@ -23,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Jet
         private readonly ILog log;
         private readonly IJetOrderLoader orderLoader;
         private readonly IJetWebClient webClient;
-        private readonly IOrderRepository orderRepository;
 
         /// <summary>
         /// Constructor
@@ -31,13 +30,12 @@ namespace ShipWorks.Stores.Platforms.Jet
         public JetDownloader(StoreEntity store,
             Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory,
             IJetWebClient webClient,
-            IOrderRepository orderRepository,
+            IStoreTypeManager storeTypeManager,
             Func<Type, ILog> createLogger)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             orderLoader = orderLoaderFactory(this);
             this.webClient = webClient;
-            this.orderRepository = orderRepository;
             log = createLogger(GetType());
         }
 

@@ -1748,7 +1748,7 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
-    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceCommandCreator.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />
@@ -4307,7 +4307,7 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\CoreExtensions\Actions\AmeriCommerceOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>AmeriCommerceOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AmeriCommerce\ExtensionMethods.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceExtensionMethods.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

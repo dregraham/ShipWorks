@@ -10,12 +10,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating
     /// <summary>
     /// Item loader for BigCommerce online updater
     /// </summary>
-    public interface IItemLoader
+    public interface IBigCommerceItemLoader
     {
         /// <summary>
         /// Load items
         /// </summary>
-        Task<GenericResult<OnlineItems>> LoadItems(
+        Task<GenericResult<BigCommerceOnlineItems>> LoadItems(
             IEnumerable<IOrderItemEntity> orderItems,
             string orderNumberComplete,
             long orderNumber,

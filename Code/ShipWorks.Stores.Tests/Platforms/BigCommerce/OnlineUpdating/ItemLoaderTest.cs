@@ -15,14 +15,14 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
     public class ItemLoaderTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly ItemLoader testObject;
+        private readonly BigCommerceItemLoader testObject;
         private readonly Mock<IBigCommerceWebClient> webClient;
 
         public ItemLoaderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             webClient = mock.Mock<IBigCommerceWebClient>();
-            testObject = mock.Create<ItemLoader>();
+            testObject = mock.Create<BigCommerceItemLoader>();
         }
 
         [Fact]

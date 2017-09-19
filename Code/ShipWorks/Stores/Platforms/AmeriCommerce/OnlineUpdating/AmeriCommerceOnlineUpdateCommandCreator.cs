@@ -16,16 +16,16 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.OnlineUpdating
     /// Create online update commands for AmeriCommerce
     /// </summary>
     [KeyedComponent(typeof(IOnlineUpdateCommandCreator), StoreTypeCode.AmeriCommerce)]
-    public class AmeriCommerceCommandCreator : IOnlineUpdateCommandCreator
+    public class AmeriCommerceOnlineUpdateCommandCreator : IOnlineUpdateCommandCreator
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceCommandCreator));
+        private readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceOnlineUpdateCommandCreator));
         private readonly IMessageHelper messageHelper;
         private readonly IAmeriCommerceOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceCommandCreator(IMessageHelper messageHelper, IAmeriCommerceOnlineUpdater onlineUpdater)
+        public AmeriCommerceOnlineUpdateCommandCreator(IMessageHelper messageHelper, IAmeriCommerceOnlineUpdater onlineUpdater)
         {
             this.messageHelper = messageHelper;
             this.onlineUpdater = onlineUpdater;
