@@ -13,6 +13,10 @@ using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model;
 using ShipWorks.UI;
+using System.Runtime.InteropServices;
+using System.Transactions;
+using System.Text;
+using ShipWorks.Users.Audit;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
@@ -255,6 +259,11 @@ namespace ShipWorks.Data.Connection
                     // Prepare the connection for use
                     PrepareConnectionForUse(con);
                 }
+                catch (Exception ex) when (ex is TransactionPromotionException || ex is COMException)
+                {
+                    LogConnectionException(ex);
+                    throw;
+                }
                 catch (SqlException ex)
                 {
                     log.WarnFormat("ConnectionMonitor failed to open connection: {0}", ex.Message);
@@ -269,6 +278,7 @@ namespace ShipWorks.Data.Connection
                     // connection was still open during a transaction scope.
                     if (ex.Number == 8501)
                     {
+                        LogConnectionException(ex);
                         throw;
                     }
 
@@ -368,6 +378,21 @@ namespace ShipWorks.Data.Connection
             {
                 Debug.WriteLine(new StackTrace().ToString());
             }
+        }
+
+        /// <summary>
+        /// Log a connection exception
+        /// </summary>
+        private static void LogConnectionException(Exception ex)
+        {
+            StringBuilder msg = new StringBuilder();
+            msg.AppendLine($"A {ex.GetType().Name} occurred while attempting ConnectionMonitor.OpenCommection.");
+
+            msg.AppendLine("Stack:");
+            msg.AppendLine(new StackTrace().ToString());
+
+            ConnectionMonitorExceptionLogger logger = new ConnectionMonitorExceptionLogger();
+            logger.Log(ex, msg, log);
         }
 
         /// <summary>
