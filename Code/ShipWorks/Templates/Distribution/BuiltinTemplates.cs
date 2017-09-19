@@ -94,7 +94,7 @@ namespace ShipWorks.Templates.Distribution
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
 
-                if (installed < new Version("5.18.0.0000"))
+                if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Package Level Details"))
                 {
                     InstallTemplate(@"Reports\Exports\Package Level Details", TemplateManager.Tree.CreateEditableClone());
 
