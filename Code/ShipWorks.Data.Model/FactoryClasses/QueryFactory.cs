@@ -166,6 +166,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmazonProfileEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AmazonServiceType entity</summary>
+		public EntityQuery<AmazonServiceTypeEntity> AmazonServiceType
+		{
+			get { return Create<AmazonServiceTypeEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the AmazonShipment entity</summary>
 		public EntityQuery<AmazonShipmentEntity> AmazonShipment
 		{

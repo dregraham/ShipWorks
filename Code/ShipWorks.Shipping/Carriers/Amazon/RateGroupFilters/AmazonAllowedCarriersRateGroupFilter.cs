@@ -1,9 +1,9 @@
-﻿using ShipWorks.Shipping.Editing.Rating;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+﻿using System.Linq;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters
 {
     /// <summary>
     /// Restrict Amazon rates to only Stamps, FedEx, and UPS

@@ -161,12 +161,15 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCreateShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
@@ -374,7 +377,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="CachedRatesService.cs" />
-    <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAllowedCarriersRateGroupFilter.cs" />
     <Compile Include="Carriers\Amazon\AmazonCancelShipmentRequest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonInsuranceChoice.cs" />
@@ -383,7 +386,6 @@
     <Compile Include="Carriers\Amazon\AmazonPackageAdapter.cs" />
     <Compile Include="Carriers\Amazon\AmazonRatesRetrievedMessage.cs" />
     <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonAccountValidator.cs" />
@@ -407,7 +409,7 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\IAmazonShippingWebClient.cs" />
-    <Compile Include="Carriers\Amazon\IAmazonRateGroupFilter.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\IAmazonRateGroupFilter.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Carriers\Amazon\AmazonRateHashingService.cs" />
     <Compile Include="Carriers\BestRate\BestRateLabelService.cs" />

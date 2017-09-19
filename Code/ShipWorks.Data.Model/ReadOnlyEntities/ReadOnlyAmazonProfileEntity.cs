@@ -45,6 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DimsAddWeight = source.DimsAddWeight;
             DeliveryExperience = source.DeliveryExperience;
             Weight = source.Weight;
+            ShippingServiceID = source.ShippingServiceID;
             
             ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -108,6 +109,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Double> Weight { get; }
+        /// <summary> The ShippingServiceID property of the Entity AmazonProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonProfile"."ShippingServiceID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ShippingServiceID { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

@@ -358,8 +358,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingServiceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShippingServiceOfferID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
@@ -515,16 +513,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceID, true); }
 			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceID, value); }
-		}
-
-		/// <summary> The ShippingServiceOfferID property of the Entity AmazonShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."ShippingServiceOfferID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShippingServiceOfferID
-		{
-			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferID, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferID, value); }
 		}
 
 		/// <summary> The InsuranceValue property of the Entity AmazonShipment<br/><br/></summary>

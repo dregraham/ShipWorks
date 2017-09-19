@@ -152,7 +152,10 @@
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCreateShipmentRequestTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceTypeRepositoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
@@ -248,13 +251,12 @@
     <Compile Include="Services\ShipmentTypeProviderTest.cs" />
     <Compile Include="Services\ShippingManagerWrapperTest.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapperTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonAllowedCarriersRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAllowedCarriersRateGroupFilterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonInsuranceChoiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonLabelServiceTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonRateGroupFactoryTest.cs" />
-    <Compile Include="Carriers\Amazon\AmazonServiceViewModelTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentRequestDetailsFactoryTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentTypeTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShippingWebClientTest.cs" />

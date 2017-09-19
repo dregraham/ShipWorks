@@ -25,14 +25,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'AmazonProfile'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'AmazonServiceType'.<br/><br/></summary>
 	[Serializable]
-	public partial class AmazonProfileEntity : CommonEntityBase
+	public partial class AmazonServiceTypeEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private ShippingProfileEntity _shippingProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -45,19 +44,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name ShippingProfile</summary>
-			public static readonly string ShippingProfile = "ShippingProfile";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static AmazonProfileEntity()
+		static AmazonServiceTypeEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public AmazonProfileEntity():base("AmazonProfileEntity")
+		public AmazonServiceTypeEntity():base("AmazonServiceTypeEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -65,71 +62,51 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public AmazonProfileEntity(IEntityFields2 fields):base("AmazonProfileEntity")
+		public AmazonServiceTypeEntity(IEntityFields2 fields):base("AmazonServiceTypeEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this AmazonProfileEntity</param>
-		public AmazonProfileEntity(IValidator validator):base("AmazonProfileEntity")
+		/// <param name="validator">The custom validator object for this AmazonServiceTypeEntity</param>
+		public AmazonServiceTypeEntity(IValidator validator):base("AmazonServiceTypeEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="shippingProfileID">PK value for AmazonProfile which data should be fetched into this AmazonProfile object</param>
+		/// <param name="amazonServiceTypeID">PK value for AmazonServiceType which data should be fetched into this AmazonServiceType object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonProfileEntity(System.Int64 shippingProfileID):base("AmazonProfileEntity")
+		public AmazonServiceTypeEntity(System.Int32 amazonServiceTypeID):base("AmazonServiceTypeEntity")
 		{
 			InitClassEmpty(null, null);
-			this.ShippingProfileID = shippingProfileID;
+			this.AmazonServiceTypeID = amazonServiceTypeID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="shippingProfileID">PK value for AmazonProfile which data should be fetched into this AmazonProfile object</param>
-		/// <param name="validator">The custom validator object for this AmazonProfileEntity</param>
+		/// <param name="amazonServiceTypeID">PK value for AmazonServiceType which data should be fetched into this AmazonServiceType object</param>
+		/// <param name="validator">The custom validator object for this AmazonServiceTypeEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AmazonProfileEntity(System.Int64 shippingProfileID, IValidator validator):base("AmazonProfileEntity")
+		public AmazonServiceTypeEntity(System.Int32 amazonServiceTypeID, IValidator validator):base("AmazonServiceTypeEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.ShippingProfileID = shippingProfileID;
+			this.AmazonServiceTypeID = amazonServiceTypeID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected AmazonProfileEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected AmazonServiceTypeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
-				if(_shippingProfile!=null)
-				{
-					_shippingProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		
-		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
-		/// <param name="fieldIndex">The fieldindex.</param>
-		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
-		{
-			switch((AmazonProfileFieldIndex)fieldIndex)
-			{
-				case AmazonProfileFieldIndex.ShippingProfileID:
-					DesetupSyncShippingProfile(true, false);
-					break;
-				default:
-					base.PerformDesyncSetupFKFieldChange(fieldIndex);
-					break;
-			}
-		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -139,9 +116,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "ShippingProfile":
-					this.ShippingProfile = (ShippingProfileEntity)entity;
-					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -164,9 +138,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "ShippingProfile":
-					toReturn.Add(Relations.ShippingProfileEntityUsingShippingProfileID);
-					break;
 				default:
 					break;				
 			}
@@ -195,9 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ShippingProfile":
-					SetupSyncShippingProfile(relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -211,9 +179,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "ShippingProfile":
-					DesetupSyncShippingProfile(false, true);
-					break;
 				default:
 					break;
 			}
@@ -224,8 +189,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
-
 			return toReturn;
 		}
 		
@@ -235,11 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_shippingProfile!=null)
-			{
-				toReturn.Add(_shippingProfile);
-			}
-
 			return toReturn;
 		}
 		
@@ -259,7 +217,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -272,23 +229,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new AmazonProfileRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'ShippingProfile' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoShippingProfile()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShippingProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
-			return bucket;
+			return new AmazonServiceTypeRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonProfileEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(AmazonServiceTypeEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -327,7 +275,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("ShippingProfile", _shippingProfile);
 			return toReturn;
 		}
 
@@ -350,63 +297,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
+			_fieldsCustomProperties.Add("AmazonServiceTypeID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
+			_fieldsCustomProperties.Add("ApiValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DeliveryExperience", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Weight", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShippingServiceID", fieldHashtable);
+			_fieldsCustomProperties.Add("Description", fieldHashtable);
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _shippingProfile</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncShippingProfile(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticAmazonProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Amazon", false, new int[] { (int)AmazonProfileFieldIndex.ShippingProfileID } );
-			_shippingProfile = null;
-		}
-		
-		/// <summary> setups the sync logic for member _shippingProfile</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncShippingProfile(IEntityCore relatedEntity)
-		{
-			if(_shippingProfile!=relatedEntity)
-			{
-				DesetupSyncShippingProfile(true, true);
-				_shippingProfile = (ShippingProfileEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticAmazonProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnShippingProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this AmazonProfileEntity</param>
+		/// <param name="validator">The validator object for this AmazonServiceTypeEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -424,9 +324,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static AmazonProfileRelations Relations
+		public  static AmazonServiceTypeRelations Relations
 		{
-			get	{ return new AmazonProfileRelations(); }
+			get	{ return new AmazonServiceTypeRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -434,13 +334,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathShippingProfile
-		{
-			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShippingProfileEntityFactory))), (IEntityRelation)GetRelationsForField("ShippingProfile")[0], (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity, (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, 0, null, null, null, null, "ShippingProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 
@@ -467,140 +360,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShippingProfileID property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."ShippingProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ShippingProfileID
-		{
-			get { return (System.Int64)GetValue((int)AmazonProfileFieldIndex.ShippingProfileID, true); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.ShippingProfileID, value); }
-		}
-
-		/// <summary> The DimsProfileID property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DimsProfileID
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)AmazonProfileFieldIndex.DimsProfileID, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsProfileID, value); }
-		}
-
-		/// <summary> The DimsLength property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsLength"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsLength
-		{
-			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsLength, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsLength, value); }
-		}
-
-		/// <summary> The DimsWidth property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsWidth"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWidth
-		{
-			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsWidth, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsWidth, value); }
-		}
-
-		/// <summary> The DimsHeight property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsHeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsHeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsHeight, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsHeight, value); }
-		}
-
-		/// <summary> The DimsWeight property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> DimsWeight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.DimsWeight, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The DimsAddWeight property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DimsAddWeight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> DimsAddWeight
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)AmazonProfileFieldIndex.DimsAddWeight, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DimsAddWeight, value); }
-		}
-
-		/// <summary> The DeliveryExperience property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."DeliveryExperience"<br/>
+		/// <summary> The AmazonServiceTypeID property of the Entity AmazonServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonServiceType"."AmazonServiceTypeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> DeliveryExperience
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		public virtual System.Int32 AmazonServiceTypeID
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)AmazonProfileFieldIndex.DeliveryExperience, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.DeliveryExperience, value); }
+			get { return (System.Int32)GetValue((int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, true); }
+			set	{ SetValue((int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, value); }
 		}
 
-		/// <summary> The Weight property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."Weight"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Double> Weight
-		{
-			get { return (Nullable<System.Double>)GetValue((int)AmazonProfileFieldIndex.Weight, false); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.Weight, value); }
-		}
-
-		/// <summary> The ShippingServiceID property of the Entity AmazonProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AmazonProfile"."ShippingServiceID"<br/>
+		/// <summary> The ApiValue property of the Entity AmazonServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonServiceType"."ApiValue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String ShippingServiceID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ApiValue
 		{
-			get { return (System.String)GetValue((int)AmazonProfileFieldIndex.ShippingServiceID, true); }
-			set	{ SetValue((int)AmazonProfileFieldIndex.ShippingServiceID, value); }
+			get { return (System.String)GetValue((int)AmazonServiceTypeFieldIndex.ApiValue, true); }
+			set	{ SetValue((int)AmazonServiceTypeFieldIndex.ApiValue, value); }
 		}
 
-		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
-		/// </summary>
-		[Browsable(true)]
-		public virtual ShippingProfileEntity ShippingProfile
+		/// <summary> The Description property of the Entity AmazonServiceType<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonServiceType"."Description"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Description
 		{
-			get { return _shippingProfile; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncShippingProfile(value);
-					CallSetRelatedEntityDuringDeserialization(value, "Amazon");
-				}
-				else
-				{
-					if(value==null)
-					{
-						bool raisePropertyChanged = (_shippingProfile !=null);
-						DesetupSyncShippingProfile(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("ShippingProfile");
-						}
-					}
-					else
-					{
-						if(_shippingProfile!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "Amazon");
-							SetupSyncShippingProfile(value);
-						}
-					}
-				}
-			}
+			get { return (System.String)GetValue((int)AmazonServiceTypeFieldIndex.Description, true); }
+			set	{ SetValue((int)AmazonServiceTypeFieldIndex.Description, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -619,7 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.AmazonServiceTypeEntity; }
 		}
 
 		#endregion

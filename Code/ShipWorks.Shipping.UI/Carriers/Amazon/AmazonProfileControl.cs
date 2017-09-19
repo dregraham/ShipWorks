@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Profiles;
 
@@ -30,8 +34,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             base.LoadProfile(profile);
 
             LoadOrigins();
+            LoadServices();
 
             dimensionsControl.Initialize();
+
             EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryExperience);
 
             AmazonProfileEntity amazonProfile = profile.Amazon;
@@ -40,12 +46,33 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
             AddValueMapping(profile, ShippingProfileFields.OriginID, originState, originCombo, labelSender);
 
             // Shipment
+            AddValueMapping(amazonProfile, AmazonProfileFields.ShippingServiceID, serviceState, service, labelService);
             AddValueMapping(amazonProfile, AmazonProfileFields.DeliveryExperience, deliveryExperienceState, deliveryExperience, labelDeliveryExperience);
             AddValueMapping(amazonProfile, AmazonProfileFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(amazonProfile, AmazonProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
+        }
+
+        /// <summary>
+        /// Populate service combo box
+        /// </summary>
+        private void LoadServices()
+        {
+            List<KeyValuePair<string, string>> services;
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                IAmazonServiceTypeRepository amazonServiceTypeRepository = scope.Resolve<IAmazonServiceTypeRepository>();
+                services = amazonServiceTypeRepository.Get()
+                    .Select(serviceTypeEntity => new KeyValuePair<string, string>(serviceTypeEntity.Description, serviceTypeEntity.ApiValue))
+                    .ToList();
+            }
+            
+            service.DisplayMember = "Key";
+            service.ValueMember = "Value";
+            service.DataSource = services;
         }
 
         /// <summary>
