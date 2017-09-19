@@ -429,6 +429,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.3.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.5.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.1.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
