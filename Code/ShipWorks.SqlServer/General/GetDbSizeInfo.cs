@@ -69,7 +69,7 @@ public partial class StoredProcedures
 
         SELECT  @TotalOrderCount  = CONVERT(bigint, [rows])
         FROM    #DbSizeInfo 
-        WHERE   TableName = '[dbo].[Order]'
+        WHERE   TableName = '[dbo].[Order]' or TableName = 'Order' or TableName = '[Order]'
 
         SELECT  @OrderTableSizeInMb = sum(CONVERT(bigint,left(reserved,len([reserved])-3))) * 1.0 / 1024.0
         FROM    #DbSizeInfo 
