@@ -284,10 +284,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             }
 
             ICarrierShipmentAdapter shipmetAdapter = loadedSelection.ShipmentAdapters.FirstOrDefault();
-            if (shipmetAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
-            }
 
             return ShippingPanelLoadedShipmentResult.Success;
         }
@@ -317,14 +313,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             UpdateStoredShipment(fromShipmentAdapter);
 
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
-
-            // If we are an unsupported shipment type, stop and show the appropriate message.
-            if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
-                IsLoadingShipment = false;
-                return;
-            }
 
             pipelines.RegisterTransient(this);
 
