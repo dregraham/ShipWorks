@@ -12,11 +12,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Paypal
 {
-    public class XmlDeserializeTest : IDisposable
+    public class PayPalXmlDeserializeTest : IDisposable
     {
         readonly AutoMock mock;
 
-        public XmlDeserializeTest()
+        public PayPalXmlDeserializeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
