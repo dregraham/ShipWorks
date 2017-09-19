@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -19,20 +18,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IOrderManager orderManager;
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonCreateShipmentRequest(IOrderManager orderManager,
             IAmazonShippingWebClient webClient,
-            IAmazonShipmentRequestDetailsFactory requestFactory,
-            IAmazonMwsWebClientSettingsFactory settingsFactory)
+            IAmazonShipmentRequestDetailsFactory requestFactory)
         {
             this.orderManager = orderManager;
             this.webClient = webClient;
             this.requestFactory = requestFactory;
-            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -48,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             IAmazonOrder order = shipment.Order as IAmazonOrder;
 
             ShipmentRequestDetails requestDetails = requestFactory.Create(shipment, order);
-            IAmazonMwsWebClientSettings amazonSettings = settingsFactory.Create(shipment.Amazon);
 
             if (order == null)
             {
@@ -61,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 0 :
                 Math.Min(shipment.Amazon.InsuranceValue, 100M);
 
-            return webClient.CreateShipment(requestDetails, amazonSettings, shipment.Amazon.ShippingServiceID);
+            return webClient.CreateShipment(requestDetails, shipment.Amazon);
         }
 
         /// <summary>

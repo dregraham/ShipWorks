@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -67,6 +68,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             settings = mock.CreateMock<IAmazonMwsWebClientSettings>();
             settings.SetupGet(x => x.Endpoint).Returns("http://www.example.com");
             settings.Setup(x => x.GetApiNamespace(It.IsAny<AmazonMwsApiCall>())).Returns(XNamespace.Get("https://mws.amazonservices.com/MerchantFulfillment/2015-06-01"));
+
+            var settingsFactory = mock.Mock<IAmazonMwsWebClientSettingsFactory>();
+
+            settingsFactory.Setup(f => f.Create(It.IsAny<AmazonShipmentEntity>())).Returns(settings);
         }
 
         [Fact]
@@ -77,14 +82,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             var testObject = mock.Create<AmazonShippingWebClient>();
 
-            Assert.Throws<AmazonShippingException>(() => testObject.CreateShipment(request, settings.Object, "foo"));
+            Assert.Throws<AmazonShippingException>(() => testObject.CreateShipment(request, new AmazonShipmentEntity()));
         }
 
         [Fact]
         public void CreateShipment_ReturnsShipment_WhenResponseIsValid()
         {
             var testObject = mock.Create<AmazonShippingWebClient>();
-            var result = testObject.CreateShipment(request, settings.Object, "foo");
+            var result = testObject.CreateShipment(request, new AmazonShipmentEntity());
 
             Assert.NotNull(result);
         }

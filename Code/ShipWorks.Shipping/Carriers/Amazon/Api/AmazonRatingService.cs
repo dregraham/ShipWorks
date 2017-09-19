@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
@@ -18,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private readonly IOrderManager orderManager;
         private readonly IAmazonShipmentRequestDetailsFactory requestFactory;
         private readonly IAmazonRateGroupFactory amazonRateGroupFactory;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRatingService"/> class.
@@ -27,13 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             IOrderManager orderManager,
             IAmazonShipmentRequestDetailsFactory requestFactory,
             IAmazonRateGroupFactory amazonRateGroupFactory,
-            IAmazonMwsWebClientSettingsFactory settingsFactory)
+            IAmazonServiceTypeRepository serviceTypeRepository)
         {
             this.webClient = webClient;
             this.orderManager = orderManager;
             this.requestFactory = requestFactory;
             this.amazonRateGroupFactory = amazonRateGroupFactory;
-            this.settingsFactory = settingsFactory;
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -82,9 +84,31 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private RateGroup GetRates(AmazonShipmentEntity amazonShipment, ShipmentRequestDetails requestDetails)
         {
-            GetEligibleShippingServicesResponse response =
-                webClient.GetRates(requestDetails, settingsFactory.Create(amazonShipment));
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, amazonShipment);
+
+            SaveUnknownServiceTypes(response);
+
             return amazonRateGroupFactory.GetRateGroupFromResponse(response);
+        }
+
+        /// <summary>
+        /// Saves unknown service type to the ShippingService repository.
+        /// </summary>
+        private void SaveUnknownServiceTypes(GetEligibleShippingServicesResponse response)
+        {
+            List<AmazonServiceTypeEntity> knownServiceTypes = serviceTypeRepository.Get();
+
+            List<ShippingService> services = response.GetEligibleShippingServicesResult.ShippingServiceList.ShippingService;
+            if (services != null)
+            {
+                foreach (ShippingService service in services)
+                {
+                    if (knownServiceTypes.None(s => s.ApiValue == service.ShippingServiceId))
+                    {
+                        serviceTypeRepository.SaveNewService(service.ShippingServiceId, service.ShippingServiceName);
+                    }
+                }
+            }
         }
     }
 }

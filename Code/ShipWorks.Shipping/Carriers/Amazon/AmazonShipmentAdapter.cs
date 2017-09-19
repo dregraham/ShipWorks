@@ -89,7 +89,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
                 Shipment.Amazon.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
-                Shipment.Amazon.ShippingServiceOfferID = rateTag.ShippingServiceOfferId ?? string.Empty;
                 Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
             }
         }

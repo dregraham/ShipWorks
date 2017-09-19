@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -32,8 +33,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly IStoreManager storeManager;
         private readonly IOrderManager orderManager;
         private readonly IShippingManager shippingManager;
-        private readonly IEditionManager editionManager;
         private readonly ILicenseService licenseService;
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Constructor for tests
@@ -45,13 +46,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, IEditionManager editionManager, ILicenseService licenseService)
+        public AmazonShipmentType(IStoreManager storeManager, IOrderManager orderManager, IShippingManager shippingManager, ILicenseService licenseService, IAmazonServiceTypeRepository serviceTypeRepository)
         {
             this.storeManager = storeManager;
             this.orderManager = orderManager;
             this.shippingManager = shippingManager;
-            this.editionManager = editionManager;
             this.licenseService = licenseService;
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -124,7 +125,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             outline.AddElement("Service", () => loaded().Amazon.ShippingServiceName);
             outline.AddElement("AmazonUniqueShipmentID", () => loaded().Amazon.AmazonUniqueShipmentID);
             outline.AddElement("ShippingServiceID", () => loaded().Amazon.ShippingServiceID);
-            outline.AddElement("ShippingServiceOfferID", () => loaded().Amazon.ShippingServiceOfferID);
         }
 
         /// <summary>
@@ -200,13 +200,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         ///
         /// Overridden to use dependency
-        public override bool IsShipmentTypeRestricted
-        {
-            get
-            {
-                return licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
-            }
-        }
+        public override bool IsShipmentTypeRestricted =>
+            licenseService.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode) == EditionRestrictionLevel.Hidden;
 
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
@@ -225,7 +220,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             base.ConfigurePrimaryProfile(profile);
 
             AmazonProfileEntity amazon = profile.Amazon;
-
             amazon.DeliveryExperience = (int) AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
             amazon.Weight = 0;
 
@@ -235,6 +229,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazon.DimsHeight = 0;
             amazon.DimsWeight = 0;
             amazon.DimsAddWeight = true;
+
+            amazon.ShippingServiceID = string.Empty;
         }
 
         /// <summary>
@@ -252,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
             IAmazonProfileEntity amazonProfile = profile.Amazon;
 
+            ShippingProfileUtility.ApplyProfileValue(amazonProfile.ShippingServiceID, amazonShipment, AmazonShipmentFields.ShippingServiceID);
             ShippingProfileUtility.ApplyProfileValue(amazonProfile.DeliveryExperience, amazonShipment, AmazonShipmentFields.DeliveryExperience);
 
             if (amazonProfile.Weight.GetValueOrDefault() > 0)
@@ -339,6 +336,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             commonDetail.PackageHeight = amazonShipment.DimsHeight;
 
             return commonDetail;
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded).
+        /// </summary>
+        /// <param name="repository">The repository from which the excluded service types are fetched.</param>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            IEnumerable<int> allServices = serviceTypeRepository.Get().Select(x => x.AmazonServiceTypeID);
+            return allServices.Except(GetExcludedServiceTypes(repository));
         }
     }
 }

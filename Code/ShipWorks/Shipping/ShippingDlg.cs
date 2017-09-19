@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
-        
+
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
         private bool loadingSelectedShipments = false;
@@ -92,6 +92,8 @@ namespace ShipWorks.Shipping
         private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ICustomsManager customsManager;
+        private readonly Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private bool closing;
         private bool applyingProfile;
 
@@ -102,12 +104,15 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager)
+            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
             this.customsManager = customsManager;
+            this.rateHashingServiceFactory = rateHashingServiceFactory;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
@@ -985,7 +990,7 @@ namespace ShipWorks.Shipping
         {
             LoadReturnsControl(uiDisplayedShipments, true);
         }
-        
+
         /// <summary>
         /// Load return data into the returns tab
         /// </summary>
@@ -1683,7 +1688,7 @@ namespace ShipWorks.Shipping
                     }
                 }
             }
-            
+
             // Update enable state
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
@@ -1942,8 +1947,12 @@ namespace ShipWorks.Shipping
 
                 try
                 {
+                    RateGroup rateGroup = runWorkerCompletedEventArgs.Result as RateGroup;
+
+                    SendRatesRetrievedMessage(rateGroup, loadedShipmentEntities.FirstOrDefault());
+
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates(runWorkerCompletedEventArgs.Result as RateGroup);
+                    LoadDisplayedRates(rateGroup);
                 }
                 catch (ObjectDisposedException ex)
                 {
@@ -1959,9 +1968,23 @@ namespace ShipWorks.Shipping
             }
         }
 
+        /// <summary>
+        /// Sends the rates retrieved message.
+        /// </summary>
+        private void SendRatesRetrievedMessage(RateGroup rateGroup, ShipmentEntity shipment)
+        {
+            GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
+                GenericResult.FromSuccess(rateGroup) :
+                GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+
+            string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
+
+            messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates,
+                shipmentAdapterFactory.Get(shipment)));
+        }
 
         /// <summary>
-        /// Gets rates for each shipment 
+        /// Gets rates for each shipment
         /// </summary>
         private bool GetRatesWorker(DoWorkEventArgs doWorkEventArgs, bool anyAttempted)
         {

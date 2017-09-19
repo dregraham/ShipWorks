@@ -432,6 +432,20 @@ namespace ShipWorks.Data.Model
 		DeliveryExperience,
 		///<summary>Weight. </summary>
 		Weight,
+		///<summary>ShippingServiceID. </summary>
+		ShippingServiceID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonServiceType.</summary>
+	public enum AmazonServiceTypeFieldIndex
+	{
+		///<summary>AmazonServiceTypeID. </summary>
+		AmazonServiceTypeID,
+		///<summary>ApiValue. </summary>
+		ApiValue,
+		///<summary>Description. </summary>
+		Description,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -446,8 +460,6 @@ namespace ShipWorks.Data.Model
 		ShippingServiceName,
 		///<summary>ShippingServiceID. </summary>
 		ShippingServiceID,
-		///<summary>ShippingServiceOfferID. </summary>
-		ShippingServiceOfferID,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
 		///<summary>DimsProfileID. </summary>
@@ -11251,6 +11263,8 @@ namespace ShipWorks.Data.Model
 		AmazonOrderItemEntity,
 		///<summary>AmazonProfile</summary>
 		AmazonProfileEntity,
+		///<summary>AmazonServiceType</summary>
+		AmazonServiceTypeEntity,
 		///<summary>AmazonShipment</summary>
 		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
