@@ -400,6 +400,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -420,6 +424,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
 		AmazonOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -820,6 +826,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -962,6 +972,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1268,6 +1282,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1282,14 +1300,14 @@ namespace ShipWorks.Data.Model
 		Classification,
 		///<summary>DistributionCenter. </summary>
 		DistributionCenter,
-		///<summary>HarmonizedCode. </summary>
-		HarmonizedCode,
 		///<summary>IsFBA. </summary>
 		IsFBA,
 		///<summary>MPN. </summary>
 		MPN,
 		///<summary>DistributionCenterID. </summary>
 		DistributionCenterID,
+		///<summary>DistributionCenterName. </summary>
+		DistributionCenterName,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1302,6 +1320,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
 		CustomOrderIdentifier,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1558,6 +1578,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
 		ClickCartProOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1730,6 +1752,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
 		CommerceInterfaceOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2148,6 +2172,8 @@ namespace ShipWorks.Data.Model
 		RollupFeedbackReceivedComments,
 		///<summary>RollupPayPalAddressStatus. </summary>
 		RollupPayPalAddressStatus,
+		///<summary>GuaranteedDelivery. </summary>
+		GuaranteedDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2190,6 +2216,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -2242,6 +2272,8 @@ namespace ShipWorks.Data.Model
 		EbayBuyerID,
 		///<summary>SellingManagerRecord. </summary>
 		SellingManagerRecord,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2744,6 +2776,58 @@ namespace ShipWorks.Data.Model
 		WasPaid,
 		///<summary>WasShipped. </summary>
 		WasShipped,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrderItem.</summary>
+	public enum EtsyOrderItemFieldIndex
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. Inherited from OrderItem</summary>
+		RowVersion,
+		///<summary>OrderID. Inherited from OrderItem</summary>
+		OrderID,
+		///<summary>Name. Inherited from OrderItem</summary>
+		Name,
+		///<summary>Code. Inherited from OrderItem</summary>
+		Code,
+		///<summary>SKU. Inherited from OrderItem</summary>
+		SKU,
+		///<summary>ISBN. Inherited from OrderItem</summary>
+		ISBN,
+		///<summary>UPC. Inherited from OrderItem</summary>
+		UPC,
+		///<summary>Description. Inherited from OrderItem</summary>
+		Description,
+		///<summary>Location. Inherited from OrderItem</summary>
+		Location,
+		///<summary>Image. Inherited from OrderItem</summary>
+		Image,
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
+		Thumbnail,
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
+		UnitPrice,
+		///<summary>UnitCost. Inherited from OrderItem</summary>
+		UnitCost,
+		///<summary>Weight. Inherited from OrderItem</summary>
+		Weight,
+		///<summary>Quantity. Inherited from OrderItem</summary>
+		Quantity,
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from OrderItem</summary>
+		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>ListingID. </summary>
+		ListingID,
+		///<summary>TransactionID. </summary>
+		TransactionID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4082,6 +4166,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4108,6 +4196,8 @@ namespace ShipWorks.Data.Model
 		GrouponOrderID,
 		///<summary>ParentOrderID. </summary>
 		ParentOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4222,6 +4312,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -4477,6 +4571,304 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetOrder.</summary>
+	public enum JetOrderFieldIndex
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. Inherited from Order</summary>
+		RowVersion,
+		///<summary>StoreID. Inherited from Order</summary>
+		StoreID,
+		///<summary>CustomerID. Inherited from Order</summary>
+		CustomerID,
+		///<summary>OrderNumber. Inherited from Order</summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. Inherited from Order</summary>
+		OrderDate,
+		///<summary>OrderTotal. Inherited from Order</summary>
+		OrderTotal,
+		///<summary>LocalStatus. Inherited from Order</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from Order</summary>
+		IsManual,
+		///<summary>OnlineLastModified. Inherited from Order</summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. Inherited from Order</summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. Inherited from Order</summary>
+		RequestedShipping,
+		///<summary>BillFirstName. Inherited from Order</summary>
+		BillFirstName,
+		///<summary>BillMiddleName. Inherited from Order</summary>
+		BillMiddleName,
+		///<summary>BillLastName. Inherited from Order</summary>
+		BillLastName,
+		///<summary>BillCompany. Inherited from Order</summary>
+		BillCompany,
+		///<summary>BillStreet1. Inherited from Order</summary>
+		BillStreet1,
+		///<summary>BillStreet2. Inherited from Order</summary>
+		BillStreet2,
+		///<summary>BillStreet3. Inherited from Order</summary>
+		BillStreet3,
+		///<summary>BillCity. Inherited from Order</summary>
+		BillCity,
+		///<summary>BillStateProvCode. Inherited from Order</summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. Inherited from Order</summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. Inherited from Order</summary>
+		BillCountryCode,
+		///<summary>BillPhone. Inherited from Order</summary>
+		BillPhone,
+		///<summary>BillFax. Inherited from Order</summary>
+		BillFax,
+		///<summary>BillEmail. Inherited from Order</summary>
+		BillEmail,
+		///<summary>BillWebsite. Inherited from Order</summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. Inherited from Order</summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. Inherited from Order</summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. Inherited from Order</summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. Inherited from Order</summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. Inherited from Order</summary>
+		ShipLastName,
+		///<summary>ShipCompany. Inherited from Order</summary>
+		ShipCompany,
+		///<summary>ShipStreet1. Inherited from Order</summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. Inherited from Order</summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. Inherited from Order</summary>
+		ShipStreet3,
+		///<summary>ShipCity. Inherited from Order</summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. Inherited from Order</summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. Inherited from Order</summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. Inherited from Order</summary>
+		ShipPhone,
+		///<summary>ShipFax. Inherited from Order</summary>
+		ShipFax,
+		///<summary>ShipEmail. Inherited from Order</summary>
+		ShipEmail,
+		///<summary>ShipWebsite. Inherited from Order</summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. Inherited from Order</summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. Inherited from Order</summary>
+		RollupItemCount,
+		///<summary>RollupItemName. Inherited from Order</summary>
+		RollupItemName,
+		///<summary>RollupItemCode. Inherited from Order</summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. Inherited from Order</summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. Inherited from Order</summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. Inherited from Order</summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. Inherited from Order</summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
+		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. Inherited from Order</summary>
+		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>MerchantOrderId. </summary>
+		MerchantOrderId,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetOrderItem.</summary>
+	public enum JetOrderItemFieldIndex
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. Inherited from OrderItem</summary>
+		RowVersion,
+		///<summary>OrderID. Inherited from OrderItem</summary>
+		OrderID,
+		///<summary>Name. Inherited from OrderItem</summary>
+		Name,
+		///<summary>Code. Inherited from OrderItem</summary>
+		Code,
+		///<summary>SKU. Inherited from OrderItem</summary>
+		SKU,
+		///<summary>ISBN. Inherited from OrderItem</summary>
+		ISBN,
+		///<summary>UPC. Inherited from OrderItem</summary>
+		UPC,
+		///<summary>Description. Inherited from OrderItem</summary>
+		Description,
+		///<summary>Location. Inherited from OrderItem</summary>
+		Location,
+		///<summary>Image. Inherited from OrderItem</summary>
+		Image,
+		///<summary>Thumbnail. Inherited from OrderItem</summary>
+		Thumbnail,
+		///<summary>UnitPrice. Inherited from OrderItem</summary>
+		UnitPrice,
+		///<summary>UnitCost. Inherited from OrderItem</summary>
+		UnitCost,
+		///<summary>Weight. Inherited from OrderItem</summary>
+		Weight,
+		///<summary>Quantity. Inherited from OrderItem</summary>
+		Quantity,
+		///<summary>LocalStatus. Inherited from OrderItem</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from OrderItem</summary>
+		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>MerchantSku. </summary>
+		MerchantSku,
+		///<summary>JetOrderItemID. </summary>
+		JetOrderItemID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetOrderSearch.</summary>
+	public enum JetOrderSearchFieldIndex
+	{
+		///<summary>JetOrderSearchID. </summary>
+		JetOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>MerchantOrderID. </summary>
+		MerchantOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetStore.</summary>
+	public enum JetStoreFieldIndex
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. Inherited from Store</summary>
+		RowVersion,
+		///<summary>License. Inherited from Store</summary>
+		License,
+		///<summary>Edition. Inherited from Store</summary>
+		Edition,
+		///<summary>TypeCode. Inherited from Store</summary>
+		TypeCode,
+		///<summary>Enabled. Inherited from Store</summary>
+		Enabled,
+		///<summary>SetupComplete. Inherited from Store</summary>
+		SetupComplete,
+		///<summary>StoreName. Inherited from Store</summary>
+		StoreName,
+		///<summary>Company. Inherited from Store</summary>
+		Company,
+		///<summary>Street1. Inherited from Store</summary>
+		Street1,
+		///<summary>Street2. Inherited from Store</summary>
+		Street2,
+		///<summary>Street3. Inherited from Store</summary>
+		Street3,
+		///<summary>City. Inherited from Store</summary>
+		City,
+		///<summary>StateProvCode. Inherited from Store</summary>
+		StateProvCode,
+		///<summary>PostalCode. Inherited from Store</summary>
+		PostalCode,
+		///<summary>CountryCode. Inherited from Store</summary>
+		CountryCode,
+		///<summary>Phone. Inherited from Store</summary>
+		Phone,
+		///<summary>Fax. Inherited from Store</summary>
+		Fax,
+		///<summary>Email. Inherited from Store</summary>
+		Email,
+		///<summary>Website. Inherited from Store</summary>
+		Website,
+		///<summary>AutoDownload. Inherited from Store</summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. Inherited from Store</summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
+		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. Inherited from Store</summary>
+		AddressValidationSetting,
+		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. Inherited from Store</summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. Inherited from Store</summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. Inherited from Store</summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. Inherited from Store</summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>ApiUser. </summary>
+		ApiUser,
+		///<summary>Secret. </summary>
+		Secret,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LabelSheet.</summary>
 	public enum LabelSheetFieldIndex
 	{
@@ -4708,6 +5100,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -4728,6 +5124,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
 		LemonStandOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4974,6 +5372,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
 		MagentoOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5266,6 +5666,8 @@ namespace ShipWorks.Data.Model
 		InvoiceNumber,
 		///<summary>SellerOrderNumber. </summary>
 		SellerOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5660,6 +6062,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
 		NetworkSolutionsOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5942,6 +6346,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -6522,6 +6930,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. </summary>
 		IsManual,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. </summary>
+		HarmonizedCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6718,6 +7130,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
 		OrderMotionShipmentID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6824,6 +7238,8 @@ namespace ShipWorks.Data.Model
 		OrderNumberComplete,
 		///<summary>IsManual. </summary>
 		IsManual,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7028,6 +7444,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>TransactionID. </summary>
 		TransactionID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7452,6 +7870,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
 		ConfirmationNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7810,6 +8230,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -7834,6 +8258,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>PoNumber. </summary>
 		PoNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8173,6 +8599,30 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipmentReturnItem.</summary>
+	public enum ShipmentReturnItemFieldIndex
+	{
+		///<summary>ShipmentReturnItemID. </summary>
+		ShipmentReturnItemID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Quantity. </summary>
+		Quantity,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Notes. </summary>
+		Notes,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>Code. </summary>
+		Code,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShippingDefaultsRule.</summary>
 	public enum ShippingDefaultsRuleFieldIndex
 	{
@@ -8410,6 +8860,8 @@ namespace ShipWorks.Data.Model
 		FedExFimsPassword,
 		///<summary>ShipmentEditLimit. </summary>
 		ShipmentEditLimit,
+		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
+		ShipmentsLoaderEnsureFiltersLoadedTimeout,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8626,6 +9078,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -8644,6 +9100,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
 		ShopifyOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9316,6 +9774,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -9332,6 +9794,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
 		ThreeDCartOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10422,6 +10886,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -10440,6 +10908,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
 		PurchaseOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11016,6 +11486,10 @@ namespace ShipWorks.Data.Model
 		LocalStatus,
 		///<summary>IsManual. Inherited from OrderItem</summary>
 		IsManual,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
+		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
+		HarmonizedCode,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
@@ -11034,6 +11508,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>YahooOrderID. </summary>
 		YahooOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11233,6 +11709,8 @@ namespace ShipWorks.Data.Model
 		EndiciaShipmentEntity,
 		///<summary>EtsyOrder</summary>
 		EtsyOrderEntity,
+		///<summary>EtsyOrderItem</summary>
+		EtsyOrderItemEntity,
 		///<summary>EtsyStore</summary>
 		EtsyStoreEntity,
 		///<summary>ExcludedPackageType</summary>
@@ -11301,6 +11779,14 @@ namespace ShipWorks.Data.Model
 		IParcelProfilePackageEntity,
 		///<summary>IParcelShipment</summary>
 		IParcelShipmentEntity,
+		///<summary>JetOrder</summary>
+		JetOrderEntity,
+		///<summary>JetOrderItem</summary>
+		JetOrderItemEntity,
+		///<summary>JetOrderSearch</summary>
+		JetOrderSearchEntity,
+		///<summary>JetStore</summary>
+		JetStoreEntity,
 		///<summary>LabelSheet</summary>
 		LabelSheetEntity,
 		///<summary>LemonStandOrder</summary>
@@ -11419,6 +11905,8 @@ namespace ShipWorks.Data.Model
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>
 		ShipmentCustomsItemEntity,
+		///<summary>ShipmentReturnItem</summary>
+		ShipmentReturnItemEntity,
 		///<summary>ShippingDefaultsRule</summary>
 		ShippingDefaultsRuleEntity,
 		///<summary>ShippingOrigin</summary>

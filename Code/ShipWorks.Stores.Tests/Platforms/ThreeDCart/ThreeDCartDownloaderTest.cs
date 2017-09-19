@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Retry;
@@ -20,12 +19,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
     public class ThreeDCartDownloaderTest
     {
         private readonly ThreeDCartRestDownloader testObject;
-        private IEnumerable<ThreeDCartOrder> orders;
-        private readonly AutoMock mock;
+        private readonly IEnumerable<ThreeDCartOrder> orders;
 
         public ThreeDCartDownloaderTest()
         {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            var mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             orders = DeserializeEmbeddedList<ThreeDCartOrder>("GetOrderResponseItemHasNoAttributes");
             var product = DeserializeEmbeddedList<ThreeDCartProduct>("GetProductResponse").FirstOrDefault();
@@ -58,6 +56,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
             Assert.Equal("New", orderEntity.OnlineStatus);
+        }
+
+        [Fact]
+        public async void LoadOrder_ReturnsFalse_WhenLoadsOrderStatusIsNotComplete()
+        {
+            var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
+                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
+            Assert.False(orderEntity.OnlineStatus.Equals("Not Complete"));
         }
 
         [Fact]
@@ -133,73 +139,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         }
 
         [Fact]
-        public async Task LoadOrder_LoadsItemName_WhenDescriptionIsOnlyName()
-        {
-            var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            Assert.Equal("Custom Cap 2", orderEntity.OrderItems.FirstOrDefault()?.Name);
-        }
-
-        [Fact]
-        public async Task LoadOrder_LoadsItemNameAndAttribute_WhenDescriptionIsNameAndOneAttribute()
-        {
-            orders = DeserializeEmbeddedList<ThreeDCartOrder>("GetOrderResponseItemHasOneAttribute");
-
-            OrderEntity order = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            OrderItemAttributeEntity actualAttribute = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.FirstOrDefault();
-
-            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
-
-            Assert.Equal("CustCap: Size", actualAttribute?.Name);
-            Assert.Equal("Extra: Small", actualAttribute?.Description);
-            Assert.Equal(2, actualAttribute?.UnitPrice);
-        }
-
-        [Fact]
-        public async Task LoadOrder_LoadsItemNameAndAttribute_WhenDescriptionIsNameAndOneAttributeWithoutPrice()
-        {
-            orders = DeserializeEmbeddedList<ThreeDCartOrder>("GetOrderResponseItemHasOneAttributeWithoutPrice");
-
-            OrderEntity order = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            OrderItemAttributeEntity actualAttribute = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.FirstOrDefault();
-
-            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
-
-            Assert.Equal("CustCap: Size", actualAttribute?.Name);
-            Assert.Equal("Extra: Small", actualAttribute?.Description);
-            Assert.Equal(0, actualAttribute?.UnitPrice);
-        }
-
-        [Fact]
-        public async Task LoadOrder_LoadsItemNameAndAttributes_WhenDescriptionIsNameAndMultipleAttributes()
-        {
-            orders = DeserializeEmbeddedList<ThreeDCartOrder>("GetOrderResponseItemHasTwoAttributes");
-
-            OrderEntity order = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            OrderItemAttributeEntity actualAttribute1 = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.
-                FirstOrDefault(a => a.UnitPrice == 2);
-            OrderItemAttributeEntity actualAttribute2 = order.OrderItems.FirstOrDefault()?.OrderItemAttributes?.
-                FirstOrDefault(a => a.UnitPrice == 3);
-
-            Assert.Equal("Custom Cap 2", order.OrderItems.FirstOrDefault()?.Name);
-
-            Assert.Equal("CustCap: Size", actualAttribute1?.Name);
-            Assert.Equal("Extra: Small", actualAttribute1?.Description);
-            Assert.Equal(2, actualAttribute1?.UnitPrice);
-
-            Assert.Equal("CustCap: Color", actualAttribute2?.Name);
-            Assert.Equal("CustCap: Blue", actualAttribute2?.Description);
-            Assert.Equal(3, actualAttribute2?.UnitPrice);
-        }
-
-        [Fact]
         public async Task LoadOrder_LoadsOrderCharges()
         {
             var orderEntity = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
@@ -215,22 +154,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
                 orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
 
             Assert.True(orderEntity.OrderPaymentDetails.Any(p => p.Label == "Payment Type" && p.Value == "Money Order"));
-        }
-
-        [Fact]
-        public async Task LoadOrder_AddsKitAdjustments_WhenOrderContainsKitItems()
-        {
-            orders = DeserializeEmbeddedList<ThreeDCartOrder>("GetOrderResponseWithKitItem");
-
-            OrderEntity order = await testObject.LoadOrder(new ThreeDCartOrderEntity(), orders.FirstOrDefault(),
-                orders.FirstOrDefault()?.ShipmentList.FirstOrDefault());
-
-            OrderChargeEntity actualCharge =
-                order.OrderCharges.FirstOrDefault(c => c.Description == "Kit Adjustment");
-
-            Assert.Equal("KIT ADJUSTMENT", actualCharge.Type);
-            Assert.Equal("Kit Adjustment", actualCharge.Description);
-            Assert.Equal(11M, actualCharge.Amount);
         }
 
         /// <summary>

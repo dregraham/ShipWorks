@@ -279,10 +279,12 @@
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalWithApiFailOverRatingClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsSurchargeType.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsZoneExcelReader.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\IUpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\SuccessfulLocalRateValidationResult.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\ILocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\LocalRateValidationResultFactory.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\TelemetricUpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
@@ -308,6 +310,7 @@
     <Compile Include="Loading\ShippingPanelLoadedShipmentResult.cs" />
     <Compile Include="Rating\ExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Rating\InformationFootnoteViewModel.cs" />
+    <Compile Include="ReturnItemRepository.cs" />
     <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
     <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
     <Compile Include="Services\Builders\ShipmentPackageTypesBuilderFactory.cs" />

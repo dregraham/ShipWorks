@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.Magento;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Actions;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
@@ -81,20 +76,25 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
                 return false;
             }
 
-            return (genericStore.TypeCode == (int)StoreTypeCode.Magento);
+            return (genericStore.TypeCode == (int) StoreTypeCode.Magento);
         }
+
+        /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Executes the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            GenericModuleStoreEntity store = StoreManager.GetStore(StoreID) as GenericModuleStoreEntity;
+            StoreEntity store = StoreManager.GetStore(StoreID);
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -102,11 +102,15 @@ namespace ShipWorks.Stores.Platforms.Magento.CoreExtensions.Actions
 
             try
             {
-                IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) new MagentoStoreType(store).CreateOnlineUpdater();
-
-                foreach (long entityID in inputKeys)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork);
+                    MagentoStoreType storeType = lifetimeScope.Resolve<MagentoStoreType>(TypedParameter.From(store));
+                    IMagentoOnlineUpdater updater = (IMagentoOnlineUpdater) storeType.CreateOnlineUpdater();
+
+                    foreach (long entityID in inputKeys)
+                    {
+                        await updater.UploadShipmentDetails(entityID, MagentoUploadCommand.Complete, comment, magentoSendEmail, context.CommitWork).ConfigureAwait(false);
+                    }
                 }
             }
             catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)

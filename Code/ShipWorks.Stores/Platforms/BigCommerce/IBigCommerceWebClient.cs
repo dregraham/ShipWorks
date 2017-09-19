@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 
@@ -22,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Attempt to get an order count to test connecting to BigCommerce.  If any error, assume connection failed.
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        void TestConnection();
+        Task TestConnection();
 
         /// <summary>
         /// Make a call to BigCommerce requesting a count of orders matching criteria.
@@ -30,30 +31,30 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderSearchCriteria">Get order count based on BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>Number of orders matching criteria</returns>
         /// <exception cref="BigCommerceException" />
-        int GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria);
+        Task<int> GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria);
 
         /// <summary>
         /// Make the call to BigCommerce to get a list of orders matching criteria
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
-        List<BigCommerceOrder> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria);
+        Task<List<BigCommerceOrder>> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria);
 
         /// <summary>
         /// Get the list of BigCommerce online order statuses
         /// </summary>
-        IEnumerable<BigCommerceOrderStatus> FetchOrderStatuses();
+        Task<IEnumerable<BigCommerceOrderStatus>> FetchOrderStatuses();
 
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        void UpdateOrderStatus(int orderNumber, int statusCode);
+        Task UpdateOrderStatus(int orderNumber, int statusCode);
 
         /// <summary>
         /// Get a list of Order Products for the order
         /// </summary>
-        List<BigCommerceProduct> GetOrderProducts(long orderNumber);
+        Task<IEnumerable<BigCommerceProduct>> GetOrderProducts(long orderNumber);
 
         /// <summary>
         /// Update the online status and details of the given shipment
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="shippingMethod">Carrier and service for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        void UploadOrderShipmentDetails(long orderNumber, long bigCommerceOrderAddressId, string trackingNumber, 
+        Task UploadOrderShipmentDetails(long orderNumber, long bigCommerceOrderAddressId, string trackingNumber,
             Tuple<string, string> shippingMethod, List<BigCommerceItem> bigCommerceOrderItems);
     }
 }

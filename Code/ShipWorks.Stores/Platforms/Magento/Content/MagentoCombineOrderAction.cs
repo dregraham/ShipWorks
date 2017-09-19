@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombineOrderActions;
 
 namespace ShipWorks.Stores.Platforms.Magento.Content
@@ -21,14 +20,15 @@ namespace ShipWorks.Stores.Platforms.Magento.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            IEnumerable<MagentoOrderSearchEntity> orderSearches = orders.Cast<IMagentoOrderEntity>()
-                .Select(x => new MagentoOrderSearchEntity
+            var recordCreator = new SearchRecordMerger<IMagentoOrderEntity>(combinedOrder, orders, sqlAdapter);
+
+            return recordCreator.Perform(MagentoOrderSearchFields.OrderID,
+                x => new MagentoOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    MagentoOrderID = x.MagentoOrderID
+                    MagentoOrderID = x.MagentoOrderID,
+                    OriginalOrderID = x.OrderID
                 });
-
-            return sqlAdapter.SaveEntityCollectionAsync(orderSearches.ToEntityCollection());
         }
     }
 }

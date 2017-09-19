@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EbayOrderID = source.EbayOrderID;
             EbayBuyerID = source.EbayBuyerID;
             SellingManagerRecord = source.SellingManagerRecord;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             EbayOrder = source.EbayOrder?.AsReadOnly(objectMap);
@@ -66,8 +67,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "EbayOrderSearch"."EbayOrderID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int64 EbayOrderID { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> EbayOrderID { get; }
         /// <summary> The EbayBuyerID property of the Entity EbayOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EbayOrderSearch"."EbayBuyerID"<br/>
@@ -80,6 +81,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> SellingManagerRecord { get; }
+        /// <summary> The OriginalOrderID property of the Entity EbayOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EbayOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IEbayOrderEntity EbayOrder { get; }

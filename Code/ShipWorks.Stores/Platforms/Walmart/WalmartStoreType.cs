@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -23,21 +22,16 @@ namespace ShipWorks.Stores.Platforms.Walmart
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Walmart, ExternallyOwned = true)]
     public class WalmartStoreType : StoreType
     {
-        private readonly Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory;
         private readonly WalmartStoreEntity walmartStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        /// <param name="downloaderFactory"></param>
         /// <param name="onlineUpdateInstanceCommandsFactory"></param>
-        public WalmartStoreType(StoreEntity store,
-            Func<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands> onlineUpdateInstanceCommandsFactory)
+        public WalmartStoreType(StoreEntity store)
             : base(store)
         {
-            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
-
             walmartStore = store as WalmartStoreEntity;
         }
 
@@ -65,10 +59,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new OrderNumberIdentifier(order.OrderNumber);
-        }
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
+            new WalmartOrderIdentifier((order as IWalmartOrderEntity)?.PurchaseOrderID);
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IWalmartOrderEntity)?.PurchaseOrderID ?? string.Empty;
 
         /// <summary>
         /// Creates a Walmart Order Entity
@@ -78,7 +76,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Creates a Walmart Order Item Entity
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance() => new WalmartOrderItemEntity();
+        public override OrderItemEntity CreateOrderItemInstance() =>
+            new WalmartOrderItemEntity();
 
         /// <summary>
         /// This is a string that uniquely identifies the store.
@@ -90,12 +89,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(WalmartShipmentUploadTask));
-
-        /// <summary>
-        /// Create the online update instance commands for Walmart
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands() =>
-            onlineUpdateInstanceCommandsFactory(walmartStore).Create().ToList();
 
         /// <summary>
         /// Generate the walmart node for the order template
@@ -128,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <returns></returns>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            List<FilterEntity> filters = new List<FilterEntity>
+            return new List<FilterEntity>
             {
                 CreateItemStatusFilter("Ready To Ship", "Acknowledged"),
                 CreateItemStatusFilter("Shipped", "Shipped"),
@@ -137,8 +130,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 CreatePartialItemStatusFilter("Partially Shipped", "Shipped"),
                 CreatePartialItemStatusFilter("Partially Cancelled", "Cancelled")
             };
-
-            return filters;
         }
 
         /// <summary>
@@ -181,7 +172,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
             secondContainer.FirstGroup.Conditions.Add(notAnyItem);
 
             definition.RootContainer.SecondGroup = secondContainer;
-
 
             return new FilterEntity
             {

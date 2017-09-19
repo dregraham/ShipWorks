@@ -139,6 +139,7 @@ namespace ShipWorks
         long searchRestoreFilterNodeID = 0;
 
         Lazy<DockControl> shipmentDock;
+        private ILifetimeScope menuCommandLifetimeScope;
 
         /// <summary>
         /// Constructor
@@ -1360,10 +1361,14 @@ namespace ShipWorks
         /// <summary>
         /// Apply the given set of MenuCommands to the given menuitem and ribbon popup
         /// </summary>
-        private void ApplyMenuCommands(List<MenuCommand> commands, ToolStripMenuItem menuItem, Popup ribbonPopup, EventHandler actionHandler)
+        private void ApplyMenuCommands(IEnumerable<IMenuCommand> commands, ToolStripMenuItem menuItem,
+            Popup ribbonPopup, EventHandler actionHandler, ILifetimeScope lifetimeScope)
         {
             menuItem.DropDownItems.Clear();
             ribbonPopup.Items.Clear();
+
+            menuCommandLifetimeScope?.Dispose();
+            menuCommandLifetimeScope = lifetimeScope;
 
             // Update available local status options
             menuItem.DropDownItems.AddRange(MenuCommandConverter.ToToolStripItems(commands, actionHandler));
@@ -1511,25 +1516,26 @@ namespace ShipWorks
         /// <summary>
         /// Execute an invoked menu command
         /// </summary>
-        void OnExecuteMenuCommand(object sender, EventArgs e)
+        private async void OnExecuteMenuCommand(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            command.ExecuteAsync(this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted);
+            await command.ExecuteAsync(this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Execute an invoked update online command
         /// </summary>
-        void OnExecuteUpdateOnlineCommand(object sender, EventArgs e)
+        private async void OnExecuteUpdateOnlineCommand(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            onlineUpdateCommandProvider.ExecuteCommandAsync(command, this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted);
+            await onlineUpdateCommandProvider.ExecuteCommandAsync(command, this, gridControl.Selection.OrderedKeys, OnAsyncMenuCommandCompleted)
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1578,11 +1584,13 @@ namespace ShipWorks
         /// </summary>
         private void UpdateOnlineUpdateCommands()
         {
+            var lifetimeScope = IoC.BeginLifetimeScope();
+
             // Update the update online options
-            List<MenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys);
+            IEnumerable<IMenuCommand> updateOnlineCommands = onlineUpdateCommandProvider.CreateOnlineUpdateCommands(gridControl.Selection.Keys, lifetimeScope);
 
             // Update the ui to display the commands
-            ApplyMenuCommands(updateOnlineCommands, contextOrderOnlineUpdate, popupUpdateOnline, OnExecuteUpdateOnlineCommand);
+            ApplyMenuCommands(updateOnlineCommands, contextOrderOnlineUpdate, popupUpdateOnline, OnExecuteUpdateOnlineCommand, lifetimeScope);
         }
 
         /// <summary>
@@ -1610,7 +1618,8 @@ namespace ShipWorks
                 StatusPresetCommands.CreateMenuCommands(StatusPresetTarget.Order, gridControl.SelectedStoreKeys, true),
                 contextOrderLocalStatus,
                 popupLocalStatus,
-                OnExecuteMenuCommand);
+                OnExecuteMenuCommand,
+                null);
         }
 
         /// <summary>
@@ -3521,9 +3530,12 @@ namespace ShipWorks
         /// </summary>
         private void OnManageActions(object sender, EventArgs e)
         {
-            using (ActionManagerDlg dlg = new ActionManagerDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ActionManagerDlg dlg = new ActionManagerDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
 
             UpdateCustomButtonsActionsUI();
@@ -4210,7 +4222,7 @@ namespace ShipWorks
                     {
                         Process.Start(file);
 
-                        // This waiting is b\c with certain apps - noteably IE - if you open stuff to fast it misses it.
+                        // This waiting is b\c with certain apps - notably IE - if you open stuff too fast it misses it.
                         Thread.Sleep(500);
                     }
 

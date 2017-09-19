@@ -1,6 +1,6 @@
-﻿using Interapptive.Shared.Net;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Walmart
 {
@@ -13,6 +13,6 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Signs the given request with the timestamp and generated signature
         /// </summary>
-        void Sign(IHttpRequestSubmitter requestSubmitter, WalmartStoreEntity store);
+        void Sign(IHttpRequestSubmitter requestSubmitter, IWalmartStoreEntity store);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -54,9 +53,10 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.SearsOrderSearch
-                .Where(SearsOrderSearchFields.PoNumber == poNumber)
-                .AndWhere(SearsOrderSearchFields.OrderID == confirmationNumber);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.SearsOrderSearch,
+                SearsOrderSearchFields.OriginalOrderID,
+                SearsOrderSearchFields.PoNumber == poNumber & SearsOrderSearchFields.OrderID == confirmationNumber);
 
         /// <summary>
         /// String representation

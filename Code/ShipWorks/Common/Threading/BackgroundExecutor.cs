@@ -1,11 +1,12 @@
-﻿using Interapptive.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Common.Threading
 {
@@ -74,10 +75,7 @@ namespace ShipWorks.Common.Threading
         /// </summary>
         public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail, bool delayProgressDialog)
         {
-            if (owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
 
             this.owner = owner;
 
@@ -108,28 +106,21 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Execute the operation asynchronously using the given entity key collection
         /// </summary>
-        public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker) =>
             ExecuteAsync(initializer, worker, null);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection
         /// </summary>
-        public void ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, object userState)
-        {
+        public Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, object userState) =>
             ExecuteAsync(initializer, worker, null, userState);
-        }
 
         /// <summary>
         /// Execute the operation asynchronously using the given item collection
         /// </summary>
         private Task<BackgroundExecutorCompletedEventArgs<T>> ExecuteAsync(Func<IProgressReporter, List<T>> initializer, BackgroundExecutorCallback<T> worker, IEnumerable<T> items, object userState)
         {
-            if (worker == null)
-            {
-                throw new ArgumentNullException("worker");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(worker, nameof(worker));
 
             if (items == null)
             {

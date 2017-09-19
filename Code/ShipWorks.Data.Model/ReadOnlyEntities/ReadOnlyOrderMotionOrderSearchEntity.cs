@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderMotionOrderSearchID = source.OrderMotionOrderSearchID;
             OrderID = source.OrderID;
             OrderMotionShipmentID = source.OrderMotionShipmentID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             OrderMotionOrder = source.OrderMotionOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 OrderMotionShipmentID { get; }
+        /// <summary> The OriginalOrderID property of the Entity OrderMotionOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderMotionOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IOrderMotionOrderEntity OrderMotionOrder { get; }

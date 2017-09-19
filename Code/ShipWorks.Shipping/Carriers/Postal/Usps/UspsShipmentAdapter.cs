@@ -45,13 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
-        public override bool SupportsAccounts
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsAccounts => true;
 
         /// <summary>
         /// Does this shipment support rate shopping?
@@ -91,10 +85,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             PostalRateSelection selection = rate.Tag as PostalRateSelection;
+            PostalShipmentType shipmentType = GetShipmentType<PostalShipmentType>();
+
+            var serviceType = (PostalServiceType) ServiceType;
+            var confirmationType = (PostalConfirmationType) Shipment.Postal.Confirmation;
+            var packagingType = (PostalPackagingType) Shipment.Postal.PackagingType;
 
             return selection != null &&
-                (int) selection.ServiceType == ServiceType &&
-                (int) selection.ConfirmationType == Shipment.Postal.Confirmation;
+                shipmentType.DoesRateMatchServiceAndPackaging(selection, serviceType, confirmationType,
+                    packagingType, Shipment.ShipCountryCode);
         }
 
         /// <summary>

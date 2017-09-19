@@ -28,6 +28,11 @@ namespace ShipWorks.Data.Connection
         bool SaveAndRefetch(IEntity2 entity);
 
         /// <summary>
+        /// Get this SqlAdapter as an IDataAccessAdapter
+        /// </summary>
+        IDataAccessAdapter AsDataAccessAdapter();
+
+        /// <summary>
         /// Save the given entity, and automatically refetch it back. Returns true if there were any entities in the graph that were dirty and saved.  Returns
         /// false if nothing was dirty and thus nothing written to the database.
         /// </summary>

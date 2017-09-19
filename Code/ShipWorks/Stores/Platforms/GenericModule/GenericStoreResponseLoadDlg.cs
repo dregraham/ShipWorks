@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using System.IO;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -18,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     public partial class GenericStoreResponseLoadDlg : Form
     {
         // The web client for the store
-        GenericStoreWebClient client = null;
+        IGenericStoreWebClient client = null;
 
         // the loaded response
         GenericModuleResponse loadedResponse = null;
@@ -45,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericStoreResponseLoadDlg(GenericStoreWebClient client)
+        public GenericStoreResponseLoadDlg(IGenericStoreWebClient client)
         {
             InitializeComponent();
 

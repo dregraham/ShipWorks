@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
 using ShipWorks.Tests.Shared;
@@ -23,14 +21,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void CreateOrderIdentifier_ReturnsOrderNumberIdentifier()
+        public void CreateOrderIdentifier_ReturnsWalmartOrderIdentifier()
         {
             WalmartStoreEntity store = new WalmartStoreEntity();
             store.TypeCode = (int) StoreTypeCode.Walmart;
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
-            OrderEntity order = new OrderEntity() {OrderNumber = 7};
-            OrderNumberIdentifier identifier = new OrderNumberIdentifier(7);
+            OrderEntity order = new WalmartOrderEntity() { PurchaseOrderID = "7" };
+            WalmartOrderIdentifier identifier = new WalmartOrderIdentifier("7");
 
             Assert.Equal(identifier.ToString(), testObject.CreateOrderIdentifier(order).ToString());
         }
@@ -38,32 +36,43 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControlWithWalmartTaskType()
         {
+            IoC.Initialize(mock.Container);
+            mock.Provide(mock.Create<WalmartShipmentUploadTask>());
+
             WalmartStoreEntity store = new WalmartStoreEntity();
-            store.TypeCode = (int)StoreTypeCode.Walmart;
+            store.TypeCode = (int) StoreTypeCode.Walmart;
 
             WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
 
             var onlineUpdateActionControl = testObject.CreateAddStoreWizardOnlineUpdateActionControl();
 
-            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(store).FirstOrDefault();
+            ActionTask actionTask = onlineUpdateActionControl.CreateActionTasks(mock.Container, store).FirstOrDefault();
 
             Assert.Equal(typeof(WalmartShipmentUploadTask), actionTask.GetType());
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_DelegatesToWalmartOnlineUpdateInstanceCommandsFactory()
+        public void GetAuditDescription_ReturnsValueWhenOrderIsCorrectType()
         {
-            WalmartStoreEntity store = new WalmartStoreEntity();
-            store.TypeCode = (int)StoreTypeCode.Walmart;
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(new WalmartOrderEntity { PurchaseOrderID = "ABC-123" });
+            Assert.Equal("ABC-123", identifier);
+        }
 
-            var commandFactory = mock.Mock<IWalmartOnlineUpdateInstanceCommands>();
-            mock.MockFunc<WalmartStoreEntity, IWalmartOnlineUpdateInstanceCommands>(commandFactory);
+        [Fact]
+        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNull()
+        {
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(null);
+            Assert.Empty(identifier);
+        }
 
-            WalmartStoreType testObject = mock.Create<WalmartStoreType>(new TypedParameter(typeof(StoreEntity), store));
-
-            testObject.CreateOnlineUpdateInstanceCommands();
-
-            commandFactory.Verify(x => x.Create(), Times.Once);
+        [Fact]
+        public void GetAuditDescription_ReturnsEmptyWhenOrderIsNotCorrectType()
+        {
+            var testObject = mock.Create<WalmartStoreType>(TypedParameter.From<StoreEntity>(null));
+            var identifier = testObject.GetAuditDescription(new OrderEntity());
+            Assert.Empty(identifier);
         }
     }
 }

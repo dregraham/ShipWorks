@@ -1,15 +1,14 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Sears;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Sears
@@ -37,12 +36,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupSecureTextProvider(mock, email, password, store);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                var testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                var testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
                 HttpVariable emailVariable = request.Variables.First(v => v.Name == "email");
 
                 Assert.Equal(email, emailVariable.Value);
@@ -66,12 +63,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupSecureTextProvider(mock, email, password, store);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
                 HttpVariable passwordVariable = request.Variables.First(v => v.Name == "password");
 
                 Assert.Equal(password, passwordVariable.Value);
@@ -95,12 +90,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupSecureTextProvider(mock, email, password, store);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
                 HttpVariable sellerIdVariable = request.Variables.FirstOrDefault(v => v.Name == "sellerId");
 
                 Assert.Null(sellerIdVariable);
@@ -125,12 +118,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
                 HttpVariable sellerIdVariable = request.Variables.Single(v => v.Name == "sellerId");
 
                 Assert.Equal(sellerId, sellerIdVariable.Value);
@@ -154,12 +145,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
                 HttpVariable emailVariable = request.Variables.SingleOrDefault(v => v.Name == "email");
 
                 Assert.Null(emailVariable);
@@ -185,11 +174,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 Assert.NotNull(request.Headers["authorization"]);
             }
@@ -225,12 +212,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 string headerText = request.Headers["authorization"];
                 string actualHash = headerText.Split(',')[2].Split('=')[1];
@@ -256,12 +241,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 Assert.StartsWith("HMAC-SHA256 ", request.Headers["authorization"]);
             }
@@ -283,12 +266,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 string headerValue = request.Headers["authorization"];
                 string headerEmail = headerValue
@@ -317,12 +298,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 string headerValue = request.Headers["authorization"];
                 string timeStamp = headerValue.Split(',')[1].Split('=')[1];
@@ -330,7 +309,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 Assert.Equal(testDateTime.AddMinutes(-15), DateTime.Parse(timeStamp).ToUniversalTime());
             }
         }
-
 
         [Fact]
         public void AddCredentials_DelegatesToIEncryptionProvider()
@@ -355,12 +333,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
                 SetupDateTime(mock);
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter);
+                SearsCredentials testObject = mock.Create<SearsCredentials>();
 
-                testObject.AddCredentials();
+                testObject.AddCredentials(store, request);
 
                 encryptionProvider.Verify(p => p.Decrypt(It.Is<string>(s => s == secretKey)));
             }
@@ -386,19 +362,17 @@ namespace ShipWorks.Stores.Tests.Platforms.Sears
 
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
                 TypedParameter dateTimeProvider = new TypedParameter(typeof(IDateTimeProvider), new DateTimeProvider());
-                TypedParameter storeParameter = new TypedParameter(typeof(SearsStoreEntity), store);
-                TypedParameter requestParameter = new TypedParameter(typeof(HttpVariableRequestSubmitter), request);
 
-                SearsCredentials testObject = mock.Create<SearsCredentials>(storeParameter, requestParameter, dateTimeProvider);
+                SearsCredentials testObject = mock.Create<SearsCredentials>(dateTimeProvider);
 
-                Assert.Throws<SearsException>(() => testObject.AddCredentials());
+                Assert.Throws<SearsException>(() => testObject.AddCredentials(store, request));
             }
         }
 
         [Fact]
         public void SearsCredentials_WithNullDateTimeProvider_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new SearsCredentials(null, null));
         }
 
         private static void SetupSecureTextProvider(AutoMock mock, string email, string password, SearsStoreEntity store)

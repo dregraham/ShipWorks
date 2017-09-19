@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
+    /// <summary>
+    /// Settings control for Newegg accounts
+    /// </summary>
     public partial class NeweggAccountSettingsControl : AccountSettingsControlBase
     {
         /// <summary>
@@ -24,6 +22,11 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
 
         /// <summary>
         /// Load the data from the given store into the control
@@ -36,21 +39,19 @@ namespace ShipWorks.Stores.Platforms.Newegg
             storeCredentialsControl.SellerId = neweggStore.SellerID;
             storeCredentialsControl.SecretKey = neweggStore.SecretKey;
             storeCredentialsControl.Marketplace = neweggStore.Channel;
-            
         }
-
 
         /// <summary>
         /// Save the data into the StoreEntity.  Nothing is saved to the database.
         /// </summary>
         /// <param name="store"></param>
         /// <returns></returns>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
             IEnumerable<ValidationError> errors = ValidateAccountSettings();
             if (errors.Count() > 0)
             {
-                // The account settings provided did not pass validation, so just grab the first error message 
+                // The account settings provided did not pass validation, so just grab the first error message
                 // and show it to the user
                 MessageHelper.ShowError(this, errors.First().ErrorMessage);
                 return false;
@@ -66,15 +67,19 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             if (neweggStore.IsDirty)
             {
-                // The store settings have been changed, so let's bounce them off the 
-                // Newegg API to confirm that they are correct
-                NeweggWebClient webClient = new NeweggWebClient(neweggStore);
                 try
                 {
-                    if (!webClient.AreCredentialsValid())
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
-                        return false;
+                        // The store settings have been changed, so let's bounce them off the
+                        // Newegg API to confirm that they are correct
+                        INeweggWebClient webClient = lifetimeScope.Resolve<INeweggWebClient>();
+                        var areCredentialsValid = await webClient.AreCredentialsValid(neweggStore).ConfigureAwait(true);
+                        if (!areCredentialsValid)
+                        {
+                            MessageHelper.ShowError(this, "ShipWorks could not communicate with Newegg using the connection settings provided.");
+                            return false;
+                        }
                     }
                 }
                 catch (NeweggException ex)
@@ -88,15 +93,15 @@ namespace ShipWorks.Stores.Platforms.Newegg
         }
 
         /// <summary>
-        /// A helper method that calidates the values of the various account controls 
+        /// A helper method that validates the values of the various account controls
         /// provided by the user.
         /// </summary>
         /// <returns>A List of any ValidationErrors that were encountered.</returns>
         private IEnumerable<ValidationError> ValidateAccountSettings()
         {
-            // We just concerned with making sure the account settings provided by the user 
-            // are in an acceptable format at this point, so we're just going to create an 
-            // empty entity and assign the the account properties that were provided by the user.
+            // We just concerned with making sure the account settings provided by the user
+            // are in an acceptable format at this point, so we're just going to create an
+            // empty entity and assign the account properties that were provided by the user.
             NeweggStoreEntity storeForValidation = new NeweggStoreEntity();
             storeForValidation.SellerID = storeCredentialsControl.SellerId;
             storeForValidation.SecretKey = storeCredentialsControl.SecretKey;
@@ -106,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         }
 
         /// <summary>
-        /// Helper method that that does type checking and casts the generic StoreEntity
+        /// Helper method that does type checking and casts the generic StoreEntity
         /// to a NeweggStoreEntity.
         /// </summary>
         /// <param name="store">The store.</param>

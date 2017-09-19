@@ -74,18 +74,18 @@ namespace Interapptive.Shared.ComponentRegistration
             {
                 var registration = GetRegistrationBuilder(item.Component, builder, registrationCache);
 
-                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.ImplementedInterfaces))
+                if (item.Attributes.Any(x => x.RegisterAs.HasFlag(RegistrationType.ImplementedInterfaces)))
                 {
                     registration.AsImplementedInterfaces();
                 }
 
-                if (item.Attributes.Any(x => x.RegisterAs == RegistrationType.Self))
+                if (item.Attributes.Any(x => x.RegisterAs.HasFlag(RegistrationType.Self)))
                 {
                     registration.AsSelf();
                 }
 
                 Type[] specificServices = item.Attributes
-                    .Where(x => x.RegisterAs == RegistrationType.SpecificService)
+                    .Where(x => x.RegisterAs.HasFlag(RegistrationType.SpecificService))
                     .Select(x => x.Service)
                     .ToArray();
                 if (specificServices.Any())
@@ -93,7 +93,7 @@ namespace Interapptive.Shared.ComponentRegistration
                     registration.As(specificServices);
                 }
 
-                if (item.Attributes.Any(x=>x.SingleInstance))
+                if (item.Attributes.Any(x => x.SingleInstance))
                 {
                     registration.SingleInstance();
                 }

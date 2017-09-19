@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Xml;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Net;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using ShipWorks.ApplicationCore;
-using System.Diagnostics;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
@@ -18,6 +18,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Web client for connecting to legacy MarketplaceAdvisor stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public class MarketplaceAdvisorLegacyClient : MarshalByRefObject
     {
         private readonly int accountType;
@@ -43,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         }
 
         /// <summary>
-        /// Create an instance of the MarketplaceAdvisorLegacyClient 
+        /// Create an instance of the MarketplaceAdvisorLegacyClient
         /// </summary>
         /// <remarks>
         /// </remarks>
@@ -121,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         }
 
         /// <summary>
-        /// Mark the given orders numbers as processed within MarketplaceAdvisor 
+        /// Mark the given orders numbers as processed within MarketplaceAdvisor
         /// </summary>
         public void MarkOrdersProcessed(List<long> orderList)
         {
@@ -256,7 +261,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// </summary>
         private string ProcessRequest(string xmlRequest)
         {
-            string apiUrl = (accountType == (int)MarketplaceAdvisorAccountType.LegacyCorporate) ?
+            string apiUrl = (accountType == (int) MarketplaceAdvisorAccountType.LegacyCorporate) ?
                 "https://api.corporate.marketplaceadvisor.channeladvisor.com/api/apiCall.asp" :
                 "https://api.marketplaceadvisor.channeladvisor.com/api/apiCall.asp";
 

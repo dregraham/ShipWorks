@@ -46,14 +46,15 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         {
             try
             {
+                var typedStore = (NetworkSolutionsStoreEntity) Store;
                 Progress.Detail = "Updating status codes...";
 
-                statusProvider = new NetworkSolutionsStatusCodeProvider((NetworkSolutionsStoreEntity) Store);
+                statusProvider = new NetworkSolutionsStatusCodeProvider(typedStore);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
 
-                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity) Store);
+                NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient();
 
                 // check for cancel
                 if (Progress.IsCancelRequested)
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 // download until NetworkSolutions says no more orders exist to download
                 while (webClient.HasMoreOrders)
                 {
-                    List<OrderType> orders = webClient.GetNextOrders();
+                    List<OrderType> orders = webClient.GetNextOrders(typedStore);
 
                     if (webClient.TotalCount == 0)
                     {

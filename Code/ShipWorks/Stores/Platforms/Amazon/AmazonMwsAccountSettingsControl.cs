@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Net;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
+    /// <summary>
+    /// Settings control for an Amazon MWS account
+    /// </summary>
     [ToolboxItem(true)]
     public partial class AmazonMwsAccountSettingsControl : AccountSettingsControlBase
     {
@@ -26,6 +33,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
 
         /// <summary>
         /// Developer account number for access to Amazon API
@@ -95,11 +107,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             // validate we get an AmazonStoreEntity
-            amazonStore = store as AmazonStoreEntity;
-            if (amazonStore == null)
-            {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store"); 
-            }
+            amazonStore = MethodConditions.EnsureArgumentIsNotNull(store as AmazonStoreEntity, nameof(store));
 
             merchantID.Text = amazonStore.MerchantID;
             authToken.Text = amazonStore.AuthToken;
@@ -114,13 +122,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Save user-entered values back to the entity
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
-            AmazonStoreEntity saveStore = store as AmazonStoreEntity;
-            if (saveStore == null)
-            {
-                throw new ArgumentException("AmazonStoreEntity expected.", "store"); 
-            }
+            AmazonStoreEntity saveStore = MethodConditions.EnsureArgumentIsNotNull(store as AmazonStoreEntity, nameof(store));
 
             if (merchantID.Text.Trim().Length == 0)
             {
@@ -147,11 +151,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             try
             {
-                saveStore.DomainName = GetStoreDomainName(saveStore.MarketplaceID);
-                
-                using (AmazonMwsClient client = new AmazonMwsClient(saveStore))
+                saveStore.DomainName = await GetStoreDomainName(saveStore.MarketplaceID).ConfigureAwait(true);
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    client.TestCredentials();
+                    var client = lifetimeScope.Resolve<IAmazonMwsClient>(TypedParameter.From(saveStore));
+                    await client.TestCredentials().ConfigureAwait(true);
                 }
 
                 return true;
@@ -167,14 +172,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Get the domain name of the marketplace
         /// </summary>
-        private string GetStoreDomainName(string marketplaceId)
+        private async Task<string> GetStoreDomainName(string marketplaceId)
         {
             // Find the domain name of the marketplace provided to account for Amazon Canada store; default to an empty string - another
             // attempt will be made to populate it when a link is clicked (primarily so existing customers don't have to take explicit
             // action to have the domain name populated
             string storeDomainName = string.Empty;
 
-            List<AmazonMwsMarketplace> marketplaces = GetMarketplaces();
+            List<AmazonMwsMarketplace> marketplaces = await GetMarketplaces().ConfigureAwait(false);
 
             if (marketplaces != null)
             {
@@ -195,7 +200,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Clicking the find marketplaces link
         /// </summary>
-        private void OnClickFindMarketplaces(object sender, EventArgs e)
+        private async void OnClickFindMarketplaces(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(merchantID.Text))
             {
@@ -210,10 +215,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             List<AmazonMwsMarketplace> marketplaces;
-            
+
             try
             {
-                marketplaces = GetMarketplaces();
+                buttonChooseMarketplace.Enabled = false;
+                marketplaces = await GetMarketplaces().ConfigureAwait(true);
+                buttonChooseMarketplace.Enabled = true;
             }
             catch (AmazonException ex)
             {
@@ -240,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Return the list of marketplaces for the amazon merchant
         /// </summary>
-        private List<AmazonMwsMarketplace> GetMarketplaces()
+        private async Task<List<AmazonMwsMarketplace>> GetMarketplaces()
         {
             amazonStore.MerchantID = merchantID.Text;
             amazonStore.AuthToken = authToken.Text;
@@ -252,10 +259,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            
-            using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                marketplaces = client.GetMarketplaces();
+                var client = lifetimeScope.Resolve<IAmazonMwsClient>(TypedParameter.From(amazonStore));
+                marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
             }
 
             marketplaceCache[GetCacheKey()] = marketplaces;
@@ -264,7 +272,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Gets the cache key 
+        /// Gets the cache key
         /// </summary>
         private string GetCacheKey()
         {

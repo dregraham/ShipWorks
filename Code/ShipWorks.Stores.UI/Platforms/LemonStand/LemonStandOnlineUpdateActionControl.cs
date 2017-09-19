@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -80,21 +81,21 @@ namespace ShipWorks.Stores.UI.Platforms.LemonStand
         /// <summary>
         /// Create the configured tasks
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             // Create the shipment upload task
-            LemonStandShipmentUploadTask shipmentUploadTask = (LemonStandShipmentUploadTask)new ActionTaskDescriptorBinding(typeof(LemonStandShipmentUploadTask), store).CreateInstance();
+            LemonStandShipmentUploadTask shipmentUploadTask = (LemonStandShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(LemonStandShipmentUploadTask), store).CreateInstance(lifetimeScope);
             tasks.Add(shipmentUploadTask);
 
             if (setStatus.Checked)
             {
                 // Create the task instance
-                LemonStandOrderUpdateTask orderUpdateTask = (LemonStandOrderUpdateTask)new ActionTaskDescriptorBinding(typeof(LemonStandOrderUpdateTask), store).CreateInstance();
+                LemonStandOrderUpdateTask orderUpdateTask = (LemonStandOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(LemonStandOrderUpdateTask), store).CreateInstance(lifetimeScope);
 
                 // Apply the desired status code
-                LemonStandStatusCodeProvider statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity)store);
+                LemonStandStatusCodeProvider statusProvider = new LemonStandStatusCodeProvider((LemonStandStoreEntity) store);
                 orderUpdateTask.StatusCode = statusProvider.GetCodeValue(status.Text);
 
                 tasks.Add(orderUpdateTask);

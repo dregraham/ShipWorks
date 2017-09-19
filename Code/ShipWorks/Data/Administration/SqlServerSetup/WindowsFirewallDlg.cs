@@ -1,13 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using Interapptive.Shared;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 

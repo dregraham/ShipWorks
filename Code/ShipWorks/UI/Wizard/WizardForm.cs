@@ -1,18 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Design;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared;
 using ShipWorks.UI.Wizard.Design;
 
 namespace ShipWorks.UI.Wizard
@@ -943,7 +938,10 @@ namespace ShipWorks.UI.Wizard
                 }
             }
 
-            DialogResult = result;
+            if (DialogResult == DialogResult.None)
+            {
+                DialogResult = result;
+            }
         }
 
         /// <summary>

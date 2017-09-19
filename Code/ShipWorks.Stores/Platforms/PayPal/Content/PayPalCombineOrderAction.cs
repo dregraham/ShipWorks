@@ -25,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.PayPal.Content
                 x => new PayPalOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    TransactionID = x.TransactionID
+                    TransactionID = x.TransactionID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common;
+using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data.Model;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
 {
@@ -17,71 +18,72 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "NetworkSolutionsShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class NetworkSolutionsShipmentUploadTask : StoreTypeTaskBase
     {
+        private readonly IShipmentDetailsUpdater shipmentDetailsUpdater;
+        private readonly IDataProvider dataProvider;
+        private readonly IStoreManager storeManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NetworkSolutionsShipmentUploadTask(IShipmentDetailsUpdater shipmentDetailsUpdater, IDataProvider dataProvider, IStoreManager storeManager)
+        {
+            this.storeManager = storeManager;
+            this.dataProvider = dataProvider;
+            this.shipmentDetailsUpdater = shipmentDetailsUpdater;
+        }
+
+        /// <summary>
+        /// Should the task run async
+        /// </summary>
+        public override bool IsAsync => true;
+
         /// <summary>
         /// Indicates if the task supports the give store type
         /// </summary>
         /// <param name="storeType"></param>
         /// <returns></returns>
-        public override bool SupportsType(StoreType storeType)
-        {
-            return storeType is NetworkSolutionsStoreType;
-        }
+        public override bool SupportsType(StoreType storeType) =>
+            storeType is NetworkSolutionsStoreType;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload tracking number of:";
-            }
-        }
+        public override string InputLabel => "Upload tracking number of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new BasicShipmentUploadTaskEditor();
-        }
+        public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
 
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             foreach (long entityID in inputKeys)
             {
-                List<long> storeKeys = DataProvider.GetRelatedKeys(entityID, EntityType.StoreEntity);
-                if (storeKeys.Count == 0)
+                IEnumerable<long> storeKeys = dataProvider.GetRelatedKeys(entityID, EntityType.StoreEntity);
+                if (storeKeys.None())
                 {
-                    // Store or shipment disapeared
+                    // Store or shipment disappeared
                     continue;
                 }
 
-                NetworkSolutionsStoreEntity storeEntity = StoreManager.GetStore(storeKeys[0]) as NetworkSolutionsStoreEntity;
-                if (storeEntity == null)
+                INetworkSolutionsStoreEntity store = storeManager.GetStore(storeKeys.First()) as INetworkSolutionsStoreEntity;
+                if (store == null)
                 {
-                    // This isnt a generic store or the store went away
+                    // This isn't a generic store or the store went away
                     continue;
                 }
 
                 try
                 {
-                    NetworkSolutionsOnlineUpdater updater = new NetworkSolutionsOnlineUpdater(storeEntity);
-                    updater.UploadShipmentDetails(entityID);
+                    await shipmentDetailsUpdater.UploadShipmentDetails(store, entityID).ConfigureAwait(false);
                 }
                 catch (NetworkSolutionsException ex)
                 {

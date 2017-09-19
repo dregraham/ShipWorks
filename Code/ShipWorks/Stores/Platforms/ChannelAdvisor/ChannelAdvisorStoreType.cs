@@ -6,10 +6,10 @@ using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -29,8 +29,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Store implementation for ChannelAdvisor
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
-    [Component(RegistrationType.Self)]
-    public class ChannelAdvisorStoreType : StoreType
+    [Component]
+    public class ChannelAdvisorStoreType : StoreType, IChannelAdvisorStoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
@@ -123,7 +123,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 MarketplaceSalesID = "",
                 Classification = "",
                 DistributionCenter = "",
-                HarmonizedCode = "",
                 IsFBA = false,
                 DistributionCenterID = -1
             };
@@ -132,7 +131,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
@@ -367,6 +366,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("Classification", () => item.Value.Classification);
             outline.AddElement("DistributionCenterID", () => item.Value.DistributionCenterID);
             outline.AddElement("DistributionCenter", () => item.Value.DistributionCenter);
+            outline.AddElement("DistributionCenterName", () => item.Value.DistributionCenterName);
             outline.AddElement("HarmonizedCode", () => item.Value.HarmonizedCode);
             outline.AddElement("FulfilledByAmazon", () => item.Value.IsFBA);
             outline.AddElement("MPN", () => item.Value.MPN);
@@ -385,67 +385,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             legacy.AddElement("StoreName", () => item.Value.MarketplaceStoreName);
             legacy.AddElement("BuyerID", () => item.Value.MarketplaceBuyerID);
             legacy.AddElement("ItemID", () => item.Value.MarketplaceSalesID);
-        }
-
-        /// <summary>
-        /// Create menu commands for uploading shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            // shipment details
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// MenuCommand handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
-                    updater.UploadTrackingNumber(shipment);
-                }
-                catch (ChannelAdvisorException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment information for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
         }
     }
 }

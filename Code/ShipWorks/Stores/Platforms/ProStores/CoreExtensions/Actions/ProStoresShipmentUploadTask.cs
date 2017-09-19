@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model;
-using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model;
+using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Actions
 {
@@ -18,38 +14,38 @@ namespace ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "ProStoresShipmentUpload", ActionTaskCategory.UpdateOnline)]
     public class ProStoresShipmentUploadTask : StoreTypeTaskBase
     {
+        readonly IShipmentDetailsUpdater shipmentUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ProStoresShipmentUploadTask(IShipmentDetailsUpdater shipmentUpdater)
+        {
+            this.shipmentUpdater = shipmentUpdater;
+        }
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
         /// <summary>
         /// Indicates if the task supports the given store type
         /// </summary>
-        public override bool SupportsType(StoreType storeType)
-        {
-            return storeType is ProStoresStoreType;
-        }
+        public override bool SupportsType(StoreType storeType) => storeType is ProStoresStoreType;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload tracking number of:";
-            }
-        }
+        public override string InputLabel => "Upload tracking number of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -59,12 +55,11 @@ namespace ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             try
             {
-                ProStoresOnlineUpdater updater = new ProStoresOnlineUpdater();
-                updater.UploadShipmentDetails(inputKeys);
+                await shipmentUpdater.UploadShipmentDetails(inputKeys).ConfigureAwait(false);
             }
             catch (ProStoresException ex)
             {

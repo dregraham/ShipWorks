@@ -1,11 +1,13 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
-using System;
+using ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.BuyDotcom
@@ -16,7 +18,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
     public class BuyDotComOnlineUpdaterTest
     {
         private BuyDotComStoreEntity store;
-        private BuyDotComOnlineUpdater updater;
+        private BuyDotComShipmentDetailsUpdater updater;
 
         private OrderEntity orderEntity;
         private FedExShipmentEntity fedExEntity;
@@ -26,17 +28,20 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         private EndiciaShipmentEntity endiciaShipmentEntity;
         private UspsShipmentEntity uspsShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
+        private readonly AutoMock mock;
 
         public BuyDotComOnlineUpdaterTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             store = new BuyDotComStoreEntity();
-            updater = new BuyDotComOnlineUpdater(store);
+            updater = mock.Create<BuyDotComShipmentDetailsUpdater>();
 
             orderEntity = new OrderEntity { OrderNumber = 123456 };
-            fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
-            upsEntity = new UpsShipmentEntity { Service = (int)UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
+            fedExEntity = new FedExShipmentEntity { Service = (int) FedExServiceType.FedExGround };
+            upsEntity = new UpsShipmentEntity { Service = (int) UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
             uspsShipmentEntity = new UspsShipmentEntity();
-            postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
+            postalShipmentEntity = new PostalShipmentEntity { Service = (int) PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             endiciaShipmentEntity = new EndiciaShipmentEntity();
 
@@ -47,10 +52,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenEndiciaAndDhlServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -61,10 +66,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsOther_WhenEndiciaAndConsolidatorServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
+            postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -75,10 +80,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenUspsAndDhlServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -89,10 +94,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostStandardIntl;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostStandardIntl;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -103,10 +108,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenUspsAndGlobalPostSmartSaverPriorityServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverStandardIntl;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverStandardIntl;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -117,10 +122,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -131,10 +136,10 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenUspsAndFirstClassServiceUsed()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             shipmentEntity.Postal = postalShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -147,7 +152,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsUsps_WhenOtherAndFirstClassServiceUsed()
         {
             shipmentEntity.Other = otherShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
@@ -159,7 +164,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         {
             otherShipmentEntity.Carrier = "dhl";
             shipmentEntity.Other = otherShipmentEntity;
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Other;
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 

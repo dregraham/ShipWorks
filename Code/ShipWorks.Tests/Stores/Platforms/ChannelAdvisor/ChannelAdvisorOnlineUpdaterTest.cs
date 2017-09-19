@@ -1,10 +1,10 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Stores.Platforms.ChannelAdvisor;
-using System;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
@@ -24,18 +24,18 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         private readonly UspsShipmentEntity uspsShipmentEntity;
         private readonly OtherShipmentEntity otherShipmentEntity;
         private AmazonShipmentEntity amazonShipmentEntity;
-        
+
 
         public ChannelAdvisorOnlineUpdaterTest()
         {
-            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456, MarketplaceNames = string.Empty};
+            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456, MarketplaceNames = string.Empty };
             storeEntity = new ChannelAdvisorStoreEntity();
             storeEntity.ConsolidatorAsUsps = false;
-            fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
-            upsEntity = new UpsShipmentEntity { Service = (int)UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
-            shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int)ShipmentTypeCode.FedEx, FedEx = fedExEntity };
+            fedExEntity = new FedExShipmentEntity { Service = (int) FedExServiceType.FedExGround };
+            upsEntity = new UpsShipmentEntity { Service = (int) UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
+            shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int) ShipmentTypeCode.FedEx, FedEx = fedExEntity };
             uspsShipmentEntity = new UspsShipmentEntity();
-            postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
+            postalShipmentEntity = new PostalShipmentEntity { Service = (int) PostalServiceType.FirstClass };
             otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground" };
             endiciaShipmentEntity = new EndiciaShipmentEntity();
             amazonShipmentEntity = new AmazonShipmentEntity { ShippingServiceName = "UPS Ground", CarrierName = "UPS" };
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
+            postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+            postalShipmentEntity.Service = (int) PostalServiceType.FirstClass;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.GlobalPostSmartSaverStandardIntl;
+            postalShipmentEntity.Service = (int) PostalServiceType.GlobalPostSmartSaverStandardIntl;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
@@ -171,13 +171,13 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.UpsOnLineTools);
 
-            upsEntity.Service = (int)UpsServiceType.UpsGround;
+            upsEntity.Service = (int) UpsServiceType.UpsGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("GROUND", code);
 
-            shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsWorldShip;
+            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.UpsWorldShip;
             code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
 
             Assert.Equal("GROUND", code);
@@ -188,7 +188,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
+            postalShipmentEntity.Service = (int) PostalServiceType.ConsolidatorDomestic;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -200,7 +200,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -212,7 +212,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity);
 
@@ -272,7 +272,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             var caOrder = shipmentEntity.Order as ChannelAdvisorOrderEntity;
             caOrder.MarketplaceNames = "ebay";
@@ -401,7 +401,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
                 Order = orderEntity,
                 TrackingNumber = "ABCD1234",
                 ShipDate = DateTime.UtcNow,
-                ShipmentType = (int)shipmentTypeCode,
+                ShipmentType = (int) shipmentTypeCode,
                 Postal = postalShipmentEntity,
                 Other = otherShipmentEntity,
                 FedEx = fedExEntity,

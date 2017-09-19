@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.SolidCommerce
@@ -17,8 +19,8 @@ namespace ShipWorks.Stores.Platforms.SolidCommerce
         /// <summary>
         /// Constructor
         /// </summary>
-        public SolidCommerceStoreType(StoreEntity store)
-            : base(store)
+        public SolidCommerceStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 

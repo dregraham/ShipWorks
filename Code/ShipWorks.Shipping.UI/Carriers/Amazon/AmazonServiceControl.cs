@@ -359,7 +359,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
             else
             {
-                RateControl.ClearSelection();
+                RateControl.SelectRate(RateControl.RateGroup.Rates.FirstOrDefault());
             }
         }
 

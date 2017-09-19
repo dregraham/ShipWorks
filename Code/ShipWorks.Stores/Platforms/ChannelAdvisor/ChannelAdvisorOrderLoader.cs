@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             orderToSave.OrderNumber = downloadedOrder.ID;
             orderToSave.OrderDate = downloadedOrder.CreatedDateUtc;
-            orderToSave.OnlineLastModified = downloadedOrder.CreatedDateUtc;
+            orderToSave.OnlineLastModified = downloadedOrder.PaymentDateUtc;
             orderToSave.CustomOrderIdentifier = downloadedOrder.SiteOrderID;
 
             LoadOrderStatuses(orderToSave, downloadedOrder);
@@ -126,7 +126,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             itemToSave.SKU = downloadedItem.Sku;
 
             // CA specific
-            itemToSave.MarketplaceSalesID = downloadedItem.SiteListingID;
+            itemToSave.MarketplaceSalesID = downloadedItem.SiteOrderItemID;
             itemToSave.MarketplaceName = downloadedOrder.SiteName;
             itemToSave.MarketplaceBuyerID = downloadedOrder.BuyerUserID;
 
@@ -174,6 +174,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     if (channelAdvisorDistributionCenter != null)
                     {
                         itemToSave.DistributionCenter = channelAdvisorDistributionCenter.Code;
+                        itemToSave.DistributionCenterName = channelAdvisorDistributionCenter.Name;
                     }
                 }
             }

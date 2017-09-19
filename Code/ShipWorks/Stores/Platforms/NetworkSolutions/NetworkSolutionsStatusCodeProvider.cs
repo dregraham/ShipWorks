@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Xml;
+using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
-using System.Xml.XPath;
-using System.Xml;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
     /// <summary>
     /// Manages available status codes for NetworkSolutions store
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class NetworkSolutionsStatusCodeProvider : OnlineStatusCodeProvider<long>
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// Constructor
         /// </summary>
         public NetworkSolutionsStatusCodeProvider(NetworkSolutionsStoreEntity store)
-            : base (store, NetworkSolutionsStoreFields.StatusCodes)
+            : base(store, NetworkSolutionsStoreFields.StatusCodes)
         {
 
         }
@@ -36,8 +36,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         protected override Dictionary<long, string> GetCodeMapFromOnline()
         {
             // get the status codes
-            NetworkSolutionsWebClient client = new NetworkSolutionsWebClient((NetworkSolutionsStoreEntity)Store);
-            List<OrderStatusType> statuses = client.GetStatusCodes();
+            NetworkSolutionsWebClient client = new NetworkSolutionsWebClient();
+            List<OrderStatusType> statuses = client.GetStatusCodes((NetworkSolutionsStoreEntity) Store);
 
             // status id -> name mapping
             Dictionary<long, string> statusCodeMap = new Dictionary<long, string>();
@@ -105,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 // make sure a valid list was mapped
                 if (nextStatusIds != null)
                 {
-                    List<string> stringIds = nextStatusIds.ConvertAll( i => i.ToString());
+                    List<string> stringIds = nextStatusIds.ConvertAll(i => i.ToString());
                     string workflowString = String.Join(",", stringIds.ToArray());
 
                     // write the workflow string to the xml

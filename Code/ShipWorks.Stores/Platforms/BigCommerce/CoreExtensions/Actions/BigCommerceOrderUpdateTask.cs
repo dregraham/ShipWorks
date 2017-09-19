@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks.Common;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
-using Autofac;
-using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Platforms.BigCommerce.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
 {
@@ -18,6 +17,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
     [ActionTask("Update store status", "BigCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class BigCommerceOrderUpdateTask : StoreInstanceTaskBase
     {
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
@@ -59,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -76,10 +80,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.CoreExtensions.Actions
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    IBigCommerceOnlineUpdater updater = lifetimeScope.Resolve<IBigCommerceOnlineUpdater>(TypedParameter.From(store));
+                    IBigCommerceOrderStatusUpdater updater = lifetimeScope.Resolve<IBigCommerceOrderStatusUpdater>(TypedParameter.From(store));
                     foreach (long orderID in inputKeys)
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        await updater.UpdateOrderStatus(store, orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
                     }
                 }
             }

@@ -728,6 +728,11 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
+        /// <summary>
+        /// Get this SqlAdapter as an IDataAccessAdapter
+        /// </summary>
+        public IDataAccessAdapter AsDataAccessAdapter() => this;
+
         #endregion Utility
 
         #region Identity Inserts

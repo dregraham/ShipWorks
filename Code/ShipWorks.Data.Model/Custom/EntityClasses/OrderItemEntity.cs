@@ -48,6 +48,11 @@ namespace ShipWorks.Data.Model.EntityClasses
             }
 
             base.OnBeforeEntitySave();
+
+            if (IsNew && OriginalOrderID == default(long))
+            {
+                OriginalOrderID = OrderID;
+            }
         }
     }
 }

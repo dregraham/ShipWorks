@@ -11,7 +11,7 @@ namespace Interapptive.Shared.Utility
         /// Get a successful result
         /// </summary>
         public static GenericResult<T> FromSuccess<T>(T value) =>
-            new GenericResult<T>(true, value, null);
+            new GenericResult<T>(true, value, (string) null);
 
         /// <summary>
         /// Get a successful result
@@ -35,7 +35,13 @@ namespace Interapptive.Shared.Utility
         /// Get a not found read result from exception
         /// </summary>
         public static GenericResult<T> FromError<T>(Exception ex) =>
-            new GenericResult<T>(false, default(T), ex.Message);
+            new GenericResult<T>(false, default(T), ex);
+
+        /// <summary>
+        /// Get an error result
+        /// </summary>
+        public static GenericResult<T> FromError<T>(Exception ex, T value) =>
+            new GenericResult<T>(false, value, ex);
     }
 
     /// <summary>
@@ -54,6 +60,18 @@ namespace Interapptive.Shared.Utility
             Success = success;
             Message = message;
             Value = value;
+            Exception = null;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal GenericResult(bool success, T value, Exception exception)
+        {
+            Success = success;
+            Message = exception?.Message;
+            Exception = exception;
+            Value = value;
         }
 
         /// <summary>
@@ -65,6 +83,11 @@ namespace Interapptive.Shared.Utility
         /// Message accompanying the object
         /// </summary>
         public string Message { get; }
+
+        /// <summary>
+        /// Exception accompanying the object
+        /// </summary>
+        public Exception Exception { get; }
 
         /// <summary>
         /// Whether or not the operation was a success

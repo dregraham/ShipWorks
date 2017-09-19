@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Content
                 x => new ThreeDCartOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    ThreeDCartOrderID = x.ThreeDCartOrderID
+                    ThreeDCartOrderID = x.ThreeDCartOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

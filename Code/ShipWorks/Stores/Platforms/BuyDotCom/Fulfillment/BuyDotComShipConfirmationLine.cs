@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment
     /// </summary>
     public class BuyDotComShipConfirmationLine
     {
-        public long ReceiptItemID
+        public string ReceiptItemID
         {
             get; set;
         }

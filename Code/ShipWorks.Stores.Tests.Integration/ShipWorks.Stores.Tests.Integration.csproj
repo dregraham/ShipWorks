@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130</SSDTPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <Import Project="..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -159,27 +168,98 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Content\CombineOrderTest.cs" />
+    <Compile Include="Content\OrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
+    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceDataAccessTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComDataAccessTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloaderTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.LeaveFeedback.cs" />
+    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.SendMessage.cs" />
+    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
+    <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleMultiCombineTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Jet\JetOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Jet\JetOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
+    <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
+    <Compile Include="Platforms\Magento\MagentoOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Miva\MivaOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\OrderIdentifierTest.cs" />
+    <Compile Include="Platforms\OrderMotion\OrderMotionOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProviderTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberSearchProviderTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponDownloadTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoTwoRestUploaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloaderTest.cs" />
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.UploadDetails.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\OnlineCommandCreatorRegistrationTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartRestOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartSoapOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Volusion\VolusionOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.UploadShipmentDetails.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.ApiUploadShipmentDetails.cs" />
+    <Compile Include="Platforms\Yahoo\YahooOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+      <Project>{41528bda-8c69-4ca9-b358-bc4e6a62d6f2}</Project>
+      <Name>ShipWorks.Tests.Integration.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
       <Project>{1E53A000-FDEB-4E9E-8BE0-19CDC14A0282}</Project>
       <Name>Interapptive.Shared</Name>
@@ -220,6 +300,10 @@
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
       <Name>ShipWorks.Core</Name>
@@ -255,6 +339,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -269,7 +354,8 @@
     if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
     xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

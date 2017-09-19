@@ -902,6 +902,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new AmazonOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new AmazonOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new AmazonOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -941,6 +951,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AmazonOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.AmazonOrderID);}
+		}
+		/// <summary>Creates a new AmazonOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -1842,6 +1857,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new BigCommerceOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2176,6 +2201,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsManual
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.HarmonizedCode);}
 		}
 		/// <summary>Creates a new BuyDotComOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -2912,6 +2947,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2947,11 +2992,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenter);}
 		}
-		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.HarmonizedCode field instance</summary>
-		public static EntityField2 HarmonizedCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.HarmonizedCode);}
-		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.IsFBA field instance</summary>
 		public static EntityField2 IsFBA
 		{
@@ -2966,6 +3006,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DistributionCenterID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenterID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.DistributionCenterName field instance</summary>
+		public static EntityField2 DistributionCenterName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenterName);}
 		}
 	}
 
@@ -2986,6 +3031,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomOrderIdentifier
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.CustomOrderIdentifier);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -3597,6 +3647,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.ClickCartProOrderID);}
 		}
+		/// <summary>Creates a new ClickCartProOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.OriginalOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity CommerceInterfaceOrderEntity</summary>
@@ -4006,6 +4061,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CommerceInterfaceOrderNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.CommerceInterfaceOrderNumber);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -4972,6 +5032,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.RollupPayPalAddressStatus);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.GuaranteedDelivery field instance</summary>
+		public static EntityField2 GuaranteedDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.GuaranteedDelivery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderItemEntity</summary>
@@ -5066,6 +5131,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsManual
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new EbayOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new EbayOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.HarmonizedCode);}
 		}
 		/// <summary>Creates a new EbayOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -5186,6 +5261,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SellingManagerRecord
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.SellingManagerRecord);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -6351,6 +6431,126 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 WasShipped
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.WasShipped);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity EtsyOrderItemEntity</summary>
+	public partial class EtsyOrderItemFields
+	{
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.ListingID field instance</summary>
+		public static EntityField2 ListingID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.ListingID);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.TransactionID field instance</summary>
+		public static EntityField2 TransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.TransactionID);}
 		}
 	}
 
@@ -9457,6 +9657,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new GrouponOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new GrouponOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -9511,6 +9721,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ParentOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.ParentOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -9776,6 +9991,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsManual
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.HarmonizedCode);}
 		}
 		/// <summary>Creates a new InfopiaOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -10339,6 +10564,711 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity JetOrderEntity</summary>
+	public partial class JetOrderFields
+	{
+		/// <summary>Creates a new JetOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new JetOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new JetOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new JetOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new JetOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new JetOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.CombineSplitStatus);}
+		}
+		/// <summary>Creates a new JetOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new JetOrderEntity.MerchantOrderId field instance</summary>
+		public static EntityField2 MerchantOrderId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.MerchantOrderId);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity JetOrderItemEntity</summary>
+	public partial class JetOrderItemFields
+	{
+		/// <summary>Creates a new JetOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.MerchantSku field instance</summary>
+		public static EntityField2 MerchantSku
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.MerchantSku);}
+		}
+		/// <summary>Creates a new JetOrderItemEntity.JetOrderItemID field instance</summary>
+		public static EntityField2 JetOrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.JetOrderItemID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity JetOrderSearchEntity</summary>
+	public partial class JetOrderSearchFields
+	{
+		/// <summary>Creates a new JetOrderSearchEntity.JetOrderSearchID field instance</summary>
+		public static EntityField2 JetOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.JetOrderSearchID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.MerchantOrderID field instance</summary>
+		public static EntityField2 MerchantOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.MerchantOrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OriginalOrderID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity JetStoreEntity</summary>
+	public partial class JetStoreFields
+	{
+		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new JetStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new JetStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new JetStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new JetStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new JetStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new JetStoreEntity.AddressValidationSetting field instance</summary>
+		public static EntityField2 AddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AddressValidationSetting);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new JetStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new JetStoreEntity.ApiUser field instance</summary>
+		public static EntityField2 ApiUser
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ApiUser);}
+		}
+		/// <summary>Creates a new JetStoreEntity.Secret field instance</summary>
+		public static EntityField2 Secret
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.Secret);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity LabelSheetEntity</summary>
 	public partial class LabelSheetFields
 	{
@@ -10892,6 +11822,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -10931,6 +11871,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 LemonStandOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.LemonStandOrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -11516,6 +12461,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 MagentoOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.MagentoOrderID);}
+		}
+		/// <summary>Creates a new MagentoOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -12216,6 +13166,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SellerOrderNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.SellerOrderNumber);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -13152,6 +14107,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderID);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.OriginalOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity NetworkSolutionsStoreEntity</summary>
@@ -13826,6 +14786,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsManual
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new NeweggOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new NeweggOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.HarmonizedCode);}
 		}
 		/// <summary>Creates a new NeweggOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -15167,6 +16137,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new OrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new OrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.HarmonizedCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderItemAttributeEntity</summary>
@@ -15627,6 +16607,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OrderMotionShipmentID);}
 		}
+		/// <summary>Creates a new OrderMotionOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OriginalOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderMotionStoreEntity</summary>
@@ -15861,6 +16846,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 IsManual
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -16331,6 +17321,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 TransactionID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.TransactionID);}
+		}
+		/// <summary>Creates a new PayPalOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -17322,6 +18317,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.ConfirmationNumber);}
 		}
+		/// <summary>Creates a new ProStoresOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.OriginalOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProStoresStoreEntity</summary>
@@ -18157,6 +19157,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new SearsOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new SearsOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new SearsOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -18206,6 +19216,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PoNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.PoNumber);}
+		}
+		/// <summary>Creates a new SearsOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -18989,6 +20004,56 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ShipmentReturnItemEntity</summary>
+	public partial class ShipmentReturnItemFields
+	{
+		/// <summary>Creates a new ShipmentReturnItemEntity.ShipmentReturnItemID field instance</summary>
+		public static EntityField2 ShipmentReturnItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.ShipmentReturnItemID);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Notes field instance</summary>
+		public static EntityField2 Notes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Notes);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new ShipmentReturnItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentReturnItemFieldIndex.Code);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ShippingDefaultsRuleEntity</summary>
 	public partial class ShippingDefaultsRuleFields
 	{
@@ -19517,6 +20582,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentEditLimit);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipmentsLoaderEnsureFiltersLoadedTimeout field instance</summary>
+		public static EntityField2 ShipmentsLoaderEnsureFiltersLoadedTimeout
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
@@ -20027,6 +21097,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new ShopifyOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -20061,6 +21141,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShopifyOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.ShopifyOrderID);}
+		}
+		/// <summary>Creates a new ShopifyOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -21612,6 +22697,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new ThreeDCartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -21641,6 +22736,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ThreeDCartOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -24107,6 +25207,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new WalmartOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new WalmartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -24141,6 +25251,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PurchaseOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.PurchaseOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -25512,6 +26627,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.IsManual);}
 		}
+		/// <summary>Creates a new YahooOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new YahooOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.HarmonizedCode);}
+		}
 		/// <summary>Creates a new YahooOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -25546,6 +26671,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 YahooOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.YahooOrderID);}
+		}
+		/// <summary>Creates a new YahooOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 

@@ -1,36 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Odbc
 {
     /// <summary>
     /// The Odbc Store Type
     /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.Odbc)]
+    [Component(RegistrationType.Self)]
     public class OdbcStoreType : StoreType
     {
-        private readonly Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, Func<OdbcStoreEntity, OdbcUploadMenuCommand> uploadMenuCommandFactory)
+        public OdbcStoreType(StoreEntity store)
             : base(store)
         {
-            this.uploadMenuCommandFactory = uploadMenuCommandFactory;
+
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Create an order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             // Put this here for now so that we can work on the downloader
             return CreateOrderIdentifier(order.OrderNumberComplete);
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OrderIdentifier CreateOrderIdentifier(string orderNumber)
         {
-            return new GenericOrderIdentifier(orderNumber);
+            return new AlphaNumericOrderIdentifier(orderNumber);
         }
 
         /// <summary>
@@ -131,22 +131,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
-        /// Creates the menu commands for the store
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
-
-            if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
-            {
-                return new List<MenuCommand>();
-            }
-
-            return new List<MenuCommand>(new[] { uploadMenuCommandFactory(odbcStore) });
-        }
-
-        /// <summary>
         /// Creates the add store wizard online update action control.
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -171,5 +155,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
             return odbcStore.ImportStrategy != (int) OdbcImportStrategy.All ||
                    odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
         }
+
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
+        public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
     }
 }

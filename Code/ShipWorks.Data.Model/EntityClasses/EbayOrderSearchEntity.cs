@@ -356,6 +356,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EbayBuyerID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("SellingManagerRecord", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -477,10 +479,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The EbayOrderID property of the Entity EbayOrderSearch<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "EbayOrderSearch"."EbayOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 EbayOrderID
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> EbayOrderID
 		{
-			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, true); }
+			get { return (Nullable<System.Int64>)GetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, false); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.EbayOrderID, value); }
 		}
 
@@ -502,6 +504,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderSearchFieldIndex.SellingManagerRecord, false); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.SellingManagerRecord, value); }
+		}
+
+		/// <summary> The OriginalOrderID property of the Entity EbayOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EbayOrderSearch"."OriginalOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OriginalOrderID
+		{
+			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.OriginalOrderID, true); }
+			set	{ SetValue((int)EbayOrderSearchFieldIndex.OriginalOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'EbayOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

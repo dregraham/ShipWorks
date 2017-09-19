@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
         public void EnsureRegistrationOrder()
         {
             StoreEntity store = new MagentoStoreEntity { StoreTypeCode = StoreTypeCode.Magento };
-            var storeType = new MagentoStoreType(store);
+            var storeType = container.Resolve<MagentoStoreType>(TypedParameter.From(store));
             var result = storeType.CreateAddStoreWizardPages(container);
 
             Assert.IsType<MagentoStoreSetupPage>(result.ElementAt(0));

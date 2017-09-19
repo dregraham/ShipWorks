@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 // Get the total number of orders for the range
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
                     await orderSearchCriteriaFactory.Create(Store, BigCommerceWebClientOrderDateSearchType.CreatedDate).ConfigureAwait(false);
-                totalCount = WebClient.GetOrderCount(orderSearchCriteria);
+                totalCount = await WebClient.GetOrderCount(orderSearchCriteria).ConfigureAwait(false);
 
                 if (totalCount != 0)
                 {
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     orderSearchCriteria.OrderDateSearchType = BigCommerceWebClientOrderDateSearchType.ModifiedDate;
                     orderSearchCriteria.LastModifiedFromDate = DateTime.UtcNow.AddDays(-bigCommerceStore.DownloadModifiedNumberOfDaysBack);
 
-                    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
+                    int modifiedCount = await WebClient.GetOrderCount(orderSearchCriteria).ConfigureAwait(false);
 
                     if (modifiedCount == 0)
                     {
@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 orderSearchCriteria.OrderDateSearchType == BigCommerceWebClientOrderDateSearchType.CreatedDate ? "new" : "modified");
 
             // Download the orders to process
-            List<BigCommerceOrder> orders = WebClient.GetOrders(orderSearchCriteria);
+            List<BigCommerceOrder> orders = await WebClient.GetOrders(orderSearchCriteria).ConfigureAwait(false);
 
             // Check to see that we received some orders to process (just in case another ShipWorks instance downloaded them before we got to them)
             if (orders.Count == 0)

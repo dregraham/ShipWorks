@@ -2,8 +2,10 @@
 using System.Net;
 using System.Security.Cryptography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Magento Two REST Web Client
     /// </summary>
+    [Component]
     public class MagentoTwoRestClient : IMagentoTwoRestClient
     {
         private readonly MagentoStoreEntity store;
@@ -87,7 +90,14 @@ namespace ShipWorks.Stores.Platforms.Magento
                 RequestBody = $"{{\"username\":\"{store.ModuleUsername}\",\"password\":\"{password}\"}}"
             };
 
-            return ProcessRequest("GetToken", request).Trim('"');
+            string tokenResponse = ProcessRequest("GetToken", request);
+
+            if (tokenResponse.IsNullOrWhiteSpace() || !tokenResponse.EndsWith("\"", StringComparison.Ordinal))
+            {
+                throw new MagentoException("An error occurred when communicating with Magento");
+            }
+
+            return tokenResponse.Trim('"');
         }
 
         /// <summary>
@@ -334,7 +344,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             {
                 JObject badResult = JObject.Parse(result);
                 string message = (string) badResult["message"];
-                throw new MagentoException(message ?? "An error occured when communicating with Magento");
+                throw new MagentoException(message ?? "An error occurred when communicating with Magento");
             }
         }
 

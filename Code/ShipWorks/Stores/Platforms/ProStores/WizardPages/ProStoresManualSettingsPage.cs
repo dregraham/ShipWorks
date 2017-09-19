@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 using System.Xml;
+using Autofac;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
 {
@@ -54,32 +50,39 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
         {
             ProStoresStoreEntity store = GetStore<ProStoresStoreEntity>();
 
-            if (radioExists.Checked)
+            if (!radioExists.Checked)
             {
-                string url = apiEntryPoint.Text.Trim();
+                return;
+            }
 
-                if (url.Length == 0)
+            string url = apiEntryPoint.Text.Trim();
+
+            if (url.Length == 0)
+            {
+                MessageHelper.ShowInformation(this, "Enter the API Entry Point of your ProStores store.");
+                e.NextPage = this;
+                return;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+
+            try
+            {
+
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    MessageHelper.ShowInformation(this, "Enter the API Entry Point of your ProStores store.");
-                    e.NextPage = this;
-                    return;
-                }
-
-                Cursor.Current = Cursors.WaitCursor;
-
-                try
-                {
-                    XmlDocument apiInfoResponse = ProStoresWebClient.GetStoreApiInfo(url);
+                    var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                    XmlDocument apiInfoResponse = webClient.GetStoreApiInfo(url);
 
                     ((ProStoresStoreType) StoreTypeManager.GetType(store)).LoadApiInfo(url, apiInfoResponse);
                 }
-                catch (ProStoresException ex)
-                {
-                    MessageHelper.ShowError(this, "An error occurred while accessing the API Entry Point:\n\n" + ex.Message);
-                    e.NextPage = this;
+            }
+            catch (ProStoresException ex)
+            {
+                MessageHelper.ShowError(this, "An error occurred while accessing the API Entry Point:\n\n" + ex.Message);
+                e.NextPage = this;
 
-                    return;
-                }
+                return;
             }
         }
     }

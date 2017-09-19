@@ -1,7 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
-using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,20 +22,34 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 {
     /// <summary>
     /// Responsible for updating the online status of Yahoo! orders
     /// </summary>
-    public class YahooEmailOnlineUpdater
+    [Component]
+    public class YahooEmailOnlineUpdater : IYahooEmailOnlineUpdater
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(YahooEmailOnlineUpdater));
+        private readonly ILog log;
+        private readonly ILogEntryFactory logEntryFactory;
+        private readonly IYahooCombineOrderSearchProvider searchProvider;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public YahooEmailOnlineUpdater(IYahooCombineOrderSearchProvider searchProvider, ILogEntryFactory logEntryFactory, Func<Type, ILog> createLogger)
+        {
+            this.searchProvider = searchProvider;
+            this.logEntryFactory = logEntryFactory;
+            log = createLogger(GetType());
+        }
 
         /// <summary>
         /// Upload the shipment details of the most recent shipment of the given order
         /// </summary>
-        public EmailOutboundEntity GenerateOrderShipmentUpdateEmail(long orderID)
+        public async Task<IEnumerable<EmailOutboundEntity>> GenerateOrderShipmentUpdateEmail(long orderID)
         {
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
@@ -38,42 +57,42 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
 
-            return GenerateShipmentUpdateEmail(shipment);
+            return await GenerateShipmentUpdateEmail(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Upload the shipment details of the given shipment
         /// </summary>
-        public EmailOutboundEntity GenerateShipmentUpdateEmail(long shipmentID)
+        public async Task<IEnumerable<EmailOutboundEntity>> GenerateShipmentUpdateEmail(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
             {
                 log.InfoFormat("Not uploading shipment details for {0} since it went away.", shipmentID);
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
 
-            return GenerateShipmentUpdateEmail(shipment);
+            return await GenerateShipmentUpdateEmail(shipment).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Upload the shipment details of the given shipment
         /// </summary>
-        public EmailOutboundEntity GenerateShipmentUpdateEmail(ShipmentEntity shipment)
+        private async Task<IEnumerable<EmailOutboundEntity>> GenerateShipmentUpdateEmail(ShipmentEntity shipment)
         {
             if (shipment.Order.IsManual)
             {
                 log.InfoFormat("Not uploading shipment details for shipment {0} because the order is manual.", shipment.ShipmentID);
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
 
             if (!shipment.Processed || shipment.Voided)
             {
                 log.InfoFormat("Not uploading tracking number for shipment {0}, either not processed or has been voided.", shipment.ShipmentID);
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
 
             try
@@ -83,18 +102,27 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             catch (ObjectDeletedException)
             {
                 // Shipment was deleted
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
             catch (SqlForeignKeyException)
             {
                 // Shipment was deleted
-                return null;
+                return Enumerable.Empty<EmailOutboundEntity>();
             }
-
-            string emailXmlContent = GenerateEmailXmlContent(shipment);
 
             YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
             YahooStoreEntity store = (YahooStoreEntity) StoreManager.GetStore(order.StoreID);
+
+            var identifiers = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+            return identifiers.Select(x => GenerateShipmentUpdateEmailForOrder(shipment, order, store, x)).ToList();
+        }
+
+        /// <summary>
+        /// Generate an email for a given order id
+        /// </summary>
+        private EmailOutboundEntity GenerateShipmentUpdateEmailForOrder(ShipmentEntity shipment, YahooOrderEntity order, YahooStoreEntity store, string yahooOrderID)
+        {
+            string emailXmlContent = GenerateEmailXmlContent(shipment, yahooOrderID, store.TrackingUpdatePassword);
             EmailAccountEntity account = EmailAccountManager.GetAccount(store.YahooEmailAccountID);
 
             // This should never happen
@@ -110,22 +138,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 throw new YahooException("The email account associated with the store is not configured for sending email.");
             }
 
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Yahoo, "TrackingUpdate");
+            IApiLogEntry logEntry = logEntryFactory.GetLogEntry(ApiLogSource.Yahoo, "TrackingUpdate", LogActionType.Other);
             logEntry.LogRequest(emailXmlContent);
 
-            return CreateEmailOutboundEntity(shipment, order, account, emailXmlContent);
+            return CreateEmailOutboundEntity(shipment, order.OrderID, account, emailXmlContent, yahooOrderID);
         }
 
         /// <summary>
         /// Creates the email outbound entity.
         /// </summary>
-        private EmailOutboundEntity CreateEmailOutboundEntity(ShipmentEntity shipment, YahooOrderEntity order,
-            EmailAccountEntity account, string emailXmlContent)
+        private EmailOutboundEntity CreateEmailOutboundEntity(ShipmentEntity shipment, long orderID,
+            EmailAccountEntity account, string emailXmlContent, string yahooOrderID)
         {
             EmailMessageHeader header = new EmailMessageHeader
             {
                 To = "tracking-update@store.yahoo.com",
-                Subject = $"Tracking update for '{order.YahooOrderID}'",
+                Subject = $"Tracking update for '{yahooOrderID}'",
                 EmailAccountID = account.EmailAccountID,
                 Visibility = EmailOutboundVisibility.OutboxOnly
             };
@@ -140,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
 
                 // Add the relations
                 email.RelatedObjects.Add(new EmailOutboundRelationEntity { EntityID = shipment.ShipmentID, RelationType = (int) EmailOutboundRelationType.ContextObject });
-                email.RelatedObjects.Add(new EmailOutboundRelationEntity { EntityID = order.OrderID, RelationType = (int) EmailOutboundRelationType.RelatedObject });
+                email.RelatedObjects.Add(new EmailOutboundRelationEntity { EntityID = orderID, RelationType = (int) EmailOutboundRelationType.RelatedObject });
 
                 adapter.SaveAndRefetch(email);
 
@@ -153,19 +181,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Generate the XML content needed to update online for the given shipment
         /// </summary>
-        private string GenerateEmailXmlContent(ShipmentEntity shipment)
+        private string GenerateEmailXmlContent(ShipmentEntity shipment, string orderID, string trackingPassword)
         {
-            YahooOrderEntity order = (YahooOrderEntity) shipment.Order;
-            YahooStoreEntity store = (YahooStoreEntity) StoreManager.GetStore(order.StoreID);
-
-            if (store == null)
+            if (trackingPassword.Length == 0)
             {
-                throw new YahooException("The Yahoo! store was deleted.");
-            }
-
-            if (store.TrackingUpdatePassword.Length == 0)
-            {
-                throw new YahooException("You must configured the 'Email Tracking Password' in the store settings window.");
+                throw new YahooException("You must configure the 'Email Tracking Password' in the store settings window.");
             }
 
             string trackingNumber;
@@ -184,12 +204,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
                 xmlWriter.WriteStartElement("TrackingUpdate");
 
                 // Email tracking password
-                xmlWriter.WriteAttributeString("password", SecureText.Decrypt(store.TrackingUpdatePassword, "yahoo"));
+                xmlWriter.WriteAttributeString("password", SecureText.Decrypt(trackingPassword, "yahoo"));
 
                 xmlWriter.WriteStartElement("YahooOrder");
 
                 // Yahoo order id
-                xmlWriter.WriteAttributeString("id", order.YahooOrderID);
+                xmlWriter.WriteAttributeString("id", orderID);
 
                 // Shipped (Can be YES, or NO)
                 xmlWriter.WriteAttributeString("shipped", "YES");

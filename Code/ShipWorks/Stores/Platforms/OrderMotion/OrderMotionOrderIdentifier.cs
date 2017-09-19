@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -11,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     /// <summary>
     /// Order Identifier that identifies orders by Order Number and Order Number Postfix
     /// </summary>
-    class OrderMotionOrderIdentifier : OrderIdentifier
+    public class OrderMotionOrderIdentifier : OrderIdentifier
     {
         // order number
         long orderNumber;
@@ -56,11 +55,10 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.Create()
-                .From(factory.OrderMotionOrderSearch
-                    .InnerJoin(OrderMotionOrderSearchEntity.Relations.OrderMotionOrderEntityUsingOrderID))
-                .Where(OrderSearchFields.OrderNumber == orderNumber)
-                .AndWhere(OrderMotionOrderSearchFields.OrderMotionShipmentID == orderMotionShipmentId);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.OrderMotionOrderSearch,
+                OrderMotionOrderSearchFields.OriginalOrderID,
+                OrderMotionOrderSearchFields.OrderMotionShipmentID == orderMotionShipmentId & OrderSearchFields.OrderNumber == orderNumber);
 
         /// <summary>
         /// String representation

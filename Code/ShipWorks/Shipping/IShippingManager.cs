@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -39,6 +40,11 @@ namespace ShipWorks.Shipping
         ShipmentEntity EnsureShipmentLoaded(ShipmentEntity shipment);
 
         /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment);
+
+        /// <summary>
         /// Gets the overridden store shipment.
         /// </summary>
         ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment);
@@ -47,6 +53,11 @@ namespace ShipWorks.Shipping
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         ICarrierShipmentAdapter GetShipment(long shipmentID);
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID);
 
         /// <summary>
         /// Gets the shipment adapter, order will be attached.
@@ -82,6 +93,11 @@ namespace ShipWorks.Shipping
         bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        ShipmentEntity CreateReturnShipment(ShipmentEntity shipment);
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment);
@@ -107,6 +123,11 @@ namespace ShipWorks.Shipping
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipment);
+
+        /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         ShipmentEntity EnsureShipmentIsLoadedWithOrder(ShipmentEntity shipment);
@@ -115,14 +136,5 @@ namespace ShipWorks.Shipping
         /// Validate that the given store is licensed to ship.
         /// </summary>
         Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache);
-
-        /// <summary>
-        /// Gets shipments based on the RelationPredicateBucket passed in.
-        /// </summary>
-        /// <param name="bucket">The bucket.</param>
-        /// <param name="sortExpression">The sort expression.</param>
-        /// <param name="maxNumberOfShipmentsToReturn">The maximum number of shipments to return.</param>
-        IEnumerable<ShipmentEntity> GetShipments(RelationPredicateBucket bucket, ISortExpression sortExpression,
-            int maxNumberOfShipmentsToReturn);
     }
 }

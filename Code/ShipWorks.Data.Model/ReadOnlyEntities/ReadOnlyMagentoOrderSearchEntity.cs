@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MagentoOrderSearchID = source.MagentoOrderSearchID;
             OrderID = source.OrderID;
             MagentoOrderID = source.MagentoOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             MagentoOrder = source.MagentoOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 MagentoOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity MagentoOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "MagentoOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IMagentoOrderEntity MagentoOrder { get; }

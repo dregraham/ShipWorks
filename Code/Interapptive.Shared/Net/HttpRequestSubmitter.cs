@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Interapptive.Shared.Net
@@ -92,7 +93,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         protected HttpRequestSubmitter()
             : this(HttpVerb.Post)
-        {}
+        { }
 
         /// <summary>
         /// Constructor for specifying the request verb
@@ -113,96 +114,13 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
-        [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
-            // Get the request Uri
-            Uri requestUri = GetPreparedRequestUri();
-
-            HttpWebRequest webRequest = null;
-            try
-            {
-                webRequest = WebRequest.Create(requestUri) as HttpWebRequest;
-                if (webRequest == null)
-                {
-                    throw new WebException("The URL is not a valid HTTP address.");
-                }
-            }
-            catch (NotSupportedException)
-            {
-                throw new WebException("The URL is not a valid HTTP address.");
-            }
-
-            // Set credentials and timeout
-            webRequest.Credentials = credentials;
-            webRequest.Timeout = (int)Timeout.TotalMilliseconds;
-            webRequest.ServicePoint.Expect100Continue = expect100Continue;
-            webRequest.KeepAlive = keepAlive;
-            webRequest.UserAgent = DefaultUserAgent;
-
-            SetAllowAutoRedirect(webRequest);
-
-            // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
-            if (Verb != HttpVerb.Get)
-            {
-                webRequest.ContentType = contentType;
-            }
-
-            if (headers.Count > 0)
-            {
-                foreach (string headerName in headers)
-                {
-                    string value = headers[headerName];
-
-                    switch (headerName.ToLowerInvariant())
-                    {
-                        case "content-type":
-                            webRequest.ContentType = value;
-                            break;
-                        case "accept":
-                            webRequest.Accept = value;
-                            break;
-                        case "connection":
-                            webRequest.Connection = value;
-                            break;
-                        case "expect":
-                            webRequest.Expect = value;
-                            break;
-                        case "date":
-                            webRequest.Date = GetDateValue(headerName, value);
-                            break;
-                        case "host":
-                            webRequest.Host = value;
-                            break;
-                        case "if-modified-since":
-                            webRequest.IfModifiedSince = GetDateValue(headerName, value);
-                            break;
-                        case "range":
-                        case "content-length":
-                        case "te":
-                            throw new WebException(String.Format("{0} is not a supported header", headerName));
-                        case "referer":
-                            webRequest.Referer = value;
-                            break;
-                        case "user-agent":
-                            webRequest.UserAgent = value;
-                            break;
-                        default:
-                            webRequest.Headers.Add(headerName, value);
-                            break;
-                    }
-                }
-            }
-
-            // Configure request method
-            SetRequestMethod(webRequest);
+            HttpWebRequest webRequest = PrepareRequest();
 
             // Raise the posting event
-            if (RequestSubmitting != null)
-            {
-                RequestSubmitting(this, new HttpRequestSubmittingEventArgs(webRequest));
-            }
+            RequestSubmitting?.Invoke(this, new HttpRequestSubmittingEventArgs(webRequest));
 
             // If not Get, then send the post data
             if (Verb != HttpVerb.Get)
@@ -225,16 +143,16 @@ namespace Interapptive.Shared.Net
 
             try
             {
-                webResponse = (HttpWebResponse)webRequest.GetResponse();
+                webResponse = (HttpWebResponse) webRequest.GetResponse();
             }
             catch (WebException ex)
             {
                 // if we are allowing certain status codes to not throw exceptions, intercept here
                 if (ex.Response != null &&
                     ex.Response is HttpWebResponse &&
-                    allowableStatusCodes.Contains(((HttpWebResponse)ex.Response).StatusCode))
+                    allowableStatusCodes.Contains(((HttpWebResponse) ex.Response).StatusCode))
                 {
-                    webResponse = (HttpWebResponse)ex.Response;
+                    webResponse = (HttpWebResponse) ex.Response;
                 }
                 else
                 {
@@ -242,6 +160,65 @@ namespace Interapptive.Shared.Net
                 }
             }
 
+            return ProcessResponse(webRequest, webResponse);
+        }
+
+        /// <summary>
+        /// Execute the request
+        /// </summary>
+        public virtual async Task<IHttpResponseReader> GetResponseAsync()
+        {
+            HttpWebRequest webRequest = PrepareRequest();
+
+            // Raise the posting event
+            RequestSubmitting?.Invoke(this, new HttpRequestSubmittingEventArgs(webRequest));
+
+            // If not Get, then send the post data
+            if (Verb != HttpVerb.Get)
+            {
+                // Setup the content
+                byte[] content = GetPostContent();
+
+                // Set the content data in the request
+                webRequest.ContentLength = content.Length;
+
+                // Submit the request to the server
+                using (Stream postStream = await webRequest.GetRequestStreamAsync().ConfigureAwait(false))
+                {
+                    await postStream.WriteAsync(content, 0, content.Length).ConfigureAwait(false);
+                }
+            }
+
+            // Get the response
+            HttpWebResponse webResponse;
+
+            try
+            {
+                webResponse = (HttpWebResponse) await webRequest.GetResponseAsync().ConfigureAwait(false);
+            }
+            catch (WebException ex)
+            {
+                // if we are allowing certain status codes to not throw exceptions, intercept here
+                if (ex.Response != null &&
+                    ex.Response is HttpWebResponse &&
+                    allowableStatusCodes.Contains(((HttpWebResponse) ex.Response).StatusCode))
+                {
+                    webResponse = (HttpWebResponse) ex.Response;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return ProcessResponse(webRequest, webResponse);
+        }
+
+        /// <summary>
+        /// Process the response
+        /// </summary>
+        private IHttpResponseReader ProcessResponse(HttpWebRequest webRequest, HttpWebResponse webResponse)
+        {
             // Check for OK
             if (webResponse.StatusCode != HttpStatusCode.OK &&
                 !allowableStatusCodes.Contains(webResponse.StatusCode))
@@ -256,10 +233,109 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
+        /// Prepare a request for execution
+        /// </summary>
+        /// <returns></returns>
+        private HttpWebRequest PrepareRequest()
+        {
+            // Get the request Uri
+            Uri requestUri = GetPreparedRequestUri();
+
+            HttpWebRequest webRequest = null;
+            try
+            {
+                webRequest = WebRequest.Create(requestUri) as HttpWebRequest;
+                if (webRequest == null)
+                {
+                    throw new WebException("The URL is not a valid HTTP address.");
+                }
+            }
+            catch (NotSupportedException)
+            {
+                throw new WebException("The URL is not a valid HTTP address.");
+            }
+
+            // Set credentials and timeout
+            webRequest.Credentials = credentials;
+            webRequest.Timeout = (int) Timeout.TotalMilliseconds;
+            webRequest.ServicePoint.Expect100Continue = expect100Continue;
+            webRequest.KeepAlive = keepAlive;
+            webRequest.UserAgent = DefaultUserAgent;
+
+            SetAllowAutoRedirect(webRequest);
+
+            // If it's not get set the content type and redirect option.  Set them before applying the headers, so any headers will override
+            if (Verb != HttpVerb.Get)
+            {
+                webRequest.ContentType = contentType;
+            }
+
+            SetHeaders(webRequest);
+
+            // Configure request method
+            SetRequestMethod(webRequest);
+            return webRequest;
+        }
+
+        /// <summary>
+        /// Set the headers on the web request
+        /// </summary>
+        private void SetHeaders(HttpWebRequest webRequest)
+        {
+            if (headers.Count == 0)
+            {
+                return;
+            }
+
+            foreach (string headerName in headers)
+            {
+                string value = headers[headerName];
+
+                switch (headerName.ToLowerInvariant())
+                {
+                    case "content-type":
+                        webRequest.ContentType = value;
+                        break;
+                    case "accept":
+                        webRequest.Accept = value;
+                        break;
+                    case "connection":
+                        webRequest.Connection = value;
+                        break;
+                    case "expect":
+                        webRequest.Expect = value;
+                        break;
+                    case "date":
+                        webRequest.Date = GetDateValue(headerName, value);
+                        break;
+                    case "host":
+                        webRequest.Host = value;
+                        break;
+                    case "if-modified-since":
+                        webRequest.IfModifiedSince = GetDateValue(headerName, value);
+                        break;
+                    case "range":
+                    case "content-length":
+                    case "te":
+                        throw new WebException(String.Format("{0} is not a supported header", headerName));
+                    case "referer":
+                        webRequest.Referer = value;
+                        break;
+                    case "user-agent":
+                        webRequest.UserAgent = value;
+                        break;
+                    default:
+                        webRequest.Headers.Add(headerName, value);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Sets the allow automatic redirect
         /// </summary>
         /// <remarks>
-        /// This is old logic and I'm not sure why the verb matters, but in order to 
+        /// This is old logic and I'm not sure why the verb matters, but in order to
         /// mitigate risk, I'm putting this in a virtual class so that this behavior can be
         /// overridden. This logic has been here since Vault...
         /// </remarks>

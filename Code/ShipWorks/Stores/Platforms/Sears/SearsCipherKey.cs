@@ -1,5 +1,7 @@
-﻿using Interapptive.Shared.Security;
-using System;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore.Security;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -7,6 +9,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     /// An ICipherKey implementation specific to the Sears store type.
     /// </summary>
     /// <seealso cref="Interapptive.Shared.Security.ICipherKey" />
+    [KeyedComponent(typeof(ICipherKey), CipherContext.Sears)]
     public class SearsCipherKey : ICipherKey
     {
         /// <summary>

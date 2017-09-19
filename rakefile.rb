@@ -92,7 +92,7 @@ namespace :build do
 	msbuild :quick => "build:restore" do |msb, args|
 		print "Building solution with the Debug (No Analyzers) config...\r\n\r\n"
 
-		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: true
+		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: false
 		msb.verbosity = 'minimal'
 		msb.targets :Build
 	end

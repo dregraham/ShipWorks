@@ -3,6 +3,9 @@ using ShipWorks.Stores.Platforms.Odbc.Upload;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
+    /// <summary>
+    /// Upload command factory
+    /// </summary>
     public interface IOdbcUploadCommandFactory
     {
         /// <summary>

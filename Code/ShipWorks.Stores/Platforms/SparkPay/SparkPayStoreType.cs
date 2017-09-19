@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.SparkPay.Factories;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
+    /// <summary>
+    /// SparkPay store type
+    /// </summary>
+    [KeyedComponent(typeof(StoreType), StoreTypeCode.SparkPay)]
     public class SparkPayStoreType : StoreType
     {
         private readonly StoreEntity store;
-        private readonly Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory;
         private readonly Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory;
         private readonly SparkPayStoreEntity sparkPayStore;
 
@@ -20,14 +23,12 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// </summary>
         public SparkPayStoreType(
             StoreEntity store,
-            Func<SparkPayStoreEntity, SparkPayOnlineUpdateInstanceCommandsFactory> onlineUpdateInstanceCommandsFactory,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusCodeProviderFactory
             ) : base(store)
         {
 
             sparkPayStore = (SparkPayStoreEntity) store;
 
-            this.onlineUpdateInstanceCommandsFactory = onlineUpdateInstanceCommandsFactory;
             this.statusCodeProviderFactory = statusCodeProviderFactory;
             this.store = store;
         }
@@ -50,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) => new OrderNumberIdentifier(order.OrderNumber);
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) => new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
         /// Creates the store instance
@@ -83,19 +84,6 @@ namespace ShipWorks.Stores.Platforms.SparkPay
                 StoreUrl = "",
                 StoreName = "My SparkPay Store",
             };
-        }
-
-        /// <summary>
-        /// Create menu commands for uploading shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            if (sparkPayStore == null)
-            {
-                throw new InvalidOperationException("Non SparkPay store passed to SparkPay license identifier");
-            }
-
-            return onlineUpdateInstanceCommandsFactory(sparkPayStore).Create();
         }
 
         /// <summary>

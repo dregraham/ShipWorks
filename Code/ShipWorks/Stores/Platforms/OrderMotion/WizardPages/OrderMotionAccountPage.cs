@@ -1,11 +1,14 @@
 ﻿using System;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using Interapptive.Shared.UI;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Net;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion.WizardPages
 {
@@ -20,12 +23,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.WizardPages
         public OrderMotionAccountPage()
         {
             InitializeComponent();
+            StepNextAsync = OnStepNext;
         }
 
         /// <summary>
         /// Moving to the next page in the Setup Wizard
         /// </summary>
-        private void OnStepNext(object sender, WizardStepEventArgs e)
+        private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
             if (bizIdTextBox.Text.Length == 0)
             {
@@ -46,8 +50,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.WizardPages
             // test connection
             try
             {
-                OrderMotionWebClient client = new OrderMotionWebClient(store);
-                client.TestConnection();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var client = lifetimeScope.Resolve<IOrderMotionWebClient>();
+                    await client.TestConnection(store).ConfigureAwait(true);
+                }
             }
             catch (OrderMotionException ex)
             {

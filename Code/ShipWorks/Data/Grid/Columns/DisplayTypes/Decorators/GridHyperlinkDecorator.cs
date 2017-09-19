@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
 {
@@ -14,7 +9,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
     public class GridHyperlinkDecorator : GridColumnDisplayDecorator
     {
         /// <summary>
-        /// Event raised when the hyplink is clicked
+        /// Event raised when the hyperlink is clicked
         /// </summary>
         public event GridHyperlinkClickEventHandler LinkClicked;
 
@@ -56,9 +51,9 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         {
             GridColumnFormattedValue formattedValue = row.GetFormattedValue(column);
 
-            return 
+            return
                 !string.IsNullOrEmpty(formattedValue.Text) &&
-                IsHyperlinkEnabled(formattedValue) && 
+                IsHyperlinkEnabled(formattedValue) &&
                 column.GetTextBounds(row, formattedValue).Contains(point);
         }
 

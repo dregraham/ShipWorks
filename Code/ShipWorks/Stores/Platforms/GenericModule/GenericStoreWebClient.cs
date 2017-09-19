@@ -1,77 +1,71 @@
 using System;
-using System.IO;
-using System.Net;
-using System.Xml;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Logging;
-using log4net;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Schema;
-using Interapptive.Shared;
+using Autofac;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using ShipWorks.Shipping;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Import.Xml.Schema;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
-	/// <summary>
-	/// Class for connecting to and working with our Generic php module
-	/// </summary>
-	public class GenericStoreWebClient
-	{
+    /// <summary>
+    /// Class for connecting to and working with our Generic PHP module
+    /// </summary>
+    [Component(RegistrationType.Self)]
+    public class GenericStoreWebClient : IGenericStoreWebClient
+    {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreWebClient));
 
-        // Store instance we're communicating on behalf of
-        GenericModuleStoreEntity store = null;
-
-		// Required module version
+        // Required module version
         private Version requiredModuleVersion;
 
         // Current schema version
         private Version currentSchemaVersion = new Version("1.1.0");
 
-		/// <summary>
-		/// Constructor for using the client to talk to a given store
-		/// </summary>
-		public GenericStoreWebClient(GenericModuleStoreEntity store)
-		{
-            this.store = store;
+        /// <summary>
+        /// Constructor for using the client to talk to a given store
+        /// </summary>
+        public GenericStoreWebClient(GenericModuleStoreEntity store)
+        {
+            Store = store;
 
-            GenericModuleStoreType type = (GenericModuleStoreType)StoreTypeManager.GetType(store);
-            requiredModuleVersion = type.GetRequiredModuleVersion();
-		}
+            StoreType = (GenericModuleStoreType) StoreTypeManager.GetType(store);
+            requiredModuleVersion = StoreType.GetRequiredModuleVersion();
+        }
+
+        /// <summary>
+        /// Store type associated with the web client
+        /// </summary>
+        private GenericModuleStoreType StoreType { get; }
 
         /// <summary>
         /// Gets the expected response encoding
         /// </summary>
-        protected Encoding ResponseEncoding
-        {
-            get
-            {
-                if (store.ModuleResponseEncoding == (int) GenericStoreResponseEncoding.UTF8)
-                {
-                    return Encoding.UTF8;
-                }
-                else
-                {
-                    // latin-1
-                    return Encoding.GetEncoding(28591);
-                }
-            }
-        }
+        protected Encoding ResponseEncoding =>
+            Store.ModuleResponseEncoding == (int) GenericStoreResponseEncoding.UTF8 ? Encoding.UTF8 : Encoding.GetEncoding(28591);
 
         /// <summary>
         /// The store the webClient is configured to connect to
         /// </summary>
-        protected GenericModuleStoreEntity Store
-        {
-            get { return store; }
-        }
+        protected GenericModuleStoreEntity Store { get; }
 
         /// <summary>
         /// Get the module and capabilities information from the module
@@ -131,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
             request.Variables.Add("start", lastOrderNumber.ToString());
-            request.Variables.Add("maxcount", store.ModuleDownloadPageSize.ToString());
+            request.Variables.Add("maxcount", Store.ModuleDownloadPageSize.ToString());
 
             return ProcessRequest(request, "getorders");
         }
@@ -144,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
             request.Variables.Add("start", FormatDate(lastModified));
-            request.Variables.Add("maxcount", store.ModuleDownloadPageSize.ToString());
+            request.Variables.Add("maxcount", Store.ModuleDownloadPageSize.ToString());
 
             return ProcessRequest(request, "getorders");
         }
@@ -152,28 +146,35 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Update the online status of the specified order
         /// </summary>
-        public virtual void UpdateOrderStatus(OrderEntity order, object code, string comment)
+        public virtual async Task<IResult> UpdateOrderStatus(OrderEntity order, string orderIdentifier, object code, string comment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
 
-            GenericModuleStoreType type = (GenericModuleStoreType)StoreTypeManager.GetType(store);
-
-            request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
+            request.Variables.Add("order", orderIdentifier);
             request.Variables.Add("status", code.ToString());
             request.Variables.Add("comments", comment);
 
-            ProcessRequest(request, "updatestatus");
+            try
+            {
+                await ProcessRequestAsync(request, "updatestatus").ConfigureAwait(false);
+            }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
-        /// Posts the tracking number for an order back to Generic
+        /// Update the online status of the specified order
         /// </summary>
-        public virtual void UploadShipmentDetails(OrderEntity order, ShipmentEntity shipment)
+        public virtual async Task<IResult> UploadShipmentDetails(OrderEntity order, string orderIdentifier, ShipmentEntity shipment)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-            GenericModuleStoreType type = (GenericModuleStoreType)StoreTypeManager.GetType(store);
+            GenericModuleStoreType type = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
-            request.Variables.Add("order", type.GetOnlineOrderIdentifier(order));
+            request.Variables.Add("order", orderIdentifier);
             request.Variables.Add("tracking", shipment.TrackingNumber);
             request.Variables.Add("carrier", type.GetOnlineCarrierName(shipment));
             request.Variables.Add("shippingcost", shipment.ShipmentCost.ToString());
@@ -181,7 +182,16 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             AppendExtendedShipmentDetails(request, shipment);
 
-            ProcessRequest(request, "updateshipment");
+            try
+            {
+                await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
+            }
+            catch (GenericStoreException ex)
+            {
+                return Result.FromError(ex);
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -190,30 +200,30 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="shipment">The shipment.</param>
-	    private void AppendExtendedShipmentDetails(HttpVariableRequestSubmitter request, ShipmentEntity shipment)
-	    {
-	        Version moduleVersion = new Version(store.ModuleVersion);
-	        if (moduleVersion.CompareTo(new Version("3.10.0")) >= 0)
-	        {
-	            // The version of the module is >= 3.10.0, so add the extended shipment
-	            // information to the request. We wanted module providers to opt-in to
-	            // this functionality to avoid negatively impacting overly strict module
-	            // implementations that may refuse a request if the variables do not match
-	            // exactly what the server is expecting.
-	            request.Variables.Add("processeddate", shipment.ProcessedDate.HasValue ? shipment.ProcessedDate.Value.ToString("s") : string.Empty);
+        private void AppendExtendedShipmentDetails(HttpVariableRequestSubmitter request, ShipmentEntity shipment)
+        {
+            Version moduleVersion = new Version(Store.ModuleVersion);
+            if (moduleVersion.CompareTo(new Version("3.10.0")) >= 0)
+            {
+                // The version of the module is >= 3.10.0, so add the extended shipment
+                // information to the request. We wanted module providers to opt-in to
+                // this functionality to avoid negatively impacting overly strict module
+                // implementations that may refuse a request if the variables do not match
+                // exactly what the server is expecting.
+                request.Variables.Add("processeddate", shipment.ProcessedDate.HasValue ? shipment.ProcessedDate.Value.ToString("s") : string.Empty);
 
-	            request.Variables.Add("voided", shipment.Voided.ToString(CultureInfo.InvariantCulture));
-	            request.Variables.Add("voideddate", shipment.VoidedDate.HasValue ? shipment.VoidedDate.Value.ToString("s") : string.Empty);
-	            request.Variables.Add("voideduser", shipment.VoidedUserID.HasValue ? shipment.VoidedUserID.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
+                request.Variables.Add("voided", shipment.Voided.ToString(CultureInfo.InvariantCulture));
+                request.Variables.Add("voideddate", shipment.VoidedDate.HasValue ? shipment.VoidedDate.Value.ToString("s") : string.Empty);
+                request.Variables.Add("voideduser", shipment.VoidedUserID.HasValue ? shipment.VoidedUserID.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
 
-                request.Variables.Add("serviceused", ShippingManager.GetOverriddenSerivceUsed(shipment));
+                request.Variables.Add("serviceused", ShippingManager.GetOverriddenServiceUsed(shipment));
                 request.Variables.Add("totalcharges", shipment.ShipmentCost.ToString());
                 request.Variables.Add("totalweight", shipment.TotalWeight.ToString(CultureInfo.InvariantCulture));
                 request.Variables.Add("returnshipment", shipment.ReturnShipment.ToString(CultureInfo.InvariantCulture));
             }
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Retrieves the status code definitions from the online store
         /// </summary>
         public GenericModuleResponse GetStatusCodes()
@@ -226,67 +236,17 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Get the url from the store
         /// </summary>
-	    protected virtual Uri GetUrlFromStore(GenericModuleStoreEntity genericStore)
-	    {
+        protected virtual Uri GetUrlFromStore(GenericModuleStoreEntity genericStore)
+        {
             return new Uri(genericStore.ModuleUrl);
-	    }
+        }
 
         /// <summary>
         /// Submits a request to the online store and returns the response
         /// </summary>
-        [NDependIgnoreLongMethod]
         protected virtual GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
         {
-            GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)store;
-            GenericModuleStoreType genericStoreType = (GenericModuleStoreType)StoreTypeManager.GetType(genericStore);
-
-            // add the action parameter
-            request.Variables.Add("action", action);
-
-            // if a store code is defined, pass it along
-            if (genericStore.ModuleOnlineStoreCode.Length > 0)
-            {
-                request.Variables.Add("storecode", genericStore.ModuleOnlineStoreCode);
-            }
-
-            string username = genericStore.ModuleUsername;
-            string password = genericStore.ModulePassword;
-            password = SecureText.Decrypt(password, username);
-
-            // add the username and password as parameters
-            request.Variables.Add("username", username);
-            request.Variables.Add("password", password);
-
-            // setup the uri
-            try
-            {
-                request.Uri = GetUrlFromStore(store);
-            }
-            catch (UriFormatException ex)
-            {
-                throw new GenericStoreException("The module URL is not properly formatted.", ex);
-            }
-
-            request.Timeout = TimeSpan.FromSeconds(genericStore.ModuleRequestTimeout);
-            request.Credentials = new NetworkCredential(username, password);
-
-            if (String.Compare(action, "getmodule", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                // some servers will fail if this is True.  The communications settings in the getmodule response control this value,
-                // but we have to make a succesful getmodule call to begin with.  This will allow that call to go through.
-                request.Expect100Continue = false;
-            }
-            else
-            {
-                request.Expect100Continue = store.ModuleHttpExpect100Continue;
-            }
-
-            // Allow derived classes to adjust the request
-            TransformRequest(request, action);
-
-            // log the request
-            ApiLogEntry logger = new ApiLogEntry(genericStoreType.LogSource, action);
-            logger.LogRequest(request);
+            ApiLogEntry logger = PrepareRequest(request, action);
 
             GenericModuleResponse webResponse;
 
@@ -297,35 +257,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 {
                     string resultXml = postResponse.ReadResult(ResponseEncoding);
 
-                    // This was added for Miva but is fine in the general case.  An XML Document cannot start with whitespace
-                    if (!resultXml.StartsWith("<"))
-                    {
-                        resultXml = resultXml.Trim();
-                    }
-
-                    // log the response
-                    logger.LogResponse(resultXml);
-
-                    // Strip invalid input characters.  Defensive against bad modules
-                    resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
-
-                    string transformedXml = TransformResponse(resultXml, action);
-
-                    // if the response was changed, log it
-                    if (!resultXml.Equals((object)transformedXml))
-                    {
-                        logger.LogResponseSupplement(transformedXml, "Transformed");
-                    }
-
-                    // Load the response from the xml
-                    webResponse = new GenericModuleResponse(transformedXml);
-
-                    // Valid the module version and schema version
-                    ValidateModuleVersion(webResponse.ModuleVersion);
-                    ValidateSchemaVersion(webResponse.SchemaVersion);
-
-                    // validate the response against the schema
-                    ValidateSchema(transformedXml, action);
+                    webResponse = ProcessResponse(action, logger, ref resultXml);
                 }
             }
             catch (Exception ex)
@@ -343,18 +275,148 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Submits a request to the online store and returns the response
+        /// </summary>
+        protected virtual async Task<GenericModuleResponse> ProcessRequestAsync(IHttpVariableRequestSubmitter request, string action)
+        {
+            ApiLogEntry logger = PrepareRequest(request, action);
+
+            GenericModuleResponse webResponse;
+
+            // execute the request
+            try
+            {
+                using (IHttpResponseReader postResponse = await request.GetResponseAsync().ConfigureAwait(false))
+                {
+                    string resultXml = await postResponse.ReadResultAsync(ResponseEncoding).ConfigureAwait(false);
+
+                    webResponse = ProcessResponse(action, logger, ref resultXml);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
+            }
+
+            // check for errors
+            if (webResponse.HasError)
+            {
+                throw new GenericStoreException(webResponse.ErrorDescription);
+            }
+
+            return webResponse;
+        }
+
+        /// <summary>
+        /// Prepare a web request for execution
+        /// </summary>
+        private ApiLogEntry PrepareRequest(IHttpVariableRequestSubmitter request, string action)
+        {
+            // add the action parameter
+            request.Variables.Add("action", action);
+
+            // if a store code is defined, pass it along
+            if (Store.ModuleOnlineStoreCode.Length > 0)
+            {
+                request.Variables.Add("storecode", Store.ModuleOnlineStoreCode);
+            }
+
+            string username = Store.ModuleUsername;
+            string password = Store.ModulePassword;
+            password = SecureText.Decrypt(password, username);
+
+            // add the username and password as parameters
+            request.Variables.Add("username", username);
+            request.Variables.Add("password", password);
+
+            // setup the uri
+            try
+            {
+                request.Uri = GetUrlFromStore(Store);
+            }
+            catch (UriFormatException ex)
+            {
+                throw new GenericStoreException("The module URL is not properly formatted.", ex);
+            }
+
+            request.Timeout = TimeSpan.FromSeconds(Store.ModuleRequestTimeout);
+            request.Credentials = new NetworkCredential(username, password);
+
+            if (String.Compare(action, "getmodule", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                // some servers will fail if this is True.  The communications settings in the getmodule response control this value,
+                // but we have to make a successful getmodule call to begin with.  This will allow that call to go through.
+                request.Expect100Continue = false;
+            }
+            else
+            {
+                request.Expect100Continue = Store.ModuleHttpExpect100Continue;
+            }
+
+            // Allow derived classes to adjust the request
+            TransformRequest(request, action);
+
+            // log the request
+            GenericModuleStoreType genericStoreType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
+
+            ApiLogEntry logger = new ApiLogEntry(genericStoreType.LogSource, action);
+            logger.LogRequest(request);
+            return logger;
+        }
+
+        /// <summary>
+        /// Process the response of a web request
+        /// </summary>
+        private GenericModuleResponse ProcessResponse(string action, ApiLogEntry logger, ref string resultXml)
+        {
+            GenericModuleResponse webResponse;
+            // This was added for Miva but is fine in the general case.  An XML Document cannot start with whitespace
+            if (!resultXml.StartsWith("<", StringComparison.Ordinal))
+            {
+                resultXml = resultXml.Trim();
+            }
+
+            // log the response
+            logger.LogResponse(resultXml);
+
+            // Strip invalid input characters.  Defensive against bad modules
+            resultXml = XmlUtility.StripInvalidXmlCharacters(resultXml);
+
+            string transformedXml = TransformResponse(resultXml, action);
+
+            // if the response was changed, log it
+            if (!resultXml.Equals((object) transformedXml))
+            {
+                logger.LogResponseSupplement(transformedXml, "Transformed");
+            }
+
+            // Load the response from the xml
+            webResponse = new GenericModuleResponse(transformedXml);
+
+            // Valid the module version and schema version
+            ValidateModuleVersion(webResponse.ModuleVersion);
+            ValidateSchemaVersion(webResponse.SchemaVersion);
+
+            // validate the response against the schema
+            ValidateSchema(transformedXml, action);
+            return webResponse;
+        }
+
+        /// <summary>
         /// Loads a GenericModuleResponse from the specified file
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+            Justification = "Identifier is not being used for data binding")]
         public GenericModuleResponse ResponseFromFile(string file, string action)
         {
             if (String.IsNullOrEmpty(file))
             {
-                throw new ArgumentNullException("file", "A file must be specified.");
+                throw new ArgumentNullException(nameof(file), "A file must be specified.");
             }
 
             if (string.IsNullOrEmpty(action))
             {
-                throw new ArgumentNullException("action", "An action must be specified");
+                throw new ArgumentNullException(nameof(action), "An action must be specified");
             }
 
             if (!File.Exists(file))
@@ -384,7 +446,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// The request construction is complete and ready to be executed.
         /// For derived classes.
         /// </summary>
-        protected virtual void TransformRequest(HttpVariableRequestSubmitter request, string action)
+        protected virtual void TransformRequest(IHttpVariableRequestSubmitter request, string action)
         {
 
         }
@@ -399,7 +461,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
-        /// Validates the version fo the module against the specified required module version
+        /// Validates the version for the module against the specified required module version
         /// </summary>
         protected void ValidateModuleVersion(Version moduleVersion)
         {

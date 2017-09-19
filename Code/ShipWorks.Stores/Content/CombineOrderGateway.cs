@@ -81,6 +81,12 @@ namespace ShipWorks.Stores.Content
         /// </remarks>
         public bool CanCombine(IStoreEntity store, IEnumerable<long> orderIDs)
         {
+            // The store can be null when deleting all stores
+            if (store == null)
+            {
+                return false;
+            }
+
             DynamicQuery query = CreateCanCombineQuery(store, orderIDs, new QueryFactory());
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())

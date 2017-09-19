@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -10,41 +8,37 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// </summary>
     public class BestRateScope : IDisposable
     {
-        [ThreadStatic]
-        static bool active;
+        static AsyncLocal<bool> active = new AsyncLocal<bool>();
 
         /// <summary>
         /// Constructor - initiates the scope
         /// </summary>
         public BestRateScope()
         {
-            if (active)
+            if (active.Value)
             {
                 throw new InvalidOperationException("Can only have one active scope per-thread at a time.");
             }
 
-            active = true;
+            active.Value = true;
         }
 
         /// <summary>
         /// Indicates if a BestRateScope is active on the current thread
         /// </summary>
-        public static bool IsActive
-        {
-            get { return active; }
-        }
+        public static bool IsActive => active.Value;
 
         /// <summary>
         /// Dispose - get rid of the scope active state
         /// </summary>
         public void Dispose()
         {
-            if (!active)
+            if (!active.Value)
             {
                 return;
             }
 
-            active = false;
+            active.Value = false;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
 
             shippingManager.Setup(x => x.EnsureShipmentLoaded(shipment));
 
-            testObject = new ThreeDCartRestOnlineUpdater(store.Object);
+            testObject = new ThreeDCartRestOnlineUpdater(store.Object, (x => new ThreeDCartRestWebClient(store.Object)));
         }
 
         [Fact]

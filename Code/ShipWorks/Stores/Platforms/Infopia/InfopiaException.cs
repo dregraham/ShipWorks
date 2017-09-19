@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Infopia
@@ -9,6 +6,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Exception to wrap error messages and codes coming back from failed CA calls
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Serializable]
     public class InfopiaException : Exception
     {
@@ -34,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Constructor for specifying CA Error Code
         /// </summary>
-        public InfopiaException(int statusCode, string message) 
+        public InfopiaException(int statusCode, string message)
             : base(message)
         {
             this.statusCode = statusCode;
@@ -58,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         }
 
         /// <summary>
-        /// Deserilization 
+        /// Deserilization
         /// </summary>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

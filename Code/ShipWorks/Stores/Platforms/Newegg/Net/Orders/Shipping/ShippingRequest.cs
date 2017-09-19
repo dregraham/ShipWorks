@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using Interapptive.Shared.Net;
-using System.Text;
-using Interapptive.Shared.Utility;
+using System.Threading.Tasks;
 using System.Xml;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
 {
@@ -17,12 +16,12 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
     public class ShippingRequest : IShippingRequest
     {
         private const string RequestUrl = "{0}/ordermgmt/orderstatus/orders/{1}?sellerid={2}";
-        
+
         private Credentials credentials;
         private INeweggRequest request;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShippingRequest"/> class. 
+        /// Initializes a new instance of the <see cref="ShippingRequest"/> class.
         /// A NeweggHttpRequest is used if no request type is given.
         /// </summary>
         /// <param name="credentials">The credentials.</param>
@@ -41,7 +40,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
             this.request = request;
         }
 
-
         /// <summary>
         /// Ships the specified shipment.
         /// </summary>
@@ -49,14 +47,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
         /// <returns>
         /// A ShippingResult object containing the details of the response.
         /// </returns>
-        public ShippingResult Ship(Shipment shipment)
+        public async Task<ShippingResult> Ship(Shipment shipment)
         {
             if (shipment == null)
             {
                 throw new InvalidOperationException("A null shipment value was provided.");
             }
 
-            // API URL depends on which marketplace the seller selected 
+            // API URL depends on which marketplace the seller selected
             string marketplace = "";
 
             switch (credentials.Channel)
@@ -76,13 +74,13 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
             // Format our request URL with the value of the order number and seller ID and configure the request
             string formattedUrl = string.Format(RequestUrl, marketplace, shipment.Header.OrderNumber, credentials.SellerId);
             RequestConfiguration requestConfig = new RequestConfiguration("Uploading Shipment Details", formattedUrl)
-            { 
-                Method = HttpVerb.Put, 
-                Body = GetRequestBody(shipment) 
+            {
+                Method = HttpVerb.Put,
+                Body = GetRequestBody(shipment)
             };
 
             // The shipping response data should contain the XML describing a ShippingResult
-            string responseData = this.request.SubmitRequest(credentials, requestConfig);            
+            string responseData = await request.SubmitRequest(credentials, requestConfig).ConfigureAwait(false);
             NeweggResponse shippingResponse = new NeweggResponse(responseData, new ShippingResponseSerializer());
 
             if (shippingResponse.ResponseErrors.Count() > 0)
@@ -100,9 +98,8 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
             return shippingResponse.Result as ShippingResult;
         }
 
-
         /// <summary>
-        /// Gets the body of the request to be sent to Newegg by serializing the 
+        /// Gets the body of the request to be sent to Newegg by serializing the
         /// shipment object.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
@@ -114,17 +111,17 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
 
             // The Newegg API requires that there are <Item> nodes within the <ItemList> node
             // when sending the request, but our shipment gets serialized into <ItemDes> nodes
-            // since it was originally intended for deserializing the response from Newegg. We 
+            // since it was originally intended for deserializing the response from Newegg. We
             // also need to remove the ProcessStatus node from the serialized shipment XML.
-            
-            // These are the only discrepancies between the request and response, so we're just going 
-            // to do a string replacement on the <ItemDes> nodes and remove the ProcessStatus node. 
-            // We may want to look at creating a new class that strictly pertains to sending the 
-            // request, but it seemed like a lot of duplication of code at this time for something 
+
+            // These are the only discrepancies between the request and response, so we're just going
+            // to do a string replacement on the <ItemDes> nodes and remove the ProcessStatus node.
+            // We may want to look at creating a new class that strictly pertains to sending the
+            // request, but it seemed like a lot of duplication of code at this time for something
             // that is contained to this single spot.
             serializedShipmentXml = serializedShipmentXml.Replace("<ItemDes>", "<Item>");
             serializedShipmentXml = serializedShipmentXml.Replace("</ItemDes>", "</Item>");
-            
+
             // Load the XML into a document to remove the unnecessary ProcessStatus node
             XmlDocument document = new XmlDocument();
             document.LoadXml(serializedShipmentXml);
@@ -147,6 +144,5 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
 
             return requestBody;
         }
-
     }
 }

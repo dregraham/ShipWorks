@@ -212,6 +212,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					toReturn = this.EtsyOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.EtsyOrderItemEntity:
+					toReturn = this.EtsyOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
 					break;
@@ -313,6 +316,18 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.IParcelShipmentEntity:
 					toReturn = this.IParcelShipment;
+					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderEntity:
+					toReturn = this.JetOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderItemEntity:
+					toReturn = this.JetOrderItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.JetOrderSearchEntity:
+					toReturn = this.JetOrderSearch;
+					break;
+				case ShipWorks.Data.Model.EntityType.JetStoreEntity:
+					toReturn = this.JetStore;
 					break;
 				case ShipWorks.Data.Model.EntityType.LabelSheetEntity:
 					toReturn = this.LabelSheet;
@@ -490,6 +505,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentCustomsItemEntity:
 					toReturn = this.ShipmentCustomsItem;
+					break;
+				case ShipWorks.Data.Model.EntityType.ShipmentReturnItemEntity:
+					toReturn = this.ShipmentReturnItem;
 					break;
 				case ShipWorks.Data.Model.EntityType.ShippingDefaultsRuleEntity:
 					toReturn = this.ShippingDefaultsRule;
@@ -993,6 +1011,12 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<EtsyOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting EtsyOrderItemEntity instances in the database.</summary>
+		public DataSource2<EtsyOrderItemEntity> EtsyOrderItem
+		{
+			get { return new DataSource2<EtsyOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting EtsyStoreEntity instances in the database.</summary>
 		public DataSource2<EtsyStoreEntity> EtsyStore
 		{
@@ -1195,6 +1219,30 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<IParcelShipmentEntity> IParcelShipment
 		{
 			get { return new DataSource2<IParcelShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetOrderEntity instances in the database.</summary>
+		public DataSource2<JetOrderEntity> JetOrder
+		{
+			get { return new DataSource2<JetOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetOrderItemEntity instances in the database.</summary>
+		public DataSource2<JetOrderItemEntity> JetOrderItem
+		{
+			get { return new DataSource2<JetOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetOrderSearchEntity instances in the database.</summary>
+		public DataSource2<JetOrderSearchEntity> JetOrderSearch
+		{
+			get { return new DataSource2<JetOrderSearchEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting JetStoreEntity instances in the database.</summary>
+		public DataSource2<JetStoreEntity> JetStore
+		{
+			get { return new DataSource2<JetStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting LabelSheetEntity instances in the database.</summary>
@@ -1549,6 +1597,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ShipmentCustomsItemEntity> ShipmentCustomsItem
 		{
 			get { return new DataSource2<ShipmentCustomsItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentReturnItemEntity instances in the database.</summary>
+		public DataSource2<ShipmentReturnItemEntity> ShipmentReturnItem
+		{
+			get { return new DataSource2<ShipmentReturnItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShippingDefaultsRuleEntity instances in the database.</summary>

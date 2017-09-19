@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             LemonStandOrderSearchID = source.LemonStandOrderSearchID;
             OrderID = source.OrderID;
             LemonStandOrderID = source.LemonStandOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             LemonStandOrder = source.LemonStandOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String LemonStandOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity LemonStandOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "LemonStandOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public ILemonStandOrderEntity LemonStandOrder { get; }

@@ -442,6 +442,7 @@
     <Compile Include="Actions\IActionDispatcher.cs" />
     <Compile Include="Actions\IActionManager.cs" />
     <Compile Include="Actions\IActionProcessorFactory.cs" />
+    <Compile Include="Actions\IActionStepContext.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionSchedule.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleException.cs" />
     <Compile Include="Actions\Scheduling\ActionSchedules\ActionScheduleFactory.cs" />
@@ -723,6 +724,9 @@
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
+    <Compile Include="ApplicationCore\Interaction\AsyncMenuCommand.cs" />
+    <Compile Include="ApplicationCore\Interaction\IMenuCommand.cs" />
+    <Compile Include="ApplicationCore\Interaction\IMenuCommandExecutionContext.cs" />
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />
@@ -948,6 +952,8 @@
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutModifiers.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\KeyboardShortcutTranslator.cs" />
     <Compile Include="Common\IWindowsMessageFilterRegistrar.cs" />
+    <Compile Include="Common\Net\IJsonRequest.cs" />
+    <Compile Include="Common\Net\JsonRequest.cs" />
     <Compile Include="Common\OrderedCompositeManipulator.cs" />
     <Compile Include="Common\CompositeValidator.cs" />
     <Compile Include="Common\CompositeValidatorResult.cs" />
@@ -959,8 +965,6 @@
     <Compile Include="Common\Threading\ActionRetry.cs" />
     <Compile Include="Common\Threading\CancellationTokenProgressProvider.cs" />
     <Compile Include="Common\Threading\EmptyProgressUpdater.cs" />
-    <Compile Include="Common\Threading\IProgressUpdater.cs" />
-    <Compile Include="Common\Threading\ProgressUpdater.cs" />
     <Compile Include="Common\Threading\SingleItemProgressDialog.cs" />
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
@@ -1016,6 +1020,8 @@
     <Compile Include="Editions\EditionManagerWrapper.cs" />
     <Compile Include="Editions\IEdition.cs" />
     <Compile Include="Editions\IEditionManager.cs" />
+    <Compile Include="Email\EmailCommunicatorWrapper.cs" />
+    <Compile Include="Email\IEmailCommunicatorWrapper.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
@@ -1274,7 +1280,9 @@
     <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoAccountType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoSource.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
@@ -1285,6 +1293,12 @@
     <Compile Include="Shipping\Editing\Rating\IExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Editing\Rating\IFootnoteParameters.cs" />
     <Compile Include="Shipping\Editing\Rating\IInformationFootnoteViewModel.cs" />
+    <Compile Include="Shipping\Editing\ReturnTabControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
@@ -1297,6 +1311,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipService.cs" />
     <Compile Include="Shipping\IRatesRetriever.cs" />
     <Compile Include="Shipping\IResidentialDeterminationService.cs" />
+    <Compile Include="Shipping\IReturnItemRepository.cs" />
     <Compile Include="Shipping\IShipmentEntityExtensions.cs" />
     <Compile Include="Shipping\IShipmentFactory.cs" />
     <Compile Include="Shipping\IShipmentPreProcessor.cs" />
@@ -1322,11 +1337,18 @@
     <Compile Include="Shipping\ShipmentsLoaderConstants.cs" />
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Communication\IStoreDownloader.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberSearchProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderSearchBaseProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\Controls\ICombineOrdersViewModel.cs" />
     <Compile Include="Stores\Content\Controls\IOrderCombinationUserInteraction.cs" />
     <Compile Include="Stores\Content\ICombineOrderGateway.cs" />
     <Compile Include="Stores\Content\ICombineOrderOrchestrator.cs" />
     <Compile Include="Stores\Content\ICombineOrder.cs" />
+    <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Content\IOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Content\IOrderCombineValidator.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\IStoreSpecificCombineOrder.cs" />
@@ -1348,8 +1370,8 @@
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
-    <Compile Include="Stores\Platforms\Amazon\IAmazonLegacyDownloader.cs" />
-    <Compile Include="Stores\Platforms\Amazon\IAmazonMwsDownloader.cs" />
+    <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -1719,9 +1741,18 @@
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsResponseHandler.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsClient.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
+    <Compile Include="Stores\Platforms\Amazon\OnlineUpdating\IAmazonOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\IAmeriCommerceWebClient.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\OnlineUpdating\AmeriCommerceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\BigCommerce\IBigCommerceIdentifier.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />
+    <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IBuyDotComShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1741,15 +1772,25 @@
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorDistributionCenterIDCondition.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorDistributionCenterNameCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\DTO\ChannelAdvisorShipment.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorClassificationCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\Orders\ChannelAdvisorIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorAccountSettingsViewModel.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\OnlineUpdating\IChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapClient.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorSoapDownloader.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorUpdateClient.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorStoreType.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\OnlineUpdating\IChannelAdvisorUpdateClient.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayGuaranteedDeliveryCondition.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayFeedbackDetails.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayMessagingDetails.cs" />
+    <Compile Include="Stores\Platforms\Ebay\IEbayOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
+    <Compile Include="Stores\Platforms\Etsy\OnlineUpdating\IEtsyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Etsy\IEtsyWebClient.cs" />
     <Compile Include="Stores\Platforms\GeekSeller\GeekSellerOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1759,11 +1800,18 @@
     <Compile Include="Stores\Platforms\GenericFile\Formats\Csv\IGenericFileCsvDownloader.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Formats\Excel\IGenericFileExcelDownloader.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Formats\Xml\IGenericFileXmlDownloader.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\GenericStoreWebClientFactory.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\IGenericModuleWebClientFactory.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\IGenericStoreWebClient.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\OnlineUpdating\GenericModuleOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
+    <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClientConfiguration.cs" />
+    <Compile Include="Stores\Platforms\Infopia\IInfopiaOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Jet\IJetStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagentoTwoRestShipment\Comment.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\Invoice.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestInvoice\MagentoInvoiceItem.cs" />
@@ -1789,24 +1837,63 @@
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoUploadCommand.cs" />
     <Compile Include="Stores\Platforms\Magento\Enums\MagentoVersion.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoModuleDownloader.cs" />
-    <Compile Include="Stores\Platforms\Magento\IMagentoOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoTwoWebClient.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoModuleWebClientFactory.cs" />
+    <Compile Include="Stores\Platforms\Magento\IMagentoWebClient.cs" />
+    <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoTwoRestClient.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoException.cs" />
-    <Compile Include="Stores\Platforms\Magento\MagentoTwoRestOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Magento\OnlineUpdating\MagentoTwoRestOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoTwoWebClient.cs" />
+    <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdaterFactory.cs" />
+    <Compile Include="Stores\Platforms\Magento\OnlineUpdating\ShipmentDetails.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorLegacyDownloader.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\IMarketplaceAdvisorOmsDownloader.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\INetworkSolutionsWebClient.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IOrderStatusUpdater.cs" />
+    <Compile Include="Stores\Platforms\NetworkSolutions\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
+    <Compile Include="Stores\Platforms\Newegg\INeweggWebClient.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\INeweggCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ItemDetails.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\NeweggCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\OrderUploadDetail.cs" />
+    <Compile Include="Stores\Platforms\Newegg\OnlineUpdating\ShipmentUploadDetails.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\IOrderMotionWebClient.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\OrderMotion\OnlineUpdating\OrderDetail.cs" />
+    <Compile Include="Stores\Platforms\ProStores\IProStoresWebClient.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\IProStoresCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\ProStores\OnlineUpdating\OrderUploadDetails.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
+    <Compile Include="Stores\Platforms\Sears\ISearsCredentials.cs" />
+    <Compile Include="Stores\Platforms\Sears\ISearsWebClient.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
+    <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Shopify\ShopifyAlreadyUploadedException.cs" />
     <Compile Include="Stores\Platforms\Shopify\IShopifyWebClient.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteIdentifier.cs" />
     <Compile Include="Stores\Platforms\ShopSite\IShopSiteWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\Enums\ThreeDCartOrderStatus.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\IThreeDCartSoapWebClient.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\IThreeDCartOnlineUpdatingDataAccess.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingDataAccess.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingOrderDetail.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOption.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOptionSet.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartOrder.cs" />
@@ -1814,8 +1901,10 @@
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartProduct.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartQuestion.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartShipment.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartSkuInfo.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\DTO\ThreeDCartTransaction.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestDownloader.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestItemAttributeLoader.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\IThreeDCartRestWebClient.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartProductCache.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\RestApi\ThreeDCartRestDownloader.cs" />
@@ -1825,6 +1914,7 @@
     <Compile Include="Stores\Platforms\Sears\SearsCredentials.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartOptionNode.cs" />
     <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartProductLoader.cs" />
+    <Compile Include="Stores\Platforms\Volusion\IVolusionWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAddressInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooAppliedPromotion.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooBillToInfo.cs" />
@@ -1856,6 +1946,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooShipToInfo.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\DTO\YahooStatusList.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\IYahooApiWebClient.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiDownloader.cs" />
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooApiOnlineUpdater.cs" />
@@ -1865,6 +1956,7 @@
     <Compile Include="Stores\Platforms\Yahoo\ApiIntegration\YahooProductWeightCache.cs" />
     <Compile Include="Stores\Platforms\Yahoo\CoreExtensions\Actions\YahooShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailDownloader.cs" />
+    <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\IYahooEmailOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1889,11 +1981,13 @@
     <Compile Include="Stores\Platforms\Yahoo\EmailIntegration\WizardPages\YahooEmailProductWeightsPage.Designer.cs">
       <DependentUpon>YahooEmailProductWeightsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Yahoo\OnlineUpdating\IYahooCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Templates\Printing\IPrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSetting.cs" />
     <Compile Include="Templates\Printing\PrinterSettingsFactory.cs" />
+    <Compile Include="Templates\Processing\TemplateXml\ElementOutlines\ReturnItemOutline.cs" />
     <Compile Include="Templates\Tokens\ITemplateTokenProcessor.cs" />
     <Compile Include="Templates\Tokens\TemplateTokenProcessorWrapper.cs" />
     <Compile Include="UI\Controls\IWeightConverter.cs" />
@@ -3403,7 +3497,6 @@
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComDownloader.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComException.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComFtpClient.cs" />
-    <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOrderImportSchema.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComOrderLoader.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\BuyDotComStoreType.cs" />
@@ -3500,7 +3593,6 @@
     <Compile Include="Stores\Platforms\Etsy\EtsyAccountSettingsControl.Designer.cs">
       <DependentUpon>EtsyAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Etsy\EtsyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyOrderStatusUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyTokenUtility.cs" />
     <Compile Include="Stores\Platforms\Etsy\EtsyEndpoints.cs" />
@@ -3541,7 +3633,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Sears\SearsDownloader.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsException.cs" />
-    <Compile Include="Stores\Platforms\Sears\SearsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsOrdersPage.cs" />
     <Compile Include="Stores\Platforms\Sears\SearsStoreType.cs" />
@@ -3574,7 +3665,6 @@
     <Compile Include="Stores\Platforms\Shopify\ShopifyCreateTokenWizard.Designer.cs">
       <DependentUpon>ShopifyCreateTokenWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Shopify\ShopifyOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3994,7 +4084,6 @@
     <Compile Include="UI\Controls\WeightDisplayFormat.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggDownloader.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggException.cs" />
-    <Compile Include="Stores\Platforms\Newegg\NeweggOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Newegg\NeweggStoreCredentialsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4195,33 +4284,9 @@
     </Compile>
     <Compile Include="Stores\InitialDownloadPolicy.cs" />
     <Compile Include="Stores\InitialDownloadRestrictionType.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.Designer.cs">
-      <DependentUpon>AmazonImportInventoryControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Actions\AmazonShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Grid\GridAmazonOrderDisplayType.cs" />
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.Designer.cs">
-      <DependentUpon>AmazonCertificatePage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.Designer.cs">
-      <DependentUpon>AmazonCredentialsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.Designer.cs">
-      <DependentUpon>AmazonInventoryPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4242,7 +4307,7 @@
     <Compile Include="Stores\Platforms\AmeriCommerce\CoreExtensions\Actions\AmeriCommerceOrderUpdateTaskEditor.Designer.cs">
       <DependentUpon>AmeriCommerceOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\AmeriCommerce\ExtensionMethods.cs" />
+    <Compile Include="Stores\Platforms\AmeriCommerce\AmeriCommerceExtensionMethods.cs" />
     <Compile Include="Stores\Platforms\AmeriCommerce\WizardPages\AmeriCommerceAccountPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4360,7 +4425,7 @@
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleCapabilities.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleCommunications.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericModuleConfigurationException.cs" />
-    <Compile Include="Stores\Platforms\GenericModule\GenericOrderIdentifier.cs" />
+    <Compile Include="Stores\Content\AlphaNumericOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreException.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreResponseLoadDlg.cs">
       <SubType>Form</SubType>
@@ -5543,50 +5608,13 @@
     <Compile Include="Stores\Management\ManualOrderSettingsControl.Designer.cs">
       <DependentUpon>ManualOrderSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.Designer.cs">
-      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonAssociatesWebClient.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.Designer.cs">
-      <DependentUpon>AmazonCertificateImportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonDownloader.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonEnsClient.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonException.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonFeedClient.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonAsin.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonItemDetail.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderIdentifier.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.Designer.cs">
-      <DependentUpon>AmazonStoreSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Amazon\AmazonStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonWeights.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonWSESecurity.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.Designer.cs">
-      <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeAttachment.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeInjectionStream.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\DimeWebRequest.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Dime\SellerCentralDimeService.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSoapClient.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloader.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorException.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5709,7 +5737,6 @@
       <DependentUpon>InfopiaAccountSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Infopia\InfopiaDownloader.cs" />
-    <Compile Include="Stores\Platforms\Infopia\InfopiaOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaProductInfo.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaStatusType.cs" />
     <Compile Include="Stores\Platforms\Infopia\InfopiaStoreType.cs" />
@@ -5722,7 +5749,7 @@
     <Compile Include="Stores\Platforms\Infopia\WizardPages\InfopiaTokenWizardPage.Designer.cs">
       <DependentUpon>InfopiaTokenWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Magento\MagentoOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Magento\OnlineUpdating\MagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoStoreType.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoActionCommentsDlg.cs">
       <SubType>Form</SubType>
@@ -5865,7 +5892,6 @@
       <DependentUpon>NetworkSolutionsOrderUpdateTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\NetworkSolutions\CoreExtensions\Actions\NetworkSolutionsOrderUpdateTask.cs" />
-    <Compile Include="Stores\Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\NetworkSolutions\NetworkSolutionsAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -5942,7 +5968,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Actions\OrderMotionShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\CoreExtensions\Filters\OrderMotionPromotionCondition.cs" />
-    <Compile Include="Stores\Platforms\OrderMotion\OrderMotionOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\OrderMotion\OrderMotionAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6049,7 +6074,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\ProStores\ProStoresApiException.cs" />
     <Compile Include="Stores\Platforms\ProStores\ProStoresDownloader.cs" />
-    <Compile Include="Stores\Platforms\ProStores\ProStoresOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\ProStores\ProStoresTokenCreateControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6126,7 +6150,7 @@
       <DependentUpon>VolusionCodeRefreshDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Volusion\VolusionDownloader.cs" />
-    <Compile Include="Stores\Platforms\Volusion\VolusionOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Volusion\OnlineUpdating\IShipmentDetailsUpdater.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionPaymentMethod.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionPaymentMethods.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionException.cs" />
@@ -8060,6 +8084,9 @@
     <EmbeddedResource Include="Shipping\Editing\ReturnsControlBase.resx">
       <DependentUpon>ReturnsControlBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
+      <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -8868,18 +8895,6 @@
     <EmbeddedResource Include="Stores\Content\EditPaymentDetailDlg.resx">
       <DependentUpon>EditPaymentDetailDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonImportInventoryControl.resx">
-      <DependentUpon>AmazonImportInventoryControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonCertificatePage.resx">
-      <DependentUpon>AmazonCertificatePage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonCredentialsPage.resx">
-      <DependentUpon>AmazonCredentialsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\WizardPages\AmazonInventoryPage.resx">
-      <DependentUpon>AmazonInventoryPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\AmeriCommerce\AmeriCommerceAccountSettingsControl.resx">
       <DependentUpon>AmeriCommerceAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -9574,18 +9589,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ManualOrderSettingsControl.resx">
       <DependentUpon>ManualOrderSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonAccountSettingsControl.resx">
-      <DependentUpon>AmazonAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportForm.resx">
-      <DependentUpon>AmazonCertificateImportForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonStoreSettingsControl.resx">
-      <DependentUpon>AmazonStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Amazon\AmazonCertificateImportControl.resx">
-      <DependentUpon>AmazonCertificateImportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAttributesSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAttributesSettingsControl.cs</DependentUpon>
@@ -10620,6 +10623,7 @@
     <Content Include="Resources\merge_icon_16x16.png" />
     <Content Include="Resources\merge_icon_32x32.png" />
     <Content Include="Resources\merge_icon_48x48.png" />
+    <None Include="Resources\jet.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Xsl;
 using System.Linq;
-using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Templates.Tokens;
+using System.Threading;
 using Interapptive.Shared.Collections;
+using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Templates.Processing
 {
@@ -29,8 +27,7 @@ namespace ShipWorks.Templates.Processing
         LruCache<string, TemplateXsl> tokenXslCache = new LruCache<string, TemplateXsl>(50);
 
         // Used to determine if we are entering a recursive import situation
-        [ThreadStatic]
-        static Stack<string> _recursionStack;
+        static AsyncLocal<Stack<string>> _recursionStack = new AsyncLocal<Stack<string>>();
 
         /// <summary>
         /// Create a new cache for the specified tree.  If initializeFrom is not null, then the internal cache data will be initialized from it.
@@ -98,7 +95,7 @@ namespace ShipWorks.Templates.Processing
                             {
                                 TemplateEntity importedTemplate = templateTree.FindTemplate(xslImport.TemplateFullName);
 
-                                // An imported template has been deleted, thats not cool.  
+                                // An imported template has been deleted, thats not cool.
                                 if (importedTemplate == null)
                                 {
                                     // If the import version is Guid.Empty, that means we already knew it was missing.
@@ -121,12 +118,12 @@ namespace ShipWorks.Templates.Processing
 
                         if (templateXsl == null)
                         {
-                         //   log.DebugFormat("TemplateXsl Cache: [{0}] OLD.", template.FullName);
+                            //   log.DebugFormat("TemplateXsl Cache: [{0}] OLD.", template.FullName);
                         }
                     }
                     else
                     {
-                       // log.DebugFormat("TemplateXsl Cache: [{0}] NEW.", template.FullName);
+                        // log.DebugFormat("TemplateXsl Cache: [{0}] NEW.", template.FullName);
                     }
 
                     if (templateXsl != null)
@@ -187,12 +184,12 @@ namespace ShipWorks.Templates.Processing
             get
             {
                 // ThreadStatic so we don't have to lock, but do have to do it for each thread.
-                if (_recursionStack == null)
+                if (_recursionStack.Value == null)
                 {
-                    _recursionStack = new Stack<string>();
+                    _recursionStack.Value = new Stack<string>();
                 }
 
-                return _recursionStack;
+                return _recursionStack.Value;
             }
         }
     }

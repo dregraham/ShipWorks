@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.Content
                 x => new CommerceInterfaceOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    CommerceInterfaceOrderNumber = x.CommerceInterfaceOrderNumber
+                    CommerceInterfaceOrderNumber = x.CommerceInterfaceOrderNumber,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

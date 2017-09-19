@@ -1,40 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.Filters;
-using System.ComponentModel;
-using ShipWorks.Data.Grid.Paging;
-using ShipWorks.Data.Grid;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
     /// <summary>
     /// Represents a generic menu command that can be executed
     /// </summary>
-    public class MenuCommand
+    public class MenuCommand : IMenuCommand
     {
-        // The text to display for the item
-        string text;
-
         // Controls if the UI for the command is enabled
         bool enabled = true;
 
         // The event handler that will be called when the item is invoked
         protected MenuCommandExecutor ExecuteEvent;
 
-        // User data
-        object tag;
-
-        // Indicates that a seperator break will be drawn before and\or after this item
-        bool breakBefore = false;
-        bool breakAfter = false;
-
-        // Child menu commands (i.e. submenu)
-        List<MenuCommand> childCommands = new List<MenuCommand>();
-
-        // Raised when the Enabled property changes
+        /// <summary>
+        /// Raised when the Enabled property changes
+        /// </summary>
         public event EventHandler EnabledChanged;
 
         /// <summary>
@@ -42,16 +26,16 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public MenuCommand(MenuCommandExecutor executeEvent)
         {
-            this.ExecuteEvent = executeEvent;
+            ExecuteEvent = executeEvent;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MenuCommand(string text, MenuCommandExecutor executeEvent)
+        public MenuCommand(string text, MenuCommandExecutor executeEvent) :
+            this(executeEvent)
         {
-            this.text = text;
-            this.ExecuteEvent = executeEvent;
+            Text = text;
         }
 
         /// <summary>
@@ -59,17 +43,13 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public MenuCommand(string text)
         {
-            this.text = text;
+            Text = text;
         }
 
         /// <summary>
         /// The Text to display in the menu item
         /// </summary>
-        public string Text
-        {
-            get { return text; }
-            set { text = value; }
-        }
+        public string Text { get; set; }
 
         /// <summary>
         /// Gets or sets if the UI for the command is enabled
@@ -89,57 +69,40 @@ namespace ShipWorks.ApplicationCore.Interaction
 
                 enabled = value;
 
-                if (EnabledChanged != null)
-                {
-                    EnabledChanged(this, EventArgs.Empty);
-                }
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         /// <summary>
         /// User data associated with the item
         /// </summary>
-        public object Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
-        /// Indicates that a seperator line will be drawn before this item
+        /// Indicates that a separator line will be drawn before this item
         /// </summary>
-        public bool BreakBefore
-        {
-            get { return breakBefore; }
-            set { breakBefore = value; }
-        }
+        public bool BreakBefore { get; set; }
 
         /// <summary>
-        /// Indicates that a seperator line will be drawn after this item
+        /// Indicates that a separator line will be drawn after this item
         /// </summary>
-        public bool BreakAfter
-        {
-            get { return breakAfter; }
-            set { breakAfter = value; }
-        }
+        public bool BreakAfter { get; set; }
 
         /// <summary>
         /// The child MenuCommand objects of this command.  (i.e. submenu items)
         /// </summary>
-        public List<MenuCommand> ChildCommands
-        {
-            get { return childCommands; }
-        }
+        public List<IMenuCommand> ChildCommands { get; } = new List<IMenuCommand>();
 
         /// <summary>
         /// Execute the command
         /// </summary>
-        public void ExecuteAsync(Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
+        public Task ExecuteAsync(Control owner, IEnumerable<long> selectedKeys, MenuCommandCompleteEventHandler callback)
         {
-            if (ExecuteEvent != null)
-            {
-                ExecuteEvent(new MenuCommandExecutionContext(this, owner, selectedKeys, callback));
-            }
+            var context = new MenuCommandExecutionContext(this, owner, selectedKeys, callback);
+
+            ExecuteEvent?.Invoke(context);
+
+            return Task.CompletedTask;
         }
     }
 }

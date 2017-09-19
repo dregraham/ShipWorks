@@ -7,6 +7,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
     /// <summary>
     /// Allow objects to be created on a Tls only app domain
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public static class TlsAppDomain
     {
         private static readonly AppDomain appDomain;
@@ -18,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
         {
             appDomain = AppDomain.CreateDomain("TLS AppDomain");
 
-            // Creating this object should set the security to 
+            // Creating this object should set the security to
             Create<SecurityProtocolSettings>();
         }
 
@@ -27,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
         /// </summary>
         public static T Create<T>(params object[] constructorParameters)
         {
-            return (T)appDomain.CreateInstanceAndUnwrap(
+            return (T) appDomain.CreateInstanceAndUnwrap(
                 Assembly.GetExecutingAssembly().FullName,
                 typeof(T).FullName,
                 false,

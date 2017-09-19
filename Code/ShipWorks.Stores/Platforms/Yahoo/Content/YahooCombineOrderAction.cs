@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content.CombineOrderActions;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.Content
 {
@@ -26,7 +27,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.Content
                 x => new YahooOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    YahooOrderID = x.YahooOrderID
+                    YahooOrderID = x.YahooOrderID,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

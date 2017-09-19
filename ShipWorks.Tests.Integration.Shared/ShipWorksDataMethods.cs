@@ -4,14 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -26,6 +31,27 @@ namespace ShipWorks.Tests.Integration.Shared
     public class ShipWorksDataMethods
     {
         static readonly Dictionary<EntityType, PrefetchPath2> prefetchPaths = new Dictionary<EntityType, PrefetchPath2>();
+
+        /// <summary>
+        /// Get a fully loaded order with all its children
+        /// </summary>
+        public static async Task<IOrderEntity> GetOrder(long orderID, params IPrefetchPathElementCore[] prefetchPaths)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var sqlAdapter = lifetimeScope.Resolve<ISqlAdapterFactory>().Create();
+                var queryFactory = new QueryFactory();
+                var query = queryFactory.Order
+                    .Where(OrderFields.OrderID == orderID);
+
+                if (prefetchPaths?.Any() == true)
+                {
+                    query = query.WithPath(prefetchPaths.First(), prefetchPaths.Skip(1).ToArray());
+                }
+
+                return await sqlAdapter.FetchFirstAsync(query);
+            }
+        }
 
         public static EntityBase2 GetEntity(long entityID)
         {

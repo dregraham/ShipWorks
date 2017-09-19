@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -16,6 +15,7 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using Microsoft.WindowsAzure.Storage;
@@ -23,7 +23,6 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Stores;
@@ -36,11 +35,10 @@ namespace ShipWorks.ApplicationCore.Crashes
     public static class CrashSubmitter
     {
         // Use this for trying to submit crashes internally; there have been
-        // problems tyring to connect to the other URL while inside the network
-        //const string url = "http://intapp01/shipworks/crash.ashx";
+        // problems trying to connect to the other URL while inside the network
         const string url = "http://springfield.interapptive.com/shipworks/crash.ashx";
 
-        // Properties we dont want to display for exception output
+        // Properties we don't want to display for exception output
         static Regex reUnwantedProperties = new Regex(@"^(StackTrace|Source|TargetSite|InnerException|Data)$", RegexOptions.IgnoreCase);
 
         /// <summary>
@@ -128,8 +126,8 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Formats the description of the exception into a unique identifiable string. The reason for
         /// this method and not just a simpler way of producing the description is that this
-        /// string will be used to find existing bugs in the database to add occurances to, instead of adding
-        /// new bugs for each occurance.
+        /// string will be used to find existing bugs in the database to add occurrences to, instead of adding
+        /// new bugs for each occurrence.
         /// </summary>
         public static string GetIdentifier(Exception ex)
         {
@@ -158,7 +156,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 assemblyVersion.Revision);
             desc.AppendFormat("V{0} ", version);
 
-            // Get the class name of the exception that occured
+            // Get the class name of the exception that occurred
             desc.Append(ex.GetType().Name);
 
             // Now add exception message and inner exception message (if there is one)
@@ -346,7 +344,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         }
 
         /// <summary>
-        /// Get a summary of the exception, that can be used as body of our fb case
+        /// Get a summary of the exception, that can be used as body of our FogBugz case
         /// </summary>
         private static string GetExceptionSummary(Exception ex)
         {
@@ -410,7 +408,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 sb.AppendFormat("{0}{1}Invoking Callstack:", tab, indent);
                 sb.AppendLine();
 
-                AppendStackTrace(backgroundEx.InvokingThreadTrace.ToString(), sb, tab, indent);
+                AppendStackTrace(backgroundEx.InvokingThreadTrace.ToString(), sb, tab, indent, backgroundEx.CausalityChain);
             }
             else
             {
@@ -434,7 +432,7 @@ namespace ShipWorks.ApplicationCore.Crashes
                 sb.AppendFormat("{0}{1}Callstack:", tab, indent);
                 sb.AppendLine();
 
-                AppendStackTrace(ex.StackTrace, sb, tab, indent);
+                AppendStackTrace(ex.StackTrace, sb, tab, indent, FlowReservoir.ExtendedStack);
 
                 if (ex.InnerException != null)
                 {
@@ -449,7 +447,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// <summary>
         /// Append a formatted version of the given stack trace
         /// </summary>
-        private static void AppendStackTrace(string stackTrace, StringBuilder sb, string tab, string indent)
+        private static void AppendStackTrace(string stackTrace, StringBuilder sb, string tab, string indent, string causalityChain)
         {
             if (string.IsNullOrEmpty(stackTrace))
             {
@@ -465,6 +463,18 @@ namespace ShipWorks.ApplicationCore.Crashes
                         sb.AppendFormat("{0}{1}{1}{2}", tab, indent, line.Trim());
                         sb.AppendLine();
                     }
+                }
+            }
+
+            if (!string.IsNullOrEmpty(causalityChain))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{tab}{indent}CAUSALITY CHAIN:");
+
+                foreach (string line in causalityChain.Split('\n', '\r').Where(x => !x.IsNullOrWhiteSpace()))
+                {
+                    sb.AppendFormat("{0}{1}{1}{2}", tab, indent, line.Trim());
+                    sb.AppendLine();
                 }
             }
         }

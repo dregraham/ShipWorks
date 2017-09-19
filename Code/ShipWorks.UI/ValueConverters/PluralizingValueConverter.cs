@@ -21,7 +21,7 @@ namespace ShipWorks.UI.ValueConverters
             long numericValue = System.Convert.ToInt64(value);
             string text = parameter?.ToString() ?? string.Empty;
 
-            return numericValue > 1 ? text + "s" : text;
+            return numericValue != 1 ? text + "s" : text;
         }
 
         /// <summary>

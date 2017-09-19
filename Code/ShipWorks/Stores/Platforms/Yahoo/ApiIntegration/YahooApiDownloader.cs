@@ -15,6 +15,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
@@ -41,14 +42,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         [NDependIgnoreTooManyParams(Justification =
             "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public YahooApiDownloader(YahooStoreEntity store,
-            Func<YahooStoreEntity, IYahooApiWebClient> createWebClient,
+            IYahooApiWebClient webClient,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
             Func<StoreEntity, YahooStoreType> getStoreType) :
             base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
-            this.webClient = createWebClient(store);
+            this.webClient = webClient;
             this.sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "YahooApiDownloader.LoadOrder");
         }
 
@@ -110,11 +111,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderList">The order list.</param>
         private async Task DownloadNewOrders(List<long> orderList)
         {
+            var store = Store as IYahooStoreEntity;
             int expectedCount = orderList.Count;
 
             foreach (long orderID in orderList)
             {
-                YahooResponse response = webClient.GetOrder(orderID);
+                YahooResponse response = webClient.GetOrder(store, orderID);
 
                 if (response.ResponseResourceList?.OrderList?.Order?.FirstOrDefault() == null)
                 {
@@ -232,7 +234,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 return EnumHelper.GetDescription((YahooApiOrderStatus) statusID);
             }
 
-            string status = webClient.GetCustomOrderStatus(statusID)
+            var store = Store as IYahooStoreEntity;
+            string status = webClient.GetCustomOrderStatus(store, statusID)
                 .ResponseResourceList?.CustomOrderStatusList?.CustomOrderStatus?.FirstOrDefault()?
                 .Code;
 
@@ -488,7 +491,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
 
                 // If item is null, that means it is not in the cache
                 // So make the call to get the item weight and cache it
-                response = webClient.GetItem(itemID);
+                response = webClient.GetItem(store, itemID);
 
                 log.Info("Retrieved item information from yahoo api.");
             }
@@ -598,17 +601,19 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         {
             bool done = false;
 
+            var store = Store as IYahooStoreEntity;
             List<long> orders = new List<long>();
 
             while (!done)
             {
-                YahooResponse response = webClient.GetOrderRange(nextOrderNumber);
+                YahooResponse response = webClient.GetOrderRange(store, nextOrderNumber);
 
                 long? nextNumberToTry = await CheckForErrors(response, nextOrderNumber).ConfigureAwait(false);
 
                 if (nextNumberToTry != null)
                 {
                     nextOrderNumber = nextNumberToTry.Value;
+                    response = webClient.GetOrderRange(store, nextOrderNumber);
                 }
 
                 // After getting more orders, Check if the last order number in the list is the same
@@ -667,10 +672,12 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 throw new DownloadException(error.Message);
             }
 
+            var store = Store as IYahooStoreEntity;
+
             // If backup order number exists, try that and check for errors
             if (backupOrderNumber != null)
             {
-                YahooResponse newResponse = webClient.GetOrderRange(backupOrderNumber.Value);
+                YahooResponse newResponse = webClient.GetOrderRange(store, backupOrderNumber.Value);
 
                 if (newResponse?.ErrorResourceList?.Error == null)
                 {
@@ -685,7 +692,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             // Backup order number didn't exist, lets try the last 5 order numbers
             for (int i = 0; i < 5; i++)
             {
-                YahooResponse newResponse = webClient.GetOrderRange(nextOrderNumber);
+                YahooResponse newResponse = webClient.GetOrderRange(store, nextOrderNumber);
 
                 if (newResponse?.ErrorResourceList?.Error == null)
                 {

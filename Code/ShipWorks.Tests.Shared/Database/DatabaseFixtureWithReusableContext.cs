@@ -4,7 +4,6 @@ using Autofac;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Users;
 
 namespace ShipWorks.Tests.Shared.Database
@@ -45,6 +44,9 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Creates the reusable data context.
         /// </summary>
+        /// <remarks>
+        /// Removed initialization of LogSession because it makes getting details on specific test failures difficult.
+        /// </remarks>
         private DataContext CreateReusableDataContext(Action<IContainer> initializeContainer, Guid instance)
         {
             var newContext = CreateDataContext(initializeContainer);
@@ -55,7 +57,7 @@ namespace ShipWorks.Tests.Shared.Database
             newContext.Mock.Override<IMessageHelper>();
 
             ShipWorksSession.Initialize(instance);
-            LogSession.Initialize();
+
             UserSession.InitializeForCurrentDatabase();
 
             return newContext;

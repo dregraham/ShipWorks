@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
@@ -11,8 +13,6 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using RestSharp.Authenticators;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication.Throttling;
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="shippingMethod">Carrier and service for this shipment</param>
         /// <param name="orderItems">The list of BigCommerceItem's in this shipment</param>
         /// <exception cref="BigCommerceException" />
-        public void UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber,
+        public async Task UploadOrderShipmentDetails(long orderNumber, long orderAddressID, string trackingNumber,
             Tuple<string, string> shippingMethod, List<BigCommerceItem> orderItems)
         {
             string uploadShipmentResource = BigCommerceWebClientEndpoints.GetUploadShipmentResource(orderNumber);
@@ -137,7 +137,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.CreateShipment, restRequest, ProgressReporter);
 
-                restResponse = throttler.ExecuteRequest<RestRequest, RestResponse>(requestThrottleArgs, MakeRequest<RestRequest, RestResponse>);
+                restResponse = await throttler.ExecuteRequestAsync<RestRequest, RestResponse>(requestThrottleArgs,
+                    MakeRequest<RestRequest, RestResponse>).ConfigureAwait(false);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -164,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Updates the online status of orders
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        public void UpdateOrderStatus(int orderNumber, int statusCode)
+        public async Task UpdateOrderStatus(int orderNumber, int statusCode)
         {
             string updateOrderStatusResource = BigCommerceWebClientEndpoints.GetOrderResource(orderNumber);
 
@@ -185,8 +186,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.UpdateOrderStatus, restRequest, ProgressReporter);
 
-                restResponse =
-                    throttler.ExecuteRequest<IRestRequest, IRestResponse>(requestThrottleArgs, MakeRequest<IRestRequest, RestResponse>);
+                restResponse = await throttler.ExecuteRequestAsync<IRestRequest, RestResponse>(
+                    requestThrottleArgs, MakeRequest<IRestRequest, RestResponse>).ConfigureAwait(false);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -213,13 +214,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderSearchCriteria">Get order count based on BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>Number of orders matching criteria</returns>
         /// <exception cref="BigCommerceException" />
-        public int GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
+        public async Task<int> GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             // Get the number of created orders
-            int createdCount = GetOrderCount(orderSearchCriteria, BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            int createdCount = await GetOrderCount(orderSearchCriteria, BigCommerceWebClientOrderDateSearchType.CreatedDate).ConfigureAwait(false);
 
             // Get the number of modified orders
-            int modifiedCount = GetOrderCount(orderSearchCriteria, BigCommerceWebClientOrderDateSearchType.ModifiedDate);
+            int modifiedCount = await GetOrderCount(orderSearchCriteria, BigCommerceWebClientOrderDateSearchType.ModifiedDate).ConfigureAwait(false);
 
             // Return the sum of modified and created orders
             return modifiedCount + createdCount;
@@ -232,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderDateSearchType">Filter by BigCommerceWebClientOrderDateSearchType.  To get all orders, we have to query by created and modified date in separate calls.</param>
         /// <returns>Number of orders matching criteria</returns>
         /// <exception cref="BigCommerceException" />
-        private int GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria, BigCommerceWebClientOrderDateSearchType orderDateSearchType)
+        private async Task<int> GetOrderCount(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria, BigCommerceWebClientOrderDateSearchType orderDateSearchType)
         {
             RestRequest getOrderCountRequest = new RestRequest(BigCommerceWebClientEndpoints.GetOrderCountResource());
 
@@ -253,8 +254,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderCount, getOrderCountRequest, ProgressReporter);
 
-                restResponse =
-                    throttler.ExecuteRequest<RestRequest, BigCommerceGetOrderCountResponse>(requestThrottleArgs, MakeRequest<RestRequest, BigCommerceGetOrderCountResponse>);
+                restResponse = await throttler.ExecuteRequestAsync<RestRequest, BigCommerceGetOrderCountResponse>(
+                        requestThrottleArgs,
+                        MakeRequest<RestRequest, BigCommerceGetOrderCountResponse>)
+                    .ConfigureAwait(false);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -282,7 +285,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <returns>The response from the API call</returns>
         /// <exception cref="BigCommerceException" />
         /// <exception cref="BigCommerceWebClientRequestThrottledException" />
-        private TRestResponse MakeRequest<TRestRequest, TRestResponse>(TRestRequest request)
+        private async Task<TRestResponse> MakeRequest<TRestRequest, TRestResponse>(TRestRequest request)
             where TRestRequest : IRestRequest
             where TRestResponse : new()
         {
@@ -290,7 +293,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             try
             {
                 // Make a call to the api
-                IRestResponse restResponse = restClientFactory.Create(store).Execute(request);
+                IRestResponse restResponse = await restClientFactory.Create(store).ExecuteTaskAsync(request).ConfigureAwait(false);
 
                 // Serialize the response and log it
                 log.Error(restResponse.Content);
@@ -443,7 +446,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="orderSearchCriteria">Filter by BigCommerceWebClientOrderSearchCriteria.</param>
         /// <returns>List of orders matching criteria, sorted by LastUpdate ascending </returns>
-        public List<BigCommerceOrder> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
+        public async Task<List<BigCommerceOrder>> GetOrders(BigCommerceWebClientOrderSearchCriteria orderSearchCriteria)
         {
             List<BigCommerceOrder> ordersToReturn = new List<BigCommerceOrder>();
 
@@ -470,7 +473,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrders, request, ProgressReporter);
 
-                ordersRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceOrder>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceOrder>>);
+                ordersRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceOrder>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceOrder>>).ConfigureAwait(false);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -504,7 +507,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                         break;
                     }
 
-                    PopulateOrder(order);
+                    await PopulateOrder(order).ConfigureAwait(false);
                     ordersToReturn.Add(order);
                 }
             }
@@ -516,25 +519,26 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Loads additional order info (product images, shipments, shipping addresses, coupons, etc...)
         /// </summary>
         /// <param name="order">The order to populate</param>
-        private void PopulateOrder(BigCommerceOrder order)
+        private async Task PopulateOrder(BigCommerceOrder order)
         {
-            LoadProductImages(order);
+            await LoadProductImages(order).ConfigureAwait(false);
 
             // Get the order shipping addresses
-            PopulateOrderShippingAddresses(order);
+            await PopulateOrderShippingAddresses(order).ConfigureAwait(false);
 
             // Get the order coupons
             RestRequest request = new RestRequest();
             request.Resource = order.coupons.resource;
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetCoupons, request, ProgressReporter);
-            List<BigCommerceCoupon> couponsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceCoupon>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceCoupon>>);
+            List<BigCommerceCoupon> couponsRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceCoupon>>(
+                requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceCoupon>>).ConfigureAwait(false);
             order.OrderCoupons = couponsRestResponse;
         }
 
         /// <summary>
         /// Populate the order's OrderShippingAddresses
         /// </summary>
-        private void PopulateOrderShippingAddresses(BigCommerceOrder order)
+        private async Task PopulateOrderShippingAddresses(BigCommerceOrder order)
         {
             // Get the order shipping addresses
             RestRequest request = new RestRequest();
@@ -542,7 +546,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             request.AddParameter("limit", BigCommerceConstants.MaxPageSize);
 
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, ProgressReporter);
-            List<BigCommerceAddress> shipToAddressesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceAddress>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceAddress>>);
+            List<BigCommerceAddress> shipToAddressesRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceAddress>>(
+                requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceAddress>>).ConfigureAwait(false);
             order.OrderShippingAddresses = shipToAddressesRestResponse;
 
             // If there were no shipping addresses, just make sure we have a non-null one to work with in our join below
@@ -583,8 +588,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     request.Resource = string.Format("{0}/{1}.json", order.shipping_addresses.resource, realShipmentOrderAddressID.ToString());
                     requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, ProgressReporter);
 
-                    BigCommerceAddress fixedShipmentAddress =
-                        throttler.ExecuteRequest<RestRequest, BigCommerceAddress>(requestThrottleArgs, MakeRequest<RestRequest, BigCommerceAddress>);
+                    BigCommerceAddress fixedShipmentAddress = await throttler.ExecuteRequestAsync<RestRequest, BigCommerceAddress>(
+                        requestThrottleArgs, MakeRequest<RestRequest, BigCommerceAddress>).ConfigureAwait(false);
 
                     // Set the shipment address id to this product address id
                     fixedShipmentAddress.id = realShipmentOrderAddressID;
@@ -598,13 +603,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get a list of Order Products for the order
         /// </summary>
-        public List<BigCommerceProduct> GetOrderProducts(long orderNumber)
+        public async Task<IEnumerable<BigCommerceProduct>> GetOrderProducts(long orderNumber)
         {
             // Get the order shipments
             RestRequest request = new RestRequest();
             request.Resource = BigCommerceWebClientEndpoints.GetOrderProducts(orderNumber);
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderProducts, request, ProgressReporter);
-            List<BigCommerceProduct> orderProductsRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceProduct>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>);
+            List<BigCommerceProduct> orderProductsRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceProduct>>(
+                requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>).ConfigureAwait(false);
 
             return orderProductsRestResponse;
         }
@@ -612,12 +618,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the list of BigCommerce online order statuses
         /// </summary>
-        public IEnumerable<BigCommerceOrderStatus> FetchOrderStatuses()
+        public async Task<IEnumerable<BigCommerceOrderStatus>> FetchOrderStatuses()
         {
             // If we don't have any order statuses, retrieve them
             if (bigCommerceOrderStatuses.None())
             {
-                bigCommerceOrderStatuses = RetrieveOrderStatusesFromStore();
+                bigCommerceOrderStatuses = await RetrieveOrderStatusesFromStore().ConfigureAwait(false);
             }
 
             return bigCommerceOrderStatuses;
@@ -627,7 +633,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Get order statuses from the store
         /// </summary>
         /// <returns></returns>
-        private List<BigCommerceOrderStatus> RetrieveOrderStatusesFromStore()
+        private async Task<List<BigCommerceOrderStatus>> RetrieveOrderStatusesFromStore()
         {
             // Create a request for getting order statuses
             RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetOrderStatusesPath());
@@ -636,7 +642,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetOrderStatuses, request, ProgressReporter);
 
-                return throttler.ExecuteRequest<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceApiOrderStatus>>)
+                var response = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceApiOrderStatus>>(requestThrottleArgs,
+                        MakeRequest<RestRequest, List<BigCommerceApiOrderStatus>>).ConfigureAwait(false);
+                return response
                     .Where(x => !string.IsNullOrWhiteSpace(x.name))
                     .Select(x => new BigCommerceOrderStatus(x.id, x.name))
                     .ToList();
@@ -656,7 +664,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="bigCommerceOrder">The BigCommerce order</param>
         /// <returns>List of BigCommerceProduct for the order</returns>
-        private List<BigCommerceProduct> GetOrderProducts(BigCommerceOrder bigCommerceOrder)
+        private async Task<IEnumerable<BigCommerceProduct>> GetOrderProducts(BigCommerceOrder bigCommerceOrder)
         {
             string orderProductsResource = bigCommerceOrder.products.resource;
             List<BigCommerceProduct> products = new List<BigCommerceProduct>();
@@ -681,8 +689,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     RequestThrottleParameters requestThrottleArgs =
                         new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProducts, request, ProgressReporter);
 
-                    List<BigCommerceProduct> pageOfProductsRestResponse =
-                        throttler.ExecuteRequest<RestRequest, List<BigCommerceProduct>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>);
+                    List<BigCommerceProduct> pageOfProductsRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceProduct>>(
+                        requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceProduct>>).ConfigureAwait(false);
 
                     // If the page is empty, pageOfProductsRestResponse is null, so break out of the loop
                     if (pageOfProductsRestResponse == null)
@@ -721,10 +729,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Loads the product images for products in an order
         /// </summary>
         /// <param name="order">The order for which to get product images</param>
-        private void LoadProductImages(BigCommerceOrder order)
+        private async Task LoadProductImages(BigCommerceOrder order)
         {
             // Get the order products from BigCommerce for this order
-            order.OrderProducts = GetOrderProducts(order);
+            var products = await GetOrderProducts(order).ConfigureAwait(false);
+            order.OrderProducts = products.ToList();
 
             // Get the store specific product image cache
             LruCache<int, BigCommerceProductImage> productImageCache = BigCommerceProductImageCache.Instance.GetStoreProductImageCache(
@@ -737,7 +746,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 if (productImage == null)
                 {
                     // Get the product images from BigCommerce
-                    List<BigCommerceImage> productImagesRestResponse = GetProductImages(order.id, product.product_id);
+                    List<BigCommerceImage> productImagesRestResponse = await GetProductImages(order.id, product.product_id).ConfigureAwait(false);
 
                     // If we received a productImagesRestResponse, process it
                     // If we did not, BigCommerce didn't return any relevant info about the product image, so we don't want to
@@ -789,7 +798,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="orderId">The BigCommerce order id for which to get images</param>
         /// <param name="productId">The BigCommerce product id for which to get images</param>
         /// <returns></returns>
-        private List<BigCommerceImage> GetProductImages(int orderId, int productId)
+        private async Task<List<BigCommerceImage>> GetProductImages(int orderId, int productId)
         {
             // Create a request for getting order product images
             RestRequest request = new RestRequest(BigCommerceWebClientEndpoints.GetProductImagesResource(productId));
@@ -799,7 +808,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetProduct, request, ProgressReporter);
 
-                productImagesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceImage>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceImage>>);
+                productImagesRestResponse = await throttler.ExecuteRequestAsync<RestRequest, List<BigCommerceImage>>(requestThrottleArgs,
+                    MakeRequest<RestRequest, List<BigCommerceImage>>).ConfigureAwait(false);
             }
             catch (BigCommerceException bigCommerceException)
             {
@@ -821,7 +831,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// Attempt to get an order count to test connecting to BigCommerce.  If any error, assume connection failed.
         /// </summary>
         /// <exception cref="BigCommerceException" />
-        public void TestConnection()
+        public async Task TestConnection()
         {
             // See if we can successfully call GetOrderCount, if we throw, we can't connect or login
             try
@@ -830,7 +840,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow,
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow);
 
-                GetOrderCount(orderSearchCriteria);
+                await GetOrderCount(orderSearchCriteria).ConfigureAwait(false);
             }
             catch (BigCommerceException ex)
             {

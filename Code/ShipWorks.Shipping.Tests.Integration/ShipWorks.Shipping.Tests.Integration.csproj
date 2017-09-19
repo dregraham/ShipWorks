@@ -182,6 +182,7 @@
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReturnItemRepositoryTest.cs" />
     <Compile Include="Services\InsuranceViewModelTest.cs" />
     <Compile Include="Services\ShipmentProcessorSteps\GetLabel\GetLabelManipulatorRegistrationTest.cs" />
     <Compile Include="Services\ShipmentsLoaderTest.cs" />

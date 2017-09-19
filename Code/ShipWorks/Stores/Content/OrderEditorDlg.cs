@@ -279,14 +279,14 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Changing the local status
         /// </summary>
-        private void OnChangeLocalStatus(object sender, EventArgs e)
+        private async void OnChangeLocalStatus(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            command.ExecuteAsync(this, new[] { orderID }, OnAsyncSetStatusCompleted);
+            await command.ExecuteAsync(this, new[] { orderID }, OnAsyncSetStatusCompleted).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ThreeDCartOrderSearchID = source.ThreeDCartOrderSearchID;
             OrderID = source.OrderID;
             ThreeDCartOrderID = source.ThreeDCartOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             ThreeDCartOrder = source.ThreeDCartOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ThreeDCartOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity ThreeDCartOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ThreeDCartOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IThreeDCartOrderEntity ThreeDCartOrder { get; }

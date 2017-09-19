@@ -1,21 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.UI;
 using Interapptive.Shared.UI;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -27,45 +15,20 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // collection of order keys passed in, representing those to have feedback left
         List<long> orderIds;
 
-        long selectedItemId;
-
-        string comments = "";
-
-        CommentTypeCodeType feedbackType = CommentTypeCodeType.Positive;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public LeaveFeedbackDlg(List<long> orderIds)
+        public LeaveFeedbackDlg(IEnumerable<long> orderIds)
         {
             InitializeComponent();
 
-            this.orderIds = orderIds;
+            this.orderIds = orderIds.ToList();
         }
 
         /// <summary>
-        /// Type of feedback being left
+        /// Details for leaving feedback
         /// </summary>
-        public CommentTypeCodeType FeedbackType
-        {
-            get { return feedbackType; }
-        }
-
-        /// <summary>
-        /// Feedback contents
-        /// </summary>
-        public string Comments
-        {
-            get { return comments; }
-        }
-
-        /// <summary>
-        /// If the user selected a single item to leave feedback for, this is the key
-        /// </summary>
-        public long SelectedItemID
-        {
-            get { return selectedItemId; }
-        }
+        public EbayFeedbackDetails Details { get; private set; }
 
         /// <summary>
         /// Selected to submit feedback
@@ -79,9 +42,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // move values from the UI
-            comments = commentsTextBox.Text;
-            feedbackType = CommentTypeCodeType.Positive;
-            selectedItemId = itemSelectionControl.SelectedKey;
+            Details = new EbayFeedbackDetails
+            {
+                Comments = commentsTextBox.Text,
+                FeedbackType = CommentTypeCodeType.Positive,
+                SelectedItemID = itemSelectionControl.SelectedKey
+            };
 
             DialogResult = DialogResult.OK;
         }

@@ -5,8 +5,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.SureDone
@@ -24,8 +26,8 @@ namespace ShipWorks.Stores.Platforms.SureDone
         /// <summary>
         /// Constructor
         /// </summary>
-        public SureDoneStoreType(StoreEntity store)
-            : base(store)
+        public SureDoneStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
         }
 

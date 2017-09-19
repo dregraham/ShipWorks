@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
@@ -19,8 +21,8 @@ namespace ShipWorks.Stores.Platforms.Choxi
         /// <summary>
         /// Initializes a new instance of the <see cref="ChoxiStoreType"/> (formerly NoMoreRack) class.
         /// </summary>
-        public ChoxiStoreType(StoreEntity store)
-            : base(store)
+        public ChoxiStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }

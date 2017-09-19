@@ -16,8 +16,10 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -30,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComDownloader));
         GenericCsvMap csvMap;
+        private readonly IBuyDotComFtpClientFactory ftpClientFactory;
 
         /// <summary>
         /// Constructor
@@ -37,9 +40,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         public BuyDotComDownloader(StoreEntity store,
             Func<StoreEntity, BuyDotComStoreType> getStoreType,
             IConfigurationData configurationData,
+            IBuyDotComFtpClientFactory ftpClientFactory,
             ISqlAdapterFactory sqlAdapterFactory)
             : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
+            this.ftpClientFactory = ftpClientFactory;
             string mapXml = ResourceUtility.ReadString("ShipWorks.Stores.Platforms.BuyDotCom.BuyDotComOrderImportMap.swcsvm");
 
             csvMap = new GenericCsvMap(new BuyDotComOrderImportSchema(), mapXml);
@@ -81,9 +86,10 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 }
                 else
                 {
-                    using (BuyDotComFtpClient ftpClient = new BuyDotComFtpClient((BuyDotComStoreEntity) Store))
+                    using (IBuyDotComFtpClient ftpClient = await ftpClientFactory.LoginAsync(Store as IBuyDotComStoreEntity).ConfigureAwait(false))
+                    //using (BuyDotComFtpClient ftpClient = new BuyDotComFtpClient((BuyDotComStoreEntity) Store))
                     {
-                        List<string> fileNames = ftpClient.GetOrderFileNames();
+                        List<string> fileNames = await ftpClient.GetOrderFileNames().ConfigureAwait(false);
 
                         if (fileNames.Count == 0)
                         {
@@ -133,12 +139,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Download File and process orders
         /// </summary>
-        private async Task<bool> DownloadFtpFile(string fileName, BuyDotComFtpClient ftpClient)
+        private async Task<bool> DownloadFtpFile(string fileName, IBuyDotComFtpClient ftpClient)
         {
             try
             {
                 // Download the content of the file
-                string fileContent = ftpClient.GetOrderFileContent(fileName);
+                string fileContent = await ftpClient.GetOrderFileContent(fileName).ConfigureAwait(false);
 
                 // Load orders from the content
                 bool result = await LoadOrdersFromCsv(fileContent).ConfigureAwait(false);
@@ -146,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 // Move the file to the Archive folder if configured (default)
                 if (BuyDotComUtility.ArchiveFileAfterDownload)
                 {
-                    ftpClient.ArchiveOrder(fileName);
+                    await ftpClient.ArchiveOrder(fileName).ConfigureAwait(false);
                 }
 
                 return result;
@@ -201,10 +207,10 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         private Task<GenericResult<OrderEntity>> InstantiateOrder(GenericCsvReader reader)
         {
             // pull out the order number
-            long orderNumber = reader.ReadField("Order.Number", 0L, false);
+            string orderNumber = reader.ReadField("Order.Number", "0");
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            return InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+            return InstantiateOrder(new AlphaNumericOrderIdentifier(orderNumber));
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
@@ -20,8 +22,8 @@ namespace ShipWorks.Stores.Platforms.Brightpearl
         /// Initializes a new instance of the <see cref="BrightpearlStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public BrightpearlStoreType(StoreEntity store)
-            : base(store)
+        public BrightpearlStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
         }
 

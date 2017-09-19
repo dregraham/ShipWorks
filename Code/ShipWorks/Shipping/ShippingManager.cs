@@ -582,7 +582,7 @@ namespace ShipWorks.Shipping
         /// Override one off service types that are shipworks specific to
         /// their more widely known counterparts
         /// </remarks>
-        public static string GetOverriddenSerivceUsed(ShipmentEntity shipment)
+        public static string GetOverriddenServiceUsed(ShipmentEntity shipment)
         {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
             return GetServiceUsedInternal(shipment, shipmentType, shipmentType.GetOveriddenServiceDescription);
@@ -793,9 +793,6 @@ namespace ShipWorks.Shipping
                     {
                         throw new ShippingException("The store the shipment was in has been deleted.");
                     }
-
-                    // Get the ShipmentType instance
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
                     // Ensure the carrier specific data has been loaded in case the shipment type needs it for voiding
                     EnsureShipmentLoaded(shipment);

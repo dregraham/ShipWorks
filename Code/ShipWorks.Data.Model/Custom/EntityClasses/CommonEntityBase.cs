@@ -3,6 +3,7 @@ using Interapptive.Shared.Collections;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
+using System.Data.SqlTypes;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -83,6 +84,11 @@ namespace ShipWorks.Data.Model.EntityClasses
                     if (field.DataType == typeof(bool))
                     {
                         field.CurrentValue = false;
+                    }
+
+                    if (field.DataType == typeof(DateTime))
+                    {
+                        field.CurrentValue = SqlDateTime.MinValue.Value;
                     }
                 }
             }

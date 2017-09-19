@@ -20,6 +20,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken);
 
         /// <summary>
+        /// GetOrders from the given next token
+        /// </summary>
+        ChannelAdvisorOrderResult GetOrders(string nextToken, string refreshToken);
+
+        /// <summary>
         /// Get the profile
         /// </summary>
         ChannelAdvisorProfilesResponse GetProfiles(string refreshToken);

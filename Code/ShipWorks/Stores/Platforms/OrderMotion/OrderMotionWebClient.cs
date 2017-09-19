@@ -1,53 +1,47 @@
 ﻿using System;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.OrderMotion.Udi;
-using System.IO;
-using System.Xml;
-using Interapptive.Shared.Net;
-using System.Xml.XPath;
-using ShipWorks.ApplicationCore.Logging;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.XPath;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using log4net;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
+using ShipWorks.Stores.Platforms.OrderMotion.Udi;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {
     /// <summary>
     /// Class for communicating with the OrderMotion web service
     /// </summary>
-    public class OrderMotionWebClient
+    [Component]
+    public class OrderMotionWebClient : IOrderMotionWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionWebClient));
 
-        // store we're working for
-        OrderMotionStoreEntity store;
-
         /// <summary>
-        /// Constructor
+        /// Connects to OrderMotion to test configuration
         /// </summary>
-        public OrderMotionWebClient(OrderMotionStoreEntity store)
-        {
-            this.store = store;
-        }
-
-        /// <summary>
-        /// Connects to OrderMotion to test configuraiton
-        /// </summary>
-        public void TestConnection()
+        public Task TestConnection(IOrderMotionStoreEntity store)
         {
             // make an AccountStatus Request
-            UdiRequest accountStatusRequest = CreateRequest(UdiRequestName.AccountStatus, UdiRequest.DefaultVersion);
+            UdiRequest accountStatusRequest = CreateRequest(store, UdiRequestName.AccountStatus, UdiRequest.DefaultVersion);
 
-            ProcessRequest(accountStatusRequest);
+            return ProcessRequest(accountStatusRequest);
         }
 
         /// <summary>
         /// Creates and configures a request
         /// </summary>
-        private UdiRequest CreateRequest(UdiRequestName requestName, string version)
+        private UdiRequest CreateRequest(IOrderMotionStoreEntity store, UdiRequestName requestName, string version)
         {
             UdiRequest request = new UdiRequest(requestName, version);
 
@@ -61,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Processes an ordermotion UDI Request
         /// </summary>
-        private IXPathNavigable ProcessRequest(UdiRequest request)
+        private async Task<IXPathNavigable> ProcessRequest(UdiRequest request)
         {
             StringWriter stringWriter = new StringWriter();
 
@@ -82,9 +76,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
             try
             {
-                IHttpResponseReader responseReader = submitter.GetResponse();
+                IHttpResponseReader responseReader = await submitter.GetResponseAsync().ConfigureAwait(false);
 
-                string response = responseReader.ReadResult();
+                string response = await responseReader.ReadResultAsync().ConfigureAwait(false);
 
                 // log the response
                 logEntry.LogResponse(response);
@@ -119,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         }
 
         /// <summary>
-        /// Locates error conditions in the OrderMotion reponse
+        /// Locates error conditions in the OrderMotion response
         /// </summary>
         private void ValidateResponse(XmlDocument xmlResponse)
         {
@@ -166,10 +160,10 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Retrieves an OrderMotion order from the UDI web service
         /// </summary>
-        public IXPathNavigable GetOrder(long orderNumber)
+        public Task<IXPathNavigable> GetOrder(IOrderMotionStoreEntity store, long orderNumber)
         {
             // make an AccountStatus Request
-            UdiRequest orderInformationRequest = CreateRequest(UdiRequestName.OrderInformation, UdiRequest.DefaultVersion);
+            UdiRequest orderInformationRequest = CreateRequest(store, UdiRequestName.OrderInformation, UdiRequest.DefaultVersion);
             orderInformationRequest.Parameters.Add("Level", 2.ToString());
             orderInformationRequest.Parameters.Add("OrderNumber", orderNumber.ToString());
 
@@ -179,10 +173,10 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Makes an ItemInformationRequest to OrderMotion
         /// </summary>
-        public IXPathNavigable GetItemInformation(string itemCode)
+        public Task<IXPathNavigable> GetItemInformation(IOrderMotionStoreEntity store, string itemCode)
         {
             // make an AccountStatus Request
-            UdiRequest itemInformationRequest = CreateRequest(UdiRequestName.ItemInformation, UdiRequest.DefaultVersion);
+            UdiRequest itemInformationRequest = CreateRequest(store, UdiRequestName.ItemInformation, UdiRequest.DefaultVersion);
             itemInformationRequest.Parameters.Add("ItemCode", itemCode);
 
             return ProcessRequest(itemInformationRequest);
@@ -191,10 +185,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Upload tracking information to OrderMotion
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public Task UploadShipmentDetails(IOrderMotionStoreEntity store, ShipmentEntity shipment, OrderDetail order)
         {
-            OrderMotionOrderEntity order = shipment.Order as OrderMotionOrderEntity;
-
             string shipmentNumber = String.Format("{0}-{1}", order.OrderNumber, order.OrderMotionShipmentID);
             string trackingNumber = shipment.TrackingNumber;
 
@@ -207,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     }
                 });
 
-            UdiRequest shipmentUpdateRequest = CreateRequest(UdiRequestName.ShipmentStatusUpdate, UdiRequest.DefaultVersion);
+            UdiRequest shipmentUpdateRequest = CreateRequest(store, UdiRequestName.ShipmentStatusUpdate, UdiRequest.DefaultVersion);
             shipmentUpdateRequest.WriteRequestDetails(w =>
             {
                 w.WriteStartElement("ShipmentConfirmation");
@@ -221,7 +213,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 w.WriteEndElement();
             });
 
-            ProcessRequest(shipmentUpdateRequest);
+            return ProcessRequest(shipmentUpdateRequest);
         }
     }
 }

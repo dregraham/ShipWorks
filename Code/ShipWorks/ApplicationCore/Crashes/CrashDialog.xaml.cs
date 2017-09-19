@@ -139,7 +139,7 @@ namespace ShipWorks.ApplicationCore.Crashes
         /// </summary>
         private static void CloseForms()
         {
-            // We need a seperate list b\c the act of closing the form removes it from the OpenForms collection,
+            // We need a separate list b\c the act of closing the form removes it from the OpenForms collection,
             // and you cant enumerate over a collection that changes during the enumeration.
             List<Form> formsToClose = FormsApplication.OpenForms.OfType<Form>().ToList();
 

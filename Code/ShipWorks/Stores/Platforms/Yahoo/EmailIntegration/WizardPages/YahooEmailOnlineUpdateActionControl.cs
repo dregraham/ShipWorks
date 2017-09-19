@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -40,11 +41,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration.WizardPages
         /// <summary>
         /// Create the tasks selected by the user
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (statusUpdate.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooShipmentUploadTask), store).CreateInstance() };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(YahooShipmentUploadTask), store).CreateInstance(lifetimeScope) };
             }
 
             return null;

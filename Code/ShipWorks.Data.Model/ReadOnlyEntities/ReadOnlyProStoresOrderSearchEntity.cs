@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ProStoresOrderSearchID = source.ProStoresOrderSearchID;
             OrderID = source.OrderID;
             ConfirmationNumber = source.ConfirmationNumber;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             ProStoresOrder = source.ProStoresOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 12<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ConfirmationNumber { get; }
+        /// <summary> The OriginalOrderID property of the Entity ProStoresOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProStoresOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IProStoresOrderEntity ProStoresOrder { get; }

@@ -4,18 +4,17 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -23,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
     [Component]
-    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader, IOrderElementFactory
+    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
     {
         private readonly ILog log;
         private readonly IChannelAdvisorRestClient restClient;
@@ -31,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly string refreshToken;
         private readonly ISqlAdapterRetry sqlAdapter;
         private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
+        private int totalOrders;
 
         /// <summary>
         /// Constructor
@@ -73,14 +73,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
 
-                DateTime start = (await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false)) ??
+                DateTime start = (await GetOrderDateStartingPoint().ConfigureAwait(false)) ??
                     DateTime.UtcNow.AddDays(-30);
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start, refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
+                totalOrders = ordersResult.ResultCount;
 
                 Progress.Detail = $"Downloading {ordersResult.ResultCount} orders...";
 
-                while (ordersResult?.ResultCount > 0)
+                while (ordersResult?.Orders?.Any() ?? false)
                 {
                     foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
                     {
@@ -91,12 +92,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         }
 
                         // Get the products for the order to pass into the loader
-                        List<ChannelAdvisorProduct> caProducts = caOrder.Items.Select(item => restClient.GetProduct(item.ProductID, refreshToken)).ToList();
+                        List<ChannelAdvisorProduct> caProducts =
+                            caOrder.Items
+                                .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
+                                .Where(p => p != null).ToList();
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
                     }
 
-                    ordersResult = restClient.GetOrders(ordersResult.Orders.Last().CreatedDateUtc, refreshToken);
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink)
+                        ? null
+                        : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -118,7 +124,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
         {
             // Update the status
-            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
+            Progress.Detail = $"Processing order {QuantitySaved + 1} of {totalOrders}...";
+            Progress.PercentComplete = Math.Min(100 * QuantitySaved / totalOrders, 100);
 
             // Check if it has been canceled
             if (!Progress.IsCancelRequested)
@@ -143,58 +150,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
         }
-
-        /// <summary>
-        /// Create an item for the order
-        /// </summary>
-        OrderItemEntity IOrderElementFactory.CreateItem(OrderEntity order) => InstantiateOrderItem(order);
-
-        /// <summary>
-        /// Create an item attribute for the item
-        /// </summary>
-        OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
-            InstantiateOrderItemAttribute(item);
-
-        /// <summary>
-        /// Create an item attribute for the item
-        /// </summary>
-        public OrderItemAttributeEntity CreateItemAttribute(OrderItemEntity item,
-            string name,
-            string description,
-            decimal unitPrice,
-            bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
-
-        /// <summary>
-        /// Crate a charge for the given order
-        /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
-
-        /// <summary>
-        /// Create a charge for the given order
-        /// </summary>
-        OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order,
-            string type,
-            string description,
-            decimal amount) => InstantiateOrderCharge(order, type, description, amount);
-
-        /// <summary>
-        /// Create a note for the given order
-        /// </summary>
-        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order,
-            string noteText,
-            DateTime noteDate,
-            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility, true);
-
-        /// <summary>
-        /// Create a payment detail for the given order
-        /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order) =>
-            InstantiateOrderPaymentDetail(order);
-
-        /// <summary>
-        /// Create a payment detail for the given order
-        /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
-            InstantiateOrderPaymentDetail(order, label, value);
     }
 }

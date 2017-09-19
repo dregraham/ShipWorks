@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.Services
         /// Get the store for the shipment
         /// </summary>
         public StoreEntity GetRelatedStore(ShipmentEntity shipment) =>
-            StoreManager.GetRelatedStore(shipment.ShipmentID);
+            StoreManager.GetRelatedStore(shipment.OrderID);
 
         /// <summary>
         /// Get the current list of stores.  All stores are returned, regardless of security.

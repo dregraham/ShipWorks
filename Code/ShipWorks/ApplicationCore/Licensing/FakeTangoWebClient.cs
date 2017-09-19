@@ -26,6 +26,16 @@ namespace ShipWorks.ApplicationCore.Licensing
         ILog log = LogManager.GetLogger(typeof(FakeTangoWebClient));
 
         /// <summary>
+        /// Makes a request to Tango to add a store
+        /// </summary>
+        public override IAddStoreResponse AddStore(ICustomerLicense license, StoreEntity store)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml("<?xml version=\"1.0\" standalone=\"yes\" ?><License><Error><Description>Invalid Authentication</Description></Error></License>");
+            return new AddStoreResponse(doc);
+        }
+
+        /// <summary>
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>

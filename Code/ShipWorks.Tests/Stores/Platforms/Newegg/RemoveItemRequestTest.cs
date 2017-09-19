@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.Newegg;
@@ -84,34 +85,34 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived()
+        public async Task RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new RemoveItemRequest(credentials, errorRequest);
-            Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
-        public void RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse()
+        public async Task RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse()
         {
             testObject = new RemoveItemRequest(credentials, failedRequest);
-            Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
-        public void RemoveItems_ReturnsItemRemovalResult_WithItemsRemoved_WhenIsSuccessfulIsTrue()
+        public async Task RemoveItems_ReturnsItemRemovalResult_WithItemsRemoved_WhenIsSuccessfulIsTrue()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
-            ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
+            ItemRemovalResult result = await testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
             Assert.Equal(1, result.Details.Order.ItemResult.ItemsRemoved.Count);
             Assert.Equal(sellerPartNumberToRemove, result.Details.Order.ItemResult.ItemsRemoved[0].SellerPartNumber);
         }
 
         [Fact]
-        public void RemoveItems_ReturnsItemRemovalResult_WithOrderNumber_WhenIsSuccessfulIsTrue()
+        public async Task RemoveItems_ReturnsItemRemovalResult_WithOrderNumber_WhenIsSuccessfulIsTrue()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
-            ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
+            ItemRemovalResult result = await testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
             Assert.Equal(orderNumberToRemoveFrom, result.Details.Order.OrderNumber);
         }

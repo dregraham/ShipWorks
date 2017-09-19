@@ -186,7 +186,6 @@ namespace ShipWorks.Tests.Stores.eBay
         }
     }
 
-
     /// <summary>
     /// This is how the old version of the EbayOnlineUpdater worked, sans the db access and non-carrier/tracking number code.
     ///
@@ -266,7 +265,7 @@ namespace ShipWorks.Tests.Stores.eBay
                             // We can't upload tracking details because this isn't a supported carrier, so create a
                             // note with the tracking number instead
                             string notesText = string.Format("Shipped {0} on {1}. Tracking number: {2}",
-                                ShippingManager.GetOverriddenSerivceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
+                                ShippingManager.GetOverriddenServiceUsed(shipment), shipment.ShipDate.ToShortDateString(), shipment.TrackingNumber);
 
                             //webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }

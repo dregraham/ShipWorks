@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Given a list of orders of a specific status, return the order numbers where their etsy status has changed.
         /// If order not found, Online Order Status set to not found
         /// </summary>
-        public static List<EtsyOrderEntity> GetOrdersWithChangedStatus(EtsyStoreEntity store, List<EtsyOrderEntity> orders, string etsyFieldName, bool currentStatus)
+        public static List<EtsyOrderEntity> GetOrdersWithChangedStatus(IEtsyWebClient webClient, EtsyStoreEntity store, List<EtsyOrderEntity> orders, string etsyFieldName, bool currentStatus)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             MethodConditions.EnsureArgumentIsNotNull(orders, nameof(orders));
@@ -93,7 +93,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
 
             List<EtsyOrderEntity> changedOrders = new List<EtsyOrderEntity>();
-            EtsyWebClient webClient = new EtsyWebClient(store);
 
             //Create tempOrder Queue to iterate through.
             List<EtsyOrderEntity> tempOrders = new List<EtsyOrderEntity>();
@@ -111,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Process a batch of orders. Add changed orders to changedOrders list. Remove processed orders from tempOrders.
         /// </summary>
-        private static void ProcessBatch(string etsyFieldName, bool currentStatus, List<EtsyOrderEntity> changedOrders, EtsyWebClient webClient, List<EtsyOrderEntity> tempOrders)
+        private static void ProcessBatch(string etsyFieldName, bool currentStatus, List<EtsyOrderEntity> changedOrders, IEtsyWebClient webClient, List<EtsyOrderEntity> tempOrders)
         {
             // A null reference error was being thrown.  Discovered by Crash Reports.
             // Let's figure out what is null....

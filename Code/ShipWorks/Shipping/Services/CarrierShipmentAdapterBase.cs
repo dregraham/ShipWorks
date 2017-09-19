@@ -347,5 +347,10 @@ namespace ShipWorks.Shipping.Services
             Shipment.CustomsItems.Remove(existingItem);
             UpdateDynamicData();
         }
+
+        /// <summary>
+        /// Get a strongly typed ShipmentType
+        /// </summary>
+        protected T GetShipmentType<T>() where T : ShipmentType => shipmentType as T;
     }
 }

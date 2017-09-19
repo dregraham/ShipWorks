@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
@@ -20,13 +19,13 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     [Component(RegistrationType.Self)]
     public class AmeriCommerceStoreType : StoreType
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceStoreType));
+        private readonly IAmeriCommerceOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceStoreType(StoreEntity store)
+        public AmeriCommerceStoreType(StoreEntity store, IAmeriCommerceOnlineUpdater onlineUpdater)
             : base(store)
         {
 #pragma warning disable 168,219
@@ -37,6 +36,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             var y = OrderType.PaymentOrder;
             var z = OrderItemType.OrderPayment;
 #pragma warning restore 168,219
+
+            this.onlineUpdater = onlineUpdater;
         }
 
         /// <summary>
@@ -137,9 +138,9 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Order identifier/locator
+        /// Order identifier/locater
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             return new OrderNumberIdentifier(order.OrderNumber);
         }
@@ -151,127 +152,5 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             return new AmeriCommerceAccountSettingsControl();
         }
-
-        #region Online Update Commands
-
-        /// <summary>
-        /// Create the menu commands for updating order status
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            // get possible status codes from the provider
-            AmeriCommerceStatusCodeProvider codeProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
-
-            // create a menu item for each status
-            bool isOne = false;
-            foreach (int codeValue in codeProvider.CodeValues)
-            {
-                isOne = true;
-
-                MenuCommand command = new MenuCommand(codeProvider.GetCodeName(codeValue), new MenuCommandExecutor(OnSetOnlineStatus));
-                command.Tag = codeValue;
-
-                commands.Add(command);
-            }
-
-            MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
-            uploadCommand.BreakBefore = isOne;
-            commands.Add(uploadCommand);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    // upload
-                    AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
-                    updater.UploadShipmentDetails(shipment);
-                }
-                catch (AmeriCommerceException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Command handler for setting online order status
-        /// </summary>
-        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-               "Set Status",
-               "ShipWorks is setting the online status.",
-               "Updating order {0} of {1}...");
-
-            MenuCommand command = context.MenuCommand;
-            int statusCode = (int) command.Tag;
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
-        }
-
-        /// <summary>
-        /// Worker thread method for updating online order status
-        /// </summary>
-        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            log.Debug(Store.StoreName);
-
-            int statusCode = (int) userState;
-            try
-            {
-                AmeriCommerceOnlineUpdater updater = new AmeriCommerceOnlineUpdater((AmeriCommerceStoreEntity) Store);
-                updater.UpdateOrderStatus(orderID, statusCode);
-            }
-            catch (AmeriCommerceException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
-            }
-        }
-
-        #endregion
     }
 }

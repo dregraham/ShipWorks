@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// UserControl for the account settings for MarketplaceAdvisor
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class MarketplaceAdvisorAccountSettingsControl : AccountSettingsControlBase
     {
         bool isOms;
@@ -120,10 +125,10 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                 try
                 {
                     OMFlags customFlags = MarketplaceAdvisorOmsFlagManager.GetCustomFlags(new MarketplaceAdvisorStoreEntity
-                        {
-                            Username = username.Text.Trim(),
-                            Password = SecureText.Encrypt(password.Text, username.Text.Trim())
-                        });
+                    {
+                        Username = username.Text.Trim(),
+                        Password = SecureText.Encrypt(password.Text, username.Text.Trim())
+                    });
 
                     using (MarketplaceAdvisorOmsUpgradeDlg dlg = new MarketplaceAdvisorOmsUpgradeDlg(customFlags))
                     {

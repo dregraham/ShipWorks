@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
@@ -51,11 +45,11 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
         /// <summary>
         /// Create the tasks selected by the user
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (shipmentUpdate.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(ProStoresShipmentUploadTask), store).CreateInstance() };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(typeof(ProStoresShipmentUploadTask), store).CreateInstance(lifetimeScope) };
             }
 
             return null;

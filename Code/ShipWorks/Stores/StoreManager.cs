@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
@@ -229,33 +230,34 @@ namespace ShipWorks.Stores
         /// </summary>
         public static StoreEntity GetRelatedStore(long entityID)
         {
-            if (EntityUtility.GetEntityType(entityID) == EntityType.StoreEntity)
+            EntityType entityType = EntityUtility.GetEntityType(entityID);
+
+            if (entityType == EntityType.StoreEntity)
             {
                 return GetStore(entityID);
             }
 
-            if (EntityUtility.GetEntityType(entityID) == EntityType.OrderEntity)
+            if (entityType == EntityType.OrderEntity)
             {
                 return GetStore(DataProvider.GetOrderHeader(entityID).StoreID);
             }
 
-            if (EntityUtility.GetEntityType(entityID) == EntityType.OrderItemEntity)
+            if (entityType == EntityType.OrderItemEntity)
             {
                 long orderID = DataProvider.GetRelatedKeys(entityID, EntityType.OrderEntity).First();
 
                 return GetStore(DataProvider.GetOrderHeader(orderID).StoreID);
             }
 
-            if (EntityUtility.GetEntityType(entityID) == EntityType.ShipmentEntity)
+            if (entityType == EntityType.ShipmentEntity)
             {
                 long orderID = DataProvider.GetRelatedKeys(entityID, EntityType.OrderEntity).First();
 
                 return GetStore(DataProvider.GetOrderHeader(orderID).StoreID);
             }
 
-            throw new InvalidOperationException("Invalid EntityType in GetRelatedStore: " + EntityUtility.GetEntityType(entityID));
+            throw new InvalidOperationException("Invalid EntityType in GetRelatedStore: " + entityType);
         }
-
 
         /// <summary>
         /// Save the specified store, Translating known exceptions
@@ -278,6 +280,37 @@ namespace ShipWorks.Stores
             try
             {
                 adapter.SaveAndRefetch(store);
+            }
+            catch (Exception ex)
+            {
+                if (!TranslateException(ex))
+                {
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save the specified store, Translating known exceptions
+        /// </summary>
+        public static async Task SaveStoreAsync(StoreEntity store)
+        {
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                await SaveStoreAsync(store, adapter).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Save the specified store, Translating known exceptions
+        /// </summary>
+        public static async Task SaveStoreAsync(StoreEntity store, SqlAdapter adapter)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(adapter, nameof(adapter));
+
+            try
+            {
+                await adapter.SaveAndRefetchAsync(store).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

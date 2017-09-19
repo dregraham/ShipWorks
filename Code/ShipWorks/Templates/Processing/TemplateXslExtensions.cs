@@ -383,6 +383,31 @@ namespace ShipWorks.Templates.Processing
             // It starts out with the item code
             string key = XPathUtility.Evaluate(xpath, "Code", "");
 
+            return GenerateItemKeyValue(key, xpath, optionSpecific);
+        }
+        
+        /// <summary>
+        /// Generates a key value for an OrderItem.  The XPathNavigator should be positioned
+        /// such that the OrderItem is the current node.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string GetOrderItemKeyValue(string key, XPathNodeIterator itemNode, bool optionSpecific)
+        {
+            if (!itemNode.MoveNext())
+            {
+                return "";
+            }
+
+            XPathNavigator xpath = itemNode.Current;
+
+            return GenerateItemKeyValue(key, xpath, optionSpecific);
+        }
+
+        /// <summary>
+        /// Generate the item key value based on the key and option specific 
+        /// </summary>
+        private string GenerateItemKeyValue(string key, XPathNavigator xpath, bool optionSpecific)
+        {
             if (optionSpecific)
             {
                 // Then add in all the option info

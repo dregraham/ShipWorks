@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -58,29 +57,19 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Create a Sears specific order instance
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            SearsOrderEntity order = new SearsOrderEntity();
-
-            return order;
-        }
+        protected override OrderEntity CreateOrderInstance() => new SearsOrderEntity();
 
         /// <summary>
         /// Create a sears specific item instance
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            SearsOrderItemEntity item = new SearsOrderItemEntity();
-
-            return item;
-        }
+        public override OrderItemEntity CreateOrderItemInstance() => new SearsOrderItemEntity();
 
         /// <summary>
         /// Create an identifier to uniquely identify a sears order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            SearsOrderEntity searsOrder = order as SearsOrderEntity;
+            ISearsOrderEntity searsOrder = order as ISearsOrderEntity;
             if (searsOrder == null)
             {
                 throw new InvalidOperationException("A non sears order was passed to the SearsStoreType.");
@@ -88,6 +77,12 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             return new SearsOrderIdentifier(searsOrder.OrderNumber, searsOrder.PoNumber);
         }
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as ISearsOrderEntity)?.PoNumber ?? string.Empty;
 
         /// <summary>
         /// Create the wizard pages for adding sears.com stores to ShipWorks
@@ -120,37 +115,19 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// The initial download restriction policy for Sears
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { MaxDaysBack = 90 };
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { MaxDaysBack = 90 };
 
         /// <summary>
         /// Determines if certain columns should be visible or not in the grid
         /// </summary>
-        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
-        {
-            if (column == OnlineGridColumnSupport.OnlineStatus)
-            {
-                return true;
-            }
-
-            return base.GridOnlineColumnSupported(column);
-        }
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column) =>
+            column == OnlineGridColumnSupport.OnlineStatus || base.GridOnlineColumnSupported(column);
 
         /// <summary>
         /// Create the license identifier for uniquely identifying Sears.com stores
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                return ((SearsStoreEntity) Store).SearsEmail;
-            }
-        }
+        protected override string InternalLicenseIdentifier => ((SearsStoreEntity) Store).SearsEmail;
 
         /// <summary>
         /// Create the condition group for searching on Amazon Order ID
@@ -196,71 +173,10 @@ namespace ShipWorks.Stores.Platforms.Sears
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    SearsOnlineUpdater updater = new SearsOnlineUpdater();
-                    updater.UploadShipmentDetails(shipment);
-                }
-                catch (SearsException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
-
-        /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices()
-        {
-            return new[] { "New", "Open", "Closed", "Overdue" };
-        }
+        public override ICollection<string> GetOnlineStatusChoices() =>
+            new[] { "New", "Open", "Closed", "Overdue" };
     }
 }

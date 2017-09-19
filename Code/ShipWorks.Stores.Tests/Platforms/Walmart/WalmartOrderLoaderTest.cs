@@ -1,13 +1,13 @@
-﻿using Autofac.Extras.Moq;
-using ShipWorks.Stores.Platforms.Walmart;
-using ShipWorks.Tests.Shared;
-using System;
+﻿using System;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Walmart;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
@@ -34,6 +34,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderDto.shippingInfo = new shippingInfoType
             {
                 estimatedDeliveryDate = DateTime.UtcNow.AddDays(-12),
+                estimatedShipDate = DateTime.UtcNow.AddDays(-12),
                 postalAddress = new postalAddressType
                 {
                     name = "foo bar",
@@ -50,12 +51,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void LoadOrder_ExitingLineItemDoesNotChange_WhenNotInDownloadedOrder()
         {
             orderEntity.IsNew = false;
-            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() {LineNumber = "15", Quantity = 15});
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
             Assert.Equal(1, orderEntity.OrderItems.Count);
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(15, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "15").Quantity);
+            Assert.Equal(15, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "15").Quantity);
         }
 
         [Fact]
@@ -72,7 +73,43 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(2, orderEntity.OrderItems.Count);
-            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "2").Quantity);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_LineItemAdded_WhenChargeIsNull()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+            orderDto.orderLines.Single().charges[0] = null;
+            
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
+        }
+
+        [Fact]
+        public void LoadOrder_LineItemAdded_WhenChargeHasNullProperties()
+        {
+            orderEntity.IsNew = false;
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
+
+            orderDto.orderLines.Single().lineNumber = "2";
+            orderDto.orderLines.Single().orderLineQuantity.amount = "1";
+            orderDto.orderLines.Single().charges[0] = new chargeType();
+
+            Assert.Equal(1, orderEntity.OrderItems.Count);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(2, orderEntity.OrderItems.Count);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
         }
 
         [Fact]
@@ -151,7 +188,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderDto.purchaseOrderId = "42A";
 
             WalmartException walmartException = Assert.Throws<WalmartException>(() => testObject.LoadOrder(orderDto, orderEntity));
-            Assert.Equal("PurchaseOrderId '42A' could not be converted to an number",
+            Assert.Equal("PurchaseOrderId '42A' could not be converted to a number",
                 walmartException.Message);
         }
 
@@ -221,7 +258,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             orderEntity.EstimatedDeliveryDate = previousValue;
             orderDto.shippingInfo.estimatedDeliveryDate = downloadValue;
-            
+
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(expectedValue, orderEntity.EstimatedDeliveryDate);
@@ -244,6 +281,28 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(expectedValue, orderEntity.EstimatedShipDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsEstimatedDeliveryDateToOrderDate_WhenEstimatedDeliveryDateIsNotValid()
+        {
+            orderDto.orderDate = new DateTime(2001, 01, 01);
+            orderDto.shippingInfo.estimatedDeliveryDate = new DateTime(1600, 01, 01);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(new DateTime(2001, 01, 01), orderEntity.EstimatedDeliveryDate);
+        }
+
+        [Fact]
+        public void LoadOrder_SetsEstimatedShipDateToOrderDate_WhenEstimatedShipDateIsNotValid()
+        {
+            orderDto.orderDate = new DateTime(2001, 01, 01);
+            orderDto.shippingInfo.estimatedShipDate = new DateTime(1600, 01, 01);
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Equal(new DateTime(2001, 01, 01), orderEntity.EstimatedShipDate);
         }
 
         [Theory]
@@ -326,6 +385,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
+        public void LoadOrder_DoesNotAddAnyCharges_WhenOrderChargePropertiesAreNull(bool isNew)
+        {
+            orderEntity.IsNew = isNew;
+            orderDto.orderLines[0].charges = new[] { new chargeType() };
+
+            testObject.LoadOrder(orderDto, orderEntity);
+
+            Assert.Empty(orderEntity.OrderCharges.Where(c => c.Type != "Refund"));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
         public void LoadOrder_LoadsTax(bool isNew)
         {
             orderEntity.IsNew = isNew;
@@ -388,7 +460,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 },
                 refund = new refundType
                 {
-                    refundCharges = new []
+                    refundCharges = new[]
                     {
                         new refundChargeType
                         {

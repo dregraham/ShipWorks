@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -13,13 +15,8 @@ using log4net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Communication.Throttling;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using System.Text;
-using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -51,15 +48,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
 
             this.store = store;
-
-            if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
-            {
-                throw new ShopifyException("ShopifyShopUrlName is missing.");
-            }
-
-            // Create the Endpoints object for getting api urls
-            endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
-
             this.progress = progress;
         }
 
@@ -70,6 +58,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             get
             {
+                if (endpoints == null)
+                {
+                    if (string.IsNullOrWhiteSpace(store.ShopifyShopUrlName))
+                    {
+                        throw new ShopifyException("ShopifyShopUrlName is missing.");
+                    }
+
+                    // Create the Endpoints object for getting api urls
+                    endpoints = new ShopifyEndpoints(store.ShopifyShopUrlName);
+                }
+
                 return endpoints;
             }
         }
@@ -387,46 +386,18 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Update the online status of the given orders
+        /// Upload the shipment details for an order
         /// </summary>
-        public void UploadOrderShipmentDetails(ShipmentEntity shipment)
+        public void UploadOrderShipmentDetails(long shopifyOrderID, string trackingNumber, string carrier, string carrierTrackingUrl)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            if (shipment.Order.IsManual)
-            {
-                log.InfoFormat("Not uploading shipment details for OrderID {0} since it is manual.", shipment.Order.OrderID);
-                return;
-            }
-
             try
             {
-                ShopifyOrderEntity order = (ShopifyOrderEntity) shipment.Order;
-
-                string carrier = GetTrackingCompany(shipment);
-                string trackingNumber = shipment.TrackingNumber;
-
-                // Check the order's online status to see if it's Fulfilled.  If it is, don't try to re-ship it...it will throw an error.
-                if ((ShopifyFulfillmentStatus) order.FulfillmentStatusCode == ShopifyFulfillmentStatus.Fulfilled)
-                {
-                    log.WarnFormat("Not updating shipment status of Order {0} since it is already 'Fulfilled'", order.OrderNumberComplete);
-                    return;
-                }
-
-                string url = Endpoints.ApiFulfillmentsUrl(order.ShopifyOrderID);
+                string url = Endpoints.ApiFulfillmentsUrl(shopifyOrderID);
 
                 if (string.IsNullOrEmpty(trackingNumber))
                 {
                     trackingNumber = "null";
                 }
-
-                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                shipmentType.LoadShipmentData(shipment, true);
-
-                string carrierTrackingUrl = shipmentType.GetCarrierTrackingUrl(shipment);
 
                 JObject fulfillmentReq = new JObject(
                     new JProperty("fulfillment", new JObject(
@@ -436,7 +407,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                 string jsonRequest = fulfillmentReq.ToString();
 
-                // Create the json post request submitter, with default params
+                // Create the JSON post request submitter, with default params
                 HttpTextPostRequestSubmitter request = new HttpTextPostRequestSubmitter(jsonRequest, "application/json; charset=utf-8") { Verb = HttpVerb.Post };
                 request.Uri = new Uri(url);
 
@@ -454,23 +425,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 throw WebHelper.TranslateWebException(ex, typeof(ShopifyException));
             }
-        }
-
-        /// <summary>
-        /// Gets the tracking company for uploading tracking to Shopify
-        /// </summary>
-        private static string GetTrackingCompany(ShipmentEntity shipment)
-        {
-            if (ShipmentTypeManager.IsPostal(shipment.ShipmentTypeCode))
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-                if (ShipmentTypeManager.IsDhl((PostalServiceType) shipment.Postal.Service))
-                {
-                    return "DHL eCommerce";
-                }
-            }
-
-            return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
 
         /// <summary>
@@ -582,9 +536,13 @@ namespace ShipWorks.Stores.Platforms.Shopify
             catch (WebException ex)
             {
                 HttpWebResponse webResponse = ex.Response as HttpWebResponse;
-                if (webResponse != null && webResponse.StatusCode == (HttpStatusCode) ShopifyConstants.OverApiLimitStatusCode)
+                if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.OverApiLimitStatusCode)
                 {
                     throw new RequestThrottledException(ex.Message);
+                }
+                else if (webResponse?.StatusCode == (HttpStatusCode) ShopifyConstants.AlreadyShippedStatusCode)
+                {
+                    throw new ShopifyAlreadyUploadedException(ex.Message);
                 }
                 else
                 {

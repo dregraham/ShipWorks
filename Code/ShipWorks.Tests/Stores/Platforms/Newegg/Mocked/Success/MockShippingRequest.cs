@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
+using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
-using ShipWorks.Stores.Platforms.Newegg.Net;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
 {
     public class MockShippingRequest : IShippingRequest
     {
-        
-        public ShippingResult Ship(Shipment shipment)
+        public Task<ShippingResult> Ship(Shipment shipment)
         {
             ShippingResult result = new ShippingResult();
 
@@ -40,7 +34,7 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
                 }
             }
 
-            return result;
+            return Task.FromResult(result);
         }
     }
 }

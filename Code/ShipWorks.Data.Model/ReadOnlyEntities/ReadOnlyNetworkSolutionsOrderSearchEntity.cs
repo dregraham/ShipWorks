@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NetworkSolutionsOrderSearchID = source.NetworkSolutionsOrderSearchID;
             OrderID = source.OrderID;
             NetworkSolutionsOrderID = source.NetworkSolutionsOrderID;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             NetworkSolutionsOrder = source.NetworkSolutionsOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 NetworkSolutionsOrderID { get; }
+        /// <summary> The OriginalOrderID property of the Entity NetworkSolutionsOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "NetworkSolutionsOrderSearch"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public INetworkSolutionsOrderEntity NetworkSolutionsOrder { get; }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -54,15 +53,15 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
         public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            factory.PayPalOrderSearch.Where(PayPalOrderSearchFields.TransactionID == transactionID);
+            CreateCombinedSearchQueryInternal(factory,
+                factory.PayPalOrderSearch,
+                PayPalOrderSearchFields.OriginalOrderID,
+                PayPalOrderSearchFields.TransactionID == transactionID);
 
         /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return string.Format("PayPalTransactionID:{0}", transactionID);
-        }
-
+        public override string ToString() =>
+            string.Format("PayPalTransactionID:{0}", transactionID);
     }
 }

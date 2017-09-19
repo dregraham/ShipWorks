@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.Xml;
+using Autofac;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
-using log4net;
-using System.Diagnostics;
-using System.Xml;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -69,8 +65,12 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             try
             {
-                string loginUrl = ProStoresWebClient.CreateApiLogonUrl(store, out pendingTicket);
-                WebHelper.OpenUrl(loginUrl, this);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                    string loginUrl = webClient.CreateApiLogonUrl(store, out pendingTicket);
+                    WebHelper.OpenUrl(loginUrl, this);
+                }
             }
             catch (Exception ex)
             {
@@ -135,9 +135,13 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             try
             {
-                XmlDocument response = ProStoresWebClient.GetTokenFromTicket(store, pendingTicket);
-                store.ApiToken = response.SelectSingleNode("//Token").InnerText;
-                store.Username = response.SelectSingleNode("//UserName").InnerText;
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                    XmlDocument response = webClient.GetTokenFromTicket(store, pendingTicket);
+                    store.ApiToken = response.SelectSingleNode("//Token").InnerText;
+                    store.Username = response.SelectSingleNode("//UserName").InnerText;
+                }
 
                 timer.Stop();
 

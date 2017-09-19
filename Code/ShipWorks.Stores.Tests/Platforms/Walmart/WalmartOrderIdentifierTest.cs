@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Assert.Equal($"WalmartPurchaseOrderID:{po}", testObject.ToString());
         }
-        
+
         [Fact]
         public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonWalmartOrderEntity()
         {

@@ -1,10 +1,10 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.SparkPay.DTO;
-using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.SparkPay
 {
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    SparkPayWebClient webClient = lifetimeScope.Resolve<SparkPayWebClient>();
+                    var webClient = lifetimeScope.Resolve<ISparkPayWebClient>();
                     log.Debug("Getting statuses from web client");
                     OrderStatusResponse response = webClient.GetStatuses(store);
                     log.Debug("Getting statuses from response");

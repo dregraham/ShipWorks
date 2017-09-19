@@ -9,6 +9,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters
     /// <summary>
     /// Condition for the MarketplaceAdvisor Invoice Number field
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [ConditionElement("MarketplaceAdvisor Invoice #", "MarketplaceAdvisorOrder.InvoiceNumber")]
     [ConditionStoreType(StoreTypeCode.MarketplaceAdvisor)]
     public class MarketplaceAdvisorInvoiceNumberCondition : StringCondition

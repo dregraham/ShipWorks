@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Common.Threading
+﻿using Interapptive.Shared.Threading;
+
+namespace ShipWorks.Common.Threading
 {
     /// <summary>
     /// Update progress that does nothing

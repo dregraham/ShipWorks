@@ -43,14 +43,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
-        private readonly Func<EbayToken, EbayWebClient> webClientFactory;
+        private readonly IEbayWebClient webClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
-
-        // WebClient to use for connectivity
-        EbayWebClient webClient;
 
         // Total number of orders expected during this download
         int expectedCount = -1;
@@ -58,11 +55,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory,
+        public EbayDownloader(StoreEntity store, IEbayWebClient webClient,
             IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-            this.webClientFactory = webClientFactory;
+            this.webClient = webClient;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -73,14 +70,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            webClient = webClientFactory(EbayToken.FromStore((EbayStoreEntity) Store));
-
             try
             {
                 Progress.Detail = "Connecting to eBay...";
 
                 // Get the official eBay time in UTC
-                eBayOfficialTime = webClient.GetOfficialTime();
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                eBayOfficialTime = webClient.GetOfficialTime(token);
 
                 bool morePages = await DownloadOrders().ConfigureAwait(false);
                 if (!morePages)
@@ -132,12 +128,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
             }
 
+            var token = EbayToken.FromStore((EbayStoreEntity) Store);
             int page = 1;
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
+                GetOrdersResponseType response = webClient.GetOrders(token, rangeStart.To(rangeEnd), page);
 
                 // Grab the total expected account from the first page
                 if (expectedCount < 0)
@@ -214,6 +211,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Special processing for canceled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
+
             {
                 log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
                 return;
@@ -434,6 +432,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private List<OrderItemEntity> LoadTransactions(EbayOrderEntity order, OrderType orderType)
         {
+            order.GuaranteedDelivery = orderType.TransactionArray.Any(t => t.GuaranteedDelivery);
+
             List<OrderItemEntity> abandonedItems = new List<OrderItemEntity>();
 
             // Go through each transaction in the order
@@ -654,7 +654,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             UpdateShippingCharges(order, orderType);
             UpdateAdjustmentCharges(order, orderType);
-            UpdateInsuranceCharges(order, orderType);
             UpdateSalesTaxCharges(order, orderType);
         }
 
@@ -700,38 +699,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (adjust != null)
             {
                 adjust.Amount = adjustment;
-            }
-        }
-
-        /// <summary>
-        /// Update insurance charges
-        /// </summary>
-        private void UpdateInsuranceCharges(EbayOrderEntity order, OrderType orderType)
-        {
-            decimal insuranceTotal = 0;
-
-            // Use insurance
-            if (orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Required ||
-                orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Optional)
-            {
-                if ((orderType.ShippingDetails.InsuranceWanted || orderType.ShippingDetails.InsuranceOption == InsuranceOptionCodeType.Required))
-                {
-                    if (orderType.ShippingServiceSelected != null && orderType.ShippingServiceSelected.ShippingInsuranceCost != null)
-                    {
-                        insuranceTotal = (decimal) orderType.ShippingServiceSelected.ShippingInsuranceCost.Value;
-                    }
-                    else if (orderType.ShippingDetails.InsuranceFee != null)
-                    {
-                        insuranceTotal = (decimal) orderType.ShippingDetails.InsuranceFee.Value;
-                    }
-                }
-            }
-
-            OrderChargeEntity insurance = GetCharge(order, "INSURANCE", "Insurance", insuranceTotal != 0);
-
-            if (insurance != null)
-            {
-                insurance.Amount = insuranceTotal;
             }
         }
 
@@ -848,9 +815,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Load variation information
             UpdateTransactionVariationDetail(orderItem, transaction);
 
-            // We can only pull weight for calculated shipping
-            UpdateTransactionWeight(orderItem, transaction);
-
             // SellingManager Pro
             orderItem.SellingManagerRecord = transaction.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? transaction.ShippingDetails.SellingManagerSalesRecordNumber : 0;
 
@@ -917,12 +881,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the weight of the given item based on the detail in the transaction
         /// </summary>
-        private void UpdateTransactionWeight(EbayOrderItemEntity orderItem, TransactionType transaction)
+        private void UpdateWeight(EbayOrderItemEntity orderItem, ItemType item)
         {
-            if (transaction.ShippingDetails.CalculatedShippingRate != null)
+            if (item.ShippingPackageDetails != null)
             {
-                WebServices.MeasureType weightMajor = transaction.ShippingDetails.CalculatedShippingRate.WeightMajor;
-                WebServices.MeasureType weightMinor = transaction.ShippingDetails.CalculatedShippingRate.WeightMinor;
+                WebServices.MeasureType weightMajor = item.ShippingPackageDetails.WeightMajor;
+                WebServices.MeasureType weightMinor = item.ShippingPackageDetails.WeightMinor;
 
                 if (weightMajor != null && weightMinor != null)
                 {
@@ -953,7 +917,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                UpdateTransactionImages(orderItem, transaction);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                ItemType ebayItem = webClient.GetItem(token, transaction.Item.ItemID);
+                UpdateWeight(orderItem, ebayItem);
+                UpdateTransactionImages(orderItem, ebayItem);
             }
             catch (EbayException exception)
             {
@@ -975,11 +942,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update transaction images
         /// </summary>
-        private void UpdateTransactionImages(EbayOrderItemEntity orderItem, TransactionType transaction)
+        private void UpdateTransactionImages(EbayOrderItemEntity orderItem, ItemType ebayItem)
         {
-            ItemType eBayItem = webClient.GetItem(transaction.Item.ItemID);
-
-            PictureDetailsType pictureDetails = eBayItem.PictureDetails;
+            PictureDetailsType pictureDetails = ebayItem.PictureDetails;
 
             // The first picture in PictureURL is the default
             if (pictureDetails?.PictureURL?.Any() == true)
@@ -991,18 +956,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // If still no image, see if there is a stock image
             if (string.IsNullOrWhiteSpace(orderItem.Image))
             {
-                if (eBayItem.ProductListingDetails != null && eBayItem.ProductListingDetails.IncludeStockPhotoURL)
+                if (ebayItem.ProductListingDetails != null && ebayItem.ProductListingDetails.IncludeStockPhotoURL)
                 {
-                    orderItem.Image = eBayItem.ProductListingDetails.StockPhotoURL ?? "";
+                    orderItem.Image = ebayItem.ProductListingDetails.StockPhotoURL ?? "";
                     orderItem.Thumbnail = orderItem.Image;
                 }
             }
 
             // See if there are other details we can use
-            if (eBayItem.ProductListingDetails != null)
+            if (ebayItem.ProductListingDetails != null)
             {
-                orderItem.UPC = eBayItem.ProductListingDetails.UPC ?? "";
-                orderItem.ISBN = eBayItem.ProductListingDetails.ISBN ?? "";
+                orderItem.UPC = ebayItem.ProductListingDetails.UPC ?? "";
+                orderItem.ISBN = ebayItem.ProductListingDetails.ISBN ?? "";
             }
         }
 
@@ -1530,7 +1495,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                GetFeedbackResponseType response = webClient.GetFeedback(token, feedbackType, page);
 
                 // Quit if eBay says there aren't any more
                 if (response.FeedbackDetailItemTotal == 0 || page > response.PaginationResult.TotalNumberOfPages)
@@ -1639,6 +1605,5 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         #endregion
-
     }
 }

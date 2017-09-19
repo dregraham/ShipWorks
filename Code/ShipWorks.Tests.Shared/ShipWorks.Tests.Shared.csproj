@@ -76,6 +76,9 @@
       <HintPath>..\..\packages\Moq.4.7.0\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Respawn, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Respawn.0.2.0\lib\net45\Respawn.dll</HintPath>
       <Private>True</Private>
@@ -167,6 +170,8 @@
     <Compile Include="EntityBuilders\UpsProfileEntityBuilder.cs" />
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
+    <Compile Include="ExtensionMethods\ParameterShorteners.cs" />
+    <Compile Include="UninitializeObjectCreator.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />
     <Compile Include="ExtensionMethods\ItExtensions.cs" />
     <Compile Include="IKeyedMockCreator.cs" />
@@ -198,6 +203,10 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Executable\ShipWorks.csproj">
+      <Project>{FCD9A0E9-0954-4249-8BAC-3BCBF93E6E10}</Project>
+      <Name>ShipWorks</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>

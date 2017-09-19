@@ -406,6 +406,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<EtsyOrderEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the EtsyOrderItem entity</summary>
+		public EntityQuery<EtsyOrderItemEntity> EtsyOrderItem
+		{
+			get { return Create<EtsyOrderItemEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the EtsyStore entity</summary>
 		public EntityQuery<EtsyStoreEntity> EtsyStore
 		{
@@ -608,6 +614,30 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<IParcelShipmentEntity> IParcelShipment
 		{
 			get { return Create<IParcelShipmentEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the JetOrder entity</summary>
+		public EntityQuery<JetOrderEntity> JetOrder
+		{
+			get { return Create<JetOrderEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the JetOrderItem entity</summary>
+		public EntityQuery<JetOrderItemEntity> JetOrderItem
+		{
+			get { return Create<JetOrderItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the JetOrderSearch entity</summary>
+		public EntityQuery<JetOrderSearchEntity> JetOrderSearch
+		{
+			get { return Create<JetOrderSearchEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the JetStore entity</summary>
+		public EntityQuery<JetStoreEntity> JetStore
+		{
+			get { return Create<JetStoreEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the LabelSheet entity</summary>
@@ -962,6 +992,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<ShipmentCustomsItemEntity> ShipmentCustomsItem
 		{
 			get { return Create<ShipmentCustomsItemEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the ShipmentReturnItem entity</summary>
+		public EntityQuery<ShipmentReturnItemEntity> ShipmentReturnItem
+		{
+			get { return Create<ShipmentReturnItemEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the ShippingDefaultsRule entity</summary>

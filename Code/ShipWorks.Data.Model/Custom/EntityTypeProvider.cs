@@ -70,6 +70,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "EndiciaScanFormEntity": return EntityType.EndiciaScanFormEntity;
 				case "EndiciaShipmentEntity": return EntityType.EndiciaShipmentEntity;
 				case "EtsyOrderEntity": return EntityType.EtsyOrderEntity;
+				case "EtsyOrderItemEntity": return EntityType.EtsyOrderItemEntity;
 				case "EtsyStoreEntity": return EntityType.EtsyStoreEntity;
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
@@ -104,6 +105,10 @@ namespace ShipWorks.Data.Model.Custom
 				case "IParcelProfileEntity": return EntityType.IParcelProfileEntity;
 				case "IParcelProfilePackageEntity": return EntityType.IParcelProfilePackageEntity;
 				case "IParcelShipmentEntity": return EntityType.IParcelShipmentEntity;
+				case "JetOrderEntity": return EntityType.JetOrderEntity;
+				case "JetOrderItemEntity": return EntityType.JetOrderItemEntity;
+				case "JetOrderSearchEntity": return EntityType.JetOrderSearchEntity;
+				case "JetStoreEntity": return EntityType.JetStoreEntity;
 				case "LabelSheetEntity": return EntityType.LabelSheetEntity;
 				case "LemonStandOrderEntity": return EntityType.LemonStandOrderEntity;
 				case "LemonStandOrderItemEntity": return EntityType.LemonStandOrderItemEntity;
@@ -163,6 +168,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
 				case "ShipmentEntity": return EntityType.ShipmentEntity;
 				case "ShipmentCustomsItemEntity": return EntityType.ShipmentCustomsItemEntity;
+				case "ShipmentReturnItemEntity": return EntityType.ShipmentReturnItemEntity;
 				case "ShippingDefaultsRuleEntity": return EntityType.ShippingDefaultsRuleEntity;
 				case "ShippingOriginEntity": return EntityType.ShippingOriginEntity;
 				case "ShippingPrintOutputEntity": return EntityType.ShippingPrintOutputEntity;
@@ -288,6 +294,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.EbayOrderItemEntity: return new EbayOrderItemRelations();
 				case EntityType.EbayStoreEntity: return new EbayStoreRelations();
 				case EntityType.EtsyOrderEntity: return new EtsyOrderRelations();
+				case EntityType.EtsyOrderItemEntity: return new EtsyOrderItemRelations();
 				case EntityType.EtsyStoreEntity: return new EtsyStoreRelations();
 				case EntityType.GenericFileStoreEntity: return new GenericFileStoreRelations();
 				case EntityType.GenericModuleStoreEntity: return new GenericModuleStoreRelations();
@@ -296,6 +303,9 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.GrouponStoreEntity: return new GrouponStoreRelations();
 				case EntityType.InfopiaOrderItemEntity: return new InfopiaOrderItemRelations();
 				case EntityType.InfopiaStoreEntity: return new InfopiaStoreRelations();
+				case EntityType.JetOrderEntity: return new JetOrderRelations();
+				case EntityType.JetOrderItemEntity: return new JetOrderItemRelations();
+				case EntityType.JetStoreEntity: return new JetStoreRelations();
 				case EntityType.LemonStandOrderEntity: return new LemonStandOrderRelations();
 				case EntityType.LemonStandOrderItemEntity: return new LemonStandOrderItemRelations();
 				case EntityType.LemonStandStoreEntity: return new LemonStandStoreRelations();

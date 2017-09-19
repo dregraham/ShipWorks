@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -32,17 +30,18 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Groupon)]
     [Component(RegistrationType.Self)]
-    class GrouponStoreType : StoreType
+    public class GrouponStoreType : StoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreType(StoreEntity store)
+        public GrouponStoreType(StoreEntity store, Func<Type, ILog> createLogger)
             : base(store)
         {
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -63,59 +62,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                GrouponOnlineUpdater shipmentUpdater = new GrouponOnlineUpdater((GrouponStoreEntity) Store);
-                shipmentUpdater.UpdateShipmentDetails(headers);
-            }
-            catch (GrouponException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(headers, ex);
-            }
-        }
-
-        /// <summary>
         /// Create the control for generating the online update shipment tasks
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
@@ -126,7 +72,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl() =>
             new GrouponAccountSettingsControl();
-
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
@@ -219,8 +164,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
-            new GrouponOrderIdentifier(((GrouponOrderEntity) order).GrouponOrderID);
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
+            new GrouponOrderIdentifier(((IGrouponOrderEntity) order).GrouponOrderID);
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IGrouponOrderEntity)?.GrouponOrderID ?? string.Empty;
 
         /// <summary>
         /// Indicates what basic grid fields we support hyper linking for

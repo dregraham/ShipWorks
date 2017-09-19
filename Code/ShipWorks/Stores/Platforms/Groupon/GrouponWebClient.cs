@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Download orders from Groupon
         /// </summary>
-        public JToken GetOrders(IGrouponStoreEntity store, DateTime start, int page)
+        public Task<JToken> GetOrders(IGrouponStoreEntity store, DateTime start, int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
@@ -49,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Uploads a batch of shipments to Groupon
         /// </summary>
-        public void UploadShipmentDetails(IGrouponStoreEntity store, List<GrouponTracking> trackingItems)
+        public Task UploadShipmentDetails(IGrouponStoreEntity store, List<GrouponTracking> trackingItems)
         {
             string trackingParameter = JsonConvert.SerializeObject(trackingItems);
 
@@ -63,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             ConfigurePostRequest(submitter, "tracking_notification", parameters);
 
-            ProcessRequest(submitter, "UploadShipmentDetails");
+            return ProcessRequest(submitter, "UploadShipmentDetails");
         }
 
         /// <summary>
@@ -99,14 +100,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Executes a request
         /// </summary>
-        private JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private async Task<JToken> ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
                 IApiLogEntry logEntry = logEntryFactory.GetLogEntry(ApiLogSource.Groupon, action, LogActionType.Other);
                 logEntry.LogRequest(submitter);
 
-                using (IHttpResponseReader reader = submitter.GetResponse())
+                using (IHttpResponseReader reader = await submitter.GetResponseAsync().ConfigureAwait(false))
                 {
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");

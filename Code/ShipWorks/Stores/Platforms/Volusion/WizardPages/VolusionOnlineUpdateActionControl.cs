@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
+using Autofac;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Volusion.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
@@ -30,11 +24,11 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
         /// <summary>
         /// Create the tasks that were configured on the control
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (createTask.Checked)
             {
-                VolusionShipmentUploadTask task = (VolusionShipmentUploadTask)new ActionTaskDescriptorBinding(typeof(VolusionShipmentUploadTask), store).CreateInstance();
+                VolusionShipmentUploadTask task = (VolusionShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(VolusionShipmentUploadTask), store).CreateInstance(lifetimeScope);
                 task.SendEmail = sendEmail.Checked;
 
                 return new List<ActionTask> { task };

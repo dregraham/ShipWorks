@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Collections
@@ -175,7 +177,7 @@ namespace Interapptive.Shared.Collections
         /// <returns></returns>
         public static string Combine(this IEnumerable<string> source, string separator)
         {
-            return source == null || !source.Any() ? string.Empty : source.Aggregate((x, y) => x + separator + y);
+            return source == null || !source.Any() ? string.Empty : string.Join(separator, source);
         }
 
         /// <summary>
@@ -352,5 +354,55 @@ namespace Interapptive.Shared.Collections
         public static IEnumerable<Tuple<TLeft, TRight>> LeftJoin<TLeft, TRight, TKey>(this IEnumerable<TLeft> left,
             IEnumerable<TRight> right, Func<TLeft, TKey> getLeftKey, Func<TRight, TKey> getRightKey) =>
             left.GroupJoin(right, getLeftKey, getRightKey, (x, y) => Tuple.Create(x, y.FirstOrDefault()));
+
+        /// <summary>
+        /// Perform an async select, showing a progress dialog
+        /// </summary>
+        [NDependIgnoreTooManyParams]
+        public static async Task<IEnumerable<TResult>> SelectWithProgress<T, TResult>(this IEnumerable<T> source,
+            IMessageHelper messageHelper, string title, string description, string detailFormat,
+            Func<T, Task<TResult>> processItem)
+        {
+            var results = new List<TResult>();
+
+            using (var progress = messageHelper.ShowProgressDialog(title, description))
+            {
+                var updater = progress.ToUpdater(source, detailFormat);
+
+                foreach (var key in source.TakeWhile(x => !progress.ProgressItem.IsCancelRequested))
+                {
+                    updater.Update();
+                    results.Add(await processItem(key).ConfigureAwait(false));
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Append an item to an enumerable
+        /// </summary>
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
+
+            return AppendInternal(source, item);
+        }
+
+        /// <summary>
+        /// Append an item to an enumerable
+        /// </summary>
+        private static IEnumerable<T> AppendInternal<T>(IEnumerable<T> source, T item)
+        {
+            using (IEnumerator<T> iter = source.GetEnumerator())
+            {
+                while (iter.MoveNext())
+                {
+                    yield return iter.Current;
+                }
+            }
+
+            yield return item;
+        }
     }
 }

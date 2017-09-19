@@ -1,4 +1,5 @@
 
+
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -155,7 +156,8 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackLeftComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupFeedbackReceivedType] [int] NULL,
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RollupPayPalAddressStatus] [int] NULL
+[RollupPayPalAddressStatus] [int] NULL,
+[GuaranteedDelivery] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -166,7 +168,10 @@ PRINT N'Creating index [IX_EbayOrder_EbayBuyerID] on [dbo].[EbayOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrder_EbayBuyerID] ON [dbo].[EbayOrder] ([EbayBuyerID])
 GO
-
+PRINT N'Creating index [IX_EbayOrder_GuaranteedDelivery] on [dbo].[EbayOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrder_GuaranteedDelivery] ON [dbo].[EbayOrder] ([GuaranteedDelivery])
+GO
 PRINT N'Creating [dbo].[WorldShipPackage]'
 GO
 CREATE TABLE [dbo].[WorldShipPackage]
@@ -739,7 +744,9 @@ CREATE TABLE [dbo].[OrderItem]
 [Quantity] [float] NOT NULL,
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
-[TotalWeight] AS ([Weight]*[Quantity])
+[TotalWeight] AS ([Weight]*[Quantity]),
+[HarmonizedCode] [varchar] (14) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [BIGINT] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -752,7 +759,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_OrderItem_OrderID] ON [dbo].[OrderItem] ([O
 GO
 ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Altering [dbo].[OrderItem]'
+CREATE NONCLUSTERED INDEX [IX_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
 GO
 PRINT N'Creating [dbo].[AmazonOrderItem]'
 GO
@@ -1312,7 +1319,7 @@ GO
 CREATE TABLE [dbo].[BuyDotComOrderItem]
 (
 [OrderItemID] [bigint] NOT NULL,
-[ReceiptItemID] [bigint] NOT NULL,
+[ReceiptItemID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ListingID] [int] NOT NULL,
 [Shipping] [money] NOT NULL,
 [Tax] [money] NOT NULL,
@@ -1364,10 +1371,10 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
 [MarketplaceSalesID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Classification] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DistributionCenter] [nvarchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsFBA] [bit] NOT NULL,
 [MPN] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DistributionCenterID] [bigint] NOT NULL
+[DistributionCenterID] [bigint] NOT NULL,
+[DistributionCenterName] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderItem] on [dbo].[ChannelAdvisorOrderItem]'
@@ -4925,7 +4932,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExFimsEnabled] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsEnabled] DEFAULT ((0)),
 [FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
 [FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT (''),
-[ShipmentEditLimit] [int] NOT NULL
+[ShipmentEditLimit] [int] NOT NULL,
+[ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -5080,6 +5088,12 @@ CREATE TABLE [dbo].[WorldShipProcessed]
 [ShipmentIdCalculated] AS (case when isnumeric([ShipmentID]+'.e0')=(1) then CONVERT([bigint],[ShipmentID],(0))  end) PERSISTED
 )
 GO
+PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
+GO
+ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
+GO
+
+GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
 CREATE TABLE [dbo].[ValidatedAddress](
@@ -5111,12 +5125,30 @@ CREATE NONCLUSTERED INDEX [IX_ValidatedAddress_ConsumerIDAddressPrefix]
     ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
 GO
 
+PRINT N'Creating [dbo].[ShipmentReturnItem]'
+GO
+CREATE TABLE [dbo].[ShipmentReturnItem]
+(
+[ShipmentReturnItemID] [bigint] NOT NULL IDENTITY(1101, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[ShipmentID] [bigint] NOT NULL,
+[Name] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Quantity] [float] NOT NULL,
+[Weight] [float] NOT NULL,
+[Notes] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[SKU] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Code] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_ShipmentReturnItem] on [dbo].[ShipmentReturnItem]'
+GO
+ALTER TABLE [dbo].[ShipmentReturnItem] ADD CONSTRAINT [PK_ShipmentReturnItem] PRIMARY KEY CLUSTERED  ([ShipmentReturnItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[ShipmentReturnItem]'
+GO
+ALTER TABLE [dbo].[ShipmentReturnItem] ADD CONSTRAINT [FK_ShipmentReturnItem_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
 
-GO
-PRINT N'Creating primary key [PK_WorldShipProcessed] on [dbo].[WorldShipProcessed]'
-GO
-ALTER TABLE [dbo].[WorldShipProcessed] ADD CONSTRAINT [PK_WorldShipProcessed] PRIMARY KEY CLUSTERED  ([WorldShipProcessedID])
-GO
 PRINT N'Altering [dbo].[DimensionsProfile]'
 GO
 PRINT N'Altering [dbo].[EmailAccount]'
@@ -5705,7 +5737,7 @@ CREATE TABLE [dbo].[GrouponOrder]
 (
 [OrderID] [bigint] NOT NULL,
 [GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
@@ -5760,6 +5792,26 @@ GO
 PRINT N'Adding foreign keys to [dbo].[GrouponStore]'
 GO
 ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+
+PRINT N'Creating table to [dbo].[EtsyOrderItem]'
+GO
+CREATE TABLE [dbo].[EtsyOrderItem](
+	[OrderItemID] [bigint] NOT NULL,
+	[TransactionID] [int] NOT NULL,
+	[ListingID] [int] NOT NULL
+ CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
+(
+	[OrderItemID] ASC
+) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[EtsyOrderItem]  WITH CHECK ADD  CONSTRAINT [FK_EtsyOrderItem_OrderItem] FOREIGN KEY([OrderItemID])
+REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+
+ALTER TABLE [dbo].[EtsyOrderItem] CHECK CONSTRAINT [FK_EtsyOrderItem_OrderItem]
 GO
 
 PRINT N'Creating [dbo].[LemonStandStore]'
@@ -5858,7 +5910,7 @@ CREATE TABLE [dbo].[OdbcStore]
     [ImportStrategy] [int] NOT NULL,
     [ImportColumnSourceType] [int] NOT NULL,
     [ImportColumnSource] [nvarchar](2048) NOT NULL,
-	[ImportOrderItemStrategy] [int] NOT NULL,
+    [ImportOrderItemStrategy] [int] NOT NULL,
     [UploadStrategy] [int] NOT NULL,
     [UploadMap] [nvarchar](max) NOT NULL,
     [UploadColumnSourceType] [int] NOT NULL,
@@ -5950,11 +6002,60 @@ PRINT N'Adding foreign keys to [dbo].[WalmartStore]'
 GO
 ALTER TABLE [dbo].[WalmartStore] ADD CONSTRAINT [FK_WalmartStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Creating [dbo].[JetStore]'
+GO
+CREATE TABLE [dbo].[JetStore]
+(
+[StoreID] [bigint] NOT NULL,
+[ApiUser] [nvarchar](100) NOT NULL,
+[Secret] [nvarchar](100) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetStore] on [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [PK_JetStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetStore]'
+GO
+ALTER TABLE [dbo].[JetStore] ADD CONSTRAINT [FK_JetStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Creating [dbo].[UpsRateTable]'
 GO
+PRINT N'Creating [dbo].[JetOrder]'
+GO
+CREATE TABLE [dbo].[JetOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[MerchantOrderId] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrder] on [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [PK_JetOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating [dbo].[JetOrderItem]'
+GO
+CREATE TABLE [dbo].[JetOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[MerchantSku] [nvarchar](50) NOT NULL,
+[JetOrderItemID] [nvarchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrderItem] on [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [PK_JetOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrderItem]'
+GO
+ALTER TABLE [dbo].[JetOrderItem] ADD CONSTRAINT [FK_JetOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrder]'
+GO
+ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [FK_JetOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 CREATE TABLE [dbo].[UpsRateTable](
-	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UploadDate][DateTime2] NOT NULL)
+    [UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UploadDate][DateTime2] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsRateTable] on [dbo].[UpsRateTable]'
 GO
@@ -5963,12 +6064,12 @@ GO
 PRINT N'Creating [dbo].[UpsPackageRate]'
 GO
 CREATE TABLE [dbo].[UpsPackageRate](
-	[UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar](3) NOT NULL,
-	[WeightInPounds][int] NOT NULL,
-	[Service][int] NOT NULL,
-	[Rate][Money] NOT NULL)
+    [UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UpsRateTableID][bigint] NOT NULL,
+    [Zone][varchar](3) NOT NULL,
+    [WeightInPounds][int] NOT NULL,
+    [Service][int] NOT NULL,
+    [Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsPackageRate] on [dbo].[UpsPackageRate]'
 GO
@@ -5987,11 +6088,11 @@ GO
 PRINT N'Creating [dbo].[UpsLetterRate]'
 GO
 CREATE TABLE [dbo].[UpsLetterRate](
-	[UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar](3) NOT NULL,
-	[Service][int] NOT NULL,
-	[Rate][Money] NOT NULL)
+    [UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UpsRateTableID][bigint] NOT NULL,
+    [Zone][varchar](3) NOT NULL,
+    [Service][int] NOT NULL,
+    [Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLetterRate] on [dbo].[UpsLetterRate]'
 GO
@@ -6005,11 +6106,11 @@ GO
 PRINT N'Creating [dbo].[UpsPricePerPound]'
 GO
 CREATE TABLE [dbo].[UpsPricePerPound](
-	[UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UpsRateTableID][bigint] NOT NULL,
-	[Zone][varchar](3) NOT NULL,
-	[Service][int] NOT NULL,
-	[Rate][Money] NOT NULL)
+    [UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UpsRateTableID][bigint] NOT NULL,
+    [Zone][varchar](3) NOT NULL,
+    [Service][int] NOT NULL,
+    [Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsPricePerPound] on [dbo].[UpsPricePerPound]'
 GO
@@ -6024,10 +6125,10 @@ GO
 PRINT N'Creating [dbo].[UpsRateSurcharge]'
 GO
 CREATE TABLE [dbo].[UpsRateSurcharge](
-	[UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UpsRateTableID][bigint] NOT NULL,
-	[SurchargeType][int] NOT NULL,
-	[Amount][float] NOT NULL)
+    [UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UpsRateTableID][bigint] NOT NULL,
+    [SurchargeType][int] NOT NULL,
+    [Amount][float] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsRateSurcharge] on [dbo].[UpsRateSurcharge]'
 GO
@@ -6046,9 +6147,9 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingZoneFile]'
 GO
 CREATE TABLE [dbo].[UpsLocalRatingZoneFile](
-	[ZoneFileID] [bigint] NOT NULL IDENTITY(1, 1),
-	[UploadDate] [DateTime2] NOT NULL,
-	[FileContent] [varbinary](max) NOT NULL)
+    [ZoneFileID] [bigint] NOT NULL IDENTITY(1, 1),
+    [UploadDate] [DateTime2] NOT NULL,
+    [FileContent] [varbinary](max) NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingZoneFile] on [dbo].[UpsLocalRatingZoneFile]'
 GO
@@ -6058,14 +6159,14 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingZone]'
 GO
 CREATE TABLE [dbo].[UpsLocalRatingZone](
-	[ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
-	[ZoneFileID] [bigint] NOT NULL,
-	[OriginZipFloor] [int] NOT NULL,
-	[OriginZipCeiling] [int] NOT NULL,
-	[DestinationZipFloor] [int] NOT NULL,
-	[DestinationZipCeiling] [int] NOT NULL,
-	[Service] [int] NOT NULL,
-	[Zone] [varchar](3) NOT NULL)
+    [ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
+    [ZoneFileID] [bigint] NOT NULL,
+    [OriginZipFloor] [int] NOT NULL,
+    [OriginZipCeiling] [int] NOT NULL,
+    [DestinationZipFloor] [int] NOT NULL,
+    [DestinationZipCeiling] [int] NOT NULL,
+    [Service] [int] NOT NULL,
+    [Zone] [varchar](3) NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingZone] on [dbo].[UpsLocalRatingZone]'
 GO
@@ -6080,10 +6181,10 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 CREATE TABLE [dbo].UpsLocalRatingDeliveryAreaSurcharge(
-	[DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
-	[ZoneFileID] [bigint] NOT NULL,
-	[DestinationZip] [int] NOT NULL,
-	[DeliveryAreaType] [int] NOT NULL)
+    [DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
+    [ZoneFileID] [bigint] NOT NULL,
+    [DestinationZip] [int] NOT NULL,
+    [DeliveryAreaType] [int] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingDeliveryAreaSurcharge] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
@@ -6108,7 +6209,8 @@ CREATE TABLE [dbo].[OrderSearch]
 [StoreID] [bigint] NOT NULL,
 [OrderNumber] [bigint] NOT NULL,
 [OrderNumberComplete] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[IsManual] [bit] NOT NULL
+[IsManual] [bit] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderSearch] on [dbo].[OrderSearch]'
@@ -6135,7 +6237,8 @@ CREATE TABLE [dbo].[AmazonOrderSearch]
 (
 [AmazonOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrderSearch] on [dbo].[AmazonOrderSearch]'
@@ -6152,7 +6255,8 @@ CREATE TABLE [dbo].[ChannelAdvisorOrderSearch]
 (
 [ChannelAdvisorOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[CustomOrderIdentifier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CustomOrderIdentifier] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrderSearch] on [dbo].[ChannelAdvisorOrderSearch]'
@@ -6169,7 +6273,8 @@ CREATE TABLE [dbo].[ClickCartProOrderSearch]
 (
 [ClickCartProOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ClickCartProOrderID] [varchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ClickCartProOrderID] [varchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ClickCartProOrderSearch] on [dbo].[ClickCartProOrderSearch]'
@@ -6186,7 +6291,8 @@ CREATE TABLE [dbo].[CommerceInterfaceOrderSearch]
 (
 [CommerceInterfaceOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[CommerceInterfaceOrderNumber] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[CommerceInterfaceOrderNumber] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_CommerceInterfaceOrderSearch] on [dbo].[CommerceInterfaceOrderSearch]'
@@ -6205,7 +6311,8 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [OrderID] [bigint] NOT NULL,
 [EbayOrderID] [bigint] NOT NULL,
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellingManagerRecord] [int] NULL
+[SellingManagerRecord] [int] NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
@@ -6223,7 +6330,8 @@ CREATE TABLE [dbo].[GrouponOrderSearch]
 [GrouponOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
- [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+ [ParentOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearch]'
@@ -6238,13 +6346,32 @@ PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID] on [dbo].[GrouponOr
 GO
 CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID]) INCLUDE ([OrderID])
 GO
+PRINT N'Creating [dbo].[JetOrderSearch]'
+GO
+CREATE TABLE [dbo].[JetOrderSearch]
+(
+[JetOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
+[OrderID] [bigint] NOT NULL,
+[MerchantOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_JetOrderSearch] on [dbo].[JetOrderSearch]'
+GO
+ALTER TABLE [dbo].[JetOrderSearch] ADD CONSTRAINT [PK_JetOrderSearch] PRIMARY KEY CLUSTERED  ([JetOrderSearchID])
+GO
+PRINT N'Creating index [IX_JetOrderSearch_JetOrderID] on [dbo].[JetOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_JetOrderSearch_JetOrderID] ON [dbo].[JetOrderSearch] ([MerchantOrderID]) INCLUDE ([OrderID])
+GO
 PRINT N'Creating [dbo].[LemonStandOrderSearch]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderSearch]
 (
 [LemonStandOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[LemonStandOrderID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[LemonStandOrderID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderSearch] on [dbo].[LemonStandOrderSearch]'
@@ -6261,7 +6388,8 @@ CREATE TABLE [dbo].[MagentoOrderSearch]
 (
 [MagentoOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[MagentoOrderID] [bigint] NOT NULL
+[MagentoOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MagentoOrderSearch] on [dbo].[MagentoOrderSearch]'
@@ -6279,7 +6407,8 @@ CREATE TABLE [dbo].[MarketplaceAdvisorOrderSearch]
 [MarketplaceAdvisorOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [InvoiceNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[SellerOrderNumber] [bigint] NOT NULL
+[SellerOrderNumber] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MarketplaceAdvisorOrderSearch] on [dbo].[MarketplaceAdvisorOrderSearch]'
@@ -6292,7 +6421,8 @@ CREATE TABLE [dbo].[NetworkSolutionsOrderSearch]
 (
 [NetworkSolutionsOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[NetworkSolutionsOrderID] [bigint] NOT NULL
+[NetworkSolutionsOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_NetworkSolutionsOrderSearch] on [dbo].[NetworkSolutionsOrderSearch]'
@@ -6305,7 +6435,8 @@ CREATE TABLE [dbo].[OrderMotionOrderSearch]
 (
 [OrderMotionOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[OrderMotionShipmentID] [int] NOT NULL
+[OrderMotionShipmentID] [int] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderMotionOrderSearch] on [dbo].[OrderMotionOrderSearch]'
@@ -6318,7 +6449,8 @@ CREATE TABLE [dbo].[PayPalOrderSearch]
 (
 [PayPalOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[TransactionID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[TransactionID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PayPalOrderSearch] on [dbo].[PayPalOrderSearch]'
@@ -6331,7 +6463,8 @@ CREATE TABLE [dbo].[ProStoresOrderSearch]
 (
 [ProStoresOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ConfirmationNumber] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[ConfirmationNumber] [varchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderSearch]'
@@ -6344,7 +6477,8 @@ CREATE TABLE [dbo].[SearsOrderSearch]
 (
 [SearsOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[PoNumber] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PoNumber] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_SearsOrderSearch] on [dbo].[SearsOrderSearch]'
@@ -6357,7 +6491,8 @@ CREATE TABLE [dbo].[ShopifyOrderSearch]
 (
 [ShopifyOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ShopifyOrderID] [bigint] NOT NULL
+[ShopifyOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyOrderSearch] on [dbo].[ShopifyOrderSearch]'
@@ -6370,7 +6505,8 @@ CREATE TABLE [dbo].[ThreeDCartOrderSearch]
 (
 [ThreeDCartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[ThreeDCartOrderID] [bigint] NOT NULL
+[ThreeDCartOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartOrderSearch] on [dbo].[ThreeDCartOrderSearch]'
@@ -6383,7 +6519,8 @@ CREATE TABLE [dbo].[WalmartOrderSearch]
 (
 [WalmartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderSearch] on [dbo].[WalmartOrderSearch]'
@@ -6400,7 +6537,8 @@ CREATE TABLE [dbo].[YahooOrderSearch]
 (
 [YahooOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
-[YahooOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[YahooOrderID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_YahooOrderSearch] on [dbo].[YahooOrderSearch]'
@@ -6430,6 +6568,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[GrouponOrderSearch]'
 GO
 ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [FK_GrouponOrderSearch_GrouponOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[GrouponOrder] ([OrderID]) ON DELETE CASCADE
+GO
+PRINT N'Adding foreign keys to [dbo].[JetOrderSearch]'
+GO
+ALTER TABLE [dbo].[JetOrderSearch] ADD CONSTRAINT [FK_JetOrderSearch_JetOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[JetOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[LemonStandOrderSearch]'
 GO

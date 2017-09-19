@@ -22,6 +22,11 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Order downloader for retrieving Infopia orders.
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Infopia)]
     public class InfopiaDownloader : StoreDownloader
     {

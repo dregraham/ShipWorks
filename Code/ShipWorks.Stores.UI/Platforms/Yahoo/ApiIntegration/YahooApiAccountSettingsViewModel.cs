@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo;
@@ -12,17 +13,19 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
     /// <summary>
     /// View model for the Yahoo Account Settings Page
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class YahooApiAccountSettingsViewModel : YahooApiAccountViewModel, INotifyPropertyChanged
     {
         private readonly Func<Type, ILog> logFactory;
-        private string helpUrl ;
+        private string helpUrl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiAccountSettingsViewModel"/> class.
         /// </summary>
         /// <param name="storeTypeManager"></param>
         /// <param name="storeWebClient">The store web client.</param>
-        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, ILog, IYahooApiWebClient> storeWebClient, Func<Type, ILog> logFactory) : base(storeWebClient, logFactory)
+        public YahooApiAccountSettingsViewModel(IStoreTypeManager storeTypeManager, IYahooApiWebClient webClient, Func<Type, ILog> logFactory) :
+            base(webClient, logFactory)
         {
             this.logFactory = logFactory;
             YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
@@ -59,8 +62,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <param name="store">The store.</param>
         public override string Save(YahooStoreEntity store)
         {
-            store.YahooStoreID = YahooStoreID;
-            store.AccessToken = AccessToken;
+            store.YahooStoreID = YahooStoreID?.Trim() ?? string.Empty;
+            store.AccessToken = AccessToken?.Trim() ?? string.Empty;
             store.BackupOrderNumber = BackupOrderNumber;
 
             if (string.IsNullOrWhiteSpace(YahooStoreID))
@@ -80,8 +83,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             try
             {
-                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken }, logFactory(typeof(YahooApiWebClient)))
-                    .ValidateCredentials();
+                YahooResponse response = webClient.ValidateCredentials(store);
 
                 string error = CheckCredentialsError(response);
 

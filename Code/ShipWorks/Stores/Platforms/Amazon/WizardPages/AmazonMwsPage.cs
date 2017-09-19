@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
 {
@@ -22,16 +23,18 @@ namespace ShipWorks.Stores.Platforms.Amazon.WizardPages
         public AmazonMwsPage()
         {
             InitializeComponent();
+
+            StepNextAsync = OnStepNextAsync;
         }
 
         /// <summary>
         /// Step Next
         /// </summary>
-        private void OnStepNext(object sender, UI.Wizard.WizardStepEventArgs e)
+        private async Task OnStepNextAsync(object sender, UI.Wizard.WizardStepEventArgs e)
         {
             AmazonStoreEntity amazonStore = GetStore<AmazonStoreEntity>();
 
-            if (!storeSettingsControl.SaveToEntity(amazonStore))
+            if (!await storeSettingsControl.SaveToEntityAsync(amazonStore).ConfigureAwait(true))
             {
                 e.NextPage = this;
             }

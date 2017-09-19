@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions.Tasks.Common;
+using Autofac;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Email.Accounts;
 
 namespace ShipWorks.Shipping.Settings
@@ -39,7 +33,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Ensure the control is initialized.  If it has already been initialized, nothing is done.
         /// </summary>
-        public void EnsureInitialized(ShipmentTypeCode code)
+        public void EnsureInitialized(ILifetimeScope lifetimeScope, ShipmentTypeCode code)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -59,18 +53,18 @@ namespace ShipWorks.Shipping.Settings
                 voidActionBox.Checked = actionStatusVoided.Enabled;
 
                 // Load the email ui
-                emailTask = (EmailTask) ActionManager.LoadTasks(actionEmail)[0];
+                emailTask = (EmailTask) ActionManager.LoadTasks(lifetimeScope, actionEmail)[0];
                 emailActionTemplate.SelectedTemplateID = emailTask.TemplateID;
                 delayDelivery.Checked = emailTask.DelayDelivery;
                 delayTimeOfDay.Value = new DateTime(2000, 1, 1, emailTask.DelayTimeOfDay.Hours, emailTask.DelayTimeOfDay.Minutes, 0);
                 UpdateEmailActionUI();
 
                 // Load the ship status UI
-                shipStatusTask = (SetOrderStatusTask) ActionManager.LoadTasks(actionStatusShipped)[0];
+                shipStatusTask = (SetOrderStatusTask) ActionManager.LoadTasks(lifetimeScope, actionStatusShipped)[0];
                 shipActionStatus.Text = shipStatusTask.Status;
 
                 // Load the void status UI
-                voidStatusTask = (SetOrderStatusTask) ActionManager.LoadTasks(actionStatusVoided)[0];
+                voidStatusTask = (SetOrderStatusTask) ActionManager.LoadTasks(lifetimeScope, actionStatusVoided)[0];
                 voidActionStatus.Text = voidStatusTask.Status;
             }
         }

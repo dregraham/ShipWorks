@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.BuyDotCom.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.BuyDotCom.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -69,11 +68,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         }
 
         /// <summary>
-        /// Returns buy.com order identifier
+        /// Create an identifier that uniquely identifies the order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new OrderNumberIdentifier(order.OrderNumber);
+            return new AlphaNumericOrderIdentifier(order.OrderNumberComplete);
         }
 
         /// <summary>
@@ -121,67 +120,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                BuyDotComOnlineUpdater shipmentUpdater = new BuyDotComOnlineUpdater(buyDotComStore);
-                shipmentUpdater.UploadOrderShipmentDetails(headers);
-            }
-            catch (BuyDotComException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(headers, ex);
-            }
-        }
-
-        /// <summary>
         /// LicenseIdentifier
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get
-            {
-                return buyDotComStore.FtpUsername;
-            }
-        }
+        protected override string InternalLicenseIdentifier => buyDotComStore.FtpUsername;
     }
 }

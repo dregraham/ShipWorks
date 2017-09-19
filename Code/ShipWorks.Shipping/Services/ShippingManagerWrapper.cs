@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,9 +9,9 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -20,26 +20,26 @@ namespace ShipWorks.Shipping.Services
     /// </summary>
     public class ShippingManagerWrapper : IShippingManager
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IValidatedAddressScope validatedAddressScope;
         private readonly IDataProvider dataProvider;
+        private readonly IReturnItemRepository returnItemRepository;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingManagerWrapper(
-            ISqlAdapterFactory sqlAdapterFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory,
             IValidatedAddressScope validatedAddressScope,
             IDataProvider dataProvider,
+            IReturnItemRepository returnItemRepository,
             Func<Type, ILog> getLogger)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.validatedAddressScope = validatedAddressScope;
             this.dataProvider = dataProvider;
+            this.returnItemRepository = returnItemRepository;
             log = getLogger(GetType());
         }
 
@@ -66,12 +66,50 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        /// <remarks>
+        /// Normally, an async method should not just wrap a sync method in a Task.Run,
+        /// but in this case, we know that the majority of the blocking time will be in the database.
+        /// As time goes on, we can replace the original EnsureShipmentLoaded with an
+        /// async-first method and then we can remove the Task.Run.
+        /// </remarks>
+        public Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment) =>
+            Task.Run(() => EnsureShipmentLoaded(shipment));
+
+        /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         public ICarrierShipmentAdapter GetShipment(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             return GetShipmentAdapter(shipment);
+        }
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        public async Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID)
+        {
+            ShipmentEntity shipment = await dataProvider.GetEntityAsync<ShipmentEntity>(shipmentID).ConfigureAwait(false);
+            if (shipment == null)
+            {
+                log.InfoFormat("Shipment {0} seems to be now deleted.", shipmentID);
+                return null;
+            }
+
+            await EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+
+            OrderEntity order = await dataProvider.GetEntityAsync<OrderEntity>(shipment.OrderID).ConfigureAwait(false);
+            if (order == null)
+            {
+                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+                return null;
+            }
+
+            shipment.Order = order;
+
+            return shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>
@@ -200,6 +238,18 @@ namespace ShipWorks.Shipping.Services
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
 
         /// <summary>
+        /// Create a shipment as a copy of an existing shipment as a return
+        /// </summary>
+        public ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)
+        {
+            return CreateShipmentCopy(shipment, x =>
+            {
+                x.ReturnShipment = true;
+                returnItemRepository.LoadReturnData(x, true);
+            });
+        }
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment
         /// </summary>
         public ShipmentEntity CreateShipmentCopy(ShipmentEntity shipment) => CreateShipmentCopy(shipment, null);
@@ -233,13 +283,19 @@ namespace ShipWorks.Shipping.Services
         /// Gets the service used.
         /// </summary>
         public string GetOverriddenServiceUsed(ShipmentEntity shipment) =>
-            ShippingManager.GetOverriddenSerivceUsed(shipment);
+            ShippingManager.GetOverriddenServiceUsed(shipment);
 
         /// <summary>
         /// Gets the service used.
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
+
+        /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        public CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipmentTypeCode) =>
+            ShippingManager.GetOtherCarrierDescription(shipmentTypeCode);
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
@@ -268,41 +324,5 @@ namespace ShipWorks.Shipping.Services
         /// </remarks>
         public Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache) =>
             ShippingManager.ValidateLicense(store, licenseCheckCache);
-
-        /// <summary>
-        /// Gets the recent shipments.
-        /// </summary>
-        /// <param name="bucket">The predicate bucket to filter the shipments returned</param>
-        /// <param name="sortExpression">The sort expression</param>
-        /// <param name="maxNumberOfShipmentsToReturn">The max number of shipments to return</param>
-        /// <returns></returns>
-        /// <exception cref="UpsLocalRatingException"></exception>
-        public IEnumerable<ShipmentEntity> GetShipments(RelationPredicateBucket bucket, ISortExpression sortExpression, int maxNumberOfShipmentsToReturn)
-        {
-            ShipmentCollection shipmentCollection = new ShipmentCollection();
-
-            try
-            {
-                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-                {
-                    adapter.FetchEntityCollection(shipmentCollection, bucket, maxNumberOfShipmentsToReturn, sortExpression);
-                }
-            }
-            catch (Exception ex) when (ex is ORMException || ex is SqlException)
-            {
-                throw new ShippingException($"Error retrieving list of shipments:{Environment.NewLine}{Environment.NewLine}{ex.Message}", ex);
-            }
-
-            IList<ShipmentEntity> shipments = shipmentCollection.Items;
-
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                EnsureShipmentLoaded(shipment);
-            }
-
-            log.Info($"{shipments.Count} shipments found matching criteria.");
-
-            return shipments;
-        }
     }
 }

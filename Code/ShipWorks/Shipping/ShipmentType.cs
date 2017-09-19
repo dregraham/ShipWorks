@@ -1030,8 +1030,8 @@ namespace ShipWorks.Shipping
             {
                 // This shipment requires customs based on the shipping address
                 // but allow the store to have the final say
-                OrderHeader orderHeader = DataProvider.GetOrderHeader(shipment.OrderID);
-                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(orderHeader.StoreID));
+                long storeID = shipment.Order?.StoreID ?? DataProvider.GetOrderHeader(shipment.OrderID).StoreID;
+                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(storeID));
 
                 // Pass a true value indicating customs is required based on the shipping address
                 requiresCustoms = storeType.IsCustomsRequired(shipment, true);

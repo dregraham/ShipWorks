@@ -38,6 +38,7 @@ using ShipWorks.Stores.Platforms.Volusion;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Yahoo;
 using Xunit;
+using ShipWorks.Stores.Platforms.Jet;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms
 {
@@ -100,7 +101,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificDownloaders = new Dictionary<StoreTypeCode, Type>
         {
-            { StoreTypeCode.Amazon, typeof(AmazonDownloaderFactory) },
+            { StoreTypeCode.Amazon, typeof(AmazonMwsDownloader) },
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceDownloader) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceDownloader) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComDownloader) },
@@ -130,7 +131,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.ThreeDCart, typeof(ThreeDCartDownloaderFactory) },
             { StoreTypeCode.Volusion, typeof(VolusionDownloader) },
             { StoreTypeCode.Walmart, typeof(WalmartDownloader) },
-            { StoreTypeCode.Yahoo, typeof(YahooDownloaderFactory) }
+            { StoreTypeCode.Yahoo, typeof(YahooDownloaderFactory) },
+            { StoreTypeCode.Jet, typeof(JetDownloader) }
         };
     }
 }

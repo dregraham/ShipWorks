@@ -329,7 +329,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnSetOrderStatus(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             StatusPresetEntity preset = (StatusPresetEntity) command.Tag;
 

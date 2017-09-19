@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -17,6 +14,7 @@ using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -35,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private readonly ThreeDCartStoreEntity threeDCartStore;
         private readonly ISqlAdapterRetry sqlAdapterRetry;
         private readonly IOrderManager orderManager;
+        private readonly IThreeDCartRestItemAttributeLoader itemAttributeLoader;
         private readonly ILog log;
         private int newOrderCount;
         private DateTime modifiedOrderEndDate;
@@ -53,12 +52,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             Func<StoreEntity, ThreeDCartStoreType> getStoreType,
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
-            Func<Type, ILog> createLogger) :
+            Func<Type, ILog> createLogger,
+            Func<IOrderElementFactory, IThreeDCartRestItemAttributeLoader> itemAttributeLoaderFactory) :
             base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             this.restWebClient = restWebClientFactory(store);
             this.sqlAdapterRetry = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ThreeDCartRestDownloader.LoadOrder");
             this.orderManager = orderManager;
+            this.itemAttributeLoader = itemAttributeLoaderFactory(this);
             this.log = createLogger(GetType());
             threeDCartStore = store;
         }
@@ -205,8 +206,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             foreach (ThreeDCartOrder threeDCartOrder in orders)
             {
                 // Don't download abandoned orders
-                if (threeDCartOrder.InvoiceNumber == 0 &&
-                    threeDCartOrder.OrderStatusID == (int) Enums.ThreeDCartOrderStatus.NotCompleted)
+                if (threeDCartOrder.OrderStatusID == (int) Enums.ThreeDCartOrderStatus.NotCompleted)
                 {
                     continue;
                 }
@@ -405,15 +405,16 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             ThreeDCartOrderItemEntity item = (ThreeDCartOrderItemEntity) InstantiateOrderItem(order);
 
             item.Code = threeDCartItem.ItemID;
-            item.SKU = item.Code;
             item.Quantity = threeDCartItem.ItemQuantity;
             item.UnitCost = threeDCartItem.ItemUnitCost;
             item.UnitPrice = threeDCartItem.ItemUnitPrice;
             item.Weight = threeDCartItem.ItemWeight;
             item.ThreeDCartShipmentID = threeDCartItem.ItemShipmentID;
 
-            LoadProductImagesAndLocation(item, threeDCartItem.CatalogID);
-            LoadItemNameAndAttributes(item, threeDCartItem);
+            LoadProductDetails(item, threeDCartItem.CatalogID);
+
+            // Item attributes (options on 3dCart) come down in the item description and need to be parsed out
+            itemAttributeLoader.LoadItemNameAndAttributes(item, threeDCartItem.ItemDescription);
 
             // There are some cases where discounts don't show in order discount field and actually appear as a separate item.
             // When this happens, it has no item price, but an item option price, which we usually ignore since we
@@ -428,59 +429,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         }
 
         /// <summary>
-        /// Loads the item name and attributes.
-        /// </summary>
-        private void LoadItemNameAndAttributes(ThreeDCartOrderItemEntity item, ThreeDCartOrderItem threeDCartItem)
-        {
-            string itemDescription = threeDCartItem.ItemDescription;
-            string[] splitDescription = itemDescription.Split(new[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries);
-
-            item.Name = splitDescription[0];
-
-            for (int i = 1; i < splitDescription.Length; i++)
-            {
-                string optionHtml = splitDescription[i];
-
-                HtmlDocument htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(optionHtml);
-
-                // get optionName
-                HtmlNode optionNameNode = htmlDoc.DocumentNode.SelectSingleNode(@"/b");
-                if (optionNameNode == null)
-                {
-                    continue;
-                }
-                string optionName = optionNameNode.InnerHtml.Trim().TrimEnd(':');
-                string optionNameAndPrice = optionNameNode.SelectSingleNode("./following-sibling::text()").InnerText.Trim();
-
-                // Get unit price
-                Regex pricePattern = new Regex(@"\$\d+(?:\.\d+)?");
-                Match match = pricePattern.Match(optionNameAndPrice);
-                decimal unitPrice = 0;
-                if (match.Groups.Count == 1)
-                {
-                    string amount = match.Groups[0].Value;
-                    decimal.TryParse(amount, NumberStyles.Currency, null, out unitPrice);
-                }
-
-                // Get description
-                Regex removePricePattern = new Regex(@"\-\ \$\d+(?:\.\d+)?");
-                string description =
-                    removePricePattern.Replace(optionNameAndPrice, string.Empty).Trim().Replace(@"&nbsp;", string.Empty);
-
-
-                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                attribute.Name = optionName;
-                attribute.Description = description;
-                attribute.UnitPrice = unitPrice;
-            }
-        }
-
-        /// <summary>
-        /// Loads the product images and location.
+        /// Loads product details that require a GetProduct call
         /// </summary>
         /// <remarks>Attempts to load from cache before reaching out to 3dcart</remarks>
-        private void LoadProductImagesAndLocation(ThreeDCartOrderItemEntity item, int catalogID)
+        private void LoadProductDetails(ThreeDCartOrderItemEntity item, int catalogID)
         {
             ThreeDCartProduct product = restWebClient.GetProduct(catalogID);
 
@@ -497,6 +449,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 }
 
                 item.Location = product.WarehouseBin;
+                item.SKU = product.SkuInfo.Sku;
+            }
+            else
+            {
+                item.SKU = item.Code;
             }
         }
 

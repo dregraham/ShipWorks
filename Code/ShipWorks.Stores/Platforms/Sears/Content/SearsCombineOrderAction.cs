@@ -26,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Sears.Content
                 x => new SearsOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    PoNumber = x.PoNumber
+                    PoNumber = x.PoNumber,
+                    OriginalOrderID = x.OrderID
                 });
         }
     }

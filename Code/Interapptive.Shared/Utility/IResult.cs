@@ -1,4 +1,6 @@
-﻿namespace Interapptive.Shared.Utility
+﻿using System;
+
+namespace Interapptive.Shared.Utility
 {
     /// <summary>
     /// Basic interface for testing success of an operation
@@ -9,6 +11,11 @@
         /// Message accompanying the object
         /// </summary>
         string Message { get; }
+
+        /// <summary>
+        /// Exception accompanying the object
+        /// </summary>
+        Exception Exception { get; }
 
         /// <summary>
         /// Whether or not the operation was a success

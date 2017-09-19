@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.FileTransfer;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
@@ -24,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Get any FTP account entity that is configured for the given store
         /// </summary>
-        public static FtpAccountEntity GetFtpAccount(BuyDotComStoreEntity store)
+        public static FtpAccountEntity GetFtpAccount(IBuyDotComStoreEntity store)
         {
             return GetFtpAccount(store.FtpUsername, SecureText.Decrypt(store.FtpPassword, store.FtpUsername));
         }
@@ -42,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             // Per buy.com, always use Active
             account.Passive = false;
 
-            // Don't accidentially add it to the database
+            // Don't accidentally add it to the database
             account.IsNew = false;
             account.IsDirty = false;
 

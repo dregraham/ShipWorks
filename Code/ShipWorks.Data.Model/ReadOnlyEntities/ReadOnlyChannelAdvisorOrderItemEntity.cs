@@ -42,10 +42,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MarketplaceSalesID = source.MarketplaceSalesID;
             Classification = source.Classification;
             DistributionCenter = source.DistributionCenter;
-            HarmonizedCode = source.HarmonizedCode;
             IsFBA = source.IsFBA;
             MPN = source.MPN;
             DistributionCenterID = source.DistributionCenterID;
+            DistributionCenterName = source.DistributionCenterName;
             
             
             
@@ -90,12 +90,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String DistributionCenter { get; }
-        /// <summary> The HarmonizedCode property of the Entity ChannelAdvisorOrderItem<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "ChannelAdvisorOrderItem"."HarmonizedCode"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String HarmonizedCode { get; }
         /// <summary> The IsFBA property of the Entity ChannelAdvisorOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "ChannelAdvisorOrderItem"."IsFBA"<br/>
@@ -114,6 +108,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 DistributionCenterID { get; }
+        /// <summary> The DistributionCenterName property of the Entity ChannelAdvisorOrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ChannelAdvisorOrderItem"."DistributionCenterName"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String DistributionCenterName { get; }
         
         
         

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
 
@@ -12,6 +14,11 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
     /// <summary>
     /// WebShopManager Store implementation.
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.WebShopManager)]
     [Component(RegistrationType.Self)]
     public class WebShopManagerStoreType : GenericModuleStoreType
@@ -19,8 +26,8 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         /// <summary>
         /// Constructor
         /// </summary>
-        public WebShopManagerStoreType(StoreEntity store)
-            : base(store)
+        public WebShopManagerStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }
@@ -51,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.WebShopManager
         /// <summary>
         /// Create a legacy-compatible web client configured for WebShopManager
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>

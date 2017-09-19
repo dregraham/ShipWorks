@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Data.Model.EntityClasses
+﻿namespace ShipWorks.Data.Model.EntityClasses
 {
+    /// <summary>
+    /// Custom Walmart order item
+    /// </summary>
     public partial class WalmartOrderItemEntity
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WalmartOrderItemEntity(OrderEntity order)
             : base(order)
         {
-            
         }
     }
 }

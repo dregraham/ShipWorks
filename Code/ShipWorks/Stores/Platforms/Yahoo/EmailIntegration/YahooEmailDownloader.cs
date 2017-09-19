@@ -15,6 +15,7 @@ using log4net;
 using Rebex.Mail;
 using Rebex.Net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -42,8 +43,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Constructor
         /// </summary>
-        public YahooEmailDownloader(YahooStoreEntity store)
-            : base(store)
+        public YahooEmailDownloader(YahooStoreEntity store, IStoreTypeManager storeTypeManager,
+                IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
 
         }

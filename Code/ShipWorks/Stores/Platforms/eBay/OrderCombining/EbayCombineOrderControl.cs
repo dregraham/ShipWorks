@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -109,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             shippingServiceComboBox.DisplayMember = "Value";
             shippingServiceComboBox.DataSource = EbayUtility.ShippingMethods;
 
-            EbayStoreEntity store = (EbayStoreEntity)StoreManager.GetStore(candidate.StoreID);
+            EbayStoreEntity store = (EbayStoreEntity) StoreManager.GetStore(candidate.StoreID);
             if (IsDomestic())
             {
                 shippingServiceComboBox.SelectedValue = store.DomesticShippingService;
@@ -138,10 +133,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             if (ebayOrder.OrderItems == null)
             {
-                return "";
+                return string.Empty;
             }
 
-            return ebayOrder.OrderItems.First().Name;
+            var orderItem = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().FirstOrDefault();
+            return orderItem?.Name ?? string.Empty;
         }
 
         /// <summary>
@@ -151,10 +147,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         {
             if (ebayOrder.OrderItems == null)
             {
-                return "";
+                return string.Empty;
             }
 
-            return ((EbayOrderItemEntity)ebayOrder.OrderItems.First()).EbayItemID.ToString();
+            var orderItem = ebayOrder.OrderItems.OfType<EbayOrderItemEntity>().FirstOrDefault();
+            return orderItem?.EbayItemID.ToString() ?? string.Empty;
         }
 
         /// <summary>
@@ -166,7 +163,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// User has toggled a row 
+        /// User has toggled a row
         /// </summary>
         private void OnAfterRowCheck(object sender, GridRowCheckEventArgs e)
         {
@@ -185,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         }
 
         /// <summary>
-        /// User chnaged the tax value
+        /// User changed the tax value
         /// </summary>
         private void OnTaxChanged(object sender, EventArgs e)
         {
@@ -233,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         private void OnShippingMethodChanged(object sender, EventArgs e)
         {
             object selectedValue = shippingServiceComboBox.SelectedValue;
-            candidate.ShippingService = selectedValue == null ? "" : (string)selectedValue;
+            candidate.ShippingService = selectedValue == null ? "" : (string) selectedValue;
         }
     }
 }

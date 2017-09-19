@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
 using Divelements.SandGrid;
-using ShipWorks.Actions.Tasks;
 using Interapptive.Shared.UI;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
 {
     /// <summary>
     /// Editor for changing MarketplaceAdvisor flags for an order or parcel
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class MarketplaceAdvisorChangeFlagsEditor : ActionTaskEditor
     {
         MarketplaceAdvisorChangeFlagsTaskBase task;

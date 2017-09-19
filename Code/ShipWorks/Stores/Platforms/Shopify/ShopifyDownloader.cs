@@ -101,12 +101,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
             while (true)
             {
                 bool shouldContinue = await DownloadOrderRange(dateRange, totalCount).ConfigureAwait(false);
-		
+
                 if (!shouldContinue || Progress.IsCancelRequested)
                 {
                     return;
                 }
-
 
                 // Update our date range to see if we can grab any orders that have come in while we've been downloading
                 dateRange = await GetNextDownloadDateRange().ConfigureAwait(false);
@@ -524,7 +523,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 option.Description = propertyValue;
                 option.UnitPrice = 0;
             }
-
         }
 
         /// <summary>

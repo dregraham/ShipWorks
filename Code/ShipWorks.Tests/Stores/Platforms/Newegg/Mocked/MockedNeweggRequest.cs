@@ -1,13 +1,13 @@
-﻿using System;
-using ShipWorks.Stores.Platforms.Newegg.Net;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg.Net;
 
 namespace ShipWorks.Tests.Stores.Newegg.Mocked
 {
     public class MockedNeweggRequest : INeweggRequest
     {
         private string desiredResponse;
-        
+
         public MockedNeweggRequest(string desiredResponse)
         {
             this.desiredResponse = desiredResponse;
@@ -19,22 +19,20 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked
         /// <param name="credentials"></param>
         /// <param name="requestConfiguration"></param>
         /// <returns></returns>
-        public string SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration)
+        public Task<string> SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration)
         {
             // Record the values provided to the method for tests to assert on
             Url = requestConfiguration.Url;
             Body = requestConfiguration.Body;
             Method = requestConfiguration.Method;
 
-            return desiredResponse;
+            return Task.FromResult(desiredResponse);
         }
-
 
         public string Url { get; set; }
 
         public string Body { get; set; }
 
         public HttpVerb Method { get; set; }
-
     }
 }

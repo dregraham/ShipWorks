@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -29,13 +25,13 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         public virtual void UpdateForStore(StoreEntity store)
         {
-            
+
         }
 
         /// <summary>
         /// Create the tasks configured to be generated.  The store they go with is given.
         /// </summary>
-        public virtual List<ActionTask> CreateActionTasks(StoreEntity store)
+        public virtual List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             throw new NotImplementedException();
         }

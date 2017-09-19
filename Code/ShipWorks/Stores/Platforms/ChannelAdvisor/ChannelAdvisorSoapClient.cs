@@ -12,7 +12,7 @@ using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         static LruCache<string, List<AttributeInfo>> inventoryItemAttributeCache = new LruCache<string, List<AttributeInfo>>(1000);
 
         // store this client is interacting on behalf of
-        ChannelAdvisorStoreEntity store = null;
+        IChannelAdvisorStoreEntity store = null;
 
         /// <summary>
         /// Encrypted credentials for using their api
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorSoapClient(ChannelAdvisorStoreEntity store)
+        public ChannelAdvisorSoapClient(IChannelAdvisorStoreEntity store)
         {
             this.store = store;
         }

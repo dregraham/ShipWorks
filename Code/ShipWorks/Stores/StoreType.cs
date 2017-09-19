@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -26,7 +27,6 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores
 {
@@ -175,10 +175,9 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Creates a store-specific instance of an OrderItemEntity
         /// </summary>
-        public virtual OrderItemEntity CreateOrderItemInstance()
-        {
-            return new OrderItemEntity();
-        }
+        /// <returns></returns>
+        public virtual OrderItemEntity CreateOrderItemInstance() =>
+            new OrderItemEntity();
 
         /// <summary>
         /// Creates a store-specific instance of OrderItemAttributeEntity
@@ -191,7 +190,12 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
-        public abstract OrderIdentifier CreateOrderIdentifier(OrderEntity order);
+        public abstract OrderIdentifier CreateOrderIdentifier(IOrderEntity order);
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public virtual string GetAuditDescription(IOrderEntity order) => order?.OrderNumberComplete ?? string.Empty;
 
         /// <summary>
         /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
@@ -206,6 +210,7 @@ namespace ShipWorks.Stores
 
             return null;
         }
+
 
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
@@ -370,18 +375,14 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create any MenuCommand's that are applied to the whole StoreType - regardless of how many specific store instances there are.
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the

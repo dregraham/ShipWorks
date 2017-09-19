@@ -25,8 +25,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
     /// <summary>
     /// Order downloader for Amazon MWS
     /// </summary>
-    [Component]
-    public class AmazonMwsDownloader : StoreDownloader, IAmazonMwsDownloader
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amazon)]
+    public class AmazonMwsDownloader : StoreDownloader, IStoreDownloader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsDownloader));
 
@@ -37,12 +37,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         private AmazonStoreEntity AmazonStore => (AmazonStoreEntity) Store;
 
+        readonly Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsDownloader(StoreEntity store)
+        public AmazonMwsDownloader(StoreEntity store, Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient)
             : base(store)
         {
+            this.createWebClient = createWebClient;
         }
 
         /// <summary>
@@ -64,10 +67,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 Progress.Detail = "Connecting to Amazon...";
 
                 // declare upfront which api calls we are going to be using so they will be throttled
-                using (AmazonMwsClient client = new AmazonMwsClient((AmazonStoreEntity) Store, Progress))
+                using (IAmazonMwsClient client = createWebClient(AmazonStore))
                 {
+                    client.Progress = Progress;
+
                     // test the local system clock
-                    if (!client.ClockInSyncWithMWS())
+                    if (!await client.ClockInSyncWithMWS().ConfigureAwait(false))
                     {
                         throw new AmazonException("Your system time is out of sync with the Amazon servers.  Ensure your clock is accurate, including the time zone.", null);
                     }
@@ -82,10 +87,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
                     }*/
 
                     // try to detect if the system is up
-                    client.TestServiceStatus();
+                    await client.TestServiceStatus().ConfigureAwait(false);
 
                     // determine where to start downloading from
-                    DateTime? startDate = await GetOnlineLastModifiedStartingPoint();
+                    DateTime? startDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
                     // Amazon's APIs are LastUpdateTime-inclusive, so skip over the order we already have
                     if (startDate.HasValue)
@@ -95,11 +100,11 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                     Progress.Detail = String.Format("Checking for new orders since {0}...", startDate);
 
-                    foreach (XPathNamespaceNavigator xpath in client.GetOrders(startDate))
+                    await client.GetOrders(startDate, async xpath =>
                     {
                         if (Progress.IsCancelRequested)
                         {
-                            return;
+                            return false;
                         }
 
                         // progress has to be indicated on each pass since we have 0 idea how many orders exists
@@ -107,7 +112,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                         // load each order in this result page
                         await LoadOrders(client, xpath).ConfigureAwait(false);
-                    }
+                        return true;
+                    }).ConfigureAwait(false);
 
                     trackedDurationEvent.AddMetric("Amazon.Fba.Order.Count", FbaOrdersDownloaded);
 
@@ -132,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Load orders from a page of results
         /// </summary>
-        private async Task LoadOrders(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrders(IAmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             int totalCount = quantitySeen + XPathUtility.Evaluate(xpath, "count(//amz:Order)", 0);
 
@@ -162,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Loads a single order from the correctly positioned xpathnavigator
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async Task LoadOrder(AmazonMwsClient client, XPathNamespaceNavigator xpath)
+        private async Task LoadOrder(IAmazonMwsClient client, XPathNamespaceNavigator xpath)
         {
             string amazonOrderID = XPathUtility.Evaluate(xpath, "amz:AmazonOrderId", "");
 
@@ -231,12 +237,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
             {
                 order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
 
-                LoadOrderItems(client, order);
+                await LoadOrderItems(client, order).ConfigureAwait(false);
 
                 // Load details about the item (weight, image, etc.) Amazon throttles usage, so to conserve on
                 // calls to Amazon, we load the item details here since we can send more than one item in
                 // a request.
-                LoadOrderItemDetails(order.OrderItems.Cast<AmazonOrderItemEntity>().ToList(), client);
+                await LoadOrderItemDetails(order.OrderItems.Cast<AmazonOrderItemEntity>().ToList(), client).ConfigureAwait(false);
 
                 // update the total
                 order.OrderTotal = OrderUtility.CalculateTotal(order);
@@ -289,84 +295,106 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private void LoadOrderItems(AmazonMwsClient client, AmazonOrderEntity order)
+        private async Task LoadOrderItems(IAmazonMwsClient client, AmazonOrderEntity order)
         {
-            foreach (XPathNamespaceNavigator navigator in client.GetOrderItems(order.AmazonOrderID))
+            await client.GetOrderItems(order.AmazonOrderID, navigator =>
             {
                 foreach (XPathNavigator tempXpath in navigator.Select("//amz:OrderItem"))
                 {
                     XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(tempXpath, navigator.Namespaces);
-
-                    AmazonOrderItemEntity item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
-
-                    // populate the basics
-                    item.Name = XPathUtility.Evaluate(xpath, "amz:Title", "");
-                    item.Quantity = XPathUtility.Evaluate(xpath, "amz:QuantityOrdered", 0d);
-                    item.UnitPrice = XPathUtility.Evaluate(xpath, "amz:ItemPrice/amz:Amount", 0M) / (item.Quantity == 0 ? 1 : Convert.ToDecimal(item.Quantity));
-                    item.Code = XPathUtility.Evaluate(xpath, "amz:SellerSKU", "");
-                    item.SKU = item.Code;
-
-                    // amazon-specific fields
-                    item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amz:OrderItemId", string.Empty);
-                    item.ConditionNote = XPathUtility.Evaluate(xpath, "amz:ConditionNote", "");
-                    item.ASIN = XPathUtility.Evaluate(xpath, "amz:ASIN", "");
-
-                    // Amazon doesn't have a new solution for weights or images
-
-                    // see if we need to add any attributes
-                    string giftMessage = XPathUtility.Evaluate(xpath, "amz:GiftMessageText", "");
-                    decimal giftWrapPrice = XPathUtility.Evaluate(xpath, "amz:GiftWrapPrice/amz:Amount", 0M);
-
-                    if (giftMessage.Length > 0 || giftWrapPrice > 0)
-                    {
-                        OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                        attribute.Name = "Gift Message";
-                        attribute.Description = giftMessage;
-                        attribute.UnitPrice = giftWrapPrice;
-                    }
-
-                    string giftwrapLevel = XPathUtility.Evaluate(xpath, "amz:GiftWrapLevel", "");
-                    if (giftwrapLevel.Length > 0)
-                    {
-                        OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                        attribute.Name = "Gift Wrap Level";
-                        attribute.Description = giftwrapLevel;
-                        attribute.UnitPrice = 0;
-                    }
-
-                    // add an attribute for each promotion
-                    foreach (XPathNavigator promoXPath in xpath.Select("amz:PromotionIds/amz:PromotionId"))
-                    {
-                        string promoId = XPathUtility.Evaluate(promoXPath, "text()", "");
-                        if (promoId.Length > 0)
-                        {
-                            OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
-                            attribute.Name = "Promotion ID";
-                            attribute.Description = promoId;
-                            attribute.UnitPrice = 0;
-                        }
-                    }
-
-                    // Charges
-                    decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
-                    AddToCharge(order, "Tax", "Tax", itemTax);
-
-                    decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
-                    AddToCharge(order, "Tax", "Tax", giftWrapTax);
-
-                    decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
-                    AddToCharge(order, "Tax", "Tax", shippingTax);
-
-                    decimal shipDiscount = XPathUtility.Evaluate(xpath, "amz:ShippingDiscount/amz:Amount", 0M);
-                    AddToCharge(order, "Shipping Discount", "Shipping Discount", -shipDiscount);
-
-                    decimal promoDiscount = XPathUtility.Evaluate(xpath, "amz:PromotionDiscount/amz:Amount", 0M);
-                    AddToCharge(order, "Promotion Discount", "Promotion Discount", -promoDiscount);
-
-                    decimal shippingPrice = XPathUtility.Evaluate(xpath, "amz:ShippingPrice/amz:Amount", 0M);
-                    AddToCharge(order, "Shipping", "Shipping", shippingPrice);
+                    LoadOrderItem(xpath, order);
                 }
+            }).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Load an order item
+        /// </summary>
+        private void LoadOrderItem(XPathNamespaceNavigator xpath, AmazonOrderEntity order)
+        {
+            AmazonOrderItemEntity item = (AmazonOrderItemEntity) InstantiateOrderItem(order);
+
+            // populate the basics
+            item.Name = XPathUtility.Evaluate(xpath, "amz:Title", "");
+            item.Quantity = XPathUtility.Evaluate(xpath, "amz:QuantityOrdered", 0d);
+            item.UnitPrice = XPathUtility.Evaluate(xpath, "amz:ItemPrice/amz:Amount", 0M) / (item.Quantity == 0 ? 1 : Convert.ToDecimal(item.Quantity));
+            item.Code = XPathUtility.Evaluate(xpath, "amz:SellerSKU", "");
+            item.SKU = item.Code;
+
+            // amazon-specific fields
+            item.AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "amz:OrderItemId", string.Empty);
+            item.ConditionNote = XPathUtility.Evaluate(xpath, "amz:ConditionNote", "");
+            item.ASIN = XPathUtility.Evaluate(xpath, "amz:ASIN", "");
+
+            // Amazon doesn't have a new solution for weights or images
+
+            // see if we need to add any attributes
+            SetOrderItemGiftDetails(xpath, item);
+
+            // add an attribute for each promotion
+            foreach (XPathNavigator promoXPath in xpath.Select("amz:PromotionIds/amz:PromotionId"))
+            {
+                string promoId = XPathUtility.Evaluate(promoXPath, "text()", "");
+                if (promoId.Length > 0)
+                {
+                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                    attribute.Name = "Promotion ID";
+                    attribute.Description = promoId;
+                    attribute.UnitPrice = 0;
+                }
+            }
+
+            AddOrderItemCharges(xpath, order);
+        }
+
+        /// <summary>
+        /// Add item charges to the order
+        /// </summary>
+        private void AddOrderItemCharges(XPathNamespaceNavigator xpath, AmazonOrderEntity order)
+        {
+            // Charges
+            decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
+            AddToCharge(order, "Tax", "Tax", itemTax);
+
+            decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
+            AddToCharge(order, "Tax", "Tax", giftWrapTax);
+
+            decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
+            AddToCharge(order, "Tax", "Tax", shippingTax);
+
+            decimal shipDiscount = XPathUtility.Evaluate(xpath, "amz:ShippingDiscount/amz:Amount", 0M);
+            AddToCharge(order, "Shipping Discount", "Shipping Discount", -shipDiscount);
+
+            decimal promoDiscount = XPathUtility.Evaluate(xpath, "amz:PromotionDiscount/amz:Amount", 0M);
+            AddToCharge(order, "Promotion Discount", "Promotion Discount", -promoDiscount);
+
+            decimal shippingPrice = XPathUtility.Evaluate(xpath, "amz:ShippingPrice/amz:Amount", 0M);
+            AddToCharge(order, "Shipping", "Shipping", shippingPrice);
+        }
+
+        /// <summary>
+        /// Set gift details on an order item
+        /// </summary>
+        private void SetOrderItemGiftDetails(XPathNamespaceNavigator xpath, AmazonOrderItemEntity item)
+        {
+            string giftMessage = XPathUtility.Evaluate(xpath, "amz:GiftMessageText", "");
+            decimal giftWrapPrice = XPathUtility.Evaluate(xpath, "amz:GiftWrapPrice/amz:Amount", 0M);
+
+            if (giftMessage.Length > 0 || giftWrapPrice > 0)
+            {
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = "Gift Message";
+                attribute.Description = giftMessage;
+                attribute.UnitPrice = giftWrapPrice;
+            }
+
+            string giftwrapLevel = XPathUtility.Evaluate(xpath, "amz:GiftWrapLevel", "");
+            if (giftwrapLevel.Length > 0)
+            {
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(item);
+                attribute.Name = "Gift Wrap Level";
+                attribute.Description = giftwrapLevel;
+                attribute.UnitPrice = 0;
             }
         }
 
@@ -375,10 +403,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         /// <param name="items">The items.</param>
         /// <param name="webClient">The web client.</param>
-        private void LoadOrderItemDetails(List<AmazonOrderItemEntity> items, AmazonMwsClient webClient)
+        private async Task LoadOrderItemDetails(List<AmazonOrderItemEntity> items, IAmazonMwsClient webClient)
         {
             AmazonProductDetailRepository repository = new AmazonProductDetailRepository(webClient);
-            IEnumerable<XPathNamespaceNavigator> products = repository.GetProductDetails(items);
+            IEnumerable<XPathNamespaceNavigator> products = await repository.GetProductDetails(items).ConfigureAwait(false);
 
             foreach (XPathNavigator product in products)
             {
