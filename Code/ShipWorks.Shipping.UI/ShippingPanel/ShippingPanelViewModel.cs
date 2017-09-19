@@ -282,9 +282,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
-
-            ICarrierShipmentAdapter shipmetAdapter = loadedSelection.ShipmentAdapters.FirstOrDefault();
-
+            
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
