@@ -739,7 +739,7 @@ CREATE TABLE [dbo].[OrderItem]
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
 [TotalWeight] AS ([Weight]*[Quantity]),
-[HarmonizedCode] [varchar] (14) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -1487,15 +1487,15 @@ CREATE NONCLUSTERED INDEX [IX_DownloadDetail_DownloadID] ON [dbo].[DownloadDetai
 GO
 PRINT N'Creating index [IX_DownloadDetail_OrderNumber] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_OrderNumber] ON [dbo].[DownloadDetail] ([OrderNumber], [ExtraStringData1]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_BigIntIndex] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_BigIntIndex] ON [dbo].[DownloadDetail] ([ExtraBigIntData1], [ExtraBigIntData2], [ExtraBigIntData3]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
-CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1])
+CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1]) INCLUDE ([DownloadID])
 GO
 PRINT N'Creating index [IX_DownloadDetail_OrderID] on [dbo].[DownloadDetail]'
 GO
@@ -3421,7 +3421,7 @@ CREATE TABLE [dbo].[ShipmentCustomsItem]
 [Weight] [float] NOT NULL,
 [UnitValue] [money] NOT NULL,
 [CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[HarmonizedCode] [varchar] (14) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfPieces] [int] NOT NULL,
 [UnitPriceAmount] [money] NOT NULL
 )

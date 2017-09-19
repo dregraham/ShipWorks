@@ -1753,7 +1753,7 @@
         <Fields>
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
-          <Field Name="HarmonizedCode" Type="string" MaxLength="14" FieldIndex="18" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -2136,7 +2136,7 @@
         <Fields>
           <Field Name="CountryOfOrigin" Type="string" MaxLength="50" FieldIndex="7" />
           <Field Name="Description" Type="string" MaxLength="150" FieldIndex="3" />
-          <Field Name="HarmonizedCode" Type="string" MaxLength="14" FieldIndex="8" />
+          <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="8" />
           <Field Name="NumberOfPieces" Type="int" FieldIndex="9" />
           <Field Name="Quantity" Type="double" FieldIndex="4" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -3769,7 +3769,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-12T21:10:41.0794692Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-19T11:51:55.1562031Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6432,7 +6432,7 @@
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
                     <Field Name="TotalWeight" Ordinal="19" IsComputed="true" DbType="6" Precision="38" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="24" Length="14" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7087,7 +7087,7 @@
                     <Field Name="Weight" Ordinal="6" DbType="6" Precision="38" />
                     <Field Name="UnitValue" Ordinal="7" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="8" DbType="12" Length="50" />
-                    <Field Name="HarmonizedCode" Ordinal="9" DbType="24" Length="14" />
+                    <Field Name="HarmonizedCode" Ordinal="9" DbType="12" Length="20" />
                     <Field Name="NumberOfPieces" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UnitPriceAmount" Ordinal="11" DbType="9" Precision="19" Scale="4" />
                   </Fields>
