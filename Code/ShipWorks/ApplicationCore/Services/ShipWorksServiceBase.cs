@@ -299,6 +299,16 @@ namespace ShipWorks.ApplicationCore.Services
 
                     return hasChanged;
                 }
+                catch (Exception ex) 
+                {
+                    if (ConnectionMonitor.IsDbConnectionException(ex))
+                    {
+                        log.Error("An error occurred while connecting to SQL Server.", ex);
+                        return hasChanged;
+                    }
+
+                    throw;
+                }
             }
         }
 
