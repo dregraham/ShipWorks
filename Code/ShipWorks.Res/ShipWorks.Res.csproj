@@ -499,6 +499,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Exports\Orders with Items\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Package Level Details\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Package Level Details\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\template.xsl">
       <SubType>Designer</SubType>
