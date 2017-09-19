@@ -12,11 +12,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Yahoo.OnlineUpdating
 {
-    public class OnlineUpdateCommandCreatorTest : IDisposable
+    public class YahooOnlineUpdateCommandCreatorTest : IDisposable
     {
         readonly AutoMock mock;
 
-        public OnlineUpdateCommandCreatorTest()
+        public YahooOnlineUpdateCommandCreatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }

@@ -13,12 +13,12 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
-    public class ShipmentDetailsUpdaterTest : IDisposable
+    public class WalmartShipmentDetailsUpdaterTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly WalmartStoreEntity store;
 
-        public ShipmentDetailsUpdaterTest()
+        public WalmartShipmentDetailsUpdaterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new WalmartStoreEntity { StoreTypeCode = StoreTypeCode.Walmart };

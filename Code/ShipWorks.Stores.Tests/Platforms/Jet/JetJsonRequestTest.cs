@@ -10,11 +10,11 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet
 {
-    public class JsonRequestTest: IDisposable
+    public class JetJsonRequestTest: IDisposable
     {
         private readonly AutoMock mock;
 
-        public JsonRequestTest()
+        public JetJsonRequestTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
