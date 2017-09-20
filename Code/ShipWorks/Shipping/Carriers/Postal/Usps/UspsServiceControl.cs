@@ -1,13 +1,14 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -52,23 +53,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Rate shopping selction has changed
+        /// Rate shopping selection has changed
         /// </summary>
         private void OnRateShopChanged(object sender, EventArgs e)
         {
             uspsAccount.SelectedValueChanged -= OnOriginChanged;
             SaveToShipments();
-            
+
             LoadAccounts();
 
             using (MultiValueScope scope = new MultiValueScope())
             {
-                LoadAccountValue(scope);
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    LoadAccountValue(scope, shipment);
+                }
             }
 
             uspsAccount.SelectedValueChanged += OnOriginChanged;
             uspsAccount.Enabled = !rateShop.Checked && rateShop.CheckState != CheckState.Checked;
-            
+
             UpdateFromSectionText();
             RaiseRateCriteriaChanged();
         }
@@ -133,10 +137,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     memo2.ApplyMultiText(shipment.Postal.Memo2);
                     memo3.ApplyMultiText(shipment.Postal.Memo3);
                     noPostage.ApplyMultiCheck(shipment.Postal.NoPostage);
-                    LoadAccountValue(scope);
+                    LoadAccountValue(scope, shipment);
                 }
             }
-            
+
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
@@ -145,23 +149,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Loads the account value from the loaded shipments.
         /// </summary>
         /// <param name="scope">A MultiValueScope is required since the account value is being applied to a MultiValueComboBox.</param>
-        private void LoadAccountValue(MultiValueScope scope)
+        private void LoadAccountValue(MultiValueScope scope, IShipmentEntity shipment)
         {
             if (scope == null)
             {
                 throw new InvalidOperationException("MultiValueScope cannot be null.");
             }
 
-            foreach (ShipmentEntity shipment in LoadedShipments)
+            if (!shipment.Processed && shipment.Postal.Usps.RateShop)
             {
-                if (!shipment.Processed && shipment.Postal.Usps.RateShop)
-                {
-                    uspsAccount.ApplyMultiValue(0);
-                }
-                else
-                {
-                    uspsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
-                }
+                uspsAccount.ApplyMultiValue(0);
+            }
+            else
+            {
+                uspsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
             }
         }
 
@@ -182,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 rateShop.ReadMultiCheck(c => shipment.Postal.Usps.RateShop = c);
-                uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long)v == 0 ? shipment.Postal.Usps.UspsAccountID : (long)v);
+                uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long) v == 0 ? shipment.Postal.Usps.UspsAccountID : (long) v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Usps.HidePostage = c);
                 memo1.ReadMultiText(t => shipment.Postal.Memo1 = t);
@@ -218,7 +219,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                UspsAccountEntity account = uspsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long)uspsAccount.SelectedValue) : null;
+                UspsAccountEntity account = uspsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long) uspsAccount.SelectedValue) : null;
                 if (account != null && (uspsAccount.Enabled || LoadedShipments.First().Processed))
                 {
                     text += account.Description;
@@ -247,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             bool multiValue = uspsAccount.MultiValued;
-            long oldAccount = multiValue ? -1 : (long)uspsAccount.SelectedValue;
+            long oldAccount = multiValue ? -1 : (long) uspsAccount.SelectedValue;
 
             uspsAccount.SelectedValueChanged -= OnOriginChanged;
 
@@ -259,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                if (uspsAccount.SelectedValue == null || oldAccount != (long)uspsAccount.SelectedValue)
+                if (uspsAccount.SelectedValue == null || oldAccount != (long) uspsAccount.SelectedValue)
                 {
                     uspsAccount.SelectedValue = oldAccount;
                 }
