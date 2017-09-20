@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
 
@@ -30,6 +31,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private const int DownloadOrderCountLimit = 200;
         private const string UpdateShipmentUrl =
             "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
+
+        private const string BaseErrorMessage = "ShipWorks encountered an error communicating with Walmart";
 
 
         /// <summary>
@@ -61,6 +64,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private string ProcessRequest(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
+            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
             submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
             submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
             submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
@@ -91,17 +95,21 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         private T ProcessRequest<T>(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
         {
+            string response = string.Empty;
+
             try
             {
-                string response = ProcessRequest(store, submitter, action);
+                response = ProcessRequest(store, submitter, action);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(T));
                 XmlReader reader = XmlReader.Create(new StringReader(response));
                 return (T) serializer.Deserialize(reader);
             }
-            catch (Exception ex) when (ex.GetType() != typeof(WalmartException))
+            catch (Exception ex) when (ex.GetType() == typeof(WalmartException) ||
+                                       ex.GetType() == typeof(InvalidOperationException) ||
+                                       ex.GetType() == typeof(ArgumentNullException))
             {
-                throw new WalmartException(ex.Message, ex);
+                throw new WalmartException(GetErrorMessage(response, ex), ex);
             }
         }
 
@@ -187,6 +195,49 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     Order acknowledgedOrder = ProcessRequest<Order>(store, requestSubmitter, "AcknowledgeOrder");
                     ordersResponse.elements[i] = acknowledgedOrder;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the error message to display to the user
+        /// </summary>
+        /// <remarks>
+        /// Attempts to extract the message from the walmart error dto, if that fails, return the original exception message.
+        /// </remarks>
+        private string GetErrorMessage(string response, Exception exceptionToRethrow)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Errors));
+                XmlReader reader = XmlReader.Create(new StringReader(response));
+
+                Errors errors = (Errors) serializer.Deserialize(reader);
+
+                // First check to see if it is the error we see during walmart outages, see TP#19684 or RNT 170907-003474
+                if (errors.error.Length == 1)
+                {
+                    error error = errors.error[0];
+
+                    if (error.code == "INVALID_REQUEST.GMP_ORDER_API" &&
+                        error.field == "data" &&
+                        error.description == "Invalid Request" &&
+                        error.info == "Request invalid." &&
+                        error.severity == errorSeverity.ERROR &&
+                        error.category == errorCategory.DATA &&
+                        error.causes?.Length == 0)
+                    {
+                        // Since walmart gives us no reason for the error, just tell the customer to try again later
+                        return $"{BaseErrorMessage}. Please try again later.";
+                    }
+                }
+
+                return $"{BaseErrorMessage}: {Environment.NewLine}{string.Join(", ", errors.error.Select(e => e.description).Distinct())}";
+            }
+            catch (Exception ex) when (ex.GetType() == typeof(InvalidOperationException) ||
+                                       ex.GetType() == typeof(ArgumentNullException))
+            {
+                // If there was an error deserializing the walmart error response, just return the original exception message
+                return $"{BaseErrorMessage}: {Environment.NewLine}{exceptionToRethrow.Message}";
             }
         }
     }
