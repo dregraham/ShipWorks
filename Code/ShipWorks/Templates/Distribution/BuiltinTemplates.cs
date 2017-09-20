@@ -107,7 +107,18 @@ namespace ShipWorks.Templates.Distribution
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
+
+                if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Standard 4x6"))
+                {
+                    InstallTemplate(@"Labels\Standard 4x6", TemplateManager.Tree.CreateEditableClone());
+                    UpdateDatabaseTemplateVersion(swVersion);
+                }
             }
+        }
+
+        private static bool TemplateExists(string name, long folderId)
+        {
+            return TemplateManager.Tree.AllTemplates.Any(t => t.Name == name && t.ParentFolderID == folderId);
         }
 
         /// <summary>
