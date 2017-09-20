@@ -64,13 +64,7 @@ namespace ShipWorks.Templates.Distribution
             }
             else
             {
-                // Added 'Reports\Shipper Productivity' for 3.7
-                if (installed < new Version("3.7.0.5018"))
-                {
-                    InstallTemplate(@"Reports\Shipper Productivity", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(swVersion);
-                }
+                InstallTemplate("Shipper Productivity", "Reports", "3.7.0.5018", false);
 
                 // SingleScan templates, check to make sure that the OrderSingleScan snippet does not exist
                 // If the same snippet is installed twice it breaks all templates in ShipWorks
@@ -93,32 +87,30 @@ namespace ShipWorks.Templates.Distribution
                     
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
-
-                if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Package Level Details"))
-                {
-                    InstallTemplate(@"Reports\Exports\Package Level Details", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(swVersion);
-                }
-				
-				if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Shipments by Provider"))
-                {
-                    InstallTemplate(@"Reports\Financials\Shipments by Provider", TemplateManager.Tree.CreateEditableClone());
-
-                    UpdateDatabaseTemplateVersion(swVersion);
-                }
-
-                if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Standard 4x6"))
-                {
-                    InstallTemplate(@"Labels\Standard 4x6", TemplateManager.Tree.CreateEditableClone());
-                    UpdateDatabaseTemplateVersion(swVersion);
-                }
+                
+                InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0000", false);
+                InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
+                InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
             }
         }
 
-        private static bool TemplateExists(string name, long folderId)
+        /// <summary>
+        /// Install the given template for the specific version
+        /// </summary>
+        /// <param name="name">the template name</param>
+        /// <param name="folderPath">the path to the template</param>
+        /// <param name="version">the version that this template is being installed for</param>
+        /// <param name="replaceExisting">if a template with a matching name exists should we replace it</param>
+        private static void InstallTemplate(string name, string folderPath, string version, bool replaceExisting)
         {
-            return TemplateManager.Tree.AllTemplates.Any(t => t.Name == name && t.ParentFolderID == folderId);
+            if (new Version(SystemData.Fetch().TemplateVersion) < new Version(version))
+            {
+                if (replaceExisting || TemplateManager.Tree.AllTemplates.None(t => t.Name == name))
+                {
+                    InstallTemplate($"{folderPath}\\{name}", TemplateManager.Tree.CreateEditableClone());
+                    UpdateDatabaseTemplateVersion(Assembly.GetExecutingAssembly().GetName().Version);
+                }
+            }
         }
 
         /// <summary>
