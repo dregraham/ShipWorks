@@ -97,7 +97,7 @@ namespace ShipWorks.Data.Connection
                     }
 
                     // Add db size info values
-                    foreach (KeyValuePair<string, string> dictionaryEntry in GetDbSizeInfo(connection))
+                    foreach (KeyValuePair<string, string> dictionaryEntry in DbSizeInfo.Fetch(connection))
                     {
                         values.Add(dictionaryEntry.Key, dictionaryEntry.Value);
                     }
@@ -109,38 +109,6 @@ namespace ShipWorks.Data.Connection
             }
 
             return values;
-        }
-
-        /// <summary>
-        /// Get common db size info for telemetry
-        /// </summary>
-        private static Dictionary<string, string> GetDbSizeInfo(SqlConnection connection)
-        {
-            Dictionary<string, string> results = new Dictionary<string, string>();
-
-            using (SqlCommand command = connection.CreateCommand())
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = "GetDbSizeInfo";
-                // Disable the command timeout since the scripts should take care of timing themselves out
-                command.CommandTimeout = 0;
-
-                command.Parameters.Add("@totalOrderCount", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-                command.Parameters.Add("@totalStanderdCombinedOrderCount", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-                command.Parameters.Add("@totalStanderdLegacyOrderCount", SqlDbType.BigInt).Direction = ParameterDirection.Output;
-                command.Parameters.Add("@orderTableSize", SqlDbType.Float).Direction = ParameterDirection.Output;
-                command.Parameters.Add("@combinedOrderSize", SqlDbType.Float).Direction = ParameterDirection.Output;
-
-                command.ExecuteNonQuery();
-
-                results.Add("Orders.Quantity.Total", command.Parameters["@totalOrderCount"].Value.ToString());
-                results.Add("Orders.Quantity.Combined.Standard", command.Parameters["@totalStanderdCombinedOrderCount"].Value.ToString());
-                results.Add("Orders.Quantity.Combined.Legacy", command.Parameters["@totalStanderdLegacyOrderCount"].Value.ToString());
-                results.Add("Database.SizeInMB.Orders", command.Parameters["@orderTableSize"].Value.ToString());
-                results.Add("Database.SizeInMB.Orders.Combined", command.Parameters["@combinedOrderSize"].Value.ToString());
-            }
-            
-            return results;
         }
     }
 }

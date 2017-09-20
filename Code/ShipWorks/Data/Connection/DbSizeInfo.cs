@@ -1,34 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
-using Microsoft.SqlServer.Server;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-/// CLR stored procedures
-/// </summary>
-public partial class StoredProcedures
+namespace ShipWorks.Data.Connection
 {
     /// <summary>
     /// Gets misc db size info
     /// </summary>
-    [SqlProcedure]
-    public static void GetDbSizeInfo(out SqlInt64 totalOrderCount, out SqlInt64 totalStanderdCombinedOrderCount,
-        out SqlInt64 totalStanderdLegacyOrderCount, out SqlDouble orderTableSize, out SqlDouble combinedOrderSize)
+    public static class DbSizeInfo
     {
-        // Attach to the connection
-        using (SqlConnection con = new SqlConnection("Context connection = true"))
+        /// <summary>
+        /// Fetch misc db size info
+        /// </summary>
+        public static Dictionary<string, string> Fetch(SqlConnection connection)
         {
-            con.Open();
-
-            totalOrderCount = 0;
-            totalStanderdCombinedOrderCount = 0;
-            totalStanderdLegacyOrderCount = 0;
-            orderTableSize = 0;
-            combinedOrderSize = 0;
-
+            Dictionary<string, string> results = new Dictionary<string, string>();
+            
             try
             {
                 // Perform the count
-                SqlCommand cmd = con.CreateCommand();
+                SqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = Query;
 
                 // See if there is a count to take
@@ -36,23 +30,23 @@ public partial class StoredProcedures
                 {
                     if (reader.Read())
                     {
-                        totalOrderCount = reader.GetInt64(0);
-                        totalStanderdCombinedOrderCount = reader.GetInt64(1);
-                        totalStanderdLegacyOrderCount = reader.GetInt64(2);
-                        orderTableSize = reader.GetDouble(3);
-                        combinedOrderSize = reader.GetDouble(4);
+                        results.Add("Orders.Quantity.Total", reader.GetInt64(0).ToString());
+                        results.Add("Orders.Quantity.Combined.Standard", reader.GetInt64(1).ToString());
+                        results.Add("Orders.Quantity.Combined.Legacy", reader.GetInt64(2).ToString());
+                        results.Add("Database.SizeInMB.Orders", reader.GetDouble(3).ToString());
+                        results.Add("Database.SizeInMB.Orders.Combined", reader.GetDouble(4).ToString());
+                        results.Add("Database.SizeInMB.Total", reader.GetDouble(5).ToString());
                     }
                 }
             }
             catch
             {
             }
+
+            return results;
         }
 
-        return;
-    }
-
-    private static readonly string Query = @"
+        private static readonly string Query = @"
         declare @TotalOrderCount bigint
         declare @TotalStandardCombinedOrderCount bigint
         declare @TotalLegacyCombinedOrderCount bigint
@@ -99,6 +93,8 @@ public partial class StoredProcedures
 		        @TotalStandardCombinedOrderCount as 'TotalStandardCombinedOrderCount',
 		        @TotalLegacyCombinedOrderCount as 'TotalLegacyCombinedOrderCount',
 		        @OrderTableSizeInMb AS 'OrderTableSizeInMb',
-		        @CombinedOrderSizeInMb AS 'CombinedOrderSizeInMb'
+		        @CombinedOrderSizeInMb AS 'CombinedOrderSizeInMb',
+				@TotalDbSizeInMb AS 'TotalDatabaseSizeInMb'
         ";
-};
+    }
+}
