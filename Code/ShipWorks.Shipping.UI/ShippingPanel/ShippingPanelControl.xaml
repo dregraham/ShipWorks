@@ -437,19 +437,6 @@
                         </Style>
                     </StackPanel.Style>
 
-                    <StackPanel Visibility="{Binding LoadedShipmentResult,
-                                Converter={StaticResource VisibleWhenEqualToParameter},
-                                ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.UnsupportedShipmentType}}">
-                        <TextBlock Style="{StaticResource TextBlock.Empty}"
-                               Margin="0, 0, 0, 5">
-                            Please use the Ship Orders dialog for this carrier.
-                        </TextBlock>
-
-                        <Button Command="{Binding OpenShippingDialogCommand}"
-                                CommandParameter="{x:Static local:OpenShippingDialogType.SelectedShipment}"
-                                Style="{StaticResource Button.ShipOrders}"/>
-                    </StackPanel>
-
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"
                                Margin="0, 0, 0, 5">
