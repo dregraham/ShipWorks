@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
-        
+
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
         private bool loadingSelectedShipments = false;
@@ -985,7 +985,7 @@ namespace ShipWorks.Shipping
         {
             LoadReturnsControl(uiDisplayedShipments, true);
         }
-        
+
         /// <summary>
         /// Load return data into the returns tab
         /// </summary>
@@ -1683,7 +1683,7 @@ namespace ShipWorks.Shipping
                     }
                 }
             }
-            
+
             // Update enable state
             processDropDownButton.Enabled = securityCreateEditProcess;
             applyProfile.Enabled = canApplyProfile;
@@ -1778,13 +1778,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the requested shipping text, (Multiple) displayed for multiple values
         /// </summary>
-        private static string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        private static string GetRequestedShippingLabel(IEnumerable<IShipmentEntity> shipments)
         {
             string label = null;
 
-            foreach (ShipmentEntity shipment in shipments)
+            foreach (IShipmentEntity shipment in shipments)
             {
-                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+                IOrderEntity order = shipment.Order ?? DataProvider.GetEntity(shipment.OrderID) as IOrderEntity;
 
                 // First one
                 if (label == null)
