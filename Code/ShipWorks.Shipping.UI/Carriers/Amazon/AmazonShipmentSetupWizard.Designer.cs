@@ -134,11 +134,13 @@
             this.contactInformation.Location = new System.Drawing.Point(23, 10);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
-            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 1;
