@@ -545,6 +545,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Quantity\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Shipments by Provider\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Shipments by Provider\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\template.xsl" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\settings.xml" />

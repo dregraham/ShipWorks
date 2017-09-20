@@ -100,6 +100,13 @@ namespace ShipWorks.Templates.Distribution
 
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
+				
+				if (installed < new Version("5.18.0.0000") && TemplateManager.Tree.AllTemplates.None(t => t.Name == "Shipments by Provider"))
+                {
+                    InstallTemplate(@"Reports\Financials\Shipments by Provider", TemplateManager.Tree.CreateEditableClone());
+
+                    UpdateDatabaseTemplateVersion(swVersion);
+                }
             }
         }
 
