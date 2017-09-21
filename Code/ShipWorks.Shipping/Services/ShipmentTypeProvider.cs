@@ -10,29 +10,19 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services
 {
     /// <summary>
     /// Provide available shipment types to UI controls
     /// </summary>
-    public class ShipmentTypeProvider : INotifyPropertyChanged, IDisposable
+    public class ShipmentTypeProvider : IDisposable
     {
-        private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ?
-            null :
-            IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
-
         private readonly IShipmentTypeManager shipmentTypeManager;
-        private readonly PropertyChangedHandler handler;
         private IEnumerable<ShipmentTypeCode> available;
+        private static readonly IEnumerable<ShipmentTypeCode> amazonCarriers = new[] { ShipmentTypeCode.Amazon };
         private readonly IDisposable subscription;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Get the current instance of the shipment type provider
-        /// </summary>
-        public static ShipmentTypeProvider Current => current;
 
         /// <summary>
         /// Constructor
@@ -40,20 +30,22 @@ namespace ShipWorks.Shipping.Services
         public ShipmentTypeProvider(IObservable<IShipWorksMessage> messenger, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentTypeManager = shipmentTypeManager;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             subscription = messenger.OfType<EnabledCarriersChangedMessage>().Subscribe(UpdateAvailableCarriers);
-            Available = shipmentTypeManager.EnabledShipmentTypeCodes.ToList();
+            available = shipmentTypeManager.EnabledShipmentTypeCodes;
         }
-
+        
         /// <summary>
-        /// Available shipment types
+        /// Get the available shipment types for the given shipment
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IEnumerable<ShipmentTypeCode> Available
+        public IEnumerable<ShipmentTypeCode> GetAvailableShipmentTypes(ICarrierShipmentAdapter shipmentAdapter)
         {
-            get { return available; }
-            private set { handler.Set(nameof(Available), ref available, value); }
+            if (shipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return amazonCarriers;
+            }
+
+            return available.Except(amazonCarriers);
         }
 
         /// <summary>
@@ -61,7 +53,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         private void UpdateAvailableCarriers(EnabledCarriersChangedMessage message)
         {
-            Available = shipmentTypeManager.EnabledShipmentTypeCodes
+            available = shipmentTypeManager.EnabledShipmentTypeCodes
                 .Concat(message.Added)
                 .Except(message.Removed)
                 .Distinct()

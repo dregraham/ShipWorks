@@ -191,7 +191,7 @@
                                   IsEnabled="{Binding AllowEditing}">
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource ShipmentTypeList}">
-                                    <Binding Path="Available" Source="{x:Static sw:ShipmentTypeProvider.Current}" />
+                                    <Binding Path="AvailableProviders" />
                                     <Binding Path="InitialShipmentTypeCode" Mode="OneWay" />
                                 </MultiBinding>
                             </ComboBox.ItemsSource>

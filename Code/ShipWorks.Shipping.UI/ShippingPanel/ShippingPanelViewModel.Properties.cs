@@ -4,6 +4,8 @@ using System.Windows.Input;
 using ShipWorks.Shipping.Loading;
 using ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl;
 using ShipWorks.UI.Controls.AddressControl;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.UI.ShippingPanel
 {
@@ -31,6 +33,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private bool? isDomestic;
         private bool isShipmentsPanelHidden;
         private int shipmentCount;
+        private IEnumerable<ShipmentTypeCode> availableProviders;
 
         /// <summary>
         /// Command to open the shipping dialog
@@ -258,6 +261,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         {
             get { return isShipmentsPanelHidden; }
             set { handler.Set(nameof(IsShipmentsPanelHidden), ref isShipmentsPanelHidden, value); }
+        }
+
+        /// <summary>
+        /// The list of available providers
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public virtual IEnumerable<ShipmentTypeCode> AvailableProviders
+        {
+            get { return availableProviders; }
+            set { handler.Set(nameof(AvailableProviders), ref availableProviders, value); }
         }
 
         /// <summary>

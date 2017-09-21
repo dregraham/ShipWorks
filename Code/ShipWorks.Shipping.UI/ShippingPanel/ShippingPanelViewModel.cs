@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
         private readonly Func<ISecurityContext> securityContextRetriever;
+        private readonly ShipmentTypeProvider shipmentTypeProvider;
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
         private long? lastSelectedShipmentID;
@@ -82,7 +83,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
             Func<Type, ILog> logFactory,
-            Func<ISecurityContext> securityContextRetriever) : this()
+            Func<ISecurityContext> securityContextRetriever, 
+            ShipmentTypeProvider shipmentTypeProvider) : this()
         {
             this.pipelines = pipelines;
             this.shippingManager = shippingManager;
@@ -91,7 +93,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingViewModelFactory = shippingViewModelFactory;
             log = logFactory(typeof(ShippingPanelViewModel));
             this.securityContextRetriever = securityContextRetriever;
-
+            this.shipmentTypeProvider = shipmentTypeProvider;
             OpenShippingDialogCommand = new RelayCommand<OpenShippingDialogType>(SendShowShippingDlgMessage);
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
@@ -312,6 +314,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentViewModel.WeightErrorMessage = string.Empty;
 
             AllowEditing = AllowEditing && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, OrderID);
+
+            AvailableProviders = shipmentTypeProvider.GetAvailableShipmentTypes(fromShipmentAdapter);
 
             IsLoadingShipment = false;
 
