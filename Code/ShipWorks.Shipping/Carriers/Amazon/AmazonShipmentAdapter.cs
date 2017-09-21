@@ -15,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentAdapter : CarrierShipmentAdapterBase
     {
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
+
         /// <summary>
         /// Copy constructor
         /// </summary>
@@ -27,9 +29,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Constructor
         /// </summary>
         public AmazonShipmentAdapter(ShipmentEntity shipment, IShipmentTypeManager shipmentTypeManager,
-            IStoreManager storeManager) : base(shipment, shipmentTypeManager, null, storeManager)
+            IStoreManager storeManager, IAmazonServiceTypeRepository serviceTypeRepository) : base(shipment, shipmentTypeManager, null, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Amazon, nameof(shipment.Amazon));
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -57,7 +60,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Service type selected
         /// </summary>
-        public override int ServiceType { get; set; } = 0;
+        public override int ServiceType
+        {
+            get
+            {
+                return serviceTypeRepository.Get()
+                    .FirstOrDefault(s => s.ApiValue == Shipment.Amazon.ShippingServiceID).AmazonServiceTypeID;
+            }
+            set
+            {
+                Shipment.Amazon.ShippingServiceID = serviceTypeRepository.Get()
+                    .FirstOrDefault(s => s.AmazonServiceTypeID == value).ApiValue;
+            }
+        }
 
         /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
@@ -102,6 +117,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonRateTag rateTag = tag as AmazonRateTag;
 
             return rateTag?.ServiceTypeID;
+        }
+
+        /// <summary>
+        /// Is the rate the same as the shipments service
+        /// </summary>
+        public override bool DoesRateMatchSelectedService(RateResult rate)
+        {
+            AmazonRateTag rateTag = rate.Tag as AmazonRateTag;
+
+            return rateTag?.ShippingServiceId == Shipment.Amazon.ShippingServiceID;
         }
 
         /// <summary>
