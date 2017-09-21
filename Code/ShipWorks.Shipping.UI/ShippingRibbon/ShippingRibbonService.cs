@@ -295,8 +295,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             // If the shipment is null or it's a non-supported shipping panel carrier, disable buttons
             if (currentShipment == null ||
-                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
-                currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None)
             {
                 shippingRibbonActions.CreateLabel.Enabled = false;
                 shippingRibbonActions.Void.Enabled = false;
