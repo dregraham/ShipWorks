@@ -173,8 +173,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void GridHyperlinkSupported_ReturnsTrue_WhenApiUserAndFieldIsOrderItemName()
         {
-
-
             Assert.True(apiTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderItemFields.Name));
         }
 
@@ -187,7 +185,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser()
         {
-            Assert.False(emailTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderItemFields.Name));
+            Assert.False(emailTestObject.GridHyperlinkSupported(yahooEmailStore.Object, item, OrderItemFields.Name));
         }
 
         [Fact]
