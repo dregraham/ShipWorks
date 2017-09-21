@@ -985,6 +985,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02.cs" />
     <Compile Include="Data\ConfigurationDataWrapper.cs" />
+    <Compile Include="Data\Connection\ConnectionMonitorExceptionLogger.cs" />
     <Compile Include="Data\Connection\ISqlAdapter.cs" />
     <Compile Include="Data\Connection\ISqlAdapterFactory.cs" />
     <Compile Include="Data\Connection\ISqlDateTimeProvider.cs" />
