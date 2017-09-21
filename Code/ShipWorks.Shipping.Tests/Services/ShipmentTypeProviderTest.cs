@@ -31,7 +31,9 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             mock.Mock<IShipmentTypeManager>().SetupGet(x => x.EnabledShipmentTypeCodes)
                 .Returns(new List<ShipmentTypeCode> { ShipmentTypeCode.Other, ShipmentTypeCode.Usps });
-            
+
+            mock.Create<ShipmentTypeProvider>();
+
             mock.Mock<IShipmentTypeManager>().Verify(s => s.EnabledShipmentTypeCodes);
         }
 
