@@ -85,8 +85,6 @@ namespace ShipWorks.Data.Grid.Columns
                                 continue;
                             }
 
-                            // This should be so rare it will never happen.  If we see it happen from a crash report, we can deal with it then by
-                            // loading the existing one from the database when this is detected.
                             throw;
                         }
                     }

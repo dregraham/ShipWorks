@@ -75,8 +75,6 @@ namespace ShipWorks.Data.Grid.Columns
                 .AndWhere(GridColumnPositionFields.ColumnGuid == positionEntity.ColumnGuid);
 
             positionEntity = adapter.FetchFirst(query);
-
-            adapter.FetchEntity(positionEntity);
         }
 
         /// <summary>
