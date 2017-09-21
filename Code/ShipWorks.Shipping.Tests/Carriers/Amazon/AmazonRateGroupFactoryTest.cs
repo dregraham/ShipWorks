@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -24,6 +25,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))
                 .Returns<RateGroup>(x => x);
+
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                    new AmazonServiceTypeEntity()
+                    {
+                        AmazonServiceTypeID = 1,
+                        ApiValue = null
+                    }
+                });
         }
 
         [Fact]
@@ -36,6 +48,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShippingServiceId = "Foo",
                 ShippingServiceOfferId = "Bar"
             });
+
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                                new AmazonServiceTypeEntity()
+                                {
+                                    AmazonServiceTypeID = 1,
+                                    ApiValue = "Foo"
+                                }
+                });
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
 
@@ -141,8 +164,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             });
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
-
-
+            
             RateGroup result = testObject.GetRateGroupFromResponse(response);
             RateResult rateResult = result.Rates.FirstOrDefault();
 
@@ -161,6 +183,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                     ShippingServiceOfferId = "Bar",
                     CarrierName = x == 1 ? "UPS" : "FedEx"
                 }));
+
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                    new AmazonServiceTypeEntity()
+                    {
+                        AmazonServiceTypeID = 1,
+                        ApiValue = "Foo"
+                    }
+                });
 
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))

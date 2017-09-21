@@ -90,7 +90,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 Shipment.Amazon.ShippingServiceName = rateTag.Description ?? string.Empty;
                 Shipment.Amazon.ShippingServiceID = rateTag.ShippingServiceId ?? string.Empty;
                 Shipment.Amazon.CarrierName = rateTag.CarrierName ?? string.Empty;
+                ServiceType = rateTag.ServiceTypeID;
             }
+        }
+
+        /// <summary>
+        /// Converts tag to an AmazonRateTag and returns the ServiceTypeID
+        /// </summary>
+        protected override int? GetServiceTypeAsIntFromTag(object tag)
+        {
+            AmazonRateTag rateTag = tag as AmazonRateTag;
+
+            return rateTag?.ServiceTypeID;
         }
 
         /// <summary>
