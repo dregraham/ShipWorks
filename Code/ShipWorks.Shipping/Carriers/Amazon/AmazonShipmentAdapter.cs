@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Copy constructor
         /// </summary>
-        private AmazonShipmentAdapter(AmazonShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        private AmazonShipmentAdapter(AmazonShipmentAdapter adapterToCopy, IAmazonServiceTypeRepository serviceTypeRepository) : base(adapterToCopy)
         {
-
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Perform the clone of the adapter using the cloned shipment
         /// </summary>
         /// <returns></returns>
-        public override ICarrierShipmentAdapter Clone() => new AmazonShipmentAdapter(this);
+        public override ICarrierShipmentAdapter Clone() => new AmazonShipmentAdapter(this, serviceTypeRepository);
 
         /// <summary>
         /// Are customs allowed?

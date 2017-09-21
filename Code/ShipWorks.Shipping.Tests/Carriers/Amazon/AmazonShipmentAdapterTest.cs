@@ -181,8 +181,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             {
                 Description = "Foo",
                 ShippingServiceId = "Bar",
-                CarrierName = "Quux"
+                CarrierName = "Quux",
+                ServiceTypeID = 2
             };
+
+            mock.Mock<IAmazonServiceTypeRepository>().Setup(r => r.Get())
+                .Returns(new List<AmazonServiceTypeEntity>() { new AmazonServiceTypeEntity() { AmazonServiceTypeID = 2, Description = "Foo", ApiValue = "Bar" } });
 
             var testObject = mock.Create<AmazonShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, rateTag)
