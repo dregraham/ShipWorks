@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (211 + 0));
+			this.InitClass( (212 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -61,6 +61,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonOrderItemEntityInfos();
 			InitAmazonOrderSearchEntityInfos();
 			InitAmazonProfileEntityInfos();
+			InitAmazonServiceTypeEntityInfos();
 			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
@@ -412,6 +413,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AmazonProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("AmazonProfileEntity", "DeliveryExperience", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AmazonProfileFieldIndex.DeliveryExperience, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AmazonProfileFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("AmazonProfileEntity", "ShippingServiceID", typeof(System.String), false, false, false, true,  (int)AmazonProfileFieldIndex.ShippingServiceID, 50, 0, 0);
+		}
+		/// <summary>Inits AmazonServiceTypeEntity's FieldInfo objects</summary>
+		private void InitAmazonServiceTypeEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AmazonServiceTypeFieldIndex), "AmazonServiceTypeEntity");
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "AmazonServiceTypeID", typeof(System.Int32), true, false, true, false,  (int)AmazonServiceTypeFieldIndex.AmazonServiceTypeID, 0, 0, 10);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "ApiValue", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.ApiValue, 50, 0, 0);
+			this.AddElementFieldInfo("AmazonServiceTypeEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonServiceTypeFieldIndex.Description, 100, 0, 0);
 		}
 		/// <summary>Inits AmazonShipmentEntity's FieldInfo objects</summary>
 		private void InitAmazonShipmentEntityInfos()
@@ -421,7 +431,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonShipmentEntity", "CarrierName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.CarrierName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceName", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceName, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceID, 50, 0, 0);
-			this.AddElementFieldInfo("AmazonShipmentEntity", "ShippingServiceOfferID", typeof(System.String), false, false, false, false,  (int)AmazonShipmentFieldIndex.ShippingServiceOfferID, 250, 0, 0);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AmazonShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonShipmentFieldIndex.DimsLength, 0, 0, 38);
@@ -850,7 +859,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(EbayOrderSearchFieldIndex), "EbayOrderSearchEntity");
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)EbayOrderSearchFieldIndex.EbayOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)EbayOrderSearchFieldIndex.OrderID, 0, 0, 19);
-			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayOrderID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.EbayOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayOrderID, 0, 0, 19);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayBuyerID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
@@ -2149,8 +2158,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Quantity", typeof(System.Double), false, false, false, false,  (int)OrderItemFieldIndex.Quantity, 0, 0, 38);
 			this.AddElementFieldInfo("OrderItemEntity", "LocalStatus", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.LocalStatus, 255, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "IsManual", typeof(System.Boolean), false, false, false, false,  (int)OrderItemFieldIndex.IsManual, 0, 0, 0);
-			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderItemEntity", "HarmonizedCode", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.HarmonizedCode, 20, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

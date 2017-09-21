@@ -31,6 +31,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "AmazonOrderItemEntity": return EntityType.AmazonOrderItemEntity;
 				case "AmazonOrderSearchEntity": return EntityType.AmazonOrderSearchEntity;
 				case "AmazonProfileEntity": return EntityType.AmazonProfileEntity;
+				case "AmazonServiceTypeEntity": return EntityType.AmazonServiceTypeEntity;
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonStoreEntity": return EntityType.AmazonStoreEntity;
 				case "AmeriCommerceStoreEntity": return EntityType.AmeriCommerceStoreEntity;

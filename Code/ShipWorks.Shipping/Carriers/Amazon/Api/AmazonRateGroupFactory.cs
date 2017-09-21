@@ -5,6 +5,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -47,7 +48,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     {
                         Description = shippingService.ShippingServiceName ?? "Unknown",
                         ShippingServiceId = shippingService.ShippingServiceId,
-                        ShippingServiceOfferId = shippingService.ShippingServiceOfferId,
                         CarrierName = shippingService.CarrierName
                     };
 

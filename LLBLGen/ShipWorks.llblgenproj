@@ -271,26 +271,33 @@
           <Field Name="DimsWeight" Type="double" IsOptional="true" FieldIndex="5" />
           <Field Name="DimsWidth" Type="double" IsOptional="true" FieldIndex="3" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
+          <Field Name="ShippingServiceID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
           <Field Name="Weight" Type="double" IsOptional="true" FieldIndex="8" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="AmazonServiceType" ObjectID="46c2dbbc-35a6-4057-8998-6be9b1e2385e">
+        <Fields>
+          <Field Name="AmazonServiceTypeID" Type="int" IsReadOnly="true" Precision="10" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ApiValue" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="Description" Type="string" MaxLength="100" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonShipment" ObjectID="ce150d7f-235a-4903-8fd6-874ee4b91c1b">
         <Fields>
-          <Field Name="AmazonUniqueShipmentID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="14" />
+          <Field Name="AmazonUniqueShipmentID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="13" />
           <Field Name="CarrierName" Type="string" MaxLength="50" FieldIndex="1" />
-          <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="13" />
-          <Field Name="DeliveryExperience" Type="int" FieldIndex="12" />
-          <Field Name="DimsAddWeight" Type="bool" FieldIndex="11" />
-          <Field Name="DimsHeight" Type="double" FieldIndex="9" />
-          <Field Name="DimsLength" Type="double" FieldIndex="7" />
-          <Field Name="DimsProfileID" Type="long" FieldIndex="6" />
-          <Field Name="DimsWeight" Type="double" FieldIndex="10" />
-          <Field Name="DimsWidth" Type="double" FieldIndex="8" />
-          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
+          <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="12" />
+          <Field Name="DeliveryExperience" Type="int" FieldIndex="11" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="10" />
+          <Field Name="DimsHeight" Type="double" FieldIndex="8" />
+          <Field Name="DimsLength" Type="double" FieldIndex="6" />
+          <Field Name="DimsProfileID" Type="long" FieldIndex="5" />
+          <Field Name="DimsWeight" Type="double" FieldIndex="9" />
+          <Field Name="DimsWidth" Type="double" FieldIndex="7" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="4" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="ShippingServiceID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="ShippingServiceName" Type="string" MaxLength="50" FieldIndex="2" />
-          <Field Name="ShippingServiceOfferID" Type="string" MaxLength="250" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="AmazonStore" ObjectID="5731eadc-cb73-4772-95ce-7810b37fcd0d" InheritanceType="2">
@@ -671,7 +678,7 @@
       <EntityDefinition Name="EbayOrderSearch" ObjectID="5071fe5f-0360-4d85-813f-875585fc9f27">
         <Fields>
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
-          <Field Name="EbayOrderID" Type="long" IsOptional="true" Precision="19" FieldIndex="2" />
+          <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
@@ -4047,7 +4054,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-12T21:10:41.0794692Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-21T14:36:21.1602272Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4195,6 +4202,15 @@
                     <Field Name="DimsAddWeight" Ordinal="7" IsOptional="true" DbType="2" />
                     <Field Name="DeliveryExperience" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="Weight" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="ShippingServiceID" Ordinal="10" IsOptional="true" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="AmazonServiceType">
+                  <PkConstraintName Name="PK_AmazonServiceTypeID" />
+                  <Fields>
+                    <Field Name="AmazonServiceTypeID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="8" Precision="10" />
+                    <Field Name="ApiValue" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="Description" Ordinal="3" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonShipment">
@@ -4212,41 +4228,40 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="ShippingServiceID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="ShippingServiceOfferID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="250" />
-                    <Field Name="InsuranceValue" Ordinal="6" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4">
+                    <Field Name="InsuranceValue" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="9" Precision="19" Scale="4">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="2" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DimsProfileID" Ordinal="7" HasDefaultValue="true" DefaultValue="(0)" DbType="0" Precision="19">
+                    <Field Name="DimsProfileID" Ordinal="6" HasDefaultValue="true" DefaultValue="(0)" DbType="0" Precision="19">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DimsLength" Ordinal="8" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
-                    <Field Name="DimsWidth" Ordinal="9" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
-                    <Field Name="DimsHeight" Ordinal="10" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
-                    <Field Name="DimsWeight" Ordinal="11" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38">
+                    <Field Name="DimsLength" Ordinal="7" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="8" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="9" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="10" HasDefaultValue="true" DefaultValue="(0)" DbType="6" Precision="38">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="3" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DimsAddWeight" Ordinal="12" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
+                    <Field Name="DimsAddWeight" Ordinal="11" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DeliveryExperience" Ordinal="13" HasDefaultValue="true" DefaultValue="(2)" DbType="8" Precision="10">
+                    <Field Name="DeliveryExperience" Ordinal="12" HasDefaultValue="true" DefaultValue="(2)" DbType="8" Precision="10">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="129" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DeclaredValue" Ordinal="14" IsOptional="true" DbType="9" Precision="19" Scale="4">
+                    <Field Name="DeclaredValue" Ordinal="13" IsOptional="true" DbType="9" Precision="19" Scale="4">
                       <CustomProperties>
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="AmazonUniqueShipmentID" Ordinal="15" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="AmazonUniqueShipmentID" Ordinal="14" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="AmazonStore">
@@ -4771,7 +4786,7 @@
                   <Fields>
                     <Field Name="EbayOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="EbayOrderID" Ordinal="3" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="EbayOrderID" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
@@ -9925,7 +9940,15 @@
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AmazonServiceType" TargetName="ShipWorksLocal:dbo:AmazonServiceType">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonServiceTypeID" TargetFieldName="AmazonServiceTypeID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ApiValue" TargetFieldName="ApiValue" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonShipment" TargetName="ShipWorksLocal:dbo:AmazonShipment">
@@ -9944,7 +9967,6 @@
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="ShippingServiceID" TargetFieldName="ShippingServiceID" />
             <FieldMapping FieldName="ShippingServiceName" TargetFieldName="ShippingServiceName" />
-            <FieldMapping FieldName="ShippingServiceOfferID" TargetFieldName="ShippingServiceOfferID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AmazonStore" TargetName="ShipWorksLocal:dbo:AmazonStore">

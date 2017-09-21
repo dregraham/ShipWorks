@@ -37,8 +37,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// </summary>
         /// <remarks>Mapped on table field: "EbayOrderSearch"."EbayOrderID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> EbayOrderID { get; }
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int64 EbayOrderID { get; }
         /// <summary> The EbayBuyerID property of the Entity EbayOrderSearch<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EbayOrderSearch"."EbayBuyerID"<br/>

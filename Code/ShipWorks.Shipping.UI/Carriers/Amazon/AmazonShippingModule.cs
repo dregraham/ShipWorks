@@ -4,6 +4,7 @@ using ShipWorks.Core.ApplicationCode;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
+using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -41,8 +42,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 
-            builder.RegisterType<AmazonServiceViewModel>();
-
             builder.RegisterType<AmazonRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.Amazon);
 
@@ -54,12 +53,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
 
             builder.RegisterType<AmazonShipmentRequestDetailsFactory>()
                 .As<IAmazonShipmentRequestDetailsFactory>();
-
-            if (!InterapptiveOnly.MagicKeysDown)
-            {
-                builder.RegisterType<AmazonAllowedCarriersRateGroupFilter>()
-                    .As<IAmazonRateGroupFilter>();
-            }
 
             builder.RegisterType<AmazonAccountValidator>()
                 .AsImplementedInterfaces();

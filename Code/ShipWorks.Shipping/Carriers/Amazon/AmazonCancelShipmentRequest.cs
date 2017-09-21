@@ -3,7 +3,6 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -14,16 +13,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonCancelShipmentRequest : IAmazonCancelShipmentRequest
     {
         private readonly IAmazonShippingWebClient webClient;
-        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCancelShipmentRequest(IAmazonShippingWebClient webClient,
-            IAmazonMwsWebClientSettingsFactory settingsFactory)
+        public AmazonCancelShipmentRequest(IAmazonShippingWebClient webClient)
         {
             this.webClient = webClient;
-            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -34,10 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public AmazonShipment Submit(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            IAmazonMwsWebClientSettings amazonSettings = settingsFactory.Create(shipment.Amazon);
-
-            CancelShipmentResponse cancelShipmentRresponse = webClient.CancelShipment(amazonSettings, shipment.Amazon);
+            
+            CancelShipmentResponse cancelShipmentRresponse = webClient.CancelShipment(shipment.Amazon);
 
             return cancelShipmentRresponse.CancelShipmentResult.AmazonShipment;
         }

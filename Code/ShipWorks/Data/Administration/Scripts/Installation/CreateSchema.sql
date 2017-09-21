@@ -1,5 +1,4 @@
 
-
 SET NUMERIC_ROUNDABORT OFF
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
@@ -20,6 +19,25 @@ PRINT N'Creating primary key [PK_BigCommerceOrderItem] on [dbo].[BigCommerceOrde
 GO
 ALTER TABLE [dbo].[BigCommerceOrderItem] ADD CONSTRAINT [PK_BigCommerceOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+
+PRINT N'Creating [dbo].[AmazonServiceType]'
+GO
+CREATE TABLE [dbo].[AmazonServiceType]
+(
+[AmazonServiceTypeID] [int] NOT NULL IDENTITY(1, 1),
+[ApiValue] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AmazonServiceTypeID] on [dbo].[AmazonServiceType]'
+GO
+ALTER TABLE [dbo].[AmazonServiceType] ADD CONSTRAINT [PK_AmazonServiceTypeID] PRIMARY KEY CLUSTERED  ([AmazonServiceTypeID])
+GO
+PRINT N'Creating index [IX_AmazonServiceType_ApiValue] on [dbo].[AmazonServiceType]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_AmazonServiceType_ApiValue] ON [dbo].[AmazonServiceType] ([ApiValue])
+GO
+
 PRINT N'Creating [dbo].[FedExPackage]'
 GO
 CREATE TABLE [dbo].[FedExPackage]
@@ -1832,7 +1850,6 @@ CREATE TABLE [dbo].[AmazonShipment]
 [CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierName] DEFAULT (''),
 [ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceName] DEFAULT (''),
 [ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
-[ShippingServiceOfferID] [nvarchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceOfferId] DEFAULT (''),
 [InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonShipment_InsuranceValue] DEFAULT ((0)),
 [DimsProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsProfileID] DEFAULT ((0)),
 [DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsLength] DEFAULT ((0)),
@@ -1866,6 +1883,7 @@ CREATE TABLE [dbo].[AmazonProfile]
 [DimsAddWeight] [bit] NULL,
 [DeliveryExperience] [int] NULL,
 [Weight] [float] NULL,
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonProfile] on [dbo].[AmazonProfile]'

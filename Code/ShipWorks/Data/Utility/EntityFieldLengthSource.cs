@@ -164,7 +164,6 @@ namespace ShipWorks.Data.Utility
         AmazonShipmentCarrierName,
         AmazonShipmentShippingServiceName,
         AmazonShipmentShippingServiceID,
-        AmazonShipmentShippingServiceOfferID,
 
         OdbcStoreCustomQuery,
 

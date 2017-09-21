@@ -1,12 +1,13 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Linq;
+using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
-using System;
-using System.Linq;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Amazon
+namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
 {
     public class AmazonAllowedCarriersRateGroupFilterTest : IDisposable
     {

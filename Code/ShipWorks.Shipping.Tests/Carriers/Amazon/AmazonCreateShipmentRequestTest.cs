@@ -44,8 +44,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
-                    It.IsAny<IAmazonMwsWebClientSettings>(),
-                    It.IsAny<string>()));
+                    defaultShipment.Amazon));
         }
 
         [Theory]
@@ -65,8 +64,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 65),
-                    It.IsAny<IAmazonMwsWebClientSettings>(),
-                    It.IsAny<string>()));
+                    defaultShipment.Amazon));
         }
 
         [Theory]
@@ -86,8 +84,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 100),
-                    It.IsAny<IAmazonMwsWebClientSettings>(),
-                    It.IsAny<string>()));
+                    defaultShipment.Amazon));
         }
 
         public void Dispose()
