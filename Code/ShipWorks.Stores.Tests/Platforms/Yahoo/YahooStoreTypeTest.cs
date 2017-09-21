@@ -175,19 +175,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         {
 
 
-            Assert.True(apiTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
+            Assert.True(apiTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderItemFields.Name));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenApiUserAndFieldIsNotOrderItemName()
         {
-            Assert.False(apiTestObject.GridHyperlinkSupported(item, OrderFields.BillFirstName));
+            Assert.False(apiTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderFields.BillFirstName));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser()
         {
-            Assert.False(emailTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
+            Assert.False(emailTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderItemFields.Name));
         }
 
         [Fact]

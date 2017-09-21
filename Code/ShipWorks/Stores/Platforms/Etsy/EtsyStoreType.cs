@@ -13,14 +13,15 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Etsy.Dialog;
 using ShipWorks.Stores.Platforms.Etsy.Enums;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Etsy
 {
@@ -83,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         public override void GenerateTemplateOrderItemElements(ElementOutline container, Func<OrderItemEntity> itemSource)
         {
-            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity );
+            var item = new Lazy<EtsyOrderItemEntity>(() => itemSource() as EtsyOrderItemEntity);
 
             ElementOutline outline = container.AddElement("Etsy");
             outline.AddElement("TransactionID", () => item.Value?.TransactionID.ToString() ?? string.Empty);
@@ -392,7 +393,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return
                 EntityUtility.IsSameField(field, OrderItemFields.Code) ||
@@ -402,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Handle a link click for the given field
         /// </summary>
-        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
             OrderItemEntity item = entity as OrderItemEntity;
             if (entity == null || owner == null || item == null)

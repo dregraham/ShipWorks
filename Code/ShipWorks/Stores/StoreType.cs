@@ -439,7 +439,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Indicates if the StoreType supports hyperlinking the grid for the given field
         /// </summary>
-        public virtual bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public virtual bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return false;
         }
@@ -447,7 +447,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Handle a hyperlink click for the given field and entity from the grid
         /// </summary>
-        public virtual void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public virtual void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
 
         }

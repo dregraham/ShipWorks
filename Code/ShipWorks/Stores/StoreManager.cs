@@ -216,6 +216,12 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
+        /// Get the store with the given ID.  If it does not exist, null is returned
+        /// </summary>
+        public static IStoreEntity GetStoreReadOnly(long storeID) =>
+            readOnlyCollection.FirstOrDefault(x => x.StoreID == storeID);
+
+        /// <summary>
         /// Do any stores have address validation enabled
         /// </summary>
         public static bool DoAnyStoresHaveAutomaticValidationEnabled()

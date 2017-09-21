@@ -12,6 +12,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -238,7 +239,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
         }
@@ -246,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Handle a link click for the given field
         /// </summary>
-        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
             string grouponURL = "http://www.groupon.com/deals";
             string itemPermalink = ((GrouponOrderItemEntity) entity).Permalink;
