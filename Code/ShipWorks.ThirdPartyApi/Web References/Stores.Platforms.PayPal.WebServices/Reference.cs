@@ -5240,7 +5240,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
 
         private PersonNameType payerNameField;
 
-        private CountryCodeType payerCountryField;
+        private string payerCountryField;
 
         private bool payerCountryFieldSpecified;
 
@@ -5316,8 +5316,9 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             }
         }
 
-        /// <remarks/>
-        public CountryCodeType PayerCountry
+        /// <remarks>THIS IS NULL BUT SHOULDN'T BE</remarks>
+        [XmlElement("PayerCountry")]
+        public string PayerCountryInternal
         {
             get
             {
@@ -5326,6 +5327,26 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             set
             {
                 this.payerCountryField = value;
+            }
+        }
+
+        /// <remarks/>
+        [XmlIgnore]
+        public CountryCodeType? PayerCountry
+        {
+            get
+            {
+                CountryCodeType result;
+                if (Enum.TryParse<CountryCodeType>(PayerCountryInternal, out result))
+                {
+                    return result;
+                }
+
+                return null;
+            }
+            set
+            {
+                PayerCountryInternal = value.ToString();
             }
         }
 
