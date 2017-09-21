@@ -79,10 +79,12 @@ namespace ShipWorks.Data.Grid.Columns
                             if (sqlEx != null && sqlEx.Number == 2601)
                             {
                                 log.InfoFormat("Race condition loading layout column, created since we just loaded.");
+
+                                // We know it's already in the db, so fetch it and use it.
+                                columnPosition.Refetch(adapter);
+                                continue;
                             }
 
-                            // This should be so rare it will never happen.  If we see it happen from a crash report, we can deal with it then by
-                            // loading the existing one from the database when this is detected.
                             throw;
                         }
                     }
