@@ -548,7 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The HarmonizedCode property of the Entity ShipmentCustomsItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "ShipmentCustomsItem"."HarmonizedCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 14<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String HarmonizedCode
 		{

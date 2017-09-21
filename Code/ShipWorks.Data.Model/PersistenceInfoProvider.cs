@@ -2262,7 +2262,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "LocalStatus", "LocalStatus", false, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("OrderItemEntity", "IsManual", "IsManual", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("OrderItemEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 18);
-			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "VarChar", 14, 0, 0, false, "", null, typeof(System.String), 19);
+			this.AddElementFieldMapping("OrderItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 18);
 		}
 
 		/// <summary>Inits OrderItemAttributeEntity's mappings</summary>
@@ -2741,7 +2741,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 5);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "UnitValue", "UnitValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 6);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "CountryOfOrigin", "CountryOfOrigin", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "HarmonizedCode", "HarmonizedCode", false, "VarChar", 14, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "HarmonizedCode", "HarmonizedCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "NumberOfPieces", "NumberOfPieces", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("ShipmentCustomsItemEntity", "UnitPriceAmount", "UnitPriceAmount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 10);
 		}
