@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Reflection;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data;
-using System.Web.Services.Protocols;
-using ShipWorks.ApplicationCore.Logging;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using Interapptive.Shared.Net;
-using log4net;
-using Interapptive.Shared.Win32;
-using ShipWorks.ApplicationCore;
+using System.Reflection;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Web.Services.Protocols;
 using Interapptive.Shared;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Win32;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
+using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -90,11 +90,11 @@ namespace ShipWorks.Stores.Platforms.PayPal
             /// <summary>
             /// Constructor
             /// </summary>
-			public CustomPayPalApiBinding(ApiLogEntry log) 
+			public CustomPayPalApiBinding(ApiLogEntry log)
                 : base(log)
-			{
+            {
 
-			}
+            }
 
             /// <summary>
             /// Execute the given request and return the response.
@@ -119,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     properties[0].SetValue(requestContainer, request, null);
 
                     object[] results = this.Invoke(callname, new object[] { requestContainer });
-                    return ((AbstractResponseType)(results[0]));
+                    return ((AbstractResponseType) (results[0]));
                 }
                 catch (Exception ex)
                 {
@@ -163,14 +163,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
         {
             if (UseLiveServer)
             {
-				if (signature)
-				{
-					return "https://api-3t.paypal.com/2.0/";
-				}
-				else
-				{
-					return "https://api.paypal.com/2.0/";
-				}
+                if (signature)
+                {
+                    return "https://api-3t.paypal.com/2.0/";
+                }
+                else
+                {
+                    return "https://api.paypal.com/2.0/";
+                }
             }
             else
             {
@@ -325,7 +325,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             searchRequest.TransactionClass = PaymentTransactionClassCodeType.Received;
 
             // execute the search
-            TransactionSearchResponseType searchResult = (TransactionSearchResponseType)ExecuteRequest(searchRequest);
+            TransactionSearchResponseType searchResult = (TransactionSearchResponseType) ExecuteRequest(searchRequest);
             if (searchResult.PaymentTransactions != null && searchResult.PaymentTransactions.Length > 0)
             {
                 string transactionId = searchResult.PaymentTransactions[0].TransactionID;
@@ -336,7 +336,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 getRequest.DetailLevel = new DetailLevelCodeType[] { DetailLevelCodeType.ReturnAll };
 
                 // execute the get request
-                GetTransactionDetailsResponseType getResult = (GetTransactionDetailsResponseType)ExecuteRequest(getRequest);
+                GetTransactionDetailsResponseType getResult = (GetTransactionDetailsResponseType) ExecuteRequest(getRequest);
 
                 return getResult.PaymentTransactionDetails;
             }
@@ -373,7 +373,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             try
             {
                 GetBalanceRequestType getBalanceRequest = new GetBalanceRequestType();
-                GetBalanceResponseType response = (GetBalanceResponseType)ExecuteRequest(getBalanceRequest);
+                GetBalanceResponseType response = (GetBalanceResponseType) ExecuteRequest(getBalanceRequest);
 
                 if (response.TimestampSpecified)
                 {
@@ -417,7 +417,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             // execute the search
             try
             {
-                TransactionSearchResponseType searchResult = (TransactionSearchResponseType)ExecuteRequest(searchRequest);
+                TransactionSearchResponseType searchResult = (TransactionSearchResponseType) ExecuteRequest(searchRequest);
 
                 // collection to hold the results
                 List<PaymentTransactionSearchResultType> transactions = new List<PaymentTransactionSearchResultType>();
@@ -441,7 +441,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                         });
                     }
                 }
-                
+
                 return transactions;
             }
             catch (PayPalException ex)
@@ -498,7 +498,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
                     throw;
                 }
             }
-
         }
 
         /// <summary>
@@ -511,7 +510,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             request.DetailLevel = new DetailLevelCodeType[] { DetailLevelCodeType.ReturnAll };
 
             // execute the request
-            GetTransactionDetailsResponseType response = (GetTransactionDetailsResponseType)ExecuteRequest(request);
+            GetTransactionDetailsResponseType response = (GetTransactionDetailsResponseType) ExecuteRequest(request);
             return response.PaymentTransactionDetails;
         }
     }
