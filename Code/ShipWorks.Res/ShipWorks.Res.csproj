@@ -428,9 +428,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.3.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.5.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.0.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -463,6 +464,8 @@
     <Content Include="Templates\Distribution\Source\Labels\Label with Invoice\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Labels\Standard 4x6\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Labels\Standard 4x6\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Standard\settings.xml" />
     <Content Include="Templates\Distribution\Source\Labels\Standard\template.xsl" />
     <Content Include="Templates\Distribution\Source\Labels\Thermal\settings.xml" />
@@ -501,6 +504,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Exports\Orders with Items\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Package Level Details\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Exports\Package Level Details\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Exports\Shipsurance Export\template.xsl">
       <SubType>Designer</SubType>
@@ -545,6 +550,8 @@
     <Content Include="Templates\Distribution\Source\Reports\Product Trends\Items by Quantity\template.xsl">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipments by Provider\settings.xml" />
+    <Content Include="Templates\Distribution\Source\Reports\Financials\Shipments by Provider\template.xsl" />
     <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\settings.xml" />
     <Content Include="Templates\Distribution\Source\Reports\Shipper Productivity\template.xsl" />
     <Content Include="Templates\Distribution\Source\System\Grid %28Detail View%29\Line Items\settings.xml" />

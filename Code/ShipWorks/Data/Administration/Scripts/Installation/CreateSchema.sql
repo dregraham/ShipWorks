@@ -757,7 +757,7 @@ CREATE TABLE [dbo].[OrderItem]
 [LocalStatus] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IsManual] [bit] NOT NULL,
 [TotalWeight] AS ([Weight]*[Quantity]),
-[HarmonizedCode] [varchar] (14) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
@@ -3439,7 +3439,7 @@ CREATE TABLE [dbo].[ShipmentCustomsItem]
 [Weight] [float] NOT NULL,
 [UnitValue] [money] NOT NULL,
 [CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[HarmonizedCode] [varchar] (14) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfPieces] [int] NOT NULL,
 [UnitPriceAmount] [money] NOT NULL
 )
