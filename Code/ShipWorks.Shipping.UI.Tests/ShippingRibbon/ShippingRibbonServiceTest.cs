@@ -393,15 +393,16 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
         #region Create return
         [Theory]
-        [InlineData(true, true, false, true)]
-        [InlineData(true, false, true, true)]
-        [InlineData(false, true, false, true)]
-        [InlineData(false, false, false, true)]
-        [InlineData(true, true, false, false)]
-        [InlineData(true, false, false, false)]
-        [InlineData(false, true, false, false)]
-        [InlineData(false, false, false, false)]
-        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission)
+        [InlineData(true, true, false, true, ShipmentTypeCode.Usps)]
+        [InlineData(true, false, true, true, ShipmentTypeCode.Usps)]
+        [InlineData(false, true, false, true, ShipmentTypeCode.Usps)]
+        [InlineData(false, false, false, true, ShipmentTypeCode.Usps)]
+        [InlineData(true, true, false, false, ShipmentTypeCode.Usps)]
+        [InlineData(true, false, false, false, ShipmentTypeCode.Usps)]
+        [InlineData(false, true, false, false, ShipmentTypeCode.Usps)]
+        [InlineData(false, false, false, false, ShipmentTypeCode.Usps)]
+        [InlineData(false, false, false, false, ShipmentTypeCode.Amazon)]
+        public void HandleOrderSelectionChanged_DisablesReturn_WhenLoadedShipmentIsProcessed(bool isProcessed, bool isReturned, bool expected, bool hasPermission, ShipmentTypeCode shipmentTypeCode)
         {
             actions.SetupGet(x => x.Return).Returns(CreateMockedRibbonButton());
             securityContext.Setup(sc => sc.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>())).Returns(hasPermission);
@@ -414,11 +415,12 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             {
                 x.Processed = isProcessed;
                 x.Voided = isReturned;
+                x.ShipmentTypeCode = shipmentTypeCode;
             }));
 
             Assert.Equal(expected, actions.Object.Return.Enabled);
         }
-
+        
         [Theory]
         [InlineData(false, true)]
         [InlineData(false, false)]

@@ -5,12 +5,12 @@ using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using ShipWorks.Data;
+using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             /// <summary>
             /// Constructor
             /// </summary>
-            public CustomPayPalApiBinding(ApiLogEntry log)
+			public CustomPayPalApiBinding(ApiLogEntry log) 
                 : base(log)
             {
 

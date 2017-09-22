@@ -51,6 +51,8 @@
             // next
             // 
             this.next.Location = new System.Drawing.Point(389, 509);
+            this.next.Tag = System.Windows.Forms.DialogResult.OK;
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -62,7 +64,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
             this.mainPanel.Size = new System.Drawing.Size(557, 437);
             // 
             // etchBottom
@@ -132,11 +134,14 @@
             this.contactInformation.Location = new System.Drawing.Point(23, 10);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
-            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal)));
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
+            | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 1;
             // 
@@ -145,6 +150,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 544);
+            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AmazonShipmentSetupWizard";
             this.NextVisible = true;

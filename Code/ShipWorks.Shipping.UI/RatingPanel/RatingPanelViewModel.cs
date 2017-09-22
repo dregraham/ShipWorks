@@ -102,16 +102,8 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             if (message.Success)
             {
-                if (message?.ShipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-                {
-                    SetRateResults(Enumerable.Empty<RateResult>(),
-                        "Please use Ship Orders to get rates for this carrier.", Enumerable.Empty<object>());
-                }
-                else
-                {
-                    SetRateResults(message.RateGroup.Rates, string.Empty,
-                        message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
-                }
+                SetRateResults(message.RateGroup.Rates, string.Empty,
+                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
             }
             else
             {

@@ -252,6 +252,7 @@ GO
 INSERT INTO dbo.AmazonServiceType
 (ApiValue, Description)
 VALUES
+('USPS_PTP_FC', 'USPS First Class'),
 ('USPS_PTP_PRI', 'USPS Priority Mail®'),
 ('USPS_PTP_PRI_SFRB', 'USPS Priority Mail® Small Flat Rate Box'),
 ('USPS_PTP_PRI_MFRB', 'USPS Priority Mail® Flat Rate Box'),
@@ -264,6 +265,7 @@ VALUES
 ('USPS_PTP_EXP', 'USPS Priority Mail Express®'),
 ('USPS_PTP_EXP_FRE', 'USPS Priority Mail Express® Flat Rate Envelope'),
 ('USPS_PTP_EXP_LFRE', 'USPS Priority Mail Express Legal Flat Rate Envelope'),
+('USPS_PTP_EXP_PFRE', 'USPS Priority Mail Express Padded Flat Rate Envelope'),
 ('USPS_PTP_PSBN', 'USPS Parcel Select'),
 ('FEDEX_PTP_GROUND', 'FedEx Ground®'),
 ('FEDEX_PTP_SECOND_DAY', 'FedEx 2Day®'),

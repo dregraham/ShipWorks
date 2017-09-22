@@ -188,7 +188,7 @@
                                   IsEnabled="{Binding AllowEditing}">
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource ShipmentTypeList}">
-                                    <Binding Path="Available" Source="{x:Static sw:ShipmentTypeProvider.Current}" />
+                                    <Binding Path="AvailableProviders" />
                                     <Binding Path="InitialShipmentTypeCode" Mode="OneWay" />
                                 </MultiBinding>
                             </ComboBox.ItemsSource>
@@ -211,11 +211,13 @@
                                     <StackPanel Style="{StaticResource Expander.Header}"
                                                 Orientation="Horizontal">
                                         <TextBlock Style="{StaticResource Expander.Header.Label}">From</TextBlock>
-                                        <TextBlock Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}">Account:</TextBlock>
-                                        <TextBlock Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibilityNegated}}"
+                                        <StackPanel Visibility="{Binding SupportsAccounts, Converter={StaticResource BooleanToVisibility}}" Orientation="Horizontal" >
+                                            <TextBlock>Account:</TextBlock>
+                                            <TextBlock Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibilityNegated}}"
                                            Text="{Binding Text, ElementName=AccountDropDown, StringFormat=' {0}, '}" />
-                                        <TextBlock xml:space="preserve" Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibility}}"
+                                            <TextBlock xml:space="preserve" Visibility="{Binding SupportsRateShopping, Converter={StaticResource BooleanToVisibility}}"
                                                    Text=" (Rate Shopping), "/>
+                                        </StackPanel>
                                         <TextBlock Text="{Binding Text, ElementName=OriginDropDown}" />
                                     </StackPanel>
                                 </Expander.Header>
@@ -433,19 +435,6 @@
                             <Setter Property="Margin" Value="12,10" />
                         </Style>
                     </StackPanel.Style>
-
-                    <StackPanel Visibility="{Binding LoadedShipmentResult,
-                                Converter={StaticResource VisibleWhenEqualToParameter},
-                                ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.UnsupportedShipmentType}}">
-                        <TextBlock Style="{StaticResource TextBlock.Empty}"
-                               Margin="0, 0, 0, 5">
-                            Please use the Ship Orders dialog for this carrier.
-                        </TextBlock>
-
-                        <Button Command="{Binding OpenShippingDialogCommand}"
-                                CommandParameter="{x:Static local:OpenShippingDialogType.SelectedShipment}"
-                                Style="{StaticResource Button.ShipOrders}"/>
-                    </StackPanel>
 
                     <StackPanel Visibility="{Binding LoadedShipmentResult,Converter={StaticResource VisibleWhenEqualToParameter},ConverterParameter={x:Static sw:ShippingPanelLoadedShipmentResult.Multiple}}">
                         <TextBlock Style="{StaticResource TextBlock.Empty}"

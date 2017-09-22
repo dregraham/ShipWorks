@@ -1570,4 +1570,36 @@
 		<Rows>2</Rows>
 		<Columns>1</Columns>
 	</LabelSheet>
+  <LabelSheet>
+    <LabelSheetID>-98</LabelSheetID>
+    <Name>Universal - 4x6 Portrait</Name>
+    <BrandName>Other</BrandName>
+    <PaperSizeDescription>4x6</PaperSizeDescription>
+    <PaperSizeHeight>6</PaperSizeHeight>
+    <PaperSizeWidth>4</PaperSizeWidth>
+    <MarginTop>0</MarginTop>
+    <MarginLeft>0</MarginLeft>
+    <LabelHeight>6</LabelHeight>
+    <LabelWidth>4</LabelWidth>
+    <VerticalSpacing>0</VerticalSpacing>
+    <HorizontalSpacing>0</HorizontalSpacing>
+    <Rows>1</Rows>
+    <Columns>1</Columns>
+  </LabelSheet>
+  <LabelSheet>
+    <LabelSheetID>-99</LabelSheetID>
+    <Name>Universal - 4x6 Landscape</Name>
+    <BrandName>Other</BrandName>
+    <PaperSizeDescription>4x6</PaperSizeDescription>
+    <PaperSizeHeight>4</PaperSizeHeight>
+    <PaperSizeWidth>6</PaperSizeWidth>
+    <MarginTop>0</MarginTop>
+    <MarginLeft>0</MarginLeft>
+    <LabelHeight>4</LabelHeight>
+    <LabelWidth>6</LabelWidth>
+    <VerticalSpacing>0</VerticalSpacing>
+    <HorizontalSpacing>0</HorizontalSpacing>
+    <Rows>1</Rows>
+    <Columns>1</Columns>
+  </LabelSheet>
 </LabelLabelSheet>

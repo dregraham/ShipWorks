@@ -386,5 +386,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             legacy.AddElement("BuyerID", () => item.Value.MarketplaceBuyerID);
             legacy.AddElement("ItemID", () => item.Value.MarketplaceSalesID);
         }
+
+        /// <summary>
+        /// Determines whether the shipping address is editable for the specified shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
+        {
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
+
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return ShippingAddressEditStateType.AmazonSfp;
+            }
+
+            return editable;
+        }
     }
 }

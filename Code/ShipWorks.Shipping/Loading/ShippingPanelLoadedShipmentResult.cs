@@ -21,9 +21,6 @@ namespace ShipWorks.Shipping.Loading
         [Description("Error")]
         Error = 3,
 
-        [Description("Unsupported Shipment Type")]
-        UnsupportedShipmentType = 4,
-
         [Description("Deleted")]
         Deleted = 5,
 

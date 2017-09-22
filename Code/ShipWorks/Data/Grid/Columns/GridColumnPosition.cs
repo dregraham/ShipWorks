@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.FactoryClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Model.HelperClasses;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -56,6 +60,21 @@ namespace ShipWorks.Data.Grid.Columns
             adapter.SaveAndRefetch(positionEntity);
 
             return isDirty;
+        }
+
+        /// <summary>
+        /// Refetch the entity from the database.  This is useful for race conditions where the
+        /// position has already been created by another instance.
+        /// </summary>
+        /// <param name="adapter"></param>
+        public void Refetch(SqlAdapter adapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<GridColumnPositionEntity> query = factory.Create<GridColumnPositionEntity>()
+                .Where(GridColumnPositionFields.GridColumnLayoutID == positionEntity.GridColumnLayoutID)
+                .AndWhere(GridColumnPositionFields.ColumnGuid == positionEntity.ColumnGuid);
+
+            positionEntity = adapter.FetchFirst(query);
         }
 
         /// <summary>
