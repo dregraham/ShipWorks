@@ -21,6 +21,7 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -448,6 +449,22 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     issueAdder.Add(orderID, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether the shipping address is editable for the specified shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
+        {
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
+
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return ShippingAddressEditStateType.AmazonSfp;
+            }
+
+            return editable;
         }
     }
 }

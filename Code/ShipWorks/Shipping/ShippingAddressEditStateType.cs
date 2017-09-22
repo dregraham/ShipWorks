@@ -36,5 +36,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         [Description("eBay GSP")]
         GspFulfilled = 3,
+
+        /// <summary>
+        /// The shipment is to be printed from Amazons carriers
+        /// </summary>
+        [Description("Amazon Seller Fulfilled Prime")]
+        AmazonSfp = 3,
     }
 }

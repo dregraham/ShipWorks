@@ -635,5 +635,21 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }
+
+        /// <summary>
+        /// Determines whether the shipping address is editable for the specified shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
+        {
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
+
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return ShippingAddressEditStateType.AmazonSfp;
+            }
+
+            return editable;
+        }
     }
 }

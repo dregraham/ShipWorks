@@ -22,5 +22,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         /// The carrier name of the rate
         /// </summary>
         public string CarrierName { get; set; }
+
+        /// <summary>
+        /// ServiceTypeID - the pnumber of the rate stored in the database
+        /// </summary>
+        public int ServiceTypeID { get; set; }
     }
 }

@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
         private readonly IShippingViewModelFactory shippingViewModelFactory;
         private readonly ILog log;
         private readonly Func<ISecurityContext> securityContextRetriever;
+        private readonly ShipmentTypeProvider shipmentTypeProvider;
         private IDisposable shipmentChangedSubscription;
         private long[] selectedOrderIds;
         private long? lastSelectedShipmentID;
@@ -82,7 +83,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             IMessageHelper messageHelper,
             IShippingViewModelFactory shippingViewModelFactory,
             Func<Type, ILog> logFactory,
-            Func<ISecurityContext> securityContextRetriever) : this()
+            Func<ISecurityContext> securityContextRetriever, 
+            ShipmentTypeProvider shipmentTypeProvider) : this()
         {
             this.pipelines = pipelines;
             this.shippingManager = shippingManager;
@@ -91,7 +93,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             this.shippingViewModelFactory = shippingViewModelFactory;
             log = logFactory(typeof(ShippingPanelViewModel));
             this.securityContextRetriever = securityContextRetriever;
-
+            this.shipmentTypeProvider = shipmentTypeProvider;
             OpenShippingDialogCommand = new RelayCommand<OpenShippingDialogType>(SendShowShippingDlgMessage);
 
             Origin = shippingViewModelFactory.GetAddressViewModel();
@@ -227,12 +229,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 LoadShipment(GetShipmentToLoad());
             }
-            else if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)
-            {
-                // We need to set this so that we can open the dialog from the "Ship Orders" button,
-                // since it expects the current shipment to be non-null
-                ShipmentAdapter = GetShipmentToLoad();
-            }
             else
             {
                 if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.NotCreated)
@@ -282,13 +278,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             {
                 return ShippingPanelLoadedShipmentResult.NotCreated;
             }
-
-            ICarrierShipmentAdapter shipmetAdapter = loadedSelection.ShipmentAdapters.FirstOrDefault();
-            if (shipmetAdapter?.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                return ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
-            }
-
+            
             return ShippingPanelLoadedShipmentResult.Success;
         }
 
@@ -318,20 +308,14 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             LoadedShipmentResult = GetLoadedShipmentResult(loadedOrderSelection);
 
-            // If we are an unsupported shipment type, stop and show the appropriate message.
-            if (ShipmentAdapter.Shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                LoadedShipmentResult = ShippingPanelLoadedShipmentResult.UnsupportedShipmentType;
-                IsLoadingShipment = false;
-                return;
-            }
-
             pipelines.RegisterTransient(this);
 
             Populate(ShipmentAdapter);
             ShipmentViewModel.WeightErrorMessage = string.Empty;
 
             AllowEditing = AllowEditing && securityContextRetriever().HasPermission(PermissionType.ShipmentsCreateEditProcess, OrderID);
+
+            AvailableProviders = shipmentTypeProvider.GetAvailableShipmentTypes(fromShipmentAdapter);
 
             IsLoadingShipment = false;
 

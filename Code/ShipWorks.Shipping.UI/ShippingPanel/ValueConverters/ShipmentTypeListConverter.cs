@@ -47,14 +47,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
                 .Distinct()
                 .OrderBy(x => ShipmentTypeManager.GetSortValue(x));
 
-            if (values.Length > 1 && values[1] is ShipmentTypeCode)
-            {
-                // We don't want Amazon in the list, so filter it out, unless the initial shipment type code was amazon
-                ShipmentTypeCode? intialShipmentTypeCode = (ShipmentTypeCode) values[1];
-                results = results.Where(x => IsIncludedShipmentType(x) ||
-                    IsShipmentTypeInUseByShipment(x, intialShipmentTypeCode));
-            }
-
             return results.Select(x => new ShipmentTypeListItem(x, getDescription(x))).ToList() ?? Enumerable.Empty<ShipmentTypeListItem>();
         }
 
@@ -64,23 +56,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ValueConverters
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Is the shipment type currently in use by the shipment
-        /// </summary>
-        private bool IsShipmentTypeInUseByShipment(ShipmentTypeCode shipmentTypeCode, ShipmentTypeCode? intialShipmentTypeCode)
-        {
-            return intialShipmentTypeCode.HasValue &&
-                intialShipmentTypeCode == shipmentTypeCode;
-        }
-
-        /// <summary>
-        /// Should the specified shipment type be excluded
-        /// </summary>
-        private bool IsIncludedShipmentType(ShipmentTypeCode shipmentTypeCode)
-        {
-            return shipmentTypeCode != ShipmentTypeCode.Amazon;
         }
     }
 }

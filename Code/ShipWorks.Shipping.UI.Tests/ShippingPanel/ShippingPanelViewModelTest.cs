@@ -235,7 +235,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [InlineData(ShippingPanelLoadedShipmentResult.Error)]
         [InlineData(ShippingPanelLoadedShipmentResult.Multiple)]
         [InlineData(ShippingPanelLoadedShipmentResult.NotCreated)]
-        [InlineData(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType)]
         public void Save_DoesNotDelegate_WhenLoadedShipmentResult_IsNotSuccess_Test(ShippingPanelLoadedShipmentResult shippingPanelLoadedShipmentResult)
         {
             Mock<ShipmentViewModel> shipmentViewModel = mock.CreateMock<ShipmentViewModel>();
@@ -574,20 +573,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelectionLoaded }));
 
             Assert.Equal(string.Empty, testObject.ErrorMessage);
-        }
-
-        [Fact]
-        public void Load_LoadedShipmentResult_IsUnsupportedShipmentType_WhenAmazonShipmentType()
-        {
-            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Amazon;
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
-                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
-                );
-
-            ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
-
-            Assert.Equal(ShippingPanelLoadedShipmentResult.UnsupportedShipmentType, testObject.LoadedShipmentResult);
         }
 
         [Fact]
@@ -1031,7 +1016,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon)]
         [InlineData(ShipmentTypeCode.None)]
         public void Save_DoesNotDelegateToShipmentViewModelSave_WhenNoneShipmentType_Test(ShipmentTypeCode shipmentTypeCode)
         {
