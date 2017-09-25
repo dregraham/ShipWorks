@@ -344,6 +344,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
+            storeEntity.AmazonVATS = false;
 
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
