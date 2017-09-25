@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using ShipWorks.Common.Threading;
 using System.Threading;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using System.Data.SqlTypes;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
@@ -28,6 +29,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public AmazonMwsStoreSettingsControl()
         {
             InitializeComponent();
+
+            amazonVATS.ValueMember = "Key";
+            amazonVATS.DisplayMember = "Value";
+            amazonVATS.DataSource = new Dictionary<bool, string>
+            {
+                { false, "Disabled" },
+                { true, "Enabled" }
+            }.ToList();
         }
 
         /// <summary>
@@ -42,6 +51,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             excludeFba.Checked = amazonStore.ExcludeFBA;
+
+            bool showVATS = ShowVATS(amazonStore);
+
+            amazonVATS.SelectedValue = amazonStore.AmazonVATS;
+            amazonVATS.Visible = showVATS;
+            amazonVATSLabel.Visible = showVATS;
+
+            if (!showVATS)
+            {
+                Height -= 20;
+            }
         }
 
         /// <summary>
@@ -56,8 +76,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             amazonStore.ExcludeFBA = excludeFba.Checked;
+            if (ShowVATS(amazonStore))
+            {
+                amazonStore.AmazonVATS = (bool) amazonVATS.SelectedValue;
+            }
 
             return true;
         }
+
+        /// <summary>
+        /// Should we show the VATS UI
+        /// </summary>
+        private bool ShowVATS(IAmazonStoreEntity store) => store.AmazonApiRegion == "UK";
     }
 }
