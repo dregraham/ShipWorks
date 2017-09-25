@@ -1352,6 +1352,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
 		}
+		/// <summary>Creates a new AmazonStoreEntity.AmazonVATS field instance</summary>
+		public static EntityField2 AmazonVATS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmeriCommerceStoreEntity</summary>

@@ -305,6 +305,7 @@
           <Field Name="AccessKeyID" Type="string" MaxLength="32" FieldIndex="6" />
           <Field Name="AmazonApi" Type="int" FieldIndex="0" />
           <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="1" />
+          <Field Name="AmazonVATS" Type="bool" FieldIndex="17" />
           <Field Name="AuthToken" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="Certificate" Type="byte[]" IsOptional="true" MaxLength="2048" FieldIndex="11" />
           <Field Name="Cookie" Type="string" MaxLength="2147483647" FieldIndex="8" />
@@ -4054,7 +4055,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-21T14:36:21.1602272Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-25T14:31:30.5398359Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4285,6 +4286,7 @@
                     <Field Name="MarketplaceID" Ordinal="16" DbType="12" Length="50" />
                     <Field Name="ExcludeFBA" Ordinal="17" DbType="2" />
                     <Field Name="DomainName" Ordinal="18" DbType="12" Length="50" />
+                    <Field Name="AmazonVATS" Ordinal="19" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="AmeriCommerceStore">
@@ -9974,6 +9976,7 @@
             <FieldMapping FieldName="AccessKeyID" TargetFieldName="AccessKeyID" />
             <FieldMapping FieldName="AmazonApi" TargetFieldName="AmazonApi" />
             <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
+            <FieldMapping FieldName="AmazonVATS" TargetFieldName="AmazonVATS" />
             <FieldMapping FieldName="AuthToken" TargetFieldName="AuthToken" />
             <FieldMapping FieldName="Certificate" TargetFieldName="Certificate" />
             <FieldMapping FieldName="Cookie" TargetFieldName="Cookie" />

@@ -600,6 +600,8 @@ namespace ShipWorks.Data.Model
 		ExcludeFBA,
 		///<summary>DomainName. </summary>
 		DomainName,
+		///<summary>AmazonVATS. </summary>
+		AmazonVATS,
 		/// <summary></summary>
 		AmountOfFields
 	}

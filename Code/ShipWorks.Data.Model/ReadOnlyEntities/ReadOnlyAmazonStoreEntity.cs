@@ -53,6 +53,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MarketplaceID = source.MarketplaceID;
             ExcludeFBA = source.ExcludeFBA;
             DomainName = source.DomainName;
+            AmazonVATS = source.AmazonVATS;
             
             
             
@@ -163,6 +164,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String DomainName { get; }
+        /// <summary> The AmazonVATS property of the Entity AmazonStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonStore"."AmazonVATS"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AmazonVATS { get; }
         
         
         
