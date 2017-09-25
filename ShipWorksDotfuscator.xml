@@ -95,6 +95,7 @@
       <namespace name="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.ThreeDCart\.RestApi\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.Shipping\.Carriers\.Amazon\.Api\.DTOs\.*.*" regex="true" />
       <namespace name="ShipWorks\.Properties\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Groupon\.DTO\.*.*" regex="true" />
