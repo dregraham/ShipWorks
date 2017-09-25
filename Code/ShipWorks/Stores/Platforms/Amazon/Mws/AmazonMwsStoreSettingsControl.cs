@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     public partial class AmazonMwsStoreSettingsControl : StoreSettingsControlBase
     {
         private const string amazonVATSWarning =
-            "Enabling the Amazon VATS toggle will stop ShipWorks from downloading the \"Tax\" line item, because the VATS tax is already included in each item total. Are you sure you want to do this?";
+            "Enabling the Amazon VATS toggle will stop ShipWorks from downloading \"Tax\" order charges, because the VATS tax is already included in each item total. Are you sure you want to do this?";
 
         /// <summary>
         /// Constructor
