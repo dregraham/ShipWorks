@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<MarketplaceAdvisorOrderSearchEntity> _marketplaceAdvisorOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -48,6 +49,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Customer = "Customer";
 			/// <summary>Member name Store</summary>
 			public static readonly string Store = "Store";
+			/// <summary>Member name MarketplaceAdvisorOrderSearch</summary>
+			public static readonly string MarketplaceAdvisorOrderSearch = "MarketplaceAdvisorOrderSearch";
 			/// <summary>Member name Notes</summary>
 			public static readonly string Notes = "Notes";
 			/// <summary>Member name OrderCharges</summary>
@@ -56,6 +59,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name Shipments</summary>
 			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
@@ -124,6 +129,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_marketplaceAdvisorOrderSearch = (EntityCollection<MarketplaceAdvisorOrderSearchEntity>)info.GetValue("_marketplaceAdvisorOrderSearch", typeof(EntityCollection<MarketplaceAdvisorOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -139,6 +145,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "MarketplaceAdvisorOrderSearch":
+					this.MarketplaceAdvisorOrderSearch.Add((MarketplaceAdvisorOrderSearchEntity)entity);
+					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -161,6 +170,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "MarketplaceAdvisorOrderSearch":
+					toReturn.Add(Relations.MarketplaceAdvisorOrderSearchEntityUsingOrderID);
+					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -190,6 +202,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "MarketplaceAdvisorOrderSearch":
+					this.MarketplaceAdvisorOrderSearch.Add((MarketplaceAdvisorOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -204,6 +219,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "MarketplaceAdvisorOrderSearch":
+					this.PerformRelatedEntityRemoval(this.MarketplaceAdvisorOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -234,6 +252,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.MarketplaceAdvisorOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -263,6 +282,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_marketplaceAdvisorOrderSearch", ((_marketplaceAdvisorOrderSearch!=null) && (_marketplaceAdvisorOrderSearch.Count>0) && !this.MarkedForDeletion)?_marketplaceAdvisorOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -284,6 +304,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new MarketplaceAdvisorOrderRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'MarketplaceAdvisorOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoMarketplaceAdvisorOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(MarketplaceAdvisorOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -297,6 +326,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._marketplaceAdvisorOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -304,6 +334,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._marketplaceAdvisorOrderSearch = (EntityCollection<MarketplaceAdvisorOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -312,6 +343,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._marketplaceAdvisorOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -321,6 +353,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<MarketplaceAdvisorOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(MarketplaceAdvisorOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -328,6 +361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
+			toReturn.Add("MarketplaceAdvisorOrderSearch", _marketplaceAdvisorOrderSearch);
 			return toReturn;
 		}
 
@@ -382,6 +416,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public new static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'MarketplaceAdvisorOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathMarketplaceAdvisorOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<MarketplaceAdvisorOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(MarketplaceAdvisorOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("MarketplaceAdvisorOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderEntity, (int)ShipWorks.Data.Model.EntityType.MarketplaceAdvisorOrderSearchEntity, 0, null, null, null, null, "MarketplaceAdvisorOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 
@@ -446,6 +487,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)MarketplaceAdvisorOrderFieldIndex.ParcelID, true); }
 			set	{ SetValue((int)MarketplaceAdvisorOrderFieldIndex.ParcelID, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'MarketplaceAdvisorOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(MarketplaceAdvisorOrderSearchEntity))]
+		public virtual EntityCollection<MarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<MarketplaceAdvisorOrderSearchEntity, MarketplaceAdvisorOrderSearchEntityFactory>("MarketplaceAdvisorOrder", true, false, ref _marketplaceAdvisorOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

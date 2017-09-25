@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IMarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -74,6 +75,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IMarketplaceAdvisorOrderSearchEntity> IMarketplaceAdvisorOrderEntity.MarketplaceAdvisorOrderSearch => MarketplaceAdvisorOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -5,6 +5,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Data.SqlTypes;
+using System.Diagnostics;
 
 namespace ShipWorks.Data.Connection
 {
@@ -92,6 +94,12 @@ namespace ShipWorks.Data.Connection
                                 }
                             }
                         }
+                    }
+
+                    // Add db size info values
+                    foreach (KeyValuePair<string, string> dictionaryEntry in DbSizeInfo.Fetch(connection))
+                    {
+                        values.Add(dictionaryEntry.Key, dictionaryEntry.Value);
                     }
                 }
             }

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
+using Autofac;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
@@ -84,15 +80,15 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
         /// <summary>
         /// Create the configured tasks
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             if (setStatus.Checked)
             {
                 // Create the task instance
-                AmeriCommerceOrderUpdateTask task = (AmeriCommerceOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(AmeriCommerceOrderUpdateTask), store).CreateInstance();
-           
+                AmeriCommerceOrderUpdateTask task = (AmeriCommerceOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(AmeriCommerceOrderUpdateTask), store).CreateInstance(lifetimeScope);
+
                 // Apply the desired status code
                 AmeriCommerceStatusCodeProvider statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) store);
                 task.StatusCode = (int) statusProvider.GetCodeValue(status.Text);
@@ -102,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WizardPages
 
             if (uploadTracking.Checked)
             {
-                AmeriCommerceShipmentUploadTask task = (AmeriCommerceShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(AmeriCommerceShipmentUploadTask), store).CreateInstance();
+                AmeriCommerceShipmentUploadTask task = (AmeriCommerceShipmentUploadTask) new ActionTaskDescriptorBinding(typeof(AmeriCommerceShipmentUploadTask), store).CreateInstance(lifetimeScope);
 
                 tasks.Add(task);
             }

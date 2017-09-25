@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<AmazonOrderSearchEntity> _amazonOrderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -48,6 +49,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Customer = "Customer";
 			/// <summary>Member name Store</summary>
 			public static readonly string Store = "Store";
+			/// <summary>Member name AmazonOrderSearch</summary>
+			public static readonly string AmazonOrderSearch = "AmazonOrderSearch";
 			/// <summary>Member name Notes</summary>
 			public static readonly string Notes = "Notes";
 			/// <summary>Member name OrderCharges</summary>
@@ -56,6 +59,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name Shipments</summary>
 			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
@@ -124,6 +129,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_amazonOrderSearch = (EntityCollection<AmazonOrderSearchEntity>)info.GetValue("_amazonOrderSearch", typeof(EntityCollection<AmazonOrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -139,6 +145,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "AmazonOrderSearch":
+					this.AmazonOrderSearch.Add((AmazonOrderSearchEntity)entity);
+					break;
 				default:
 					base.SetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -161,6 +170,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "AmazonOrderSearch":
+					toReturn.Add(Relations.AmazonOrderSearchEntityUsingOrderID);
+					break;
 				default:
 					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
@@ -190,6 +202,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "AmazonOrderSearch":
+					this.AmazonOrderSearch.Add((AmazonOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -204,6 +219,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "AmazonOrderSearch":
+					this.PerformRelatedEntityRemoval(this.AmazonOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
@@ -234,6 +252,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.AmazonOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -263,6 +282,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_amazonOrderSearch", ((_amazonOrderSearch!=null) && (_amazonOrderSearch.Count>0) && !this.MarkedForDeletion)?_amazonOrderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -284,6 +304,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new AmazonOrderRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'AmazonOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAmazonOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -297,6 +326,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._amazonOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -304,6 +334,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._amazonOrderSearch = (EntityCollection<AmazonOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -312,6 +343,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._amazonOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -321,6 +353,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<AmazonOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AmazonOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -328,6 +361,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
+			toReturn.Add("AmazonOrderSearch", _amazonOrderSearch);
 			return toReturn;
 		}
 
@@ -388,6 +422,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public new static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAmazonOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<AmazonOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(AmazonOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("AmazonOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.AmazonOrderEntity, (int)ShipWorks.Data.Model.EntityType.AmazonOrderSearchEntity, 0, null, null, null, null, "AmazonOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 
@@ -482,6 +523,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonOrderFieldIndex.PurchaseOrderNumber, true); }
 			set	{ SetValue((int)AmazonOrderFieldIndex.PurchaseOrderNumber, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'AmazonOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(AmazonOrderSearchEntity))]
+		public virtual EntityCollection<AmazonOrderSearchEntity> AmazonOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<AmazonOrderSearchEntity, AmazonOrderSearchEntityFactory>("AmazonOrder", true, false, ref _amazonOrderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

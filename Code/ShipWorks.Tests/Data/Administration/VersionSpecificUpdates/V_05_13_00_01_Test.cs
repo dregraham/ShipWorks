@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Data.Administration.VersionSpecificUpdates;
 using ShipWorks.Tests.Shared;
 using Xunit;

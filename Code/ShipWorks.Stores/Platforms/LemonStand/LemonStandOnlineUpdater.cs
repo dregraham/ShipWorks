@@ -1,42 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using Interapptive.Shared.Utility;
+using System;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
     ///     Uploads shipment information to LemonStand
     /// </summary>
+    [Component(RegisterAs = RegistrationType.Self)]
     public class LemonStandOnlineUpdater
     {
-        // the store this instance is for
         private readonly ILemonStandWebClient client;
-        // Logger
         private readonly ILog log;
         private readonly LemonStandStoreEntity store;
         private LemonStandStatusCodeProvider statusCodeProvider;
-
+        
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public LemonStandOnlineUpdater(LemonStandStoreEntity store)
-            : this(LogManager.GetLogger(typeof (LemonStandOnlineUpdater)), new LemonStandWebClient(store))
+        public LemonStandOnlineUpdater(LemonStandStoreEntity store, Func<LemonStandStoreEntity, ILemonStandWebClient> webClientFactory)
         {
             this.store = store;
-        }
-
-        public LemonStandOnlineUpdater(ILog log, ILemonStandWebClient client)
-        {
-            this.log = log;
-            this.client = client;
+            this.client = webClientFactory(store);
+            log = LogManager.GetLogger(typeof(LemonStandOnlineUpdater));
         }
 
         /// <summary>
@@ -58,10 +57,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Changes the status of an LemonStand order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode)
+        public async Task UpdateOrderStatus(long orderID, int statusCode)
         {
             UnitOfWork2 unitOfWork = new UnitOfWork2();
-            UpdateOrderStatus(orderID, statusCode, unitOfWork);
+            await UpdateOrderStatus(orderID, statusCode, unitOfWork).ConfigureAwait(false);
 
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
@@ -73,20 +72,41 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Changes the status of an LemonStand order to that specified
         /// </summary>
-        public void UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
+        public async Task UpdateOrderStatus(long orderID, int statusCode, UnitOfWork2 unitOfWork)
         {
             OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
             if (order != null)
             {
-                if (order.IsManual)
+                if (order.IsManual && order.CombineSplitStatus == CombineSplitStatusType.None)
                 {
                     return;
                 }
 
-                LemonStandOrderEntity lemonStandOrder = (LemonStandOrderEntity)order;
+                List<LemonStandException> exceptions = new List<LemonStandException>();
 
-                client.UpdateOrderStatus(lemonStandOrder.LemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
+                    IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                    foreach (string lemonStandOrderID in identifiers)
+                    {
+                        try
+                        {
+                            client.UpdateOrderStatus(lemonStandOrderID, StatusCodeProvider.GetCodeName(statusCode));
+                        }
+                        catch (LemonStandException ex)
+                        {
+                            exceptions.Add(ex);
+                        }
+                    }
+                }
+
+                if (exceptions.Any())
+                {
+                    throw exceptions.First();
+                }
 
                 // Update the local database with the new status
                 OrderEntity basePrototype = new OrderEntity(orderID)
@@ -107,24 +127,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Push the shipment details to the store.
         /// </summary>
-        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
+        public async Task UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             foreach (long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-
-                // Check to see if shipment exists
-                if (shipment == null)
+                if (shipment != null)
                 {
-                    log.InfoFormat("Not uploading orderid {0} has no items.", orderKey);
-                    continue;
-                }
-
-                if (!shipment.Order.IsManual)
-                {
-                    string shipmentID = GetShipmentID(shipment);
-
-                    client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
+                    await UpdateShipmentDetails(shipment).ConfigureAwait(false);
                 }
             }
         }
@@ -132,36 +142,52 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Push the online status for an shipment.
         /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        public async Task UpdateShipmentDetails(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            if (!shipment.Order.IsManual)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                string shipmentID = GetShipmentID(shipment);
+                var combinedOrderSearchProvider = scope.Resolve<LemonStandCombineOrderIdSearchProvider>();
+                IEnumerable<string> identifiers = await combinedOrderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
 
-                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
+                List<LemonStandException> exceptions = new List<LemonStandException>();
+
+                foreach (string orderNumber in identifiers)
+                {
+                    try
+                    {
+                        string shipmentID = GetShipmentID(orderNumber);
+
+                        client.UploadShipmentDetails(shipment.TrackingNumber, shipmentID);
+                    }
+                    catch (LemonStandException ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                }
+
+                if (exceptions.Any())
+                {
+                    throw exceptions.First();
+                }
             }
         }
 
         /// <summary>
-        ///     Gets the LemonStand shipment ID as it is required to upload tracking information
+        /// Gets the LemonStand shipment ID as it is required to upload tracking information
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <param name="orderNumber">The Order.OrderNumber.</param>
         /// <returns>LemonStand API Shipment ID</returns>
-        private string GetShipmentID(ShipmentEntity shipmentEntity)
+        private string GetShipmentID(string orderID)
         {
-            LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
-
-            string orderID = order.OrderNumber.ToString();
             // use order id to get invoice
             JToken invoice = client.GetOrderInvoice(orderID);
             string invoiceID = invoice.SelectToken("data.invoices.data").Children().First().SelectToken("id").ToString();
 
             // use invoice id to get shipment
             JToken shipment = client.GetShipment(invoiceID);
-            string shipmentID =
-                shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
+            string shipmentID = shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
 
             return shipmentID;
         }

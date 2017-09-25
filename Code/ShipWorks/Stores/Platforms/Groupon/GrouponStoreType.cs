@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -32,26 +30,24 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Groupon)]
     [Component(RegistrationType.Self)]
-    class GrouponStoreType : StoreType
+    public class GrouponStoreType : StoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreType(StoreEntity store)
+        public GrouponStoreType(StoreEntity store, Func<Type, ILog> createLogger)
             : base(store)
         {
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Identifying type code
         /// </summary>
-        public override StoreTypeCode TypeCode
-        {
-            get { return StoreTypeCode.Groupon; }
-        }
+        public override StoreTypeCode TypeCode => StoreTypeCode.Groupon;
 
         /// <summary>
         /// Gets the license identifier for this store
@@ -61,84 +57,21 @@ namespace ShipWorks.Stores.Platforms.Groupon
             get
             {
                 GrouponStoreEntity store = (GrouponStoreEntity) Store;
-
-                string identifier = store.SupplierID;
-
-                return identifier;
-            }
-        }
-
-        /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                GrouponOnlineUpdater shipmentUpdater = new GrouponOnlineUpdater((GrouponStoreEntity) Store);
-                shipmentUpdater.UpdateShipmentDetails(headers);
-            }
-            catch (GrouponException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(headers, ex);
+                return store.SupplierID;
             }
         }
 
         /// <summary>
         /// Create the control for generating the online update shipment tasks
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new OnlineUpdateShipmentUpdateActionControl(typeof(GrouponShipmentUploadTask));
-        }
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new OnlineUpdateShipmentUpdateActionControl(typeof(GrouponShipmentUploadTask));
 
         /// <summary>
         /// Create the user control used in the Store Manager window.
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            GrouponAccountSettingsControl settingsControl = new GrouponAccountSettingsControl();
-
-            return settingsControl;
-        }
-
+        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+            new GrouponAccountSettingsControl();
 
         /// <summary>
         /// Create the Wizard pages used in the setup wizard to configure the store.
@@ -184,25 +117,26 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Create the Groupon order entity
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new GrouponOrderEntity { GrouponOrderID = string.Empty };
-        }
+        protected override OrderEntity CreateOrderInstance() =>
+            new GrouponOrderEntity
+            {
+                GrouponOrderID = string.Empty,
+                ParentOrderID = string.Empty
+            };
 
         /// <summary>
         /// Creates a custom order item entity
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            GrouponOrderItemEntity entity = new GrouponOrderItemEntity();
-
-            entity.Permalink = "";
-            entity.ChannelSKUProvided = "";
-            entity.FulfillmentLineItemID = "";
-            entity.BomSKU = "";
-            entity.GrouponLineItemID = "";
-
-            return entity;
+            return new GrouponOrderItemEntity
+            {
+                Permalink = string.Empty,
+                ChannelSKUProvided = string.Empty,
+                FulfillmentLineItemID = string.Empty,
+                BomSKU = string.Empty,
+                GrouponLineItemID = string.Empty
+            };
         }
 
         /// <summary>
@@ -230,18 +164,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new GrouponOrderIdentifier(((GrouponOrderEntity) order).GrouponOrderID);
-        }
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
+            new GrouponOrderIdentifier(((IGrouponOrderEntity) order).GrouponOrderID);
 
         /// <summary>
-        /// Indicates what basic grid fields we support hyperlinking for
+        /// Get a description for use when auditing an order
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
-        {
-            return EntityUtility.IsSameField(field, OrderItemFields.Name);
-        }
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IGrouponOrderEntity)?.GrouponOrderID ?? string.Empty;
+
+        /// <summary>
+        /// Indicates what basic grid fields we support hyper linking for
+        /// </summary>
+        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field) =>
+            EntityUtility.IsSameField(field, OrderItemFields.Name);
 
         /// <summary>
         /// Handle a link click for the given field
@@ -259,10 +195,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
-        }
+        public static string AccountSettingsHelpUrl =>
+            "http://support.shipworks.com/support/solutions/articles/4000046208";
 
         /// <summary>
         /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will

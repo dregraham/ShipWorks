@@ -145,7 +145,7 @@ namespace ShipWorks.Filters.Grid
                                 return;
                             }
 
-                            // 547: statement conflicted with contraint
+                            // 547: statement conflicted with constraint
                             if (sqlEx.Number == 547)
                             {
                                 log.Info(string.Format("Could not insert settings for filter node {0}, looks like it went away.", filterNode.FilterNodeID), ex);

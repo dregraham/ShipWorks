@@ -74,7 +74,7 @@ namespace ShipWorks.Email.Accounts
         }
 
         /// <summary>
-        /// Get the current list of all email accoutns
+        /// Get the current list of all email accounts
         /// </summary>
         public static IList<EmailAccountEntity> EmailAccounts
         {

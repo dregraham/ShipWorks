@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Yahoo;
@@ -34,8 +34,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
             YahooResponse itemResponse = YahooApiWebClient.DeserializeResponse<YahooResponse>(itemXml);
 
             var webClient = mock.Mock<IYahooApiWebClient>();
-            webClient.Setup(x => x.GetOrder(1001)).Returns(orderResponse);
-            webClient.Setup(x => x.GetItem("hubbabubbagum")).Returns(itemResponse);
+            webClient.Setup(x => x.GetOrder(It.IsAny<IYahooStoreEntity>(), 1001)).Returns(orderResponse);
+            webClient.Setup(x => x.GetItem(It.IsAny<IYahooStoreEntity>(), "hubbabubbagum")).Returns(itemResponse);
 
             store = new YahooStoreEntity
             {

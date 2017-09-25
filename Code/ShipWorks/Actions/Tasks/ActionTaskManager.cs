@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks;
 using System.Reflection;
-using System.Windows.Forms;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions.Tasks.Common;
-using Interapptive.Shared.Utility;
-using SandContextPopup = Divelements.SandRibbon.ContextPopup;
-using SandMenuItem = Divelements.SandRibbon.MenuItem;
-using SandMenu = Divelements.SandRibbon.Menu;
-using SandHeading = Divelements.SandRibbon.PopupHeading;
-using System.Drawing;
+using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
+using SandContextPopup = Divelements.SandRibbon.ContextPopup;
+using SandHeading = Divelements.SandRibbon.PopupHeading;
+using SandMenu = Divelements.SandRibbon.Menu;
+using SandMenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -24,7 +22,8 @@ namespace ShipWorks.Actions.Tasks
     /// </summary>
     public static class ActionTaskManager
     {
-        static Dictionary<string, ActionTaskDescriptor> taskDescriptors;
+        static Lazy<Dictionary<string, ActionTaskDescriptor>> taskDescriptors =
+            new Lazy<Dictionary<string, ActionTaskDescriptor>>(() => LoadDescriptors());
 
         class DescriptorStoreInfo
         {
@@ -35,12 +34,9 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
-        /// Static constructor
+        /// Get all the available task descriptors
         /// </summary>
-        static ActionTaskManager()
-        {
-            LoadDescriptors();
-        }
+        public static IEnumerable<ActionTaskDescriptor> TaskDescriptors => taskDescriptors.Value.Values.ToReadOnly();
 
         /// <summary>
         /// Get the descriptor that has the given identifier
@@ -48,7 +44,7 @@ namespace ShipWorks.Actions.Tasks
         public static ActionTaskDescriptor GetDescriptor(string identifier)
         {
             ActionTaskDescriptor descriptor = null;
-            if (!taskDescriptors.TryGetValue(identifier, out descriptor))
+            if (!taskDescriptors.Value.TryGetValue(identifier, out descriptor))
             {
                 throw new NotFoundException(string.Format("Could not find descriptor for identifier '{0}'.", identifier));
             }
@@ -61,7 +57,7 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         public static ActionTaskDescriptor GetDescriptor(Type type)
         {
-            foreach (ActionTaskDescriptor descriptor in taskDescriptors.Values)
+            foreach (ActionTaskDescriptor descriptor in taskDescriptors.Value.Values)
             {
                 if (descriptor.SystemType == type)
                 {
@@ -95,84 +91,98 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Create a menu that can be used to select task types
         /// </summary>
-        [NDependIgnoreLongMethod]
         public static SandContextPopup CreateTasksMenu()
         {
             List<ActionTaskDescriptorBinding> commonBindings = new List<ActionTaskDescriptorBinding>();
             Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap = new Dictionary<StoreTypeCode, DescriptorStoreInfo>();
 
-            // A menu item for each descriptor that has no store-specific issues
-            foreach (ActionTaskDescriptor descriptor in taskDescriptors.Values.Where(atd => !atd.Hidden).OrderBy(d => d.BaseName))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                // We need to create a dummy instance of the task to figure out how to bind it
-                ActionTask taskDummy = descriptor.CreateInstance();
-
-                StoreInstanceTaskBase instanceTask = taskDummy as StoreInstanceTaskBase;
-                if (instanceTask != null)
+                // A menu item for each descriptor that has no store-specific issues
+                foreach (ActionTaskDescriptor descriptor in taskDescriptors.Value.Values.Where(atd => !atd.Hidden).OrderBy(d => d.BaseName))
                 {
-                    // Go through each store to see which ones this instance task supports
-                    foreach (StoreEntity store in StoreManager.GetEnabledStores())
+                    // We need to create a dummy instance of the task to figure out how to bind it
+                    ActionTask taskDummy = descriptor.CreateInstance(lifetimeScope);
+
+                    StoreInstanceTaskBase instanceTask = taskDummy as StoreInstanceTaskBase;
+                    if (instanceTask != null)
                     {
-                        if (instanceTask.SupportsStore(store))
-                        {
-                            ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor, store.StoreID);
-
-                            // Get the bucket to put it in
-                            DescriptorStoreInfo infoBucket;
-                            if (!storeBindingsMap.TryGetValue((StoreTypeCode) store.TypeCode, out infoBucket))
-                            {
-                                infoBucket = new DescriptorStoreInfo();
-                                infoBucket.StoreTypeCode = (StoreTypeCode) store.TypeCode;
-                                storeBindingsMap[infoBucket.StoreTypeCode] = infoBucket;
-                            }
-
-                            // Get the bucket for this particular store
-                            List<ActionTaskDescriptorBinding> storeBindings;
-                            if (!infoBucket.StoreInstanceBindings.TryGetValue(store.StoreID, out storeBindings))
-                            {
-                                storeBindings = new List<ActionTaskDescriptorBinding>();
-                                infoBucket.StoreInstanceBindings[store.StoreID] = storeBindings;
-                            }
-
-                            // Add this binding
-                            storeBindings.Add(binding);
-                        }
-                    }
-                }
-                else
-                {
-                    StoreTypeTaskBase typeTask = taskDummy as StoreTypeTaskBase;
-                    if (typeTask != null)
-                    {
-                        // Go through each store type to see what the task supports
-                        foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes(true))
-                        {
-                            if (typeTask.SupportsType(storeType))
-                            {
-                                ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor, storeType.TypeCode);
-
-                                // Get the bucket to put it in
-                                DescriptorStoreInfo infoBucket;
-                                if (!storeBindingsMap.TryGetValue(storeType.TypeCode, out infoBucket))
-                                {
-                                    infoBucket = new DescriptorStoreInfo();
-                                    infoBucket.StoreTypeCode = storeType.TypeCode;
-                                    storeBindingsMap[infoBucket.StoreTypeCode] = infoBucket;
-                                }
-
-                                infoBucket.StoreTypeBindings.Add(binding);
-                            }
-                        }
+                        AddStoreInstanceBinding(storeBindingsMap, descriptor, instanceTask);
                     }
                     else
                     {
-                        ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor);
-                        commonBindings.Add(binding);
+                        StoreTypeTaskBase typeTask = taskDummy as StoreTypeTaskBase;
+                        if (typeTask != null)
+                        {
+                            AddStoreTypeBinding(storeBindingsMap, descriptor, typeTask);
+                        }
+                        else
+                        {
+                            ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor);
+                            commonBindings.Add(binding);
+                        }
                     }
                 }
             }
 
             return CrateTasksMenu(commonBindings, storeBindingsMap);
+        }
+
+        /// <summary>
+        /// Add store instance bindings
+        /// </summary>
+        private static void AddStoreInstanceBinding(Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap,
+            ActionTaskDescriptor descriptor, StoreInstanceTaskBase instanceTask)
+        {
+            // Go through each store to see which ones this instance task supports
+            foreach (StoreEntity store in StoreManager.GetEnabledStores().Where(instanceTask.SupportsStore))
+            {
+                ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor, store.StoreID);
+
+                // Get the bucket to put it in
+                DescriptorStoreInfo infoBucket;
+                if (!storeBindingsMap.TryGetValue((StoreTypeCode) store.TypeCode, out infoBucket))
+                {
+                    infoBucket = new DescriptorStoreInfo();
+                    infoBucket.StoreTypeCode = (StoreTypeCode) store.TypeCode;
+                    storeBindingsMap[infoBucket.StoreTypeCode] = infoBucket;
+                }
+
+                // Get the bucket for this particular store
+                List<ActionTaskDescriptorBinding> storeBindings;
+                if (!infoBucket.StoreInstanceBindings.TryGetValue(store.StoreID, out storeBindings))
+                {
+                    storeBindings = new List<ActionTaskDescriptorBinding>();
+                    infoBucket.StoreInstanceBindings[store.StoreID] = storeBindings;
+                }
+
+                // Add this binding
+                storeBindings.Add(binding);
+            }
+        }
+
+        /// <summary>
+        /// Add store type binding
+        /// </summary>
+        private static void AddStoreTypeBinding(Dictionary<StoreTypeCode, DescriptorStoreInfo> storeBindingsMap,
+            ActionTaskDescriptor descriptor, StoreTypeTaskBase typeTask)
+        {
+            // Go through each store type to see what the task supports
+            foreach (StoreType storeType in StoreManager.GetUniqueStoreTypes(true).Where(typeTask.SupportsType))
+            {
+                ActionTaskDescriptorBinding binding = new ActionTaskDescriptorBinding(descriptor, storeType.TypeCode);
+
+                // Get the bucket to put it in
+                DescriptorStoreInfo infoBucket;
+                if (!storeBindingsMap.TryGetValue(storeType.TypeCode, out infoBucket))
+                {
+                    infoBucket = new DescriptorStoreInfo();
+                    infoBucket.StoreTypeCode = storeType.TypeCode;
+                    storeBindingsMap[infoBucket.StoreTypeCode] = infoBucket;
+                }
+
+                infoBucket.StoreTypeBindings.Add(binding);
+            }
         }
 
         /// <summary>
@@ -320,12 +330,12 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Load all the condition element descriptors present in the assembly
         /// </summary>
-        private static void LoadDescriptors()
+        private static Dictionary<string, ActionTaskDescriptor> LoadDescriptors()
         {
-            taskDescriptors = new Dictionary<string, ActionTaskDescriptor>();
+            var taskDescriptors = new Dictionary<string, ActionTaskDescriptor>();
 
             IEnumerable<Type> allTypes = Assembly.Load("ShipWorks.Stores").GetTypes().Union(Assembly.GetExecutingAssembly().GetTypes());
-            
+
             // Look for the ConditionAttribute on each type in the assembly
             foreach (Type type in allTypes)
             {
@@ -343,6 +353,8 @@ namespace ShipWorks.Actions.Tasks
                     taskDescriptors[descriptor.Identifier] = descriptor;
                 }
             }
+
+            return taskDescriptors;
         }
     }
 }

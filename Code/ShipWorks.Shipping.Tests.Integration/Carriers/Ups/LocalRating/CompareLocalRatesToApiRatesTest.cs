@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         private long localRatingAccountID;
         private long apiRatingAccountID;
         private const string ContextName = "CompareLocalRatesToApiRatesTest";
-        
+
         public CompareLocalRatesToApiRatesTest(DatabaseFixtureWithReusableContext db, ITestOutputHelper output)
         {
             this.output = output;
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(400)]
         public void DeclaredValue(decimal value)
         {
-            RunTest(s=>s.Ups.Packages[0].DeclaredValue=value);
+            RunTest(s => s.Ups.Packages[0].DeclaredValue = value);
         }
 
         [Theory]
@@ -188,8 +188,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
         [Fact]
         public void AdditionalHandling()
-        { 
-            RunTest(s=>s.Ups.Packages[0].DimsLength=61);
+        {
+            RunTest(s => s.Ups.Packages[0].DimsLength = 61);
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(UpsDeliveryConfirmationType.Signature)]
         public void UseDifferentConfirmations(UpsDeliveryConfirmationType deliveryConfirmationType)
         {
-            RunTest(s=>s.Ups.DeliveryConfirmation = (int) deliveryConfirmationType);
+            RunTest(s => s.Ups.DeliveryConfirmation = (int) deliveryConfirmationType);
         }
 
 
@@ -282,7 +282,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             bool forMedical,
             double weight)
         {
-            
+
             RunTest(s =>
             {
                 UpsPackageEntity package = s.Ups.Packages[0];
@@ -318,7 +318,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [InlineData(false)]
         public void SaturdayDelivery(bool saturdayDelivery)
         {
-            RunTest(s=>
+            RunTest(s =>
             {
                 s.Ups.SaturdayDelivery = saturdayDelivery;
                 s.ShipDate = DateTime.Now.Next(DayOfWeek.Friday);
@@ -329,7 +329,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         [Fact]
         public void ShipOnASaturday()
         {
-            RunTest(s=>s.ShipDate = DateTime.Now.Next(DayOfWeek.Saturday));
+            RunTest(s => s.ShipDate = DateTime.Now.Next(DayOfWeek.Saturday));
         }
 
         [Theory]
@@ -387,10 +387,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             Assert.NotNull(firstLocalResult);
 
             // If this fails, rates were likely from the API.
-            Assert.IsType<UpsLocalServiceRate>(firstLocalResult); 
+            Assert.IsType<UpsLocalServiceRate>(firstLocalResult);
 
             Assert.Equal(localResult.Value.Cast<UpsLocalServiceRate>().Count(), localResult.Value.Count);
-            
+
             Assert.True(ValidateResult(localResult.Value.Cast<UpsLocalServiceRate>().ToList(), apiResult.Value));
         }
 
@@ -459,12 +459,12 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                 output.WriteLine($"LocalRates returned the following unsupported services:\n\n{string.Join("\n", extraLocalRates)}\n");
                 valid = false;
             }
-            
+
             // Filter out api rates that LocalRates cannot handle
             apiRates = apiRates.Where(r => localServiceTypes.Contains(r.Service)).ToList();
 
             var apiRatesNotInLocalRates =
-                apiRates.Where(apiRate => localRates.None(localRate => localRate.Service == apiRate.Service)).Select(r=>r.Service).ToList();
+                apiRates.Where(apiRate => localRates.None(localRate => localRate.Service == apiRate.Service)).Select(r => r.Service).ToList();
             if (apiRatesNotInLocalRates.Any())
             {
                 output.WriteLine($"LocalRates client did not return services(s) returned by the api client. Missing services:\n\n{string.Join("\n", apiRatesNotInLocalRates)}\n");
@@ -528,7 +528,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             long accountID,
             IUpsRateClient client)
         {
-            Modify.Shipment(shipment).Set(s=>s.Ups.UpsAccountID = accountID).Save();
+            Modify.Shipment(shipment).Set(s => s.Ups.UpsAccountID = accountID).Save();
 
             return client.GetRates(shipment);
         }

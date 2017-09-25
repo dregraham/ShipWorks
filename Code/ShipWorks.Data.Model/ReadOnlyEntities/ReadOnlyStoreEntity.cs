@@ -69,6 +69,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
 
             CopyCustomStoreData(source);
         }
@@ -256,6 +258,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public Nullable<System.Int64> InitialDownloadOrder { get; }
         
         
+        
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

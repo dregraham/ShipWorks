@@ -1,24 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
+using Interapptive.Shared.StackTraceHelper;
 
 namespace ShipWorks.Common.Threading
 {
+    /// <summary>
+    /// Exception caught on background thread
+    /// </summary>
     public class BackgroundException : Exception
     {
-        // The Exception that was caught on the background thread.
-        Exception backgroundEx;
-
-        // The StackTrace from the invoking thread that led up to the starting of the background thread
-        StackTrace invokingThreadTrace;
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BackgroundException(Exception backgroundEx, StackTrace invokingThreadTrace)
             : base(backgroundEx.Message)
         {
-            this.backgroundEx = backgroundEx;
-            this.invokingThreadTrace = invokingThreadTrace;
+            ActualException = backgroundEx;
+            InvokingThreadTrace = invokingThreadTrace;
+            FlowReservoir.Tag();
+            CausalityChain = FlowReservoir.ExtendedStack;
         }
 
         /// <summary>
@@ -26,18 +26,17 @@ namespace ShipWorks.Common.Threading
         // because when .NET does its UnhandledException handler, it throws out the outer exception (which would be this class)
         // and only uses the inner.  We don't want to be thrown out.
         /// </summary>
-        public Exception ActualException
-        {
-            get { return backgroundEx; }
-        }
+        public Exception ActualException { get; }
 
         /// <summary>
-        /// The StackTrace from the thread that started the background operation that led up to the execution 
+        /// The StackTrace from the thread that started the background operation that led up to the execution
         /// of the background thread.
         /// </summary>
-        public StackTrace InvokingThreadTrace
-        {
-            get { return invokingThreadTrace; }
-        }
+        public StackTrace InvokingThreadTrace { get; }
+
+        /// <summary>
+        /// Chain of async method calls, if any
+        /// </summary>
+        public string CausalityChain { get; }
     }
 }

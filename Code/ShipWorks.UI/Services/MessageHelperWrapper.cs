@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
+using ShipWorks.Users;
 
 namespace ShipWorks.UI.Services
 {
@@ -15,12 +16,18 @@ namespace ShipWorks.UI.Services
     {
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
+        private readonly ICurrentUserSettings currentUserSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider)
+        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider,
+            ICurrentUserSettings currentUserSettings,
+            Func<IUserConditionalNotification> createUserConditionalNotification)
         {
+            this.currentUserSettings = currentUserSettings;
+            this.createUserConditionalNotification = createUserConditionalNotification;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -41,6 +48,12 @@ namespace ShipWorks.UI.Services
         public void ShowInformation(string message) => MessageHelper.ShowInformation(ownerFactory(), message);
 
         /// <summary>
+        /// Show a user conditional information message
+        /// </summary>
+        public void ShowUserConditionalInformation(string title, string message, UserConditionalNotificationType notificationType) =>
+            createUserConditionalNotification().Show(this, title, message, notificationType);
+
+        /// <summary>
         /// Show a message
         /// </summary>
         public void ShowMessage(string message) => MessageHelper.ShowMessage(ownerFactory(), message);
@@ -56,7 +69,7 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Show a new progress dialog
         /// </summary>
-        public IDisposable ShowProgressDialog(string title, string description)
+        public ISingleItemProgressDialog ShowProgressDialog(string title, string description)
         {
             ProgressItem progressItem = new ProgressItem(title);
             progressItem.Starting();
@@ -68,11 +81,7 @@ namespace ShipWorks.UI.Services
 
             IDisposable disposable = ShowProgressDialog(title, description, progressProvider, TimeSpan.Zero);
 
-            return Disposable.Create(() =>
-            {
-                progressItem.Completed();
-                disposable.Dispose();
-            });
+            return new SingleItemProgressDialog(disposable, progressItem);
         }
 
         /// <summary>
@@ -87,7 +96,7 @@ namespace ShipWorks.UI.Services
             };
 
             return schedulerProvider.WindowsFormsEventLoop
-                .Schedule(progressDialog, timeSpan, OpenProgressDialog);
+                .Schedule(Tuple.Create(progressDialog, ownerFactory()), timeSpan, OpenProgressDialog);
         }
 
         /// <summary>
@@ -119,6 +128,22 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public bool? ShowDialog(IDialog dialog)
+        {
+            Control owner = ownerFactory();
+            if (owner.InvokeRequired)
+            {
+                return (bool?) owner.Invoke((Func<IDialog, bool?>) ShowDialog, dialog);
+            }
+
+            dialog.LoadOwner(owner);
+
+            return dialog.ShowDialog();
+        }
+
+        /// <summary>
         /// Show an information message, takes an owner
         /// </summary>
         public void ShowInformation(IWin32Window owner, string message) => MessageHelper.ShowInformation(owner, message);
@@ -137,9 +162,10 @@ namespace ShipWorks.UI.Services
         /// <summary>
         /// Close the given progress dialog
         /// </summary>
-        private IDisposable OpenProgressDialog(IScheduler scheduler, ProgressDlg dialog)
+        private IDisposable OpenProgressDialog(IScheduler scheduler, Tuple<ProgressDlg, Control> state)
         {
-            Control owner = ownerFactory();
+            ProgressDlg dialog = state.Item1;
+            Control owner = state.Item2;
 
             dialog.Show(owner);
 

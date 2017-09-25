@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
@@ -38,16 +39,18 @@ namespace ShipWorks.Actions.Tasks
         // This is so we can return settings when switching between task types
         Dictionary<ActionTaskDescriptorBinding, ActionTask> taskHistoryMap = new Dictionary<ActionTaskDescriptorBinding, ActionTask>();
 
-        // The menus for choosing whatits inputs will be
+        // The menus for choosing what its inputs will be
         ContextMenuStrip inputSourceMenu;
         private bool usesDisabledFilter = false;
         private readonly long initialInputFilterNodeId;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionTaskBubble(ActionTask task, IEnumerable<ActionTaskBubble> allBubbles)
+        public ActionTaskBubble(ILifetimeScope lifetimeScope, ActionTask task, IEnumerable<ActionTaskBubble> allBubbles)
         {
+            this.lifetimeScope = lifetimeScope;
             InitializeComponent();
 
             if (task == null)
@@ -109,7 +112,7 @@ namespace ShipWorks.Actions.Tasks
         {
             ActionTaskEditor editor = task.CreateEditor();
 
-            // We have to ensure the contorl is created, to make sure its OnLoad is called, which is where it may change
+            // We have to ensure the control is created, to make sure its OnLoad is called, which is where it may change
             // its height.
             IntPtr handle = editor.Handle;
 
@@ -204,7 +207,7 @@ namespace ShipWorks.Actions.Tasks
             // See if we have cached settings for it, if not create them
             if (!taskHistoryMap.TryGetValue(binding, out task))
             {
-                task = binding.CreateInstance();
+                task = binding.CreateInstance(lifetimeScope);
                 taskHistoryMap[binding] = task;
             }
 
@@ -216,7 +219,7 @@ namespace ShipWorks.Actions.Tasks
                 return;
             }
 
-            // Copy over the flow settings of the old one, so it looks seemless
+            // Copy over the flow settings of the old one, so it looks seamless
             CopyFlowSettings(oldTask.Entity, task.Entity);
 
             CreateTaskEditor();

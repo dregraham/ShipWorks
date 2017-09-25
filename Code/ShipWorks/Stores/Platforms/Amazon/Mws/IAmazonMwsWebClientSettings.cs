@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
-    /// Class for handeling Amazon MWS API Related Settings
+    /// Class for handling Amazon MWS API Related Settings
     /// </summary>
     public interface IAmazonMwsWebClientSettings
     {

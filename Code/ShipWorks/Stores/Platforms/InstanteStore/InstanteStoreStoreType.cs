@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.InstanteStore
@@ -15,8 +17,8 @@ namespace ShipWorks.Stores.Platforms.InstanteStore
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstanteStoreStoreType(StoreEntity store) :
-            base(store)
+        public InstanteStoreStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }

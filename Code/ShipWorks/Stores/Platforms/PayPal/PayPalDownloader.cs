@@ -8,6 +8,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
@@ -60,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 DateTime rangeEnd = client.GetPayPalTime();
 
                 // get the date range start
-                DateTime? startDate = GetOrderDateStartingPoint();
+                DateTime? startDate = await GetOrderDateStartingPoint();
                 if (!startDate.HasValue)
                 {
                     // need to start from today - maxIntialDownload
@@ -181,7 +182,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             if (ShouldImportTransaction(transaction))
             {
-                PayPalOrderEntity order = (PayPalOrderEntity) await InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID)).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(new PayPalOrderIdentifier(transaction.PaymentInfo.TransactionID)).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", transaction.PaymentInfo.TransactionID, result.Message);
+                    return;
+                }
+
+                PayPalOrderEntity order = (PayPalOrderEntity) result.Value;
 
                 order.TransactionID = transaction.PaymentInfo.TransactionID;
                 order.PayPalFee = GetAmount(transaction.PaymentInfo.FeeAmount);
@@ -227,7 +235,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         private async Task LoadNewOrder(PayPalOrderEntity order, PaymentTransactionType transaction)
         {
-            order.OrderDate = GetOrderDate(transaction.PaymentInfo.PaymentDate);
+            order.OrderDate = await GetOrderDate(transaction.PaymentInfo.PaymentDate);
             order.RequestedShipping = transaction.PaymentInfo.ShippingMethod ?? "";
 
             // no customer ids
@@ -244,7 +252,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             // assign an order number
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -255,14 +263,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// we've decided to use the date of the newest order in the database as the order date since the thought is
         /// that this transaction had to have come after that or it would have been included in a previous download.
         /// </remarks>
-        private DateTime GetOrderDate(DateTime? transactionDate)
+        private async Task<DateTime> GetOrderDate(DateTime? transactionDate)
         {
             if (transactionDate.HasValue)
             {
                 return transactionDate.Value.ToUniversalTime();
             }
 
-            return GetOrderDateStartingPoint() ?? SqlDateTimeProvider.Current.GetUtcDate();
+            return (await GetOrderDateStartingPoint()) ?? SqlDateTimeProvider.Current.GetUtcDate();
         }
 
         /// <summary>

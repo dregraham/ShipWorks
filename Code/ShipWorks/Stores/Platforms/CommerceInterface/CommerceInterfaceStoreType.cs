@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
@@ -42,8 +40,8 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Constructor
         /// </summary>
-        public CommerceInterfaceStoreType(StoreEntity store)
-            : base(store)
+        public CommerceInterfaceStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }
@@ -107,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Create the new web client, which is legacy-capable
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>
@@ -172,76 +170,5 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// Account settings help url
         /// </summary>
         public override string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/4000065045";
-
-        #region Online Update Commands
-
-        /// <summary>
-        /// Create online update commands
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new List<MenuCommand>
-            {
-                new MenuCommand("Upload Shipment Details...", new MenuCommandExecutor(OnUploadShipmentDetails))
-            };
-        }
-
-        /// <summary>
-        /// Command handler for setting online order status
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            using (StatusCodeSelectionDlg dlg = new StatusCodeSelectionDlg(CreateStatusCodeProvider()))
-            {
-                if (dlg.ShowDialog(context.Owner) == DialogResult.OK)
-                {
-                    int selectedCode = dlg.SelectedStatusCode;
-                    BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                                   "Upload Shipment",
-                                   "ShipWorks is uploading shipment information",
-                                   "Updating order {0} of {1}...");
-
-                    executor.ExecuteCompleted += (o, e) =>
-                    {
-                        context.Complete(e.Issues, MenuCommandResult.Error);
-                    };
-                    executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, selectedCode);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // unpackage the selected status code
-            int selectedCode = (int) userState;
-
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
-            {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-            }
-            else
-            {
-                try
-                {
-                    // upload
-                    CommerceInterfaceOnlineUpdater updater = new CommerceInterfaceOnlineUpdater((GenericModuleStoreEntity) Store);
-                    updater.UploadTrackingNumber(shipment.ShipmentID, selectedCode);
-                }
-                catch (GenericStoreException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment details for orderID {0}: {1}", orderID, ex.Message);
-
-                    // add the error to the issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
-        }
-
-        #endregion
     }
 }

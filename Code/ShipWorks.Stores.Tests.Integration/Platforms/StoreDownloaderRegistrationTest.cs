@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         private readonly Dictionary<StoreTypeCode, Type> specificDownloaders = new Dictionary<StoreTypeCode, Type>
         {
-            { StoreTypeCode.Amazon, typeof(AmazonDownloaderFactory) },
+            { StoreTypeCode.Amazon, typeof(AmazonMwsDownloader) },
             { StoreTypeCode.AmeriCommerce, typeof(AmeriCommerceDownloader) },
             { StoreTypeCode.BigCommerce, typeof(BigCommerceDownloader) },
             { StoreTypeCode.BuyDotCom, typeof(BuyDotComDownloader) },

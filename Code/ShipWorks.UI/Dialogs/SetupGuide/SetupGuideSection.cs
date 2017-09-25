@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.UI.Dialogs.SetupGuide
 {
@@ -11,16 +12,19 @@ namespace ShipWorks.UI.Dialogs.SetupGuide
         /// <summary>
         /// Add store section
         /// </summary>
+        [Description("Add a store")]
         AddStore,
 
         /// <summary>
         /// Add shipping account section
         /// </summary>
+        [Description("Add a shipping account")]
         AddShippingAccount,
 
         /// <summary>
         /// Use ShipWorks section
         /// </summary>
+        [Description("Use ShipWorks")]
         UseShipWorks
     }
 }

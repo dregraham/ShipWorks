@@ -1,11 +1,11 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
@@ -52,45 +52,45 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived()
+        public async Task Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new CancelOrderRequest(credentials, failedRequest);
-            Assert.Throws<NeweggException>(() => testObject.Cancel(orderToCancel, CancellationReason.OutOfStock));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.Cancel(orderToCancel, CancellationReason.OutOfStock));
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder()
+        public async Task Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
-            CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
+            CancellationResult result = await testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
             Assert.Equal(orderToCancel.OrderNumber, result.Detail.OrderNumber);
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder()
+        public async Task Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
-            CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
+            CancellationResult result = await testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
             Assert.Equal(expectedCancelledOrderStatus, result.Detail.OrderStatus);
         }
 
         [Fact]
-        public void Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder()
+        public async Task Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
 
-            CancellationResult result = testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
+            CancellationResult result = await testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
 
             Assert.Equal(expectedCancelledSellerId, result.Detail.SellerId);
         }
-        
-        public void Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()
+
+        public async Task Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()
         {
-            // We're going to try to bounce the request off of the Newegg API, so setup 
+            // We're going to try to bounce the request off of the Newegg API, so setup
             // the test object to use a "live" NeweggHttpRequest and an order setup in
             // our sandbox seller account, and use the sandbox seller account credentials
             Order sandboxedOrderToCancel = new Order { OrderNumber = 137956884 };
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // This should throw an exception since the order we're trying to cancel has
             // already been invoiced
-            Assert.Throws<NeweggException>(() => testObject.Cancel(sandboxedOrderToCancel, CancellationReason.UnableToFulfillOrder));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.Cancel(sandboxedOrderToCancel, CancellationReason.UnableToFulfillOrder));
         }
     }
 }

@@ -204,6 +204,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IOrderSearchEntity> OrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -230,6 +231,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IOrderSearchEntity> IStoreEntity.OrderSearch => OrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

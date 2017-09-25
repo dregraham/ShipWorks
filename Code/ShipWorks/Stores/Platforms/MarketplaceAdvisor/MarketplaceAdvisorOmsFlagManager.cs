@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
 using Divelements.SandGrid;
 using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
@@ -12,6 +9,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Utility class for dealing with Maretkworks flags
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public static class MarketplaceAdvisorOmsFlagManager
     {
         // Maps marketorks user names to the custom flags for that account

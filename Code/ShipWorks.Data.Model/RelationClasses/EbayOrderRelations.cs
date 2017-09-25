@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = base.GetAllRelations();
 			toReturn.Add(this.EbayCombinedOrderRelationEntityUsingOrderID);
 			toReturn.Add(this.EbayOrderItemEntityUsingLocalEbayOrderID);
+			toReturn.Add(this.EbayOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -63,6 +64,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(EbayOrderFields.OrderID, EbayOrderItemFields.LocalEbayOrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderItemEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EbayOrderEntity and EbayOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayOrder.OrderID - EbayOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation EbayOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayOrderSearch" , true);
+				relation.AddEntityFieldPair(EbayOrderFields.OrderID, EbayOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -123,6 +139,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(EbayOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EbayOrderEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayOrder.OrderID - OrderSearch.OrderID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(EbayOrderFields.OrderID, OrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -227,10 +258,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation EbayCombinedOrderRelationEntityUsingOrderIDStatic = new EbayOrderRelations().EbayCombinedOrderRelationEntityUsingOrderID;
 		internal static readonly IEntityRelation EbayOrderItemEntityUsingLocalEbayOrderIDStatic = new EbayOrderRelations().EbayOrderItemEntityUsingLocalEbayOrderID;
+		internal static readonly IEntityRelation EbayOrderSearchEntityUsingOrderIDStatic = new EbayOrderRelations().EbayOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new EbayOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new EbayOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new EbayOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new EbayOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingOrderIDStatic = new EbayOrderRelations().OrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new EbayOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new EbayOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new EbayOrderRelations().CustomerEntityUsingCustomerID;

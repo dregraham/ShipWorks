@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.StackTraceHelper;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -154,6 +155,7 @@ namespace ShipWorks
             }
             catch (Exception ex)
             {
+                FlowReservoir.Tag();
                 await HandleUnhandledException(ex, false);
             }
 
@@ -344,6 +346,7 @@ namespace ShipWorks
         /// </summary>
         private static async void OnAppDomainException(object sender, UnhandledExceptionEventArgs e)
         {
+            FlowReservoir.Tag();
             await HandleUnhandledException((Exception) e.ExceptionObject, false);
         }
 
@@ -352,6 +355,7 @@ namespace ShipWorks
         /// </summary>
         private static async void OnApplicationException(object sender, ThreadExceptionEventArgs e)
         {
+            FlowReservoir.Tag();
             await HandleUnhandledException(e.Exception, true);
         }
 

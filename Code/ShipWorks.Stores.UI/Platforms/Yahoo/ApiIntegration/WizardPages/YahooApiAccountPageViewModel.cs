@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Yahoo;
@@ -11,6 +12,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
     /// <summary>
     /// View model for the YahooAccountPage
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class YahooApiAccountPageViewModel : YahooApiAccountViewModel, INotifyPropertyChanged
     {
         private string helpUrl;
@@ -20,7 +22,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration.WizardPages
         /// </summary>
         /// <param name="storeTypeManager">The store type manager.</param>
         /// <param name="storeWebClient">The store web client.</param>
-        public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, Func<YahooStoreEntity, ILog, IYahooApiWebClient> storeWebClient, Func<Type, ILog> logfactory) : base(storeWebClient, logfactory)
+        public YahooApiAccountPageViewModel(IStoreTypeManager storeTypeManager, IYahooApiWebClient webClient, Func<Type, ILog> logfactory) :
+            base(webClient, logfactory)
         {
             YahooStoreType storeType = storeTypeManager.GetType(StoreTypeCode.Yahoo) as YahooStoreType;
             HelpUrl = storeType?.AccountSettingsHelpUrl;

@@ -25,9 +25,14 @@ namespace Interapptive.Shared.UI
         void ShowInformation(string message);
 
         /// <summary>
+        /// Show a user conditional information message
+        /// </summary>
+        void ShowUserConditionalInformation(string title, string message, UserConditionalNotificationType notificationType);
+
+        /// <summary>
         /// Show a new progress dialog
         /// </summary>
-        IDisposable ShowProgressDialog(string title, string description);
+        ISingleItemProgressDialog ShowProgressDialog(string title, string description);
 
         /// <summary>
         /// Show a new progress dialog
@@ -48,6 +53,11 @@ namespace Interapptive.Shared.UI
         /// Show a dialog and get the results
         /// </summary>
         DialogResult ShowDialog(Func<Form> createDialog);
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        bool? ShowDialog(IDialog dialog);
 
         /// <summary>
         /// Show an information message, takes an owner

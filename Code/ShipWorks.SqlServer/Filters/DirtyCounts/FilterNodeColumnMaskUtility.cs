@@ -22,8 +22,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         {
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
-            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 74;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 20;
+            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 75;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 21;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 73;
@@ -53,10 +53,29 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
-            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 2;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderItem] = 3;
+            tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 7;
+            tableBitCount[(int) FilterNodeColumnMaskTable.MagentoOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrderSearch] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.NetworkSolutionsOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ShopifyOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.ThreeDCartOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 4;
+            tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
 {
     /// <summary>
-    /// Task for uploading shipment detials to Groupon
+    /// Task for uploading shipment details to Groupon
     /// </summary>
     [ActionTask("Upload shipment details", "GrouponShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class GrouponShipmentUploadTask : StoreInstanceTaskBase
@@ -19,26 +22,19 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
         const long maxBatchSize = 1000;
 
         /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// This task is for Orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload the tracking number for:";
-            }
-        }
+        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         /// Instantiates the editor for the action
@@ -65,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
         /// <summary>
         /// Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -79,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
             }
 
             // Get any postponed data we've previously stored away
-            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>)d).ToList();
+            List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
 
             // To avoid postponing forever on big selections, we only postpone up to maxBatchSize
             if (context.CanPostpone && postponedKeys.Count < maxBatchSize)
@@ -91,24 +87,27 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private static void UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
+        private static async Task UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                foreach(long shipmentKey in shipmentKeys)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    GrouponOnlineUpdater updater = new GrouponOnlineUpdater(store);
+                    IGrouponOnlineUpdater updater = lifetimeScope.Resolve<IGrouponOnlineUpdater>();
 
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+                    foreach (long shipmentKey in shipmentKeys)
+                    {
+                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    updater.UpdateShipmentDetails(shipment);
+                        await updater.UpdateShipmentDetails(store, shipment.Order, shipment).ConfigureAwait(false);
+                    }
                 }
             }
             catch (GrouponException ex)

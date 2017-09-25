@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Settings.WizardPages
@@ -16,6 +10,7 @@ namespace ShipWorks.Shipping.Settings.WizardPages
     public partial class ShippingWizardPageAutomation : WizardPage
     {
         ShipmentType shipmentType;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
@@ -25,6 +20,7 @@ namespace ShipWorks.Shipping.Settings.WizardPages
             InitializeComponent();
 
             this.shipmentType = shipmentType;
+            lifetimeScope = IoC.BeginLifetimeScope();
         }
 
         /// <summary>
@@ -32,7 +28,7 @@ namespace ShipWorks.Shipping.Settings.WizardPages
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            automationControl.EnsureInitialized(shipmentType.ShipmentTypeCode);
+            automationControl.EnsureInitialized(lifetimeScope, shipmentType.ShipmentTypeCode);
         }
 
         /// <summary>

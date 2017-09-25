@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 using System.Xml;
+using Autofac;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -57,9 +53,13 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             try
             {
-                XmlDocument apiInfoResponse = ProStoresWebClient.GetStoreApiInfo(url);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                    XmlDocument apiInfoResponse = webClient.GetStoreApiInfo(url);
 
-                ((ProStoresStoreType) StoreTypeManager.GetType(store)).LoadApiInfo(url, apiInfoResponse);
+                    ((ProStoresStoreType) StoreTypeManager.GetType(store)).LoadApiInfo(url, apiInfoResponse);
+                }
             }
             catch (ProStoresException ex)
             {

@@ -1,5 +1,7 @@
-﻿using ShipWorks.Stores.Content;
+﻿using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -69,5 +71,11 @@ namespace ShipWorks.Stores.Content
 
             downloadDetail.ExtraStringData1 = prototype.OrderNumberComplete;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            factory.OrderSearch.Where(OrderSearchFields.OrderNumberComplete == orderNumberString);
     }
 }

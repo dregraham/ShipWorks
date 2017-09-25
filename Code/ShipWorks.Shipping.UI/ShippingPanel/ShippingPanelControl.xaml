@@ -55,9 +55,6 @@
         <ScrollViewer VerticalScrollBarVisibility="Visible"
                       ui:LimitScrollSize.Mode="{x:Static ui:LimitScrollSizeMode.Width}">
             <ScrollViewer.Resources>
-                <SolidColorBrush x:Key="Green" Color="#FF009900" />
-                <SolidColorBrush x:Key="Yellow" Color="#FFE8A800" />
-                <SolidColorBrush x:Key="Blue" Color="#FF0066CC" />
                 <Style TargetType="ui:NotificationBorder">
                     <Setter Property="Margin" Value="0,0,0,12" />
                 </Style>

@@ -3,7 +3,7 @@
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     /// <summary>
-    /// Channel Advisor soap downloader
+    /// Interface for the ChannelAdvisor soap downloader
     /// </summary>
     public interface IChannelAdvisorSoapDownloader : IStoreDownloader
     {

@@ -83,6 +83,7 @@
         <Condition identifier="Order.Printed" displayAs="Printed With" />
         <Separator/>
         <Group name="Entry Method">
+          <Condition identifier="Order.Combined" displayAs="Combined" />
           <Condition identifier="Order.Downloaded" displayAs="Downloaded" />
           <Condition identifier="Order.Manual" displayAs="Manually Entered" />
         </Group>

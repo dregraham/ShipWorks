@@ -1,19 +1,24 @@
 ﻿using System.Windows.Forms;
 using System.Xml.Linq;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using System.Xml.XPath;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages
 {
     /// <summary>
     /// Wizard page for entering MarketplaceAdvisor account credentials
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class MarketplaceAdvisorAccountPage : AddStoreWizardPage
     {
         /// <summary>

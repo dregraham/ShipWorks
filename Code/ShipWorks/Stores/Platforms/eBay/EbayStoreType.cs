@@ -6,18 +6,15 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -28,7 +25,6 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.OrderItems;
 using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Messaging.Messages;
 using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
@@ -41,29 +37,17 @@ using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.Ebay.WizardPages;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Templates.Tokens;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
     /// <summary>
-    /// Entrypoint for the eBay integration.
+    /// Entry point for the eBay integration.
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.Ebay)]
     [Component(RegistrationType.Self)]
     public class EbayStoreType : StoreType
     {
-        /// <summary>
-        /// The possible Update Online Status options
-        /// </summary>
-        enum EbayOnlineAction
-        {
-            Paid,
-            Shipped,
-            NotPaid,
-            NotShipped
-        }
-
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayStoreType));
 
@@ -76,12 +60,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => (int) EbayUtility.GetEffectivePaymentMethod(e));
         }
 
+        private readonly IConfigurationData configuration;
+        private readonly IMessageHelper messageHelper;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreType(StoreEntity store)
+        public EbayStoreType(StoreEntity store, IConfigurationData configuration, IMessageHelper messageHelper)
             : base(store)
         {
+            this.messageHelper = messageHelper;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -139,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 pages.Add(new FreemiumStoreWizardValidateAccountPage());
             }
 
-            // People end up thinking they have to download paypal details and images, when really it just takes forever.  Don't show these options by default
+            // People end up thinking they have to download PayPal details and images, when really it just takes forever.  Don't show these options by default
             // pages.Add(new EBayPayPalPage());
             // pages.Add(new EBayOptionsPage());
 
@@ -314,16 +303,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 PayPalAddressStatus = (int) AddressStatusCodeType.None,
                 PayPalTransactionID = "",
 
-                SellingManagerRecord = 0,
+                SellingManagerRecord = 0
             };
         }
 
         /// <summary>
         /// Creates the identifier to locate a particular order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            EbayOrderEntity ebayOrder = order as EbayOrderEntity;
+            IEbayOrderEntity ebayOrder = order as IEbayOrderEntity;
             if (ebayOrder == null)
             {
                 throw new InvalidOperationException("A non Ebay order was passed to the EbayStoreType.");
@@ -335,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (ebayOrderId == 0)
             {
-                EbayOrderItemEntity orderItem = ebayOrder.OrderItems.FirstOrDefault() as EbayOrderItemEntity;
+                IEbayOrderItemEntity orderItem = ebayOrder.OrderItems.FirstOrDefault() as IEbayOrderItemEntity;
                 if (orderItem != null)
                 {
                     itemId = orderItem.EbayItemID;
@@ -345,6 +334,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // create the identifier
             return new EbayOrderIdentifier(ebayOrderId, itemId, transactionId);
+        }
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order)
+        {
+            var ebayOrder = order as IEbayOrderEntity;
+
+            if (ebayOrder == null)
+            {
+                return string.Empty;
+            }
+
+            return ebayOrder.SellingManagerRecord.HasValue ?
+                    ebayOrder.SellingManagerRecord.Value.ToString() :
+                    ebayOrder.EbayOrderID.ToString();
         }
 
         /// <summary>
@@ -600,467 +606,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             outline.AddElement("CheckoutStatus", () => EnumHelper.GetDescription((EbayEffectivePaymentStatus) item.Value.EffectiveCheckoutStatus));
             outline.AddElement("CheckoutComplete", () => EbayUtility.IsCheckoutStatusComplete(item.Value) ? "true" : "false");
 
-            // only write out paypal stuff if we know the paypal transaction id
+            // only write out PayPal stuff if we know the PayPal transaction id
             ElementOutline paypalElement = outline.AddElement("PayPal", ElementOutline.If(() => item.Value.PayPalTransactionID.Length > 0));
             paypalElement.AddElement("TransactionID", () => item.Value.PayPalTransactionID);
             paypalElement.AddElement("AddressStatus", () => EbayUtility.GetAddressStatusName((AddressStatusCodeType) item.Value.PayPalAddressStatus));
         }
-
-        #region Online Update Commands
-
-        /// <summary>
-        /// Create the menu commands for updating the ebay order online
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-
-            List<MenuCommand> commands = new List<MenuCommand>()
-            {
-                new MenuCommand("Send Message...", OnSendMessage),
-                new MenuCommand("Leave Positive Feedback...", OnLeaveFeedback) { BreakAfter = true },
-
-                new MenuCommand("Mark as Paid", OnUpdateShipment){ Tag = EbayOnlineAction.Paid },
-                new MenuCommand("Mark as Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.Shipped },
-
-                new MenuCommand("Mark as Not Paid", OnUpdateShipment) { Tag = EbayOnlineAction.NotPaid, BreakBefore = true },
-                new MenuCommand("Mark as Not Shipped", OnUpdateShipment) { Tag = EbayOnlineAction.NotShipped },
-
-                new MenuCommand("Combine orders locally...", OnCombineOrders) { BreakBefore = true, Tag = EbayCombinedOrderType.Local },
-                new MenuCommand("Combine orders on eBay...", OnCombineOrders) { Tag = EbayCombinedOrderType.Ebay },
-
-                new MenuCommand("Ship to GSP Facility", OnShipToGspFacility) { BreakBefore = true },
-                new MenuCommand("Ship to Buyer", OnShipToBuyer)
-            };
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Handler for the Ship to GSP Facility menu command
-        /// </summary>
-        /// <param name="context">The context.</param>
-        private void OnShipToGspFacility(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Updating selected shipping method to Global Shipping Program",
-                "ShipWorks is updating the selected shipment method.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-
-                SendOrderSelectionChangingMessage(context.SelectedKeys);
-            };
-
-            executor.ExecuteAsync(ShipToGspFacilityCallback, context.SelectedKeys);
-        }
-
-        /// <summary>
-        /// Callback for designating an order to be shipped via GSP
-        /// </summary>
-        /// <param name="orderId">The order ID.</param>
-        /// <param name="userState">State of the user.</param>
-        /// <param name="issueAdder">The issue adder.</param>
-        private void ShipToGspFacilityCallback(long orderId, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            try
-            {
-                EbayOrderEntity ebayOrder = DataProvider.GetEntity(orderId) as EbayOrderEntity;
-                if (ebayOrder == null)
-                {
-                    throw new EbayException(string.Format("Could not find order {0}. It may have been deleted.", orderId));
-                }
-
-                if (ebayOrder.GspEligible)
-                {
-                    if (ebayOrder.SelectedShippingMethod != (int) EbayShippingMethod.GlobalShippingProgram)
-                    {
-                        // We have an eBay order that is eligible for the GSP program that needs to have the
-                        // shipping method changed
-                        ebayOrder.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            adapter.SaveAndRefetch(ebayOrder);
-                        }
-                    }
-                }
-                else
-                {
-                    // The order is not eligible for the GSP program (determined by eBay)
-                    throw new EbayException(string.Format("Order number {0} is not eligible for the Global Shipping Program", ebayOrder.OrderNumber));
-                }
-            }
-            catch (EbayException ex)
-            {
-                log.ErrorFormat("Could not change order ID {0} to be shipped to GSP facility: ", orderId, ex.Message);
-                issueAdder.Add(orderId, ex);
-            }
-        }
-
-        /// <summary>
-        /// Sends an OrderSelectionChangedMessage so that other panels can update appropriately.
-        /// </summary>
-        private static void SendOrderSelectionChangingMessage(IEnumerable<long> orderIds)
-        {
-            OrderSelectionChangingMessage orderSelectionChangingMessage = new OrderSelectionChangingMessage(new object(), orderIds.ToList());
-            Messenger.Current.Send(orderSelectionChangingMessage);
-        }
-
-        /// <summary>
-        /// Handler for the Ship to Buyer menu command
-        /// </summary>
-        /// <param name="context">The context.</param>
-        private void OnShipToBuyer(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Updating selected shipping method to Standard",
-                "ShipWorks is updating the selected shipment method.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-
-                SendOrderSelectionChangingMessage(context.SelectedKeys);
-            };
-
-            executor.ExecuteAsync(ShipToBuyerCallback, context.SelectedKeys);
-        }
-
-        /// <summary>
-        /// Callback for designating an order to be shipped to buyer
-        /// </summary>
-        /// <param name="orderId">The order ID.</param>
-        /// <param name="userState">State of the user.</param>
-        /// <param name="issueAdder">The issue adder.</param>
-        private void ShipToBuyerCallback(long orderId, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            try
-            {
-                EbayOrderEntity ebayOrder = DataProvider.GetEntity(orderId) as EbayOrderEntity;
-                if (ebayOrder == null)
-                {
-                    throw new EbayException(string.Format("Could not find order {0}. It may have been deleted.", orderId));
-                }
-
-                // Only perform the update if the selected shipping method has not already been overridden to direct to buyer
-                if (ebayOrder.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
-                {
-                    ebayOrder.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyerOverridden;
-                    using (SqlAdapter adapter = new SqlAdapter())
-                    {
-                        adapter.SaveAndRefetch(ebayOrder);
-                    }
-                }
-            }
-            catch (EbayException ex)
-            {
-                log.ErrorFormat("Error designating order {0} to be shipped to buyer: ", orderId, ex.Message);
-                issueAdder.Add(orderId, ex);
-            }
-        }
-
-        /// <summary>
-        /// MenuCommand handler for allowing the user to combine eBay orders
-        /// </summary>
-        private void OnCombineOrders(MenuCommandExecutionContext context)
-        {
-            EbayPotentialCombinedOrderFinder finder = new EbayPotentialCombinedOrderFinder(context.Owner);
-            finder.SearchComplete += new EbayPotentialCombinedOrdersFoundEventHandler(OnPotentialCombinedOrdersFound);
-
-            List<long> orderIDs = context.SelectedKeys.ToList();
-
-            try
-            {
-                finder.SearchAsync(orderIDs, context, (EbayCombinedOrderType) context.MenuCommand.Tag);
-            }
-            catch (EbayException ex)
-            {
-                context.Complete(MenuCommandResult.Error, ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Loading of possible combined payments is complete
-        /// </summary>
-        void OnPotentialCombinedOrdersFound(object sender, EbayPotentialCombinedOrdersFoundEventArgs e)
-        {
-            // unpack the user state
-            MenuCommandExecutionContext context = (MenuCommandExecutionContext) e.UserState;
-
-            // handle completing the menu command
-            if (e.Error != null)
-            {
-                context.Complete(MenuCommandResult.Error, e.Error.Message);
-                return;
-            }
-            else if (e.Cancelled)
-            {
-                context.Complete();
-                return;
-            }
-            else if (e.Candidates.Count == 0)
-            {
-                context.Complete(MenuCommandResult.Warning, string.Format("None of the selected orders are able to be combined {0}.", e.CombinedOrderType == EbayCombinedOrderType.Local ? "locally" : "on eBay"));
-                return;
-            }
-
-            // continue to allow selection of which order(s) to combine
-            using (EbayCombineOrdersDlg dlg = new EbayCombineOrdersDlg(e.CombinedOrderType, e.Candidates))
-            {
-                if (dlg.ShowDialog(e.Owner) != DialogResult.OK)
-                {
-                    context.Complete();
-                    return;
-                }
-
-                List<OrderCombining.EbayCombinedOrderCandidate> selectedOrders = dlg.SelectedOrders;
-
-                // create another background worker for combining
-                BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate> executor = new BackgroundExecutor<OrderCombining.EbayCombinedOrderCandidate>(e.Owner,
-                    "Combining eBay Orders",
-                    "ShipWorks is combining eBay Orders.",
-                    "Combining Order {0} of {1}...");
-
-                executor.ExecuteCompleted += (o, ea) =>
-                {
-                    context.Complete(ea.Issues, MenuCommandResult.Error);
-                };
-
-                // perform the order combining
-                executor.ExecuteAsync(CombineOrdersCallback, selectedOrders);
-            }
-        }
-
-        /// <summary>
-        /// Worker method for combining eBay orders
-        /// </summary>
-        private void CombineOrdersCallback(OrderCombining.EbayCombinedOrderCandidate toCombine, object userState, BackgroundIssueAdder<OrderCombining.EbayCombinedOrderCandidate> issueAdder)
-        {
-            try
-            {
-                toCombine.Combine();
-            }
-            catch (EbayException ex)
-            {
-                // log it
-                log.ErrorFormat("Error creating combined order: {0}", ex.Message);
-
-                // add the error to the issues so we can react later
-                issueAdder.Add(toCombine, ex);
-            }
-        }
-
-        /// <summary>
-        /// MenuCommand handler for sending messages to the eBay buyer
-        /// </summary>
-        private void OnSendMessage(MenuCommandExecutionContext context)
-        {
-            List<long> selectedIds = context.SelectedKeys.ToList();
-
-            using (EbayMessagingDlg dlg = new EbayMessagingDlg(selectedIds))
-            {
-                if (dlg.ShowDialog(context.Owner) != DialogResult.OK)
-                {
-                    context.Complete();
-                    return;
-                }
-
-                // kick off the message sending
-                Dictionary<string, object> state = new Dictionary<string, object>();
-                state.Add("MessageType", dlg.MessageType);
-                state.Add("Message", dlg.Message);
-                state.Add("Subject", dlg.Subject);
-                state.Add("CopyMe", dlg.CopyMe);
-
-                // if the user selected to send a message relating to a Single item, we only use that key
-                if (dlg.SelectedItemID > 0)
-                {
-                    selectedIds.Clear();
-                    selectedIds.Add(dlg.SelectedItemID);
-                }
-
-                BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Sending Messages",
-                    "ShipWorks is sending eBay Messages.",
-                    "Sending message for {0} of {1}...");
-
-                executor.ExecuteCompleted += (o, e) =>
-                    {
-                        context.Complete(e.Issues, MenuCommandResult.Error);
-                    };
-
-                // execute, passing the state which tells what message information to send
-                executor.ExecuteAsync(SendMessageCallback, selectedIds, state);
-            }
-        }
-
-        /// <summary>
-        /// Worker method for sending eBay messages.
-        /// </summary>
-        private void SendMessageCallback(long entityId, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // get the store instance
-            EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(entityId) as EbayStoreEntity;
-
-            // unpack the user state
-            Dictionary<string, object> state = userState as Dictionary<string, object>;
-
-            EbaySendMessageType messageType = (EbaySendMessageType) state["MessageType"];
-            string subject = (string) state["Subject"];
-            string message = (string) state["Message"];
-            bool copyMe = (bool) state["CopyMe"];
-
-            // Perform token processing on the message to be sent
-            string processedSubject = TemplateTokenProcessor.ProcessTokens(subject, entityId);
-            string processedMessage = TemplateTokenProcessor.ProcessTokens(message, entityId);
-
-            try
-            {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.SendMessage(entityId, messageType, processedSubject, processedMessage, copyMe);
-            }
-            catch (EbayException ex)
-            {
-                // log it
-                log.ErrorFormat("Error sending eBay message for entityID {0}: {1}", entityId, ex.Message);
-
-                // add the error to the issues so we can react later
-                issueAdder.Add(entityId, ex);
-            }
-        }
-
-        /// <summary>
-        /// MenuCommand handler for leaving ebay feedback
-        /// </summary>
-        private void OnLeaveFeedback(MenuCommandExecutionContext context)
-        {
-            // get the list of orderIds selected
-            List<long> selectedIds = context.SelectedKeys.ToList();
-
-            using (LeaveFeedbackDlg dlg = new LeaveFeedbackDlg(selectedIds))
-            {
-                if (dlg.ShowDialog(context.Owner) != DialogResult.OK)
-                {
-                    context.Complete();
-                    return;
-                }
-
-                string comments = dlg.Comments;
-                CommentTypeCodeType feedbackType = dlg.FeedbackType;
-
-                // if the user selected to leave feedback for a single item, use it only
-                if (dlg.SelectedItemID > 0)
-                {
-                    selectedIds.Clear();
-                    selectedIds.Add(dlg.SelectedItemID);
-                }
-
-                // execute
-                BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Leaving Feedback",
-                    "ShipWorks is leaving eBay Feedback.",
-                    "Leaving feedback for order {0} of {1}...");
-
-                executor.ExecuteCompleted += (o, e) =>
-                    {
-                        context.Complete(e.Issues, MenuCommandResult.Error);
-                    };
-
-                // execute, passing the menu command state which tells how to perform the update
-                Dictionary<string, object> state = new Dictionary<string, object>();
-                state["feedback"] = comments;
-                state["feedbackType"] = feedbackType;
-
-                executor.ExecuteAsync(LeaveFeedbackCallback, selectedIds, state);
-            }
-        }
-
-        /// <summary>
-        /// Worker method for leaving feedback.
-        /// </summary>
-        private void LeaveFeedbackCallback(long entityId, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(entityId) as EbayStoreEntity;
-
-            // unpack the user state
-            Dictionary<string, object> state = userState as Dictionary<string, object>;
-
-            try
-            {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.LeaveFeedback(entityId, (CommentTypeCodeType) state["feedbackType"], (string) state["feedback"]);
-            }
-            catch (EbayException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status for entity Id {0}: {1}", entityId, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(entityId, ex);
-            }
-        }
-
-        /// <summary>
-        /// MenuCommand handler for marking an order as paid/shipped
-        /// </summary>
-        private void OnUpdateShipment(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Updating Shipment Status",
-                "ShipWorks is updating shipment status.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            // execute, passing the menu command state which tells how to perform the update
-            executor.ExecuteAsync(UpdateStatusCallback, context.SelectedKeys, context.MenuCommand.Tag);
-        }
-
-        /// <summary>
-        /// Worker thread method for updated order status
-        /// </summary>
-        private void UpdateStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // need to get the store instance for this order
-            EbayStoreEntity ebayStore = StoreManager.GetRelatedStore(orderID) as EbayStoreEntity;
-
-            // unpack the user state
-            EbayOnlineAction action = (EbayOnlineAction) userState;
-
-            bool? paid = null;
-            if (action == EbayOnlineAction.Paid || action == EbayOnlineAction.NotPaid)
-            {
-                paid = action == EbayOnlineAction.Paid;
-            }
-
-            bool? shipped = null;
-            if (action == EbayOnlineAction.Shipped || action == EbayOnlineAction.NotShipped)
-            {
-                shipped = action == EbayOnlineAction.Shipped;
-            }
-
-            try
-            {
-                EbayOnlineUpdater updater = new EbayOnlineUpdater(ebayStore);
-                updater.UpdateOnlineStatus(orderID, paid, shipped);
-            }
-            catch (EbayException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status for orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
-            }
-        }
-
-        #endregion
-
 
         /// <summary>
         /// Will calling OverrideShipmentDetails change the specified shipment

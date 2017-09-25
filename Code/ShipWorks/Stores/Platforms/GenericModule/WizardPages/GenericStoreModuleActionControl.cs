@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
 {
@@ -136,23 +132,23 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
         /// <summary>
         /// Create the tasks the user has selected from the UI
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             // Validate settings, and throw if they are not valid.
-            ValidateUi(DoesStoreSupportOnlineStatusUpdates((GenericModuleStoreEntity)store));
+            ValidateUi(DoesStoreSupportOnlineStatusUpdates((GenericModuleStoreEntity) store));
 
             List<ActionTask> tasks = new List<ActionTask>();
 
             // Shipment update task
             if (panelShipmentUpdate.Visible && shipmentUpdate.Checked)
             {
-                tasks.Add(new ActionTaskDescriptorBinding(typeof(GenericStoreShipmentUploadTask), store).CreateInstance());
+                tasks.Add(new ActionTaskDescriptorBinding(typeof(GenericStoreShipmentUploadTask), store).CreateInstance(lifetimeScope));
             }
 
             // Order status update
             if (panelOrderStatus.Visible && statusUpdate.Checked)
             {
-                GenericStoreOrderUpdateTask statusTask = (GenericStoreOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(GenericStoreOrderUpdateTask), store).CreateInstance();
+                GenericStoreOrderUpdateTask statusTask = (GenericStoreOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(GenericStoreOrderUpdateTask), store).CreateInstance(lifetimeScope);
                 statusTask.StatusCode = comboStatus.SelectedValue.ToString();
 
                 if (commentToken.Visible)

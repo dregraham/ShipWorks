@@ -1,68 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms.ChannelAdvisor;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
 {
-
     /// <summary>
-    /// Task for uploading shipment detials to ChannelAdvisor
+    /// Task for uploading shipment details to ChannelAdvisor
     /// </summary>
     [ActionTask("Upload shipment details", "ChannelAdvisorShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class ChannelAdvisorShipmentUploadTask : StoreInstanceTaskBase
     {
+        private readonly IChannelAdvisorOnlineUpdater onlineUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ChannelAdvisorShipmentUploadTask(IChannelAdvisorOnlineUpdater onlineUpdater)
+        {
+            this.onlineUpdater = onlineUpdater;
+        }
+
         /// <summary>
         /// This task is for Orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.ShipmentEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
         /// Descriptive label which appears on the task editor
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Upload the tracking number for:";
-            }
-        }
+        public override string InputLabel => "Upload the tracking number for:";
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
-        public override bool SupportsStore(StoreEntity store)
-        {
-            ChannelAdvisorStoreEntity genericStore = store as ChannelAdvisorStoreEntity;
-            if (genericStore == null)
-            {
-                return false;
-            }
+        public override bool SupportsStore(StoreEntity store) => store is ChannelAdvisorStoreEntity;
 
-            return true;
-        }
+        /// <summary>
+        /// This task should be run asynchronously.
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Executes the task
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             if (StoreID <= 0)
             {
@@ -77,10 +63,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
 
             try
             {
-                ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater(store);
                 foreach (long entityID in inputKeys)
                 {
-                    updater.UploadTrackingNumber(entityID);
+                    await onlineUpdater.UploadTrackingNumber(store, entityID).ConfigureAwait(false);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -94,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
-            return new BasicShipmentUploadTaskEditor(); 
+            return new BasicShipmentUploadTaskEditor();
         }
     }
 }

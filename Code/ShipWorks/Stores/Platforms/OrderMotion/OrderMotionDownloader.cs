@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Stores.Communication;
@@ -32,8 +33,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.OrderMotion)]
     public class OrderMotionDownloader : StoreDownloader
     {
-        // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(OrderMotionDownloader));
+        private readonly ILog log;
 
         // number of email messages to be downloaded
         int messageCount;
@@ -46,13 +46,16 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
 
         // cached item attribute names
         Dictionary<string, string> itemAttributes = new Dictionary<string, string>();
+        private readonly IOrderMotionWebClient webClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderMotionDownloader(StoreEntity store)
+        public OrderMotionDownloader(StoreEntity store, IOrderMotionWebClient webClient, Func<Type, ILog> createLogger)
             : base(store)
         {
+            this.webClient = webClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -227,7 +230,14 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 int shipmentId = Convert.ToInt32(invoiceId.Substring(slash + 1));
 
                 OrderMotionOrderIdentifier identifier = new OrderMotionOrderIdentifier(orderNumber, shipmentId);
-                OrderMotionOrderEntity order = (OrderMotionOrderEntity) await InstantiateOrder(identifier).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(identifier).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                    return;
+                }
+
+                OrderMotionOrderEntity order = (OrderMotionOrderEntity) result.Value;
 
                 // set the order postfix
                 if (shipmentId > 1)
@@ -235,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     order.ApplyOrderNumberPostfix(String.Format("-{0}", shipmentId));
                 }
 
-                XPathNavigator xpath = GetOrderMotionOrder(order.OrderNumber);
+                XPathNavigator xpath = await GetOrderMotionOrder(order.OrderNumber).ConfigureAwait(false);
 
                 DateTime orderDate = GetOrderDate(reader, xpath);
 
@@ -289,16 +299,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                 return;
             }
 
-            // notes
             await LoadNotes(order, xpath).ConfigureAwait(false);
-
-            // order items
-            LoadItems(order, xpath);
-
-            // order charges
+            await LoadItems(order, xpath).ConfigureAwait(false);
             LoadCharges(order, xpath);
-
-            // payment details
             LoadPaymentDetails(order, xpath);
 
             // calculate the total
@@ -377,7 +380,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Load order items from the order
         /// </summary>
-        private void LoadItems(OrderMotionOrderEntity order, XPathNavigator xpath)
+        private async Task LoadItems(OrderMotionOrderEntity order, XPathNavigator xpath)
         {
             XPathNodeIterator itemIterator = xpath.Select("//LineItem");
             while (itemIterator.MoveNext())
@@ -405,14 +408,14 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                     item.Weight = weight;
                 }
 
-                LoadOptions(item, itemNavigator);
+                await LoadOptions(item, itemNavigator).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Loads options/attributes for the specified item
         /// </summary>
-        private void LoadOptions(OrderItemEntity item, XPathNavigator xpath)
+        private async Task LoadOptions(OrderItemEntity item, XPathNavigator xpath)
         {
             XPathNodeIterator attributeIterator = xpath.Select("ItemAttributes/AttributeValue");
             while (attributeIterator.MoveNext())
@@ -427,7 +430,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
                         continue;
                     }
 
-                    string attributeName = GetItemAttributeName(item.Code, attributeID);
+                    string attributeName = await GetItemAttributeName(item.Code, attributeID).ConfigureAwait(false);
                     if (!string.IsNullOrEmpty(attributeName))
                     {
                         // create an option
@@ -662,16 +665,13 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Retrieves and temporarily caches the OrderMotion response data for the order number provided.
         /// </summary>
-        private XPathNavigator GetOrderMotionOrder(long orderNumber)
+        private async Task<XPathNavigator> GetOrderMotionOrder(long orderNumber)
         {
             // see if we have it in the cache first
             if (!orderResponseCache.ContainsKey(orderNumber))
             {
-                // make a web service call to get the order information from OrderMotion
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
-
                 // get the order xml and cache it
-                orderResponseCache[orderNumber] = client.GetOrder(orderNumber);
+                orderResponseCache[orderNumber] = await webClient.GetOrder((IOrderMotionStoreEntity) Store, orderNumber).ConfigureAwait(false);
             }
 
             // return the cached document
@@ -682,7 +682,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Looks up the item attribute name based on Id for a given itemcode. Caches the result.
         /// </summary>
-        private string GetItemAttributeName(string itemCode, int attributeID)
+        private async Task<string> GetItemAttributeName(string itemCode, int attributeID)
         {
             string attributeHashKey = GetAttributeHashKey(itemCode, attributeID);
             string attributeName = null;
@@ -691,7 +691,7 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             if (!loadedItems.ContainsKey(itemCode))
             {
                 // load it
-                CacheItemAttributes(itemCode);
+                await CacheItemAttributes(itemCode).ConfigureAwait(false);
             }
 
             // now look for the attributeID
@@ -706,19 +706,18 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Caches the attributes for a specified itemCode
         /// </summary>
-        private void CacheItemAttributes(string itemCode)
+        private async Task CacheItemAttributes(string itemCode)
         {
             try
             {
-                OrderMotionWebClient client = new OrderMotionWebClient((OrderMotionStoreEntity) Store);
-
                 // get the detail information for this itemcode
-                XPathNavigator xpath = client.GetItemInformation(itemCode).CreateNavigator();
+                var itemInformation = await webClient.GetItemInformation((IOrderMotionStoreEntity) Store, itemCode).ConfigureAwait(false);
+                XPathNavigator xpath = itemInformation.CreateNavigator();
 
                 // cache that we've loaded this item - in the future we may store actual item data here
                 loadedItems[itemCode] = true;
 
-                // continue to load its attributres
+                // continue to load its attributes
                 XPathNodeIterator attributeIterator = xpath.Select(@"//CustomItemAttribute/Attribute");
                 while (attributeIterator.MoveNext())
                 {

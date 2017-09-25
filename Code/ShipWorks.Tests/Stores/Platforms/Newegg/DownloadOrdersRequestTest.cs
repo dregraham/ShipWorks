@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Xml;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
@@ -61,71 +62,70 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived()
+        public async Task GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, failureRequest);
-            Assert.Throws<NeweggException>(() => testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All));
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfo_WhenSuccessfulResponseReceived()
+        public async Task GetDownloadInfo_ReturnsDownloadInfo_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
-            DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
 
             Assert.NotNull(info);
             Assert.IsAssignableFrom<DownloadInfo>(info);
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithTotalOrders_WhenSuccessfulResponseReceived()
+        public async Task GetDownloadInfo_ReturnsDownloadInfoWithTotalOrders_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
-            DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
 
             // The number of orders in our DownloadedOrders.xml file
             Assert.Equal(42, info.TotalOrders);
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithStartDate_WhenSuccessfulResponseReceived()
+        public async Task GetDownloadInfo_ReturnsDownloadInfoWithStartDate_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
             DateTime toDate = DateTime.Parse("6/1/2012");
 
-            DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
             Assert.Equal(fromDate, info.StartDate);
         }
 
         [Fact]
-        public void GetDownloadInfo_ReturnsDownloadInfoWithEndDate_WhenSuccessfulResponseReceived()
+        public async Task GetDownloadInfo_ReturnsDownloadInfoWithEndDate_WhenSuccessfulResponseReceived()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
             DateTime toDate = DateTime.Parse("6/1/2012");
 
-            DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
             Assert.Equal(toDate, info.EndDate);
         }
 
-
         [Fact]
-        public void GetDownloadInfo_PageCountIsZero_WhenZeroOrdersToDownload()
+        public async Task GetDownloadInfo_PageCountIsZero_WhenZeroOrdersToDownload()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, zeroOrdersRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
             DateTime toDate = DateTime.Parse("6/1/2012");
 
-            DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
             Assert.Equal(0, info.PageCount);
         }
 
         [Fact]
-        public void GetDownloadInfo_PageCountIsOne_WhenFortyTwoOrdersToDownload()
+        public async Task GetDownloadInfo_PageCountIsOne_WhenFortyTwoOrdersToDownload()
         {
             // A test case for total orders not being evenly divided by max page size - page count
             // should be "rounded up" to the next integer value
@@ -133,20 +133,20 @@ namespace ShipWorks.Tests.Stores.Newegg
             DateTime fromDate = DateTime.Parse("5/1/2012");
             DateTime toDate = DateTime.Parse("6/1/2012");
 
-            DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
             Assert.Equal(1, info.PageCount);
         }
 
         [Fact]
-        public void GetDownloadInfo_PageCountIsTwo_WhenTwoHundredOrdersToDownload()
+        public async Task GetDownloadInfo_PageCountIsTwo_WhenTwoHundredOrdersToDownload()
         {
             // A test case for total orders being evenly divided by the max page size
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, twoHundredOrdersRequest);
             DateTime fromDate = DateTime.Parse("5/1/2012");
             DateTime toDate = DateTime.Parse("6/1/2012");
 
-            DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
+            DownloadInfo info = await testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
             Assert.Equal(2, info.PageCount);
         }

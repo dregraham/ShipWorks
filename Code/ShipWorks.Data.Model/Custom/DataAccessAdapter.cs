@@ -14,7 +14,7 @@ namespace ShipWorks.Data.Model
         /// </summary>
         public static IFieldPersistenceInfo GetPersistenceInfo(IEntityField2 field)
         {
-            using (TransactionScope suppress = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope suppress = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (DataAccessAdapter adapter = new DataAccessAdapter())
                 {

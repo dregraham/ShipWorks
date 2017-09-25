@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ProStoresOrderSearch = source.ProStoresOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IProStoresOrderSearchEntity>();
 
             CopyCustomProStoresOrderData(source);
         }
@@ -67,6 +69,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String AuthorizedBy { get; }
         
         
+        
+        public IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

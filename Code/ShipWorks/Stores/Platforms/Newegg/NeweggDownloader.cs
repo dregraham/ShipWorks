@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -27,15 +29,19 @@ namespace ShipWorks.Stores.Platforms.Newegg
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.NeweggMarketplace)]
     public class NeweggDownloader : StoreDownloader
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(NeweggDownloader));
+        private readonly ILog log;
+        private readonly INeweggWebClient webClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NeweggDownloader"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        public NeweggDownloader(StoreEntity store)
+        public NeweggDownloader(StoreEntity store, INeweggWebClient webClient, Func<Type, ILog> createLogger)
             : base(store)
         {
+            this.webClient = webClient;
+            log = createLogger(GetType());
+
             if (!(store is NeweggStoreEntity))
             {
                 string message = string.Format("An invalid store type was provided to the NeweggDownloader: {0}", Store.GetType().FullName);
@@ -98,8 +104,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             List<NeweggOrderEntity> unfulfilledShipWorksOrders = GetUnfulfilledShipWorksOrders();
 
             // Download the order info from Newegg for this specific list of orders
-            NeweggWebClient webClient = new NeweggWebClient(this.Store as NeweggStoreEntity);
-            DownloadInfo downloadInfo = webClient.GetDownloadInfo(unfulfilledShipWorksOrders);
+            var typedStore = Store as INeweggStoreEntity;
+
+            DownloadInfo downloadInfo = webClient.GetDownloadInfo(typedStore, unfulfilledShipWorksOrders);
 
             int pageNumberToDownload = downloadInfo.PageCount;
             if (pageNumberToDownload > 0)
@@ -108,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 while (pageNumberToDownload > 0)
                 {
                     // Download the orders from Newegg and check for any discrepancies between ShipWorks and Newegg
-                    IEnumerable<Order> orders = webClient.DownloadOrders(unfulfilledShipWorksOrders, pageNumberToDownload);
+                    IEnumerable<Order> orders = await webClient.DownloadOrders(typedStore, unfulfilledShipWorksOrders, pageNumberToDownload).ConfigureAwait(false);
                     foreach (Order order in orders)
                     {
                         NeweggOrderEntity orderToUpdate = unfulfilledShipWorksOrders.Find(o => o.OrderNumber == order.OrderNumber);
@@ -181,12 +188,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         private async Task DownloadNewOrders(NeweggOrderType orderType)
         {
-            NeweggWebClient webClient = new NeweggWebClient(Store as NeweggStoreEntity);
+            var typedStore = Store as INeweggStoreEntity;
 
             // Get the initial metadata of the order download to figure out how many pages and
             // the total number of orders we'll be downloading based on our starting point.
-            DateTime startingPoint = GetDownloadStartingPoint();
-            DownloadInfo downloadInfo = webClient.GetDownloadInfo(startingPoint, orderType);
+            DateTime startingPoint = await GetDownloadStartingPoint().ConfigureAwait(false);
+            DownloadInfo downloadInfo = await webClient.GetDownloadInfo(typedStore, startingPoint, orderType).ConfigureAwait(false);
             int pagesToDownload = downloadInfo.PageCount;
 
             if (pagesToDownload == 0)
@@ -206,7 +213,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     // The Newegg API returns orders in descending order by order date, so get the pages in
                     // chronological order by starting from the last page - use the end date of our download
                     // info to ensure the data is consistent with the snapshot of the download info.
-                    IEnumerable<Order> orders = webClient.DownloadOrders(downloadInfo.StartDate, downloadInfo.EndDate, pagesToDownload, orderType);
+                    var downloadRange = downloadInfo.StartDate.To(downloadInfo.EndDate);
+                    IEnumerable<Order> orders = await webClient.DownloadOrders(typedStore, downloadRange, pagesToDownload, orderType).ConfigureAwait(false);
 
                     // All the orders have been downloaded for the current page now load them into ShipWorks
                     // and decrement our page counter for the next iteration
@@ -254,13 +262,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Gets the download starting point.
         /// </summary>
         /// <returns>A DateTime object.</returns>
-        private DateTime GetDownloadStartingPoint()
+        private async Task<DateTime> GetDownloadStartingPoint()
         {
             // We're going to have our starting point default to either the initial download days setting or a year back
             int previousDaysToDownload = Store.InitialDownloadDays.HasValue ? Store.InitialDownloadDays.Value : 365;
             DateTime startingPoint = DateTime.UtcNow.AddDays(-1 * previousDaysToDownload);
 
-            DateTime? lastModifiedDate = GetOnlineLastModifiedStartingPoint();
+            DateTime? lastModifiedDate = await GetOnlineLastModifiedStartingPoint();
             if (lastModifiedDate.HasValue)
             {
                 // We have a record of the last order date in the system, so
@@ -279,7 +287,14 @@ namespace ShipWorks.Stores.Platforms.Newegg
         private async Task LoadOrder(Order downloadedOrder)
         {
             OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(downloadedOrder.OrderNumber);
-            NeweggOrderEntity order = (NeweggOrderEntity) await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.OrderNumber, result.Message);
+                return;
+            }
+
+            NeweggOrderEntity order = (NeweggOrderEntity) result.Value;
 
             order.OrderDate = downloadedOrder.OrderDateToUtcTime();
             order.OrderTotal = downloadedOrder.OrderTotalAmount;
@@ -369,7 +384,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             order.ShipPostalCode = downloadedOrder.ShipToZipCode;
             order.ShipPhone = downloadedOrder.CustomerPhoneNumber;
         }
-
 
         /// <summary>
         /// Formats the USA country code.

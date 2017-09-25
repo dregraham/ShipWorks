@@ -55,6 +55,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             LocalStatus = source.LocalStatus;
             IsManual = source.IsManual;
             HarmonizedCode = source.HarmonizedCode;
+            OriginalOrderID = source.OriginalOrderID;
             
             
             Order = source.Order?.AsReadOnly(objectMap);
@@ -180,6 +181,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String HarmonizedCode { get; }
+        /// <summary> The OriginalOrderID property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."OriginalOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 OriginalOrderID { get; }
         
         
         public IOrderEntity Order { get; }

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Logging;
-using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -16,11 +15,14 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -41,14 +43,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EbayDownloader));
-        private readonly Func<EbayToken, EbayWebClient> webClientFactory;
+        private readonly IEbayWebClient webClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         // The current time according to eBay
         DateTime eBayOfficialTime;
-
-        // WebClient to use for connectivity
-        EbayWebClient webClient;
 
         // Total number of orders expected during this download
         int expectedCount = -1;
@@ -56,10 +55,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, Func<EbayToken, EbayWebClient> webClientFactory, ISqlAdapterFactory sqlAdapterFactory)
-            : base(store)
+        public EbayDownloader(StoreEntity store, IEbayWebClient webClient,
+            IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
-            this.webClientFactory = webClientFactory;
+            this.webClient = webClient;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -70,14 +70,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            webClient = webClientFactory(EbayToken.FromStore((EbayStoreEntity) Store));
-
             try
             {
                 Progress.Detail = "Connecting to eBay...";
 
                 // Get the official eBay time in UTC
-                eBayOfficialTime = webClient.GetOfficialTime();
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                eBayOfficialTime = webClient.GetOfficialTime(token);
 
                 bool morePages = await DownloadOrders().ConfigureAwait(false);
                 if (!morePages)
@@ -119,7 +118,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             //bool usePagedDownload = true;
 
             // Get the date\time to start downloading from
-            DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
+            DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false)) ??
+                DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
 
             // Ebay only allows going back 30 days
@@ -128,12 +128,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 rangeStart = eBayOfficialTime.AddDays(-30).AddMinutes(5);
             }
 
+            var token = EbayToken.FromStore((EbayStoreEntity) Store);
             int page = 1;
 
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetOrdersResponseType response = webClient.GetOrders(rangeStart, rangeEnd, page);
+                GetOrdersResponseType response = webClient.GetOrders(token, rangeStart.To(rangeEnd), page);
 
                 // Grab the total expected account from the first page
                 if (expectedCount < 0)
@@ -199,48 +200,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private async Task ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overridden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity) await InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderType.OrderID, result.Message);
+                return;
+            }
+
+            EbayOrderEntity order = (EbayOrderEntity) result.Value;
 
             // Special processing for canceled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
+
             {
                 log.WarnFormat("Skipping eBay order {0} due to we've never seen it and it's canceled.", orderType.OrderID);
                 return;
             }
 
-            // If its new it needs a ShipWorks order number
-            if (order.IsNew)
-            {
-                order.OrderNumber = GetNextOrderNumber();
-
-                // We use the oldest auction date as the order date
-                order.OrderDate = DetermineOrderDate(orderType);
-            }
-
-            // Update last modified
-            order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
-
-            // Online status
-            order.OnlineStatusCode = (int) orderType.OrderStatus;
-            order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
-
-            // SellingManager Pro
-            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
-
-            // Buyer , email, and address
-            order.EbayBuyerID = orderType.BuyerUserID;
-            order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
-            UpdateOrderAddress(order, orderType.ShippingAddress);
-            
-            // Requested shipping (but only if we actually have an address)
-            if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
-            {
-                order.RequestedShipping = EbayUtility.GetShipmentMethodName(orderType.ShippingServiceSelected.ShippingService);
-            }
-            else
-            {
-                order.RequestedShipping = "";
-            }
+            await PopulateOrderDetails(orderType, order).ConfigureAwait(false);
 
             // Load all the transactions (line items) for the order
             List<OrderItemEntity> abandonedItems = LoadTransactions(order, orderType);
@@ -273,6 +250,48 @@ namespace ShipWorks.Stores.Platforms.Ebay
             BalanceOrderTotal(order, orderType);
 
             await SaveOrder(order, abandonedItems).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Populate details of the order
+        /// </summary>
+        private async Task PopulateOrderDetails(OrderType orderType, EbayOrderEntity order)
+        {
+            // If its new it needs a ShipWorks order number
+            if (order.IsNew)
+            {
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
+
+                // We use the oldest auction date as the order date
+                order.OrderDate = DetermineOrderDate(orderType);
+            }
+
+            // Update last modified
+            order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
+
+            // Online status
+            order.OnlineStatusCode = (int) orderType.OrderStatus;
+            order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
+
+            // SellingManager Pro
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ?
+                orderType.ShippingDetails.SellingManagerSalesRecordNumber :
+                (int?) null;
+
+            // Buyer , email, and address
+            order.EbayBuyerID = orderType.BuyerUserID;
+            order.ShipEmail = order.BillEmail = DetermineBuyerEmail(orderType);
+            UpdateOrderAddress(order, orderType.ShippingAddress);
+
+            // Requested shipping (but only if we actually have an address)
+            if (!string.IsNullOrWhiteSpace(order.ShipLastName) || !string.IsNullOrWhiteSpace(order.ShipCity) || !string.IsNullOrWhiteSpace(order.ShipCountryCode))
+            {
+                order.RequestedShipping = EbayUtility.GetShipmentMethodName(orderType.ShippingServiceSelected.ShippingService);
+            }
+            else
+            {
+                order.RequestedShipping = "";
+            }
         }
 
         /// <summary>
@@ -548,15 +567,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
         /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
         /// </summary>
-        protected override DateTime? GetOnlineLastModifiedStartingPoint()
+        protected override async Task<DateTime?> GetOnlineLastModifiedStartingPoint()
         {
-            DateTime? onlineLastModifiedStartingPoint = base.GetOnlineLastModifiedStartingPoint();
+            DateTime? onlineLastModifiedStartingPoint = await base.GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
             if (((EbayStoreEntity) Store).DownloadOlderOrders)
             {
                 // We need to calculate the starting point for the initial starting point of
                 // a download cycle
-                return CalculateStartingPoint(onlineLastModifiedStartingPoint);
+                return await CalculateStartingPoint(onlineLastModifiedStartingPoint).ConfigureAwait(false);
             }
 
             // Use the default behavior - the store is not configured to check for older orders
@@ -569,11 +588,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="onlineLastModifiedStartingPoint">The DateTime of the most recent online last modified date that ShipWorks is aware of. This is used
         /// in the event that the last four download cycles are more recent (i.e. this is to ensure overlap).</param>
         /// <returns>The DateTime to use as the starting point of a download.</returns>
-        private DateTime? CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
+        private async Task<DateTime?> CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
         {
             // Need to check previous download history for this store to calculate the starting point.
             const int previousNumberOfDownloads = 4;
-            List<DateTime> startDates = GetPreviousDownloadStartTimes(previousNumberOfDownloads);
+            List<DateTime> startDates = await GetPreviousDownloadStartTimes(previousNumberOfDownloads).ConfigureAwait(false);
 
             if (startDates.None())
             {
@@ -611,33 +630,21 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         /// <param name="previousDownloadCount">The number of previous downloads to use when getting starting point(s).</param>
         /// <returns>A List of DateTime instance representing the time the previous downloads started.</returns>
-        private List<DateTime> GetPreviousDownloadStartTimes(int previousDownloadCount)
+        private async Task<List<DateTime>> GetPreviousDownloadStartTimes(int previousDownloadCount)
         {
-            // Only interested in successful downloads that contained orders
-            RelationPredicateBucket bucket = new RelationPredicateBucket
-            (
-                DownloadFields.StoreID == Store.StoreID &
-                DownloadFields.Result == (int) DownloadResult.Success &
-                DownloadFields.QuantityTotal > 0
-            );
+            QueryFactory factory = new QueryFactory();
+            DynamicQuery<DateTime> query = factory.Create()
+                .Select(() => DownloadFields.Started.ToValue<DateTime>())
+                .Where(DownloadFields.StoreID == Store.StoreID)
+                .AndWhere(DownloadFields.Result == (int) DownloadResult.Success)
+                .AndWhere(DownloadFields.QuantityTotal > 0)
+                .OrderBy(DownloadFields.DownloadID.Descending())
+                .Limit(previousDownloadCount);
 
-            // We just want the start date of the download
-            ResultsetFields resultFields = new ResultsetFields(1);
-            resultFields.DefineField(DownloadFields.Started, 0, "Started", string.Empty);
-
-            // Sort so we only get the latest download records
-            ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
-
-            List<DateTime> startDates = new DateTimeList();
-            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                while (reader.Read())
-                {
-                    startDates.Add(reader.GetDateTime(0));
-                }
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             }
-
-            return startDates;
         }
 
         /// <summary>
@@ -645,8 +652,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void UpdateCharges(EbayOrderEntity order, OrderType orderType)
         {
-            #region Shipping
+            UpdateShippingCharges(order, orderType);
+            UpdateAdjustmentCharges(order, orderType);
+            UpdateSalesTaxCharges(order, orderType);
+        }
 
+        /// <summary>
+        /// Update the shipping charges
+        /// </summary>
+        private void UpdateShippingCharges(EbayOrderEntity order, OrderType orderType)
+        {
             // Shipping
             OrderChargeEntity shipping = GetCharge(order, "SHIPPING", "Shipping");
 
@@ -666,11 +681,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 shipping.Amount = 0;
             }
+        }
 
-            #endregion
-
-            #region Adjustment
-
+        /// <summary>
+        /// Update adjustment charges
+        /// </summary>
+        private void UpdateAdjustmentCharges(EbayOrderEntity order, OrderType orderType)
+        {
             // Only use the adjustment value if the order is considered complete.  Otherwise ebay seems to put an adjustment on non-complete orders that sets the total to zero.
             decimal adjustment = (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed) ?
                 (decimal) orderType.AdjustmentAmount.Value :
@@ -683,11 +700,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 adjust.Amount = adjustment;
             }
+        }
 
-            #endregion
-
-            #region Sales Tax
-
+        /// <summary>
+        /// Update sales tax charges
+        /// </summary>
+        private void UpdateSalesTaxCharges(EbayOrderEntity order, OrderType orderType)
+        {
             decimal salesTax = 0m;
 
             if (orderType.ShippingDetails.SalesTax != null && orderType.ShippingDetails.SalesTax.SalesTaxAmount != null)
@@ -698,8 +717,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Tax
             OrderChargeEntity tax = GetCharge(order, "TAX", "Sales Tax");
             tax.Amount = salesTax;
-
-            #endregion
         }
 
         /// <summary>
@@ -900,35 +917,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
-                ItemType eBayItem = webClient.GetItem(transaction.Item.ItemID);
-
-                UpdateWeight(orderItem, eBayItem);
-
-                PictureDetailsType pictureDetails = eBayItem.PictureDetails;
-
-                // The first picture in PictureURL is the default
-                if (pictureDetails != null && pictureDetails.PictureURL != null && pictureDetails.PictureURL.Length > 0)
-                {
-                    orderItem.Image = eBayItem.PictureDetails.PictureURL[0] ?? "";
-                    orderItem.Thumbnail = orderItem.Image;
-                }
-
-                // If still no image, see if there is a stock image
-                if (string.IsNullOrWhiteSpace(orderItem.Image))
-                {
-                    if (eBayItem.ProductListingDetails != null && eBayItem.ProductListingDetails.IncludeStockPhotoURL)
-                    {
-                        orderItem.Image = eBayItem.ProductListingDetails.StockPhotoURL ?? "";
-                        orderItem.Thumbnail = orderItem.Image;
-                    }
-                }
-
-                // See if there are other details we can use
-                if (eBayItem.ProductListingDetails != null)
-                {
-                    orderItem.UPC = eBayItem.ProductListingDetails.UPC ?? "";
-                    orderItem.ISBN = eBayItem.ProductListingDetails.ISBN ?? "";
-                }
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                ItemType ebayItem = webClient.GetItem(token, transaction.Item.ItemID);
+                UpdateWeight(orderItem, ebayItem);
+                UpdateTransactionImages(orderItem, ebayItem);
             }
             catch (EbayException exception)
             {
@@ -944,6 +936,38 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     throw;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update transaction images
+        /// </summary>
+        private void UpdateTransactionImages(EbayOrderItemEntity orderItem, ItemType ebayItem)
+        {
+            PictureDetailsType pictureDetails = ebayItem.PictureDetails;
+
+            // The first picture in PictureURL is the default
+            if (pictureDetails?.PictureURL?.Any() == true)
+            {
+                orderItem.Image = pictureDetails.PictureURL[0] ?? "";
+                orderItem.Thumbnail = orderItem.Image;
+            }
+
+            // If still no image, see if there is a stock image
+            if (string.IsNullOrWhiteSpace(orderItem.Image))
+            {
+                if (ebayItem.ProductListingDetails != null && ebayItem.ProductListingDetails.IncludeStockPhotoURL)
+                {
+                    orderItem.Image = ebayItem.ProductListingDetails.StockPhotoURL ?? "";
+                    orderItem.Thumbnail = orderItem.Image;
+                }
+            }
+
+            // See if there are other details we can use
+            if (ebayItem.ProductListingDetails != null)
+            {
+                orderItem.UPC = ebayItem.ProductListingDetails.UPC ?? "";
+                orderItem.ISBN = ebayItem.ProductListingDetails.ISBN ?? "";
             }
         }
 
@@ -986,7 +1010,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 otherCharge.Description = "Other";
                 otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
             }
-
         }
 
         /// <summary>
@@ -996,120 +1019,153 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="isGsp">if set to <c>true</c> [is global shipping program order].</param>
         /// <param name="gspDetails">The multi leg shipping details.</param>
         /// <exception cref="EbayException">eBay did not provide a reference ID for an order designated for the Global Shipping Program.</exception>
-        [NDependIgnoreLongMethod]
         private void UpdateGlobalShippingProgramInfo(EbayOrderEntity order, bool isGsp, MultiLegShippingDetailsType gspDetails)
         {
             order.GspEligible = isGsp;
 
             if (order.GspEligible)
             {
-                // This is part of the global shipping program, so we need to pull out the address info
-                // of the international shipping provider but first make sure there aren't any null
-                // objects in the address hierarchy
-                if (gspDetails != null &&
-                    gspDetails.SellerShipmentToLogisticsProvider != null &&
-                    gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
-                {
-                    // Pull out the name of the international shipping provider
-                    PersonName name = PersonName.Parse(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Name);
-                    order.GspFirstName = name.First;
-                    order.GspLastName = name.Last;
-
-                    // Address info
-
-                    // eBay includes "Suite 400" as part of street1 which some shipping carriers (UPS) don't recognize as a valid address.
-                    // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on
-                    // the presence of a comma in street 1
-
-                    // We're ultimately going to populate the ebayOrder.GspStreet property values based on the elements in th streetLines list
-                    List<string> streetLines = new List<string>
-                    {
-                        // Default the list to empty strings for the case where the Street1 and Street2
-                        // properties of the shipping address are null
-                        gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 ?? string.Empty,
-                        gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street2 ?? string.Empty
-                    };
-
-                    if (gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 != null)
-                    {
-                        // Try to split the Street1 property based on comma
-                        List<string> splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new[] { ',' }).ToList();
-
-                        // We'll always have at least one value in the result of the split which will be our value for street1
-                        streetLines[0] = splitStreetInfo[0];
-
-                        if (splitStreetInfo.Count > 1)
-                        {
-                            // There were multiple components to the original Street1 address provided by eBay; this second
-                            // component will be the value we use for our street 2 address instead of the value provided by eBay
-                            streetLines[1] = splitStreetInfo[1].Trim();
-                        }
-                    }
-
-                    order.GspStreet1 = streetLines[0].Trim();
-                    order.GspStreet2 = streetLines[1].Trim();
-
-                    order.GspCity = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.CityName ?? string.Empty;
-                    order.GspStateProvince = Geography.GetStateProvCode(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.StateOrProvince) ?? string.Empty;
-                    order.GspPostalCode = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.PostalCode ?? string.Empty;
-                    order.GspCountryCode = Enum.GetName(typeof(WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
-
-                    // Pull out the reference ID that will identify the order to the international shipping provider
-                    order.GspReferenceID = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.ReferenceID;
-
-                    if (order.GspPostalCode.Length >= 5)
-                    {
-                        // Only grab the first five digits of the postal code; there have been incidents in the past where eBay
-                        // sends down an invalid 9 digit postal code (e.g. 41018-319) that prevents orders from being shipped
-                        order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
-                    }
-
-                    if (order.IsNew || order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
-                    {
-                        // The seller has the choice to NOT ship GSP, so only default the shipping program to GSP for new orders
-                        // or orders if the selected shipping method has not been manually overridden
-                        order.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(order.GspReferenceID))
-                {
-                    // We can't necessarily reference an ID number here since the ShipWorks order ID may not be assigned yet,
-                    // so we'll reference the order date and the buyer that made the purchase
-                    string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
-                                        StringUtility.FormatFriendlyDateTime(order.OrderDate), order.BillUnparsedName);
-
-                    throw new EbayMissingGspReferenceException(message);
-                }
+                UpdateGspInfoWhenEligible(order, gspDetails);
             }
             else
             {
-                // This isn't a GSP order, so we're going to wipe the GSP data from the order in the event that
-                // an order was previously marked as a GSP, but is no longer for some reason
+                UpdateGspInfoWhenNotEligible(order);
+            }
+        }
 
-                order.GspFirstName = string.Empty;
-                order.GspLastName = string.Empty;
+        /// <summary>
+        /// Update the GSP information when the order is not eligible
+        /// </summary>
+        /// <param name="order"></param>
+        private static void UpdateGspInfoWhenNotEligible(EbayOrderEntity order)
+        {
+            // This isn't a GSP order, so we're going to wipe the GSP data from the order in the event that
+            // an order was previously marked as a GSP, but is no longer for some reason
+            order.GspFirstName = string.Empty;
+            order.GspLastName = string.Empty;
+
+            // Address info
+            order.GspStreet1 = string.Empty;
+            order.GspStreet2 = string.Empty;
+            order.GspCity = string.Empty;
+            order.GspStateProvince = string.Empty;
+            order.GspPostalCode = string.Empty;
+            order.GspCountryCode = string.Empty;
+
+            // Reset the reference ID and the shipping method to standard
+            order.GspReferenceID = string.Empty;
+
+            if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+            {
+                // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
+                // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
+                // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
+                // to the combined order).
+                order.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer;
+            }
+        }
+
+        /// <summary>
+        /// Update the GSP when the order is eligible
+        /// </summary>
+        private static void UpdateGspInfoWhenEligible(EbayOrderEntity order, MultiLegShippingDetailsType gspDetails)
+        {
+            // This is part of the global shipping program, so we need to pull out the address info
+            // of the international shipping provider but first make sure there aren't any null
+            // objects in the address hierarchy
+            if (gspDetails != null &&
+                gspDetails.SellerShipmentToLogisticsProvider != null &&
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress != null)
+            {
+                // Pull out the name of the international shipping provider
+                PersonName name = PersonName.Parse(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Name);
+                order.GspFirstName = name.First;
+                order.GspLastName = name.Last;
 
                 // Address info
-                order.GspStreet1 = string.Empty;
-                order.GspStreet2 = string.Empty;
-                order.GspCity = string.Empty;
-                order.GspStateProvince = string.Empty;
-                order.GspPostalCode = string.Empty;
-                order.GspCountryCode = string.Empty;
 
-                // Reset the reference ID and the shipping method to standard
-                order.GspReferenceID = string.Empty;
+                // eBay includes "Suite 400" as part of street1 which some shipping carriers (UPS) don't recognize as a valid address.
+                // So, we'll try to split the street1 line (1850 Airport Exchange Blvd, Suite 400) into separate addresses based on
+                // the presence of a comma in street 1
 
-                if (order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+                // We're ultimately going to populate the ebayOrder.GspStreet property values based on the elements in th streetLines list
+                string[] streetLines = ParseGspStreet(gspDetails);
+
+                PopulateGspAddress(order, gspDetails, streetLines);
+            }
+
+            if (string.IsNullOrEmpty(order.GspReferenceID))
+            {
+                // We can't necessarily reference an ID number here since the ShipWorks order ID may not be assigned yet,
+                // so we'll reference the order date and the buyer that made the purchase
+                string message = string.Format("eBay did not provide a reference ID for an order designated for the Global Shipping Program. The order was placed on {0} from buyer {1}.",
+                                    StringUtility.FormatFriendlyDateTime(order.OrderDate), order.BillUnparsedName);
+
+                throw new EbayMissingGspReferenceException(message);
+            }
+        }
+
+        /// <summary>
+        /// Populate the GSP address
+        /// </summary>
+        private static void PopulateGspAddress(EbayOrderEntity order, MultiLegShippingDetailsType gspDetails, string[] streetLines)
+        {
+            order.GspStreet1 = streetLines[0].Trim();
+            order.GspStreet2 = streetLines[1].Trim();
+
+            order.GspCity = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.CityName ?? string.Empty;
+            order.GspStateProvince = Geography.GetStateProvCode(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.StateOrProvince) ?? string.Empty;
+            order.GspPostalCode = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.PostalCode ?? string.Empty;
+            order.GspCountryCode = Enum.GetName(typeof(WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
+
+            // Pull out the reference ID that will identify the order to the international shipping provider
+            order.GspReferenceID = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.ReferenceID;
+
+            if (order.GspPostalCode.Length >= 5)
+            {
+                // Only grab the first five digits of the postal code; there have been incidents in the past where eBay
+                // sends down an invalid 9 digit postal code (e.g. 41018-319) that prevents orders from being shipped
+                order.GspPostalCode = order.GspPostalCode.Substring(0, 5);
+            }
+
+            if (order.IsNew || order.SelectedShippingMethod != (int) EbayShippingMethod.DirectToBuyerOverridden)
+            {
+                // The seller has the choice to NOT ship GSP, so only default the shipping program to GSP for new orders
+                // or orders if the selected shipping method has not been manually overridden
+                order.SelectedShippingMethod = (int) EbayShippingMethod.GlobalShippingProgram;
+            }
+        }
+
+        /// <summary>
+        /// Parse the GSP street
+        /// </summary>
+        private static string[] ParseGspStreet(MultiLegShippingDetailsType gspDetails)
+        {
+            // Default the list to empty strings for the case where the Street1 and Street2
+            // properties of the shipping address are null
+            string[] streetLines =
+            {
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 ?? string.Empty,
+                gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street2 ?? string.Empty
+            };
+
+            if (gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 != null)
+            {
+                // Try to split the Street1 property based on comma
+                string[] splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new[] { ',' });
+
+                // We'll always have at least one value in the result of the split which will be our value for street1
+                streetLines[0] = splitStreetInfo[0];
+
+                if (splitStreetInfo.Length > 1)
                 {
-                    // Only change the status if it has not been previously overridden; due to the individual transactions being downloaded
-                    // first then the combined orders being downloaded, this would inadvertently get set back to GSP if the combined order is
-                    // a GSP order (if the same buyer purchases one item that is GSP and another that isn't, the GSP settings get applied
-                    // to the combined order).
-                    order.SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer;
+                    // There were multiple components to the original Street1 address provided by eBay; this second
+                    // component will be the value we use for our street 2 address instead of the value provided by eBay
+                    streetLines[1] = splitStreetInfo[1].Trim();
                 }
             }
+
+            return streetLines;
         }
 
         /// <summary>
@@ -1144,115 +1200,83 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return await FindOrder(identifier, true).ConfigureAwait(false);
+            return await FindOrder(identifier).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Find and load an order of the given identifier, optionally including child charges
         /// </summary>
-        private Task<EbayOrderEntity> FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private async Task<EbayOrderEntity> FindOrder(EbayOrderIdentifier identifier)
         {
-            PrefetchPath2 prefetch = null;
+            QueryFactory factory = new QueryFactory();
 
-            // When we do load the order, see if we should include charges
-            if (includeCharges)
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                prefetch = new PrefetchPath2(EntityType.OrderEntity);
-                prefetch.Add(OrderEntity.PrefetchPathOrderCharges);
+                return identifier.EbayOrderID == 0 ?
+                    await FindOrderWitoutEbayID(identifier, factory, sqlAdapter).ConfigureAwait(false) :
+                    await FindOrderWithEbayID(identifier, factory, sqlAdapter).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Find an ebay order without an ebay id
+        /// </summary>
+        private async Task<EbayOrderEntity> FindOrderWitoutEbayID(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderItemEntity);
+
+            DynamicQuery query = factory.Create()
+                .Select(EbayOrderItemFields.OrderID)
+                .From(Joins.Left(OrderEntity.Relations.OrderItemEntityUsingOrderID)
+                    .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(entityName)))
+                .Where(EbayOrderItemFields.EbayItemID == identifier.EbayItemID)
+                .AndWhere(EbayOrderItemFields.EbayTransactionID == identifier.TransactionID)
+                .AndWhere(OrderFields.StoreID == Store.StoreID)
+                .AndWhere(OrderFields.IsManual == false);
+
+            long? orderId = await sqlAdapter.FetchScalarAsync<long?>(query).ConfigureAwait(false);
+
+            if (!orderId.HasValue)
+            {
+                // order does not exist
+                return null;
             }
 
-            // A single-auction will have an OrderID of zero
-            if (identifier.EbayOrderID == 0)
-            {
-                // doing a few joins, give LLBLgen the information
-                RelationCollection relations = new RelationCollection(OrderEntity.Relations.OrderItemEntityUsingOrderID);
-                relations.Add(OrderItemEntity.Relations.GetSubTypeRelation("EbayOrderItemEntity"));
+            EntityQuery<EbayOrderEntity> orderQuery = factory.EbayOrder
+                .Where(OrderFields.OrderID == orderId.Value)
+                .WithPath(OrderEntity.PrefetchPathOrderCharges);
 
-                // Look for any existing EbayOrderItem with matching ebayItemID and TransactionID
-                // it's parent order will be the order we're looking for
-                object objOrderID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderID,
-                    null, AggregateFunction.None,
-                    EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID &
-                        OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false,
-                    null,
-                    relations);
+            return await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false);
+        }
 
-                if (objOrderID == null)
-                {
-                    // order does not exist
-                    return Task.FromResult<EbayOrderEntity>(null);
-                }
-                else
-                {
-                    // return the order entity
-                    long orderID = (long) objOrderID;
+        /// <summary>
+        /// Find an order with an ebay id
+        /// </summary>
+        private async Task<EbayOrderEntity> FindOrderWithEbayID(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
+        {
+            EntityQuery<EbayOrderEntity> orderQuery = factory.EbayOrder
+                .Where(EbayOrderFields.EbayOrderID == identifier.EbayOrderID)
+                .AndWhere(EbayOrderFields.StoreID == Store.StoreID)
+                .WithPath(OrderEntity.PrefetchPathOrderCharges);
 
-                    EbayOrderEntity ebayOrder = new EbayOrderEntity(orderID);
-                    SqlAdapter.Default.FetchEntity(ebayOrder, prefetch);
-
-                    return Task.FromResult(ebayOrder);
-                }
-            }
-            else
-            {
-                RelationPredicateBucket bucket = new RelationPredicateBucket(
-                EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
-
-                EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
-                SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
-                EbayOrderEntity ebayOrder = collection.FirstOrDefault();
-
-                if (ebayOrder == null)
-                {
-                    ebayOrder = GetCombinedOrder(identifier, includeCharges);
-                }
-
-                return Task.FromResult(ebayOrder);
-            }
+            return await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false) ??
+                await GetCombinedOrder(identifier, factory, sqlAdapter).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Gets the locally combined order if it exists.
         /// </summary>
-        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private async Task<EbayOrderEntity> GetCombinedOrder(EbayOrderIdentifier identifier, QueryFactory factory, ISqlAdapter sqlAdapter)
         {
-            EbayOrderEntity ebayOrder = null;
+            EntityQuery<EbayCombinedOrderRelationEntity> orderQuery = factory.EbayCombinedOrderRelation
+                .Where(EbayCombinedOrderRelationFields.EbayOrderID == identifier.EbayOrderID)
+                .AndWhere(EbayCombinedOrderRelationFields.StoreID == Store.StoreID)
+                .WithPath(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder
+                    .WithSubPath(OrderEntity.PrefetchPathOrderCharges));
 
-            if (identifier.EbayOrderID != 0)
-            {
-                IPredicateExpression relationFilter = new PredicateExpression();
-                relationFilter.Add(EbayCombinedOrderRelationFields.EbayOrderID == identifier.EbayOrderID);
-                relationFilter.AddWithAnd(EbayCombinedOrderRelationFields.StoreID == Store.StoreID);
-
-                RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
-                relationPredicateBucket.PredicateExpression.Add(relationFilter);
-
-                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.EbayCombinedOrderRelationEntity);
-                if (includeCharges)
-                {
-                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder).SubPath.Add(OrderEntity.PrefetchPathOrderCharges);
-                }
-                else
-                {
-                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder);
-                }
-
-                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity;
-                using (EntityCollection<EbayCombinedOrderRelationEntity> relationCollection = new EntityCollection<EbayCombinedOrderRelationEntity>())
-                {
-                    SqlAdapter.Default.FetchEntityCollection(relationCollection, relationPredicateBucket, prefetch);
-                    ebayCombinedOrderRelationEntity = relationCollection.FirstOrDefault();
-                }
-
-                if (ebayCombinedOrderRelationEntity != null)
-                {
-                    ebayOrder = ebayCombinedOrderRelationEntity.EbayOrder;
-                }
-            }
-
-            return ebayOrder;
+            EbayCombinedOrderRelationEntity relationEntity = await sqlAdapter.FetchFirstAsync(orderQuery).ConfigureAwait(false);
+            return relationEntity?.EbayOrder;
         }
-
 
         /// <summary>
         /// Locate an item with the given identifier
@@ -1471,7 +1495,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Keep going until the user cancels or there aren't any more.
             while (true)
             {
-                GetFeedbackResponseType response = webClient.GetFeedback(feedbackType, page);
+                var token = EbayToken.FromStore((EbayStoreEntity) Store);
+                GetFeedbackResponseType response = webClient.GetFeedback(token, feedbackType, page);
 
                 // Quit if eBay says there aren't any more
                 if (response.FeedbackDetailItemTotal == 0 || page > response.PaginationResult.TotalNumberOfPages)
@@ -1580,6 +1605,5 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         #endregion
-
     }
 }

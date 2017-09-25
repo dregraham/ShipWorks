@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            JetOrderSearch = source.JetOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IJetOrderSearchEntity>();
 
             CopyCustomJetOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String MerchantOrderId { get; }
         
         
+        
+        public IEnumerable<IJetOrderSearchEntity> JetOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

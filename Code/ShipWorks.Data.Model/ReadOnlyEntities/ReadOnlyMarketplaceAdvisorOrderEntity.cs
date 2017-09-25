@@ -43,6 +43,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            MarketplaceAdvisorOrderSearch = source.MarketplaceAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IMarketplaceAdvisorOrderSearchEntity>();
 
             CopyCustomMarketplaceAdvisorOrderData(source);
         }
@@ -74,6 +76,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int64 ParcelID { get; }
         
         
+        
+        public IEnumerable<IMarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

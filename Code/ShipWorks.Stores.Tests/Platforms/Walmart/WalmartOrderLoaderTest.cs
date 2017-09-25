@@ -1,13 +1,13 @@
-﻿using Autofac.Extras.Moq;
-using ShipWorks.Stores.Platforms.Walmart;
-using ShipWorks.Tests.Shared;
-using System;
+﻿using System;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Moq;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Walmart;
+using ShipWorks.Stores.Platforms.Walmart.DTO;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
@@ -51,12 +51,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public void LoadOrder_ExitingLineItemDoesNotChange_WhenNotInDownloadedOrder()
         {
             orderEntity.IsNew = false;
-            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() {LineNumber = "15", Quantity = 15});
+            orderEntity.OrderItems.Add(new WalmartOrderItemEntity() { LineNumber = "15", Quantity = 15 });
             Assert.Equal(1, orderEntity.OrderItems.Count);
 
             testObject.LoadOrder(orderDto, orderEntity);
 
-            Assert.Equal(15, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "15").Quantity);
+            Assert.Equal(15, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "15").Quantity);
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(2, orderEntity.OrderItems.Count);
-            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i=>i.LineNumber == "2").Quantity);
+            Assert.Equal(1, orderEntity.OrderItems.Cast<WalmartOrderItemEntity>().Single(i => i.LineNumber == "2").Quantity);
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             orderDto.purchaseOrderId = "42A";
 
             WalmartException walmartException = Assert.Throws<WalmartException>(() => testObject.LoadOrder(orderDto, orderEntity));
-            Assert.Equal("PurchaseOrderId '42A' could not be converted to an number",
+            Assert.Equal("PurchaseOrderId '42A' could not be converted to a number",
                 walmartException.Message);
         }
 
@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             orderEntity.EstimatedDeliveryDate = previousValue;
             orderDto.shippingInfo.estimatedDeliveryDate = downloadValue;
-            
+
             testObject.LoadOrder(orderDto, orderEntity);
 
             Assert.Equal(expectedValue, orderEntity.EstimatedDeliveryDate);
@@ -460,7 +460,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 },
                 refund = new refundType
                 {
-                    refundCharges = new []
+                    refundCharges = new[]
                     {
                         new refundChargeType
                         {

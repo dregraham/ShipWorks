@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.CloudConversion
@@ -16,9 +18,10 @@ namespace ShipWorks.Stores.Platforms.CloudConversion
         /// Initializes a new instance of the <see cref="CloudConversionStoreType"/> class.
         /// </summary>
         /// <param name="store"></param>
-        public CloudConversionStoreType(StoreEntity store) : base(store)
-        { }
-
+        public CloudConversionStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
+        {
+        }
 
         /// <summary>
         /// The numeric type code of the store.

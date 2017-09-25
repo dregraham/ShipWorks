@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         int totalCount = 0;
         const int goBackDaysForUnpaid = 60;
         const int goBackDaysForUnshipped = 60;
-        EtsyWebClient webClient;
+        private readonly IEtsyWebClient webClient;
 
         /// <summary>
         /// Number of orders to download at a time.
@@ -48,10 +48,10 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Constructor
         /// </summary>
-        public EtsyDownloader(StoreEntity store)
+        public EtsyDownloader(StoreEntity store, Func<EtsyStoreEntity, IEtsyWebClient> createWebClient)
             : base(store)
         {
-            webClient = new EtsyWebClient(store as EtsyStoreEntity);
+            webClient = createWebClient(store as EtsyStoreEntity);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasShipped, false, goBackDaysForUnshipped, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(webClient, Store as EtsyStoreEntity, shipWorksOrders, "was_shipped", false);
 
             //Update those statuses locally
             foreach (var changedOrder in newlyChangedOrders)
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> shipWorksOrders = GetOrdersByEtsyStatus(EtsyOrderFields.WasPaid, false, goBackDaysForUnpaid, EtsyOrderStatus.Open);
 
             //Query etsy for those orders whose status has changed
-            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
+            List<EtsyOrderEntity> newlyChangedOrders = EtsyOrderStatusUtility.GetOrdersWithChangedStatus(webClient, Store as EtsyStoreEntity, shipWorksOrders, "was_paid", false);
             UpdatePaymentInformation(newlyChangedOrders);
         }
 
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
             List<EtsyOrderEntity> tempOrders = new List<EtsyOrderEntity>();
             tempOrders.AddRange(orders);
 
-            while (tempOrders.Count() > 0)
+            while (tempOrders.Any())
             {
                 //Get a batch of order numbers
                 var pageOfOrderNumbers = (from x in tempOrders.Take(EtsyEndpoints.GetOrderLimit)
@@ -207,13 +207,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// </summary>
         private async Task<bool> DownloadNextOrdersPage()
         {
-            DateTime startDate;
-            DateTime endDate;
             bool isMoreToProcess = true;
 
-            GetDateRange(out startDate, out endDate);
+            Range<DateTime> dateRange = await GetDateRange().ConfigureAwait(false);
 
-            int offset = GetOffset(startDate, endDate);
+            int offset = GetOffset(dateRange);
 
             // 'GetOffset' sets the total count.  Should probably be refactored
             if (totalCount == 0)
@@ -222,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 return false;
             }
 
-            List<JToken> orders = webClient.GetOrders(startDate, endDate, limit, offset);
+            List<JToken> orders = webClient.GetOrders(dateRange, limit, offset);
 
             // If any orders were downloaded we have to import them
             if (orders.Count > 0)
@@ -243,33 +241,31 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Gets the date range for the next batch of orders.
         /// </summary>
-        private void GetDateRange(out DateTime startDate, out DateTime endDate)
+        private async Task<Range<DateTime>> GetDateRange()
         {
             // Gets the current time from Etsy and subtracts 5 minutes.
-            endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
+            DateTime endDate = webClient.GetEtsyDateTime().AddMinutes(-5);
 
             //The most recent order date.
-            DateTime? calculatedStartDate = GetOrderDateStartingPoint();
+            DateTime? calculatedStartDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
 
             if (calculatedStartDate.HasValue)
             {
-                startDate = calculatedStartDate.Value;
+                return calculatedStartDate.Value.To(endDate);
             }
-            else
-            {
-                //They must have chosen all orders. Start at the beginning of time for store.
-                startDate = webClient.GetStoreCreationDate();
-            }
+
+            //They must have chosen all orders. Start at the beginning of time for store.
+            return webClient.GetStoreCreationDate().To(endDate);
         }
 
         /// <summary>
         /// Get the offset to use for an Etsy Query.
         /// (If there are 1000 orders and the limit is 100, 900 will be returned. When offset is used, the 100 oldest orders will download)
         /// </summary>
-        private int GetOffset(DateTime startDate, DateTime endDate)
+        private int GetOffset(Range<DateTime> dateRange)
         {
             //Gets number of orders between dates.
-            int currentCount = webClient.GetOrderCount(startDate, endDate);
+            int currentCount = webClient.GetOrderCount(dateRange);
 
             //If totalCount hasn't been set, this is the first time through. Set it.
             if (totalCount == 0)
@@ -321,8 +317,14 @@ namespace ShipWorks.Stores.Platforms.Etsy
             long orderNumber = (long) orderFromEtsy["receipt_id"];
 
             // Get the order instance
-            OrderEntity orderEntity = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
-            EtsyOrderEntity order = (EtsyOrderEntity) orderEntity;
+            GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            EtsyOrderEntity order = (EtsyOrderEntity) result.Value;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = orderFromEtsy.GetValue("grandtotal", 0m);
@@ -490,6 +492,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
             item.Name = transaction.GetValue("title", "");
             int productId = transaction["product_data"].GetValue("product_id", 0);
+
 
             if (productId != 0)
             {

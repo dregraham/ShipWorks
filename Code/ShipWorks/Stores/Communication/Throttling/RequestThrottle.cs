@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Common.Threading;
 
@@ -14,7 +16,7 @@ namespace ShipWorks.Stores.Communication.Throttling
     {
         private readonly ILog logger;
 
-        // for cancelling waits
+        // for canceling waits
         readonly ManualResetEvent cancelledEvent = new ManualResetEvent(false);
         readonly object cancelEventDisposeSyncObj = new object();
         readonly string storeName;
@@ -31,24 +33,18 @@ namespace ShipWorks.Stores.Communication.Throttling
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
         /// If the throttler detects that the number of calls has been reached, the throttler will wait the
-        /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
+        /// desired amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
         /// <typeparam name="TWebClientRequestType">Type of the request</typeparam>
         /// <typeparam name="TWebClientReturnType">The type of response that should be returned</typeparam>
         /// <param name="requestThrottleParams">Throttling request parameters</param>
         /// <param name="webClientMethod">Method that will be executed to </param>
-        /// <returns>Restul from the api call</returns>
+        /// <returns>Result from the api call</returns>
         public virtual TWebClientReturnType ExecuteRequest<TWebClientRequestType, TWebClientReturnType>(RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, TWebClientReturnType> webClientMethod)
         {
-            if (requestThrottleParams == null)
-            {
-                throw new ArgumentNullException("requestThrottleParams");
-            }
-            if (webClientMethod == null)
-            {
-                throw new ArgumentNullException("webClientMethod");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(requestThrottleParams, nameof(requestThrottleParams));
+            MethodConditions.EnsureArgumentIsNotNull(webClientMethod, nameof(webClientMethod));
 
             while (true)
             {
@@ -68,22 +64,46 @@ namespace ShipWorks.Stores.Communication.Throttling
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
         /// If the throttler detects that the number of calls has been reached, the throttler will wait the
-        /// desiered amount of time before making the call to webClientMethod again.  It will continue to make
+        /// desired amount of time before making the call to webClientMethod again.  It will continue to make
+        /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
+        /// </summary>
+        /// <typeparam name="TWebClientRequestType">Type of the request</typeparam>
+        /// <typeparam name="TWebClientReturnType">The type of response that should be returned</typeparam>
+        /// <param name="requestThrottleParams">Throttling request parameters</param>
+        /// <param name="webClientMethod">Method that will be executed to </param>
+        /// <returns>Result from the api call</returns>
+        public virtual async Task<TWebClientReturnType> ExecuteRequestAsync<TWebClientRequestType, TWebClientReturnType>(
+            RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, Task<TWebClientReturnType>> webClientMethod)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(requestThrottleParams, nameof(requestThrottleParams));
+            MethodConditions.EnsureArgumentIsNotNull(webClientMethod, nameof(webClientMethod));
+
+            while (true)
+            {
+                try
+                {
+                    return await webClientMethod((TWebClientRequestType) requestThrottleParams.Request).ConfigureAwait(false);
+                }
+                catch (RequestThrottledException)
+                {
+                    HandleRequestThrottleException(requestThrottleParams);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
+        /// desired amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
         /// <param name="requestThrottleParams">Throttling request parameters</param>
         /// <param name="webClientMethod">Method that will be executed to </param>
-        /// <returns>Restul from the api call</returns>
+        /// <returns>Result from the api call</returns>
         public virtual void ExecuteRequest(RequestThrottleParameters requestThrottleParams, Action webClientMethod)
         {
-            if (requestThrottleParams == null)
-            {
-                throw new ArgumentNullException("requestThrottleParams");
-            }
-            if (webClientMethod == null)
-            {
-                throw new ArgumentNullException("webClientMethod");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(requestThrottleParams, nameof(requestThrottleParams));
+            MethodConditions.EnsureArgumentIsNotNull(webClientMethod, nameof(webClientMethod));
 
             while (true)
             {
@@ -150,7 +170,7 @@ namespace ShipWorks.Stores.Communication.Throttling
         /// </summary>
         protected void CancellableWait(IProgressReporter progress, TimeSpan timeToSleep)
         {
-            // syncrhronize waiting
+            // synchronize waiting
             cancelledEvent.Reset();
 
             // on a background thread, wait for the ProgressReporter to indicate a cancel is requested
@@ -194,7 +214,7 @@ namespace ShipWorks.Stores.Communication.Throttling
         }
 
         /// <summary>
-        /// Asyncronously wait for the ProgressReporter to be cancelled
+        /// Asynchronously wait for the ProgressReporter to be canceled
         /// </summary>
         protected void AsyncWaitForCancel(object state)
         {
@@ -212,7 +232,7 @@ namespace ShipWorks.Stores.Communication.Throttling
             // if the user requested the cancel, signal to the calling thread
             if (progress.IsCancelRequested)
             {
-                // The caller could have timeed out waiting and eventually disposed our cancelEvent.
+                // The caller could have timed out waiting and eventually disposed our cancelEvent.
                 // so only Set it if it is isn't closed
                 lock (cancelEventDisposeSyncObj)
                 {

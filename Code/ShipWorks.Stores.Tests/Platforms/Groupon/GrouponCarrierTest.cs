@@ -10,14 +10,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
 {
     public class GrouponCarrierTest
     {
-
         [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenCarrierIsUspsAndServiceIsNotMediaMail()
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Postal = new PostalShipmentEntity();
-            shipment.Postal.Service = (int)PostalServiceType.PriorityMail;
-            shipment.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipment.Postal.Service = (int) PostalServiceType.PriorityMail;
+            shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             Assert.Equal("usps", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -27,8 +26,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Postal = new PostalShipmentEntity();
-            shipment.Postal.Service = (int)PostalServiceType.MediaMail;
-            shipment.ShipmentType = (int)ShipmentTypeCode.Usps;
+            shipment.Postal.Service = (int) PostalServiceType.MediaMail;
+            shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
 
             Assert.Equal("uspsmm", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -50,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.FedEx = new FedExShipmentEntity();
             shipment.FedEx.Service = (int) FedExServiceType.FedEx2Day;
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             Assert.Equal("fedex", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -60,8 +59,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             Assert.Equal("Fedexhd", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -71,8 +70,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int)FedExServiceType.SmartPost;
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.FedEx.Service = (int) FedExServiceType.SmartPost;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             Assert.Equal("fedexsp", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -82,8 +81,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
-            shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
+            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             Assert.Equal("Fexp", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -93,8 +92,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Ups = new UpsShipmentEntity();
-            shipment.Ups.Service = (int)UpsServiceType.Ups2DayAir;
-            shipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            shipment.Ups.Service = (int) UpsServiceType.Ups2DayAir;
+            shipment.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
 
             Assert.Equal("ups", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -104,8 +103,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Ups = new UpsShipmentEntity();
-            shipment.Ups.Service = (int)UpsServiceType.UpsMailInnovationsExpedited;
-            shipment.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
+            shipment.Ups.Service = (int) UpsServiceType.UpsMailInnovationsExpedited;
+            shipment.ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools;
 
             Assert.Equal("upsmi", GrouponCarrier.GetCarrierCode(shipment));
         }
@@ -116,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Other = new OtherShipmentEntity();
             shipment.Other.Carrier = "Other Carrier";
-            shipment.ShipmentType = (int)ShipmentTypeCode.Other;
+            shipment.ShipmentType = (int) ShipmentTypeCode.Other;
 
             Assert.Equal("Other Carrier", GrouponCarrier.GetCarrierCode(shipment));
         }

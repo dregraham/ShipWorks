@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<ICommerceInterfaceOrderSearchEntity> CommerceInterfaceOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<ICommerceInterfaceOrderSearchEntity> ICommerceInterfaceOrderEntity.CommerceInterfaceOrderSearch => CommerceInterfaceOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

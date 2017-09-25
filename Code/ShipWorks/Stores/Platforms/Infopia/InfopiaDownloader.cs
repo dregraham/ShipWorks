@@ -10,6 +10,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,19 +22,23 @@ namespace ShipWorks.Stores.Platforms.Infopia
     /// <summary>
     /// Order downloader for retrieving Infopia orders.
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Infopia)]
     public class InfopiaDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(InfopiaDownloader));
+
         // count of orders to be downloaded
         int totalCount = 0;
 
         /// <summary>
         /// Convenience property for quick access to the specific store entity
         /// </summary>
-        private InfopiaStoreEntity InfopiaStore
-        {
-            get { return (InfopiaStoreEntity) Store; }
-        }
+        private InfopiaStoreEntity InfopiaStore => (InfopiaStoreEntity) Store;
 
         /// <summary>
         /// Constructor
@@ -52,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         {
             Progress.Detail = "Checking for orders...";
 
-            DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+            DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
             if (!lastModified.HasValue)
             {
                 // If they chose to go back forever, still limit to a year
@@ -122,7 +127,14 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 int orderNumber = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER ID*']", 0);
 
                 // get the order instance, creates one if necessary
-                OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                    return;
+                }
+
+                OrderEntity order = result.Value;
 
                 // test the ORDER TM.  We have had problems in the past where all order information was blank due to some Infopia server problems.
                 string orderDate = XPathUtility.Evaluate(xpath, "Cell[@Name='*ORDER TM*']", "");
@@ -204,7 +216,6 @@ namespace ShipWorks.Stores.Platforms.Infopia
             // make sure these are already cached
             InfopiaWebClient client = new InfopiaWebClient(InfopiaStore);
             client.EnsureProducts(productsToDownload);
-
         }
 
         /// <summary>

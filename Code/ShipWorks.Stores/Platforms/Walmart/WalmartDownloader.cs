@@ -2,9 +2,12 @@
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -23,22 +26,30 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private readonly IWalmartOrderLoader walmartOrderLoader;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private readonly ILog log;
         private readonly WalmartStoreEntity walmartStore;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartDownloader"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+            "These parameters are dependencies the store downloader already had, they're just explicit now")]
         public WalmartDownloader(StoreEntity store,
             IWalmartWebClient walmartWebClient,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             IWalmartOrderLoader walmartOrderLoader,
-            IDateTimeProvider dateTimeProvider)
-            : base(store)
+            IDateTimeProvider dateTimeProvider,
+            IConfigurationData configurationData,
+            ISqlAdapterFactory sqlAdapterFactory,
+            IStoreTypeManager storeTypeManager,
+            Func<Type, ILog> logFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.walmartWebClient = walmartWebClient;
             this.walmartOrderLoader = walmartOrderLoader;
             this.dateTimeProvider = dateTimeProvider;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "WalmartDownloader.Download");
+            log = logFactory(GetType());
 
             walmartStore = store as WalmartStoreEntity;
         }
@@ -60,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                     return;
                 }
 
-                ordersListType ordersList = GetFirstBatch();
+                ordersListType ordersList = await GetFirstBatch().ConfigureAwait(false);
                 int totalOrders = ordersList.meta.totalCount;
 
                 if (totalOrders == 0)
@@ -94,9 +105,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// Gets the first batch.
         /// </summary>
-        private ordersListType GetFirstBatch()
+        private async Task<ordersListType> GetFirstBatch()
         {
-            DateTime startDate = GetOrderDateStartingPoint();
+            DateTime startDate = await GetWalmartOrderDateStartingPoint();
             return walmartWebClient.GetOrders(walmartStore, startDate);
         }
 
@@ -141,8 +152,14 @@ namespace ShipWorks.Stores.Platforms.Walmart
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
             // See remarks in WalmartOrderIdentifier for why we use this vs OrderNumberIdentifier
-            WalmartOrderEntity orderToSave =
-                (WalmartOrderEntity) await InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new WalmartOrderIdentifier(downloadedOrder.purchaseOrderId)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", downloadedOrder.purchaseOrderId, result.Message);
+                return;
+            }
+
+            WalmartOrderEntity orderToSave = (WalmartOrderEntity) result.Value;
 
             walmartOrderLoader.LoadOrder(downloadedOrder, orderToSave);
 
@@ -155,9 +172,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// will be used to calculate the initial number of days back to. We then compare that with the
         /// date calculated from DownloadModifiedNumberOfDaysBack and send the earlier of the two dates.
         /// </summary>
-        protected new DateTime GetOrderDateStartingPoint()
+        protected async Task<DateTime> GetWalmartOrderDateStartingPoint()
         {
-            DateTime? defaultStartingPoint = base.GetOrderDateStartingPoint();
+            DateTime? defaultStartingPoint = await base.GetOrderDateStartingPoint();
             DateTime modifiedDaysBack = dateTimeProvider.UtcNow.AddDays(-walmartStore.DownloadModifiedNumberOfDaysBack);
 
             if (defaultStartingPoint == null || modifiedDaysBack < defaultStartingPoint.Value)

@@ -1,6 +1,9 @@
 ﻿using System;
-using ShipWorks.Stores.Content;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -10,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     public class GrouponOrderIdentifier : OrderIdentifier
     {
         // GrouponStore's Order ID
-        private readonly string grouponStoreOrderId = "";
+        private readonly string grouponStoreOrderId;
 
         /// <summary>
         /// Constructor
@@ -44,11 +47,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.GrouponOrderSearch,
+                GrouponOrderSearchFields.OriginalOrderID,
+                GrouponOrderSearchFields.GrouponOrderID == grouponStoreOrderId);
+
+        /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return string.Format("GrouponStoreOrderID:{0}", grouponStoreOrderId);
-        }
+        public override string ToString() => $"GrouponStoreOrderID:{grouponStoreOrderId}";
     }
 }

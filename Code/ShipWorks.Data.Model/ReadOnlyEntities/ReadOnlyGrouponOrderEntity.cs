@@ -37,9 +37,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             GrouponOrderID = source.GrouponOrderID;
+            ParentOrderID = source.ParentOrderID;
             
             
             
+            GrouponOrderSearch = source.GrouponOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IGrouponOrderSearchEntity>();
 
             CopyCustomGrouponOrderData(source);
         }
@@ -51,8 +54,16 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String GrouponOrderID { get; }
+        /// <summary> The ParentOrderID property of the Entity GrouponOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GrouponOrder"."ParentOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ParentOrderID { get; }
         
         
+        
+        public IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

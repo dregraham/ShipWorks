@@ -6,7 +6,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration.DTO;
 
 namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
@@ -18,40 +18,31 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
     public class YahooApiWebClient : IYahooApiWebClient
     {
         private readonly ILog log;
-        private readonly string yahooStoreID;
-        private readonly string token;
-        private readonly string yahooOrderEndpoint;
-        private readonly string yahooCatalogEndpoint;
         private const int OrdersPerPage = 50;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YahooApiWebClient"/> class.
         /// </summary>
-        /// <param name="store">The Yahoo Store Entity</param>
-        public YahooApiWebClient(YahooStoreEntity store, Func<Type, ILog> createLog)
+        public YahooApiWebClient(Func<Type, ILog> createLog)
         {
             this.log = createLog(GetType());
-            yahooStoreID = store.YahooStoreID;
-            token = store.AccessToken;
-            yahooOrderEndpoint = $"https://{yahooStoreID}.order.store.yahooapis.com/V1";
-            yahooCatalogEndpoint = $"https://{yahooStoreID}.catalog.store.yahooapis.com/V1";
         }
 
         /// <summary>
         /// Validates the credentials.
         /// </summary>
-        public YahooResponse ValidateCredentials()
+        public YahooResponse ValidateCredentials(IYahooStoreEntity store)
         {
-            return GetCustomOrderStatus(-1);
+            return GetCustomOrderStatus(store, -1);
         }
 
         /// <summary>
         /// Gets the custom order status.
         /// </summary>
         /// <param name="statusID">The status identifier.</param>
-        public YahooResponse GetCustomOrderStatus(int statusID)
+        public YahooResponse GetCustomOrderStatus(IYahooStoreEntity store, int statusID)
         {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
+            string body = RequestBodyIntro(store) + GetRequestBodyIntro +
                           "<CustomOrderStatusListQuery>" +
                           "<CustomQueryParams>" +
                           $"<StatusID>{statusID}</StatusID>" +
@@ -63,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(body, "xml")
             {
                 Verb = HttpVerb.Post,
-                Uri = new Uri(yahooOrderEndpoint + "/order")
+                Uri = new Uri(YahooOrderEndpoint(store) + "/order")
             };
 
             return ProcessRequest(submitter, "GetCustomOrderStatus");
@@ -73,9 +64,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Gets an order.
         /// </summary>
         /// <param name="orderID">The Yahoo Order ID</param>
-        public YahooResponse GetOrder(long orderID)
+        public YahooResponse GetOrder(IYahooStoreEntity store, long orderID)
         {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
+            string body = RequestBodyIntro(store) + GetRequestBodyIntro +
                 "<OrderListQuery>" +
                 "<Filter>" +
                 "<Include>all</Include>" +
@@ -87,16 +78,16 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 "</ResourceList>" +
                 "</ystorewsRequest>";
 
-            return ProcessRequest(CreateOrderRequestSubmitter(body), "GetOrder");
+            return ProcessRequest(CreateOrderRequestSubmitter(store, body), "GetOrder");
         }
 
         /// <summary>
         /// Gets a "page" of orders from a starting order number
         /// </summary>
         /// <param name="startingOrderNumber">The Yahoo Order ID to start from</param>
-        public YahooResponse GetOrderRange(long startingOrderNumber)
+        public YahooResponse GetOrderRange(IYahooStoreEntity store, long startingOrderNumber)
         {
-            string body = RequestBodyIntro + GetRequestBodyIntro +
+            string body = RequestBodyIntro(store) + GetRequestBodyIntro +
                           "<OrderListQuery>" +
                           "<Filter>" +
                           "<Include>status</Include>" +
@@ -111,17 +102,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            return ProcessRequest(CreateOrderRequestSubmitter(body), "GetOrderRange");
+            return ProcessRequest(CreateOrderRequestSubmitter(store, body), "GetOrderRange");
         }
 
         /// <summary>
         /// Gets an item.
         /// </summary>
         /// <param name="itemID">The Yahoo Item ID</param>
-        public YahooResponse GetItem(string itemID)
+        public YahooResponse GetItem(IYahooStoreEntity store, string itemID)
         {
             log.Debug("Building item request.");
-            string body = RequestBodyIntro + GetRequestBodyIntro +
+            string body = RequestBodyIntro(store) + GetRequestBodyIntro +
                           "<CatalogQuery>" +
                           "<ItemQueryList>" +
                           "<ItemIDList>" +
@@ -133,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                           "</ResourceList>" +
                           "</ystorewsRequest>";
 
-            return ProcessRequest(CreateCatalogRequestSubmitter(body), "GetItem");
+            return ProcessRequest(CreateCatalogRequestSubmitter(store, body), "GetItem");
         }
 
         /// <summary>
@@ -142,9 +133,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <param name="orderID">The order's Yahoo Order ID</param>
         /// <param name="trackingNumber">The tracking number to upload</param>
         /// <param name="shipper">The shipping carrier used</param>
-        public void UploadShipmentDetails(string orderID, string trackingNumber, string shipper)
+        public void UploadShipmentDetails(IYahooStoreEntity store, string orderID, string trackingNumber, string shipper)
         {
-            string body = RequestBodyIntro + UpdateRequestBodyIntro +
+            string body = RequestBodyIntro(store) + UpdateRequestBodyIntro +
                           "<Order>" +
                           $"<OrderID>{orderID}</OrderID>" +
                           "<CartShipmentInfo>";
@@ -165,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
                 "</ResourceList>" +
                 "</ystorewsRequest>";
 
-            ProcessRequest(CreateOrderRequestSubmitter(body), "UploadShipmentDetails");
+            ProcessRequest(CreateOrderRequestSubmitter(store, body), "UploadShipmentDetails");
         }
 
         /// <summary>
@@ -173,31 +164,32 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// </summary>
         /// <param name="orderID">The Yahoo Order ID</param>
         /// <param name="status">The order status to upload</param>
-        public void UploadOrderStatus(string orderID, string status)
+        public void UploadOrderStatus(IYahooStoreEntity store, string orderID, string status)
         {
-            string body = RequestBodyIntro + UpdateRequestBodyIntro +
-                          "<Order>" +
-                          $"<OrderID>{orderID}</OrderID>" +
-                          "<CartShipmentInfo>" +
-                          $"<ShipState>{status}</ShipState>" +
-                          "</CartShipmentInfo>" +
-                          "</Order>" +
-                          "</ResourceList>" +
-                          "</ystorewsRequest>";
+            string body = RequestBodyIntro(store) +
+                UpdateRequestBodyIntro +
+                "<Order>" +
+                $"<OrderID>{orderID}</OrderID>" +
+                "<CartShipmentInfo>" +
+                $"<ShipState>{status}</ShipState>" +
+                "</CartShipmentInfo>" +
+                "</Order>" +
+                "</ResourceList>" +
+                "</ystorewsRequest>";
 
-            ProcessRequest(CreateOrderRequestSubmitter(body), "UploadOrderStatus");
+            ProcessRequest(CreateOrderRequestSubmitter(store, body), "UploadOrderStatus");
         }
 
         /// <summary>
         /// Creates the order request submitter.
         /// </summary>
         /// <param name="xmlBody">The XML body</param>
-        private HttpTextPostRequestSubmitter CreateOrderRequestSubmitter(string xmlBody)
+        private HttpTextPostRequestSubmitter CreateOrderRequestSubmitter(IYahooStoreEntity store, string xmlBody)
         {
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
             {
                 Verb = HttpVerb.Post,
-                Uri = new Uri(yahooOrderEndpoint + "/order")
+                Uri = new Uri(YahooOrderEndpoint(store) + "/order")
             };
 
             return submitter;
@@ -207,17 +199,29 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// Creates the catalog request submitter.
         /// </summary>
         /// <param name="xmlBody">The XML body.</param>
-        private HttpTextPostRequestSubmitter CreateCatalogRequestSubmitter(string xmlBody)
+        private HttpTextPostRequestSubmitter CreateCatalogRequestSubmitter(IYahooStoreEntity store, string xmlBody)
         {
             log.Debug("Creating catalog request submitter.");
             HttpTextPostRequestSubmitter submitter = new HttpTextPostRequestSubmitter(xmlBody, "xml")
             {
                 Verb = HttpVerb.Post,
-                Uri = new Uri(yahooCatalogEndpoint + "/CatalogQuery")
+                Uri = new Uri(YahooCatalogEndpoint(store) + "/CatalogQuery")
             };
 
             return submitter;
         }
+
+        /// <summary>
+        /// Get order endpoint
+        /// </summary>
+        private string YahooOrderEndpoint(IYahooStoreEntity store) =>
+            $"https://{store.YahooStoreID}.order.store.yahooapis.com/V1";
+
+        /// <summary>
+        /// Get catalog endpoint
+        /// </summary>
+        private string YahooCatalogEndpoint(IYahooStoreEntity store) =>
+            $"https://{store.YahooStoreID}.catalog.store.yahooapis.com/V1";
 
         /// <summary>
         /// Cleans the response.
@@ -234,13 +238,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.ApiIntegration
         /// <summary>
         /// The request xml intro
         /// </summary>
-        private string RequestBodyIntro => "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-                                           "<ystorewsRequest>" +
-                                           $"<StoreID>{yahooStoreID}</StoreID>" +
-                                           "<SecurityHeader>" +
-                                           $"<PartnerStoreContractToken>{token}</PartnerStoreContractToken>" +
-                                           "</SecurityHeader>" +
-                                           "<Version>1.0</Version>";
+        private string RequestBodyIntro(IYahooStoreEntity store) =>
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+            "<ystorewsRequest>" +
+            $"<StoreID>{store.YahooStoreID}</StoreID>" +
+            "<SecurityHeader>" +
+            $"<PartnerStoreContractToken>{store.AccessToken}</PartnerStoreContractToken>" +
+            "</SecurityHeader>" +
+            "<Version>1.0</Version>";
 
         /// <summary>
         /// Additional xml intro for get requests

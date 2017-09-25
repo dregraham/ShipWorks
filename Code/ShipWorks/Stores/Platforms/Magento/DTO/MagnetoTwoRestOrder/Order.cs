@@ -55,5 +55,13 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("extension_attributes")]
         public ExtensionAttributes ExtensionAttributes { get; set; }
+
+        /// <summary>
+        /// Creates a copy of this object.  Mainly used for tests.
+        /// </summary>
+        public Order ShallowCopy()
+        {
+            return (Order) this.MemberwiseClone();
+        }
     }
 }

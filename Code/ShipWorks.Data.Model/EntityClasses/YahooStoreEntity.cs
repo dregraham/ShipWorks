@@ -47,6 +47,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name YahooEmailAccount</summary>
 			public static readonly string YahooEmailAccount = "YahooEmailAccount";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 		}
 		#endregion
 		

@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            OrderMotionOrderSearch = source.OrderMotionOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderMotionOrderSearchEntity>();
 
             CopyCustomOrderMotionOrderData(source);
         }
@@ -67,6 +69,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String OrderMotionInvoiceNumber { get; }
         
         
+        
+        public IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

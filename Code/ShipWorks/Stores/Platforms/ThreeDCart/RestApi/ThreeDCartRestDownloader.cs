@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 // Get the number of days back that we should check for modified orders.
                 int numberOfDaysBack = threeDCartStore.DownloadModifiedNumberOfDaysBack > 0 ? threeDCartStore.DownloadModifiedNumberOfDaysBack : 0;
 
-                DateTime? startDate = GetOrderDateStartingPoint();
+                DateTime? startDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
                 if (!startDate.HasValue)
                 {
                     // There's no orders or the user wanted to download all orders
@@ -225,7 +225,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         $"Checking order {orderIdentifier} for modifications..." :
                         $"Processing new order {++newOrderCount}";
 
-                    OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+                    GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+                    if (result.Failure)
+                    {
+                        log.InfoFormat("Skipping order '{0}': {1}.", threeDCartOrder, result.Message);
+                        return;
+                    }
+
+                    OrderEntity order = result.Value;
 
                     order = await LoadOrder(order, threeDCartOrder, shipment).ConfigureAwait(false);
 

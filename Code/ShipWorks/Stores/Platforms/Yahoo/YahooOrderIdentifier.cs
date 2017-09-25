@@ -1,7 +1,9 @@
-﻿using System;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
+﻿using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Yahoo
 {
@@ -47,11 +49,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.YahooOrderSearch,
+                YahooOrderSearchFields.OriginalOrderID,
+                YahooOrderSearchFields.YahooOrderID == yahooOrderID);
+
+        /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return $"YahooOrderID:{yahooOrderID}";
-        }
+        public override string ToString() => $"YahooOrderID:{yahooOrderID}";
     }
 }

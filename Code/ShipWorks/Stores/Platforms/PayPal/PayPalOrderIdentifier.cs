@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         {
             PayPalOrderEntity paypalOrder = order as PayPalOrderEntity;
 
-            // make sure we're dealign with a paypal order
+            // make sure we're dealing with a PayPal order
             if (paypalOrder == null)
             {
                 throw new InvalidOperationException("A non PayPal order was passed to the PayPal Order Identifier");
@@ -50,12 +50,18 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.PayPalOrderSearch,
+                PayPalOrderSearchFields.OriginalOrderID,
+                PayPalOrderSearchFields.TransactionID == transactionID);
+
+        /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return string.Format("PayPalTransactionID:{0}", transactionID);
-        }
-
+        public override string ToString() =>
+            string.Format("PayPalTransactionID:{0}", transactionID);
     }
 }

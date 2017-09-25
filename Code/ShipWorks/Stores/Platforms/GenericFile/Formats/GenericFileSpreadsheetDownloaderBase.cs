@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -22,6 +23,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
     /// </summary>
     public abstract class GenericFileSpreadsheetDownloaderBase : GenericFileDownloaderBase
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(GenericFileSpreadsheetDownloaderBase));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -43,7 +46,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// </summary>
         protected async Task LoadOrder(GenericSpreadsheetReader reader)
         {
-            OrderEntity order = await InstantiateOrder(reader).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(reader).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order: {0}.", result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             GenericSpreadsheetOrderLoader loader = new GenericSpreadsheetOrderLoader();
             loader.Load(order, reader, this);
@@ -56,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Instantiate the generic order based on the reader
         /// </summary>
-        private Task<OrderEntity> InstantiateOrder(GenericSpreadsheetReader reader)
+        private Task<GenericResult<OrderEntity>> InstantiateOrder(GenericSpreadsheetReader reader)
         {
             // pull out the order number
             string orderNumber = reader.ReadField("Order.Number", "");
@@ -71,7 +81,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
             // get the order instance; Change this to our derived class once it's needed and exists
             return InstantiateOrder(orderIdentifier);
         }
-
 
         /// <summary>
         /// Load the orders from the given GenericFileInstance

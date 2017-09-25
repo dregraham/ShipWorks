@@ -66,6 +66,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IAmazonOrderSearchEntity> AmazonOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -92,6 +93,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IAmazonOrderSearchEntity> IAmazonOrderEntity.AmazonOrderSearch => AmazonOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

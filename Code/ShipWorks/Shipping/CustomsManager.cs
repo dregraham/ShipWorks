@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping
             else
             {
                 // Make sure that these new customs items get persisted
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                 {
                     GenerateCustomsItems(shipment);
 

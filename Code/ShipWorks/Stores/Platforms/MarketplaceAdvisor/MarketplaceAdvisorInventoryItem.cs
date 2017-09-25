@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 
@@ -10,6 +7,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Represents an item in the MarketplaceAdvisor inventory system for the user.
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Serializable]
     public class MarketplaceAdvisorInventoryItem
     {
@@ -35,14 +37,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         public MarketplaceAdvisorInventoryItem(XPathNavigator item)
         {
             imageUrl = XPathUtility.Evaluate(item, "ImageUrl1", "");
-				
+
             cost = XPathUtility.Evaluate(item, "CostEach", (decimal) 0.0);
 
             isbn = XPathUtility.Evaluate(item, "ISBN", "");
             upc = XPathUtility.Evaluate(item, "UPC", "");
             sku = XPathUtility.Evaluate(item, "SKU", "");
             description = XPathUtility.Evaluate(item, "Description", "");
-                
+
             double weight = XPathUtility.Evaluate(item, "Weight", 0.0);
             int weightType = XPathUtility.Evaluate(item, "WeightType", 0);
 
@@ -90,17 +92,17 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
         public string ISBN
         {
-            get { return isbn;}
+            get { return isbn; }
         }
 
-        public string UPC 
+        public string UPC
         {
-            get { return upc;}
+            get { return upc; }
         }
 
         public string SKU
         {
-            get { return sku;}
-        }	
+            get { return sku; }
+        }
     }
 }

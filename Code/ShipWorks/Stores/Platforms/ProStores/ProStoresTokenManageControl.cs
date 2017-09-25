@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 using System.IO;
-using System.Xml.Linq;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -112,7 +114,11 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
                         Cursor.Current = Cursors.WaitCursor;
 
-                        ProStoresWebClient.TestXteConnection(store);
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                            webClient.TestXteConnection(store);
+                        }
 
                         return true;
                     }

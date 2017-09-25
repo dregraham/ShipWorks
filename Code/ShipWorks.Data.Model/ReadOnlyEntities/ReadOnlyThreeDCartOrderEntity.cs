@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ThreeDCartOrderSearch = source.ThreeDCartOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IThreeDCartOrderSearchEntity>();
 
             CopyCustomThreeDCartOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Int64 ThreeDCartOrderID { get; }
         
         
+        
+        public IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

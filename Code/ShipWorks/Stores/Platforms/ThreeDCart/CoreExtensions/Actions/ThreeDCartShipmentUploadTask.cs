@@ -6,6 +6,9 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 {
@@ -36,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.ShipmentEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -44,16 +47,21 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         }
 
         /// <summary>
-        /// Execute the details upload
+        /// This task should be run asynchronously
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        public override bool IsAsync => true;
+
+        /// <summary>
+        /// Execute the status updates
+        /// </summary>
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             foreach (long entityID in inputKeys)
             {
                 List<long> storeKeys = DataProvider.GetRelatedKeys(entityID, EntityType.StoreEntity);
                 if (storeKeys.Count == 0)
                 {
-                    // Store or shipment disapeared
+                    // Store or shipment disappeared
                     continue;
                 }
 
@@ -66,15 +74,18 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
                 try
                 {
-                    if (storeEntity.RestUser)
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(storeEntity);
-                        updater.UpdateShipmentDetails(entityID);
-                    }
-                    else
-                    {
-                        ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(storeEntity);
-                        updater.UpdateShipmentDetails(entityID);
+                        if (storeEntity.RestUser)
+                        {
+                            ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(storeEntity));
+                            await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(storeEntity));
+                            await updater.UpdateShipmentDetails(entityID).ConfigureAwait(false);
+                        }
                     }
                 }
                 catch (ThreeDCartException ex)

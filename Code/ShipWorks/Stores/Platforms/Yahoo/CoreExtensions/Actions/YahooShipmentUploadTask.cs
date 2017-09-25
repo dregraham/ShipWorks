@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
+using System.Threading.Tasks;
 using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -23,6 +22,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
     public class YahooShipmentUploadTask : StoreInstanceTaskBase
     {
         private const long maxBatchSize = 1000;
+        private readonly IYahooApiOnlineUpdater onlineUpdater;
+        private readonly IYahooEmailOnlineUpdater emailUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public YahooShipmentUploadTask(IYahooApiOnlineUpdater onlineUpdater, IYahooEmailOnlineUpdater emailUpdater)
+        {
+            this.emailUpdater = emailUpdater;
+            this.onlineUpdater = onlineUpdater;
+        }
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
@@ -49,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// <summary>
         /// Execute the details upload
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (inputKeys == null)
             {
@@ -70,18 +85,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
 
             if (store.YahooStoreID.IsNullOrWhiteSpace())
             {
-                EmailShipmentUploadTask(inputKeys, context);
+                await EmailShipmentUploadTask(inputKeys, context).ConfigureAwait(false);
             }
             else
             {
-                ApiShipmentUploadTask(inputKeys, context, store);
+                await ApiShipmentUploadTask(inputKeys, context, store).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Shipment upload task for API integration
         /// </summary>
-        private void ApiShipmentUploadTask(List<long> inputKeys, ActionStepContext context, YahooStoreEntity store)
+        private async Task ApiShipmentUploadTask(List<long> inputKeys, IActionStepContext context, YahooStoreEntity store)
         {
             // Get any postponed data we've previously stored away
             List<long> postponedKeys = context.GetPostponedData().SelectMany(d => (List<long>) d).ToList();
@@ -96,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UploadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UploadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
@@ -105,30 +120,22 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// </summary>
         /// <param name="store">The store.</param>
         /// <param name="shipmentKeys">The shipment keys.</param>
-        private void UploadShipmentDetails(YahooStoreEntity store, IEnumerable<long> shipmentKeys)
+        private async Task UploadShipmentDetails(YahooStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                foreach (long shipmentKey in shipmentKeys)
                 {
-                    YahooApiOnlineUpdater updater = lifetimeScope.Resolve<YahooApiOnlineUpdater>(TypedParameter.From(store));
+                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    foreach (long shipmentKey in shipmentKeys)
+                    OrderEntity order = shipment.Order;
+
+                    if (order == null)
                     {
-                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
-
-                        OrderEntity order = shipment.Order;
-
-                        if (order == null)
-                        {
-                            throw new ActionTaskRunException($"Error getting the order for shipment ID: {shipmentKey}");
-                        }
-
-                        if (!order.IsManual)
-                        {
-                            updater.UpdateShipmentDetails(shipment);
-                        }
+                        throw new ActionTaskRunException($"Error getting the order for shipment ID: {shipmentKey}");
                     }
+
+                    await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
                 }
             }
             catch (YahooException ex)
@@ -142,16 +149,15 @@ namespace ShipWorks.Stores.Platforms.Yahoo.CoreExtensions.Actions
         /// </summary>
         /// <param name="inputKeys">The input keys.</param>
         /// <param name="context">The context.</param>
-        private void EmailShipmentUploadTask(List<long> inputKeys, ActionStepContext context)
+        private async Task EmailShipmentUploadTask(List<long> inputKeys, IActionStepContext context)
         {
             foreach (long entityID in inputKeys)
             {
                 try
                 {
-                    YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
-                    EmailOutboundEntity email = updater.GenerateShipmentUpdateEmail(entityID);
+                    IEnumerable<EmailOutboundEntity> emails = await emailUpdater.GenerateShipmentUpdateEmail(entityID).ConfigureAwait(false);
 
-                    if (email != null)
+                    foreach (var email in emails)
                     {
                         context.AddGeneratedEmail(email);
                     }

@@ -1,14 +1,16 @@
 using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
@@ -16,14 +18,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
-using ShipWorks.Filters;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Autofac;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Management
 {
@@ -79,6 +77,7 @@ namespace ShipWorks.Stores.Management
         {
             InitializeComponent();
 
+            optionControl.DeselectingAsync = OnPageDeselectingAsync;
             WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
 
             this.store = store;
@@ -86,9 +85,15 @@ namespace ShipWorks.Stores.Management
 
             switch (initialSection)
             {
-                case Section.OnlineAccount: optionControl.SelectedPage = optionPageOnlineAccount; break;
-                case Section.StoreDetails: optionControl.SelectedPage = optionPageStoreDetails; break;
-                case Section.StatusPresets: optionControl.SelectedPage = optionPageStatusPreset; break;
+                case Section.OnlineAccount:
+                    optionControl.SelectedPage = optionPageOnlineAccount;
+                    break;
+                case Section.StoreDetails:
+                    optionControl.SelectedPage = optionPageStoreDetails;
+                    break;
+                case Section.StatusPresets:
+                    optionControl.SelectedPage = optionPageStatusPreset;
+                    break;
             }
         }
 
@@ -178,18 +183,47 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// A page is being deselected
         /// </summary>
-        private void OnPageDeselecting(object sender, OptionControlCancelEventArgs e)
+        private async Task<bool> OnPageDeselectingAsync(OptionPage optionPage, int index)
         {
-            if (e.OptionPage == optionPageOnlineAccount)
+            if (optionPage != optionPageOnlineAccount)
             {
-                Cursor.Current = Cursors.WaitCursor;
-
-                // The Store Settings tab may depend on what's currently in account settings, so we have to save it right away
-                if (!accountControl.SaveToEntity(store))
-                {
-                    e.Cancel = true;
-                }
+                return false;
             }
+
+            using (BlockUI())
+            {
+                // The Store Settings tab may depend on what's currently in account settings, so we have to save it right away
+                return !await SaveAccountControl().ConfigureAwait(true);
+            }
+        }
+
+        /// <summary>
+        /// Block UI editing while an operation is taking place
+        /// </summary>
+        private IDisposable BlockUI()
+        {
+            ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope();
+            IMessageHelper messageHelper = lifetimeScope.Resolve<IMessageHelper>();
+
+            return new CompositeDisposable(
+                messageHelper.SetCursor(Cursors.WaitCursor),
+                DisableEditControls(),
+                lifetimeScope);
+        }
+
+        /// <summary>
+        /// Disable editing controls
+        /// </summary>
+        private IDisposable DisableEditControls()
+        {
+            cancel.Enabled = false;
+            ok.Enabled = false;
+
+            return Disposable.Create(() =>
+            {
+                cancel.Enabled = true;
+                ok.Enabled = true;
+            });
         }
 
         /// <summary>
@@ -261,7 +295,7 @@ namespace ShipWorks.Stores.Management
                 // Settings control gets location and width of the section title, so that each settings control can simply
                 // set its titles to go all the way across with anchors.
                 storeSettingsControl.Location = new Point(sectionTitleManualOrders.Left, manualOrderSettingsControl.Bottom + 8);
-                storeSettingsControl.Width = sectionTitleManualOrders.Width; ;
+                storeSettingsControl.Width = sectionTitleManualOrders.Width;
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(storeSettingsControl);
 
@@ -467,95 +501,109 @@ namespace ShipWorks.Stores.Management
         /// Save changes
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void OnOK(object sender, EventArgs e)
+        private async void OnOK(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
-
-            // Update enabled state.  Has to come now and not in the 'SaveSettings' section b\c some of the other save code looks at the value
-            store.Enabled = !storeDisabled.Checked;
-
-            storeContactControl.SaveToEntity(store);
-            storeAddressControl.SaveToEntity(store);
-
-            // Do an initial check of the store name
-            if (!StoreManager.CheckStoreName(store.StoreName, store, this))
+            using (BlockUI())
             {
-                optionControl.SelectedPage = optionPageStoreDetails;
-                return;
-            }
+                // Update enabled state.  Has to come now and not in the 'SaveSettings' section b\c some of the other save code looks at the value
+                store.Enabled = !storeDisabled.Checked;
 
-            // Online Settings and Store Settings don't get applied for disabled stores
-            if (store.Enabled)
-            {
-                if (!accountControl.SaveToEntity(store))
+                storeContactControl.SaveToEntity(store);
+                storeAddressControl.SaveToEntity(store);
+
+                // Do an initial check of the store name
+                if (!StoreManager.CheckStoreName(store.StoreName, store, this))
                 {
-                    optionControl.SelectedPage = optionPageOnlineAccount;
+                    optionControl.SelectedPage = optionPageStoreDetails;
                     return;
                 }
 
-                // Save the settings tab to the store entity
-                if (!SaveSettingsTab())
+                // Online Settings and Store Settings don't get applied for disabled stores
+                if (store.Enabled)
                 {
-                    optionControl.SelectedPage = optionPageSettings;
-                    return;
-                }
-            }
-
-            try
-            {
-                bool wasStoreDirty = store.IsDirty;
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    orderStatusPresets.Save(adapter);
-                    itemStatusPresets.Save(adapter);
-
-                    StoreManager.SaveStore(store, adapter);
-
-                    adapter.Commit();
-                }
-
-                StoreManager.CheckForChanges();
-
-                if (wasStoreDirty)
-                {
-                    // Let any subscribers know that the store has changed.
-                    Messenger.Current.Send(new StoreChangedMessage(this, store));
-                }
-
-                // If the user has just disabled address validation, we should mark any pending orders
-                // as not checked.  This is being done in its own transaction so that it doesn't affect
-                // saving the changes to the store if the update fails.
-                if (resetPendingValidations)
-                {
-                    using (SqlAdapter adapter = new SqlAdapter())
+                    if (!await SaveAccountControl().ConfigureAwait(true))
                     {
-                        OrderEntity orderUpdate = new OrderEntity
-                        {
-                            ShipAddressValidationStatus = (int) AddressValidationStatusType.NotChecked
-                        };
+                        optionControl.SelectedPage = optionPageOnlineAccount;
+                        return;
+                    }
 
-                        var pendingOrderBucket = new RelationPredicateBucket();
-                        pendingOrderBucket.PredicateExpression.Add(OrderFields.StoreID == store.StoreID);
-                        pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending);
-
-                        adapter.UpdateEntitiesDirectly(orderUpdate, pendingOrderBucket);
+                    // Save the settings tab to the store entity
+                    if (!SaveSettingsTab())
+                    {
+                        optionControl.SelectedPage = optionPageSettings;
+                        return;
                     }
                 }
 
-                // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point -
-                // that happens only in the MainForm
-                StatusPresetManager.CheckForChanges();
+                try
+                {
+                    bool wasStoreDirty = store.IsDirty;
 
-                DialogResult = DialogResult.OK;
+                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    {
+                        orderStatusPresets.Save(adapter);
+                        itemStatusPresets.Save(adapter);
+
+                        StoreManager.SaveStore(store, adapter);
+
+                        adapter.Commit();
+                    }
+
+                    StoreManager.CheckForChanges();
+
+                    if (wasStoreDirty)
+                    {
+                        // Let any subscribers know that the store has changed.
+                        Messenger.Current.Send(new StoreChangedMessage(this, store));
+                    }
+
+                    // If the user has just disabled address validation, we should mark any pending orders
+                    // as not checked.  This is being done in its own transaction so that it doesn't affect
+                    // saving the changes to the store if the update fails.
+                    if (resetPendingValidations)
+                    {
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            OrderEntity orderUpdate = new OrderEntity
+                            {
+                                ShipAddressValidationStatus = (int) AddressValidationStatusType.NotChecked
+                            };
+
+                            var pendingOrderBucket = new RelationPredicateBucket();
+                            pendingOrderBucket.PredicateExpression.Add(OrderFields.StoreID == store.StoreID);
+                            pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending);
+
+                            adapter.UpdateEntitiesDirectly(orderUpdate, pendingOrderBucket);
+                        }
+                    }
+
+                    // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point -
+                    // that happens only in the MainForm
+                    StatusPresetManager.CheckForChanges();
+
+                    DialogResult = DialogResult.OK;
+                }
+                catch (DuplicateNameException ex)
+                {
+                    MessageHelper.ShowError(this, ex.Message);
+
+                    optionControl.SelectedPage = optionPageStoreDetails;
+                    return;
+                }
             }
-            catch (DuplicateNameException ex)
+        }
+
+        /// <summary>
+        /// Save the account control
+        /// </summary>
+        private async Task<bool> SaveAccountControl()
+        {
+            if (accountControl.IsSaveAsync)
             {
-                MessageHelper.ShowError(this, ex.Message);
-
-                optionControl.SelectedPage = optionPageStoreDetails;
-                return;
+                return await accountControl.SaveToEntityAsync(store).ConfigureAwait(false);
             }
+
+            return accountControl.SaveToEntity(store);
         }
 
         /// <summary>

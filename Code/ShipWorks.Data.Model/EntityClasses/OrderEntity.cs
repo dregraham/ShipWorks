@@ -36,6 +36,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private EntityCollection<OrderChargeEntity> _orderCharges;
 		private EntityCollection<OrderItemEntity> _orderItems;
 		private EntityCollection<OrderPaymentDetailEntity> _orderPaymentDetails;
+		private EntityCollection<OrderSearchEntity> _orderSearch;
 		private EntityCollection<ShipmentEntity> _shipments;
 		private EntityCollection<ValidatedAddressEntity> _validatedAddress;
 		private EntityCollection<ShipmentEntity> _shipmentCollectionViaValidatedAddress;
@@ -65,6 +66,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name Shipments</summary>
 			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
@@ -132,6 +135,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				_orderCharges = (EntityCollection<OrderChargeEntity>)info.GetValue("_orderCharges", typeof(EntityCollection<OrderChargeEntity>));
 				_orderItems = (EntityCollection<OrderItemEntity>)info.GetValue("_orderItems", typeof(EntityCollection<OrderItemEntity>));
 				_orderPaymentDetails = (EntityCollection<OrderPaymentDetailEntity>)info.GetValue("_orderPaymentDetails", typeof(EntityCollection<OrderPaymentDetailEntity>));
+				_orderSearch = (EntityCollection<OrderSearchEntity>)info.GetValue("_orderSearch", typeof(EntityCollection<OrderSearchEntity>));
 				_shipments = (EntityCollection<ShipmentEntity>)info.GetValue("_shipments", typeof(EntityCollection<ShipmentEntity>));
 				_validatedAddress = (EntityCollection<ValidatedAddressEntity>)info.GetValue("_validatedAddress", typeof(EntityCollection<ValidatedAddressEntity>));
 				_shipmentCollectionViaValidatedAddress = (EntityCollection<ShipmentEntity>)info.GetValue("_shipmentCollectionViaValidatedAddress", typeof(EntityCollection<ShipmentEntity>));
@@ -196,6 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "OrderPaymentDetails":
 					this.OrderPaymentDetails.Add((OrderPaymentDetailEntity)entity);
 					break;
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)entity);
+					break;
 				case "Shipments":
 					this.Shipments.Add((ShipmentEntity)entity);
 					break;
@@ -246,6 +253,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "OrderPaymentDetails":
 					toReturn.Add(Relations.OrderPaymentDetailEntityUsingOrderID);
+					break;
+				case "OrderSearch":
+					toReturn.Add(Relations.OrderSearchEntityUsingOrderID);
 					break;
 				case "Shipments":
 					toReturn.Add(Relations.ShipmentEntityUsingOrderID);
@@ -305,6 +315,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "OrderPaymentDetails":
 					this.OrderPaymentDetails.Add((OrderPaymentDetailEntity)relatedEntity);
 					break;
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)relatedEntity);
+					break;
 				case "Shipments":
 					this.Shipments.Add((ShipmentEntity)relatedEntity);
 					break;
@@ -341,6 +354,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "OrderPaymentDetails":
 					this.PerformRelatedEntityRemoval(this.OrderPaymentDetails, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "OrderSearch":
+					this.PerformRelatedEntityRemoval(this.OrderSearch, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "Shipments":
 					this.PerformRelatedEntityRemoval(this.Shipments, relatedEntity, signalRelatedEntityManyToOne);
@@ -387,6 +403,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add(this.OrderCharges);
 			toReturn.Add(this.OrderItems);
 			toReturn.Add(this.OrderPaymentDetails);
+			toReturn.Add(this.OrderSearch);
 			toReturn.Add(this.Shipments);
 			toReturn.Add(this.ValidatedAddress);
 			return toReturn;
@@ -421,6 +438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_orderCharges", ((_orderCharges!=null) && (_orderCharges.Count>0) && !this.MarkedForDeletion)?_orderCharges:null);
 				info.AddValue("_orderItems", ((_orderItems!=null) && (_orderItems.Count>0) && !this.MarkedForDeletion)?_orderItems:null);
 				info.AddValue("_orderPaymentDetails", ((_orderPaymentDetails!=null) && (_orderPaymentDetails.Count>0) && !this.MarkedForDeletion)?_orderPaymentDetails:null);
+				info.AddValue("_orderSearch", ((_orderSearch!=null) && (_orderSearch.Count>0) && !this.MarkedForDeletion)?_orderSearch:null);
 				info.AddValue("_shipments", ((_shipments!=null) && (_shipments.Count>0) && !this.MarkedForDeletion)?_shipments:null);
 				info.AddValue("_validatedAddress", ((_validatedAddress!=null) && (_validatedAddress.Count>0) && !this.MarkedForDeletion)?_validatedAddress:null);
 				info.AddValue("_shipmentCollectionViaValidatedAddress", ((_shipmentCollectionViaValidatedAddress!=null) && (_shipmentCollectionViaValidatedAddress.Count>0) && !this.MarkedForDeletion)?_shipmentCollectionViaValidatedAddress:null);
@@ -481,6 +499,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderPaymentDetailFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'OrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
 			return bucket;
 		}
 
@@ -546,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(this._orderCharges);
 			collectionsQueue.Enqueue(this._orderItems);
 			collectionsQueue.Enqueue(this._orderPaymentDetails);
+			collectionsQueue.Enqueue(this._orderSearch);
 			collectionsQueue.Enqueue(this._shipments);
 			collectionsQueue.Enqueue(this._validatedAddress);
 			collectionsQueue.Enqueue(this._shipmentCollectionViaValidatedAddress);
@@ -560,6 +588,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			this._orderCharges = (EntityCollection<OrderChargeEntity>) collectionsQueue.Dequeue();
 			this._orderItems = (EntityCollection<OrderItemEntity>) collectionsQueue.Dequeue();
 			this._orderPaymentDetails = (EntityCollection<OrderPaymentDetailEntity>) collectionsQueue.Dequeue();
+			this._orderSearch = (EntityCollection<OrderSearchEntity>) collectionsQueue.Dequeue();
 			this._shipments = (EntityCollection<ShipmentEntity>) collectionsQueue.Dequeue();
 			this._validatedAddress = (EntityCollection<ValidatedAddressEntity>) collectionsQueue.Dequeue();
 			this._shipmentCollectionViaValidatedAddress = (EntityCollection<ShipmentEntity>) collectionsQueue.Dequeue();
@@ -575,6 +604,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn |=(this._orderCharges != null);
 			toReturn |=(this._orderItems != null);
 			toReturn |=(this._orderPaymentDetails != null);
+			toReturn |=(this._orderSearch != null);
 			toReturn |=(this._shipments != null);
 			toReturn |=(this._validatedAddress != null);
 			toReturn |= (this._shipmentCollectionViaValidatedAddress != null);
@@ -591,6 +621,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderChargeEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderChargeEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderItemEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderItemEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderPaymentDetailEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderPaymentDetailEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ValidatedAddressEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ValidatedAddressEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ShipmentEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))) : null);
@@ -607,6 +638,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("OrderCharges", _orderCharges);
 			toReturn.Add("OrderItems", _orderItems);
 			toReturn.Add("OrderPaymentDetails", _orderPaymentDetails);
+			toReturn.Add("OrderSearch", _orderSearch);
 			toReturn.Add("Shipments", _shipments);
 			toReturn.Add("ValidatedAddress", _validatedAddress);
 			toReturn.Add("ShipmentCollectionViaValidatedAddress", _shipmentCollectionViaValidatedAddress);
@@ -779,6 +811,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipSenseRecognitionStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipAddressType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CombineSplitStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -905,6 +939,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathOrderPaymentDetails
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<OrderPaymentDetailEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderPaymentDetailEntityFactory))), (IEntityRelation)GetRelationsForField("OrderPaymentDetails")[0], (int)ShipWorks.Data.Model.EntityType.OrderEntity, (int)ShipWorks.Data.Model.EntityType.OrderPaymentDetailEntity, 0, null, null, null, null, "OrderPaymentDetails", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("OrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.OrderEntity, (int)ShipWorks.Data.Model.EntityType.OrderSearchEntity, 0, null, null, null, null, "OrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
@@ -1712,6 +1753,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderFieldIndex.ShipAddressType, value); }
 		}
 
+		/// <summary> The CombineSplitStatus property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."CombineSplitStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus
+		{
+			get { return (Interapptive.Shared.Enums.CombineSplitStatusType)GetValue((int)OrderFieldIndex.CombineSplitStatus, true); }
+			set	{ SetValue((int)OrderFieldIndex.CombineSplitStatus, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(NoteEntity))]
 		public virtual EntityCollection<NoteEntity> Notes
@@ -1738,6 +1789,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<OrderPaymentDetailEntity> OrderPaymentDetails
 		{
 			get { return GetOrCreateEntityCollection<OrderPaymentDetailEntity, OrderPaymentDetailEntityFactory>("Order", true, false, ref _orderPaymentDetails);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(OrderSearchEntity))]
+		public virtual EntityCollection<OrderSearchEntity> OrderSearch
+		{
+			get { return GetOrCreateEntityCollection<OrderSearchEntity, OrderSearchEntityFactory>("Order", true, false, ref _orderSearch);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

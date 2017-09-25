@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -10,7 +9,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
@@ -54,7 +52,7 @@ namespace ShipWorks.Actions.Tasks.Common
             foreach (long orderID in inputKeys)
             {
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
-                
+
                 // If the address has already been validated, don't bother validating it again
                 if (order == null || !AddressValidator.ShouldValidateAddress(new AddressAdapter(order, "Ship")))
                 {
@@ -62,7 +60,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
 
                 StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
-                if (store == null || store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidationDisabled)
+                if (store == null || store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
                 {
                     continue;
                 }
@@ -86,11 +84,11 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Commit the database changes
         /// </summary>
-        public override void Commit(List<long> inputKeys, ActionStepContext context)
+        public override async Task Commit(List<long> inputKeys, ActionStepContext context)
         {
             try
             {
-                base.Commit(inputKeys, context);
+                await base.Commit(inputKeys, context).ConfigureAwait(false);
             }
             catch (ORMConcurrencyException ex)
             {

@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IShopifyOrderSearchEntity> ShopifyOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -68,6 +69,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IShopifyOrderSearchEntity> IShopifyOrderEntity.ShopifyOrderSearch => ShopifyOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -710,5 +710,11 @@ namespace ShipWorks.Filters
                 }
             }
         }
+
+        /// <summary>
+        /// Wait for a filter operation to complete
+        /// </summary>
+        public static bool WaitForFiltersToComplete(TimeSpan wait) =>
+            calculatingEvent.WaitOne(wait, false);
     }
 }

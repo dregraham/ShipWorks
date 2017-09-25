@@ -1,30 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Filters;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Diagnostics;
-using ShipWorks.Data.Grid;
-using ShipWorks.UI;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Connection;
+using ShipWorks.Filters;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Common.Threading;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -74,7 +65,7 @@ namespace ShipWorks.Stores.Content.Panels
         {
             get { return new FilterTarget[] { FilterTarget.Customers }; }
         }
-        
+
         /// <summary>
         /// Update the contents of the menu for setting status
         /// </summary>
@@ -92,14 +83,14 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Execute an invoked menu command
         /// </summary>
-        void OnSetStatus(object sender, EventArgs e)
+        private async void OnSetStatus(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             // Execute the command
-            command.ExecuteAsync(this, entityGrid.Selection.OrderedKeys, OnAsyncSetStatusCompleted);
+            await command.ExecuteAsync(this, entityGrid.Selection.OrderedKeys, OnAsyncSetStatusCompleted).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -231,10 +222,7 @@ namespace ShipWorks.Stores.Content.Panels
                     {
                         ReloadContent();
 
-                        if (OrderDeleted != null)
-                        {
-                            OrderDeleted(this, EventArgs.Empty);
-                        }
+                        OrderDeleted?.Invoke(this, EventArgs.Empty);
                     };
 
                 deleter.DeleteAsync(orderKeys);

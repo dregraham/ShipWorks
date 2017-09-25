@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Globalization;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using log4net;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
     /// <summary>
     /// Utility methods for interacting with Infopia's web service
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public static class InfopiaUtility
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(InfopiaUtility));
 
         // list of supported Infopia statuses
@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
             {
                 int size = InterapptiveOnly.Registry.GetValue("InfopiaBatchSize", 200);
 
-                // Restrict between 1 and 500 
+                // Restrict between 1 and 500
                 return Math.Min(Math.Max(size, 1), 500);
             }
             set
@@ -132,9 +132,9 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Gets the Infopia Shipper Code from a given shipment
         /// </summary>
-        public static string GetInfopiaShipperCode(ShipmentEntity shipment)
+        public static string GetInfopiaShipperCode(IShipmentEntity shipment)
         {
-            switch ((ShipmentTypeCode)shipment.ShipmentType)
+            switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.FedEx:
                     return "FedEx";
@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         }
 
         /// <summary>
-        /// Retrurns the values to upload to Infopia
+        /// Returns the values to upload to Infopia
         /// </summary>
         public static void GetShipmentUploadValues(ShipmentEntity shipment, out string shipper, out string trackingNumber)
         {

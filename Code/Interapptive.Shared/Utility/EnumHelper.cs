@@ -218,9 +218,9 @@ namespace Interapptive.Shared.Utility
                     throw new InvalidOperationException("Cannot use EnumHelper on Enum not marked with ObfuscationAttribute.");
                 }
 
-                if (obfuscate.Exclude || obfuscate.StripAfterObfuscation)
+                if (obfuscate.StripAfterObfuscation)
                 {
-                    throw new InvalidOperationException("Enums using EnumHelper must set Exclude=false, and StripAfterObfuscation=false on ObfuscationAttribute");
+                    throw new InvalidOperationException("Enums using EnumHelper must set StripAfterObfuscation=false on ObfuscationAttribute");
                 }
 
                 // If its not, we go ahead and read every value now

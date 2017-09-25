@@ -1,10 +1,11 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Services.Dialogs;
 using ShipWorks.Shipping.UI;
 using ShipWorks.SingleScan;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.UI.Platforms.LemonStand;
 using ShipWorks.UI.ValueConverters;
@@ -34,20 +35,31 @@ namespace ShipWorks.Startup
         /// Build the registrations in IoC container
         /// </summary>
         public static IContainer BuildRegistrations(IContainer container) =>
-            IoC.BuildRegistrations(container,
-                // Interapptive.Shared
-                typeof(HttpVariableRequestSubmitter).Assembly,
-                // ShipWorks.Shipping
-                typeof(ShippingDialogService).Assembly,
-                // ShipWorks.Shipping.UI
-                typeof(ShippingModule).Assembly,
-                // ShipWorks.Stores.UI
-                typeof(LemonStandStoreModule).Assembly,
-                // ShipWorks.UI
-                typeof(EnumImageConverter).Assembly,
-                // ShipWorks.Stores
-                typeof(MagentoTwoRestClient).Assembly,
-                // ShipWorks.SingleScan
-                typeof(ScannerService).Assembly);
+            IoC.BuildRegistrations(container, AllAssemblies);
+
+        /// <summary>
+        /// All ShipWorks assemblies to be used for dependency injection
+        /// </summary>
+        public static Assembly[] AllAssemblies => new[]
+        {
+            // Interapptive.Shared
+            typeof(HttpVariableRequestSubmitter).Assembly,
+            // ShipWorks.Shared
+            typeof(StoreTypeCode).Assembly,
+            // ShipWorks.Core
+            typeof(MainForm).Assembly,
+            // ShipWorks.Shipping
+            typeof(ShippingDialogService).Assembly,
+            // ShipWorks.Shipping.UI
+            typeof(ShippingModule).Assembly,
+            // ShipWorks.Stores
+            typeof(MagentoTwoRestClient).Assembly,
+            // ShipWorks.Stores.UI
+            typeof(LemonStandStoreModule).Assembly,
+            // ShipWorks.UI
+            typeof(EnumImageConverter).Assembly,
+            // ShipWorks.SingleScan
+            typeof(ScannerService).Assembly
+        };
     }
 }

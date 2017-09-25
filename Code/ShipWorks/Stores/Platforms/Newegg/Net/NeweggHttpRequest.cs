@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 
@@ -18,8 +17,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         public NeweggHttpRequest()
         { }
 
-
-
         /// <summary>
         /// Submits the request with the given credentials and request configuration.
         /// </summary>
@@ -28,17 +25,17 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         /// <returns>
         /// A NeweggResponse containing the response from the Newegg API.
         /// </returns>
-        public string SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration)
+        public async Task<string> SubmitRequest(Credentials credentials, RequestConfiguration requestConfiguration)
         {
             try
             {
                 // Setup the request with the specifics for submitting the request to Newegg
                 HttpXmlVariableRequestSubmitter submitter = CreateXmlHttpVariableRequestSubmitter(credentials, requestConfiguration);
-                LogRequest(submitter, requestConfiguration);  
+                LogRequest(submitter, requestConfiguration);
 
-                using (IHttpResponseReader reader = submitter.GetResponse())
+                using (IHttpResponseReader reader = await submitter.GetResponseAsync().ConfigureAwait(false))
                 {
-                    string responseData = reader.ReadResult();                    
+                    string responseData = reader.ReadResult();
                     LogResponseText(responseData, requestConfiguration);
 
                     return responseData;
@@ -49,7 +46,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
                 throw new NeweggException("An error occurred contacting Newegg. Please try again later.", ex);
             }
         }
-
 
         /// <summary>
         /// A factory method for creating/configuring an XmlHttpVariableRequestSubmitter.
@@ -87,7 +83,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
             log.LogRequest(submitter);
         }
 
-
         /// <summary>
         /// Logs the response.
         /// </summary>
@@ -98,6 +93,5 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
             ApiLogEntry log = new ApiLogEntry(ApiLogSource.Newegg, requestConfiguration.Description);
             log.LogResponse(xmlResponse);
         }
-
     }
 }

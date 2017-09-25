@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data;
-using Interapptive.Shared.Net;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -64,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
         }
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -72,23 +67,28 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// Should the action be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the details upload
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             foreach (long entityID in inputKeys)
             {
                 List<long> storeKeys = DataProvider.GetRelatedKeys(entityID, EntityType.StoreEntity);
                 if (storeKeys.Count == 0)
                 {
-                    // Store or shipment disapeared
+                    // Store or shipment disappeared
                     continue;
                 }
 
                 GenericModuleStoreEntity storeEntity = StoreManager.GetStore(storeKeys[0]) as GenericModuleStoreEntity;
                 if (storeEntity == null)
                 {
-                    // This isnt a generic store or the store went away
+                    // This isn't a generic store or the store went away
                     continue;
                 }
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Actions
                 try
                 {
                     GenericStoreOnlineUpdater updater = new GenericStoreOnlineUpdater(storeEntity);
-                    updater.UploadTrackingNumber(entityID);
+                    await updater.UploadTrackingNumber(entityID).ConfigureAwait(false);
                 }
                 catch (GenericStoreException ex)
                 {

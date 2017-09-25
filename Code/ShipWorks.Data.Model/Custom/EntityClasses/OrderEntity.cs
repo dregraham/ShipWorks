@@ -43,14 +43,14 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Changes the order number.
         /// </summary>
-        public void ChangeOrderNumber(string orderNumber, string prefix, string postfix)
+        public void ChangeOrderNumber(string orderNumber, string prefix, string postfix, long defaultOrderNumber = AlphaNumericOrderNumberIdentifier)
         {
             settingOrderNumberComplete = true;
 
             OrderNumberComplete = $"{prefix}{orderNumber}{postfix}";
 
             long numericOrderNumber;
-            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : AlphaNumericOrderNumberIdentifier;
+            OrderNumber = long.TryParse(orderNumber, out numericOrderNumber) ? numericOrderNumber : defaultOrderNumber;
 
             settingOrderNumberComplete = false;
         }

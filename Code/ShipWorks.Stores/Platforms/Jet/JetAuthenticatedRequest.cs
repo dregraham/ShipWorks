@@ -5,7 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request. If an error is thrown, refresh the token and try again.
         /// </summary>
-        public GenericResult<T> Submit<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store)
+        public GenericResult<T> Submit<T>(string action, IHttpRequestSubmitter request, IJetStoreEntity store)
         {
             return ProcessRequest<T>(action, request, store, true);
         }
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Process the request. If an error is thrown, refresh the token and try again.
         /// </summary>
-        private GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, JetStoreEntity store, bool generateNewTokenIfExpired)
+        private GenericResult<T> ProcessRequest<T>(string action, IHttpRequestSubmitter request, IJetStoreEntity store, bool generateNewTokenIfExpired)
         {
             try
             {

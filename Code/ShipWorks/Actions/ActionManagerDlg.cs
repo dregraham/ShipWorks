@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ShipWorks.Actions.Scheduling;
-using ShipWorks.UI;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using Divelements.SandGrid;
-using ShipWorks.Properties;
-using ShipWorks.Data.Connection;
-using ShipWorks.Actions.Triggers;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Actions.Triggers;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Properties;
+using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using Interapptive.Shared.UI;
-using ShipWorks.Stores;
-using ShipWorks.Editions;
-using System.Text.RegularExpressions;
-using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Actions
 {
@@ -32,12 +29,14 @@ namespace ShipWorks.Actions
     public partial class ActionManagerDlg : Form
     {
         Font fontStrikeout;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionManagerDlg()
+        public ActionManagerDlg(ILifetimeScope lifetimeScope)
         {
+            this.lifetimeScope = lifetimeScope;
             InitializeComponent();
 
             WindowStateSaver.Manage(this, WindowStateSaverOptions.Size);
@@ -126,54 +125,51 @@ namespace ShipWorks.Actions
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string entry in taskSummary.Split(','))
+            var matches = taskSummary.Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Select(x => Regex.Match(x, @"([^:]+)([:](\d+))?"))
+                .Where(x => x.Success);
+
+            foreach (Match match in matches)
             {
-                if (entry.Trim().Length == 0)
+                if (sb.Length > 0)
                 {
-                    continue;
+                    sb.Append(", ");
                 }
 
-                Match match = Regex.Match(entry.Trim(), @"([^:]+)([:](\d+))?");
-                if (match.Success)
+                try
                 {
-                    if (sb.Length > 0)
+                    ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(match.Groups[1].Value);
+
+                    // If we don't have type binding data (pre 3.5), then just use the base name
+                    if (match.Groups.Count <= 2 || !match.Groups[2].Success)
                     {
-                        sb.Append(", ");
+                        sb.Append(descriptor.BaseName);
                     }
-
-                    try
+                    else
                     {
-                        ActionTaskDescriptor descriptor = ActionTaskManager.GetDescriptor(match.Groups[1].Value);
+                        ActionTask instance = descriptor.CreateInstance(lifetimeScope);
 
-                        // If we don't have type binding data (pre 3.5), then just use the base name
-                        if (match.Groups.Count <= 2 || !match.Groups[2].Success)
+                        if (instance is StoreTypeTaskBase)
                         {
-                            sb.Append(descriptor.BaseName);
+                            sb.Append(new ActionTaskDescriptorBinding(descriptor, (StoreTypeCode) int.Parse(match.Groups[3].Value)).FullName);
+                        }
+                        else if (instance is StoreInstanceTaskBase)
+                        {
+                            sb.Append(new ActionTaskDescriptorBinding(descriptor, long.Parse(match.Groups[3].Value)).FullName);
                         }
                         else
                         {
-                            ActionTask instance = descriptor.CreateInstance();
-
-                            if (instance is StoreTypeTaskBase)
-                            {
-                                sb.Append(new ActionTaskDescriptorBinding(descriptor, (StoreTypeCode) int.Parse(match.Groups[3].Value)).FullName);
-                            }
-                            else if (instance is StoreInstanceTaskBase)
-                            {
-                                sb.Append(new ActionTaskDescriptorBinding(descriptor, long.Parse(match.Groups[3].Value)).FullName);
-                            }
-                            else
-                            {
-                                sb.Append(descriptor.BaseName);
-                            }
+                            sb.Append(descriptor.BaseName);
                         }
                     }
-                    catch (NotFoundException)
-                    {
-                        // If the descriptor isn't found it's because it was truncated in the database due to the length of TaskSummary getting too long
-                        sb.Append("...");
-                        break;
-                    }
+                }
+                catch (NotFoundException)
+                {
+                    // If the descriptor isn't found it's because it was truncated in the database due to the length of TaskSummary getting too long
+                    sb.Append("...");
+                    break;
                 }
             }
 
@@ -245,7 +241,7 @@ namespace ShipWorks.Actions
             action.TriggerSettings = "<Settings />";
             action.TaskSummary = "";
 
-            using (ActionEditorDlg dlg = new ActionEditorDlg(action))
+            using (ActionEditorDlg dlg = new ActionEditorDlg(lifetimeScope, action))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -290,16 +286,16 @@ namespace ShipWorks.Actions
                 e.Cancel = true;
                 action.RollbackChanges();
 
-                BeginInvoke((MethodInvoker) delegate 
+                BeginInvoke((MethodInvoker) delegate
                     {
                         MessageHelper.ShowError(this, ex.Message);
 
-                        ReloadActions(-1); 
+                        ReloadActions(-1);
                     }
                 );
             }
         }
-        
+
         /// <summary>
         /// A checkbox in the grid changed
         /// </summary>
@@ -329,7 +325,7 @@ namespace ShipWorks.Actions
                 action.RollbackChanges();
                 MessageHelper.ShowError(this, ex.Message);
 
-                BeginInvoke((MethodInvoker)delegate { e.Row.Checked = !e.Row.Checked; });
+                BeginInvoke((MethodInvoker) delegate { e.Row.Checked = !e.Row.Checked; });
             }
             catch (ActionConcurrencyException ex)
             {
@@ -371,7 +367,7 @@ namespace ShipWorks.Actions
         /// </summary>
         private void EditAction(ActionEntity action)
         {
-            using (ActionEditorDlg dlg = new ActionEditorDlg(action))
+            using (ActionEditorDlg dlg = new ActionEditorDlg(lifetimeScope, action))
             {
                 dlg.ShowDialog(this);
 

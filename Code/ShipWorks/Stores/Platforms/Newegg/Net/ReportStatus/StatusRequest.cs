@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
 {
@@ -27,13 +26,11 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
             this.credentials = credentials;
         }
 
-
         /// <summary>
         /// Gets or sets the ID of the request being inquired about.
         /// </summary>
         /// <value>The request ID.</value>
         public string RequestId { get; set; }
-
 
         /// <summary>
         /// Gets the status of the report.
@@ -41,9 +38,9 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
         /// <returns>
         /// A StatusResult object.
         /// </returns>
-        public StatusResult GetStatus()
+        public async Task<StatusResult> GetStatus()
         {
-            NeweggResponse response = SubmitRequest();
+            NeweggResponse response = await SubmitRequest().ConfigureAwait(false);
             if (response.ResponseErrors.Count() > 0)
             {
                 string errorMessage = string.Format("An error occurred communicating with Newegg: ");
@@ -59,7 +56,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
             return response.Result as StatusResult;
         }
 
-        
         /// <summary>
         /// Submits the request with the given credentials and parameter values.
         /// </summary>
@@ -68,9 +64,9 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
         /// <returns>
         /// A NeweggResponse containing the response from the Newegg API.
         /// </returns>
-        private NeweggResponse SubmitRequest()
+        private async Task<NeweggResponse> SubmitRequest()
         {
-            // API URL depends on which marketplace the seller selected 
+            // API URL depends on which marketplace the seller selected
             string marketplace = "";
 
             switch (credentials.Channel)
@@ -90,13 +86,13 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
             // Format our request URL with the value of the seller ID and configure the request
             string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);
             RequestConfiguration requestConfig = new RequestConfiguration("Report Status", formattedUrl)
-            { 
-                Method = HttpVerb.Put, 
-                Body = GetRequestBody() 
+            {
+                Method = HttpVerb.Put,
+                Body = GetRequestBody()
             };
 
             NeweggHttpRequest request = new NeweggHttpRequest();
-            string responseData = request.SubmitRequest(credentials, requestConfig);
+            string responseData = await request.SubmitRequest(credentials, requestConfig).ConfigureAwait(false);
 
             // Create and return a NeweggResponse object with our raw data and the serializer that can
             // deserialize the response into the excpected StatusResult

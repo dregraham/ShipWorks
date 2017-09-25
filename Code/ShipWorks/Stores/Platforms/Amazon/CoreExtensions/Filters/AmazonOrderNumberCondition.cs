@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -10,7 +8,7 @@ using ShipWorks.Data.Model.HelperClasses;
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
 {
     /// <summary>
-    /// Condition for the MarketplaceAdvisor Invoice Number field
+    /// Condition for the Amazon order numbers
     /// </summary>
     [ConditionElement("Amazon Order #", "Amazon.OrderID")]
     [ConditionStoreType(StoreTypeCode.Amazon)]
@@ -21,10 +19,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
+            string amazonOrderSql = String.Empty;
+            string amazonOrderSearchSql = String.Empty;
+
+            // Add any combined order AmazonOrderID entries.
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, AmazonOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                amazonOrderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(AmazonOrderSearchFields.AmazonOrderID), context));
+            }
+
+            // Add any existing order AmazonOrderID entries.
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, AmazonOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(AmazonOrderFields.AmazonOrderID), context));
+                amazonOrderSql = scope.Adorn(GenerateSql(context.GetColumnReference(AmazonOrderFields.AmazonOrderID), context));
             }
+
+            // OR the two together.
+            return $"{amazonOrderSql} OR {amazonOrderSearchSql}";
         }
     }
 }

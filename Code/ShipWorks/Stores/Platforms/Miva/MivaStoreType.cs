@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Miva.WizardPages;
@@ -22,13 +24,18 @@ namespace ShipWorks.Stores.Platforms.Miva
     [Component(RegistrationType.Self)]
     public class MivaStoreType : GenericModuleStoreType
     {
+        private readonly Func<MivaStoreEntity, MivaWebClient> createWebClient;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public MivaStoreType(StoreEntity store)
-            : base(store)
+        public MivaStoreType(StoreEntity store,
+            IMessageHelper messageHelper,
+            IOrderManager orderManager,
+            Func<MivaStoreEntity, MivaWebClient> createWebClient) :
+            base(store, messageHelper, orderManager)
         {
-
+            this.createWebClient = createWebClient;
         }
 
         /// <summary>
@@ -99,10 +106,8 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Create the MivaWebClient
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
-        {
-            return new MivaWebClient((MivaStoreEntity) Store);
-        }
+        public override IGenericStoreWebClient CreateWebClient() =>
+            createWebClient((MivaStoreEntity) Store);
 
         /// <summary>
         /// Read the capabilities of the given module
@@ -168,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Miva
             {
                 try
                 {
-                    MivaWebClient webClient = new MivaWebClient(miva);
+                    MivaWebClient webClient = createWebClient(miva);
                     order.OrderNumber = webClient.GetNextOrderID();
                 }
                 catch (GenericStoreException ex)

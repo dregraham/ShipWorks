@@ -340,6 +340,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -400,6 +402,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -408,6 +412,20 @@ namespace ShipWorks.Data.Model
 		ASIN,
 		///<summary>ConditionNote. </summary>
 		ConditionNote,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonOrderSearch.</summary>
+	public enum AmazonOrderSearchFieldIndex
+	{
+		///<summary>AmazonOrderSearchID. </summary>
+		AmazonOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>AmazonOrderID. </summary>
+		AmazonOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -822,6 +840,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -966,6 +986,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1206,6 +1228,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1272,6 +1296,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1294,6 +1320,20 @@ namespace ShipWorks.Data.Model
 		DistributionCenterID,
 		///<summary>DistributionCenterName. </summary>
 		DistributionCenterName,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ChannelAdvisorOrderSearch.</summary>
+	public enum ChannelAdvisorOrderSearchFieldIndex
+	{
+		///<summary>ChannelAdvisorOrderSearchID. </summary>
+		ChannelAdvisorOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>CustomOrderIdentifier. </summary>
+		CustomOrderIdentifier,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1532,10 +1572,26 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
 		ClickCartProOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ClickCartProOrderSearch.</summary>
+	public enum ClickCartProOrderSearchFieldIndex
+	{
+		///<summary>ClickCartProOrderSearchID. </summary>
+		ClickCartProOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ClickCartProOrderID. </summary>
+		ClickCartProOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1690,10 +1746,26 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
 		CommerceInterfaceOrderNumber,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: CommerceInterfaceOrderSearch.</summary>
+	public enum CommerceInterfaceOrderSearchFieldIndex
+	{
+		///<summary>CommerceInterfaceOrderSearchID. </summary>
+		CommerceInterfaceOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>CommerceInterfaceOrderNumber. </summary>
+		CommerceInterfaceOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1742,6 +1814,8 @@ namespace ShipWorks.Data.Model
 		CustomerKey,
 		///<summary>UseParallelActionQueue. </summary>
 		UseParallelActionQueue,
+		///<summary>AllowEbayCombineLocally. </summary>
+		AllowEbayCombineLocally,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2060,6 +2134,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2154,6 +2230,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -2190,6 +2268,24 @@ namespace ShipWorks.Data.Model
 		PayPalTransactionID,
 		///<summary>PayPalAddressStatus. </summary>
 		PayPalAddressStatus,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrderSearch.</summary>
+	public enum EbayOrderSearchFieldIndex
+	{
+		///<summary>EbayOrderSearchID. </summary>
+		EbayOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>EbayOrderID. </summary>
+		EbayOrderID,
+		///<summary>EbayBuyerID. </summary>
+		EbayBuyerID,
+		///<summary>SellingManagerRecord. </summary>
+		SellingManagerRecord,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2684,6 +2780,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -2734,6 +2832,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4028,10 +4128,14 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
 		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4076,6 +4180,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -4088,6 +4194,22 @@ namespace ShipWorks.Data.Model
 		BomSKU,
 		///<summary>GrouponLineItemID. </summary>
 		GrouponLineItemID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrderSearch.</summary>
+	public enum GrouponOrderSearchFieldIndex
+	{
+		///<summary>GrouponOrderSearchID. </summary>
+		GrouponOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>GrouponOrderID. </summary>
+		GrouponOrderID,
+		///<summary>ParentOrderID. </summary>
+		ParentOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4204,6 +4326,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -4610,6 +4734,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MerchantOrderId. </summary>
@@ -4658,12 +4784,28 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
 		MerchantSku,
 		///<summary>JetOrderItemID. </summary>
 		JetOrderItemID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: JetOrderSearch.</summary>
+	public enum JetOrderSearchFieldIndex
+	{
+		///<summary>JetOrderSearchID. </summary>
+		JetOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>MerchantOrderID. </summary>
+		MerchantOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4922,6 +5064,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -4970,6 +5114,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -4978,6 +5124,20 @@ namespace ShipWorks.Data.Model
 		ShortDescription,
 		///<summary>Category. </summary>
 		Category,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: LemonStandOrderSearch.</summary>
+	public enum LemonStandOrderSearchFieldIndex
+	{
+		///<summary>LemonStandOrderSearchID. </summary>
+		LemonStandOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>LemonStandOrderID. </summary>
+		LemonStandOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5206,10 +5366,26 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>
 		MagentoOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MagentoOrderSearch.</summary>
+	public enum MagentoOrderSearchFieldIndex
+	{
+		///<summary>MagentoOrderSearchID. </summary>
+		MagentoOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>MagentoOrderID. </summary>
+		MagentoOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5476,6 +5652,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -5486,6 +5664,22 @@ namespace ShipWorks.Data.Model
 		InvoiceNumber,
 		///<summary>ParcelID. </summary>
 		ParcelID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: MarketplaceAdvisorOrderSearch.</summary>
+	public enum MarketplaceAdvisorOrderSearchFieldIndex
+	{
+		///<summary>MarketplaceAdvisorOrderSearchID. </summary>
+		MarketplaceAdvisorOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>InvoiceNumber. </summary>
+		InvoiceNumber,
+		///<summary>SellerOrderNumber. </summary>
+		SellerOrderNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5862,10 +6056,26 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
 		NetworkSolutionsOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: NetworkSolutionsOrderSearch.</summary>
+	public enum NetworkSolutionsOrderSearchFieldIndex
+	{
+		///<summary>NetworkSolutionsOrderSearchID. </summary>
+		NetworkSolutionsOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>NetworkSolutionsOrderID. </summary>
+		NetworkSolutionsOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6096,6 +6306,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -6148,6 +6360,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -6666,6 +6880,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. </summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. </summary>
+		CombineSplitStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6728,6 +6944,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. </summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6902,6 +7120,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -6910,6 +7130,20 @@ namespace ShipWorks.Data.Model
 		OrderMotionPromotion,
 		///<summary>OrderMotionInvoiceNumber. </summary>
 		OrderMotionInvoiceNumber,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderMotionOrderSearch.</summary>
+	public enum OrderMotionOrderSearchFieldIndex
+	{
+		///<summary>OrderMotionOrderSearchID. </summary>
+		OrderMotionOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>OrderMotionShipmentID. </summary>
+		OrderMotionShipmentID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6998,6 +7232,26 @@ namespace ShipWorks.Data.Model
 		Label,
 		///<summary>Value. </summary>
 		Value,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: OrderSearch.</summary>
+	public enum OrderSearchFieldIndex
+	{
+		///<summary>OrderSearchID. </summary>
+		OrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7178,6 +7432,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -7188,6 +7444,20 @@ namespace ShipWorks.Data.Model
 		PayPalFee,
 		///<summary>PaymentStatus. </summary>
 		PaymentStatus,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: PayPalOrderSearch.</summary>
+	public enum PayPalOrderSearchFieldIndex
+	{
+		///<summary>PayPalOrderSearchID. </summary>
+		PayPalOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>TransactionID. </summary>
+		TransactionID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7590,6 +7860,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -7598,6 +7870,20 @@ namespace ShipWorks.Data.Model
 		AuthorizedDate,
 		///<summary>AuthorizedBy. </summary>
 		AuthorizedBy,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ProStoresOrderSearch.</summary>
+	public enum ProStoresOrderSearchFieldIndex
+	{
+		///<summary>ProStoresOrderSearchID. </summary>
+		ProStoresOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ConfirmationNumber. </summary>
+		ConfirmationNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7900,6 +8186,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -7956,6 +8244,8 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -7968,6 +8258,20 @@ namespace ShipWorks.Data.Model
 		Shipping,
 		///<summary>OnlineStatus. </summary>
 		OnlineStatus,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: SearsOrderSearch.</summary>
+	public enum SearsOrderSearchFieldIndex
+	{
+		///<summary>SearsOrderSearchID. </summary>
+		SearsOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>PoNumber. </summary>
+		PoNumber,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8734,6 +9038,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -8786,12 +9092,28 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
 		ShopifyOrderItemID,
 		///<summary>ShopifyProductID. </summary>
 		ShopifyProductID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShopifyOrderSearch.</summary>
+	public enum ShopifyOrderSearchFieldIndex
+	{
+		///<summary>ShopifyOrderSearchID. </summary>
+		ShopifyOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ShopifyOrderID. </summary>
+		ShopifyOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9416,6 +9738,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
@@ -9464,10 +9788,26 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
 		ThreeDCartShipmentID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ThreeDCartOrderSearch.</summary>
+	public enum ThreeDCartOrderSearchFieldIndex
+	{
+		///<summary>ThreeDCartOrderSearchID. </summary>
+		ThreeDCartOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>ThreeDCartOrderID. </summary>
+		ThreeDCartOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10092,6 +10432,8 @@ namespace ShipWorks.Data.Model
 		SingleScanSettings,
 		///<summary>AutoWeigh. </summary>
 		AutoWeigh,
+		///<summary>DialogSettings. </summary>
+		DialogSettings,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10500,6 +10842,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
@@ -10556,12 +10900,28 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
 		LineNumber,
 		///<summary>OnlineStatus. </summary>
 		OnlineStatus,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: WalmartOrderSearch.</summary>
+	public enum WalmartOrderSearchFieldIndex
+	{
+		///<summary>WalmartOrderSearchID. </summary>
+		WalmartOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>PurchaseOrderID. </summary>
+		PurchaseOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11090,6 +11450,8 @@ namespace ShipWorks.Data.Model
 		ShipSenseRecognitionStatus,
 		///<summary>ShipAddressType. Inherited from Order</summary>
 		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -11138,12 +11500,28 @@ namespace ShipWorks.Data.Model
 		IsManual,
 		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
 		HarmonizedCode,
+		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
+		OriginalOrderID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>
 		YahooProductID,
 		///<summary>Url. </summary>
 		Url,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: YahooOrderSearch.</summary>
+	public enum YahooOrderSearchFieldIndex
+	{
+		///<summary>YahooOrderSearchID. </summary>
+		YahooOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>YahooOrderID. </summary>
+		YahooOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11261,6 +11639,8 @@ namespace ShipWorks.Data.Model
 		AmazonOrderEntity,
 		///<summary>AmazonOrderItem</summary>
 		AmazonOrderItemEntity,
+		///<summary>AmazonOrderSearch</summary>
+		AmazonOrderSearchEntity,
 		///<summary>AmazonProfile</summary>
 		AmazonProfileEntity,
 		///<summary>AmazonServiceType</summary>
@@ -11293,12 +11673,18 @@ namespace ShipWorks.Data.Model
 		ChannelAdvisorOrderEntity,
 		///<summary>ChannelAdvisorOrderItem</summary>
 		ChannelAdvisorOrderItemEntity,
+		///<summary>ChannelAdvisorOrderSearch</summary>
+		ChannelAdvisorOrderSearchEntity,
 		///<summary>ChannelAdvisorStore</summary>
 		ChannelAdvisorStoreEntity,
 		///<summary>ClickCartProOrder</summary>
 		ClickCartProOrderEntity,
+		///<summary>ClickCartProOrderSearch</summary>
+		ClickCartProOrderSearchEntity,
 		///<summary>CommerceInterfaceOrder</summary>
 		CommerceInterfaceOrderEntity,
+		///<summary>CommerceInterfaceOrderSearch</summary>
+		CommerceInterfaceOrderSearchEntity,
 		///<summary>Computer</summary>
 		ComputerEntity,
 		///<summary>Configuration</summary>
@@ -11317,6 +11703,8 @@ namespace ShipWorks.Data.Model
 		EbayOrderEntity,
 		///<summary>EbayOrderItem</summary>
 		EbayOrderItemEntity,
+		///<summary>EbayOrderSearch</summary>
+		EbayOrderSearchEntity,
 		///<summary>EbayStore</summary>
 		EbayStoreEntity,
 		///<summary>EmailAccount</summary>
@@ -11385,6 +11773,8 @@ namespace ShipWorks.Data.Model
 		GrouponOrderEntity,
 		///<summary>GrouponOrderItem</summary>
 		GrouponOrderItemEntity,
+		///<summary>GrouponOrderSearch</summary>
+		GrouponOrderSearchEntity,
 		///<summary>GrouponStore</summary>
 		GrouponStoreEntity,
 		///<summary>InfopiaOrderItem</summary>
@@ -11407,6 +11797,8 @@ namespace ShipWorks.Data.Model
 		JetOrderEntity,
 		///<summary>JetOrderItem</summary>
 		JetOrderItemEntity,
+		///<summary>JetOrderSearch</summary>
+		JetOrderSearchEntity,
 		///<summary>JetStore</summary>
 		JetStoreEntity,
 		///<summary>LabelSheet</summary>
@@ -11415,14 +11807,20 @@ namespace ShipWorks.Data.Model
 		LemonStandOrderEntity,
 		///<summary>LemonStandOrderItem</summary>
 		LemonStandOrderItemEntity,
+		///<summary>LemonStandOrderSearch</summary>
+		LemonStandOrderSearchEntity,
 		///<summary>LemonStandStore</summary>
 		LemonStandStoreEntity,
 		///<summary>MagentoOrder</summary>
 		MagentoOrderEntity,
+		///<summary>MagentoOrderSearch</summary>
+		MagentoOrderSearchEntity,
 		///<summary>MagentoStore</summary>
 		MagentoStoreEntity,
 		///<summary>MarketplaceAdvisorOrder</summary>
 		MarketplaceAdvisorOrderEntity,
+		///<summary>MarketplaceAdvisorOrderSearch</summary>
+		MarketplaceAdvisorOrderSearchEntity,
 		///<summary>MarketplaceAdvisorStore</summary>
 		MarketplaceAdvisorStoreEntity,
 		///<summary>MivaOrderItemAttribute</summary>
@@ -11431,6 +11829,8 @@ namespace ShipWorks.Data.Model
 		MivaStoreEntity,
 		///<summary>NetworkSolutionsOrder</summary>
 		NetworkSolutionsOrderEntity,
+		///<summary>NetworkSolutionsOrderSearch</summary>
+		NetworkSolutionsOrderSearchEntity,
 		///<summary>NetworkSolutionsStore</summary>
 		NetworkSolutionsStoreEntity,
 		///<summary>NeweggOrder</summary>
@@ -11463,16 +11863,22 @@ namespace ShipWorks.Data.Model
 		OrderItemAttributeEntity,
 		///<summary>OrderMotionOrder</summary>
 		OrderMotionOrderEntity,
+		///<summary>OrderMotionOrderSearch</summary>
+		OrderMotionOrderSearchEntity,
 		///<summary>OrderMotionStore</summary>
 		OrderMotionStoreEntity,
 		///<summary>OrderPaymentDetail</summary>
 		OrderPaymentDetailEntity,
+		///<summary>OrderSearch</summary>
+		OrderSearchEntity,
 		///<summary>OtherProfile</summary>
 		OtherProfileEntity,
 		///<summary>OtherShipment</summary>
 		OtherShipmentEntity,
 		///<summary>PayPalOrder</summary>
 		PayPalOrderEntity,
+		///<summary>PayPalOrderSearch</summary>
+		PayPalOrderSearchEntity,
 		///<summary>PayPalStore</summary>
 		PayPalStoreEntity,
 		///<summary>Permission</summary>
@@ -11485,6 +11891,8 @@ namespace ShipWorks.Data.Model
 		PrintResultEntity,
 		///<summary>ProStoresOrder</summary>
 		ProStoresOrderEntity,
+		///<summary>ProStoresOrderSearch</summary>
+		ProStoresOrderSearchEntity,
 		///<summary>ProStoresStore</summary>
 		ProStoresStoreEntity,
 		///<summary>Resource</summary>
@@ -11497,6 +11905,8 @@ namespace ShipWorks.Data.Model
 		SearsOrderEntity,
 		///<summary>SearsOrderItem</summary>
 		SearsOrderItemEntity,
+		///<summary>SearsOrderSearch</summary>
+		SearsOrderSearchEntity,
 		///<summary>SearsStore</summary>
 		SearsStoreEntity,
 		///<summary>ServerMessage</summary>
@@ -11531,6 +11941,8 @@ namespace ShipWorks.Data.Model
 		ShopifyOrderEntity,
 		///<summary>ShopifyOrderItem</summary>
 		ShopifyOrderItemEntity,
+		///<summary>ShopifyOrderSearch</summary>
+		ShopifyOrderSearchEntity,
 		///<summary>ShopifyStore</summary>
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
@@ -11557,6 +11969,8 @@ namespace ShipWorks.Data.Model
 		ThreeDCartOrderEntity,
 		///<summary>ThreeDCartOrderItem</summary>
 		ThreeDCartOrderItemEntity,
+		///<summary>ThreeDCartOrderSearch</summary>
+		ThreeDCartOrderSearchEntity,
 		///<summary>ThreeDCartStore</summary>
 		ThreeDCartStoreEntity,
 		///<summary>UpsAccount</summary>
@@ -11609,6 +12023,8 @@ namespace ShipWorks.Data.Model
 		WalmartOrderEntity,
 		///<summary>WalmartOrderItem</summary>
 		WalmartOrderItemEntity,
+		///<summary>WalmartOrderSearch</summary>
+		WalmartOrderSearchEntity,
 		///<summary>WalmartStore</summary>
 		WalmartStoreEntity,
 		///<summary>WorldShipGoods</summary>
@@ -11623,6 +12039,8 @@ namespace ShipWorks.Data.Model
 		YahooOrderEntity,
 		///<summary>YahooOrderItem</summary>
 		YahooOrderItemEntity,
+		///<summary>YahooOrderSearch</summary>
+		YahooOrderSearchEntity,
 		///<summary>YahooProduct</summary>
 		YahooProductEntity,
 		///<summary>YahooStore</summary>

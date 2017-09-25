@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
-using log4net;
-using System.Data.SqlClient;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
-using ShipWorks.Templates.Printing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -40,10 +37,10 @@ namespace ShipWorks.Actions.Tasks
 
         /// <summary>
         /// Run the task.
-        /// 
+        ///
         /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
         /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
-        /// 
+        ///
         /// </summary>
         public virtual void Run(List<long> inputKeys, ActionStepContext context)
         {
@@ -52,10 +49,10 @@ namespace ShipWorks.Actions.Tasks
 
         /// <summary>
         /// Run the task for tasks that require input but don't need the context
-        /// 
+        ///
         /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
         /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
-        /// 
+        ///
         /// </summary>
         protected virtual void Run(List<long> inputKeys)
         {
@@ -64,10 +61,10 @@ namespace ShipWorks.Actions.Tasks
 
         /// <summary>
         /// Run the task for tasks that don't require any input or context
-        /// 
+        ///
         /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
         /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
-        /// 
+        ///
         /// </summary>
         protected virtual void Run()
         {
@@ -75,16 +72,43 @@ namespace ShipWorks.Actions.Tasks
         }
 
         /// <summary>
-        /// Commit the task.
-        /// 
-        /// This should not perform any long-running operations, but should simply save to the database.
-        /// 
+        /// Run the task.
+        ///
+        /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
+        /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
+        ///
         /// </summary>
-        public virtual void Commit(List<long> inputKeys, ActionStepContext context)
+        public virtual Task RunAsync(List<long> inputKeys, IActionStepContext context) => RunAsync(inputKeys);
+
+        /// <summary>
+        /// Run the task for tasks that require input but don't need the context
+        ///
+        /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
+        /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
+        ///
+        /// </summary>
+        protected virtual Task RunAsync(List<long> inputKeys) => RunAsync();
+
+        /// <summary>
+        /// Run the task for tasks that don't require any input or context
+        ///
+        /// This should perform any long-running operations, but should NOT save to the database. This function is NOT within a transaction and should not be, as it's designed
+        /// for doing things like printing and connecting to external websites, which take too much time to be within a transaction.
+        ///
+        /// </summary>
+        protected virtual Task RunAsync() => Task.CompletedTask;
+
+        /// <summary>
+        /// Commit the task.
+        ///
+        /// This should not perform any long-running operations, but should simply save to the database.
+        ///
+        /// </summary>
+        public virtual async Task Commit(List<long> inputKeys, ActionStepContext context)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
-                context.CommitWork.Commit(adapter);
+                await context.CommitWork.CommitAsync(adapter).ConfigureAwait(false);
             }
         }
 
@@ -92,18 +116,18 @@ namespace ShipWorks.Actions.Tasks
         /// The underlying database entity this task represents.  This can be null when the task has failed and is being re-executed.  In that
         /// case there is no underlying entity, just the raw task settings.
         /// </summary>
-        public ActionTaskEntity Entity
-        {
-            get { return taskEntity; }
-        }
+        public ActionTaskEntity Entity => taskEntity;
 
         /// <summary>
         /// Indicates if the task requires input to function.  Such as the contents of a filter, or the item that caused the action.
         /// </summary>
-        public virtual ActionTaskInputRequirement InputRequirement
-        {
-            get { return ActionTaskInputRequirement.Required; }
-        }
+        public virtual ActionTaskInputRequirement InputRequirement =>
+            ActionTaskInputRequirement.Required;
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public virtual bool IsAsync => false;
 
         /// <summary>
         /// The label that goes before what the data source for the task should be.
@@ -124,29 +148,20 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// If the task operates on only one type of input, this specified what type that is.
         /// </summary>
-        public virtual EntityType? InputEntityType
-        {
-            get { return null; }
-        }
+        public virtual EntityType? InputEntityType => null;
 
         /// <summary>
-        /// Indicates if the task directly or indirectly reads and makes decisions based onthe contents of filters during its execution. 
+        /// Indicates if the task directly or indirectly reads and makes decisions based on the contents of filters during its execution.
         /// It is important to return true if a task does so that the action engine can ensure filters are up to date.
         /// </summary>
-        public virtual bool ReadsFilterContents
-        {
-            get { return false; }
-        }
+        public virtual bool ReadsFilterContents => false;
 
         /// <summary>
         /// The entity has been loaded and this task instance should load its settings.
         /// </summary>
         public void Initialize(ActionTaskEntity taskEntity)
         {
-            if (taskEntity == null)
-            {
-                throw new ArgumentNullException("taskEntity");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(taskEntity, nameof(taskEntity));
 
             if (this.taskEntity != null)
             {

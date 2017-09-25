@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
 {
@@ -44,11 +42,10 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
             return new NeweggResponse(responseData, new StatusResponseSerializer());
         }
 
-        public StatusResult GetStatus()
+        public Task<StatusResult> GetStatus()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            return SubmitRequest(credentials, new Dictionary<string, object>()).Result as StatusResult;
+            return Task.FromResult(SubmitRequest(credentials, new Dictionary<string, object>()).Result as StatusResult);
         }
-
     }
 }

@@ -81,6 +81,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between EbayStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(EbayStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between EbayStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// EbayStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -139,6 +154,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new EbayStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation EbayCombinedOrderRelationEntityUsingStoreIDStatic = new EbayStoreRelations().EbayCombinedOrderRelationEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new EbayStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new EbayStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new EbayStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

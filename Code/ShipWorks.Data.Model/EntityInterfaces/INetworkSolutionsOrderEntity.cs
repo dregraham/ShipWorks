@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<INetworkSolutionsOrderSearchEntity> INetworkSolutionsOrderEntity.NetworkSolutionsOrderSearch => NetworkSolutionsOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

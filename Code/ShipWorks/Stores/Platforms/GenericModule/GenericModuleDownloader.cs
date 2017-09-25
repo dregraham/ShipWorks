@@ -9,7 +9,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -22,7 +21,7 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
     /// <summary>
-    /// Provides the entrypoint into the order download processes for Generic
+    /// Provides the entry point into the order download processes for Generic
     /// </summary>
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Amosoft)]
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Brightpearl)]
@@ -118,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 }
 
                 // Create the web client to download with
-                GenericStoreWebClient webClient = storeType.CreateWebClient();
+                var webClient = storeType.CreateWebClient();
 
                 GetOnlineStatusCodes(storeType, supportModeActive);
 
@@ -126,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                 if (!supportModeActive)
                 {
-                    GetOrderCount(webClient);
+                    await GetOrderCount(webClient).ConfigureAwait(false);
 
                     if (totalCount == 0)
                     {
@@ -157,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Downloads the orders.
         /// </summary>
-        private async Task DownloadOrders(bool supportMode, GenericStoreWebClient webClient)
+        private async Task DownloadOrders(bool supportMode, IGenericStoreWebClient webClient)
         {
             // keep going until none are left
             while (true)
@@ -187,9 +186,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Gets the online status codes.
         /// </summary>
-        /// <param name="storeType">Type of the store.</param>
+        /// <param name="genericModuleStoreType">Type of the store.</param>
         /// <param name="supportMode">if set to <c>true</c> [support mode].</param>
-        private void GetOnlineStatusCodes(GenericModuleStoreType storeType, bool supportMode)
+        private void GetOnlineStatusCodes(GenericModuleStoreType genericModuleStoreType, bool supportMode)
         {
             // If status codes are supported download them
             if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
@@ -197,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 // Update the status codes
                 Progress.Detail = "Updating status codes...";
 
-                statusCodeProvider = storeType.CreateStatusCodeProvider();
+                statusCodeProvider = genericModuleStoreType.CreateStatusCodeProvider();
 
                 if (!supportMode)
                 {
@@ -209,20 +208,20 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Gets the order count.
         /// </summary>
-        private void GetOrderCount(GenericStoreWebClient webClient)
+        private async Task GetOrderCount(IGenericStoreWebClient webClient)
         {
             // Get the largest last modified time.  We start downloading there.
             if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
             {
                 // Downloading based on the last modified time
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
                 totalCount = webClient.GetOrderCount(lastModified);
             }
             else
             {
                 // Downloading based on the last order number we've downloaded
-                long lastOrderNumber = GetOrderNumberStartingPoint();
+                long lastOrderNumber = await GetOrderNumberStartingPoint().ConfigureAwait(false);
 
                 // Get the number of orders that need downloading
                 totalCount = webClient.GetOrderCount(lastOrderNumber);
@@ -232,7 +231,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Presents the support staff with a way to load orders from a module response file directly
         /// </summary>
-        private async Task DownloadOrdersFromFile(GenericStoreWebClient client)
+        private async Task DownloadOrdersFromFile(IGenericStoreWebClient client)
         {
             using (GenericStoreResponseLoadDlg dlg = new GenericStoreResponseLoadDlg(client))
             {
@@ -263,21 +262,21 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Downloads and imports the next batch of orders into ShipWorks
         /// </summary>
-        private async Task<bool> DownloadNextOrdersPage(GenericStoreWebClient webClient)
+        private async Task<bool> DownloadNextOrdersPage(IGenericStoreWebClient webClient)
         {
             // Get the largest last modified time.  We start downloading there.
             GenericModuleResponse response;
             if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
             {
                 // Downloading based on the last modified time
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint();
 
                 response = webClient.GetNextOrderPage(lastModified);
             }
             else
             {
                 // pickup where we left off
-                long lastOrderNumber = GetOrderNumberStartingPoint();
+                long lastOrderNumber = await GetOrderNumberStartingPoint();
 
                 // retrieve the next page of data from the web module
                 response = webClient.GetNextOrderPage(lastOrderNumber);
@@ -290,10 +289,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             if (orderNodes.Count > 0)
             {
                 // import the downloaded orders
-                await LoadOrders(orderNodes).ConfigureAwait(false);
-
-                // signal that we imported some orders
-                return true;
+                return await LoadOrders(orderNodes).ConfigureAwait(false);
             }
             else
             {
@@ -307,26 +303,30 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Imports the orders contained in the iterator
         /// </summary>
-        private async Task LoadOrders(XPathNodeIterator orderNodes)
+        private async Task<bool> LoadOrders(XPathNodeIterator orderNodes)
         {
+            bool anyProcessed = false;
+
             // go through each order in the batch
             while (orderNodes.MoveNext())
             {
                 // check for cancel again
                 if (Progress.IsCancelRequested)
                 {
-                    return;
+                    return false;
                 }
 
                 // Update the status
                 Progress.Detail = string.Format("Processing order {0}...", (QuantitySaved + 1));
 
                 XPathNavigator order = orderNodes.Current.Clone();
-                await LoadOrder(order).ConfigureAwait(false);
+                anyProcessed |= await LoadOrder(order).ConfigureAwait(false);
 
                 // update the status
                 Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / totalCount);
             }
+
+            return anyProcessed;
         }
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // pull out the order number
             string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "");
 
-            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
             // so in that case, we leave a single 0.
             orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
@@ -362,34 +362,38 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// <summary>
         /// Assigns an order number to the order
         /// </summary>
-        protected virtual void AssignOrderNumber(OrderEntity order)
+        protected virtual Task AssignOrderNumber(OrderEntity order)
         {
             // this is an extension point for derived class.  The GenericStoreDownloader
             // implementation uses the OrderNumberIdentifier which has already applied an order number
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        protected async Task<OrderEntity> InstantiateOrder(XPathNavigator xpath)
+        protected Task<GenericResult<OrderEntity>> InstantiateOrder(XPathNavigator xpath)
         {
             // Construct the order identifier based on the incoming xml
             OrderIdentifier orderIdentifier = CreateOrderIdentifier(xpath);
 
             // get the order instance; Change this to our derived class once it's needed and exists
-            OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
-
-            AssignOrderNumber(order);
-
-            return order;
+            return InstantiateOrder(orderIdentifier);
         }
 
         /// <summary>
         /// Extract the order from the xml
         /// </summary>
-        private async Task LoadOrder(XPathNavigator xpath)
+        private async Task<bool> LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = await InstantiateOrder(xpath).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(xpath).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                return false;
+            }
+
+            OrderEntity order = result.Value;
+            await AssignOrderNumber(order).ConfigureAwait(false);
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
@@ -441,6 +445,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+            return true;
         }
 
         /// <summary>

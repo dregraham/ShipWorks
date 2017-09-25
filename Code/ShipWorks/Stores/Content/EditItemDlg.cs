@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content.Panels;
-using System.Globalization;
-using ShipWorks.Data.Connection;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content.Panels;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Stores.Content
 {
@@ -255,10 +255,10 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         void OnSetLocalStatus(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             StatusPresetEntity preset = (StatusPresetEntity) command.Tag;
-            UpdateStatusDisplay(preset.StatusText);            
+            UpdateStatusDisplay(preset.StatusText);
 
             if (TemplateTokenProcessor.HasTokens(preset.StatusText))
             {
@@ -331,7 +331,7 @@ namespace ShipWorks.Stores.Content
                         // Everything has been set on the order, so calculate the hash key
                         OrderEntity order = (OrderEntity) DataProvider.GetEntity(item.OrderID);
                         OrderUtility.PopulateOrderDetails(order, adapter);
-                        
+
                         OrderUtility.UpdateShipSenseHashKey(order);
                         adapter.SaveAndRefetch(order);
 

@@ -27,9 +27,16 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String GrouponOrderID { get; }
+        /// <summary> The ParentOrderID property of the Entity GrouponOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GrouponOrder"."ParentOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String ParentOrderID { get; }
         
         
         
+        IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +63,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IGrouponOrderSearchEntity> IGrouponOrderEntity.GrouponOrderSearch => GrouponOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -1,61 +1,45 @@
 ﻿extern alias rebex2015;
-
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using rebex2015::Rebex.IO;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.FileTransfer;
 using rebex2015::Rebex.Net;
-using System.IO;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
-using System.Xml.Linq;
-using Interapptive.Shared.Net;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
     /// <summary>
     /// Wraps all FTP operations for dealing with buy.com
     /// </summary>
-    public class BuyDotComFtpClient : IDisposable
+    [Component]
+    public class BuyDotComFtpClient : IBuyDotComFtpClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComFtpClient));
+        private readonly ILog log;
+        private IFtp ftp;
 
-        IFtp ftp;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public BuyDotComFtpClient(BuyDotComStoreEntity store)
+        public BuyDotComFtpClient(IFtp ftp, Func<Type, ILog> createLogger)
         {
-            if (store == null)
-            {
-                throw new ArgumentNullException("store");
-            }
-
-            try
-            {
-                ftp = FtpUtility.LogonToFtp(BuyDotComUtility.GetFtpAccount(store));
-            }
-            catch (FileTransferException ex)
-            {
-                throw new BuyDotComException(ex.Message, ex);
-            }
+            this.ftp = ftp;
+            log = createLogger(GetType());
         }
 
         /// <summary>
         /// Gets list of order files queued for process
         /// </summary>
-        public List<string> GetOrderFileNames()
+        public async Task<List<string>> GetOrderFileNames()
         {
             try
             {
-                ftp.ChangeDirectory("/Orders");
+                await ftp.ChangeDirectoryAsync("/Orders").ConfigureAwait(false);
 
-                FileSystemItemCollection list = ftp.GetList();
+                FileSystemItemCollection list = await ftp.GetListAsync().ConfigureAwait(false);
 
                 return list
                     .Where(item =>
@@ -73,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Given a name of the order file, return a stream that is ready to read
         /// </summary>
-        public string GetOrderFileContent(string fileName)
+        public async Task<string> GetOrderFileContent(string fileName)
         {
             try
             {
@@ -84,12 +68,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    ftp.GetFile(filePath, stream);
+                    await ftp.GetFileAsync(filePath, stream).ConfigureAwait(false);
                     stream.Position = 0;
 
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        string fileContent = reader.ReadToEnd();
+                        string fileContent = await reader.ReadToEndAsync().ConfigureAwait(false);
 
                         apiLogger.LogResponse(fileContent, "txt");
 
@@ -106,12 +90,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Move order file to archive directory.
         /// </summary>
-        public void ArchiveOrder(string fileName)
+        public async Task ArchiveOrder(string fileName)
         {
             try
             {
-                ftp.Rename(string.Format("/Orders/{0}", fileName),
-                    string.Format("/Orders/Archive/{0}", fileName));
+                await ftp.RenameAsync(string.Format("/Orders/{0}", fileName),
+                    string.Format("/Orders/Archive/{0}", fileName)).ConfigureAwait(false);
             }
             catch (NetworkSessionException ex)
             {
@@ -122,7 +106,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// Upload ship confirmation information.
         /// </summary>
-        public void UploadShipConfirmation(List<BuyDotComShipConfirmation> confirmations)
+        public async Task UploadShipConfirmation(List<BuyDotComShipConfirmation> confirmations)
         {
             StringWriter writer = new StringWriter();
 
@@ -147,11 +131,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
 
             try
             {
-                ftp.ChangeDirectory("/Fulfillment");
+                await ftp.ChangeDirectoryAsync("/Fulfillment").ConfigureAwait(false);
 
                 using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(writer.ToString())))
                 {
-                    ftp.PutFile(stream, string.Format("shipworks_{0:yyyy-MM-dd_hh-mm-ss-tt}.txt", DateTime.Now));
+                    await ftp.PutFileAsync(stream, string.Format("shipworks_{0:yyyy-MM-dd_hh-mm-ss-tt}.txt", DateTime.Now)).ConfigureAwait(false);
                 }
             }
             catch (NetworkSessionException ex)

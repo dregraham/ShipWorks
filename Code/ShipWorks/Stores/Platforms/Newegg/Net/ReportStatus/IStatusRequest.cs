@@ -1,5 +1,6 @@
-﻿
+﻿using System.Threading.Tasks;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus.Response;
+
 namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
 {
     /// <summary>
@@ -17,6 +18,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
         /// Gets the status of the report.
         /// </summary>
         /// <returns>A StatusResult object.</returns>
-        StatusResult GetStatus();
+        Task<StatusResult> GetStatus();
     }
 }

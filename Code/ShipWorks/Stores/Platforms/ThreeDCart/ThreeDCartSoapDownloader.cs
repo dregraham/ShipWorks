@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 // Get the number of orders for the range
                 ThreeDCartWebClientOrderSearchCriteria orderSearchCriteria =
-                    GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
+                    await GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.CreatedDate);
 
                 totalCount = WebClient.GetOrderCount(orderSearchCriteria);
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                     Progress.Detail = "Checking for modified orders...";
                     lastModifiedOrderDateProcessed = DateTime.UtcNow.AddDays(-7);
                     orderSearchCriteria =
-                        GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
+                        await GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType.ModifiedDate);
 
                     int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
                     if (modifiedCount == 0)
@@ -169,7 +169,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 }
 
                 // Download the next range of orders
-                orderSearchCriteria = GetOrderSearchCriteria(orderSearchCriteria.OrderDateSearchType);
+                orderSearchCriteria = await GetOrderSearchCriteria(orderSearchCriteria.OrderDateSearchType);
             }
         }
 
@@ -210,13 +210,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Gets the order search criteria
         /// </summary>
         /// <returns>ThreeDCartWebClientOrderSearchCriteria </returns>
-        private ThreeDCartWebClientOrderSearchCriteria GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType orderDateSearchType)
+        private async Task<ThreeDCartWebClientOrderSearchCriteria> GetOrderSearchCriteria(ThreeDCartWebClientOrderDateSearchType orderDateSearchType)
         {
             // Getting last online modified starting point
             DateTime? modifiedDateStartingPoint;
             if (lastModifiedOrderDateProcessed == DateTime.MinValue)
             {
-                modifiedDateStartingPoint = GetOnlineLastModifiedStartingPoint();
+                modifiedDateStartingPoint = await GetOnlineLastModifiedStartingPoint();
                 if (!modifiedDateStartingPoint.HasValue)
                 {
                     modifiedDateStartingPoint = DateTime.UtcNow.AddDays(-7);
@@ -233,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             // Set end date to now
             DateTime modifiedDateEndPoint = DateTime.UtcNow;
 
-            DateTime? createdDateStartingPoint = GetOrderDateStartingPoint();
+            DateTime? createdDateStartingPoint = await GetOrderDateStartingPoint();
 
             // If the date has a value, add 1 second
             createdDateStartingPoint = createdDateStartingPoint.HasValue ? createdDateStartingPoint.Value.AddSeconds(1) : DateTime.UtcNow.AddYears(-10);
@@ -256,6 +256,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// <returns>True, if all orders were loaded.  False if the user pressed cancel</returns>
         private async Task<bool> LoadOrders(List<XmlNode> orderNodes)
         {
+            List<IResult> results = new List<IResult>();
+
             // Go through each order in the XML Document
             foreach (XmlNode order in orderNodes)
             {
@@ -282,13 +284,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 // The first order will always NOT be a sub order
                 bool isSubOrder = false;
                 bool hasSubOrders = shipmentNodes.Count > 1;
+
                 while (shipmentNodes.MoveNext())
                 {
                     XPathNavigator shipmentNode = shipmentNodes.Current.Clone();
 
                     string invoiceNumberPostFix = hasSubOrders ? string.Format("-{0}", shipmentIndex) : string.Empty;
 
-                    await LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders).ConfigureAwait(false);
+                    IResult result = await LoadOrder(orderXPathNavigator, shipmentNode, invoiceNumberPostFix, isSubOrder, hasSubOrders).ConfigureAwait(false);
+                    results.Add(result);
 
                     shipmentIndex++;
 
@@ -299,6 +303,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
 
+            // If all of the results were failures do to combining, do not continue in an infinite loop.
+            if (results.All(r => r.Failure && r.Message == "Combined"))
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -306,13 +316,20 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Extract and save the order from the XML
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async Task LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
+        private async Task<IResult> LoadOrder(XPathNavigator xmlOrderXPath, XPathNavigator shipmentNode, string invoiceNumberPostFix, bool isSubOrder, bool hasSubOrders)
         {
             // Create a ThreeDCartOrderIdentifier
             ThreeDCartOrderIdentifier threeDCartOrderIdentifier = await CreateOrderIdentifier(xmlOrderXPath, invoiceNumberPostFix).ConfigureAwait(false);
 
             // Get the order instance.
-            OrderEntity order = await InstantiateOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(threeDCartOrderIdentifier).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", threeDCartOrderIdentifier.OrderNumber, result.Message);
+                return result;
+            }
+
+            OrderEntity order = result.Value;
 
             if (order is ThreeDCartOrderEntity)
             {
@@ -437,6 +454,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             //Save the downloaded order
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "ThreeDCartSoapDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+            return Result.FromSuccess();
         }
         
         /// <summary>

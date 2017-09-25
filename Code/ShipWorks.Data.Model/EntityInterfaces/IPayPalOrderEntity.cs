@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IPayPalOrderSearchEntity> PayPalOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -74,6 +75,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IPayPalOrderSearchEntity> IPayPalOrderEntity.PayPalOrderSearch => PayPalOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

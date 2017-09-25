@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -13,26 +13,26 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get orders jet
         /// </summary>
-        GenericResult<JetOrderResponse> GetOrders(JetStoreEntity store);
+        GenericResult<JetOrderResponse> GetOrders(IJetStoreEntity store);
 
         /// <summary>
         /// Get a jet product for the given item
         /// </summary>
-        GenericResult<JetProduct> GetProduct(JetOrderItem item, JetStoreEntity store);
+        GenericResult<JetProduct> GetProduct(JetOrderItem item, IJetStoreEntity store);
 
         /// <summary>
         /// Acknowledge the given order
         /// </summary>
-        void Acknowledge(JetOrderDetailsResult order, JetStoreEntity store);
+        void Acknowledge(JetOrderDetailsResult order, IJetStoreEntity store);
 
         /// <summary>
         /// Get order details for the given order
         /// </summary>
-        GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store);
+        GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, IJetStoreEntity store);
 
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        void UploadShipmentDetails(ShipmentEntity shipment, JetStoreEntity store);
+        void UploadShipmentDetails(string merchantOrderId, ShipmentEntity shipment, IJetStoreEntity store);
     }
 }

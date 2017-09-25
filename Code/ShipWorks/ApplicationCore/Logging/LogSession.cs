@@ -44,16 +44,16 @@ namespace ShipWorks.ApplicationCore.Logging
         private const string traceLayoutPattern = "%date{HH:mm:ss.fff} %-5level [%logger] [%thread] --> %message%newline";
 
         /// <summary>
-        /// Initialize the configuration of the logger.  If sessionName is specified, it's appeneded to the default log folder name.
+        /// Initialize the configuration of the logger.  If sessionName is specified, it's appended to the default log folder name.
         /// </summary>
         public static void Initialize(string sessionName = "")
         {
             logPath = Path.Combine(DataPath.LogRoot, DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + (!string.IsNullOrWhiteSpace(sessionName) ? " - " + sessionName : ""));
 
-            // The thing gets initialized in the static contructor... this ensures it
+            // The thing gets initialized in the static constructor... this ensures it
             DynamicQueryEngine.ArithAbortOn = DynamicQueryEngine.ArithAbortOn ? true : false;
 
-            // Prviate logging is not encrypted for interapptive users
+            // Private logging is not encrypted for interapptive users
             IsPrivateLoggingEncrypted = !InterapptiveOnly.IsInterapptiveUser;
 
             logOptions = LoadLogOptions();
@@ -96,7 +96,7 @@ namespace ShipWorks.ApplicationCore.Logging
             get
             {
                 Directory.CreateDirectory(logPath);
-                return logPath; 
+                return logPath;
             }
         }
 
@@ -116,7 +116,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Gets \ sets wether private (Interapptive only) logging is encrypted
+        /// Gets \ sets whether private (Interapptive only) logging is encrypted
         /// </summary>
         public static bool IsPrivateLoggingEncrypted { get; set; } = true;
 
@@ -153,7 +153,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
             Trace.Listeners.Clear();
             Trace.Listeners.Add(new DefaultTraceListener());
-            
+
             // Turns on console logging
             BasicConfigurator.Configure(CreateTraceAppender());
 
@@ -170,7 +170,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Aply the logging options for logging sw runtime events
+        /// Apply the logging options for logging sw runtime events
         /// </summary>
         private static void ApplyShipWorksLogging(AppenderSkeleton appender)
         {
@@ -197,7 +197,7 @@ namespace ShipWorks.ApplicationCore.Logging
             layout.ActivateOptions();
             appender.Layout = layout;
 
-            // Appened to existing files, rolling over on date\size boundries
+            // Append to existing files, rolling over on date\size boundaries
             appender.AppendToFile = true;
             appender.RollingStyle = RollingFileAppender.RollingMode.Composite;
 
@@ -205,7 +205,7 @@ namespace ShipWorks.ApplicationCore.Logging
             appender.CountDirection = 1;
             appender.MaxSizeRollBackups = -1;
 
-            // Rollover boundries
+            // Rollover boundaries
             appender.MaxFileSize = 10 * 1024 * 1024;
             appender.DatePattern = "MM-dd";
             appender.StaticLogFileName = true;
@@ -218,7 +218,7 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         /// <summary>
-        /// Create 
+        /// Create
         /// </summary>
         private static IAppender CreateTraceAppender()
         {
@@ -340,7 +340,7 @@ namespace ShipWorks.ApplicationCore.Logging
             catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
                 CultureInfo.InvariantCulture))
             {
-                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // A crash was occurring when attempting to access invalid timestamps. We are eating the exception
                 // and continuing to delete the file, since it is most likely corrupt.
                 isExpired = true;
                 log.Error("File or directory has an invalid Windows timestamp. ShipWorks will attempt to delete it, " +
@@ -357,13 +357,13 @@ namespace ShipWorks.ApplicationCore.Logging
         {
             foreach (FileSystemInfo childFsi in di.GetFileSystemInfos())
             {
-                // If any file in the folder has been written to in the proper amount of time, then dont delete the directory
+                // If any file in the folder has been written to in the proper amount of time, then don't delete the directory
                 if (!IsLogEntryChildExpired(childFsi, logExpirationDate))
                 {
                     return;
                 }
             }
-            
+
             log.InfoFormat("Deleting log '{0}'", fsi.Name);
             Directory.Delete(fsi.FullName, true);
         }
@@ -385,7 +385,7 @@ namespace ShipWorks.ApplicationCore.Logging
             catch (ArgumentOutOfRangeException ex) when (ex.Message.StartsWith("Not a valid Win32 FileTime", true,
                 CultureInfo.InvariantCulture))
             {
-                // A crash was occuring when attempting to access invalid timestamps. We are eating the exception
+                // A crash was occurring when attempting to access invalid timestamps. We are eating the exception
                 // and continuing to delete the file, since it is most likely corrupt.
                 log.Error("File found with an invalid Windows timestamp. ShipWorks will continue " +
                           "to check if this directory should be deleted.");

@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -250,38 +246,6 @@ namespace ShipWorks.Stores.Content
 
                 adapter.Commit();
             }
-        }
-
-        /// <summary>
-        /// Gets the next OrderNumber that an order should use.  This is useful for storetypes that don't supply their own
-        /// order numbers for ShipWorks, such as Amazon and eBay.
-        /// </summary>
-        public static long GetNextOrderNumber(long storeID)
-        {
-            long orderNumber = -1;
-
-            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -6, "OrderUtility.GetNextOrderNumber.");
-            sqlAdapterRetry.ExecuteWithRetry(() =>
-            {
-                object result = DBNull.Value;
-
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    result = adapter.GetScalar(
-                        OrderFields.OrderNumber,
-                        null, AggregateFunction.Max,
-                        OrderFields.StoreID == storeID & OrderFields.IsManual == false);
-                }
-
-                orderNumber = result is DBNull ? 0 : (long) result;
-
-                // Get the next one
-                orderNumber++;
-
-                log.InfoFormat("GetNextOrderNumber = {0}", orderNumber);
-            });
-
-            return orderNumber;
         }
 
         /// <summary>

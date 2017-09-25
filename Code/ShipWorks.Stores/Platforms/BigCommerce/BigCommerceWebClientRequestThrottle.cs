@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -29,16 +30,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 {
                     // These retry intervals are not the specific BigCommerce quota intervals.  Just some rough guesses based on the BigCommerce intervals on how quickly to retry if we are throttled
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrders),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrderCount),    
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrderCount),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrder),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetCoupons),            
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetCoupons),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrderStatuses),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetProducts),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetProduct),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetShipments),                
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetShipments),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetShippingAddress),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.UpdateOrderStatus),                
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.CreateShipment),                
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.UpdateOrderStatus),
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.CreateShipment),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrderProducts)
                 };
         }
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
         /// <summary>
         /// ExecuteRequest will make a throttled call to webClientMethod and return the result.
-        /// If the throttler detects that the number of calls has been reached, the throttler will wait the 
+        /// If the throttler detects that the number of calls has been reached, the throttler will wait the
         /// desired amount of time before making the call to webClientMethod again.  It will continue to make
         /// the calls until a successful call is made, the user clicks cancel, or a cancel exception is thrown.
         /// </summary>
@@ -63,19 +64,19 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="requestThrottleParams">Throttling request parameters</param>
         /// <param name="webClientMethod">Method that will be executed to </param>
         /// <returns></returns>
-        public override TWebClientReturnType ExecuteRequest<TWebClientRequestType, TWebClientReturnType>(RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, TWebClientReturnType> webClientMethod)
+        public override async Task<TWebClientReturnType> ExecuteRequestAsync<TWebClientRequestType, TWebClientReturnType>(RequestThrottleParameters requestThrottleParams, Func<TWebClientRequestType, Task<TWebClientReturnType>> webClientMethod)
         {
             // Find the quota for the api call, and update the request throttle params
-            RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((BigCommerceWebClientApiCall)requestThrottleParams.ApiCall));
+            RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall> definition = quotas.First(q => q.ApiCalls.Contains((BigCommerceWebClientApiCall) requestThrottleParams.ApiCall));
             requestThrottleParams.RetryInterval = definition.RetryInterval;
 
             // Get a logger for this request, serialize the JSON request, and log it.
             IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.BigCommerce, EnumHelper.GetDescription(requestThrottleParams.ApiCall), LogActionType.Other);
-            string requestText = JsonConvert.SerializeObject((TWebClientRequestType)requestThrottleParams.Request);
+            string requestText = JsonConvert.SerializeObject((TWebClientRequestType) requestThrottleParams.Request);
             logger.LogRequest(requestText, "txt");
 
             // Ask the base throttler to start making the call
-            TWebClientReturnType restResponse = base.ExecuteRequest(requestThrottleParams, webClientMethod);
+            TWebClientReturnType restResponse = await base.ExecuteRequest(requestThrottleParams, webClientMethod).ConfigureAwait(false);
 
             // Serialize the response and log it
             string responseText = JsonConvert.SerializeObject(restResponse);

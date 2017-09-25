@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Crashes
             }
             catch (Exception e)
             {
-                // Eat any exceptions tha occur as a result of submitting the crash report
+                // Eat any exceptions that occur as a result of submitting the crash report
                 log.Error(e);
             }
         }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Stores.Platforms.Infopia
+﻿namespace ShipWorks.Stores.Platforms.Infopia
 {
     /// <summary>
     /// Status codes returned by Infopia
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     enum InfopiaStatusType
     {
         Error = -100,

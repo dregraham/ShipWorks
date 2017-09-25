@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelSale.WizardPages;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -20,8 +22,8 @@ namespace ShipWorks.Stores.Platforms.ChannelSale
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelSaleStoreType(StoreEntity store)
-            : base(store)
+        public ChannelSaleStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
         }
 

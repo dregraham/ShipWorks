@@ -179,11 +179,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
                 })
                 .Set(x => x.ShipCountryCode, "UK").Save();
 
-            using (SqlAdapter transactedAdapter = new SqlAdapter(true))
-            {
-                testObject.LoadCustomsItems(shipment, false, transactedAdapter);
-                transactedAdapter.Commit();
-            }
+            testObject.LoadCustomsItems(shipment, false, adapter);
 
             var predicate = new RelationPredicateBucket(ShipmentCustomsItemFields.ShipmentID == shipment.ShipmentID);
             using (EntityCollection<ShipmentCustomsItemEntity> customs = new EntityCollection<ShipmentCustomsItemEntity>())

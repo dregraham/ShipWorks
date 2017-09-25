@@ -178,15 +178,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
+    <Compile Include="Content\CombineOrderAuditTest.cs" />
+    <Compile Include="Content\CombineOrdersGatewayTest.cs" />
+    <Compile Include="Content\CombineOrdersViewModelTest.cs" />
+    <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
-    <Compile Include="Platforms\Amazon\AmazonDownloaderFactoryTest.cs" />
+    <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
+    <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonStoreTypeTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceBasicAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModelTest.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifierTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceItemLoaderTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceDataAccessTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAuthenticatorFactoryTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceIdentifierTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOauthAuthenticatorTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceShipmentDetailsUpdaterClientTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceShipmentDetailsUpdaterTest.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOrderStatusUpdaterTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClientFactoryTest.cs" />
@@ -195,6 +212,10 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoaderTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClientTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClientTest.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Ebay\EbayOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\GenericFile\GenericFileDownloaderFactoryTest.cs" />
+    <Compile Include="Platforms\Groupon\GrouponOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponCarrierTest.cs" />
     <Compile Include="Platforms\Jet\JetAuthenticatedRequestTest.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdaterTest.cs" />
@@ -208,7 +229,7 @@
     <Compile Include="Platforms\Jet\JetTokenRepositoryTest.cs" />
     <Compile Include="Platforms\Jet\JetTokenTest.cs" />
     <Compile Include="Platforms\Jet\JetWebClientTest.cs" />
-    <Compile Include="Platforms\Jet\JsonRequestTest.cs" />
+    <Compile Include="Platforms\Jet\JetJsonRequestTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreTypeTest.cs" />
@@ -221,6 +242,7 @@
     <Compile Include="Platforms\Magento\MagentoVersionToGridRowHeightConverterTest.cs" />
     <Compile Include="Platforms\Magento\WizardPages\MagentoWizardSettingsControlViewModelTest.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactoryTest.cs" />
+    <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceFactoryTest.cs" />
     <Compile Include="Platforms\Odbc\Download\CustomQueryOdbcDownloadQueryTest.cs" />
@@ -269,9 +291,15 @@
     <Compile Include="Platforms\Odbc\ViewModels\TestOdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModelTest.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMapSettingsControlViewModelTest.cs" />
-    <Compile Include="Platforms\Paypal\XmlDeserializeTest.cs" />
+    <Compile Include="Platforms\OrderMotion\OrderMotionOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Paypal\PayPalStoreTypeTest.cs" />
+    <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Paypal\PayPalXmlDeserializeTest.cs" />
+    <Compile Include="Platforms\Sears\SearsStoreTypeTest.cs" />
+    <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
     <Compile Include="Platforms\Sears\SearsCipherKeyTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyOrderIdentifierTest.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteLegacyAuthenticationPersistenceStrategyTest.cs" />
     <Compile Include="Platforms\ShopSite\Responses\ShopSiteResponseHelper.cs" />
     <Compile Include="Platforms\ShopSite\ShopSiteOauthAccessTokenWebClientTest.cs" />
@@ -295,7 +323,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartProductCacheTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdaterTest.cs" />
+    <Compile Include="Platforms\Walmart\WalmartShipmentDetailsUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSignerTest.cs" />
@@ -303,6 +331,7 @@
     <Compile Include="Platforms\Walmart\WalmartStoreSetupControlViewModelTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreTypeTest.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiDownloaderTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooApiOnlineUpdaterTest.cs" />
@@ -412,7 +441,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Platforms\ShopSite\Responses\TestConnection.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Platforms\AmeriCommerce\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

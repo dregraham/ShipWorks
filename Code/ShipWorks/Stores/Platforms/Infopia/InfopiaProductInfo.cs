@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using System.Xml.XPath;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {
     /// <summary>
 	/// Represents information downloaded from Infopia about a product SKU
 	/// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
 	public class InfopiaProductInfo
-	{
+    {
         public string ImageUrl { get; set; }
         public double WeightLbs { get; set; }
         public string Isbn { get; set; }
@@ -33,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// Constructor
         /// </summary>
 		public InfopiaProductInfo(XPathNavigator xpathSku)
-		{
+        {
             ImageUrl = XPathUtility.Evaluate(xpathSku, "Cell[@Name='*IMAGE 1 URL*']", "");
             Isbn = XPathUtility.Evaluate(xpathSku, "Cell[@Name='*ISBN*']", "");
             Upc = XPathUtility.Evaluate(xpathSku, "Cell[@Name='*UPC*']", "");

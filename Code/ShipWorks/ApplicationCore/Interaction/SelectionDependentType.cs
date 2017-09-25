@@ -19,6 +19,8 @@ namespace ShipWorks.ApplicationCore.Interaction
         OneOrMoreCustomers,
 
         OneRow,
-        OneOrMoreRows
+        OneOrMoreRows,
+
+        AppliesFunction
     }
 }

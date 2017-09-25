@@ -18,6 +18,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -226,6 +227,11 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<HttpRequestSubmitterFactory>()
                 .As<IHttpRequestSubmitterFactory>();
 
+            foreach (var taskDescriptor in ActionTaskManager.TaskDescriptors)
+            {
+                builder.RegisterType(taskDescriptor.SystemType).AsSelf();
+            }
+
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(container);
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -347,10 +353,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
-
-            builder.RegisterType<UserSessionWrapper>()
-                .AsImplementedInterfaces()
-                .UsingConstructor();
 
             builder.RegisterType<ValidatedAddressManagerWrapper>()
                 .AsImplementedInterfaces()

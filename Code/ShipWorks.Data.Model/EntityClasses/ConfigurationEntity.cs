@@ -324,6 +324,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CustomerKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UseParallelActionQueue", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AllowEbayCombineLocally", fieldHashtable);
 		}
 		#endregion
 
@@ -520,6 +522,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.UseParallelActionQueue, true); }
 			set	{ SetValue((int)ConfigurationFieldIndex.UseParallelActionQueue, value); }
+		}
+
+		/// <summary> The AllowEbayCombineLocally property of the Entity Configuration<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Configuration"."AllowEbayCombineLocally"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AllowEbayCombineLocally
+		{
+			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AllowEbayCombineLocally, true); }
+			set	{ SetValue((int)ConfigurationFieldIndex.AllowEbayCombineLocally, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

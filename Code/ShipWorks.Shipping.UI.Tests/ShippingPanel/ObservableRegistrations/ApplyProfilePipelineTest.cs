@@ -68,8 +68,6 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             Mock<ShippingPanelViewModel> viewModel = mock.CreateMock<ShippingPanelViewModel>();
             viewModel.Setup(x => x.Shipment).Returns(new ShipmentEntity { ShipmentID = 12 });
 
-            ShippingProfileEntity profile = new ShippingProfileEntity();
-
             ApplyProfilePipeline testObject = mock.Create<ApplyProfilePipeline>();
             testObject.Register(viewModel.Object);
 

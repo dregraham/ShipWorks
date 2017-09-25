@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Filters.Content.Conditions;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using ShipWorks.Filters.Content.Conditions;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {
@@ -58,8 +51,6 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void UpdateValueVisibility()
         {
-            StringOperator op = (StringOperator) equalityOperator.SelectedValue;
-
             targetValue.Left = equalityOperator.Right + 3;
             Width = targetValue.Right + errorSpace;
         }

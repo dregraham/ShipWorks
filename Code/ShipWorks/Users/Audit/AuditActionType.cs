@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
 using System.ComponentModel;
+using System.Reflection;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Users.Audit
@@ -10,7 +7,7 @@ namespace ShipWorks.Users.Audit
     /// <summary>
     /// Enumerates the types of events that can be audited
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum AuditActionType
     {
         /// <summary>
@@ -81,6 +78,13 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         [Description("Reload ShipSense started")]
         [ImageResource("arrows_green_static")]
-        ReloadShipSenseStarted = 9
+        ReloadShipSenseStarted = 9,
+
+        /// <summary>
+        /// Orders were combined.
+        /// </summary>
+        [Description("Combine Order")]
+        [ImageResource("merge_icon_16x16")]
+        CombineOrder = 10
     }
 }

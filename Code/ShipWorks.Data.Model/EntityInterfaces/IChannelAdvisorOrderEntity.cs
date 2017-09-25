@@ -84,6 +84,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -110,6 +111,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IChannelAdvisorOrderSearchEntity> IChannelAdvisorOrderEntity.ChannelAdvisorOrderSearch => ChannelAdvisorOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

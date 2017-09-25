@@ -15,6 +15,7 @@ using log4net;
 using Rebex.Mail;
 using Rebex.Net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -42,8 +43,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         /// <summary>
         /// Constructor
         /// </summary>
-        public YahooEmailDownloader(YahooStoreEntity store)
-            : base(store)
+        public YahooEmailDownloader(YahooStoreEntity store, IStoreTypeManager storeTypeManager,
+                IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+            : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
 
         }
@@ -216,7 +218,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
             int orderNumber = Convert.ToInt32(yahooOrderID.Substring(lastSlash + 1));
 
             // Create a new order for it
-            YahooOrderEntity order = (YahooOrderEntity) await InstantiateOrder(new YahooOrderIdentifier(yahooOrderID)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new YahooOrderIdentifier(yahooOrderID)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", yahooOrderID, result.Message);
+                return;
+            }
+
+            YahooOrderEntity order = (YahooOrderEntity) result.Value;
 
             long numericTime = XPathUtility.Evaluate(xpath, "NumericTime", 0L);
 

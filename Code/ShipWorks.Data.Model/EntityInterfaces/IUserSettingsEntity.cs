@@ -129,6 +129,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean AutoWeigh { get; }
+        /// <summary> The DialogSettings property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."DialogSettings"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String DialogSettings { get; }
         
         IUserEntity User { get; }
         

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Xml;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Users.Audit;
-using log4net;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using System.IO;
+﻿using System.Collections.Generic;
 using Interapptive.Shared;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores
 {
@@ -21,7 +14,7 @@ namespace ShipWorks.Stores
     /// </summary>
     public abstract class OnlineStatusCodeProvider<T> : StatusCodeProvider<T>
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(OnlineStatusCodeProvider<T>));
 
         // Store entity using status codes
@@ -84,7 +77,7 @@ namespace ShipWorks.Stores
             // Update to use this map now
             CodeMap = newMap;
 
-            // Go throug all pairs in the new map
+            // Go through all pairs in the new map
             foreach (KeyValuePair<T, string> pair in newMap)
             {
                 T code = pair.Key;

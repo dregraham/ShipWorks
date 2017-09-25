@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
 {
     /// <summary>
-    /// An implementation of the IRemoveItemRequest interface that hits the Newegg API. 
-    /// This will remove item(s) in specified order, but only supports order(s) that is 
+    /// An implementation of the IRemoveItemRequest interface that hits the Newegg API.
+    /// This will remove item(s) in specified order, but only supports order(s) that is
     /// fulfilled by seller. If all items removed from an order, order status becomes void.
     /// </summary>
     public class RemoveItemRequest : IRemoveItemRequest
@@ -49,14 +49,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
         /// <param name="order">The order items should be removed from.</param>
         /// <param name="items">The items to be removed.</param>
         /// <returns>An ItemRemovalResult object.</returns>
-        public ItemRemovalResult RemoveItems(Order order, IEnumerable<Item> items)
+        public async Task<ItemRemovalResult> RemoveItems(Order order, IEnumerable<Item> items)
         {
             if (order == null)
             {
                 throw new ArgumentNullException("The order parameter cannot not be null");
             }
 
-            // API URL depends on which marketplace the seller selected 
+            // API URL depends on which marketplace the seller selected
             string marketplace = "";
 
             switch (credentials.Channel)
@@ -75,14 +75,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
 
             string formattedUrl = string.Format(RequestUrl, marketplace, order.OrderNumber, credentials.SellerId);
 
-            RequestConfiguration requestConfig = new RequestConfiguration("Remove Items", formattedUrl) 
-            { 
-                Method = HttpVerb.Put, 
-                Body = GetRequestBody(items) 
+            RequestConfiguration requestConfig = new RequestConfiguration("Remove Items", formattedUrl)
+            {
+                Method = HttpVerb.Put,
+                Body = GetRequestBody(items)
             };
 
             // The removal response data should contain the XML describing an ItemRemovalResult
-            string responseData = this.request.SubmitRequest(credentials, requestConfig);
+            string responseData = await request.SubmitRequest(credentials, requestConfig).ConfigureAwait(false);
             NeweggResponse removalResponse = new NeweggResponse(responseData, new ItemRemovalResponseSerializer());
 
             if (removalResponse.ResponseErrors.Count() > 0)
@@ -129,9 +129,9 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
                           <Order>
                             <ItemList>");
 
-            foreach(Item item in items)
+            foreach (Item item in items)
             {
-                requestBody.AppendFormat("<Item><SellerPartNumber>{0}</SellerPartNumber></Item>", item.SellerPartNumber);                              
+                requestBody.AppendFormat("<Item><SellerPartNumber>{0}</SellerPartNumber></Item>", item.SellerPartNumber);
             }
 
             requestBody.Append(@"

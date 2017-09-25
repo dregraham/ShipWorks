@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Groupon
@@ -34,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             tokenTextBox.Text = grouponStore.Token;
             supplierIDTextbox.Text = grouponStore.SupplierID;
         }
-        
+
         /// <summary>
         /// Saves the user selected settings back to the store entity;
         /// </summary>
@@ -56,10 +58,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                 try
                 {
-                    GrouponWebClient client = new GrouponWebClient(grouponStore);
-                    //Check to see if we have access to Groupon with the new creds
-                    //Ask for some orders
-                    client.GetOrders(DateTime.UtcNow, 1);
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        var client = lifetimeScope.Resolve<IGrouponWebClient>();
+
+                        //Check to see if we have access to Groupon with the new creds
+                        //Ask for some orders
+                        client.GetOrders(grouponStore, DateTime.UtcNow, 1);
+                    }
 
                     return true;
                 }
@@ -91,8 +97,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(GrouponStoreEntity store)
         {
-            return (store.Fields[(int)GrouponStoreFieldIndex.Token].IsChanged ||
-                    store.Fields[(int)GrouponStoreFieldIndex.SupplierID].IsChanged);
+            return (store.Fields[(int) GrouponStoreFieldIndex.Token].IsChanged ||
+                    store.Fields[(int) GrouponStoreFieldIndex.SupplierID].IsChanged);
         }
     }
 }

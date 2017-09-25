@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityInterfaces;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce.Downloading
@@ -13,6 +14,6 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Downloading
         /// order multiple times.
         /// </summary>
         /// <returns>BigCommerceWebClientOrderSearchCriteria </returns>
-        BigCommerceWebClientOrderSearchCriteria Create(IStoreEntity store, BigCommerceWebClientOrderDateSearchType orderDateSearchType);
+        Task<BigCommerceWebClientOrderSearchCriteria> Create(IStoreEntity store, BigCommerceWebClientOrderDateSearchType orderDateSearchType);
     }
 }

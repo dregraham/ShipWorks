@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 OrdersResponse ordersResponse;
                 do
                 {
-                    ordersResponse = webClient.GetOrders(GetStartDate(), 1);
+                    ordersResponse = webClient.GetOrders(await GetStartDate(), 1);
 
                     if (ordersResponse == null)
                     {
@@ -101,27 +101,7 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     foreach (Order magentoOrder in ordersResponse.Orders)
                     {
-                        MagentoOrderIdentifier orderIdentifier;
-                        // The orders order number and orderid are not the same
-                        if (magentoOrder.EntityId.ToString() != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
-                        {
-                            // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
-                            // we have downloaded this order before used its entity id as the order number so use it again
-                            orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
-                        }
-                        else
-                        {
-                            // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
-                            long orderNumber =
-                                MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
-                            string orderNumberPostfix =
-                                MagentoTwoRestOrderNumberUtility.GetOrderNumberPostfix(magentoOrder.IncrementId);
-
-                            orderIdentifier = new MagentoOrderIdentifier(orderNumber, "", orderNumberPostfix);
-                        }
-
-                        MagentoOrderEntity orderEntity = await InstantiateOrder(orderIdentifier).ConfigureAwait(false) as MagentoOrderEntity;
-                        await LoadOrder(orderEntity, magentoOrder, Progress).ConfigureAwait(false);
+                        await DownloadOrder(magentoOrder).ConfigureAwait(false);
                     }
                 } while (ordersResponse.TotalCount > 0);
 
@@ -133,6 +113,40 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
         }
 
+        /// <summary>
+        /// Download an individual order
+        /// </summary>
+        private async Task DownloadOrder(Order magentoOrder)
+        {
+            MagentoOrderIdentifier orderIdentifier;
+
+            // The orders order number and orderid are not the same
+            if (magentoOrder.EntityId.ToString() != magentoOrder.IncrementId && IsLegacyRestOrder(magentoOrder.EntityId))
+            {
+                // Check and see if we downloaded this order prior to making the switch from entityid to incrementid
+                // we have downloaded this order before used its entity id as the order number so use it again
+                orderIdentifier = new MagentoOrderIdentifier(magentoOrder.EntityId, "", "");
+            }
+            else
+            {
+                // the above did not yield an order identifier so use our default and correct behavior of using incrementid as the order identifier
+                long orderNumber =
+                    MagentoTwoRestOrderNumberUtility.GetOrderNumber(magentoOrder.IncrementId);
+                string orderNumberPostfix =
+                    MagentoTwoRestOrderNumberUtility.GetOrderNumberPostfix(magentoOrder.IncrementId);
+
+                orderIdentifier = new MagentoOrderIdentifier(orderNumber, "", orderNumberPostfix);
+            }
+
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderIdentifier.OrderNumber, result.Message);
+                return;
+            }
+
+            await LoadOrder((MagentoOrderEntity) result.Value, magentoOrder, Progress).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Check and see if the MagentoOrderId belongs to an order that was downloaded prior to us switching from using EntityId as the order number to IncrementId
@@ -162,9 +176,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Get the start date for the download cycle
         /// </summary>
         /// <remarks>if we have not saved any orders yet use the start date minus 5 minutes</remarks>
-        private DateTime? GetStartDate()
+        private async Task<DateTime?> GetStartDate()
         {
-            DateTime? onlineLastModifiedStartingPoint = GetOnlineLastModifiedStartingPoint();
+            DateTime? onlineLastModifiedStartingPoint = await GetOnlineLastModifiedStartingPoint();
 
             // If we haven't saved any orders yet use the start date minus 5 minutes
             // add a 5 min buffer to overlap possible server time issues

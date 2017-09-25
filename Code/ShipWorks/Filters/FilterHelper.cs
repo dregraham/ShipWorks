@@ -485,7 +485,7 @@ namespace ShipWorks.Filters
             // If we are within a transaction right now, we don't want the FilterNodeContent table locked into that
             // transaction.  The FilterNodeContent table should actually never be in a transaction, so just suppressing
             // the transaction should make it so we never block or cause blocking.
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 ResultsetFields resultFields = new ResultsetFields(1);
                 resultFields.DefineField(FilterNodeFields.FilterNodeContentID, 0, "FilterNodeContentID", "");
@@ -529,7 +529,7 @@ namespace ShipWorks.Filters
 
             // If we are within a transaction right now, we don't want the FilterNodeContent table locked into that
             // transaction.  We may block if filter are being updated, but at least we won't cause blocking.
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
@@ -552,7 +552,7 @@ namespace ShipWorks.Filters
             byte[] rowVersion;
 
             // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
                 // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
@@ -576,7 +576,7 @@ namespace ShipWorks.Filters
             Stopwatch timer = Stopwatch.StartNew();
 
             // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 log.InfoFormat("Ensuring filters are at least as up to date as {0}", SqlUtility.GetTimestampValue(rowVersion));
 
@@ -627,14 +627,14 @@ namespace ShipWorks.Filters
             byte[] rowVersion;
 
             // Can't calculate filters within a transaction - would hose everything up
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 // We need to capture the DBTS on entry - we only care if filters get as up-to-date as what the dirty mark is now.
                 // If changes just keep coming in and coming in, then update counts would always be needed, and we'd never consider filters
                 // up-to-date
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    rowVersion = (byte[])DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
+                    rowVersion = (byte[]) DbCommandProvider.ExecuteScalar(con, "SELECT @@DBTS");
                 }
             }
 
@@ -655,7 +655,7 @@ namespace ShipWorks.Filters
                 iteration++;
 
                 // Can't calculate filters within a transaction - would hose everything up
-                using (new TransactionScope(TransactionScopeOption.Suppress))
+                using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
                 {
                     log.InfoFormat($"Ensuring QUICK filters are at least as up to date as {SqlUtility.GetTimestampValue(rowVersion)}, iteration {iteration}.");
 
@@ -696,7 +696,7 @@ namespace ShipWorks.Filters
                 }
             }
 
-            log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[])result), SqlUtility.GetTimestampValue(rowVersion));
+            log.InfoFormat("Still not ensured up-to-date ({0} < {1}), calculating and waiting...", SqlUtility.GetTimestampValue((byte[]) result), SqlUtility.GetTimestampValue(rowVersion));
 
             // Sleep 50ms so we don't slam SQL Server every couple of ms.
             Thread.Sleep(50);

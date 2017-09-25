@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IThreeDCartOrderSearchEntity> IThreeDCartOrderEntity.ThreeDCartOrderSearch => ThreeDCartOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -110,6 +110,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipSenseHashKey = source.ShipSenseHashKey;
             ShipSenseRecognitionStatus = source.ShipSenseRecognitionStatus;
             ShipAddressType = source.ShipAddressType;
+            CombineSplitStatus = source.CombineSplitStatus;
             
             
             Customer = source.Customer?.AsReadOnly(objectMap);
@@ -123,6 +124,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 Enumerable.Empty<IOrderItemEntity>();
             OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IOrderPaymentDetailEntity>();
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
             Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
                 Enumerable.Empty<IShipmentEntity>();
             ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
@@ -576,6 +579,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipAddressType { get; }
+        /// <summary> The CombineSplitStatus property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."CombineSplitStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus { get; }
         
         
         public ICustomerEntity Customer { get; }
@@ -590,6 +599,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public IEnumerable<IOrderItemEntity> OrderItems { get; }
         
         public IEnumerable<IOrderPaymentDetailEntity> OrderPaymentDetails { get; }
+        
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         
         public IEnumerable<IShipmentEntity> Shipments { get; }
         

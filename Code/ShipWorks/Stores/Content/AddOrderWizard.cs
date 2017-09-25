@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
@@ -64,6 +65,8 @@ namespace ShipWorks.Stores.Content
 
             order.BillCountryCode = "US";
             order.ShipCountryCode = "US";
+
+            order.CombineSplitStatus = CombineSplitStatusType.None;
 
             radioOrderNumberGenerate.Checked = true;
 
@@ -326,7 +329,7 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnSetOrderStatus(object sender, EventArgs e)
         {
-            MenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
+            IMenuCommand command = MenuCommandConverter.ExtractMenuCommand(sender);
 
             StatusPresetEntity preset = (StatusPresetEntity) command.Tag;
 

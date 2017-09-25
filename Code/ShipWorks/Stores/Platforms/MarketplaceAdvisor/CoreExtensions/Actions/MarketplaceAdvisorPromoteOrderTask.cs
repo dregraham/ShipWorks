@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
-using ShipWorks.Data;
+﻿using System.Collections.Generic;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
@@ -17,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Actions
     /// <summary>
     /// Task for promoting a MarketplaceAdvisor order
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [ActionTask("Promote order", "MarketplaceAdvisorPromoteOrder", ActionTaskCategory.UpdateOnline)]
     public class MarketplaceAdvisorPromoteOrderTask : StoreInstanceTaskBase
     {

@@ -1,5 +1,8 @@
 ﻿using System;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -13,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly string lemonStandStoreOrderID;
 
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
         public LemonStandOrderIdentifier(string lemonStandStoreOrderID)
         {
@@ -21,7 +24,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Apply the order number to the order provided
+        /// Constructor
+        /// </summary>
+        public LemonStandOrderIdentifier(int orderID) : this(orderID.ToString())
+        {
+
+        }
+
+        /// <summary>
+        /// Apply the order number to the order provided
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
@@ -37,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Apply the order number to the download log entity
+        /// Apply the order number to the download log entity
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
@@ -50,11 +61,17 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     String representation
+        /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
-        public override string ToString()
-        {
-            return $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
-        }
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.LemonStandOrderSearch,
+                LemonStandOrderSearchFields.OriginalOrderID,
+                LemonStandOrderSearchFields.LemonStandOrderID == lemonStandStoreOrderID);
+
+        /// <summary>
+        /// String representation
+        /// </summary>
+        public override string ToString() => $"LemonStandStoreOrderID:{lemonStandStoreOrderID}";
     }
 }

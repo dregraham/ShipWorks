@@ -345,6 +345,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.Contains(1, numbersInEnumerable);
             Assert.Contains(2, numbersInEnumerable);
         }
+
         [Fact]
         public void DefaultIfEmptyOrNull_ReturnsDefault_WhenEmpty()
         {

@@ -28,5 +28,10 @@ namespace ShipWorks.Data
         /// Create database resource from bytes
         /// </summary>
         DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label);
+
+        /// <summary>
+        /// Register the data as a resource in the database.  If already present, the existing reference is returned.
+        /// </summary>
+        DataResourceReference CreateFromText(string text, long consumerID);
     }
 }

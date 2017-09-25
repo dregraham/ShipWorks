@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Autofac;
-using log4net;
-using ShipWorks.ApplicationCore;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
@@ -59,10 +56,20 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <summary>
         /// Get the code map from the given store
         /// </summary>
-        private Dictionary<int, string> GetCodeMap(IBigCommerceStoreEntity store)
+        /// <remarks>
+        /// This needs to be run in a new task so that we can block on it without deadlock
+        /// </remarks>
+        private Dictionary<int, string> GetCodeMap(IBigCommerceStoreEntity store) =>
+            Task.Run(() => GetCodeMapAsync(store)).Result;
+
+        /// <summary>
+        /// Get the code map from the given store
+        /// </summary>
+        private async Task<Dictionary<int, string>> GetCodeMapAsync(IBigCommerceStoreEntity store)
         {
             IBigCommerceWebClient client = webClientFactory.Create(store);
-            return client.FetchOrderStatuses().ToDictionary(x => x.StatusID, x => x.StatusText);
+            var codes = await client.FetchOrderStatuses().ConfigureAwait(false);
+            return codes.ToDictionary(x => x.StatusID, x => x.StatusText);
         }
     }
 }

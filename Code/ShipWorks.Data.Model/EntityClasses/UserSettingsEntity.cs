@@ -385,6 +385,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("SingleScanSettings", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoWeigh", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DialogSettings", fieldHashtable);
 		}
 		#endregion
 
@@ -661,6 +663,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoWeigh, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.AutoWeigh, value); }
+		}
+
+		/// <summary> The DialogSettings property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."DialogSettings"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String DialogSettings
+		{
+			get { return (System.String)GetValue((int)UserSettingsFieldIndex.DialogSettings, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.DialogSettings, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

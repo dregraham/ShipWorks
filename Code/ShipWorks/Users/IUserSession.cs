@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Logon;
 
@@ -38,5 +39,10 @@ namespace ShipWorks.Users
         /// Is a user logged on
         /// </summary>
         bool IsLoggedOn { get; }
+
+        /// <summary>
+        /// Update the current user's settings
+        /// </summary>
+        void UpdateSettings(Action<UserSettingsEntity> updateAction);
     }
 }

@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
             { 20021, "Order #{0} does not exist" }
         };
 
-        protected readonly Func<YahooStoreEntity, ILog, IYahooApiWebClient> StoreWebClient;
+        protected readonly IYahooApiWebClient webClient;
         private readonly Func<Type, ILog> logfactory;
         protected readonly PropertyChangedHandler Handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,9 +40,9 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// Initializes a new instance of the <see cref="YahooApiAccountViewModel"/> class.
         /// </summary>
         /// <param name="storeWebClient">The store web client.</param>
-        public YahooApiAccountViewModel(Func<YahooStoreEntity, ILog, IYahooApiWebClient> storeWebClient, Func<Type, ILog> logfactory)
+        public YahooApiAccountViewModel(IYahooApiWebClient webClient, Func<Type, ILog> logfactory)
         {
-            this.StoreWebClient = storeWebClient;
+            this.webClient = webClient;
             this.logfactory = logfactory;
             Handler = new PropertyChangedHandler(this, () => PropertyChanged);
         }
@@ -133,8 +133,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             try
             {
-                YahooResponse response = StoreWebClient(new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken }, logfactory(typeof(YahooApiWebClient)))
-                            .GetOrderRange(BackupOrderNumber.GetValueOrDefault());
+                var store = new YahooStoreEntity() { YahooStoreID = YahooStoreID, AccessToken = AccessToken };
+                YahooResponse response = webClient.GetOrderRange(store, BackupOrderNumber.GetValueOrDefault());
 
                 CheckCredentialsError(response);
 
@@ -200,8 +200,8 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
         /// <returns></returns>
         public virtual string Save(YahooStoreEntity store)
         {
-            store.YahooStoreID = YahooStoreID;
-            store.AccessToken = AccessToken;
+            store.YahooStoreID = YahooStoreID?.Trim() ?? string.Empty;
+            store.AccessToken = AccessToken?.Trim() ?? string.Empty;
             store.BackupOrderNumber = BackupOrderNumber;
 
             string message = ValidateInput();
@@ -212,8 +212,7 @@ namespace ShipWorks.Stores.UI.Platforms.Yahoo.ApiIntegration
 
             try
             {
-                YahooResponse response = StoreWebClient(new YahooStoreEntity { YahooStoreID = YahooStoreID, AccessToken = AccessToken }, logfactory(typeof(YahooApiWebClient)))
-                    .ValidateCredentials();
+                YahooResponse response = webClient.ValidateCredentials(store);
 
                 string error = response.ErrorMessages == null ?
                     string.Empty :

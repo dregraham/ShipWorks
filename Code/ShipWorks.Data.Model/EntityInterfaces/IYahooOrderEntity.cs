@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IYahooOrderSearchEntity> YahooOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -56,6 +57,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IYahooOrderSearchEntity> IYahooOrderEntity.YahooOrderSearch => YahooOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

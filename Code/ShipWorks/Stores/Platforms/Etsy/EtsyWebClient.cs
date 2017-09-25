@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Web;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Net.OAuth;
 using Interapptive.Shared.Security;
@@ -21,19 +22,22 @@ namespace ShipWorks.Stores.Platforms.Etsy
     /// <summary>
     /// Etsy Web Services Client
     /// </summary>
-    public class EtsyWebClient
+    [Component]
+    public class EtsyWebClient : IEtsyWebClient
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EtsyWebClient));
 
         // The store we are connecting to
-        readonly EtsyStoreEntity store;
+        private readonly EtsyStoreEntity store;
+        private readonly ILogEntryFactory logEntryFactory;
         string unvalidatedSecretToken = string.Empty;
 
         /// <summary>
         /// Create an instance of the web client for connecting to the specified store
         /// </summary>
-        public EtsyWebClient(EtsyStoreEntity etsyStore)
+        public EtsyWebClient(EtsyStoreEntity etsyStore, ILogEntryFactory logEntryFactory)
         {
+            this.logEntryFactory = logEntryFactory;
             if (etsyStore == null)
             {
                 throw new ArgumentNullException("etsyStore");
@@ -43,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Get's the URL a user will use to authorize their etsy account to use ShipWorks.
+        /// Gets the URL a user will use to authorize their etsy account to use ShipWorks.
         /// </summary>
         /// <returns>URL for Etsy Authorization</returns>
         public Uri GetRequestTokenURL(Uri callbackURL)
@@ -143,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Get's store create date from Etsy
+        /// Gets store create date from Etsy
         /// </summary>
         public DateTime GetStoreCreationDate()
         {
@@ -181,12 +185,12 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get the number of orders from Etsy between startDate and endDate
         /// </summary>
-        public int GetOrderCount(DateTime startDate, DateTime endDate)
+        public int GetOrderCount(Range<DateTime> dateRange)
         {
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
-            oAuth.OtherParameters.Add("min_created", DateTimeUtility.ToUnixTimestamp(startDate).ToString());
-            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
+            oAuth.OtherParameters.Add("min_created", DateTimeUtility.ToUnixTimestamp(dateRange.Start).ToString());
+            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(dateRange.End).ToString());
             oAuth.OtherParameters.Add("limit", "1");
 
             string response = ProcessRequest(oAuth, "GetOrderCount");
@@ -197,15 +201,15 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Get's orders created after startDate.
+        /// Gets orders created after startDate.
         /// </summary>
-        public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int limit, int offset)
+        public List<JToken> GetOrders(Range<DateTime> dateRange, int limit, int offset)
         {
-            double startDateStamp = DateTimeUtility.ToUnixTimestamp(startDate);
+            double startDateStamp = DateTimeUtility.ToUnixTimestamp(dateRange.Start);
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetFindAllShopReceiptsUrl(store.EtsyShopID));
 
             oAuth.OtherParameters.Add("min_created", startDateStamp.ToString());
-            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(endDate).ToString());
+            oAuth.OtherParameters.Add("max_created", DateTimeUtility.ToUnixTimestamp(dateRange.End).ToString());
             oAuth.OtherParameters.Add("includes", EtsyEndpoints.OrderIncludes);
             oAuth.OtherParameters.Add("limit", limit.ToString());
             oAuth.OtherParameters.Add("offset", offset.ToString());
@@ -250,8 +254,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Gets a list of products
         /// </summary>
-        /// <param name="listingId"></param>
-        /// <param name="productId"></param>
         public JToken GetProduct(int listingId, int productId)
         {
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetProductUrl(listingId, productId));
@@ -374,7 +376,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Given a comma seperated list of recieptsID's, return the orders shipped and paid status.
+        /// Given a comma separated list of recieptsID's, return the orders shipped and paid status.
         /// </summary>
         private JArray GetOrderStatuses(string receipts)
         {
@@ -390,7 +392,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Returns an OAuth oject with url, token, and tokenSecret filled in.
+        /// Returns an OAuth object with url, token, and tokenSecret filled in.
         /// </summary>
         private OAuth GetNewOAuth(Uri url)
         {
@@ -434,7 +436,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Actual call to Etsy
         /// </summary>
-        private static string ProcessRequest(OAuth oAuth, string action, bool encryptResponse = false)
+        private string ProcessRequest(OAuth oAuth, string action, bool encryptResponse = false)
         {
             IHttpResponseReader response = GetResponseReader(oAuth, action, encryptResponse);
             return response.ReadResult();
@@ -443,9 +445,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Get the HttpResponseReader from Etsy
         /// </summary>
-        private static IHttpResponseReader GetResponseReader(OAuth oAuth, string action, bool encryptResponse = false)
+        private IHttpResponseReader GetResponseReader(OAuth oAuth, string action, bool encryptResponse = false)
         {
-            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Etsy, action);
+            IApiLogEntry logger = logEntryFactory.GetLogEntry(ApiLogSource.Etsy, action, LogActionType.Other);
 
             // Set if we want encryption
             logger.Encryption = encryptResponse ? ApiLogEncryption.Encrypted : ApiLogEncryption.Default;
@@ -483,7 +485,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Given a comma seperated list of order numbers, return the order numbers where the Etsy status doesn't match the parameters.
+        /// Given a comma separated list of order numbers, return the order numbers where the Etsy status doesn't match the parameters.
         /// </summary>
         public IEnumerable<long> GetOrderNumbersWithChangedStatus(string orderNumbers, string etsyFieldName, bool currentStatus)
         {
@@ -495,7 +497,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         }
 
         /// <summary>
-        /// Get payment information from Etsy for the comma seperated list of orders
+        /// Get payment information from Etsy for the comma separated list of orders
         /// </summary>
         public JArray GetPaymentInformation(string formattedOrderNumbers)
         {

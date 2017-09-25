@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IOrderMotionOrderSearchEntity> OrderMotionOrderSearch { get; }
 
         /// <summary>
         /// Get a read only version of the entity
@@ -68,6 +69,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IOrderMotionOrderSearchEntity> IOrderMotionOrderEntity.OrderMotionOrderSearch => OrderMotionOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -14,6 +17,9 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using Interapptive.Shared.Metrics;
+using ShipWorks.Data.Model.EntityInterfaces;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -222,101 +228,137 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// Performs the order combining on those selected contained orders
         /// </summary>
         [NDependIgnoreLongMethod]
-        public bool Combine()
+        public async Task<bool> Combine()
         {
             List<EbayCombinedOrderComponent> toCombine = components.Where(c => c.Included).ToList();
-
+            int orderToCombineCount = toCombine.Count;
+            bool result = false;
             long? ebayOrderID = null;
 
-            // If combining on eBay, do that first
-            if (CombinedOrderType == EbayCombinedOrderType.Ebay)
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Combined"))
             {
-                EbayStoreEntity ebayStore = StoreManager.GetStore(StoreID) as EbayStoreEntity;
-
-                // build the collection of transactions to be combined
-                List<TransactionType> transactions = new List<TransactionType>();
-
-                // Go through each order that is going to be combined, and build a list of all eBay transactions from it
-                foreach (EbayOrderEntity order in toCombine.Select(c => c.Order))
+                // If combining on eBay, do that first
+                if (CombinedOrderType == EbayCombinedOrderType.Ebay)
                 {
-                    // Ensure the items are loaded for this order
-                    if (order.OrderItems.Count == 0)
-                    {
-                        order.OrderItems.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
-                    }
+                    EbayStoreEntity ebayStore = StoreManager.GetStore(StoreID) as EbayStoreEntity;
 
-                    // Create transactions based on each eBay item
-                    foreach (EbayOrderItemEntity orderItem in order.OrderItems.OfType<EbayOrderItemEntity>())
+                    // build the collection of transactions to be combined
+                    List<TransactionType> transactions = new List<TransactionType>();
+
+                    // Go through each order that is going to be combined, and build a list of all eBay transactions from it
+                    foreach (EbayOrderEntity order in toCombine.Select(c => c.Order))
                     {
-                        // build a TransactionType to identify the transaction with eBay
-                        TransactionType transaction = new TransactionType()
+                        // Ensure the items are loaded for this order
+                        if (order.OrderItems.Count == 0)
                         {
-                            TransactionID = orderItem.EbayTransactionID.ToString(),
-                            Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
-                        };
+                            order.OrderItems.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.OrderItemEntity).Cast<OrderItemEntity>());
+                        }
 
-                        // add it to the list of transactions to be sent to eBay
-                        transactions.Add(transaction);
+                        // Create transactions based on each eBay item
+                        foreach (EbayOrderItemEntity orderItem in order.OrderItems.OfType<EbayOrderItemEntity>())
+                        {
+                            // build a TransactionType to identify the transaction with eBay
+                            TransactionType transaction = new TransactionType()
+                            {
+                                TransactionID = orderItem.EbayTransactionID.ToString(),
+                                Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
+                            };
+
+                            // add it to the list of transactions to be sent to eBay
+                            transactions.Add(transaction);
+                        }
+                    }
+
+                    // use the most recent order being combined as the template
+                    EbayOrderEntity orderTemplate = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
+
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IEbayWebClient webClient = lifetimeScope.Resolve<IEbayWebClient>();
+                        var token = EbayToken.FromStore(ebayStore);
+
+                        // Combine the orders through eBay and pull out the new eBay order ID
+                        ebayOrderID = webClient.CombineOrders(
+                            token,
+                            transactions,
+                            GetCombinedPaymentTotal(toCombine),
+                            AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
+                            ShippingCost,
+                            orderTemplate.ShipCountryCode,
+                            ShippingService,
+                            TaxPercent,
+                            TaxState,
+                            TaxShipping);
                     }
                 }
 
-                // use the most recent order being combined as the template
-                EbayOrderEntity orderTemplate = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
-
-                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(ebayStore));
-
-                // Combine the orders through eBay and pull out the new eBay order ID
-                ebayOrderID = webClient.CombineOrders(
-                    transactions,
-                    GetCombinedPaymentTotal(toCombine),
-                    AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
-                    ShippingCost,
-                    orderTemplate.ShipCountryCode,
-                    ShippingService,
-                    TaxPercent,
-                    TaxState,
-                    TaxShipping);
-            }
-
-            // create the local combined order
-            bool result = false;
-            try
-            {
-                SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) =>
+                // create the local combined order
+                try
                 {
-                    result = CombineLocalOrders(adapter, toCombine, ebayOrderID);
+                    SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry =
+                        new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
-                    // Don't commit because sqlDeadlockRetry will do the commit
-                });
-            }
-            catch (ORMQueryExecutionException ex)
-            {
-                // An ORM query exception could occur if one of the mapped tables no longer exists or cannot be found
-                // in the database
-                // Log the details of the original exception
-                log.Error(string.Format("An ORM exception occurred: {0}. {1}", ex.Message, ex.QueryExecuted));
+                    await sqlDeadlockRetry.ExecuteWithRetryAsync((SqlAdapter adapter) =>
+                    {
+                        return CombineLocalOrders(adapter, toCombine, ebayOrderID);
+                        // Don't commit because sqlDeadlockRetry will do the commit
+                    }).ConfigureAwait(false);
 
-                // Now construct a more user-friendly error message in the form of an eBay exception
-                string errorMessage = "An error occurred while saving a combined order. ";
-                long? orderNumberBeingDeleted = GetOrderNumberFromORMQueryExecutionException(ex);
-
-                if (orderNumberBeingDeleted.HasValue)
-                {
-                    errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderNumberBeingDeleted.Value);
+                    result = true;
                 }
+                catch (ORMQueryExecutionException ex)
+                {
+                    // An ORM query exception could occur if one of the mapped tables no longer exists or cannot be found
+                    // in the database
+                    // Log the details of the original exception
+                    log.Error(string.Format("An ORM exception occurred: {0}. {1}", ex.Message, ex.QueryExecuted));
 
-                throw new EbayException(errorMessage, ex);
-            }
-            catch (SqlDeadlockException ex)
-            {
-                // Log the details of the original exception
-                log.Error(string.Format("A SqlDeadlockException exception occurred: {0}", ex.Message));
+                    // Now construct a more user-friendly error message in the form of an eBay exception
+                    string errorMessage = "An error occurred while saving a combined order. ";
+                    long? orderNumberBeingDeleted = GetOrderNumberFromORMQueryExecutionException(ex);
 
-                throw new EbayException("An error occurred while saving a combined order. ", ex);
+                    if (orderNumberBeingDeleted.HasValue)
+                    {
+                        errorMessage += string.Format("Failed to delete one of the old orders being combined (order number {0}).", orderNumberBeingDeleted.Value);
+                    }
+
+                    throw new EbayException(errorMessage, ex);
+                }
+                catch (SqlDeadlockException ex)
+                {
+                    // Log the details of the original exception
+                    log.Error(string.Format("A SqlDeadlockException exception occurred: {0}", ex.Message));
+
+                    throw new EbayException("An error occurred while saving a combined order. ", ex);
+                }
+                finally
+                {
+                    AddTelemetryProperties(trackedDurationEvent, orderToCombineCount, result);
+                }
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Add telemetry properties
+        /// </summary>
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, int orderCount, bool result)
+        {
+            try
+            {
+                string legacyType = CombinedOrderType == EbayCombinedOrderType.Local ? "Local" : "eBay";
+
+                trackedDurationEvent.AddProperty("Orders.Combined.Result", result ? "Success" : "Failed");
+                trackedDurationEvent.AddProperty("Orders.Combined.Quantity", orderCount.ToString());
+                trackedDurationEvent.AddProperty("Orders.Combined.StoreType", EnumHelper.GetDescription(StoreTypeCode.Ebay));
+                trackedDurationEvent.AddProperty("Orders.Combined.StoreId", StoreID.ToString());
+                trackedDurationEvent.AddProperty("Orders.Combined.Strategy", $"Legacy-{legacyType}");
+            }
+            catch
+            {
+                // Just continue...we don't want to stop the combine if telemetry has an issue.
+            }
         }
 
         /// <summary>
@@ -324,7 +366,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
         [NDependIgnoreLongMethod]
-        private bool CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
+        private async Task<bool> CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
             // Do nothing
             if (toCombine.Count == 0)
@@ -353,7 +395,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             newOrder.RollupItemTotalWeight = 0;
 
             // Generate a new order number
-            newOrder.OrderNumber = OrderUtility.GetNextOrderNumber(store.StoreID);
+            newOrder.OrderNumber = await new OrderUtilityWrapper(new SqlAdapterFactory()).GetNextOrderNumberAsync(store.StoreID)
+                .ConfigureAwait(false);
 
             if (!locallyCombinedOnly)
             {
