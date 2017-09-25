@@ -16,6 +16,7 @@ using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -353,14 +354,17 @@ namespace ShipWorks.Stores.Platforms.Amazon
         private void AddOrderItemCharges(XPathNamespaceNavigator xpath, AmazonOrderEntity order)
         {
             // Charges
-            decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
-            AddToCharge(order, "Tax", "Tax", itemTax);
+            if ((Store as IAmazonStoreEntity)?.AmazonVATS != true)
+            {
+	            decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
+	            AddToCharge(order, "Tax", "Tax", itemTax);
 
-            decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
-            AddToCharge(order, "Tax", "Tax", giftWrapTax);
+	            decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
+	            AddToCharge(order, "Tax", "Tax", giftWrapTax);
 
-            decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
-            AddToCharge(order, "Tax", "Tax", shippingTax);
+	            decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
+	            AddToCharge(order, "Tax", "Tax", shippingTax);
+			}
 
             decimal shipDiscount = XPathUtility.Evaluate(xpath, "amz:ShippingDiscount/amz:Amount", 0M);
             AddToCharge(order, "Shipping Discount", "Shipping Discount", -shipDiscount);

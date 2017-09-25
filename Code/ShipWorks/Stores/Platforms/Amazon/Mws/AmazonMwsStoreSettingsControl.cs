@@ -23,6 +23,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// </summary>
     public partial class AmazonMwsStoreSettingsControl : StoreSettingsControlBase
     {
+        private const string amazonVATSWarning =
+            "Enabling the Amazon VATS toggle will stop ShipWorks from downloading the \"Tax\" line item, because the VATS tax is already included in each item total. Are you sure you want to do this?";
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -44,6 +47,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
+            amazonVATS.SelectedValueChanged -= OnAmazonVATSSelectedValueChanged;
+
             AmazonStoreEntity amazonStore = store as AmazonStoreEntity;
             if (amazonStore == null)
             {
@@ -62,6 +67,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 Height -= 20;
             }
+
+            amazonVATS.SelectedValueChanged += OnAmazonVATSSelectedValueChanged;
         }
 
         /// <summary>
@@ -88,5 +95,19 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Should we show the VATS UI
         /// </summary>
         private bool ShowVATS(IAmazonStoreEntity store) => store.AmazonApiRegion == "UK";
+
+        /// <summary>
+        /// Handle changing the Amazon VATS option
+        /// </summary>
+        private void OnAmazonVATSSelectedValueChanged(object sender, EventArgs e)
+        {
+            ComboBox vats = sender as ComboBox;
+            if (vats == null || (bool) vats.SelectedValue == false)
+            {
+                return;
+            }
+
+            vats.SelectedValue = MessageBox.Show(this, amazonVATSWarning, "Amazon VATS", MessageBoxButtons.YesNo) == DialogResult.Yes;
+        }
     }
 }
