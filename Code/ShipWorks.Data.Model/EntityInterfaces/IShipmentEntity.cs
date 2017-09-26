@@ -476,6 +476,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<IShipmentReturnItemEntity> ReturnItems { get; }
         IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -535,5 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyShipmentEntity(this, objectMap);
         }
+
+        
     }
 }

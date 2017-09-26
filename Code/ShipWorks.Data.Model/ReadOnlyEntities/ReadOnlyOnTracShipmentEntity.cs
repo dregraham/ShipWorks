@@ -59,7 +59,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeclaredValue = source.DeclaredValue;
             RequestedLabelFormat = source.RequestedLabelFormat;
             
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
             
 
@@ -213,6 +213,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOnTracShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

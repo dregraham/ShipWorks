@@ -43,15 +43,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMivaOrderItemAttributeEntity AsReadOnly();
+        IMivaOrderItemAttributeEntity AsReadOnlyMivaOrderItemAttribute();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMivaOrderItemAttributeEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IMivaOrderItemAttributeEntity AsReadOnlyMivaOrderItemAttribute(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -72,13 +74,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IMivaOrderItemAttributeEntity AsReadOnly() =>
+        public override IOrderItemAttributeEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IMivaOrderItemAttributeEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemAttributeEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -89,5 +91,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyMivaOrderItemAttributeEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IMivaOrderItemAttributeEntity AsReadOnlyMivaOrderItemAttribute() =>
+            (IMivaOrderItemAttributeEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IMivaOrderItemAttributeEntity AsReadOnlyMivaOrderItemAttribute(IDictionary<object, object> objectMap) =>
+            (IMivaOrderItemAttributeEntity) AsReadOnly(objectMap);
+        
     }
 }

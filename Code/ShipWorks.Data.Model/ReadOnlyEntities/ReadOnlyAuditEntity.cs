@@ -49,10 +49,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             HasEvents = source.HasEvents;
             
             
-            Computer = source.Computer?.AsReadOnly(objectMap);
-            User = source.User?.AsReadOnly(objectMap);
+            Computer = (IComputerEntity) source.Computer?.AsReadOnly(objectMap);
+            User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
-            AuditChanges = source.AuditChanges?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            AuditChanges = source.AuditChanges?.Select(x => x.AsReadOnly(objectMap)).OfType<IAuditChangeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IAuditChangeEntity>();
 
             CopyCustomAuditData(source);
@@ -143,6 +143,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IAuditEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -66,7 +66,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            OrderMotionStore = source.OrderMotionStore?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderMotionStore = source.OrderMotionStore?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderMotionStoreEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderMotionStoreEntity>();
 
             CopyCustomEmailAccountData(source);
@@ -249,6 +249,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IEmailAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

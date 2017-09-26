@@ -36,15 +36,27 @@ namespace <[RootNamespace]>.EntityInterfaces
         <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
         IEnumerable<I<[RelatedEntityName]>Entity> <[MappedFieldNameRelation]> { get; }<[EndIf]><[NextForeach]>
 
+        <[ If IsSubType ]>
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        <[ If IsSubType ]>new <[EndIf]>I<[CurrentEntityName]>Entity AsReadOnly();
+        I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        <[ If IsSubType ]>new <[EndIf]>I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap);
+        I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>(IDictionary<object, object> objectMap);
+        <[Else]>
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        I<[RootEntityName]>Entity AsReadOnly();
+
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        I<[RootEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap);<[EndIf]>
     }
 }
 
@@ -69,13 +81,13 @@ namespace <[RootNamespace]>.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly() =>
+        public <[ If IsSubType ]>override<[Else]>virtual<[EndIf]> I<[RootEntityName]>Entity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap)
+        public <[ If IsSubType ]>override<[Else]>virtual<[EndIf]> I<[RootEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -86,5 +98,19 @@ namespace <[RootNamespace]>.EntityClasses
 
             return new ReadOnly<[CurrentEntityName]>Entity(this, objectMap);
         }
+
+        <[ If IsSubType ]>
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>() =>
+            (I<[CurrentEntityName]>Entity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>(IDictionary<object, object> objectMap) =>
+            (I<[CurrentEntityName]>Entity) AsReadOnly(objectMap);
+        <[ EndIf ]>
     }
 }

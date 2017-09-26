@@ -373,7 +373,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         }
 
         /// <summary>
-        ///     Indicates what basic grid fields we support hyperlinking for
+        /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
         public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {

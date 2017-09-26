@@ -127,15 +127,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IAmazonStoreEntity AsReadOnly();
+        IAmazonStoreEntity AsReadOnlyAmazonStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IAmazonStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IAmazonStoreEntity AsReadOnlyAmazonStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -156,13 +158,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IAmazonStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IAmazonStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -173,5 +175,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyAmazonStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IAmazonStoreEntity AsReadOnlyAmazonStore() =>
+            (IAmazonStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IAmazonStoreEntity AsReadOnlyAmazonStore(IDictionary<object, object> objectMap) =>
+            (IAmazonStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

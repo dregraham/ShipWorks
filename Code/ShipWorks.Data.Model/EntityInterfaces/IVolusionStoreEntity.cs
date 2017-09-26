@@ -79,15 +79,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IVolusionStoreEntity AsReadOnly();
+        IVolusionStoreEntity AsReadOnlyVolusionStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IVolusionStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IVolusionStoreEntity AsReadOnlyVolusionStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -108,13 +110,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IVolusionStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IVolusionStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -125,5 +127,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyVolusionStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IVolusionStoreEntity AsReadOnlyVolusionStore() =>
+            (IVolusionStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IVolusionStoreEntity AsReadOnlyVolusionStore(IDictionary<object, object> objectMap) =>
+            (IVolusionStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

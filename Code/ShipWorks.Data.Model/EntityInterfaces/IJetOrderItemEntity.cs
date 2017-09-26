@@ -37,15 +37,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IJetOrderItemEntity AsReadOnly();
+        IJetOrderItemEntity AsReadOnlyJetOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IJetOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IJetOrderItemEntity AsReadOnlyJetOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -66,13 +68,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IJetOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IJetOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -83,5 +85,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyJetOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IJetOrderItemEntity AsReadOnlyJetOrderItem() =>
+            (IJetOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IJetOrderItemEntity AsReadOnlyJetOrderItem(IDictionary<object, object> objectMap) =>
+            (IJetOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

@@ -85,15 +85,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IChannelAdvisorOrderItemEntity AsReadOnly();
+        IChannelAdvisorOrderItemEntity AsReadOnlyChannelAdvisorOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IChannelAdvisorOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IChannelAdvisorOrderItemEntity AsReadOnlyChannelAdvisorOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -114,13 +116,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IChannelAdvisorOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IChannelAdvisorOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -131,5 +133,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyChannelAdvisorOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IChannelAdvisorOrderItemEntity AsReadOnlyChannelAdvisorOrderItem() =>
+            (IChannelAdvisorOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IChannelAdvisorOrderItemEntity AsReadOnlyChannelAdvisorOrderItem(IDictionary<object, object> objectMap) =>
+            (IChannelAdvisorOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

@@ -42,9 +42,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            UpsLocalRatingDeliveryAreaSurcharge = source.UpsLocalRatingDeliveryAreaSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsLocalRatingDeliveryAreaSurcharge = source.UpsLocalRatingDeliveryAreaSurcharge?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsLocalRatingDeliveryAreaSurchargeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsLocalRatingDeliveryAreaSurchargeEntity>();
-            UpsLocalRatingZone = source.UpsLocalRatingZone?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsLocalRatingZone = source.UpsLocalRatingZone?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsLocalRatingZoneEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsLocalRatingZoneEntity>();
 
             CopyCustomUpsLocalRatingZoneFileData(source);
@@ -85,6 +85,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsLocalRatingZoneFileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

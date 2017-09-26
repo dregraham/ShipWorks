@@ -163,6 +163,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -209,5 +211,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyPrintResultEntity(this, objectMap);
         }
+
+        
     }
 }

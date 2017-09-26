@@ -41,7 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EntityID = source.EntityID;
             
             
-            ActionQueue = source.ActionQueue?.AsReadOnly(objectMap);
+            ActionQueue = (IActionQueueEntity) source.ActionQueue?.AsReadOnly(objectMap);
             
 
             CopyCustomActionQueueSelectionData(source);
@@ -80,6 +80,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IActionQueueSelectionEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

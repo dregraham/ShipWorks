@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Amount = source.Amount;
             
             
-            Order = source.Order?.AsReadOnly(objectMap);
+            Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
             
 
             CopyCustomOrderChargeData(source);
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOrderChargeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

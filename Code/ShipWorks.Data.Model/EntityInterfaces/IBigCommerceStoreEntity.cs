@@ -85,15 +85,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IBigCommerceStoreEntity AsReadOnly();
+        IBigCommerceStoreEntity AsReadOnlyBigCommerceStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IBigCommerceStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IBigCommerceStoreEntity AsReadOnlyBigCommerceStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -114,13 +116,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IBigCommerceStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IBigCommerceStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -131,5 +133,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyBigCommerceStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IBigCommerceStoreEntity AsReadOnlyBigCommerceStore() =>
+            (IBigCommerceStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IBigCommerceStoreEntity AsReadOnlyBigCommerceStore(IDictionary<object, object> objectMap) =>
+            (IBigCommerceStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

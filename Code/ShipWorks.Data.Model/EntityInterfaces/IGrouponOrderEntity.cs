@@ -31,15 +31,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGrouponOrderEntity AsReadOnly();
+        IGrouponOrderEntity AsReadOnlyGrouponOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGrouponOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IGrouponOrderEntity AsReadOnlyGrouponOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -60,13 +62,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IGrouponOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +79,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyGrouponOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IGrouponOrderEntity AsReadOnlyGrouponOrder() =>
+            (IGrouponOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IGrouponOrderEntity AsReadOnlyGrouponOrder(IDictionary<object, object> objectMap) =>
+            (IGrouponOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

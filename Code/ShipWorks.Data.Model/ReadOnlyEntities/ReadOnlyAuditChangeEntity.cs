@@ -42,9 +42,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EntityID = source.EntityID;
             
             
-            Audit = source.Audit?.AsReadOnly(objectMap);
+            Audit = (IAuditEntity) source.Audit?.AsReadOnly(objectMap);
             
-            AuditChangeDetails = source.AuditChangeDetails?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            AuditChangeDetails = source.AuditChangeDetails?.Select(x => x.AsReadOnly(objectMap)).OfType<IAuditChangeDetailEntity>().ToReadOnly() ??
                 Enumerable.Empty<IAuditChangeDetailEntity>();
 
             CopyCustomAuditChangeData(source);
@@ -91,6 +91,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IAuditChangeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

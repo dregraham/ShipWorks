@@ -49,15 +49,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IPayPalOrderEntity AsReadOnly();
+        IPayPalOrderEntity AsReadOnlyPayPalOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IPayPalOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IPayPalOrderEntity AsReadOnlyPayPalOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -78,13 +80,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IPayPalOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IPayPalOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -95,5 +97,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyPayPalOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IPayPalOrderEntity AsReadOnlyPayPalOrder() =>
+            (IPayPalOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IPayPalOrderEntity AsReadOnlyPayPalOrder(IDictionary<object, object> objectMap) =>
+            (IPayPalOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

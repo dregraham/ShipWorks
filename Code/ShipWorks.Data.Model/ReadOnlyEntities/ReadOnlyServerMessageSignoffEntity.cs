@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Dismissed = source.Dismissed;
             
             
-            ServerMessage = source.ServerMessage?.AsReadOnly(objectMap);
+            ServerMessage = (IServerMessageEntity) source.ServerMessage?.AsReadOnly(objectMap);
             
 
             CopyCustomServerMessageSignoffData(source);
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IServerMessageSignoffEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

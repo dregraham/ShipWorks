@@ -112,20 +112,20 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipAddressType = source.ShipAddressType;
             
             
-            Customer = source.Customer?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
+            Customer = (ICustomerEntity) source.Customer?.AsReadOnly(objectMap);
+            Store = (IStoreEntity) source.Store?.AsReadOnly(objectMap);
             
-            Notes = source.Notes?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Notes = source.Notes?.Select(x => x.AsReadOnly(objectMap)).OfType<INoteEntity>().ToReadOnly() ??
                 Enumerable.Empty<INoteEntity>();
-            OrderCharges = source.OrderCharges?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderCharges = source.OrderCharges?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderChargeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderChargeEntity>();
-            OrderItems = source.OrderItems?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderItems = source.OrderItems?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderItemEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderItemEntity>();
-            OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderPaymentDetailEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderPaymentDetailEntity>();
-            Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).OfType<IShipmentEntity>().ToReadOnly() ??
                 Enumerable.Empty<IShipmentEntity>();
-            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).OfType<IValidatedAddressEntity>().ToReadOnly() ??
                 Enumerable.Empty<IValidatedAddressEntity>();
 
             CopyCustomOrderData(source);
@@ -604,6 +604,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

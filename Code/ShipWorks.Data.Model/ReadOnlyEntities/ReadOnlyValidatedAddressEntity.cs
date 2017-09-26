@@ -53,8 +53,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MilitaryAddress = source.MilitaryAddress;
             
             
-            Order = source.Order?.AsReadOnly(objectMap);
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
+            Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
 
             CopyCustomValidatedAddressData(source);
@@ -167,6 +167,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IValidatedAddressEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

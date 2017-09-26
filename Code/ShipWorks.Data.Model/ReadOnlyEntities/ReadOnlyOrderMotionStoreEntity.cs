@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderMotionBizID = source.OrderMotionBizID;
             
             
-            OrderMotionEmailAccount = source.OrderMotionEmailAccount?.AsReadOnly(objectMap);
+            OrderMotionEmailAccount = (IEmailAccountEntity) source.OrderMotionEmailAccount?.AsReadOnly(objectMap);
             
 
             CopyCustomOrderMotionStoreData(source);
@@ -67,12 +67,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IOrderMotionStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IOrderMotionStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IOrderMotionStoreEntity AsReadOnlyOrderMotionStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IOrderMotionStoreEntity AsReadOnlyOrderMotionStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

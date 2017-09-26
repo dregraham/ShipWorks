@@ -92,12 +92,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INeweggOrderItemEntity AsReadOnly() => this;
+        public override IOrderItemEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INeweggOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public INeweggOrderItemEntity AsReadOnlyNeweggOrderItem() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public INeweggOrderItemEntity AsReadOnlyNeweggOrderItem(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

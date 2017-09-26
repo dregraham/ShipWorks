@@ -43,15 +43,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IWalmartStoreEntity AsReadOnly();
+        IWalmartStoreEntity AsReadOnlyWalmartStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IWalmartStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IWalmartStoreEntity AsReadOnlyWalmartStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -72,13 +74,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IWalmartStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IWalmartStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -89,5 +91,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyWalmartStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IWalmartStoreEntity AsReadOnlyWalmartStore() =>
+            (IWalmartStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IWalmartStoreEntity AsReadOnlyWalmartStore(IDictionary<object, object> objectMap) =>
+            (IWalmartStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

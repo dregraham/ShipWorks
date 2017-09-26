@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RelationType = source.RelationType;
             
             
-            EmailOutbound = source.EmailOutbound?.AsReadOnly(objectMap);
+            EmailOutbound = (IEmailOutboundEntity) source.EmailOutbound?.AsReadOnly(objectMap);
             
 
             CopyCustomEmailOutboundRelationData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IEmailOutboundRelationEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -56,6 +56,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         ITemplateEntity Template { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -103,5 +105,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyTemplateComputerSettingsEntity(this, objectMap);
         }
+
+        
     }
 }

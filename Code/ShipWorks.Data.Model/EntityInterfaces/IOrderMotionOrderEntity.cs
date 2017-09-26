@@ -43,15 +43,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IOrderMotionOrderEntity AsReadOnly();
+        IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IOrderMotionOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -72,13 +74,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IOrderMotionOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IOrderMotionOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -89,5 +91,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyOrderMotionOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder() =>
+            (IOrderMotionOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder(IDictionary<object, object> objectMap) =>
+            (IOrderMotionOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

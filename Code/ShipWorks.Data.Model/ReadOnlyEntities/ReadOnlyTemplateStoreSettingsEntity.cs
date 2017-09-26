@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EmailSubject = source.EmailSubject;
             
             
-            Template = source.Template?.AsReadOnly(objectMap);
+            Template = (ITemplateEntity) source.Template?.AsReadOnly(objectMap);
             
 
             CopyCustomTemplateStoreSettingsData(source);
@@ -122,6 +122,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ITemplateStoreSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

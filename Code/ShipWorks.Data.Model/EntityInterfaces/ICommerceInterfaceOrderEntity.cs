@@ -31,15 +31,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ICommerceInterfaceOrderEntity AsReadOnly();
+        ICommerceInterfaceOrderEntity AsReadOnlyCommerceInterfaceOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ICommerceInterfaceOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        ICommerceInterfaceOrderEntity AsReadOnlyCommerceInterfaceOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -60,13 +62,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ICommerceInterfaceOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new ICommerceInterfaceOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +79,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyCommerceInterfaceOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public ICommerceInterfaceOrderEntity AsReadOnlyCommerceInterfaceOrder() =>
+            (ICommerceInterfaceOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public ICommerceInterfaceOrderEntity AsReadOnlyCommerceInterfaceOrder(IDictionary<object, object> objectMap) =>
+            (ICommerceInterfaceOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

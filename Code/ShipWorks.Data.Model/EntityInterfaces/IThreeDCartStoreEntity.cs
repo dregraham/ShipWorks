@@ -61,15 +61,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IThreeDCartStoreEntity AsReadOnly();
+        IThreeDCartStoreEntity AsReadOnlyThreeDCartStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IThreeDCartStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IThreeDCartStoreEntity AsReadOnlyThreeDCartStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -90,13 +92,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IThreeDCartStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -107,5 +109,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyThreeDCartStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IThreeDCartStoreEntity AsReadOnlyThreeDCartStore() =>
+            (IThreeDCartStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IThreeDCartStoreEntity AsReadOnlyThreeDCartStore(IDictionary<object, object> objectMap) =>
+            (IThreeDCartStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

@@ -141,6 +141,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IOrderItemAttributeEntity> OrderItemAttributes { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -189,5 +191,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyOrderItemEntity(this, objectMap);
         }
+
+        
     }
 }

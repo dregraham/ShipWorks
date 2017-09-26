@@ -39,11 +39,11 @@ namespace <[RootNamespace]>.ReadOnlyEntityClasses
             <[Foreach EntityField]>
             <[EntityFieldName]> = source.<[EntityFieldName]>;<[NextForeach]>
             <[Foreach RelatedEntity OneToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
-            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
+            <[MappedFieldNameRelation]> = (I<[RelatedEntityName]>Entity) source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
             <[Foreach RelatedEntity ManyToOne]><[If Not StringValueEquals MappedFieldNameRelation ""]>
-            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
+            <[MappedFieldNameRelation]> = (I<[RelatedEntityName]>Entity) source.<[MappedFieldNameRelation]>?.AsReadOnly(objectMap);<[EndIf]><[NextForeach]>
             <[Foreach RelatedEntity OneToMany]><[If Not StringValueEquals MappedFieldNameRelation ""]>
-            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            <[MappedFieldNameRelation]> = source.<[MappedFieldNameRelation]>?.Select(x => x.AsReadOnly(objectMap)).OfType<I<[RelatedEntityName]>Entity>().ToReadOnly() ??
                 Enumerable.Empty<I<[RelatedEntityName]>Entity>();<[EndIf]><[NextForeach]>
 
             CopyCustom<[CurrentEntityName]>Data(source);
@@ -69,12 +69,24 @@ namespace <[RootNamespace]>.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly() => this;
+        public <[ If IsSubType ]>override<[Else]>virtual<[EndIf]> I<[RootEntityName]>Entity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public <[ If IsSubType ]>new<[Else]>virtual<[EndIf]> I<[CurrentEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public <[ If IsSubType ]>override<[Else]>virtual<[EndIf]> I<[RootEntityName]>Entity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        <[ If IsSubType ]>
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public I<[CurrentEntityName]>Entity AsReadOnly<[CurrentEntityName]>(IDictionary<object, object> objectMap) => this;
+        <[ EndIf ]>
 
         /// <summary>
         /// Copy any custom data

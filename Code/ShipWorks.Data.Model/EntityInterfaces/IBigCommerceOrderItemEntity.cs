@@ -55,15 +55,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IBigCommerceOrderItemEntity AsReadOnly();
+        IBigCommerceOrderItemEntity AsReadOnlyBigCommerceOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IBigCommerceOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IBigCommerceOrderItemEntity AsReadOnlyBigCommerceOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -84,13 +86,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IBigCommerceOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IBigCommerceOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -101,5 +103,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyBigCommerceOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IBigCommerceOrderItemEntity AsReadOnlyBigCommerceOrderItem() =>
+            (IBigCommerceOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IBigCommerceOrderItemEntity AsReadOnlyBigCommerceOrderItem(IDictionary<object, object> objectMap) =>
+            (IBigCommerceOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

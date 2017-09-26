@@ -41,15 +41,15 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            UpsAccount = source.UpsAccount?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsAccount = source.UpsAccount?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsAccountEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsAccountEntity>();
-            UpsLetterRate = source.UpsLetterRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsLetterRate = source.UpsLetterRate?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsLetterRateEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsLetterRateEntity>();
-            UpsPackageRate = source.UpsPackageRate?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsPackageRate = source.UpsPackageRate?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsPackageRateEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsPackageRateEntity>();
-            UpsPricePerPound = source.UpsPricePerPound?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsPricePerPound = source.UpsPricePerPound?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsPricePerPoundEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsPricePerPoundEntity>();
-            UpsRateSurcharge = source.UpsRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UpsRateSurcharge = source.UpsRateSurcharge?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsRateSurchargeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsRateSurchargeEntity>();
 
             CopyCustomUpsRateTableData(source);
@@ -90,6 +90,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsRateTableEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

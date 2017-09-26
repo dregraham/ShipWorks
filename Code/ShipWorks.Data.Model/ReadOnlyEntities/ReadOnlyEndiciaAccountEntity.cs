@@ -239,6 +239,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public virtual IEndiciaAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
+        
+
         /// <summary>
         /// Copy any custom data
         /// </summary>

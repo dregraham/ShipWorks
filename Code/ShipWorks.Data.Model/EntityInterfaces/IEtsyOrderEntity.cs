@@ -37,15 +37,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IEtsyOrderEntity AsReadOnly();
+        IEtsyOrderEntity AsReadOnlyEtsyOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IEtsyOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IEtsyOrderEntity AsReadOnlyEtsyOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -66,13 +68,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IEtsyOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IEtsyOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -83,5 +85,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyEtsyOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IEtsyOrderEntity AsReadOnlyEtsyOrder() =>
+            (IEtsyOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IEtsyOrderEntity AsReadOnlyEtsyOrder(IDictionary<object, object> objectMap) =>
+            (IEtsyOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

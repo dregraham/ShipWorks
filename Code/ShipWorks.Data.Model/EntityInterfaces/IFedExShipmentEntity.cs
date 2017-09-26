@@ -963,6 +963,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IFedExPackageEntity> Packages { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -1011,5 +1013,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyFedExShipmentEntity(this, objectMap);
         }
+
+        
     }
 }

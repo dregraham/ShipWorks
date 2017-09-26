@@ -71,6 +71,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public virtual IExcludedPackageTypeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
+        
+
         /// <summary>
         /// Copy any custom data
         /// </summary>

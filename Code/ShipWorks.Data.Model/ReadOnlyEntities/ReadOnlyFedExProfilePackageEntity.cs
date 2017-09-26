@@ -72,7 +72,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PackingDetailsPackingInstructions = source.PackingDetailsPackingInstructions;
             
             
-            FedExProfile = source.FedExProfile?.AsReadOnly(objectMap);
+            FedExProfile = (IFedExProfileEntity) source.FedExProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomFedExProfilePackageData(source);
@@ -297,6 +297,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFedExProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

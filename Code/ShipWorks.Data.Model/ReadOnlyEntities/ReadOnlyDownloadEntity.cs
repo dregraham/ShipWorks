@@ -51,9 +51,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ErrorMessage = source.ErrorMessage;
             
             
-            Computer = source.Computer?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
-            User = source.User?.AsReadOnly(objectMap);
+            Computer = (IComputerEntity) source.Computer?.AsReadOnly(objectMap);
+            Store = (IStoreEntity) source.Store?.AsReadOnly(objectMap);
+            User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
 
             CopyCustomDownloadData(source);
@@ -156,6 +156,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IDownloadEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

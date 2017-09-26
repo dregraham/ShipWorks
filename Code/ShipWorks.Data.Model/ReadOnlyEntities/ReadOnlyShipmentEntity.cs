@@ -110,23 +110,23 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BilledType = source.BilledType;
             BilledWeight = source.BilledWeight;
             
-            Amazon = source.Amazon?.AsReadOnly(objectMap);
-            BestRate = source.BestRate?.AsReadOnly(objectMap);
-            FedEx = source.FedEx?.AsReadOnly(objectMap);
-            InsurancePolicy = source.InsurancePolicy?.AsReadOnly(objectMap);
-            IParcel = source.IParcel?.AsReadOnly(objectMap);
-            OnTrac = source.OnTrac?.AsReadOnly(objectMap);
-            Other = source.Other?.AsReadOnly(objectMap);
-            Postal = source.Postal?.AsReadOnly(objectMap);
-            Ups = source.Ups?.AsReadOnly(objectMap);
+            Amazon = (IAmazonShipmentEntity) source.Amazon?.AsReadOnly(objectMap);
+            BestRate = (IBestRateShipmentEntity) source.BestRate?.AsReadOnly(objectMap);
+            FedEx = (IFedExShipmentEntity) source.FedEx?.AsReadOnly(objectMap);
+            InsurancePolicy = (IInsurancePolicyEntity) source.InsurancePolicy?.AsReadOnly(objectMap);
+            IParcel = (IIParcelShipmentEntity) source.IParcel?.AsReadOnly(objectMap);
+            OnTrac = (IOnTracShipmentEntity) source.OnTrac?.AsReadOnly(objectMap);
+            Other = (IOtherShipmentEntity) source.Other?.AsReadOnly(objectMap);
+            Postal = (IPostalShipmentEntity) source.Postal?.AsReadOnly(objectMap);
+            Ups = (IUpsShipmentEntity) source.Ups?.AsReadOnly(objectMap);
             
-            Order = source.Order?.AsReadOnly(objectMap);
+            Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
             
-            CustomsItems = source.CustomsItems?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            CustomsItems = source.CustomsItems?.Select(x => x.AsReadOnly(objectMap)).OfType<IShipmentCustomsItemEntity>().ToReadOnly() ??
                 Enumerable.Empty<IShipmentCustomsItemEntity>();
-            ReturnItems = source.ReturnItems?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ReturnItems = source.ReturnItems?.Select(x => x.AsReadOnly(objectMap)).OfType<IShipmentReturnItemEntity>().ToReadOnly() ??
                 Enumerable.Empty<IShipmentReturnItemEntity>();
-            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).OfType<IValidatedAddressEntity>().ToReadOnly() ??
                 Enumerable.Empty<IValidatedAddressEntity>();
 
             CopyCustomShipmentData(source);
@@ -609,6 +609,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data
