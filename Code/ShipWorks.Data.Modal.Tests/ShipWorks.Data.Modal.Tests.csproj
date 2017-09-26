@@ -129,6 +129,7 @@
     <Compile Include="Custom\EndicaAccountEntityTest.cs" />
     <Compile Include="Custom\FedExAccountEntityTest.cs" />
     <Compile Include="Custom\IParcelAccountEntityTest.cs" />
+    <Compile Include="Custom\MivaStoreEntityTest.cs" />
     <Compile Include="Custom\NullCarrierAccountTest.cs" />
     <Compile Include="Custom\OnTracAccountEntityTest.cs" />
     <Compile Include="Custom\OrderItemAttributeEntityTest.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Custom\UpsAccountEntityTest.cs" />
     <Compile Include="Custom\UpsPackageEntityTest.cs" />
     <Compile Include="Custom\UspsAccountEntityTest.cs" />
+    <Compile Include="Custom\YahooStoreEntityTest.cs" />
     <Compile Include="EbayOrderEntityTest.cs" />
     <Compile Include="FedExShipmentEntityTest.cs" />
     <Compile Include="UspsAccountEntityTest.cs" />
