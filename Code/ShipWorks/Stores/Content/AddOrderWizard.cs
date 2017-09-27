@@ -105,7 +105,8 @@ namespace ShipWorks.Stores.Content
             amountSpent.Text = "";
 
             var validStores = (from store in StoreManager.GetAllStores()
-                               where UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID)
+                               where UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID) 
+                                  && store.Enabled
                                select new { Key = store.StoreName, Value = store })
                 .ToList();
 
