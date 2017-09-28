@@ -312,10 +312,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             ConditionGroup group = new ConditionGroup();
 
-            ChannelAdvisorOrderIDCondition caCondition = new ChannelAdvisorOrderIDCondition();
-            caCondition.TargetValue = search;
-            caCondition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(caCondition);
+            ChannelAdvisorOrderIDCondition orderIdConditon = new ChannelAdvisorOrderIDCondition();
+            orderIdConditon.TargetValue = search;
+            orderIdConditon.Operator = StringOperator.BeginsWith;
+
+            ChannelAdvisorMarketplaceBuyerCondition buyerCondition = new ChannelAdvisorMarketplaceBuyerCondition();
+            buyerCondition.TargetValue = search;
+            buyerCondition.Operator = StringOperator.BeginsWith;
+
+            ForAnyItemCondition anyItemCondition = new ForAnyItemCondition();
+            anyItemCondition.Container.FirstGroup.JoinType = ConditionJoinType.Any;
+            anyItemCondition.Container.FirstGroup.Conditions.Add(buyerCondition);
+
+            group.JoinType = ConditionJoinType.Any;
+            group.Conditions.Add(orderIdConditon);
+            group.Conditions.Add(anyItemCondition);
 
             return group;
         }
