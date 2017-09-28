@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            ClickCartProOrder = source.ClickCartProOrder?.AsReadOnly(objectMap);
+            ClickCartProOrder = (IClickCartProOrderEntity) source.ClickCartProOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomClickCartProOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IClickCartProOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

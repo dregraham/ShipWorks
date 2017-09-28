@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            OrderMotionOrderSearch = source.OrderMotionOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderMotionOrderSearch = source.OrderMotionOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderMotionOrderSearchEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderMotionOrderSearchEntity>();
 
             CopyCustomOrderMotionOrderData(source);
@@ -75,12 +75,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IOrderMotionOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IOrderMotionOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IOrderMotionOrderEntity AsReadOnlyOrderMotionOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

@@ -60,7 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            RelatedObjects = source.RelatedObjects?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            RelatedObjects = source.RelatedObjects?.Select(x => x.AsReadOnly(objectMap)).OfType<IEmailOutboundRelationEntity>().ToReadOnly() ??
                 Enumerable.Empty<IEmailOutboundRelationEntity>();
 
             CopyCustomEmailOutboundData(source);
@@ -207,6 +207,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IEmailOutboundEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -63,7 +63,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UpsRateTableID = source.UpsRateTableID;
             
             
-            UpsRateTable = source.UpsRateTable?.AsReadOnly(objectMap);
+            UpsRateTable = (IUpsRateTableEntity) source.UpsRateTable?.AsReadOnly(objectMap);
             
 
             CopyCustomUpsAccountData(source);
@@ -234,6 +234,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

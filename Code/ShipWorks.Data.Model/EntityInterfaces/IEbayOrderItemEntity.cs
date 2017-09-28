@@ -127,15 +127,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IEbayOrderItemEntity AsReadOnly();
+        IEbayOrderItemEntity AsReadOnlyEbayOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IEbayOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IEbayOrderItemEntity AsReadOnlyEbayOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -156,13 +158,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IEbayOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IEbayOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -173,5 +175,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyEbayOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IEbayOrderItemEntity AsReadOnlyEbayOrderItem() =>
+            (IEbayOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IEbayOrderItemEntity AsReadOnlyEbayOrderItem(IDictionary<object, object> objectMap) =>
+            (IEbayOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

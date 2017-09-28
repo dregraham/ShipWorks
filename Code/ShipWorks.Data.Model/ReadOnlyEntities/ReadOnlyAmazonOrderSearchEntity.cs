@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            AmazonOrder = source.AmazonOrder?.AsReadOnly(objectMap);
+            AmazonOrder = (IAmazonOrderEntity) source.AmazonOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomAmazonOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IAmazonOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

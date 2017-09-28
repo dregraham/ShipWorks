@@ -78,6 +78,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public virtual IAmazonASINEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
+        
+
         /// <summary>
         /// Copy any custom data
         /// </summary>

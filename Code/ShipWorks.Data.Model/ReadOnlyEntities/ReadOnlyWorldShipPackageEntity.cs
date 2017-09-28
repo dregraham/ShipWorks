@@ -82,7 +82,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DryIceWeightUnitOfMeasure = source.DryIceWeightUnitOfMeasure;
             
             
-            WorldShipShipment = source.WorldShipShipment?.AsReadOnly(objectMap);
+            WorldShipShipment = (IWorldShipShipmentEntity) source.WorldShipShipment?.AsReadOnly(objectMap);
             
 
             CopyCustomWorldShipPackageData(source);
@@ -367,6 +367,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IWorldShipPackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

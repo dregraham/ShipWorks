@@ -1783,13 +1783,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the requested shipping text, (Multiple) displayed for multiple values
         /// </summary>
-        private static string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        private static string GetRequestedShippingLabel(IEnumerable<IShipmentEntity> shipments)
         {
             string label = null;
 
-            foreach (ShipmentEntity shipment in shipments)
+            foreach (IShipmentEntity shipment in shipments)
             {
-                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+                IOrderEntity order = shipment.Order ?? DataProvider.GetEntity(shipment.OrderID) as IOrderEntity;
 
                 // First one
                 if (label == null)

@@ -55,15 +55,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IAmeriCommerceStoreEntity AsReadOnly();
+        IAmeriCommerceStoreEntity AsReadOnlyAmeriCommerceStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IAmeriCommerceStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IAmeriCommerceStoreEntity AsReadOnlyAmeriCommerceStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -84,13 +86,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IAmeriCommerceStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IAmeriCommerceStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -101,5 +103,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyAmeriCommerceStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IAmeriCommerceStoreEntity AsReadOnlyAmeriCommerceStore() =>
+            (IAmeriCommerceStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IAmeriCommerceStoreEntity AsReadOnlyAmeriCommerceStore(IDictionary<object, object> objectMap) =>
+            (IAmeriCommerceStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

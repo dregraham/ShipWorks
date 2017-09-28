@@ -162,12 +162,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IProStoresStoreEntity AsReadOnlyProStoresStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IProStoresStoreEntity AsReadOnlyProStoresStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

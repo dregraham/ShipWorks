@@ -42,8 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             StoreID = source.StoreID;
             
             
-            EbayOrder = source.EbayOrder?.AsReadOnly(objectMap);
-            EbayStore = source.EbayStore?.AsReadOnly(objectMap);
+            EbayOrder = (IEbayOrderEntity) source.EbayOrder?.AsReadOnly(objectMap);
+            EbayStore = (IEbayStoreEntity) source.EbayStore?.AsReadOnly(objectMap);
             
 
             CopyCustomEbayCombinedOrderRelationData(source);
@@ -90,6 +90,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IEbayCombinedOrderRelationEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

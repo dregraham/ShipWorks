@@ -290,6 +290,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IWorldShipShipmentEntity WorldShipShipment { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -337,5 +339,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyWorldShipPackageEntity(this, objectMap);
         }
+
+        
     }
 }

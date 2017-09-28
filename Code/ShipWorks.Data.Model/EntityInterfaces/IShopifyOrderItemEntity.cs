@@ -37,15 +37,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IShopifyOrderItemEntity AsReadOnly();
+        IShopifyOrderItemEntity AsReadOnlyShopifyOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IShopifyOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IShopifyOrderItemEntity AsReadOnlyShopifyOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -66,13 +68,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IShopifyOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IShopifyOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -83,5 +85,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyShopifyOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IShopifyOrderItemEntity AsReadOnlyShopifyOrderItem() =>
+            (IShopifyOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IShopifyOrderItemEntity AsReadOnlyShopifyOrderItem(IDictionary<object, object> objectMap) =>
+            (IShopifyOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

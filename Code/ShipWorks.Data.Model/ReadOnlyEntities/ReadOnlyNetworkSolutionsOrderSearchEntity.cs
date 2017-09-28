@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            NetworkSolutionsOrder = source.NetworkSolutionsOrder?.AsReadOnly(objectMap);
+            NetworkSolutionsOrder = (INetworkSolutionsOrderEntity) source.NetworkSolutionsOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomNetworkSolutionsOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual INetworkSolutionsOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

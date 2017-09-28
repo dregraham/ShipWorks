@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PaperSource = source.PaperSource;
             
             
-            Template = source.Template?.AsReadOnly(objectMap);
+            Template = (ITemplateEntity) source.Template?.AsReadOnly(objectMap);
             
 
             CopyCustomTemplateComputerSettingsData(source);
@@ -94,6 +94,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ITemplateComputerSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

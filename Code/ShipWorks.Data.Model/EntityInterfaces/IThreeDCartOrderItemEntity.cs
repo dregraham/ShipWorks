@@ -31,15 +31,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IThreeDCartOrderItemEntity AsReadOnly();
+        IThreeDCartOrderItemEntity AsReadOnlyThreeDCartOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IThreeDCartOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IThreeDCartOrderItemEntity AsReadOnlyThreeDCartOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -60,13 +62,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IThreeDCartOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +79,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyThreeDCartOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IThreeDCartOrderItemEntity AsReadOnlyThreeDCartOrderItem() =>
+            (IThreeDCartOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IThreeDCartOrderItemEntity AsReadOnlyThreeDCartOrderItem(IDictionary<object, object> objectMap) =>
+            (IThreeDCartOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

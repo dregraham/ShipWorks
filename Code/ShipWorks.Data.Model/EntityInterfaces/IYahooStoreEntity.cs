@@ -56,15 +56,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEmailAccountEntity YahooEmailAccount { get; }
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IYahooStoreEntity AsReadOnly();
+        IYahooStoreEntity AsReadOnlyYahooStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IYahooStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IYahooStoreEntity AsReadOnlyYahooStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -86,13 +88,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IYahooStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IYahooStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -103,5 +105,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyYahooStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IYahooStoreEntity AsReadOnlyYahooStore() =>
+            (IYahooStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IYahooStoreEntity AsReadOnlyYahooStore(IDictionary<object, object> objectMap) =>
+            (IYahooStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

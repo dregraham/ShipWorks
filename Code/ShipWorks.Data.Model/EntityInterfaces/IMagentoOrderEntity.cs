@@ -32,15 +32,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IMagentoOrderSearchEntity> MagentoOrderSearch { get; }
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMagentoOrderEntity AsReadOnly();
+        IMagentoOrderEntity AsReadOnlyMagentoOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMagentoOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IMagentoOrderEntity AsReadOnlyMagentoOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -62,13 +64,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IMagentoOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IMagentoOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -79,5 +81,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyMagentoOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IMagentoOrderEntity AsReadOnlyMagentoOrder() =>
+            (IMagentoOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IMagentoOrderEntity AsReadOnlyMagentoOrder(IDictionary<object, object> objectMap) =>
+            (IMagentoOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

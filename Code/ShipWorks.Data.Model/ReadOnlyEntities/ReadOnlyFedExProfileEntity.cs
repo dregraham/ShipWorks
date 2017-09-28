@@ -74,10 +74,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReferenceFIMS = source.ReferenceFIMS;
             ThirdPartyConsignee = source.ThirdPartyConsignee;
             
-            ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
-            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IFedExProfilePackageEntity>().ToReadOnly() ??
                 Enumerable.Empty<IFedExProfilePackageEntity>();
 
             CopyCustomFedExProfileData(source);
@@ -322,6 +322,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFedExProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

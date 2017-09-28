@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            CommerceInterfaceOrder = source.CommerceInterfaceOrder?.AsReadOnly(objectMap);
+            CommerceInterfaceOrder = (ICommerceInterfaceOrderEntity) source.CommerceInterfaceOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomCommerceInterfaceOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ICommerceInterfaceOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

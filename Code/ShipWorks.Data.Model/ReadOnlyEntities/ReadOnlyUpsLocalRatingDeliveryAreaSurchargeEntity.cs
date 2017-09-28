@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeliveryAreaType = source.DeliveryAreaType;
             
             
-            UpsLocalRatingZoneFile = source.UpsLocalRatingZoneFile?.AsReadOnly(objectMap);
+            UpsLocalRatingZoneFile = (IUpsLocalRatingZoneFileEntity) source.UpsLocalRatingZoneFile?.AsReadOnly(objectMap);
             
 
             CopyCustomUpsLocalRatingDeliveryAreaSurchargeData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsLocalRatingDeliveryAreaSurchargeEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

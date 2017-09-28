@@ -51,6 +51,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<IAuditEntity> Audit { get; }
         IEnumerable<IServiceStatusEntity> ServiceStatus { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -99,5 +101,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyComputerEntity(this, objectMap);
         }
+
+        
     }
 }

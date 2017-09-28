@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return
                 EntityUtility.IsSameField(field, OrderItemFields.Code) ||
@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Handle a link click for the given field
         /// </summary>
-        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
             OrderItemEntity item = entity as OrderItemEntity;
             if (entity == null || owner == null || item == null)

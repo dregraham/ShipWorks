@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            Rules = source.Rules?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Rules = source.Rules?.Select(x => x.AsReadOnly(objectMap)).OfType<IShippingPrintOutputRuleEntity>().ToReadOnly() ??
                 Enumerable.Empty<IShippingPrintOutputRuleEntity>();
 
             CopyCustomShippingPrintOutputData(source);
@@ -88,6 +88,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShippingPrintOutputEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

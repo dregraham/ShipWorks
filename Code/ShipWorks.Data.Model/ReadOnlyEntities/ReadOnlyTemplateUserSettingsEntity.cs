@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PreviewZoom = source.PreviewZoom;
             
             
-            Template = source.Template?.AsReadOnly(objectMap);
+            Template = (ITemplateEntity) source.Template?.AsReadOnly(objectMap);
             
 
             CopyCustomTemplateUserSettingsData(source);
@@ -108,6 +108,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ITemplateUserSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

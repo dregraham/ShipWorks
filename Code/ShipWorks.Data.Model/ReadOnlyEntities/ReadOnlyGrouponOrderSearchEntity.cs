@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            GrouponOrder = source.GrouponOrder?.AsReadOnly(objectMap);
+            GrouponOrder = (IGrouponOrderEntity) source.GrouponOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomGrouponOrderSearchData(source);
@@ -94,6 +94,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IGrouponOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

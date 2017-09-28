@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            PayPalOrderSearch = source.PayPalOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            PayPalOrderSearch = source.PayPalOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IPayPalOrderSearchEntity>().ToReadOnly() ??
                 Enumerable.Empty<IPayPalOrderSearchEntity>();
 
             CopyCustomPayPalOrderData(source);
@@ -82,12 +82,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IPayPalOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IPayPalOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IPayPalOrderEntity AsReadOnlyPayPalOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IPayPalOrderEntity AsReadOnlyPayPalOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

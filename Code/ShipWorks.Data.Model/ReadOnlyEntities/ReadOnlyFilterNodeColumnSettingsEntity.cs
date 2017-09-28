@@ -43,8 +43,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             GridColumnLayoutID = source.GridColumnLayoutID;
             
             
-            FilterNode = source.FilterNode?.AsReadOnly(objectMap);
-            User = source.User?.AsReadOnly(objectMap);
+            FilterNode = (IFilterNodeEntity) source.FilterNode?.AsReadOnly(objectMap);
+            User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
 
             CopyCustomFilterNodeColumnSettingsData(source);
@@ -97,6 +97,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFilterNodeColumnSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

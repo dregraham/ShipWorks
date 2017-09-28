@@ -47,9 +47,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequestedLabelFormat = source.RequestedLabelFormat;
             RateShop = source.RateShop;
             
-            PostalShipment = source.PostalShipment?.AsReadOnly(objectMap);
+            PostalShipment = (IPostalShipmentEntity) source.PostalShipment?.AsReadOnly(objectMap);
             
-            ScanFormBatch = source.ScanFormBatch?.AsReadOnly(objectMap);
+            ScanFormBatch = (IScanFormBatchEntity) source.ScanFormBatch?.AsReadOnly(objectMap);
             
 
             CopyCustomUspsShipmentData(source);
@@ -132,6 +132,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUspsShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

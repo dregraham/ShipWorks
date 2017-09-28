@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AutoWeigh = source.AutoWeigh;
             DialogSettings = source.DialogSettings;
             
-            User = source.User?.AsReadOnly(objectMap);
+            User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
             
 
@@ -192,6 +192,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUserSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            ChannelAdvisorOrder = source.ChannelAdvisorOrder?.AsReadOnly(objectMap);
+            ChannelAdvisorOrder = (IChannelAdvisorOrderEntity) source.ChannelAdvisorOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomChannelAdvisorOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IChannelAdvisorOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

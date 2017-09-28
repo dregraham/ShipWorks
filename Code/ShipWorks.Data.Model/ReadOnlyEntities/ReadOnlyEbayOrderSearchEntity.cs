@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            EbayOrder = source.EbayOrder?.AsReadOnly(objectMap);
+            EbayOrder = (IEbayOrderEntity) source.EbayOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomEbayOrderSearchData(source);
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IEbayOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

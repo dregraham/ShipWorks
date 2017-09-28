@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
         }
@@ -181,10 +181,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Handle a link click for the given field
         /// </summary>
-        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
-            LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
-            string lemonStandUrl = store.StoreURL + "/product";
+            ILemonStandStoreEntity lemonStandStore = (ILemonStandStoreEntity) store;
+            string lemonStandUrl = lemonStandStore.StoreURL + "/product";
             string itemUrl = ((LemonStandOrderItemEntity) entity).UrlName;
 
             string url = lemonStandUrl + "/" + itemUrl;

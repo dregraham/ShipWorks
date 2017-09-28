@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            ProStoresOrder = source.ProStoresOrder?.AsReadOnly(objectMap);
+            ProStoresOrder = (IProStoresOrderEntity) source.ProStoresOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomProStoresOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IProStoresOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -55,15 +55,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGrouponOrderItemEntity AsReadOnly();
+        IGrouponOrderItemEntity AsReadOnlyGrouponOrderItem();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGrouponOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IGrouponOrderItemEntity AsReadOnlyGrouponOrderItem(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -84,13 +86,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponOrderItemEntity AsReadOnly() =>
+        public override IOrderItemEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IGrouponOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -101,5 +103,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyGrouponOrderItemEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IGrouponOrderItemEntity AsReadOnlyGrouponOrderItem() =>
+            (IGrouponOrderItemEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IGrouponOrderItemEntity AsReadOnlyGrouponOrderItem(IDictionary<object, object> objectMap) =>
+            (IGrouponOrderItemEntity) AsReadOnly(objectMap);
+        
     }
 }

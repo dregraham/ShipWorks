@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ServiceDisplayName = source.ServiceDisplayName;
             
             
-            Computer = source.Computer?.AsReadOnly(objectMap);
+            Computer = (IComputerEntity) source.Computer?.AsReadOnly(objectMap);
             
 
             CopyCustomServiceStatusData(source);
@@ -122,6 +122,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IServiceStatusEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

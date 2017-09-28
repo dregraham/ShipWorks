@@ -71,12 +71,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ILemonStandOrderItemEntity AsReadOnly() => this;
+        public override IOrderItemEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ILemonStandOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public ILemonStandOrderItemEntity AsReadOnlyLemonStandOrderItem() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public ILemonStandOrderItemEntity AsReadOnlyLemonStandOrderItem(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

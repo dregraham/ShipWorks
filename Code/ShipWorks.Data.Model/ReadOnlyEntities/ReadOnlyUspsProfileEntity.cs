@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequireFullAddressValidation = source.RequireFullAddressValidation;
             RateShop = source.RateShop;
             
-            PostalProfile = source.PostalProfile?.AsReadOnly(objectMap);
+            PostalProfile = (IPostalProfileEntity) source.PostalProfile?.AsReadOnly(objectMap);
             
             
 
@@ -94,6 +94,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUspsProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

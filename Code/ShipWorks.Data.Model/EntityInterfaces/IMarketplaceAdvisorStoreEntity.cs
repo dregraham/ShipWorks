@@ -49,15 +49,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMarketplaceAdvisorStoreEntity AsReadOnly();
+        IMarketplaceAdvisorStoreEntity AsReadOnlyMarketplaceAdvisorStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IMarketplaceAdvisorStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IMarketplaceAdvisorStoreEntity AsReadOnlyMarketplaceAdvisorStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -78,13 +80,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IMarketplaceAdvisorStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IMarketplaceAdvisorStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -95,5 +97,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyMarketplaceAdvisorStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IMarketplaceAdvisorStoreEntity AsReadOnlyMarketplaceAdvisorStore() =>
+            (IMarketplaceAdvisorStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IMarketplaceAdvisorStoreEntity AsReadOnlyMarketplaceAdvisorStore(IDictionary<object, object> objectMap) =>
+            (IMarketplaceAdvisorStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

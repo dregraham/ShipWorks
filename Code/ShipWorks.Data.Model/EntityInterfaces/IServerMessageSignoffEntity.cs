@@ -62,6 +62,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IServerMessageEntity ServerMessage { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -109,5 +111,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyServerMessageSignoffEntity(this, objectMap);
         }
+
+        
     }
 }

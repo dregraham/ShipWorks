@@ -44,15 +44,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IProStoresOrderEntity AsReadOnly();
+        IProStoresOrderEntity AsReadOnlyProStoresOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IProStoresOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IProStoresOrderEntity AsReadOnlyProStoresOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -74,13 +76,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IProStoresOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -91,5 +93,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyProStoresOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IProStoresOrderEntity AsReadOnlyProStoresOrder() =>
+            (IProStoresOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IProStoresOrderEntity AsReadOnlyProStoresOrder(IDictionary<object, object> objectMap) =>
+            (IProStoresOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            MarketplaceAdvisorOrderSearch = source.MarketplaceAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            MarketplaceAdvisorOrderSearch = source.MarketplaceAdvisorOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IMarketplaceAdvisorOrderSearchEntity>().ToReadOnly() ??
                 Enumerable.Empty<IMarketplaceAdvisorOrderSearchEntity>();
 
             CopyCustomMarketplaceAdvisorOrderData(source);
@@ -82,12 +82,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IMarketplaceAdvisorOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IMarketplaceAdvisorOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IMarketplaceAdvisorOrderEntity AsReadOnlyMarketplaceAdvisorOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IMarketplaceAdvisorOrderEntity AsReadOnlyMarketplaceAdvisorOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

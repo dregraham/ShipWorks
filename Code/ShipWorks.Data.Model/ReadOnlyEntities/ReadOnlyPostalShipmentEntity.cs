@@ -59,9 +59,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Memo3 = source.Memo3;
             NoPostage = source.NoPostage;
             
-            Endicia = source.Endicia?.AsReadOnly(objectMap);
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
-            Usps = source.Usps?.AsReadOnly(objectMap);
+            Endicia = (IEndiciaShipmentEntity) source.Endicia?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
+            Usps = (IUspsShipmentEntity) source.Usps?.AsReadOnly(objectMap);
             
             
 
@@ -219,6 +219,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IPostalShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -69,6 +69,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IStoreEntity Store { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -117,5 +119,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyOrderSearchEntity(this, objectMap);
         }
+
+        
     }
 }

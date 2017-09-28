@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            AmazonOrderSearch = source.AmazonOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            AmazonOrderSearch = source.AmazonOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IAmazonOrderSearchEntity>().ToReadOnly() ??
                 Enumerable.Empty<IAmazonOrderSearchEntity>();
 
             CopyCustomAmazonOrderData(source);
@@ -103,12 +103,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IAmazonOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IAmazonOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IAmazonOrderEntity AsReadOnlyAmazonOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IAmazonOrderEntity AsReadOnlyAmazonOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

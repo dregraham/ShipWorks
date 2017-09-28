@@ -5,6 +5,7 @@ using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores;
 
@@ -28,7 +29,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         /// </summary>
         protected override bool IsHyperlinkEnabled(GridColumnFormattedValue formattedValue)
         {
-            StoreType storeType = GetStoreType(formattedValue);
+            Tuple<StoreType, IStoreEntity> storeType = GetStoreType(formattedValue);
             EntityField2 field = formattedValue.PrimaryField;
 
             if (storeType == null || (object) field == null)
@@ -50,13 +51,13 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                 field = rollupInfo.ChildField;
             }
 
-            return storeType.GridHyperlinkSupported(formattedValue.Entity, field);
+            return storeType.Item1.GridHyperlinkSupported(storeType.Item2, formattedValue.Entity, field);
         }
 
         /// <summary>
         /// Get the StoreType instance represented by the given value
         /// </summary>
-        private StoreType GetStoreType(GridColumnFormattedValue formattedValue)
+        private Tuple<StoreType, IStoreEntity> GetStoreType(GridColumnFormattedValue formattedValue)
         {
             if (formattedValue.Entity == null)
             {
@@ -91,13 +92,13 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                 return null;
             }
 
-            StoreEntity store = StoreManager.GetStore(order.StoreID);
+            IStoreEntity store = StoreManager.GetStoreReadOnly(order.StoreID);
             if (store == null)
             {
                 return null;
             }
 
-            return StoreTypeManager.GetType(store);
+            return Tuple.Create(StoreTypeManager.GetType((StoreTypeCode) store.TypeCode), store);
         }
 
         /// <summary>
@@ -138,7 +139,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
         {
             GridColumnFormattedValue formattedValue = row.GetFormattedValue(column);
 
-            StoreType storeType = GetStoreType(formattedValue);
+            Tuple<StoreType, IStoreEntity> storeType = GetStoreType(formattedValue);
             if (storeType != null)
             {
                 // Automatically translate rollups - we'll provide the selection menu for child items automatically
@@ -160,7 +161,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                         }
                         else
                         {
-                            storeType.GridHyperlinkClick(rollupInfo.ChildField, children[0], row.Grid.SandGrid);
+                            storeType.Item1.GridHyperlinkClick(storeType.Item2, rollupInfo.ChildField, children[0], row.Grid.SandGrid);
                         }
                     }
                     else if (children.Count > 1)
@@ -173,7 +174,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                             EntityBase2 hoistedChild = child;
 
                             ToolStripMenuItem menuItem = new ToolStripMenuItem(child.GetCurrentFieldValue(rollupInfo.ChildField.FieldIndex).ToString());
-                            menuItem.Click += (object sender, EventArgs e) => { storeType.GridHyperlinkClick(rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
+                            menuItem.Click += (object sender, EventArgs e) => { storeType.Item1.GridHyperlinkClick(storeType.Item2, rollupInfo.ChildField, hoistedChild, row.Grid.SandGrid); };
 
                             // Disable manual orders \ items
                             if (skipManual && IsManuallyEntered(hoistedChild))
@@ -190,7 +191,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators
                 }
                 else
                 {
-                    storeType.GridHyperlinkClick(formattedValue.PrimaryField, formattedValue.Entity, row.Grid.SandGrid);
+                    storeType.Item1.GridHyperlinkClick(storeType.Item2, formattedValue.PrimaryField, formattedValue.Entity, row.Grid.SandGrid);
                 }
             }
         }

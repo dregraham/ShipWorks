@@ -43,7 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            MarketplaceAdvisorOrder = source.MarketplaceAdvisorOrder?.AsReadOnly(objectMap);
+            MarketplaceAdvisorOrder = (IMarketplaceAdvisorOrderEntity) source.MarketplaceAdvisorOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomMarketplaceAdvisorOrderSearchData(source);
@@ -94,6 +94,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IMarketplaceAdvisorOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

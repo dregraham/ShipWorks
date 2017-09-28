@@ -32,15 +32,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<ILemonStandOrderSearchEntity> LemonStandOrderSearch { get; }
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ILemonStandOrderEntity AsReadOnly();
+        ILemonStandOrderEntity AsReadOnlyLemonStandOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ILemonStandOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        ILemonStandOrderEntity AsReadOnlyLemonStandOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -62,13 +64,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ILemonStandOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new ILemonStandOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -79,5 +81,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyLemonStandOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public ILemonStandOrderEntity AsReadOnlyLemonStandOrder() =>
+            (ILemonStandOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public ILemonStandOrderEntity AsReadOnlyLemonStandOrder(IDictionary<object, object> objectMap) =>
+            (ILemonStandOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

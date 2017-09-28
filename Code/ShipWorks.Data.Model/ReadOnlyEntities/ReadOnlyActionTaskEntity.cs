@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FlowError = source.FlowError;
             
             
-            Action = source.Action?.AsReadOnly(objectMap);
+            Action = (IActionEntity) source.Action?.AsReadOnly(objectMap);
             
 
             CopyCustomActionTaskData(source);
@@ -143,6 +143,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IActionTaskEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            ShopifyOrder = source.ShopifyOrder?.AsReadOnly(objectMap);
+            ShopifyOrder = (IShopifyOrderEntity) source.ShopifyOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomShopifyOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShopifyOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

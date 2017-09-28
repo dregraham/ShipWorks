@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            OrderMotionOrder = source.OrderMotionOrder?.AsReadOnly(objectMap);
+            OrderMotionOrder = (IOrderMotionOrderEntity) source.OrderMotionOrder?.AsReadOnly(objectMap);
             
 
             CopyCustomOrderMotionOrderSearchData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOrderMotionOrderSearchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

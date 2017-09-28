@@ -230,6 +230,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IFedExProfileEntity FedExProfile { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -277,5 +279,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyFedExProfilePackageEntity(this, objectMap);
         }
+
+        
     }
 }

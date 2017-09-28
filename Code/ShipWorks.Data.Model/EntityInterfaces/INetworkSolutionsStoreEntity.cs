@@ -49,15 +49,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new INetworkSolutionsStoreEntity AsReadOnly();
+        INetworkSolutionsStoreEntity AsReadOnlyNetworkSolutionsStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new INetworkSolutionsStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        INetworkSolutionsStoreEntity AsReadOnlyNetworkSolutionsStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -78,13 +80,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INetworkSolutionsStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new INetworkSolutionsStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -95,5 +97,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyNetworkSolutionsStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public INetworkSolutionsStoreEntity AsReadOnlyNetworkSolutionsStore() =>
+            (INetworkSolutionsStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public INetworkSolutionsStoreEntity AsReadOnlyNetworkSolutionsStore(IDictionary<object, object> objectMap) =>
+            (INetworkSolutionsStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

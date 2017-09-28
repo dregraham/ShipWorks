@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            YahooOrderSearch = source.YahooOrderSearch?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            YahooOrderSearch = source.YahooOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IYahooOrderSearchEntity>().ToReadOnly() ??
                 Enumerable.Empty<IYahooOrderSearchEntity>();
 
             CopyCustomYahooOrderData(source);
@@ -61,12 +61,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IYahooOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IYahooOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IYahooOrderEntity AsReadOnlyYahooOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IYahooOrderEntity AsReadOnlyYahooOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

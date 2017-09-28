@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UnitPriceAmount = source.UnitPriceAmount;
             
             
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
 
             CopyCustomShipmentCustomsItemData(source);
@@ -136,6 +136,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShipmentCustomsItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

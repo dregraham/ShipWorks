@@ -43,15 +43,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new INeweggOrderEntity AsReadOnly();
+        INeweggOrderEntity AsReadOnlyNeweggOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new INeweggOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        INeweggOrderEntity AsReadOnlyNeweggOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -72,13 +74,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INeweggOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new INeweggOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -89,5 +91,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyNeweggOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public INeweggOrderEntity AsReadOnlyNeweggOrder() =>
+            (INeweggOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public INeweggOrderEntity AsReadOnlyNeweggOrder(IDictionary<object, object> objectMap) =>
+            (INeweggOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

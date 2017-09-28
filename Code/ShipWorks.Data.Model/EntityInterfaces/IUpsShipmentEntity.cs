@@ -333,6 +333,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IEnumerable<IUpsPackageEntity> Packages { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -381,5 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyUpsShipmentEntity(this, objectMap);
         }
+
+        
     }
 }

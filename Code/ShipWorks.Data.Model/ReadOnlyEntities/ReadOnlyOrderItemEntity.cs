@@ -58,9 +58,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             
             
-            Order = source.Order?.AsReadOnly(objectMap);
+            Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
             
-            OrderItemAttributes = source.OrderItemAttributes?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderItemAttributes = source.OrderItemAttributes?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderItemAttributeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderItemAttributeEntity>();
 
             CopyCustomOrderItemData(source);
@@ -203,6 +203,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOrderItemEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

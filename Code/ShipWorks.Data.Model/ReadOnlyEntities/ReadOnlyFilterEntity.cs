@@ -46,9 +46,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            UsedBySequences = source.UsedBySequences?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UsedBySequences = source.UsedBySequences?.Select(x => x.AsReadOnly(objectMap)).OfType<IFilterSequenceEntity>().ToReadOnly() ??
                 Enumerable.Empty<IFilterSequenceEntity>();
-            ChildSequences = source.ChildSequences?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ChildSequences = source.ChildSequences?.Select(x => x.AsReadOnly(objectMap)).OfType<IFilterSequenceEntity>().ToReadOnly() ??
                 Enumerable.Empty<IFilterSequenceEntity>();
 
             CopyCustomFilterData(source);
@@ -113,6 +113,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFilterEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data
