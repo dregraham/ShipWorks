@@ -2,8 +2,8 @@
 GO 
 CREATE TABLE [dbo].[EtsyOrderItem]( 
      [OrderItemID] [bigint] NOT NULL, 
-     [TransactionID] [bigint] NOT NULL, 
-     [ListingID] [bigint] NOT NULL 
+     [TransactionID] [nvarchar] (300) NOT NULL, 
+     [ListingID] [nvarchar] (100) NOT NULL 
  CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED  
 ( 
      [OrderItemID] ASC 
@@ -20,15 +20,7 @@ GO
  
 INSERT INTO [dbo].[EtsyOrderItem]  
             ([OrderItemID], [TransactionID], [ListingID]) 
-     SELECT [OrderItemID],  
-             (CASE 
-                         when ISNUMERIC([Code]) <> 0 and CONVERT(FLOAT, [Code]) BETWEEN -2147483648 AND 2147483647  then convert(bigint, [Code]) 
-                         else ''  
-                    END),   
-             (CASE 
-                         when ISNUMERIC([SKU]) <> 0 and CONVERT(FLOAT, [Code]) BETWEEN -2147483648 AND 2147483647  then convert(bigint, [SKU]) 
-                         else ''  
-                    END) 
+     SELECT [OrderItemID], [Code], [SKU]
      FROM [dbo].[OrderItem]  
      INNER JOIN [Order] ON [Order].[OrderID] = [OrderItem].[OrderID] 
      INNER JOIN [Store] ON [Store].[StoreID] = [Order].[StoreID] 
@@ -36,7 +28,7 @@ INSERT INTO [dbo].[EtsyOrderItem]
      AND [OrderItemID] NOT IN (SELECT [OrderItemID] FROM [EtsyOrderItem]) 
 GO 
  
-ALTER TABLE [EtsyOrderItem] ALTER COLUMN [TransactionID] [int] NOT NULL 
+ALTER TABLE [EtsyOrderItem] ALTER COLUMN [TransactionID] [nvarchar] (300) NOT NULL 
 GO 
-ALTER TABLE [EtsyOrderItem] ALTER COLUMN [ListingID] [int] NOT NULL 
+ALTER TABLE [EtsyOrderItem] ALTER COLUMN [ListingID] [nvarchar] (100) NOT NULL 
 GO
