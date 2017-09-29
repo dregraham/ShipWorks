@@ -32,6 +32,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
+        public void TestConnection_SetsUri()
+        {
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = SetupHttpVariableRequestSubmitter("TestConnectionResponse");
+
+            WalmartWebClient testObject = mock.Create<WalmartWebClient>();
+
+            testObject.TestConnection(new WalmartStoreEntity());
+
+            requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/feeds"));
+        }
+
+        [Fact]
         public void GetOrders_SetsUri()
         {
             DateTime start = DateTime.UtcNow.AddDays(-3);
@@ -42,20 +54,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.GetOrders(new WalmartStoreEntity(), start);
 
             requestSubmitter.VerifySet(r => r.Uri = new Uri("https://marketplace.walmartapis.com/v3/orders"));
-        }
-
-        private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
-        {
-            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
-            responseReader.Setup(r => r.ReadResult()).Returns(response);
-
-            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
-            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
-            mock.Mock<IHttpRequestSubmitterFactory>()
-                .Setup(f => f.GetHttpVariableRequestSubmitter())
-                .Returns(requestSubmitter.Object);
-
-            return requestSubmitter;
         }
 
         [Fact]
@@ -229,44 +227,73 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void GetOrders_ThrowsWalmartExceptionWithErrorMessageFromErrorDTO()
         {
-            SetupHttpVariableRequestSubmitter(ErrorResponse);
+            SetupHttpVariableRequestSubmitterForBadRequest(ErrorResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
 
-            Assert.Equal($"{BaseErrorMessage}: {Environment.NewLine}WM_SVC.ENV set blank or null, WM_CONSUMER.ID set blank or null",ex.Message);
+            Assert.Equal($"{BaseErrorMessage}:{Environment.NewLine}400 Bad Request{Environment.NewLine}WM_SVC.ENV set blank or null, WM_CONSUMER.ID set blank or null",ex.Message);
         }
 
         [Fact]
         public void GetOrders_ThrowsWalmartExceptionWithTryAgainLaterMessage_WhenErrorMatchesOutageError()
         {
-            SetupHttpVariableRequestSubmitter(OutageErrorResponse);
+            SetupHttpVariableRequestSubmitterForBadRequest(OutageErrorResponse);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
 
-            Assert.Equal($"{BaseErrorMessage}. Please try again later.", ex.Message);
+            Assert.Equal($"{BaseErrorMessage}. Please try again later. 400 Bad Request", ex.Message);
         }
 
         [Fact]
         public void GetOrders_ThrowsWalmartExceptionWithDotNetExceptionMessage_WhenUnableToParseErrorDTO()
         {
-            SetupHttpVariableRequestSubmitter(UnexpectedError);
+            SetupHttpVariableRequestSubmitterForBadRequest(UnexpectedError);
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
 
-            Assert.Equal($"ShipWorks encountered an error communicating with Walmart: {Environment.NewLine}There is an error in XML document (1, 1).", ex.Message);
+            Assert.Equal($"ShipWorks encountered an error communicating with Walmart: {Environment.NewLine}400 Bad Request", ex.Message);
         }
 
+        private Mock<IHttpVariableRequestSubmitter> SetupHttpVariableRequestSubmitter(string response)
+        {
+            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
+            responseReader.Setup(r => r.ReadResult()).Returns(response);
+            responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.OK);
+
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
+            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
+            mock.Mock<IHttpRequestSubmitterFactory>()
+                .Setup(f => f.GetHttpVariableRequestSubmitter())
+                .Returns(requestSubmitter.Object);
+
+            return requestSubmitter;
+        }
+
+        private void SetupHttpVariableRequestSubmitterForBadRequest(string response)
+        {
+            Mock<IHttpResponseReader> responseReader = mock.Mock<IHttpResponseReader>();
+            responseReader.Setup(r => r.ReadResult()).Returns(response);
+            responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.BadRequest);
+            responseReader.Setup(r => r.HttpWebResponse.StatusDescription).Returns("Bad Request");
+
+            Mock<IHttpVariableRequestSubmitter> requestSubmitter = mock.Mock<IHttpVariableRequestSubmitter>();
+            requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);
+            mock.Mock<IHttpRequestSubmitterFactory>()
+                .Setup(f => f.GetHttpVariableRequestSubmitter())
+                .Returns(requestSubmitter.Object);
+        }
 
         private void SetupAcknowledgeOrderResponse()
         {
             var responseReader = acknowledgeMock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult()).Returns(GetOrderText(orderLineStatusValueType.Acknowledged));
+            responseReader.Setup(r => r.HttpWebResponse.StatusCode).Returns(HttpStatusCode.OK);
 
             var requestSubmitter = acknowledgeMock.Mock<IHttpRequestSubmitter>();
             requestSubmitter.Setup(r => r.GetResponse()).Returns(responseReader);

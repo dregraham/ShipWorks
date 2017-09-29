@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -56,61 +57,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             requestSubmitter.Uri = new Uri(TestConnectionUrl);
             requestSubmitter.Verb = HttpVerb.Get;
 
-            ProcessRequest(store, requestSubmitter, "TestConnection");
-        }
-
-        /// <summary>
-        /// Executes a request
-        /// </summary>
-        private string ProcessRequest(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
-        {
-            submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
-            submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
-            submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
-            submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
-            submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
-
-            requestSigner.Sign(submitter, store);
-
-            try
-            {
-                IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
-                logEntry.LogRequest(submitter);
-
-                using (IHttpResponseReader reader = submitter.GetResponse())
-                {
-                    string responseData = reader.ReadResult();
-                    logEntry.LogResponse(responseData, "xml");
-                    return responseData;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw WebHelper.TranslateWebException(ex, typeof(WalmartException));
-            }
-        }
-
-        /// <summary>
-        /// Process the request and deserialize the response
-        /// </summary>
-        private T ProcessRequest<T>(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
-        {
-            string response = string.Empty;
-
-            try
-            {
-                response = ProcessRequest(store, submitter, action);
-
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                XmlReader reader = XmlReader.Create(new StringReader(response));
-                return (T) serializer.Deserialize(reader);
-            }
-            catch (Exception ex) when (ex.GetType() == typeof(WalmartException) ||
-                                       ex.GetType() == typeof(InvalidOperationException) ||
-                                       ex.GetType() == typeof(ArgumentNullException))
-            {
-                throw new WalmartException(GetErrorMessage(response, ex), ex);
-            }
+            ProcessRequest<string>(store, requestSubmitter, "TestConnection");
         }
 
         /// <summary>
@@ -199,12 +146,68 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
+        /// Process the request and deserialize the response
+        /// </summary>
+        private T ProcessRequest<T>(WalmartStoreEntity store, IHttpRequestSubmitter submitter, string action)
+        {
+            string response = string.Empty;
+            try
+            {
+                submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.Unauthorized);
+                submitter.Headers.Add("WM_SVC.NAME", "Walmart Marketplace");
+                submitter.Headers.Add("WM_CONSUMER.ID", store.ConsumerID);
+                submitter.Headers.Add("WM_CONSUMER.CHANNEL.TYPE", ChannelType);
+                submitter.Headers.Add("WM_QOS.CORRELATION_ID", Guid.NewGuid().ToString());
+
+                requestSigner.Sign(submitter, store);
+
+                IApiLogEntry logEntry = apiLogEntryFactory(ApiLogSource.Walmart, action);
+                logEntry.LogRequest(submitter);
+
+                using (IHttpResponseReader responseReader = submitter.GetResponse())
+                {
+                    response = responseReader.ReadResult();
+                    logEntry.LogResponse(response, "xml");
+
+                    // The reason we allow 400 and 401 above but then throw for everything that is not 200 here is
+                    // because we need to retain both the error DTO from Walmart as well as the HTTP status code
+                    // description. If we didn't allow them, we'd lose the Walmart message.
+                    if (responseReader.HttpWebResponse.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new WebException($"{(int)responseReader.HttpWebResponse.StatusCode} {responseReader.HttpWebResponse.StatusDescription}");
+                    }
+
+                    return DeserializeResponse<T>(response);
+                }
+            }
+            catch (Exception ex) when (ex.GetType() == typeof(WebException) ||
+                                       ex.GetType() == typeof(InvalidOperationException) ||
+                                       ex.GetType() == typeof(ArgumentNullException))
+            {
+                throw new WalmartException(GetErrorMessage(response, ex.Message), ex);
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the response.
+        /// </summary>
+        private static T DeserializeResponse<T>(string response)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlReader xmlReader = XmlReader.Create(new StringReader(response));
+
+            return typeof(T) == typeof(string) ?
+                (T) TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(response):
+                (T) serializer.Deserialize(xmlReader);
+        }
+
+        /// <summary>
         /// Gets the error message to display to the user
         /// </summary>
         /// <remarks>
         /// Attempts to extract the message from the walmart error dto, if that fails, return the original exception message.
         /// </remarks>
-        private string GetErrorMessage(string response, Exception exceptionToRethrow)
+        private string GetErrorMessage(string response, string exceptionMessage)
         {
             try
             {
@@ -227,17 +230,19 @@ namespace ShipWorks.Stores.Platforms.Walmart
                         error.causes?.Length == 0)
                     {
                         // Since walmart gives us no reason for the error, just tell the customer to try again later
-                        return $"{BaseErrorMessage}. Please try again later.";
+                        return $"{BaseErrorMessage}. Please try again later. {exceptionMessage}";
                     }
                 }
 
-                return $"{BaseErrorMessage}: {Environment.NewLine}{string.Join(", ", errors.error.Select(e => e.description).Distinct())}";
+                // Exception message + Walmart message
+                return $"{BaseErrorMessage}:{Environment.NewLine}{exceptionMessage}{Environment.NewLine}" +
+                       $"{string.Join(", ", errors.error.Select(e => e.description).Distinct())}";
             }
             catch (Exception ex) when (ex.GetType() == typeof(InvalidOperationException) ||
                                        ex.GetType() == typeof(ArgumentNullException))
             {
                 // If there was an error deserializing the walmart error response, just return the original exception message
-                return $"{BaseErrorMessage}: {Environment.NewLine}{exceptionToRethrow.Message}";
+                return $"{BaseErrorMessage}: {Environment.NewLine}{exceptionMessage}";
             }
         }
     }
