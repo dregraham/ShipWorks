@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using log4net;
@@ -108,9 +109,16 @@ namespace ShipWorks.Stores.Content
             amountSpent.Text = "";
 
             var validStores = (from store in StoreManager.GetAllStores()
-                               where UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID)
+                               where store.Enabled && UserSession.Security.HasPermission(PermissionType.OrdersModify, store.StoreID) 
                                select new { Key = store.StoreName, Value = store })
                 .ToList();
+
+            if (validStores.None())
+            {
+                MessageHelper.ShowError(this, "ShipWorks is unable to create a manual order because all stores have been disabled or you do not have permission to create orders.");
+                Close();
+                return;
+            }
 
             comboStores.DisplayMember = "Key";
             comboStores.ValueMember = "Value";
