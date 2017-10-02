@@ -19,18 +19,19 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Gets/Sets the cutoff time settings
         /// </summary>
-        public Tuple<bool, DateTime> Value
+        public Tuple<bool, TimeSpan> Value
         {
             get
             {
                 return Tuple.Create(
                     cutoffEnabled.Checked,
-                    cutoffTime.Value);
+                    cutoffTime.Value.TimeOfDay);
             }
             set
             {
                 cutoffEnabled.Checked = value.Item1;
-                cutoffTime.Value = value.Item2;
+                cutoffTime.Enabled = cutoffEnabled.Checked;
+                cutoffTime.Value = new DateTime(2000, 1, 1).Add(value.Item2);
             }
         }
 

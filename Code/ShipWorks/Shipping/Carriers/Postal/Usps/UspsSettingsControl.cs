@@ -61,7 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void PositionControls()
         {
-            express1SettingsControl.Top = optionsControl.Bottom + 5;
+            shippingCutoff.Top = optionsControl.Bottom;
+            express1SettingsControl.Top = shippingCutoff.Bottom + 5;
 
             if (express1SettingsControl.Visible)
             {
@@ -73,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                panelBottom.Top = optionsControl.Bottom;
+                panelBottom.Top = shippingCutoff.Bottom + 5;
             }
 
             servicePicker.Top = panelBottom.Bottom + 4;
@@ -106,6 +107,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 // Doesn't make sense to show Stamps.com insurance choosing to Express1
                 panelInsurance.Visible = false;
+            }
+
+            if (ShipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                shippingCutoff.Value = Tuple.Create(settings.UspsShippingDateCutoffEnabled, settings.UspsShippingDateCutoffTime);
             }
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
@@ -193,6 +199,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Preparing to save Express1 settings {0}", express1Settings == null);
                 express1Settings.SaveSettings(settings);
                 log.Info("Finished saving Express1 settings");
+
+                var cutoffDetails = shippingCutoff.Value;
+                settings.UspsShippingDateCutoffEnabled = cutoffDetails.Item1;
+                settings.UspsShippingDateCutoffTime = cutoffDetails.Item2;
             }
 
             if (uspsResellerType == UspsResellerType.None)
