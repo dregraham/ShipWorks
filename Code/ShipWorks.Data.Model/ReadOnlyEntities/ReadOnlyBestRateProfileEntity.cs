@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Weight = source.Weight;
             ServiceLevel = source.ServiceLevel;
             
-            ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
 
@@ -122,6 +122,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IBestRateProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

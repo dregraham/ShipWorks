@@ -43,9 +43,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            Audit = source.Audit?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Audit = source.Audit?.Select(x => x.AsReadOnly(objectMap)).OfType<IAuditEntity>().ToReadOnly() ??
                 Enumerable.Empty<IAuditEntity>();
-            ServiceStatus = source.ServiceStatus?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ServiceStatus = source.ServiceStatus?.Select(x => x.AsReadOnly(objectMap)).OfType<IServiceStatusEntity>().ToReadOnly() ??
                 Enumerable.Empty<IServiceStatusEntity>();
 
             CopyCustomComputerData(source);
@@ -92,6 +92,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IComputerEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

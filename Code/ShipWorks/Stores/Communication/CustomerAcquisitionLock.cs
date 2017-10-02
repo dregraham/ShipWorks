@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private void AcquireLock()
         {
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 con = SqlSession.Current.OpenConnection();
             }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
@@ -10,6 +7,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Base class for all exceptions that we want to handle from MarketplaceAdvisor
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Serializable]
     class MarketplaceAdvisorException : Exception
     {
@@ -33,8 +35,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Constructor that supports remoting.
         /// </summary>
-        public MarketplaceAdvisorException(SerializationInfo info, StreamingContext context) : 
-            base(info, context) 
+        public MarketplaceAdvisorException(SerializationInfo info, StreamingContext context) :
+            base(info, context)
         {
 
         }

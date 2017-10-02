@@ -1,40 +1,33 @@
-﻿using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
     /// <summary>
     /// Provides credentials for making requests to the Sears api
     /// </summary>
-    public class SearsCredentials
+    [Component]
+    public class SearsCredentials : ISearsCredentials
     {
-        private readonly SearsStoreEntity store;
-        private readonly HttpVariableRequestSubmitter request;
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsCredentials(SearsStoreEntity store,
-			HttpVariableRequestSubmitter request,
-			IDateTimeProvider dateTimeProvider,
-            IEncryptionProviderFactory encryptionProviderFactory)
+        public SearsCredentials(IDateTimeProvider dateTimeProvider, IEncryptionProviderFactory encryptionProviderFactory)
         {
-            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
             MethodConditions.EnsureArgumentIsNotNull(dateTimeProvider, nameof(dateTimeProvider));
             MethodConditions.EnsureArgumentIsNotNull(encryptionProviderFactory, nameof(encryptionProviderFactory));
 
-            this.store = store;
-            this.request = request;
             this.dateTimeProvider = dateTimeProvider;
             this.encryptionProviderFactory = encryptionProviderFactory;
         }
@@ -42,9 +35,12 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Adds credentials to the request based on the store
         /// </summary>
-        public void AddCredentials()
+        public void AddCredentials(ISearsStoreEntity store, IHttpVariableRequestSubmitter request)
         {
-            HttpVariableCollection credentials = GetCredentialsHttpVariables();
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
+
+            HttpVariableCollection credentials = GetCredentialsHttpVariables(store);
             if (credentials.Any())
             {
                 if (request.Verb == HttpVerb.Put)
@@ -59,13 +55,13 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
             }
 
-            AddCredentialsHeader();
+            AddCredentialsHeader(store, request);
         }
 
         /// <summary>
         /// Adds the credentials header to the request for authenticating
         /// </summary>
-        private void AddCredentialsHeader()
+        private void AddCredentialsHeader(ISearsStoreEntity store, IHttpVariableRequestSubmitter request)
         {
             if (!string.IsNullOrEmpty(store.SellerID))
             {
@@ -110,11 +106,10 @@ namespace ShipWorks.Stores.Platforms.Sears
             }
         }
 
-
         /// <summary>
         /// Return the collection of HTTP variables for authenticating
         /// </summary>
-        private HttpVariableCollection GetCredentialsHttpVariables()
+        private HttpVariableCollection GetCredentialsHttpVariables(ISearsStoreEntity store)
         {
             HttpVariableCollection credentials = new HttpVariableCollection();
 

@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ProStoresOrderSearch = source.ProStoresOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IProStoresOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IProStoresOrderSearchEntity>();
 
             CopyCustomProStoresOrderData(source);
         }
@@ -68,15 +70,29 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
+        public IEnumerable<IProStoresOrderSearchEntity> ProStoresOrderSearch { get; }
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IProStoresOrderEntity AsReadOnlyProStoresOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IProStoresOrderEntity AsReadOnlyProStoresOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

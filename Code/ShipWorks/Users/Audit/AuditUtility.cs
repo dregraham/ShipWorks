@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.UI;
@@ -7,6 +8,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using System.Data;
 
 namespace ShipWorks.Users.Audit
 {
@@ -21,10 +23,7 @@ namespace ShipWorks.Users.Audit
         /// <summary>
         /// The hard-coded "EntityID" that represents "Various" for audit logs that are for multiple objects.
         /// </summary>
-        public static long VariousEntityID
-        {
-            get { return -999; }
-        }
+        public static long VariousEntityID => -999;
 
         /// <summary>
         /// Audit the given event for the logged on user on the current computer

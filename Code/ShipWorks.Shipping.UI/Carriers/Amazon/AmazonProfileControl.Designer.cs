@@ -52,16 +52,19 @@
             this.labelWeight = new System.Windows.Forms.Label();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.labelService = new System.Windows.Forms.Label();
+            this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.serviceState = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupBoxFrom.SuspendLayout();
             this.groupInsurance.SuspendLayout();
             this.groupShipment.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
-            //
+            // 
             // tabControl
-            //
+            // 
             this.tabControl.Controls.Add(this.tabPageSettings);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
@@ -69,9 +72,9 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(425, 499);
             this.tabControl.TabIndex = 0;
-            //
+            // 
             // tabPageSettings
-            //
+            // 
             this.tabPageSettings.AutoScroll = true;
             this.tabPageSettings.Controls.Add(this.groupBoxFrom);
             this.tabPageSettings.Controls.Add(this.groupInsurance);
@@ -83,10 +86,10 @@
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
-            //
+            // 
             // groupBoxFrom
-            //
-            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.groupBoxFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxFrom.Controls.Add(this.kryptonBorderEdge1);
             this.groupBoxFrom.Controls.Add(this.labelSender);
@@ -98,10 +101,10 @@
             this.groupBoxFrom.TabIndex = 12;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
-            //
+            // 
             // kryptonBorderEdge1
-            //
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            // 
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -109,18 +112,18 @@
             this.kryptonBorderEdge1.Name = "kryptonBorderEdge1";
             this.kryptonBorderEdge1.Size = new System.Drawing.Size(1, 29);
             this.kryptonBorderEdge1.Text = "kryptonBorderEdge1";
-            //
+            // 
             // labelSender
-            //
+            // 
             this.labelSender.AutoSize = true;
             this.labelSender.Location = new System.Drawing.Point(67, 27);
             this.labelSender.Name = "labelSender";
             this.labelSender.Size = new System.Drawing.Size(39, 13);
             this.labelSender.TabIndex = 12;
             this.labelSender.Text = "Origin:";
-            //
+            // 
             // originCombo
-            //
+            // 
             this.originCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.originCombo.FormattingEnabled = true;
             this.originCombo.Location = new System.Drawing.Point(112, 23);
@@ -128,9 +131,9 @@
             this.originCombo.PromptText = "(Multiple Values)";
             this.originCombo.Size = new System.Drawing.Size(206, 21);
             this.originCombo.TabIndex = 3;
-            //
+            // 
             // originState
-            //
+            // 
             this.originState.AutoSize = true;
             this.originState.Checked = true;
             this.originState.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -140,41 +143,41 @@
             this.originState.TabIndex = 2;
             this.originState.Tag = "";
             this.originState.UseVisualStyleBackColor = true;
-            //
+            // 
             // groupInsurance
-            //
-            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.groupInsurance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupInsurance.Controls.Add(this.insuranceControl);
             this.groupInsurance.Controls.Add(this.insuranceState);
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
-            this.groupInsurance.Location = new System.Drawing.Point(6, 236);
+            this.groupInsurance.Location = new System.Drawing.Point(6, 266);
             this.groupInsurance.Name = "groupInsurance";
             this.groupInsurance.Size = new System.Drawing.Size(405, 76);
             this.groupInsurance.TabIndex = 11;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
-            //
+            // 
             // insuranceControl
-            //
-            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            // 
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(35, 21);
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(316, 52);
             this.insuranceControl.TabIndex = 97;
-            //
+            // 
             // insuranceState
-            //
+            // 
             this.insuranceState.AutoSize = true;
             this.insuranceState.Location = new System.Drawing.Point(9, 25);
             this.insuranceState.Name = "insuranceState";
             this.insuranceState.Size = new System.Drawing.Size(15, 14);
             this.insuranceState.TabIndex = 0;
             this.insuranceState.UseVisualStyleBackColor = true;
-            //
+            // 
             // kryptonBorderEdge10
-            //
-            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            // 
+            this.kryptonBorderEdge10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge10.AutoSize = false;
             this.kryptonBorderEdge10.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -182,11 +185,14 @@
             this.kryptonBorderEdge10.Name = "kryptonBorderEdge10";
             this.kryptonBorderEdge10.Size = new System.Drawing.Size(1, 46);
             this.kryptonBorderEdge10.Text = "kryptonBorderEdge1";
-            //
+            // 
             // groupShipment
-            //
-            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.groupShipment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupShipment.Controls.Add(this.serviceState);
+            this.groupShipment.Controls.Add(this.labelService);
+            this.groupShipment.Controls.Add(this.service);
             this.groupShipment.Controls.Add(this.deliveryExperience);
             this.groupShipment.Controls.Add(this.labelDeliveryExperience);
             this.groupShipment.Controls.Add(this.deliveryExperienceState);
@@ -199,122 +205,159 @@
             this.groupShipment.Controls.Add(this.kryptonBorderEdge);
             this.groupShipment.Location = new System.Drawing.Point(6, 69);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(405, 161);
+            this.groupShipment.Size = new System.Drawing.Size(405, 191);
             this.groupShipment.TabIndex = 5;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
-            //
+            // 
             // deliveryExperience
-            //
+            // 
             this.deliveryExperience.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deliveryExperience.FormattingEnabled = true;
-            this.deliveryExperience.Location = new System.Drawing.Point(112, 128);
+            this.deliveryExperience.Location = new System.Drawing.Point(112, 158);
             this.deliveryExperience.Name = "deliveryExperience";
             this.deliveryExperience.PromptText = "(Multiple Values)";
             this.deliveryExperience.Size = new System.Drawing.Size(220, 21);
             this.deliveryExperience.TabIndex = 5;
-            //
+            // 
             // labelDeliveryExperience
-            //
+            // 
             this.labelDeliveryExperience.AutoSize = true;
             this.labelDeliveryExperience.BackColor = System.Drawing.Color.Transparent;
-            this.labelDeliveryExperience.Location = new System.Drawing.Point(34, 131);
+            this.labelDeliveryExperience.Location = new System.Drawing.Point(34, 161);
             this.labelDeliveryExperience.Name = "labelDeliveryExperience";
             this.labelDeliveryExperience.Size = new System.Drawing.Size(72, 13);
             this.labelDeliveryExperience.TabIndex = 76;
             this.labelDeliveryExperience.Text = "Confirmation:";
-            //
+            // 
             // deliveryExperienceState
-            //
+            // 
             this.deliveryExperienceState.AutoSize = true;
             this.deliveryExperienceState.Checked = true;
             this.deliveryExperienceState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.deliveryExperienceState.Location = new System.Drawing.Point(9, 131);
+            this.deliveryExperienceState.Location = new System.Drawing.Point(9, 161);
             this.deliveryExperienceState.Name = "deliveryExperienceState";
             this.deliveryExperienceState.Size = new System.Drawing.Size(15, 14);
             this.deliveryExperienceState.TabIndex = 74;
             this.deliveryExperienceState.Tag = "";
             this.deliveryExperienceState.UseVisualStyleBackColor = true;
-            //
+            // 
             // dimensionsState
-            //
+            // 
             this.dimensionsState.AutoSize = true;
             this.dimensionsState.Checked = true;
             this.dimensionsState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dimensionsState.Location = new System.Drawing.Point(9, 52);
+            this.dimensionsState.Location = new System.Drawing.Point(9, 82);
             this.dimensionsState.Name = "dimensionsState";
             this.dimensionsState.Size = new System.Drawing.Size(15, 14);
             this.dimensionsState.TabIndex = 73;
             this.dimensionsState.Tag = "";
             this.dimensionsState.UseVisualStyleBackColor = true;
-            //
+            // 
             // dimensionsControl
-            //
+            // 
             this.dimensionsControl.BackColor = System.Drawing.Color.Transparent;
             this.dimensionsControl.Cleared = false;
-            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.dimensionsControl.Location = new System.Drawing.Point(109, 48);
+            this.dimensionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dimensionsControl.Location = new System.Drawing.Point(109, 78);
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 2;
-            //
+            // 
             // labelDimensions
-            //
+            // 
             this.labelDimensions.AutoSize = true;
             this.labelDimensions.BackColor = System.Drawing.Color.Transparent;
-            this.labelDimensions.Location = new System.Drawing.Point(42, 54);
+            this.labelDimensions.Location = new System.Drawing.Point(42, 84);
             this.labelDimensions.Name = "labelDimensions";
             this.labelDimensions.Size = new System.Drawing.Size(64, 13);
             this.labelDimensions.TabIndex = 71;
             this.labelDimensions.Text = "Dimensions:";
-            //
+            // 
             // weightState
-            //
+            // 
             this.weightState.AutoSize = true;
             this.weightState.Checked = true;
             this.weightState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.weightState.Location = new System.Drawing.Point(9, 23);
+            this.weightState.Location = new System.Drawing.Point(9, 53);
             this.weightState.Name = "weightState";
             this.weightState.Size = new System.Drawing.Size(15, 14);
             this.weightState.TabIndex = 70;
             this.weightState.Tag = "";
             this.weightState.UseVisualStyleBackColor = true;
-            //
+            // 
             // weight
-            //
+            // 
+            this.weight.AutoSize = true;
+            this.weight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(112, 21);
+            this.weight.ConfigureTelemetryEntityCounts = null;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(112, 51);
             this.weight.Name = "weight";
             this.weight.RangeMax = 400D;
             this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(269, 21);
+            this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 1;
             this.weight.Weight = 0D;
-            //
+            // 
             // labelWeight
-            //
+            // 
             this.labelWeight.AutoSize = true;
             this.labelWeight.BackColor = System.Drawing.Color.Transparent;
-            this.labelWeight.Location = new System.Drawing.Point(61, 25);
+            this.labelWeight.Location = new System.Drawing.Point(61, 55);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 67;
             this.labelWeight.Text = "Weight:";
-            //
+            // 
             // kryptonBorderEdge
-            //
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            // 
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 14);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 133);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 163);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
-            //
+            // 
+            // labelService
+            // 
+            this.labelService.AutoSize = true;
+            this.labelService.BackColor = System.Drawing.Color.White;
+            this.labelService.Location = new System.Drawing.Point(60, 23);
+            this.labelService.Name = "labelService";
+            this.labelService.Size = new System.Drawing.Size(46, 13);
+            this.labelService.TabIndex = 79;
+            this.labelService.Text = "Service:";
+            // 
+            // service
+            // 
+            this.service.DisplayMember = "Description";
+            this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.service.FormattingEnabled = true;
+            this.service.Location = new System.Drawing.Point(112, 20);
+            this.service.Name = "service";
+            this.service.PromptText = "(Multiple Values)";
+            this.service.Size = new System.Drawing.Size(220, 21);
+            this.service.TabIndex = 78;
+            this.service.ValueMember = "ShippingServiceId";
+            // 
+            // serviceState
+            // 
+            this.serviceState.AutoSize = true;
+            this.serviceState.Checked = true;
+            this.serviceState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.serviceState.Location = new System.Drawing.Point(9, 23);
+            this.serviceState.Name = "serviceState";
+            this.serviceState.Size = new System.Drawing.Size(15, 14);
+            this.serviceState.TabIndex = 80;
+            this.serviceState.Tag = "";
+            this.serviceState.UseVisualStyleBackColor = true;
+            // 
             // AmazonProfileControl
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
@@ -328,7 +371,7 @@
             this.groupInsurance.PerformLayout();
             this.groupShipment.ResumeLayout(false);
             this.groupShipment.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -358,5 +401,8 @@
         private System.Windows.Forms.Label labelSender;
         private ShipWorks.UI.Controls.MultiValueComboBox originCombo;
         private System.Windows.Forms.CheckBox originState;
+        private System.Windows.Forms.CheckBox serviceState;
+        private System.Windows.Forms.Label labelService;
+        private ShipWorks.UI.Controls.MultiValueComboBox service;
     }
 }

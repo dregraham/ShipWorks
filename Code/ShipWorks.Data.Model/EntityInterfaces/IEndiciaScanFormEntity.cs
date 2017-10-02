@@ -68,6 +68,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IScanFormBatchEntity ScanFormBatch { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -115,5 +117,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyEndiciaScanFormEntity(this, objectMap);
         }
+
+        
     }
 }

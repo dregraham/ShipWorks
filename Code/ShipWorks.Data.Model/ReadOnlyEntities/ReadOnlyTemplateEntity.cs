@@ -61,13 +61,13 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             SaveFileOnlineResources = source.SaveFileOnlineResources;
             
             
-            ParentFolder = source.ParentFolder?.AsReadOnly(objectMap);
+            ParentFolder = (ITemplateFolderEntity) source.ParentFolder?.AsReadOnly(objectMap);
             
-            ComputerSettings = source.ComputerSettings?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ComputerSettings = source.ComputerSettings?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateComputerSettingsEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateComputerSettingsEntity>();
-            StoreSettings = source.StoreSettings?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            StoreSettings = source.StoreSettings?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateStoreSettingsEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateStoreSettingsEntity>();
-            UserSettings = source.UserSettings?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UserSettings = source.UserSettings?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateUserSettingsEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateUserSettingsEntity>();
 
             CopyCustomTemplateData(source);
@@ -232,6 +232,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ITemplateEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

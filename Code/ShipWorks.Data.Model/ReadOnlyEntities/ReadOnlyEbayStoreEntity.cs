@@ -54,7 +54,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            EbayCombinedOrderRelation = source.EbayCombinedOrderRelation?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            EbayCombinedOrderRelation = source.EbayCombinedOrderRelation?.Select(x => x.AsReadOnly(objectMap)).OfType<IEbayCombinedOrderRelationEntity>().ToReadOnly() ??
                 Enumerable.Empty<IEbayCombinedOrderRelationEntity>();
 
             CopyCustomEbayStoreData(source);
@@ -159,12 +159,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IEbayStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IEbayStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IEbayStoreEntity AsReadOnlyEbayStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IEbayStoreEntity AsReadOnlyEbayStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

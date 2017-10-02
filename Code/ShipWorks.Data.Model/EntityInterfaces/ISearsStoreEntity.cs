@@ -49,15 +49,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ISearsStoreEntity AsReadOnly();
+        ISearsStoreEntity AsReadOnlySearsStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new ISearsStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        ISearsStoreEntity AsReadOnlySearsStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -78,13 +80,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ISearsStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new ISearsStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -95,5 +97,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlySearsStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public ISearsStoreEntity AsReadOnlySearsStore() =>
+            (ISearsStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public ISearsStoreEntity AsReadOnlySearsStore(IDictionary<object, object> objectMap) =>
+            (ISearsStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

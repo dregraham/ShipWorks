@@ -4,18 +4,13 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Web.Services.Protocols;
-using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using ShipWorks.Data;
+using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using ShipWorks.Stores.Platforms.PayPal.WebServices;
 
 namespace ShipWorks.Stores.Platforms.PayPal
 {
@@ -24,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
     /// </summary>
     public class PayPalWebClient
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(PayPalWebClient));
 
         // The account this web client is operating for
@@ -84,13 +79,13 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         class CustomPayPalApiBinding : PayPalAPISoapBinding
         {
-            // Logger 
+            // Logger
             static readonly ILog log = LogManager.GetLogger(typeof(CustomPayPalApiBinding));
 
             /// <summary>
             /// Constructor
             /// </summary>
-			public CustomPayPalApiBinding(ApiLogEntry log)
+			public CustomPayPalApiBinding(ApiLogEntry log) 
                 : base(log)
             {
 
@@ -134,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         #endregion
 
         /// <summary>
-        /// Determines if we should connect to the 
+        /// Determines if we should connect to the
         /// </summary>
         public static bool UseLiveServer
         {
@@ -390,13 +385,11 @@ namespace ShipWorks.Stores.Platforms.PayPal
             }
         }
 
-
         /// <summary>
-        /// Return transaction headers for transactions that occur between the given dates. Filter 
-        /// specifies whether or not to remove transaction types for which we can't get 
-        /// details on. 
+        /// Return transaction headers for transactions that occur between the given dates. Filter
+        /// specifies whether or not to remove transaction types for which we can't get
+        /// details on.
         /// </summary>
-        [NDependIgnoreLongMethod]
         public List<PaymentTransactionSearchResultType> GetTransactions(DateTime rangeStart, DateTime rangeEnd, bool filter)
         {
             TransactionSearchRequestType searchRequest = new TransactionSearchRequestType();
@@ -426,19 +419,13 @@ namespace ShipWorks.Stores.Platforms.PayPal
                 {
                     transactions.AddRange(searchResult.PaymentTransactions);
 
-                    // sort by timestamp 
-                    transactions.Sort((a, b) =>
-                    {
-                        return a.Timestamp.CompareTo(b.Timestamp);
-                    });
+                    // sort by timestamp
+                    transactions.Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
 
                     if (filter)
                     {
                         // remove the transaction types that PayPal doesn't let us query against
-                        transactions.RemoveAll(t =>
-                        {
-                            return excludedTransactions.Any(ex => ex.Matches(t.Type));
-                        });
+                        transactions.RemoveAll(t => excludedTransactions.Any(ex => ex.Matches(t.Type)));
                     }
                 }
 
@@ -446,58 +433,67 @@ namespace ShipWorks.Stores.Platforms.PayPal
             }
             catch (PayPalException ex)
             {
-                // check for "results truncated" error/warning.  PayPal only returns 100 results, so we have to retry
-                // with smaller chunks.
-                if (ex.Errors.Count(e => e.Code.Trim() == "11002") > 0)
+                var results = HandleGetTransactionsException(rangeStart, rangeEnd, ex);
+                if (results == null)
                 {
-                    log.InfoFormat("PayPal reported too many results, recalculating download range chunk size.");
-
-                    TimeSpan difference = rangeEnd - rangeStart;
-                    if (difference.TotalMinutes < 1)
-                    {
-                        log.InfoFormat("PayPal reported too many results, with a span of 1 minute; quitting.");
-
-                        // +100 transactions in a single minute... probably a safe limit
-                        // just a safeguard so we don't go forever
-                        throw;
-                    }
-
-                    // try a smaller batch (1/16th the time of the last range attempted)
-                    TimeSpan chunkSize = new TimeSpan(difference.Ticks / 16);
-                    DateTime chunkStart = rangeStart;
-
-                    // collection for results
-                    List<PaymentTransactionSearchResultType> transactions = new List<PaymentTransactionSearchResultType>();
-
-                    // walk the total timespan in small parts
-                    while (chunkStart.Add(chunkSize) < rangeEnd)
-                    {
-                        DateTime chunkEnd = chunkStart.Add(chunkSize);
-
-                        // download the next chunk
-                        transactions.AddRange(GetTransactions(chunkStart, chunkEnd, true));
-
-                        // move to the next chunk
-                        chunkStart = chunkEnd;
-                    }
-
-                    // now add in the final chunk
-                    transactions.AddRange(GetTransactions(chunkStart, rangeEnd, true));
-
-                    // sort by timestamp 
-                    transactions.Sort((a, b) =>
-                    {
-                        return a.Timestamp.CompareTo(b.Timestamp);
-                    });
-
-                    return transactions;
-                }
-                else
-                {
-                    // some other error, re-raise it
                     throw;
                 }
+
+                return results;
             }
+        }
+
+        /// <summary>
+        /// Handle exception thrown by GetTransactions
+        /// </summary>
+        private List<PaymentTransactionSearchResultType> HandleGetTransactionsException(DateTime rangeStart, DateTime rangeEnd, PayPalException ex)
+        {
+            // check for "results truncated" error/warning.  PayPal only returns 100 results, so we have to retry
+            // with smaller chunks.
+            if (ex.Errors.None(e => e.Code.Trim() == "11002"))
+            {
+                // some other error, re-raise it
+                return null;
+            }
+
+            log.InfoFormat("PayPal reported too many results, recalculating download range chunk size.");
+
+            TimeSpan difference = rangeEnd - rangeStart;
+            if (difference.TotalMinutes < 1)
+            {
+                log.InfoFormat("PayPal reported too many results, with a span of 1 minute; quitting.");
+
+                // +100 transactions in a single minute... probably a safe limit
+                // just a safeguard so we don't go forever
+                return null;
+            }
+
+            // try a smaller batch (1/16th the time of the last range attempted)
+            TimeSpan chunkSize = new TimeSpan(difference.Ticks / 16);
+            DateTime chunkStart = rangeStart;
+
+            // collection for results
+            List<PaymentTransactionSearchResultType> transactions = new List<PaymentTransactionSearchResultType>();
+
+            // walk the total timespan in small parts
+            while (chunkStart.Add(chunkSize) < rangeEnd)
+            {
+                DateTime chunkEnd = chunkStart.Add(chunkSize);
+
+                // download the next chunk
+                transactions.AddRange(GetTransactions(chunkStart, chunkEnd, true));
+
+                // move to the next chunk
+                chunkStart = chunkEnd;
+            }
+
+            // now add in the final chunk
+            transactions.AddRange(GetTransactions(chunkStart, rangeEnd, true));
+
+            // sort by timestamp
+            transactions.Sort((a, b) => a.Timestamp.CompareTo(b.Timestamp));
+
+            return transactions;
         }
 
         /// <summary>

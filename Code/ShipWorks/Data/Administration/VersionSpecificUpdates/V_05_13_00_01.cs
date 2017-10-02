@@ -48,7 +48,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 EntityQuery<BigCommerceStoreEntity> query = new QueryFactory().BigCommerceStore
                      .Where(BigCommerceStoreFields.Identifier == string.Empty);
 
-                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync<BigCommerceStoreEntity>(query).Result;
+                IEntityCollection2 stores = sqlAdapter.FetchQueryAsync(query).Result;
                 foreach (BigCommerceStoreEntity store in stores.OfType<BigCommerceStoreEntity>())
                 {
                     identifier.Set(store);

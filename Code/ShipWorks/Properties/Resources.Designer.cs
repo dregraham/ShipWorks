@@ -2853,6 +2853,36 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap merge_icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("merge_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap merge_icon_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("merge_icon_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap merge_icon_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("merge_icon_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap message {
             get {
                 object obj = ResourceManager.GetObject("message", resourceCulture);
@@ -3846,6 +3876,36 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap splash_april {
             get {
                 object obj = ResourceManager.GetObject("splash_april", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap split_icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("split_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap split_icon_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("split_icon_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap split_icon_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("split_icon_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// Speciailized identifier for MarketplaceAdvisor orders, which for OMS can have parcel numbers
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public class MarketplaceAdvisorOrderNumberIdentifier : OrderNumberIdentifier
     {
         int parcelNumber;

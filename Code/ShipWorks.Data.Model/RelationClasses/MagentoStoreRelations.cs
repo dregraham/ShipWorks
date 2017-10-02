@@ -65,6 +65,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between MagentoStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// MagentoStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(MagentoStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("MagentoStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between MagentoStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// MagentoStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -122,6 +137,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new MagentoStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new MagentoStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new MagentoStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new MagentoStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

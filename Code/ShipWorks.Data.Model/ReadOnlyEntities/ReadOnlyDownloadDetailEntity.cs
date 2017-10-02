@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ExtraStringData1 = source.ExtraStringData1;
             
             
-            DownloadLog = source.DownloadLog?.AsReadOnly(objectMap);
+            DownloadLog = (IDownloadEntity) source.DownloadLog?.AsReadOnly(objectMap);
             
 
             CopyCustomDownloadDetailData(source);
@@ -122,6 +122,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IDownloadDetailEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

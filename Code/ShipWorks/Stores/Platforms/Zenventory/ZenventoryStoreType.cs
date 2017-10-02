@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
@@ -19,8 +21,8 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// <summary>
         /// Initializes a new instance of the <see cref="ZenventoryStoreType"/> class.
         /// </summary>
-        public ZenventoryStoreType(StoreEntity store)
-            : base(store)
+        public ZenventoryStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager) :
+            base(store, messageHelper, orderManager)
         {
 
         }
@@ -29,7 +31,6 @@ namespace ShipWorks.Stores.Platforms.Zenventory
         /// Gets the type code for this store
         /// </summary>
         public override StoreTypeCode TypeCode => StoreTypeCode.Zenventory;
-
 
         /// <summary>
         /// Get the log source

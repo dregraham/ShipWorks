@@ -1,6 +1,7 @@
 ﻿using System;
-using Interapptive.Shared.Utility;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.BigCommerce.Enums;
@@ -30,10 +31,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Downloading
         /// order multiple times.
         /// </summary>
         /// <returns>BigCommerceWebClientOrderSearchCriteria </returns>
-        public BigCommerceWebClientOrderSearchCriteria Create(IStoreEntity store, BigCommerceWebClientOrderDateSearchType searchType)
+        public async Task<BigCommerceWebClientOrderSearchCriteria> Create(IStoreEntity store, BigCommerceWebClientOrderDateSearchType searchType)
         {
             // Getting last online modified starting point
-            DateTime? createdDateStartingPoint = startingPoint.OrderDate(store);
+            DateTime? createdDateStartingPoint = await startingPoint.OrderDate(store);
 
             // If the date has a value, add 1 second, otherwise default to 6 months back
             createdDateStartingPoint = createdDateStartingPoint.HasValue ?
@@ -44,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Downloading
             DateTime createdDateEndPoint = dateTimeProvider.UtcNow;
 
             // Getting last online modified starting point
-            DateTime? modifiedDateStartingPoint = startingPoint.OnlineLastModified(store);
+            DateTime? modifiedDateStartingPoint = await startingPoint.OnlineLastModified(store);
 
             // If the date has a value, add 1 second, otherwise default to 6 months back
             modifiedDateStartingPoint = modifiedDateStartingPoint.HasValue ?

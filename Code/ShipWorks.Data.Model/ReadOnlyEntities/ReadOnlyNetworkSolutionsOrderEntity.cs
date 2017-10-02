@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            NetworkSolutionsOrderSearch = source.NetworkSolutionsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<INetworkSolutionsOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<INetworkSolutionsOrderSearchEntity>();
 
             CopyCustomNetworkSolutionsOrderData(source);
         }
@@ -54,15 +56,29 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
+        public IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INetworkSolutionsOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INetworkSolutionsOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

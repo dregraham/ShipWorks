@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Actions.Tasks.Common;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.NetworkSolutions.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
 {
@@ -16,76 +15,65 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
     [ActionTask("Update store status", "NetworkSolutionsOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class NetworkSolutionsOrderUpdateTask : StoreInstanceTaskBase
     {
-        long statusCode = -1;
-        string comments = "";
+        private readonly IOrderStatusUpdater orderStatusUpdater;
+        private readonly IStoreManager storeManager;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NetworkSolutionsOrderUpdateTask(IOrderStatusUpdater orderStatusUpdater, IStoreManager storeManager)
+        {
+            this.storeManager = storeManager;
+            this.orderStatusUpdater = orderStatusUpdater;
+        }
+
+        /// <summary>
+        /// Should the task run async
+        /// </summary>
+        public override bool IsAsync => true;
 
         /// <summary>
         /// Indicates if the task is supported for the specified store
         /// </summary>
-        public override bool SupportsStore(StoreEntity store)
-        {
-            return store is NetworkSolutionsStoreEntity;
-        }
+        public override bool SupportsStore(StoreEntity store) =>
+            store is NetworkSolutionsStoreEntity;
 
         /// <summary>
         /// The status code the task will be run with
         /// </summary>
-        public long StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
+        public long StatusCode { get; set; } = -1;
 
         /// <summary>
         /// The comment string to be applied to the status update
         /// </summary>
-        public string Comment
-        {
-            get { return comments; }
-            set { comments = value; }
-        }
+        public string Comment { get; set; } = string.Empty;
 
         /// <summary>
         /// How to label input selection for the task
         /// </summary>
-        public override string InputLabel
-        {
-            get
-            {
-                return "Set status of:";
-            }
-        }
+        public override string InputLabel => "Set status of:";
 
         /// <summary>
         /// This task only operates on orders
         /// </summary>
-        public override EntityType? InputEntityType
-        {
-            get
-            {
-                return EntityType.OrderEntity;
-            }
-        }
+        public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
-        public override ActionTaskEditor CreateEditor()
-        {
-            return new NetworkSolutionsOrderUpdateTaskEditor(this);
-        }
+        public override ActionTaskEditor CreateEditor() => new NetworkSolutionsOrderUpdateTaskEditor(this);
 
         /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
                 throw new ActionTaskRunException("A store has not been configured for the task.");
             }
 
-            NetworkSolutionsStoreEntity store = StoreManager.GetStore(StoreID) as NetworkSolutionsStoreEntity;
+            NetworkSolutionsStoreEntity store = storeManager.GetStore(StoreID) as NetworkSolutionsStoreEntity;
             if (store == null)
             {
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
@@ -93,10 +81,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
 
             try
             {
-                NetworkSolutionsOnlineUpdater updater = new NetworkSolutionsOnlineUpdater(store);
                 foreach (long entityID in inputKeys)
                 {
-                    updater.UpdateOrderStatus(entityID, statusCode, comments, context.CommitWork);
+                    await orderStatusUpdater.UpdateOrderStatus(store, entityID, StatusCode, Comment, context.CommitWork).ConfigureAwait(false);
                 }
             }
             catch (NetworkSolutionsException ex)

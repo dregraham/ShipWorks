@@ -9,6 +9,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,9 +21,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for legacy MarketplaceAdvisor store types
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Component]
     public class MarketplaceAdvisorLegacyDownloader : StoreDownloader, IMarketplaceAdvisorLegacyDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorLegacyDownloader));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -149,9 +157,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     totalRecords);
 
                 XPathNavigator order = orders.Current.Clone();
-                long orderNumber = await LoadOrder(order).ConfigureAwait(false);
+                GenericResult<long> orderNumber = await LoadOrder(order).ConfigureAwait(false);
 
-                markAsProcessed.Add(orderNumber);
+                if (orderNumber.Success)
+                {
+                    markAsProcessed.Add(orderNumber.Value);
+                }
 
                 // update the status
                 Progress.PercentComplete = 100 * QuantitySaved / totalRecords;
@@ -170,13 +181,20 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Extract the order from the XML
         /// </summary>
-        private async Task<long> LoadOrder(XPathNavigator xpath)
+        private async Task<GenericResult<long>> LoadOrder(XPathNavigator xpath)
         {
             // Now extract the Order#
             long orderNumber = XPathUtility.Evaluate(xpath, "Number", (long) 0);
 
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return GenericResult.FromError<long>(result.Message);
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // MarketplaceAdvisor sends shit down locally to their own server, stupid
             DateTime date = DateTime.Parse(XPathUtility.Evaluate(xpath, "Date", ""));
@@ -229,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "MarketplaceAdvisorLegacyDownloader.LoadOrder");
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
-            return orderNumber;
+            return GenericResult.FromSuccess(orderNumber);
         }
 
         /// <summary>

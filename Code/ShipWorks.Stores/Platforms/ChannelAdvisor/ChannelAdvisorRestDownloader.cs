@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     [Component]
     public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
     {
+        private readonly ILog log;
         private readonly IChannelAdvisorRestClient restClient;
         private readonly Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory;
         private readonly string refreshToken;
@@ -32,10 +35,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorRestDownloader(StoreEntity store, IChannelAdvisorRestClient restClient,
+        [NDependIgnoreTooManyParams(Justification =
+            "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
+        public ChannelAdvisorRestDownloader(StoreEntity store,
+            IChannelAdvisorRestClient restClient,
             IEncryptionProviderFactory encryptionProviderFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory) :
+            Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory,
+            Func<Type, ILog> createLogger) :
             base(store)
         {
             this.restClient = restClient;
@@ -46,6 +53,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
             refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                 .Decrypt(caStore.RefreshToken);
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -65,7 +73,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
 
-                DateTime start = GetOrderDateStartingPoint() ?? DateTime.UtcNow.AddDays(-30);
+                DateTime start = (await GetOrderDateStartingPoint().ConfigureAwait(false)) ??
+                    DateTime.UtcNow.AddDays(-30);
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
                 totalOrders = ordersResult.ResultCount;
@@ -121,8 +130,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // Check if it has been canceled
             if (!Progress.IsCancelRequested)
             {
-                ChannelAdvisorOrderEntity order =
-                    (ChannelAdvisorOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(caOrder.ID)).ConfigureAwait(false);
+                // get the order instance
+                GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(caOrder.ID)).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", caOrder.ID, result.Message);
+                    return;
+                }
+
+                ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) result.Value;
 
                 // Required by order loader
                 order.Store = Store;
@@ -131,7 +147,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
 
                 // Save the downloaded order
-                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order));
+                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
         }
     }

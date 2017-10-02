@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 
 namespace ShipWorks.Users.Audit
@@ -11,7 +7,7 @@ namespace ShipWorks.Users.Audit
     /// Reasons why something may be audited.  This is related to the Super User, and what's going on
     /// when a the Super User does something.
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum AuditReasonType
     {
         // No reason specified.
@@ -25,6 +21,9 @@ namespace ShipWorks.Users.Audit
         AutomaticDownload = 2,
 
         [Description("Manual Download")]
-        ManualDownload = 3
+        ManualDownload = 3,
+
+        [Description("Combine Order")]
+        CombineOrder = 4
     }
 }

@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Visibility = source.Visibility;
             
             
-            Order = source.Order?.AsReadOnly(objectMap);
+            Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
             
 
             CopyCustomNoteData(source);
@@ -115,6 +115,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual INoteEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

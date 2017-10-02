@@ -86,7 +86,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         private async Task LoadOrder(XPathNavigator xpath)
         {
-            OrderEntity order = await InstantiateOrder(xpath).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(xpath).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order: {0}.", result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             GenericXmlOrderLoader.LoadOrder(order, this, null, xpath);
 
@@ -98,7 +105,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// <summary>
         /// Instantiate the generic order based on the configured mapping and the specified XPath
         /// </summary>
-        private Task<OrderEntity> InstantiateOrder(XPathNavigator xpath)
+        private Task<GenericResult<OrderEntity>> InstantiateOrder(XPathNavigator xpath)
         {
             // pull out the order number
             string orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", String.Empty);

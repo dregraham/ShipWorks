@@ -2,6 +2,7 @@
 using System.Net;
 using System.Security.Cryptography;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -17,6 +18,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Magento Two REST Web Client
     /// </summary>
+    [Component]
     public class MagentoTwoRestClient : IMagentoTwoRestClient
     {
         private readonly MagentoStoreEntity store;

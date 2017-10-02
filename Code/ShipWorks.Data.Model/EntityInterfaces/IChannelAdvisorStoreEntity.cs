@@ -73,15 +73,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IChannelAdvisorStoreEntity AsReadOnly();
+        IChannelAdvisorStoreEntity AsReadOnlyChannelAdvisorStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IChannelAdvisorStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IChannelAdvisorStoreEntity AsReadOnlyChannelAdvisorStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -102,13 +104,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IChannelAdvisorStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IChannelAdvisorStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -119,5 +121,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyChannelAdvisorStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IChannelAdvisorStoreEntity AsReadOnlyChannelAdvisorStore() =>
+            (IChannelAdvisorStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IChannelAdvisorStoreEntity AsReadOnlyChannelAdvisorStore(IDictionary<object, object> objectMap) =>
+            (IChannelAdvisorStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

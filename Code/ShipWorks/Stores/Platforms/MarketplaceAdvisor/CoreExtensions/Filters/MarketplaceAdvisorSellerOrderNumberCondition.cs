@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -12,6 +9,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters
     /// <summary>
     /// Condition for the MarketplaceAdvisor Invoice Number field
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [ConditionElement("MarketplaceAdvisor Seller Order #", "MarketplaceAdvisorOrder.SellerOrderNumber")]
     [ConditionStoreType(StoreTypeCode.MarketplaceAdvisor)]
     public class MarketplaceAdvisorSellerOrderNumberCondition : NumericStringCondition<long>
@@ -21,10 +23,20 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
+            string orderSql = String.Empty;
+            string orderSearchSql = String.Empty;
+
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, MarketplaceAdvisorOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(GenerateSql(context.GetColumnReference(MarketplaceAdvisorOrderFields.SellerOrderNumber), context));
+                orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(MarketplaceAdvisorOrderFields.SellerOrderNumber), context));
             }
+
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, MarketplaceAdvisorOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(MarketplaceAdvisorOrderSearchFields.SellerOrderNumber), context));
+            }
+
+            return $"{orderSql} OR {orderSearchSql}";
         }
     }
 }

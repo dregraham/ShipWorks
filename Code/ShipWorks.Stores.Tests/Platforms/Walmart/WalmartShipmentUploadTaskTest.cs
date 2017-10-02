@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public WalmartShipmentUploadTaskTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = new WalmartShipmentUploadTask();
+            testObject = mock.Create<WalmartShipmentUploadTask>();
         }
 
         [Fact]

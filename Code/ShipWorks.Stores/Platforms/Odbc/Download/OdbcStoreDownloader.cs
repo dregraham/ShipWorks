@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly OdbcStoreEntity store;
+        private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
 
         /// <summary>
@@ -33,12 +35,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         public OdbcStoreDownloader(StoreEntity store,
             IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
-            IOdbcOrderLoader orderLoader) : base(store)
+            IOdbcOrderLoader orderLoader,
+            Func<Type, ILog> logFactory) : base(store)
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
+            log = logFactory(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
@@ -55,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             Progress.Detail = "Querying data source...";
             try
             {
-                IOdbcCommand downloadCommand = GenerateDownloadCommand(store, trackedDurationEvent);
+                IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
                 trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
                 IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
@@ -81,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the download command based on the store entity
         /// </summary>
-        private IOdbcCommand GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
+        private async Task<IOdbcCommand> GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
@@ -91,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
 
                 // Get the starting point and include it for telemetry
-                DateTime startingPoint = GetOnlineLastModifiedStartingPoint().GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+                DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
                 trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
                 return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
@@ -142,15 +146,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 Progress.Detail = $"Processing order {QuantitySaved + 1}";
 
-                OrderEntity downloadedOrder = await LoadOrder(odbcRecordsForOrder).ConfigureAwait(false);
+                GenericResult<OrderEntity> downloadedOrder = await LoadOrder(odbcRecordsForOrder).ConfigureAwait(false);
 
-                try
+                if (downloadedOrder.Success)
                 {
-                    await SaveDownloadedOrder(downloadedOrder).ConfigureAwait(false);
-                }
-                catch (ORMQueryExecutionException ex)
-                {
-                    throw new DownloadException(ex.Message, ex);
+                    try
+                    {
+                        await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
+                    }
+                    catch (ORMQueryExecutionException ex)
+                    {
+                        throw new DownloadException(ex.Message, ex);
+                    }
                 }
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
@@ -161,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Downloads the order.
         /// </summary>
         /// <exception cref="DownloadException">Order number not found in map.</exception>
-        private async Task<OrderEntity> LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
+        private async Task<GenericResult<OrderEntity>> LoadOrder(IGrouping<string, OdbcRecord> odbcRecordsForOrder)
         {
             OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
@@ -181,18 +188,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
-            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string, 
+            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
             // so in that case, we leave a single 0.
             orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
-            // Create an order using the order number
-            OrderEntity orderEntity = await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
-            
+            GenericResult<OrderEntity> result = await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return result;
+            }
+
+            OrderEntity orderEntity = result.Value;
+
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
-            
+
             orderEntity.ChangeOrderNumber(orderNumber);
 
-            return orderEntity;
+            return GenericResult.FromSuccess(orderEntity);
         }
     }
 }

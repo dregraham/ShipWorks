@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Interapptive.Shared.Net;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using System.Text;
+using System.Threading.Tasks;
+using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
 {
@@ -58,18 +57,18 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <param name="utcToDate">The UTC to date.</param>
         /// <param name="orderType">Type of the order.</param>
         /// <returns>A DownloadInfo object.</returns>
-        public DownloadInfo GetDownloadInfo(DateTime utcFromDate, DateTime utcToDate, NeweggOrderType orderType)
+        public async Task<DownloadInfo> GetDownloadInfo(DateTime utcFromDate, DateTime utcToDate, NeweggOrderType orderType)
         {
             // We just want some high level info about all that would be downloaded, so
             // just submit a request to get the first page with a max page size of 1
             // so we pull down the least amount of data (Newegg does not have a method
             // to obtain information about order quantities)
             string requestBody = GetRequestBody(utcFromDate, utcToDate, 1, 1, orderType);
-            DownloadResult downloadResult = GetDownloadResponse(requestBody); 
-           
-            DownloadInfo info = new DownloadInfo 
-            { 
-                TotalOrders = downloadResult.Body.PageInfo.RecordCount, 
+            DownloadResult downloadResult = await GetDownloadResponse(requestBody).ConfigureAwait(false);
+
+            DownloadInfo info = new DownloadInfo
+            {
+                TotalOrders = downloadResult.Body.PageInfo.RecordCount,
                 StartDate = utcFromDate,
                 EndDate = utcToDate,
                 PageCount = new PageCalculator().CalculatePageCount(downloadResult.Body.PageInfo.RecordCount, MaxPageSize)
@@ -109,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <returns>
         /// An IEnumerable of Order objects.
         /// </returns>
-        public DownloadResult Download(DateTime utcFromDate, DateTime utcToDate, int pageNumber, NeweggOrderType orderType)
+        public Task<DownloadResult> Download(DateTime utcFromDate, DateTime utcToDate, int pageNumber, NeweggOrderType orderType)
         {
             // Build the request body based on the parameters provided
             string requestBody = GetRequestBody(utcFromDate, utcToDate, pageNumber, MaxPageSize, orderType);
@@ -122,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <param name="orders">The orders.</param>
         /// <param name="pageNumber">The page number.</param>
         /// <returns>A DownloadResult object.</returns>
-        public DownloadResult Download(IEnumerable<Order> orders, int pageNumber)
+        public Task<DownloadResult> Download(IEnumerable<Order> orders, int pageNumber)
         {
             // Build the request body based on the parameters provided
             string requestBody = GetRequestBody(orders, pageNumber, MaxPageSize);
@@ -134,11 +133,11 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// </summary>
         /// <param name="requestBody">The request body.</param>
         /// <returns>A DownloadResult object.</returns>
-        private DownloadResult GetDownloadResponse(string requestBody)
+        private async Task<DownloadResult> GetDownloadResponse(string requestBody)
         {
             // Submit the request and inspect the response
-            NeweggResponse response = SubmitRequest(requestBody);
-            if (response.ResponseErrors.Count() > 0)
+            NeweggResponse response = await SubmitRequest(requestBody).ConfigureAwait(false);
+            if (response.ResponseErrors.Any())
             {
                 throw new NeweggException("Failed to get orders from Newegg. Please try again later.", response);
             }
@@ -152,9 +151,9 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// </summary>
         /// <param name="requestBody">The request body.</param>
         /// <returns>A NeweggResponse object.</returns>
-        private NeweggResponse SubmitRequest(string requestBody)
+        private async Task<NeweggResponse> SubmitRequest(string requestBody)
         {
-            // API URL depends on which marketplace the seller selected 
+            // API URL depends on which marketplace the seller selected
             string marketplace = "";
 
             switch (credentials.Channel)
@@ -175,12 +174,12 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
             string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);
 
             RequestConfiguration requestConfig = new RequestConfiguration("Downloading Orders", formattedUrl)
-            { 
-                Method = HttpVerb.Put, 
+            {
+                Method = HttpVerb.Put,
                 Body = requestBody
             };
 
-            string orderData = request.SubmitRequest(credentials, requestConfig);
+            string orderData = await request.SubmitRequest(credentials, requestConfig).ConfigureAwait(false);
 
             // The order data should contain the XML containing the list of orders from Newegg
             NeweggResponse orderResponse = new NeweggResponse(orderData, new DownloadResponseSerializer());
@@ -203,7 +202,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// </summary>
         /// <returns>Data that is being posted to the Newegg API.</returns>
         private static string GetRequestBody(DateTime utcFromDate, DateTime utcToDate, int pageNumber, int pageSize, NeweggOrderType orderType)
-        {   
+        {
             // Newegg expects all dates to be in PST, so convert the date range used in our request to PST
             DateTime fromDateInPacificStandardTime = ConvertUtcToPacificStandardTime(utcFromDate);
             DateTime toDateInPacificStandardTime = ConvertUtcToPacificStandardTime(utcToDate);
@@ -221,12 +220,12 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
                           <Type>{4}</Type>
                         </RequestCriteria>
                       </RequestBody>
-                    </NeweggAPIRequest>", pageNumber, pageSize, fromDateInPacificStandardTime.ToString("yyyy-MM-dd hh:mm:ss tt"), toDateInPacificStandardTime.ToString("yyyy-MM-dd hh:mm:ss tt"), (int)orderType);
+                    </NeweggAPIRequest>", pageNumber, pageSize, fromDateInPacificStandardTime.ToString("yyyy-MM-dd hh:mm:ss tt"), toDateInPacificStandardTime.ToString("yyyy-MM-dd hh:mm:ss tt"), (int) orderType);
             return requestBody;
         }
 
         /// <summary>
-        /// Gets the payload for the report generation request based on the order numbers of the 
+        /// Gets the payload for the report generation request based on the order numbers of the
         /// orders specified.
         /// </summary>
         /// <returns>Data that is being posted to the Newegg API.</returns>

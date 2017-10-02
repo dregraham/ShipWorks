@@ -5,6 +5,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
@@ -13,15 +14,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     {
         private readonly IMessenger messenger;
         private readonly IEnumerable<IAmazonRateGroupFilter> rateFilters;
+        private readonly IAmazonServiceTypeRepository serviceTypeRepository;
 
         /// <summary>
         /// Creates an Amazon RateGroup from an GetEligibleShippingServicesResponse
         /// </summary>
         /// <remarks>uses rateFilters to filter out rates</remarks>
-        public AmazonRateGroupFactory(IMessenger messenger, IEnumerable<IAmazonRateGroupFilter> rateFilters)
+        public AmazonRateGroupFactory(IMessenger messenger, IEnumerable<IAmazonRateGroupFilter> rateFilters, IAmazonServiceTypeRepository serviceTypeRepository)
         {
             this.messenger = messenger;
             this.rateFilters = rateFilters;
+            this.serviceTypeRepository = serviceTypeRepository;
         }
 
         /// <summary>
@@ -47,11 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     {
                         Description = shippingService.ShippingServiceName ?? "Unknown",
                         ShippingServiceId = shippingService.ShippingServiceId,
-                        ShippingServiceOfferId = shippingService.ShippingServiceOfferId,
-                        CarrierName = shippingService.CarrierName
-                    };
+                        CarrierName = shippingService.CarrierName,
+                        ServiceTypeID = serviceTypeRepository.Get().Single(s => s.ApiValue == shippingService.ShippingServiceId).AmazonServiceTypeID
+                    };                    
 
                     RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
+                    rateResult.ShipmentType = ShipmentTypeCode.Amazon;
                     rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
                     rateResults.Add(rateResult);
                 }

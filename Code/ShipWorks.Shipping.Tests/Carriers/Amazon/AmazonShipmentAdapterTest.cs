@@ -48,9 +48,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>()));
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>()));
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(shipment, null, mock.Create<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(shipment, null, mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
         }
 
         [Fact]
@@ -181,9 +181,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             {
                 Description = "Foo",
                 ShippingServiceId = "Bar",
-                ShippingServiceOfferId = "Baz",
-                CarrierName = "Quux"
+                CarrierName = "Quux",
+                ServiceTypeID = 2
             };
+
+            mock.Mock<IAmazonServiceTypeRepository>().Setup(r => r.Get())
+                .Returns(new List<AmazonServiceTypeEntity>() { new AmazonServiceTypeEntity() { AmazonServiceTypeID = 2, Description = "Foo", ApiValue = "Bar" } });
 
             var testObject = mock.Create<AmazonShipmentAdapter>(TypedParameter.From(shipment));
             testObject.SelectServiceFromRate(new RateResult("Foo", "1", 1M, rateTag)
@@ -194,7 +197,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal("Foo", shipment.Amazon.ShippingServiceName);
             Assert.Equal("Bar", shipment.Amazon.ShippingServiceID);
-            Assert.Equal("Baz", shipment.Amazon.ShippingServiceOfferID);
             Assert.Equal("Quux", shipment.Amazon.CarrierName);
         }
 
@@ -205,7 +207,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             shipment.Amazon.ShippingServiceName = "A";
             shipment.Amazon.ShippingServiceID = "B";
-            shipment.Amazon.ShippingServiceOfferID = "C";
             shipment.Amazon.CarrierName = "D";
 
             var testObject = mock.Create<AmazonShipmentAdapter>(TypedParameter.From(shipment));
@@ -217,7 +218,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             Assert.Equal("A", shipment.Amazon.ShippingServiceName);
             Assert.Equal("B", shipment.Amazon.ShippingServiceID);
-            Assert.Equal("C", shipment.Amazon.ShippingServiceOfferID);
             Assert.Equal("D", shipment.Amazon.CarrierName);
         }
     }

@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 long pruchaseOrderId;
                 if (!long.TryParse(downloadedOrder.purchaseOrderId, out pruchaseOrderId))
                 {
-                    throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to an number");
+                    throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to a number");
                 }
                 orderToSave.OrderNumber = pruchaseOrderId;
                 // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
@@ -65,10 +65,12 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 ClearExistingCharges(orderToSave);
             }
 
-            LoadItems(downloadedOrder.orderLines, orderToSave);
-            LoadOtherCharges(downloadedOrder.orderLines, orderToSave);
-            LoadTax(downloadedOrder.orderLines, orderToSave);
-            LoadRefunds(downloadedOrder.orderLines, orderToSave);
+            var orderLines = downloadedOrder.orderLines ?? Enumerable.Empty<orderLineType>();
+
+            LoadItems(orderLines, orderToSave);
+            LoadOtherCharges(orderLines, orderToSave);
+            LoadTax(orderLines, orderToSave);
+            LoadRefunds(orderLines, orderToSave);
 
             orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
         }
@@ -93,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             // order charge for each charge type.
             downloadedOrderOrderLines.SelectMany(orderLine => orderLine.charges)
                 .Where(charge => (charge?.chargeAmount?.amount ?? 0) != 0 && charge?.chargeType1 != "PRODUCT")
-                .GroupBy(charge => new {charge.chargeType1, charge.chargeName}, charge => charge.chargeAmount.amount)
+                .GroupBy(charge => new { charge.chargeType1, charge.chargeName }, charge => charge.chargeAmount.amount)
                 .ForEach(group => InstantiateOrderCharge(orderToSave, group.Key.chargeType1, group.Key.chargeName, group.Sum()));
         }
 
@@ -119,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
             orderLines.Select(orderLine => orderLine.refund)
                 .Where(refund => refund != null)
                 .SelectMany(refund => refund.refundCharges)
-                .GroupBy(c => c.refundReason, c => new {c.charge.chargeAmount, c.charge.tax?.taxAmount.amount})
+                .GroupBy(c => c.refundReason, c => new { c.charge.chargeAmount, c.charge.tax?.taxAmount.amount })
                 .ForEach(refundGroup =>
                 {
                     string name = refundGroup.Key.ToString();
@@ -146,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// a line item will not be deleted and that the price will go to 0 if
         /// the order is canceled.
         /// </remarks>
-        private void LoadItems(orderLineType[] downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
+        public void LoadItems(IEnumerable<orderLineType> downloadedOrderOrderLines, WalmartOrderEntity orderToSave)
         {
             foreach (orderLineType orderLine in downloadedOrderOrderLines)
             {
@@ -172,8 +174,8 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 .Sum(c => c.chargeAmount?.amount ?? 0);
 
             // Walmart spelled "Canceled" wrong, so I added the correct spelling in case they fix it...
-            item.Quantity = (item.OnlineStatus == orderLineStatusValueType.Cancelled.ToString()) 
-                ? 0 
+            item.Quantity = (item.OnlineStatus == orderLineStatusValueType.Cancelled.ToString())
+                ? 0
                 : double.Parse(orderLine.orderLineQuantity.amount);
         }
 

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet.DTO;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -19,9 +20,9 @@ namespace ShipWorks.Stores.Platforms.Jet
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Jet)]
     public class JetDownloader : StoreDownloader
     {
+        private readonly ILog log;
         private readonly IJetOrderLoader orderLoader;
         private readonly IJetWebClient webClient;
-        private readonly IOrderRepository orderRepository;
 
         /// <summary>
         /// Constructor
@@ -29,12 +30,13 @@ namespace ShipWorks.Stores.Platforms.Jet
         public JetDownloader(StoreEntity store,
             Func<IOrderElementFactory, IJetOrderLoader> orderLoaderFactory,
             IJetWebClient webClient,
-            IOrderRepository orderRepository) 
-            : base(store)
+            IStoreTypeManager storeTypeManager,
+            Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store))
         {
             orderLoader = orderLoaderFactory(this);
             this.webClient = webClient;
-            this.orderRepository = orderRepository;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Jet
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
         }
-        
+
         /// <summary>
         /// Load and acknowledge the order
         /// </summary>
@@ -96,8 +98,14 @@ namespace ShipWorks.Stores.Platforms.Jet
             {
                 JetOrderDetailsResult jetOrder = orderDetails.Value;
 
-                JetOrderEntity order =
-                    (JetOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId)).ConfigureAwait(false);
+                var result = await InstantiateOrder(new OrderNumberIdentifier(jetOrder.ReferenceOrderId)).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", jetOrder.ReferenceOrderId, result.Message);
+                    return;
+                }
+
+                JetOrderEntity order = (JetOrderEntity) result.Value;
 
                 if (order.IsNew)
                 {

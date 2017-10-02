@@ -30,16 +30,19 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<INetworkSolutionsOrderSearchEntity> NetworkSolutionsOrderSearch { get; }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new INetworkSolutionsOrderEntity AsReadOnly();
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        new INetworkSolutionsOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -56,17 +59,18 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<INetworkSolutionsOrderSearchEntity> INetworkSolutionsOrderEntity.NetworkSolutionsOrderSearch => NetworkSolutionsOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new INetworkSolutionsOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new INetworkSolutionsOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +81,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyNetworkSolutionsOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder() =>
+            (INetworkSolutionsOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public INetworkSolutionsOrderEntity AsReadOnlyNetworkSolutionsOrder(IDictionary<object, object> objectMap) =>
+            (INetworkSolutionsOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

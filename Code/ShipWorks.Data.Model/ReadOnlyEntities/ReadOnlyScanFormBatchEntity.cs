@@ -43,13 +43,13 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            EndiciaScanForms = source.EndiciaScanForms?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            EndiciaScanForms = source.EndiciaScanForms?.Select(x => x.AsReadOnly(objectMap)).OfType<IEndiciaScanFormEntity>().ToReadOnly() ??
                 Enumerable.Empty<IEndiciaScanFormEntity>();
-            EndiciaShipment = source.EndiciaShipment?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            EndiciaShipment = source.EndiciaShipment?.Select(x => x.AsReadOnly(objectMap)).OfType<IEndiciaShipmentEntity>().ToReadOnly() ??
                 Enumerable.Empty<IEndiciaShipmentEntity>();
-            UspsScanForms = source.UspsScanForms?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UspsScanForms = source.UspsScanForms?.Select(x => x.AsReadOnly(objectMap)).OfType<IUspsScanFormEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUspsScanFormEntity>();
-            UspsShipment = source.UspsShipment?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            UspsShipment = source.UspsShipment?.Select(x => x.AsReadOnly(objectMap)).OfType<IUspsShipmentEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUspsShipmentEntity>();
 
             CopyCustomScanFormBatchData(source);
@@ -100,6 +100,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IScanFormBatchEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

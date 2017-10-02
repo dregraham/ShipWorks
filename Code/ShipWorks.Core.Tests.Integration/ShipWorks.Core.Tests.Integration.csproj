@@ -149,6 +149,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionQueueGatewayStandardTest.cs" />
     <Compile Include="Actions\ActionQueueGatewayDefaultPrintTest.cs" />
+    <Compile Include="Actions\ActionTaskAsyncTest.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgradeTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="Common\ApplyValidatorsTest.cs" />

@@ -295,8 +295,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             // If the shipment is null or it's a non-supported shipping panel carrier, disable buttons
             if (currentShipment == null ||
-                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None ||
-                currentShipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+                currentShipment.ShipmentTypeCode == ShipmentTypeCode.None)
             {
                 shippingRibbonActions.CreateLabel.Enabled = false;
                 shippingRibbonActions.Void.Enabled = false;
@@ -352,7 +351,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
 
             shippingRibbonActions.CreateLabel.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.Void.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsVoidDelete;
-            shippingRibbonActions.Return.Enabled = currentShipment.Processed && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
+            shippingRibbonActions.Return.Enabled = currentShipment.Processed && currentShipment.ShipmentTypeCode != ShipmentTypeCode.Amazon && !currentShipment.Voided && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.Reprint.Enabled = currentShipment.Processed && !currentShipment.Voided;
             shippingRibbonActions.ShipAgain.Enabled = currentShipment.Processed && shipmentsCreateEditProcessAllowed;
             shippingRibbonActions.ApplyProfile.Enabled = !currentShipment.Processed && shipmentsCreateEditProcessAllowed;

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared;
+using Autofac;
 using Interapptive.Shared.Security;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -14,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
     /// </summary>
     public partial class VolusionAccountSettingsControl : AccountSettingsControlBase
     {
-        private static ILog log = LogManager.GetLogger(typeof (VolusionAccountSettingsControl));
+        private static ILog log = LogManager.GetLogger(typeof(VolusionAccountSettingsControl));
 
         /// <summary>
         /// Constructor
@@ -44,7 +46,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Save UI values to the backing entity
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override bool SaveToEntity(StoreEntity store)
         {
             VolusionStoreEntity volusionStore = store as VolusionStoreEntity;
@@ -52,7 +53,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
             {
                 throw new InvalidOperationException("A non Volusion Store was passed to the Volusion Account Settings control");
             }
-
 
             // validate everything
             //   Url, email, and encrypted password are all that's essential
@@ -87,14 +87,22 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 volusionStore.StoreUrl = "http://" + volusionStore.StoreUrl;
             }
 
-            if (volusionStore.IsDirty)
+            return volusionStore.IsDirty ? PerformSave(volusionStore, webPassword) : true;
+        }
+
+        /// <summary>
+        /// Perform the save
+        /// </summary>
+        /// <returns></returns>
+        private bool PerformSave(IVolusionStoreEntity store, string webPassword)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                Cursor.Current = Cursors.WaitCursor;
+                var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
 
-                // test url, username, api password with the web client
-                VolusionWebClient client = new VolusionWebClient(volusionStore);
-
-                if (!client.ValidateCredentials())
+                if (!webClient.ValidateCredentials(store))
                 {
                     MessageHelper.ShowError(this, "ShipWorks could not communicate with Volusion using the settings provided.");
                     return false;
@@ -103,9 +111,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 if (webPassword.Length > 0)
                 {
                     // test logging into the store as a web user
-                    VolusionWebSession session = new VolusionWebSession(volusionStore.StoreUrl);
+                    VolusionWebSession session = new VolusionWebSession(store.StoreUrl);
 
-                    if (!session.LogOn(volusionStore.WebUserName, webPassword))
+                    if (!session.LogOn(store.WebUserName, webPassword))
                     {
                         MessageHelper.ShowError(this, "ShipWorks was unable to logon to the Volusion website using the provided settings.");
                         return false;

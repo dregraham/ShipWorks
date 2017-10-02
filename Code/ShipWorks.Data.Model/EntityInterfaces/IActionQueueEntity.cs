@@ -117,6 +117,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<IActionQueueSelectionEntity> ActionQueueSelection { get; }
         IEnumerable<IActionQueueStepEntity> Steps { get; }
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -165,5 +167,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyActionQueueEntity(this, objectMap);
         }
+
+        
     }
 }

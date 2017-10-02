@@ -19,6 +19,11 @@ namespace ShipWorks.Stores
         StoreType GetType(StoreEntity store);
 
         /// <summary>
+        /// Get the StoreType instance of the specified StoreID
+        /// </summary>
+        StoreType GetType(long storeID);
+
+        /// <summary>
         /// The indexer of the class based on store type
         /// </summary>
         StoreType GetType(StoreTypeCode typeCode);

@@ -1,14 +1,14 @@
 ﻿using System;
-using Xunit;
-using ShipWorks.Stores.Platforms.Newegg;
-using ShipWorks.Stores.Platforms.Newegg.Net;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
+using System.Threading.Tasks;
 using System.Xml;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
+using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
+using ShipWorks.Stores.Platforms.Newegg.Net;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
+using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
@@ -189,18 +189,18 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ThrowsNeweggException_WhenErrorResponseIsReceived()
+        public async Task Ship_ThrowsNeweggException_WhenErrorResponseIsReceived()
         {
             testObject = new ShippingRequest(credentials, errorRequest);
-            Assert.Throws<NeweggException>(() => testObject.Ship(shipment));
+            await Assert.ThrowsAsync<NeweggException>(() => testObject.Ship(shipment));
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenAllSuccessful()
+        public async Task Ship_ReturnsCorrectPackageSummary_WhenAllSuccessful()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
             Assert.Equal(2, shippingResult.PackageSummary.SuccessCount);
@@ -208,11 +208,11 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenContainingSuccessesAndFailures()
+        public async Task Ship_ReturnsCorrectPackageSummary_WhenContainingSuccessesAndFailures()
         {
             testObject = new ShippingRequest(credentials, successAndFailureRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
             Assert.Equal(1, shippingResult.PackageSummary.SuccessCount);
@@ -220,11 +220,11 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ReturnsCorrectPackageSummary_WhenAllFailures()
+        public async Task Ship_ReturnsCorrectPackageSummary_WhenAllFailures()
         {
             testObject = new ShippingRequest(credentials, allFailuresRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
             Assert.Equal(0, shippingResult.PackageSummary.SuccessCount);
@@ -232,41 +232,41 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_ContainsPackageList_WhenSuccessResponse()
+        public async Task Ship_ContainsPackageList_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.True(shippingResult.Detail.Shipment.Packages.Count > 0);
         }
 
         [Fact]
-        public void Ship_ContainsItemList_WhenSuccessResponse()
+        public async Task Ship_ContainsItemList_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.True(shippingResult.Detail.Shipment.Packages[0].Items.Count > 0);
         }
 
         [Fact]
-        public void Ship_ContainsSellerId_WhenSuccessResponse()
+        public async Task Ship_ContainsSellerId_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.Equal(sellerId, shippingResult.Detail.SellerId);
         }
 
         [Fact]
-        public void Ship_ContainsOrderNumber_WhenSuccessResponse()
+        public async Task Ship_ContainsOrderNumber_WhenSuccessResponse()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            ShippingResult shippingResult = testObject.Ship(shipment);
+            ShippingResult shippingResult = await testObject.Ship(shipment);
 
             Assert.Equal(this.orderNumber, shippingResult.Detail.OrderNumber);
         }
@@ -281,8 +281,8 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
-            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest)allSuccessRequest).Url);
+            // the data/configuration of the request
+            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest) allSuccessRequest).Url);
         }
 
         [Fact]
@@ -294,9 +294,9 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
+            // the data/configuration of the request
             XmlDocument requestXml = new XmlDocument();
-            requestXml.LoadXml(((Mocked.MockedNeweggRequest)allSuccessRequest).Body);
+            requestXml.LoadXml(((Mocked.MockedNeweggRequest) allSuccessRequest).Body);
             int actualActionValue = int.Parse(requestXml.SelectSingleNode("UpdateOrderStatus/Action").InnerText);
 
             Assert.Equal(expectedActionValue, actualActionValue);
@@ -328,9 +328,9 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request 
+            // the data/configuration of the request
             XmlDocument requestXml = new XmlDocument();
-            requestXml.LoadXml(((Mocked.MockedNeweggRequest)allSuccessRequest).Body);
+            requestXml.LoadXml(((Mocked.MockedNeweggRequest) allSuccessRequest).Body);
             string actualValue = requestXml.SelectSingleNode("UpdateOrderStatus/Value").InnerText.Trim();
 
             Assert.Equal(expectedValue, actualValue);
@@ -343,14 +343,14 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
-            // the data/configuration of the request          
-            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest)allSuccessRequest).Method);
+            // the data/configuration of the request
+            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest) allSuccessRequest).Method);
         }
 
-        
+
         public void Ship_ReturnsShippingResults_WhenShippingAnOrderWithNeweggAPI_IntegrationTest()
         {
-            //    // We're going to try to bounce the request off of the Newegg API, so setup 
+            //    // We're going to try to bounce the request off of the Newegg API, so setup
             //    // the test object to use a "live" NeweggHttpRequest and an order setup in
             //    // our sandbox seller account, and use the sandbox seller account credentials
 
@@ -363,7 +363,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             //    Assert.True(shippingResult.IsSuccessful);
             //    Assert.Equal(shipment.Header.OrderNumber, shippingResult.Detail.OrderNumber);
-            //    Assert.Equal(shipment.Header.SellerId, shippingResult.Detail.SellerId);            
+            //    Assert.Equal(shipment.Header.SellerId, shippingResult.Detail.SellerId);
             //Assert.Inconclusive("Need an unshipped order to run this integration test.");
         }
     }

@@ -66,16 +66,19 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IAmazonOrderSearchEntity> AmazonOrderSearch { get; }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        IAmazonOrderEntity AsReadOnlyAmazonOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IAmazonOrderEntity AsReadOnly();
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        new IAmazonOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IAmazonOrderEntity AsReadOnlyAmazonOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -92,17 +95,18 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IAmazonOrderSearchEntity> IAmazonOrderEntity.AmazonOrderSearch => AmazonOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IAmazonOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IAmazonOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -113,5 +117,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyAmazonOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IAmazonOrderEntity AsReadOnlyAmazonOrder() =>
+            (IAmazonOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IAmazonOrderEntity AsReadOnlyAmazonOrder(IDictionary<object, object> objectMap) =>
+            (IAmazonOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

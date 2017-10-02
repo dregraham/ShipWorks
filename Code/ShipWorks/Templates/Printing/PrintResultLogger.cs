@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
 using System.Diagnostics;
 using System.Transactions;
 using HtmlAgilityPack;
-using Interapptive.Shared;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Users;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Processing;
+using ShipWorks.Users;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -108,7 +105,7 @@ namespace ShipWorks.Templates.Printing
                     string printContent = templateResult.ReadResult();
 
                     // If its html content, then process all the images
-                    if (template.OutputFormat == (int)TemplateOutputFormat.Html)
+                    if (template.OutputFormat == (int) TemplateOutputFormat.Html)
                     {
                         TemplateHtmlImageProcessor imageProcessor = new TemplateHtmlImageProcessor
                         {
@@ -128,9 +125,9 @@ namespace ShipWorks.Templates.Printing
                     result.ContentResourceID = contentResource.ReferenceID;
 
                     // Save the result while in a transaction
-                    using (new LoggedStopwatch(log, "PrintResultLogger.LogPrintResultContent - comitted: "))
+                    using (new LoggedStopwatch(log, "PrintResultLogger.LogPrintResultContent - committed: "))
                     {
-                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                         {
                             adapter.SaveEntity(result);
 

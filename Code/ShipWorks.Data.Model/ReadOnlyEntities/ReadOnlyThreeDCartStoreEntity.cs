@@ -92,12 +92,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IThreeDCartStoreEntity AsReadOnlyThreeDCartStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IThreeDCartStoreEntity AsReadOnlyThreeDCartStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using ShipWorks.Data.Grid.Columns.DisplayTypes;
-using ShipWorks.Data.Model.EntityClasses;
-using System.Windows.Forms;
+using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Net;
-using ShipWorks.Data.Grid.Columns;
-using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
-using ShipWorks.Data.Grid;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Grid;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
 {
@@ -21,8 +18,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
     /// </summary>
     public class GridAmazonOrderDisplayType : GridOrderNumberDisplayType
     {
-        private static ILog log = LogManager.GetLogger(typeof (GridAmazonOrderDisplayType));
-
+        private static ILog log = LogManager.GetLogger(typeof(GridAmazonOrderDisplayType));
 
         /// <summary>
         /// Constructor
@@ -30,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
         public GridAmazonOrderDisplayType()
         {
             GridHyperlinkDecorator hyperlink = new GridHyperlinkDecorator();
-            hyperlink.LinkClicked += new GridHyperlinkClickEventHandler(OnLinkClicked);
+            hyperlink.LinkClicked += OnLinkClicked;
 
             Decorate(hyperlink);
         }
@@ -38,12 +34,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
         /// <summary>
         /// Launches the browser to the amazon order page
         /// </summary>
-        private void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        private async void OnLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
             AmazonOrderEntity order = e.Row.Entity as AmazonOrderEntity;
             if (order != null)
             {
-                string domainName = GetDomainName(order);
+                string domainName = await GetDomainName(order).ConfigureAwait(false);
                 string orderUrl = $"https://sellercentral.{domainName}/gp/orders/order-details.html/?orderID={order.AmazonOrderID}";
                 Uri orderUri = new Uri(orderUrl);
 
@@ -54,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
 
                     try
                     {
-                        // There have been cases where 502 errors have been received when trying to navigate to 
+                        // There have been cases where 502 errors have been received when trying to navigate to
                         // the store domain provided by amazon, so we'll try to bounce a request off of the URL
                         // to see whether it works; if it doesn't work, we'll resort to just hitting sellercentral.amazon.com
                         IHttpResponseReader response = request.GetResponse();
@@ -97,20 +93,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid
         /// </summary>
         /// <param name="order">The order.</param>
         /// <returns>The domain name for the store (e.g. amazon.com, amazon.ca, etc.)</returns>
-        private static string GetDomainName(OrderEntity order)
+        private static async Task<string> GetDomainName(OrderEntity order)
         {
-            // Default the domain to amazon.com in case there is an exception trying to 
+            // Default the domain to amazon.com in case there is an exception trying to
             // get the domain from the store type
             string domainName = "amazon.com";
-            
+
             try
             {
-                AmazonStoreEntity amazonStoreEntity = DataProvider.GetEntity(order.StoreID) as AmazonStoreEntity;
+                StoreEntity amazonStoreEntity = DataProvider.GetEntity(order.StoreID) as AmazonStoreEntity;
 
-                // Obtain the domain name from the store, so we navigate to the correct URL based on 
+                // Obtain the domain name from the store, so we navigate to the correct URL based on
                 // the marketplace (i.e. amazon.ca vs. amazon.com)
-                AmazonStoreType amazonStoreType = new AmazonStoreType(amazonStoreEntity);
-                domainName = amazonStoreType.GetDomainName();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    AmazonStoreType amazonStoreType = lifetimeScope.Resolve<AmazonStoreType>(TypedParameter.From(amazonStoreEntity));
+                    domainName = await amazonStoreType.GetDomainName().ConfigureAwait(false);
+                }
             }
             catch (AmazonException)
             {

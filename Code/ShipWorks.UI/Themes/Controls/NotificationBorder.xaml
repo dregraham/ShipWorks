@@ -9,8 +9,14 @@
                     <Border BorderThickness="2"
                             CornerRadius="2"
                             BorderBrush="{TemplateBinding BorderBrush}">
-                        <StackPanel Orientation="Horizontal">
-                            <Border BorderThickness="0"
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    BorderThickness="0"
                                     CornerRadius="0"
                                     Margin="0"
                                     VerticalAlignment="Stretch"
@@ -24,8 +30,8 @@
                                                 VerticalAlignment="Center"
                                                 Content="{Binding Path=IconControl, RelativeSource={RelativeSource TemplatedParent}}" />
                             </Border>
-                            <ContentPresenter Margin="8" />
-                        </StackPanel>
+                            <ContentPresenter Grid.Column="1" Margin="8" />
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

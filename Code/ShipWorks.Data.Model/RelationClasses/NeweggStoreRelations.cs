@@ -65,6 +65,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between NeweggStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// NeweggStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(NeweggStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("NeweggStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between NeweggStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// NeweggStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -122,6 +137,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new NeweggStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new NeweggStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new NeweggStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new NeweggStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

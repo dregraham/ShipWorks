@@ -37,9 +37,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             GrouponOrderID = source.GrouponOrderID;
+            ParentOrderID = source.ParentOrderID;
             
             
             
+            GrouponOrderSearch = source.GrouponOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IGrouponOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IGrouponOrderSearchEntity>();
 
             CopyCustomGrouponOrderData(source);
         }
@@ -51,18 +54,38 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String GrouponOrderID { get; }
+        /// <summary> The ParentOrderID property of the Entity GrouponOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GrouponOrder"."ParentOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ParentOrderID { get; }
         
         
+        
+        public IEnumerable<IGrouponOrderSearchEntity> GrouponOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IGrouponOrderEntity AsReadOnlyGrouponOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IGrouponOrderEntity AsReadOnlyGrouponOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

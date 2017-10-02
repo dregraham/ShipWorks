@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
@@ -22,6 +23,11 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// StoreType instance for MarketplaceAdvisor stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.MarketplaceAdvisor)]
     [Component(RegistrationType.Self)]
     public class MarketplaceAdvisorStoreType : StoreType
@@ -87,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Create the identifier to uniquely identify the order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
             int parcelNumber = 1;
 
@@ -175,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// a little easier to do them as instance commands, and since there will likely only be one MW account per ShipWorks user,
         /// this is fine.
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        public override IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> menuCommands = new List<MenuCommand>();
 

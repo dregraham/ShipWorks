@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -38,15 +37,19 @@ namespace ShipWorks.Stores.Platforms.Amazon
     public class AmazonStoreType : StoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonStoreType));
+        private readonly ILog log;
+        private readonly Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonStoreType(StoreEntity store)
+        public AmazonStoreType(StoreEntity store,
+            Func<AmazonStoreEntity, IAmazonMwsClient> createMwsClient,
+            Func<Type, ILog> createLogger)
             : base(store)
         {
-
+            this.createMwsClient = createMwsClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -78,39 +81,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// Creates the usercontrol that sits in the Store Settings section of the Store Management
         /// window
         /// </summary>
-        public override StoreSettingsControlBase CreateStoreSettingsControl()
-        {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
-            {
-                // MWS doesn't have any store settings to configure
-                return new AmazonMwsStoreSettingsControl();
-            }
-            else
-            {
-                // Legacy has Weights to configure (and inventory to import)
-                return new AmazonStoreSettingsControl();
-            }
-        }
+        public override StoreSettingsControlBase CreateStoreSettingsControl() =>
+            new AmazonMwsStoreSettingsControl();
 
         /// <summary>
         /// Create the account settings control
         /// </summary>
-        public override AccountSettingsControlBase CreateAccountSettingsControl()
-        {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
-            {
-                return new AmazonMwsAccountSettingsControl();
-            }
-            else
-            {
-                // legacy
-                return new AmazonAccountSettingsControl();
-            }
-        }
+        public override AccountSettingsControlBase CreateAccountSettingsControl() =>
+            new AmazonMwsAccountSettingsControl();
 
         /// <summary>
         /// Create the collection of setup wizard pages for configuring the integration
@@ -118,29 +96,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            // show the old signup for as long as possible, 10/10/2011
-            // if after 10/10/2011, someone needs to signup that has used the old api in the month before, allow it via magic keys
-            bool showLegacy = (DateTime.UtcNow < new DateTime(2011, 10, 10) && !InterapptiveOnly.MagicKeysDown) ||
-                                (InterapptiveOnly.MagicKeysDown && DateTime.UtcNow >= new DateTime(2011, 10, 10));
-
-            if (showLegacy)
+            return new List<WizardPage>()
             {
-                return new List<WizardPage>()
-                {
-                    new AmazonCredentialsPage(),
-                    new AmazonCertificatePage(),
-                    new AmazonInventoryPage()
-                };
-            }
-            else
-            {
-                return new List<WizardPage>()
-                {
-                    new AmazonMwsCountryPage(),
-                    new AmazonMwsPage(),
-                    new AmazonMwsDownloadCriteriaPage()
-                };
-            }
+                new AmazonMwsCountryPage(),
+                new AmazonMwsPage(),
+                new AmazonMwsDownloadCriteriaPage()
+            };
         }
 
         /// <summary>
@@ -336,10 +297,16 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the identifier for locating amazon orders in the SW database
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            return new AmazonOrderIdentifier(((AmazonOrderEntity) order).AmazonOrderID);
+            return new AmazonOrderIdentifier(((IAmazonOrderEntity) order).AmazonOrderID);
         }
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IAmazonOrderEntity)?.AmazonOrderID ?? string.Empty;
 
         /// <summary>
         /// Create the fields that can be used to compare for the same amazon customer
@@ -377,6 +344,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             storeEntity.MarketplaceID = "";
             storeEntity.ExcludeFBA = true;
             storeEntity.DomainName = string.Empty;
+            storeEntity.AmazonVATS = false;
 
             // Assign the default weight downloading priority
             List<AmazonWeightField> weightPriority = new List<AmazonWeightField>()
@@ -410,19 +378,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
-
-            // Amazon MWS has last modified and status fields
-            if (amazonStore.AmazonApi == (int) AmazonApi.MarketplaceWebService)
+            if (column == OnlineGridColumnSupport.LastModified)
             {
-                if (column == OnlineGridColumnSupport.LastModified)
-                {
-                    return true;
-                }
-                else if (column == OnlineGridColumnSupport.OnlineStatus)
-                {
-                    return true;
-                }
+                return true;
+            }
+
+            if (column == OnlineGridColumnSupport.OnlineStatus)
+            {
+                return true;
             }
 
             return base.GridOnlineColumnSupported(column);
@@ -431,21 +394,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Get the initial download policy of amazon
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 14, MaxDaysBack = 30 };
 
         /// <summary>
         /// Creates the custom OrderItem entity.
         /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            return new AmazonOrderItemEntity();
-        }
+        public override OrderItemEntity CreateOrderItemInstance() =>
+            new AmazonOrderItemEntity();
 
         /// <summary>
         /// Generate the template XML output for the given order
@@ -478,65 +434,12 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            // upload the tracking number for the most recent processed, not voided shipment
-            try
-            {
-                AmazonOnlineUpdater shipmentUpdater = new AmazonOnlineUpdater((AmazonStoreEntity) Store);
-                shipmentUpdater.UploadOrderShipmentDetails(headers);
-            }
-            catch (AmazonException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(headers, ex);
-            }
-        }
-
-        /// <summary>
         /// Gets the Amazon domain name associated with this store.
         /// </summary>
         /// <returns>The domain name for the store (e.g. amazon.com, amazon.ca, etc.)</returns>
         /// <exception cref="AmazonException">Thrown when an error occurs when the domain name needs to be looked
         /// up via Amazon MWS</exception>
-        public string GetDomainName()
+        public async Task<string> GetDomainName()
         {
             AmazonStoreEntity amazonStore = Store as AmazonStoreEntity;
 
@@ -546,9 +449,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 {
                     // The domain name has not been retrieved from Amazon yet (the store was registered before
                     // this functionality was added), so we need to try to look it up
-                    using (AmazonMwsClient client = new AmazonMwsClient(amazonStore))
+                    using (IAmazonMwsClient client = createMwsClient(amazonStore))
                     {
-                        List<AmazonMwsMarketplace> marketplaces = client.GetMarketplaces();
+                        List<AmazonMwsMarketplace> marketplaces = await client.GetMarketplaces().ConfigureAwait(false);
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name
@@ -564,7 +467,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
                                 // Save the domain to the store, so we don't have to retrieve it from Amazon next time
                                 amazonStore.DomainName = domainName;
-                                StoreManager.SaveStore(amazonStore);
+                                await StoreManager.SaveStoreAsync(amazonStore).ConfigureAwait(false);
                             }
                             else
                             {
@@ -574,7 +477,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                                 if (!string.IsNullOrWhiteSpace(amazonStore.AmazonApiRegion))
                                 {
                                     amazonStore.DomainName = GetDomainNameFromApiRegion(amazonStore);
-                                    StoreManager.SaveStore(amazonStore);
+                                    await StoreManager.SaveStoreAsync(amazonStore).ConfigureAwait(false);
                                 }
                             }
                         }
@@ -634,6 +537,22 @@ namespace ShipWorks.Stores.Platforms.Amazon
         protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
+        }
+
+        /// <summary>
+        /// Determines whether the shipping address is editable for the specified shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
+        {
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
+
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return ShippingAddressEditStateType.AmazonSfp;
+            }
+
+            return editable;
         }
     }
 }

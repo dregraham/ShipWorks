@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore;
 using System.Diagnostics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
+using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 {
     /// <summary>
     /// Web client for connecting to MarketplaceAdvisor via OMS
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public class MarketplaceAdvisorOmsClient : MarshalByRefObject
     {
         private readonly string username;
@@ -31,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
             this.username = username;
             this.password = password;
             this.log = log;
-            this.downloadFlags = (MarketplaceAdvisorOmsFlagTypes)downloadFlagsInt;
+            this.downloadFlags = (MarketplaceAdvisorOmsFlagTypes) downloadFlagsInt;
         }
 
         /// <summary>
@@ -305,7 +310,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                     updateInfo.ParcelUid = order.ParcelID;
 
                     updateInfo.TrackingNumber = shipment.TrackingNumber;
-                    updateInfo.ShippingCost = (double)shipment.ShipmentCost;
+                    updateInfo.ShippingCost = (double) shipment.ShipmentCost;
 
                     updateInfo.ShippingMethodCode = shipment.ShippingMethodCode;
                     updateInfo.IsValidateShippingMethodCode = false;

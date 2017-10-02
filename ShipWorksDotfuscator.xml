@@ -95,6 +95,7 @@
       <namespace name="ShipWorks\.Shipping\.Carriers\.OnTrac\.Schemas\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Newegg\.Net.*Response\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.BigCommerce\.DTO\.*.*" regex="true" />
+      <namespace name="ShipWorks\.Stores\.Platforms\.ThreeDCart\.RestApi\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.Shipping\.Carriers\.Amazon\.Api\.DTOs\.*.*" regex="true" />
       <namespace name="ShipWorks\.Properties\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.Groupon\.DTO\.*.*" regex="true" />
@@ -109,6 +110,7 @@
       <namespace name="ShipWorks\.Stores\.Platforms\.Jet\.DTO\.*.*" regex="true" />
       <namespace name="ShipWorks\.Stores\.Platforms\.ChannelAdvisor\.Enums\.*" regex="true" />
       <namespace name="ShipWorks.UI.Controls.Weight" />
+      <namespace name="Interapptive\.Shared\.StackTraceHelper\.*.*" regex="true" />
       <type name=".*" regex="true">
         <customattribute name="ShipWorks.Filters.Content.ConditionElementAttribute" />
       </type>

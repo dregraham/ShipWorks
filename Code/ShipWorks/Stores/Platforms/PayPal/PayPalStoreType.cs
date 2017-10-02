@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
@@ -55,8 +56,6 @@ namespace ShipWorks.Stores.Platforms.PayPal
 
             return CreateInitialFilters<PayPalPaymentStatus, PayPalPaymentStatusCondition>(ShippingStatuses);
         }
-
-
 
         /// <summary>
         /// Store settings control
@@ -116,9 +115,9 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Identifies orders
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            PayPalOrderEntity payPalOrder = order as PayPalOrderEntity;
+            IPayPalOrderEntity payPalOrder = order as IPayPalOrderEntity;
             if (payPalOrder == null)
             {
                 throw new InvalidOperationException("A non PayPal Order was passed to CreateOrderIdentifier");
@@ -128,9 +127,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
         }
 
         /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IPayPalOrderEntity)?.TransactionID ?? string.Empty;
+
+        /// <summary>
         /// Create the setup wizard pages
         /// </summary>
-        /// <param name="scope"></param>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return new List<WizardPage>()
@@ -161,6 +165,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl => "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
+        public static string AccountSettingsHelpUrl =>
+            "http://support.shipworks.com/support/solutions/articles/129331-ebay-setup-connecting-paypal-to-shipworks";
     }
 }

@@ -148,7 +148,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // First do base/common initialization
             base.Initialize();
 
-            // This kicks off scale detection when SW starts instead of waiting for the the scale to initialize the first time 
+            // This kicks off scale detection when SW starts instead of waiting for the the scale to initialize the first time
             // it is used which can take upwards to 1 minute.
             ScaleReader.Initialize();
 

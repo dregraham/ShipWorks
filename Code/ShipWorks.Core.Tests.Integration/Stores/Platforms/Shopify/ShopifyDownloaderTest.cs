@@ -9,7 +9,6 @@ using Interapptive.Shared.Utility;
 using Moq;
 using Newtonsoft.Json.Linq;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -53,18 +52,18 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
 
                 webClient.Setup(w => w.GetServerCurrentDateTime()).Returns(DateTime.UtcNow);
 
-                webClient.Setup(w => w.GetOrderCount(It.IsInRange(updatedAfter, DateTime.MaxValue, Range.Inclusive),
-                                                     It.IsInRange(DateTime.MinValue, updatedBefore, Range.Inclusive)))
+                webClient.Setup(w => w.GetOrderCount(It.IsInRange(updatedAfter, DateTime.MaxValue, Moq.Range.Inclusive),
+                                                     It.IsInRange(DateTime.MinValue, updatedBefore, Moq.Range.Inclusive)))
                                                      .Returns(0);
-                webClient.Setup(w => w.GetOrderCount(It.IsInRange(DateTime.MinValue, updatedAt, Range.Inclusive),
-                                                     It.IsInRange(updatedAt, DateTime.MaxValue, Range.Inclusive)))
+                webClient.Setup(w => w.GetOrderCount(It.IsInRange(DateTime.MinValue, updatedAt, Moq.Range.Inclusive),
+                                                     It.IsInRange(updatedAt, DateTime.MaxValue, Moq.Range.Inclusive)))
                     .Returns(7);
 
                 webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
                     .Returns(new List<JToken> { orders[0], orders[1] })
                     .Returns(new List<JToken> { orders[2], orders[3] })
                     .Returns(new List<JToken> { orders[4], orders[5] })
-                    .Returns(new List<JToken> { orders[6]})
+                    .Returns(new List<JToken> { orders[6] })
                     .Returns(new List<JToken> { orders[0], orders[1] })
                     .Returns(new List<JToken> { orders[2], orders[3] })
                     .Returns(new List<JToken> { orders[4], orders[5] })
@@ -110,7 +109,6 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
 
             progress = context.Mock.Mock<IProgressReporter>().Object;
             StatusPresetManager.CheckForChanges();
-            LogSession.Initialize();
         }
 
         [Fact]

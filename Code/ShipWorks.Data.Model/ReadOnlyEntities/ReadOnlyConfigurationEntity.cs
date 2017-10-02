@@ -50,6 +50,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AuditDeletedOrders = source.AuditDeletedOrders;
             CustomerKey = source.CustomerKey;
             UseParallelActionQueue = source.UseParallelActionQueue;
+            AllowEbayCombineLocally = source.AllowEbayCombineLocally;
             
             
             
@@ -142,6 +143,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean UseParallelActionQueue { get; }
+        /// <summary> The AllowEbayCombineLocally property of the Entity Configuration<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Configuration"."AllowEbayCombineLocally"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AllowEbayCombineLocally { get; }
         
         
         
@@ -154,6 +161,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IConfigurationEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

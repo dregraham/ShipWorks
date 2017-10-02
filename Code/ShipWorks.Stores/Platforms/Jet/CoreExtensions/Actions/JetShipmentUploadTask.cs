@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Autofac;
+using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -16,6 +15,21 @@ namespace ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "JetShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class JetShipmentUploadTask : StoreInstanceTaskBase
     {
+        readonly JetOnlineUpdater onlineUpdater;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public JetShipmentUploadTask(JetOnlineUpdater onlineUpdater)
+        {
+            this.onlineUpdater = onlineUpdater;
+        }
+
+        /// <summary>
+        /// Should the ActionTask be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
         /// <summary>
         /// This task is for shipments
         /// </summary>
@@ -43,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions
         /// <summary>
         /// Executes the task
         /// </summary>
-        protected override void Run(List<long> inputKeys)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             if (StoreID <= 0)
             {
@@ -56,20 +70,16 @@ namespace ShipWorks.Stores.Platforms.Jet.CoreExtensions.Actions
                 throw new ActionTaskRunException("The store configured for the task has been deleted.");
             }
 
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            try
             {
-                try
+                foreach (long entityID in inputKeys)
                 {
-                    JetOnlineUpdater updater = scope.Resolve<JetOnlineUpdater>();
-                    foreach (long entityID in inputKeys)
-                    {
-                        updater.UpdateShipmentDetails(entityID, store);
-                    }
+                    await onlineUpdater.UpdateShipmentDetails(entityID, store).ConfigureAwait(false);
                 }
-                catch (JetException ex)
-                {
-                    throw new ActionTaskRunException(ex.Message, ex);
-                }
+            }
+            catch (JetException ex)
+            {
+                throw new ActionTaskRunException(ex.Message, ex);
             }
         }
     }

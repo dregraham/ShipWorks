@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
 {
@@ -27,15 +28,15 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <returns>
         /// A DownloadResult object.
         /// </returns>
-        DownloadResult Download(DateTime utcFromDate, DateTime utcToDate, int pageNumber, NeweggOrderType orderType);
-        
+        Task<DownloadResult> Download(DateTime utcFromDate, DateTime utcToDate, int pageNumber, NeweggOrderType orderType);
+
         /// <summary>
         /// Downloads the specified orders.
         /// </summary>
         /// <param name="orders">The orders.</param>
         /// <param name="pageNumber">The page number.</param>
         /// <returns>A DownloadResult object.</returns>
-        DownloadResult Download(IEnumerable<Order> orders, int pageNumber);
+        Task<DownloadResult> Download(IEnumerable<Order> orders, int pageNumber);
 
         /// <summary>
         /// Gets the download info for a particular date range.
@@ -46,8 +47,8 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <returns>
         /// A DownloadInfo object.
         /// </returns>
-        DownloadInfo GetDownloadInfo(DateTime utcFromDate, DateTime utcToDate, NeweggOrderType orderType);
-        
+        Task<DownloadInfo> GetDownloadInfo(DateTime utcFromDate, DateTime utcToDate, NeweggOrderType orderType);
+
         /// <summary>
         /// Gets the download info for a set of orders.
         /// </summary>

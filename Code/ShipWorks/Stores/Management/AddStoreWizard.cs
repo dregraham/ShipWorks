@@ -914,7 +914,7 @@ namespace ShipWorks.Stores.Management
             try
             {
                 // See what tasks are configured to be created
-                tasks = control.CreateActionTasks(store);
+                tasks = control.CreateActionTasks(scope, store);
             }
             catch (OnlineUpdateActionCreateException ex)
             {

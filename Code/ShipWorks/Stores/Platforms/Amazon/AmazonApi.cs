@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -12,8 +8,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum AmazonApi
     {
-        LegacySoap,
-
-        MarketplaceWebService
+        MarketplaceWebService = 1
     }
 }

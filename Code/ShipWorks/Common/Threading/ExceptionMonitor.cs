@@ -48,6 +48,24 @@ namespace ShipWorks.Common.Threading
         /// Wrap the given call with exception handling that propagates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
         /// using the given text that stays active until the callback completes.  If it is null, no ApplicationBusyToken is created.
         /// </summary>
+        public static ParameterizedThreadStart WrapAsyncThread(Func<object, Task> callback, string uiOperationText = null)
+        {
+            StackTrace stackTrace = new StackTrace(1);
+
+            ApplicationBusyToken busyToken = null;
+
+            if (!string.IsNullOrWhiteSpace(uiOperationText))
+            {
+                busyToken = ApplicationBusyManager.OperationStarting(uiOperationText);
+            }
+
+            return (object state) => AsyncWrapper(stackTrace, busyToken, () => callback(state));
+        }
+
+        /// <summary>
+        /// Wrap the given call with exception handling that propagates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
+        /// using the given text that stays active until the callback completes.  If it is null, no ApplicationBusyToken is created.
+        /// </summary>
         public static WaitCallback WrapWorkItem(WaitCallback callback, string uiOperationText = null)
         {
             StackTrace stackTrace = new StackTrace(1);
@@ -60,6 +78,24 @@ namespace ShipWorks.Common.Threading
             }
 
             return (object state) => { Wrapper(stackTrace, busyToken, () => { callback(state); }); };
+        }
+
+        /// <summary>
+        /// Wrap the given call with exception handling that propagates the exception to the main UI thread.  If uiOperationText is non-null, an operation is registered with the ApplicationBusyManager
+        /// using the given text that stays active until the callback completes.  If it is null, no ApplicationBusyToken is created.
+        /// </summary>
+        public static WaitCallback WrapAsyncWorkItem(Func<object, Task> callback, string uiOperationText = null)
+        {
+            StackTrace stackTrace = new StackTrace(1);
+
+            ApplicationBusyToken busyToken = null;
+
+            if (!string.IsNullOrWhiteSpace(uiOperationText))
+            {
+                busyToken = ApplicationBusyManager.OperationStarting(uiOperationText);
+            }
+
+            return (object state) => AsyncWrapper(stackTrace, busyToken, () => callback(state));
         }
 
         /// <summary>
@@ -86,6 +122,34 @@ namespace ShipWorks.Common.Threading
                     busyToken = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Main wrapper function for handling the exceptions
+        /// </summary>
+        private static Task AsyncWrapper(StackTrace invokingThreadTrace, ApplicationBusyToken busyToken, Func<Task> callback)
+        {
+            try
+            {
+                return callback();
+            }
+            catch (Exception ex)
+            {
+                if (!HandleException(ex, invokingThreadTrace))
+                {
+                    throw;
+                }
+            }
+            finally
+            {
+                if (busyToken != null)
+                {
+                    busyToken.Dispose();
+                    busyToken = null;
+                }
+            }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>

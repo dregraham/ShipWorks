@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using log4net;
 
 namespace ShipWorks.Data.Connection
 {
     /// <summary>
-    /// Creates a scope within wich the deadlock priorty of every open connection will be set to what is configured
+    /// Creates a scope within which the deadlock priority of every open connection will be set to what is configured
     /// </summary>
     public sealed class SqlDeadlockPriorityScope : IDisposable
     {
@@ -15,11 +13,7 @@ namespace ShipWorks.Data.Connection
         static readonly ILog log = LogManager.GetLogger(typeof(SqlDeadlockPriorityScope));
 
         // Only one possible at a time per thread
-        [ThreadStatic]
-        static SqlDeadlockPriorityScope activeScope;
-
-        // The deadlock priority to set
-        int priority;
+        static AsyncLocal<SqlDeadlockPriorityScope> activeScope = new AsyncLocal<SqlDeadlockPriorityScope>();
 
         /// <summary>
         /// Constructs a new SqlSessionScope.  The given SqlSession is active until
@@ -27,41 +21,35 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlDeadlockPriorityScope(int priority)
         {
-            if (SqlDeadlockPriorityScope.activeScope != null)
+            if (activeScope.Value != null)
             {
                 throw new InvalidOperationException("Only one SqlSessionScope in SqlDeadlockPriorityScope may be active at a time.");
             }
 
             log.InfoFormat("Entering SqlDeadlockPriorityScope ({0})", priority);
 
-            this.priority = priority;
-            SqlDeadlockPriorityScope.activeScope = this;
+            DeadlockPriority = priority;
+            activeScope.Value = this;
         }
 
         /// <summary>
         /// The deadlock priority of the scope
         /// </summary>
-        public int DeadlockPriority
-        {
-            get { return priority; }
-        }
+        public int DeadlockPriority { get; }
 
         /// <summary>
         /// Returns the SqlDeadlockPriorityScope that is currently in scope, or null if none
         /// </summary>
-        public static SqlDeadlockPriorityScope Current
-        {
-            get { return activeScope; }
-        }
+        public static SqlDeadlockPriorityScope Current => activeScope.Value;
 
         /// <summary>
         /// Leave the scope
         /// </summary>
         public void Dispose()
         {
-            SqlDeadlockPriorityScope.activeScope = null;
+            activeScope.Value = null;
 
             log.InfoFormat("Leaving SqlDeadlockPriorityScope");
-        }    
+        }
     }
 }

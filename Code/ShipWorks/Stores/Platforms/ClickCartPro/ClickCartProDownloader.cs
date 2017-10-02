@@ -1,4 +1,5 @@
-﻿using System.Xml.XPath;
+﻿using System.Threading.Tasks;
+using System.Xml.XPath;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -31,11 +32,11 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Assigns an order number to the provided order
         /// </summary>
-        protected override void AssignOrderNumber(OrderEntity order)
+        protected override async Task AssignOrderNumber(OrderEntity order)
         {
             if (order.IsNew)
             {
-                order.OrderNumber = GetNextOrderNumber();
+                order.OrderNumber = await GetNextOrderNumberAsync().ConfigureAwait(false);
             }
         }
 

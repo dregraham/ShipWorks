@@ -69,6 +69,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
 
             CopyCustomStoreData(source);
         }
@@ -257,6 +259,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -266,6 +270,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

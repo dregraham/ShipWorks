@@ -130,35 +130,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         }
 
         [Fact]
-        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsUploadShipmentDetailsCommand_WhenEmailUser()
-        {
-            List<MenuCommand> commands = emailTestObject.CreateOnlineUpdateInstanceCommands();
-
-            Assert.Equal(1, commands.Count);
-
-            Assert.Equal("Upload Shipment Details", commands.FirstOrDefault()?.Text);
-        }
-
-        [Fact]
-        public void CreateOnlineUpdateInstanceCommands_ReturnsUploadShipmentDetailsAndUpdateStatusCommands_WhenApiUser()
-        {
-            List<string> commandNames = apiTestObject.CreateOnlineUpdateInstanceCommands()
-                .Select(command => command.Text).ToList();
-
-            Assert.Equal(7, commandNames.Count);
-
-            foreach (EnumEntry<YahooApiOrderStatus> orderStatus in orderStatuses.
-                Where(orderStatus => orderStatus.Value != YahooApiOrderStatus.PartiallyShipped &&
-                orderStatus.Value != YahooApiOrderStatus.FullyShipped
-                && orderStatus.Value != YahooApiOrderStatus.Tracked))
-            {
-                Assert.Contains(orderStatus.Description, commandNames);
-            }
-
-            Assert.Contains("Upload Shipment Details", commandNames);
-        }
-
-        [Fact]
         public void GridOnlineColumnSupported_ReturnsTrue_WhenApiUserAndColumnIsOnlineStatus()
         {
             Assert.True(apiTestObject.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));
@@ -173,21 +144,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Yahoo
         [Fact]
         public void GridHyperlinkSupported_ReturnsTrue_WhenApiUserAndFieldIsOrderItemName()
         {
-
-
-            Assert.True(apiTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
+            Assert.True(apiTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderItemFields.Name));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenApiUserAndFieldIsNotOrderItemName()
         {
-            Assert.False(apiTestObject.GridHyperlinkSupported(item, OrderFields.BillFirstName));
+            Assert.False(apiTestObject.GridHyperlinkSupported(yahooApiStore.Object, item, OrderFields.BillFirstName));
         }
 
         [Fact]
         public void GridHyperlinkSupported_ReturnsFalse_WhenEmailUser()
         {
-            Assert.False(emailTestObject.GridHyperlinkSupported(item, OrderItemFields.Name));
+            Assert.False(emailTestObject.GridHyperlinkSupported(yahooEmailStore.Object, item, OrderItemFields.Name));
         }
 
         [Fact]

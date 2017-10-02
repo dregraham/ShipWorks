@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using log4net;
@@ -6,8 +8,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using System;
-using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.Sears
 {
@@ -91,8 +91,11 @@ namespace ShipWorks.Stores.Platforms.Sears
 
             try
             {
-                SearsWebClient webClient = new SearsWebClient(searsStore);
-                webClient.TestConnection();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var webClient = lifetimeScope.Resolve<ISearsWebClient>();
+                    webClient.TestConnection(searsStore);
+                }
 
                 return true;
             }

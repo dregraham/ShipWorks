@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping
@@ -38,6 +40,11 @@ namespace ShipWorks.Shipping
         ShipmentEntity EnsureShipmentLoaded(ShipmentEntity shipment);
 
         /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment);
+
+        /// <summary>
         /// Gets the overridden store shipment.
         /// </summary>
         ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment);
@@ -46,6 +53,11 @@ namespace ShipWorks.Shipping
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         ICarrierShipmentAdapter GetShipment(long shipmentID);
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID);
 
         /// <summary>
         /// Gets the shipment adapter, order will be attached.
@@ -109,6 +121,11 @@ namespace ShipWorks.Shipping
         /// Gets the shipment type carrier name.
         /// </summary>
         string GetCarrierName(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipment);
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.

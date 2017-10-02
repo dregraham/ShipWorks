@@ -99,6 +99,10 @@
     <Reference Include="Rebex.Mail">
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=100.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharpSigned.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
@@ -148,11 +152,57 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMergeChargesAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMoveValidatedAddressesAction.cs" />
+    <Compile Include="Content\CombineOrderAudit.cs" />
+    <Compile Include="Content\CombineOrderGateway.cs" />
+    <Compile Include="Content\CombineOrderViewModel.cs" />
+    <Compile Include="Content\DefaultOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Content\ICombineOrderAudit.cs" />
+    <Compile Include="Content\ICombineOrderDialog.cs" />
+    <Compile Include="Content\ICombineOrderSuccessDialog.cs" />
+    <Compile Include="Content\ICombineOrderSuccessViewModel.cs" />
+    <Compile Include="Content\ICombineOrderAddressComparer.cs" />
+    <Compile Include="Content\CombineOrderOrchestrator.cs" />
+    <Compile Include="Content\CombineOrderSuccessViewModel.cs" />
+    <Compile Include="Content\CombineOrderUserInteraction.cs" />
+    <Compile Include="Content\CombineOrderAddressComparer.cs" />
+    <Compile Include="Content\CombineOrder.cs" />
+    <Compile Include="Content\CombineOrderActions\ICombineOrderAction.cs" />
+    <Compile Include="Content\CombineOrderActions\IStoreSpecificCombineOrderAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMoveItemsAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMoveNotesAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderMovePaymentDetailsAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
+    <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
+    <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineItems.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceItemLoader.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineOrderDetails.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceOrderStatusUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceShipmentDetailsUpdaterClient.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOrderStatusUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceDataAccess.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineOrder.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceDataAccess.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceItemLoader.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceShipmentDetailsUpdaterClient.cs" />
+    <Compile Include="Platforms\BuyDotCom\BuyDotComFtpClientFactory.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComDataAccess.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\IBuyDotComDataAccess.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComShipmentUpload.cs" />
+    <Compile Include="Platforms\BuyDotCom\OnlineUpdating\BuyDotComShipmentUploadOrder.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorCipherKey.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorUpdateClient.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenterResponse.cs" />
@@ -178,7 +228,7 @@
     <Compile Include="OrderNote.cs" />
     <Compile Include="OrderRepository.cs" />
     <Compile Include="OrderChargeCalculator.cs" />
-    <Compile Include="Platforms\Amazon\AmazonDownloaderFactory.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonCombineOrderAction.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceAccountSettingsViewModel.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceOauthAuthenticationPersisitenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\BigCommerceConnectionVerifier.cs" />
@@ -192,7 +242,7 @@
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloader.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceException.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceMaxIncompleteOrdersReachedException.cs" />
-    <Compile Include="Platforms\BigCommerce\BigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifier.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderStatus.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceProductImageCache.cs" />
@@ -201,6 +251,22 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorOAuthResponse.cs" />
     <Compile Include="Platforms\ChannelAdvisor\IChannelAdvisorRestDownloader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorCombineOrderAction.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
+    <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
+    <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\UserInteraction.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
+    <Compile Include="Platforms\Etsy\OnlineUpdating\IEtsyUserInteraction.cs" />
     <Compile Include="Platforms\GeekSeller\GeekSellerStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceStoreType.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWebClient.cs" />
@@ -243,11 +309,12 @@
     <Compile Include="Platforms\BigCommerce\Enums\BigCommerceWebClientOrderDateSearchType.cs" />
     <Compile Include="Platforms\BigCommerce\AccountSettings\IBigCommerceAuthenticationPersistenceStrategy.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceAuthenticatorFactory.cs" />
-    <Compile Include="Platforms\BigCommerce\IBigCommerceOnlineUpdater.cs" />
+    <Compile Include="Platforms\BigCommerce\OnlineUpdating\IBigCommerceShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceRestClientFactory.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Jet\Content\JetCombineOrderAction.cs" />
     <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
     <Compile Include="Platforms\Jet\DTO\JetShipResponse.cs" />
     <Compile Include="Platforms\Jet\DTO\JetAddress.cs" />
@@ -275,6 +342,8 @@
     <Compile Include="Platforms\Jet\IJetShipmentRequestFactory.cs" />
     <Compile Include="Platforms\Jet\IJetToken.cs" />
     <Compile Include="Platforms\Jet\IJetWebClient.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponCombineOrderAction.cs" />
+    <Compile Include="Platforms\Groupon\OnlineUpdating\GrouponOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\InfiPlex\InfiPlexStoreType.cs" />
     <Compile Include="Platforms\Amosoft\AmosoftStoreType.cs" />
     <Compile Include="Platforms\Jet\IJetOrderLoader.cs" />
@@ -283,7 +352,9 @@
     <Compile Include="Platforms\Jet\JetAuthenticatedRequest.cs" />
     <Compile Include="Platforms\Jet\JetDownloader.cs" />
     <Compile Include="Platforms\Jet\JetException.cs" />
-    <Compile Include="Platforms\Jet\JetOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Jet\OnlineUpdating\IJetOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Jet\OnlineUpdating\JetOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Jet\OnlineUpdating\JetOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdater.cs" />
     <Compile Include="Platforms\Jet\JetOrderIdentifier.cs" />
     <Compile Include="Platforms\Jet\JetOrderLoader.cs" />
@@ -294,6 +365,9 @@
     <Compile Include="Platforms\Jet\JetToken.cs" />
     <Compile Include="Platforms\Jet\JetTokenRepository.cs" />
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
+    <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdater.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandCombineOrderAction.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
@@ -309,6 +383,7 @@
     <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCode.cs" />
     <Compile Include="Platforms\LemonStand\DTO\LemonStandStatusCodes.cs" />
     <Compile Include="Platforms\LemonStand\ILemonStandWebClient.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandCombineOrderIdSearchProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandDownloader.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandException.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdater.cs" />
@@ -317,22 +392,44 @@
     <Compile Include="Platforms\LemonStand\LemonStandStatusCodeProvider.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Platforms\LemonStand\OnlineUpdating\LemonStandOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Magento\IMagentoTwoRestDownloader.cs" />
+    <Compile Include="Platforms\Magento\MagentoCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Magento\MagentoDownloaderFactory.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneConnectProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoExtensionProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoTwoRestProbe.cs" />
+    <Compile Include="Platforms\Magento\Content\MagentoCombineOrderAction.cs" />
     <Compile Include="Platforms\Magento\IMagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoHttpRequestSubmitter.cs" />
+    <Compile Include="Platforms\Magento\MagentoModuleWebClientFactory.cs" />
     <Compile Include="Platforms\Magento\MagentoProductCache.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestClient.cs" />
     <Compile Include="Platforms\Magento\MagentoTwoRestOrderNumberUtility.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\ActionComments.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\IUserInteraction.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\MagentoOnlineUpdaterFactory.cs" />
+    <Compile Include="Platforms\Magento\OnlineUpdating\UserInteraction.cs" />
     <Compile Include="Platforms\MarketplaceAdvisor\MarketplaceAdvisorDownloaderFactory.cs" />
+    <Compile Include="Platforms\MarketplaceAdvisor\Content\MarketplaceAdvisorCombineOrderAction.cs" />
+    <Compile Include="Platforms\NetworkSolutions\Content\NetworkSolutionsCombineOrderAction.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\INetworkSolutionsCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\INetworkSolutionsUserInteraction.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsCommentDetails.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\NetworkSolutionsUserInteraction.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\OrderStatusUpdater.cs" />
+    <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\DataAccess.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\NeweggOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
-    <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcUploadMenuCommand.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
@@ -352,6 +449,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcCustomUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcShippingServiceFieldValueResolver.cs" />
     <Compile Include="Platforms\Odbc\Upload\FieldValueResolvers\OdbcDefaultFieldValueResolver.cs" />
+    <Compile Include="Platforms\Odbc\Upload\OdbcOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcTableUploadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploadCommand.cs" />
     <Compile Include="Platforms\Odbc\DataSource\IOdbcDataSourceService.cs" />
@@ -417,8 +515,27 @@
     <Compile Include="Platforms\Odbc\Download\OdbcTableDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
+    <Compile Include="Platforms\OrderMotion\Content\OrderMotionCombineOrderAction.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\DataAccess.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\IOrderMotionCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOrderSearchProvider.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresCombineOrderAction.cs" />
+    <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
+    <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
+    <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdater.cs" />
+    <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Shopify\Content\ShopifyCombineOrderAction.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\ShopSite\IShopSiteOauthAccessTokenWebClient.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\ShopSiteConnectionVerifier.cs" />
     <Compile Include="Platforms\ShopSite\AccountSettings\IShopSiteConnectionVerifier.cs" />
@@ -452,8 +569,14 @@
     <Compile Include="Platforms\SparkPay\DTO\StoresResponse.cs" />
     <Compile Include="Platforms\SparkPay\Enums\SparkPayWebClientApiCall.cs" />
     <Compile Include="Platforms\SparkPay\Factories\HttpJsonVariableRequestSubmitter.cs" />
-    <Compile Include="Platforms\SparkPay\Factories\SparkPayOnlineUpdateInstanceCommandsFactory.cs" />
+    <Compile Include="Platforms\SparkPay\Factories\ISparkPayShipmentFactory.cs" />
+    <Compile Include="Platforms\SparkPay\Factories\SparkPayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\SparkPay\Factories\SparkPayShipmentFactory.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayOnlineUpdater.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayWebClient.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayWebClientRequestThrottle.cs" />
+    <Compile Include="Platforms\SparkPay\SparkPayCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\SparkPay\ISparkPayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdater.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayException.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayDownloader.cs" />
@@ -474,6 +597,10 @@
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoader.cs" />
+    <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartCombineOrderAction.cs" />
+    <Compile Include="Platforms\Volusion\OnlineUpdating\VolusionOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Volusion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Walmart\Content\WalmartCombineOrderAction.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Actions\WalmartShipmentUploadTask.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedDeliveryDateCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartEstimatedShipDateCondition.cs" />
@@ -483,21 +610,27 @@
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
-    <Compile Include="Platforms\Walmart\IWalmartOnlineUpdateInstanceCommands.cs" />
     <Compile Include="Platforms\Walmart\IWalmartOrderLoader.cs" />
     <Compile Include="Platforms\Walmart\IWalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClient.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\IShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\IWalmartCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\WalmartCombinedIdentifier.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\WalmartOrderSearchProvider.cs" />
     <Compile Include="Platforms\Walmart\WalmartCipherKey.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartException.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdateInstanceCommands.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\OnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifier.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoader.cs" />
-    <Compile Include="Platforms\Walmart\WalmartOnlineUpdater.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />
+    <Compile Include="Platforms\Yahoo\Content\YahooCombineOrderAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\StoreManagerWrapper.cs" />
     <Compile Include="Services\StoreTypeManagerWrapper.cs" />
@@ -519,6 +652,10 @@
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
       <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>

@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.Common;
 using System.Transactions;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
 using log4net;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration
@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private Version GetInstalledSchemaVersion()
         {
-            using (new TransactionScope(TransactionScopeOption.Suppress))
+            using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {

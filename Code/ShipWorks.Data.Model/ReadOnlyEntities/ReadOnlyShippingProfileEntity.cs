@@ -48,14 +48,14 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnShipment = source.ReturnShipment;
             RequestedLabelFormat = source.RequestedLabelFormat;
             
-            Amazon = source.Amazon?.AsReadOnly(objectMap);
-            BestRate = source.BestRate?.AsReadOnly(objectMap);
-            FedEx = source.FedEx?.AsReadOnly(objectMap);
-            IParcel = source.IParcel?.AsReadOnly(objectMap);
-            OnTrac = source.OnTrac?.AsReadOnly(objectMap);
-            Other = source.Other?.AsReadOnly(objectMap);
-            Postal = source.Postal?.AsReadOnly(objectMap);
-            Ups = source.Ups?.AsReadOnly(objectMap);
+            Amazon = (IAmazonProfileEntity) source.Amazon?.AsReadOnly(objectMap);
+            BestRate = (IBestRateProfileEntity) source.BestRate?.AsReadOnly(objectMap);
+            FedEx = (IFedExProfileEntity) source.FedEx?.AsReadOnly(objectMap);
+            IParcel = (IIParcelProfileEntity) source.IParcel?.AsReadOnly(objectMap);
+            OnTrac = (IOnTracProfileEntity) source.OnTrac?.AsReadOnly(objectMap);
+            Other = (IOtherProfileEntity) source.Other?.AsReadOnly(objectMap);
+            Postal = (IPostalProfileEntity) source.Postal?.AsReadOnly(objectMap);
+            Ups = (IUpsProfileEntity) source.Ups?.AsReadOnly(objectMap);
             
             
 
@@ -157,6 +157,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShippingProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

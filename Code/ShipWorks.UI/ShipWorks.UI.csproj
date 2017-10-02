@@ -133,6 +133,7 @@
     <Compile Include="AttachedProperties\EntityFieldLength.cs" />
     <Compile Include="AttachedProperties\LimitScrollSize.cs" />
     <Compile Include="AttachedProperties\LimitScrollSizeMode.cs" />
+    <Compile Include="AttachedProperties\ListSelection.cs" />
     <Compile Include="AttachedProperties\PopupClickManager.cs" />
     <Compile Include="AttachedProperties\TextRestriction.cs" />
     <Compile Include="AttachedProperties\UpdateWhenMessageReceived.cs" />
@@ -220,6 +221,12 @@
     <Compile Include="Dialogs\SetupGuide\ShippingOptions.xaml.cs">
       <DependentUpon>ShippingOptions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\UserConditionalNotification\DesignModeUserConditionalNotificationViewModel.cs" />
+    <Compile Include="Dialogs\UserConditionalNotification\IUserConditionalNotificationDialog.cs" />
+    <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotificationDialog.xaml.cs">
+      <DependentUpon>UserConditionalNotificationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotificationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />
@@ -329,6 +336,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\UserConditionalNotification\UserConditionalNotificationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Controls\DatePickerStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -358,6 +369,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\GlobalStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

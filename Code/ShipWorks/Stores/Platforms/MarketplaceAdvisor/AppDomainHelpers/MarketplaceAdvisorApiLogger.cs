@@ -11,14 +11,9 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
     /// Wrap the ApiLogger in a marshalable class so logging can happen accross Appdomains
     /// </summary>
     /// <remarks>
-    /// <para>
-    /// If the client tried to use the ApiLogEntry natively, the ShipWorks initialization process would start again
-    /// since ShipWorks hasn't actually been initialized in the secondary app domain.
-    /// </para>
-    /// <para>
-    /// This is only partially implemented because I wanted to get logging functionality to the MarketplaceAdvisor web service
-    /// without having to modify the service itself.
-    /// </para>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
     /// </remarks>
     public class MarketplaceAdvisorApiLogger : MarshalByRefObject, IApiLogEntry
     {

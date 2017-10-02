@@ -19,7 +19,7 @@ namespace Interapptive.Shared.Extensions
         {
             return task.ContinueWith(x =>
             {
-                if (x.IsFaulted)
+                if (x.IsFaulted && x.Exception != null)
                 {
                     getOwner().BeginInvoke((Action) (() => { throw x.Exception; }));
                 }

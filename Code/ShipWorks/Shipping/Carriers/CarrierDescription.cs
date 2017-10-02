@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using ShipWorks.Data.Model.EntityClasses;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -32,7 +32,15 @@ namespace ShipWorks.Shipping.Carriers
 
             ensureOtherIsLoaded(shipment);
 
-            BuildCarrierDetails(shipment.Other.Carrier);   
+            BuildCarrierDetails(shipment.Other.Carrier);
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public CarrierDescription(string carrierName)
+        {
+            BuildCarrierDetails(carrierName);
         }
 
         /// <summary>
@@ -114,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers
             {
                 ShipmentType otherShipmentType = lifetimeScope.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Other);
                 otherShipmentType.LoadShipmentData(shipment, false);
-            }   
+            }
         }
     }
 }

@@ -51,6 +51,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEbayStoreEntity EbayStore { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -99,5 +101,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyEbayCombinedOrderRelationEntity(this, objectMap);
         }
+
+        
     }
 }

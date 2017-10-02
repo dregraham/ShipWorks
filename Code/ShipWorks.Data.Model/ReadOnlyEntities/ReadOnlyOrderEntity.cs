@@ -110,22 +110,25 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipSenseHashKey = source.ShipSenseHashKey;
             ShipSenseRecognitionStatus = source.ShipSenseRecognitionStatus;
             ShipAddressType = source.ShipAddressType;
+            CombineSplitStatus = source.CombineSplitStatus;
             
             
-            Customer = source.Customer?.AsReadOnly(objectMap);
-            Store = source.Store?.AsReadOnly(objectMap);
+            Customer = (ICustomerEntity) source.Customer?.AsReadOnly(objectMap);
+            Store = (IStoreEntity) source.Store?.AsReadOnly(objectMap);
             
-            Notes = source.Notes?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Notes = source.Notes?.Select(x => x.AsReadOnly(objectMap)).OfType<INoteEntity>().ToReadOnly() ??
                 Enumerable.Empty<INoteEntity>();
-            OrderCharges = source.OrderCharges?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderCharges = source.OrderCharges?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderChargeEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderChargeEntity>();
-            OrderItems = source.OrderItems?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderItems = source.OrderItems?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderItemEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderItemEntity>();
-            OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderPaymentDetails = source.OrderPaymentDetails?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderPaymentDetailEntity>().ToReadOnly() ??
                 Enumerable.Empty<IOrderPaymentDetailEntity>();
-            Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            OrderSearch = source.OrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IOrderSearchEntity>();
+            Shipments = source.Shipments?.Select(x => x.AsReadOnly(objectMap)).OfType<IShipmentEntity>().ToReadOnly() ??
                 Enumerable.Empty<IShipmentEntity>();
-            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ValidatedAddress = source.ValidatedAddress?.Select(x => x.AsReadOnly(objectMap)).OfType<IValidatedAddressEntity>().ToReadOnly() ??
                 Enumerable.Empty<IValidatedAddressEntity>();
 
             CopyCustomOrderData(source);
@@ -576,6 +579,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipAddressType { get; }
+        /// <summary> The CombineSplitStatus property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."CombineSplitStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus { get; }
         
         
         public ICustomerEntity Customer { get; }
@@ -591,6 +600,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         public IEnumerable<IOrderPaymentDetailEntity> OrderPaymentDetails { get; }
         
+        public IEnumerable<IOrderSearchEntity> OrderSearch { get; }
+        
         public IEnumerable<IShipmentEntity> Shipments { get; }
         
         public IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
@@ -604,6 +615,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

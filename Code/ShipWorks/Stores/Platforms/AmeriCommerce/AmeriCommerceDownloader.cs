@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -21,6 +25,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.AmeriCommerce)]
     public class AmeriCommerceDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceDownloader));
+
         // total number of orders to be downloaded
         int totalCount = 0;
 
@@ -47,47 +53,55 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             {
                 Progress.Detail = "Updating status codes...";
 
+                AmeriCommerceStoreEntity americommerceStore = Store as AmeriCommerceStoreEntity;
+
                 // refresh the status codes from AmeriCommerce
-                statusProvider = new AmeriCommerceStatusCodeProvider((AmeriCommerceStoreEntity) Store);
+                statusProvider = new AmeriCommerceStatusCodeProvider(americommerceStore);
                 statusProvider.UpdateFromOnlineStore();
 
                 Progress.Detail = "Checking for orders...";
 
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+
+                List<OrderTrans> orders;
 
                 // create the web client
-                AmeriCommerceWebClient client = new AmeriCommerceWebClient((AmeriCommerceStoreEntity) Store);
-
-                // get orders
-                List<OrderTrans> orders = client.GetOrders(lastModified);
-
-                totalCount = orders.Count;
-
-                if (totalCount == 0)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    Progress.Detail = "No orders to download.";
-                    Progress.PercentComplete = 100;
-                    return;
-                }
+                    // Create the client for connecting to the module
+                    IAmeriCommerceWebClient webClient = lifetimeScope.Resolve<IAmeriCommerceWebClient>(TypedParameter.From(americommerceStore));
 
-                Progress.Detail = String.Format("Downloading {0} orders...", totalCount);
+                    // get orders
+                    orders = webClient.GetOrders(lastModified);
 
-                // cycle through each order, importing
-                for (int i = 0; i < totalCount; i++)
-                {
-                    OrderTrans order = orders[i];
+                    totalCount = orders.Count;
 
-                    // check for cancel
-                    if (Progress.IsCancelRequested)
+                    if (totalCount == 0)
                     {
+                        Progress.Detail = "No orders to download.";
+                        Progress.PercentComplete = 100;
                         return;
                     }
 
-                    Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
+                    Progress.Detail = String.Format("Downloading {0} orders...", totalCount);
 
-                    await LoadOrder(client, order).ConfigureAwait(false);
+                    // cycle through each order, importing
+                    for (int i = 0; i < totalCount; i++)
+                    {
+                        OrderTrans order = orders[i];
 
-                    Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
+                        // check for cancel
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
+                        Progress.Detail = String.Format("Downloading order {0} of {1}...", i + 1, totalCount);
+
+                        await LoadOrder(webClient, order).ConfigureAwait(false);
+
+                        Progress.PercentComplete = Math.Min(100, 100 * (i + 1) / totalCount);
+                    }
                 }
             }
             catch (AmeriCommerceException ex)
@@ -103,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load an AmeriCommerce order
         /// </summary>
-        private async Task LoadOrder(AmeriCommerceWebClient client, OrderTrans orderTrans)
+        private async Task LoadOrder(IAmeriCommerceWebClient client, OrderTrans orderTrans)
         {
             // first fetch all of the detail data for the order transaction
             orderTrans = client.FillOrderDetail(orderTrans);
@@ -117,7 +131,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             // begin pulling into ShipWorks now
             int orderNumber = orderTrans.orderID.GetValue(0);
 
-            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             // populate the few properties that are allowed to change between downloads
             order.OrderDate = orderTrans.orderDate.GetValue(DateTime.UtcNow);
@@ -190,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// </summary>
         private void LoadPayments(OrderEntity order, OrderTrans orderTrans)
         {
-            // number of creditcards
+            // number of credit cards
             int cardCounter = 0;
             int paymentCounter = 0;
 
@@ -296,7 +317,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Load order items
         /// </summary>
-        private void LoadOrderItems(AmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
+        private void LoadOrderItems(IAmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
         {
             foreach (OrderItemTrans orderItemTrans in orderTrans.OrderItemColTrans)
             {
@@ -379,7 +400,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Loads the appropriate address info from the Americommerce order
         /// </summary>
-        private void LoadAddressInfo(AmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
+        private void LoadAddressInfo(IAmeriCommerceWebClient client, OrderEntity order, OrderTrans orderTrans)
         {
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
@@ -420,7 +441,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Populates a person adapter with information from an AmeriCommerce order address
         /// </summary>
-        private void LoadAddressInfo(AmeriCommerceWebClient client, PersonAdapter person, OrderAddressTrans address)
+        private void LoadAddressInfo(IAmeriCommerceWebClient client, PersonAdapter person, OrderAddressTrans address)
         {
             // name
             person.FirstName = address.FirstName;

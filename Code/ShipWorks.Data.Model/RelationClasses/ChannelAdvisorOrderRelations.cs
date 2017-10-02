@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.ChannelAdvisorOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between ChannelAdvisorOrderEntity and ChannelAdvisorOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ChannelAdvisorOrder.OrderID - ChannelAdvisorOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation ChannelAdvisorOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ChannelAdvisorOrderSearch" , true);
+				relation.AddEntityFieldPair(ChannelAdvisorOrderFields.OrderID, ChannelAdvisorOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between ChannelAdvisorOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// ChannelAdvisorOrder.OrderID - Note.EntityID
@@ -91,6 +107,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ChannelAdvisorOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ChannelAdvisorOrderEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ChannelAdvisorOrder.OrderID - OrderSearch.OrderID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(ChannelAdvisorOrderFields.OrderID, OrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -193,10 +224,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticChannelAdvisorOrderRelations
 	{
+		internal static readonly IEntityRelation ChannelAdvisorOrderSearchEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().ChannelAdvisorOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new ChannelAdvisorOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().OrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new ChannelAdvisorOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ChannelAdvisorOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new ChannelAdvisorOrderRelations().CustomerEntityUsingCustomerID;

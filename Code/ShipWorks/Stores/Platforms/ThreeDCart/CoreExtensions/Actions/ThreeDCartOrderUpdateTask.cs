@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Actions.Tasks.Common;
+using System.Threading.Tasks;
+using Autofac;
+using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Actions;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
@@ -38,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         public override EntityType? InputEntityType => EntityType.OrderEntity;
 
         /// <summary>
-        /// Insantiates the editor for this action
+        /// Instantiates the editor for this action
         /// </summary>
         public override ActionTaskEditor CreateEditor()
         {
@@ -46,9 +49,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This task should be run asynchronously
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         /// Execute the status updates
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -63,20 +71,23 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
 
             try
             {
-                if (store.RestUser)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    ThreeDCartRestOnlineUpdater updater = new ThreeDCartRestOnlineUpdater(store);
-                    foreach (long orderID in inputKeys)
+                    if (store.RestUser)
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        ThreeDCartRestOnlineUpdater updater = scope.Resolve<ThreeDCartRestOnlineUpdater>(TypedParameter.From(store));
+                        foreach (long orderID in inputKeys)
+                        {
+                            await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        }
                     }
-                }
-                else
-                {
-                    ThreeDCartSoapOnlineUpdater updater = new ThreeDCartSoapOnlineUpdater(store);
-                    foreach (long orderID in inputKeys)
+                    else
                     {
-                        updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork);
+                        ThreeDCartSoapOnlineUpdater updater = scope.Resolve<ThreeDCartSoapOnlineUpdater>(TypedParameter.From(store));
+                        foreach (long orderID in inputKeys)
+                        {
+                            await updater.UpdateOrderStatus(orderID, StatusCode, context.CommitWork).ConfigureAwait(false);
+                        }
                     }
                 }
             }

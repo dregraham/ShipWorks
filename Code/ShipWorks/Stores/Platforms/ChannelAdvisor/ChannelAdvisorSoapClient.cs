@@ -7,11 +7,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory;
@@ -37,10 +38,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         static LruCache<string, List<AttributeInfo>> inventoryItemAttributeCache = new LruCache<string, List<AttributeInfo>>(1000);
 
         // store this client is interacting on behalf of
-        ChannelAdvisorStoreEntity store = null;
+        IChannelAdvisorStoreEntity store = null;
 
         /// <summary>
-        /// Enrypted credentials for using their api
+        /// Encrypted credentials for using their api
         /// </summary>
         static string apiKey = "kHEXBLDJfWgNzWtKwQfmGgvqYUpr7MY+KHKhrg343I16NZiHJpfNqg==";
         static string apiPassword = "FXH5tUy8pYE6aLR/k1eR8w==";
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorSoapClient(ChannelAdvisorStoreEntity store)
+        public ChannelAdvisorSoapClient(IChannelAdvisorStoreEntity store)
         {
             this.store = store;
         }
@@ -137,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Constructs the api credientails for communication with the CA Admin service
+        /// Constructs the api credentials for communication with the CA Admin service
         /// </summary>
         private static caAdminService.APICredentials GetAdminCredentials()
         {
@@ -174,7 +175,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Gets the credentialsf or the CA Inventory Service
+        /// Gets the credentials or the CA Inventory Service
         /// </summary>
         private static caInventoryService.APICredentials GetInventoryCredentials()
         {
@@ -235,7 +236,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         List<caOrderService.OrderResponseDetailComplete> orders = result.ResultData.Cast<caOrderService.OrderResponseDetailComplete>().OrderBy(o => o.LastUpdateDate ?? o.OrderTimeGMT).ToList();
 
                         // If any of the order's LastModTimes have changed since we grabbed the headers then skip them for now (we'll get them in a later call, b\c the date will now be later).  If
-                        // we processed it now, we'd be processing a later date befor earlier dates, and if the user then cancelled, we miss everyting in between
+                        // we processed it now, we'd be processing a later date before earlier dates, and if the user then canceled, we miss everything in between
                         foreach (var order in orders.ToList())
                         {
                             if (!nextPage.Any(o => o.OrderID == order.OrderID && o.LastUpdateDate == order.LastUpdateDate))
@@ -264,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private void ConfigureOrderFilter(caOrderService.OrderCriteria criteria)
         {
-            // There were many bugs related to users choosing the other critiera. If payment hadn't cleared, order details would be incomplete.
+            // There were many bugs related to users choosing the other criteria. If payment hadn't cleared, order details would be incomplete.
             // If we filtered the shipping status to unshipped, we'd never pickup historic shipped orders, or changes to shipped orders online status
             criteria.PaymentStatusFilter = PaymentStatusCodes.Cleared;
         }
@@ -312,10 +313,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public caInventoryService.InventoryItemResponse[] GetInventoryItems(List<string> skus)
         {
-            if (skus == null)
-            {
-                throw new ArgumentNullException("skus");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(skus, nameof(skus));
 
             List<caInventoryService.InventoryItemResponse> foundItems = new List<caInventoryService.InventoryItemResponse>();
             List<string> missingSkus = new List<string>();
@@ -383,10 +381,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <exception cref="System.ArgumentNullException">sku</exception>
         public IEnumerable<AttributeInfo> GetInventoryItemAttributes(string sku)
         {
-            if (sku == null)
-            {
-                throw new ArgumentNullException("sku");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(sku, nameof(sku));
 
             string lookupKey = GetInventoryCacheKey(sku);
 
@@ -564,8 +559,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 try
                 {
-                    caShippingService.OrderShipment[] shipments = new caShippingService.OrderShipment[]
-                    {
+                    caShippingService.OrderShipment[] shipments = {
                         new caShippingService.OrderShipment
                         {
                             OrderId = caOrderID,

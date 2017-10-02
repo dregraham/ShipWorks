@@ -9,7 +9,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     /// <summary>
     /// Web client for Magento, extends the generic client to add Action functionality
     /// </summary>
-    public class MagentoWebClient : GenericStoreWebClient
+    public class MagentoWebClient : GenericStoreWebClient, IMagentoWebClient
     {
         /// <summary>
         /// Constructor

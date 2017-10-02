@@ -85,6 +85,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public virtual IShippingProviderRuleEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
 
+        
+
         /// <summary>
         /// Copy any custom data
         /// </summary>

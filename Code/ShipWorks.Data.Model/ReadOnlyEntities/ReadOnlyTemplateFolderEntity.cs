@@ -42,11 +42,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Name = source.Name;
             
             
-            ParentFolder = source.ParentFolder?.AsReadOnly(objectMap);
+            ParentFolder = (ITemplateFolderEntity) source.ParentFolder?.AsReadOnly(objectMap);
             
-            Templates = source.Templates?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Templates = source.Templates?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateEntity>();
-            ChildFolders = source.ChildFolders?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ChildFolders = source.ChildFolders?.Select(x => x.AsReadOnly(objectMap)).OfType<ITemplateFolderEntity>().ToReadOnly() ??
                 Enumerable.Empty<ITemplateFolderEntity>();
 
             CopyCustomTemplateFolderData(source);
@@ -95,6 +95,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual ITemplateFolderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

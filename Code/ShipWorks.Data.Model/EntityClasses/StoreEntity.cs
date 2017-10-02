@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private EntityCollection<OrderSearchEntity> _orderSearch;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,6 +45,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 		}
 		#endregion
 		
@@ -101,6 +104,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_orderSearch = (EntityCollection<OrderSearchEntity>)info.GetValue("_orderSearch", typeof(EntityCollection<OrderSearchEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
@@ -116,6 +120,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)entity);
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -138,6 +145,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "OrderSearch":
+					toReturn.Add(Relations.OrderSearchEntityUsingStoreID);
+					break;
 				default:
 					break;				
 			}
@@ -166,6 +176,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "OrderSearch":
+					this.OrderSearch.Add((OrderSearchEntity)relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -179,6 +192,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "OrderSearch":
+					this.PerformRelatedEntityRemoval(this.OrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+					break;
 				default:
 					break;
 			}
@@ -206,6 +222,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
+			toReturn.Add(this.OrderSearch);
 			return toReturn;
 		}
 
@@ -234,6 +251,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_orderSearch", ((_orderSearch!=null) && (_orderSearch.Count>0) && !this.MarkedForDeletion)?_orderSearch:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -255,6 +273,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			return new StoreRelations().GetAllRelations();
 		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'OrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(OrderSearchFields.StoreID, null, ComparisonOperator.Equal, this.StoreID));
+			return bucket;
+		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
@@ -268,6 +295,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
+			collectionsQueue.Enqueue(this._orderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -275,6 +303,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
+			this._orderSearch = (EntityCollection<OrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -283,6 +312,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
+			toReturn |=(this._orderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -292,6 +322,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -299,6 +330,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("OrderSearch", _orderSearch);
 			return toReturn;
 		}
 
@@ -412,6 +444,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'OrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<OrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("OrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.StoreEntity, (int)ShipWorks.Data.Model.EntityType.OrderSearchEntity, 0, null, null, null, null, "OrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 
@@ -736,6 +775,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)StoreFieldIndex.InitialDownloadOrder, false); }
 			set	{ SetValue((int)StoreFieldIndex.InitialDownloadOrder, value); }
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(OrderSearchEntity))]
+		public virtual EntityCollection<OrderSearchEntity> OrderSearch
+		{
+			get { return GetOrCreateEntityCollection<OrderSearchEntity, OrderSearchEntityFactory>("Store", true, false, ref _orderSearch);	}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 		}
 		#endregion
 		

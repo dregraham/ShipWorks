@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using SD.LLBLGen.Pro.QuerySpec.Adapter;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -45,13 +45,13 @@ namespace ShipWorks.Stores.Communication
         private static readonly ILog log = LogManager.GetLogger(typeof(StoreDownloader));
         private readonly IConfigurationEntity config;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-
+        private readonly IOrderUtility orderUtility;
         private long downloadLogID;
         protected DbConnection connection;
         private string orderStatusText = string.Empty;
         private string itemStatusText = string.Empty;
-        private bool orderStatusHasTokens = false;
-        private bool itemStatusHasTokens = false;
+        private bool orderStatusHasTokens;
+        private bool itemStatusHasTokens;
 
         /// <summary>
         /// Constructor
@@ -64,15 +64,33 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Constructor
         /// </summary>
-        protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
-            this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory)
+        protected StoreDownloader(StoreEntity store, StoreType storeType) :
+            this(store, storeType, ConfigurationData.FetchReadOnly(), new SqlAdapterFactory())
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory)
+        protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration, ISqlAdapterFactory sqlAdapterFactory) :
+            this(store, storeType, configuration, sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        protected StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory) :
+            this(store, storeType, configurationData.FetchReadOnly(), sqlAdapterFactory, new OrderUtilityWrapper(sqlAdapterFactory))
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        private StoreDownloader(StoreEntity store, StoreType storeType, IConfigurationEntity configuration,
+                                ISqlAdapterFactory sqlAdapterFactory, IOrderUtility orderUtility)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
@@ -80,6 +98,7 @@ namespace ShipWorks.Stores.Communication
             StoreType = storeType;
             config = configuration;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.orderUtility = orderUtility;
         }
 
         /// <summary>
@@ -124,6 +143,13 @@ namespace ShipWorks.Stores.Communication
         public int QuantityNew { get; private set; }
 
         /// <summary>
+        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
+        /// order numbers for ShipWorks, such as Amazon and eBay.
+        /// </summary>
+        protected async Task<long> GetNextOrderNumberAsync() => await orderUtility.GetNextOrderNumberAsync(Store.StoreID)
+                                                                             .ConfigureAwait(false);
+
+        /// <summary>
         /// Download data from the configured store.
         /// </summary>
         public async Task Download(IProgressReporter progress, long downloadLogID, DbConnection connection)
@@ -165,12 +191,12 @@ namespace ShipWorks.Stores.Communication
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
         /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
         /// </summary>
-        protected virtual DateTime? GetOnlineLastModifiedStartingPoint()
+        protected virtual async Task<DateTime?> GetOnlineLastModifiedStartingPoint()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
-                return startingPoint.OnlineLastModified(Store);
+                return await startingPoint.OnlineLastModified(Store).ConfigureAwait(false);
             }
         }
 
@@ -178,12 +204,12 @@ namespace ShipWorks.Stores.Communication
         /// Obtains the most recent order date.  If there is none, and the store has an InitialDaysBack policy, it
         /// will be used to calculate the initial number of days back to.
         /// </summary>
-        protected DateTime? GetOrderDateStartingPoint()
+        protected async Task<DateTime?> GetOrderDateStartingPoint()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
-                return startingPoint.OrderDate(Store);
+                return await startingPoint.OrderDate(Store).ConfigureAwait(false);
             }
         }
 
@@ -191,51 +217,13 @@ namespace ShipWorks.Stores.Communication
         /// Gets the largest OrderNumber we have in our database for non-manual orders for this store.  If no
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>
-        /// <returns></returns>
-        protected long GetOrderNumberStartingPoint()
+        protected async Task<long> GetOrderNumberStartingPoint()
         {
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                object result = adapter.GetScalar(
-                    OrderFields.OrderNumber,
-                    null, AggregateFunction.Max,
-                    OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
-
-                long orderNumber;
-
-                if (result is DBNull)
-                {
-                    if (Store.InitialDownloadOrder != null)
-                    {
-                        // We have to subtract one b\c the downloader expects the starting point to be the max order number in the db.  So what
-                        // it does is download all orders AFTER it.  But for the initial download policy, we want to START with it.  So we have
-                        // to back off by one to include it.
-                        orderNumber = Math.Max(0, Store.InitialDownloadOrder.Value - 1);
-                        log.InfoFormat("Max(OrderNumber) - applying initial download policy.");
-                    }
-                    else
-                    {
-                        orderNumber = 0;
-                    }
-                }
-                else
-                {
-                    orderNumber = (long) result;
-                }
-
-                log.InfoFormat("MAX(OrderNumber) = {0}", orderNumber);
-
-                return orderNumber;
+                IDownloadStartingPoint startingPoint = lifetimeScope.Resolve<IDownloadStartingPoint>();
+                return await startingPoint.OrderNumber(Store).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Gets the next OrderNumber that an order should use.  This is useful for store types that don't supply their own
-        /// order numbers for ShipWorks, such as Amazon and eBay.
-        /// </summary>
-        protected long GetNextOrderNumber()
-        {
-            return OrderUtility.GetNextOrderNumber(Store.StoreID);
         }
 
         /// <summary>
@@ -243,7 +231,16 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
-        protected virtual async Task<OrderEntity> InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected virtual Task<GenericResult<OrderEntity>> InstantiateOrder(long orderNumber) =>
+            InstantiateOrder(new OrderNumberIdentifier(orderNumber));
+
+        /// <summary>
+        /// Instantiates the order identified by the given identifier.  If no order exists in the database,
+        /// a new one is initialized, created, and returned.  If the order does exist in the database,
+        /// that order is returned.
+        /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002")]
+        protected virtual async Task<GenericResult<OrderEntity>> InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderIdentifier, nameof(orderIdentifier));
 
@@ -260,38 +257,75 @@ namespace ShipWorks.Stores.Communication
                 BillingAddressBeforeDownload = new AddressAdapter();
                 AddressAdapter.Copy(order, "Bill", BillingAddressBeforeDownload);
 
-                return order;
+                return GenericResult.FromSuccess(order);
             }
-            else
+
+            bool isCombinedOrder = await IsCombinedOrder(orderIdentifier).ConfigureAwait(false);
+            if (isCombinedOrder)
             {
-                log.Debug($"{orderIdentifier} not found, creating");
+                log.InfoFormat("{0} was combined, skipping", orderIdentifier);
 
-                // Create a new order
-                order = StoreType.CreateOrder();
+                // Increment the quantity saved so we show the user we are moving to the next order.
+                QuantitySaved++;
 
-                // Its for this store
-                order.StoreID = Store.StoreID;
-
-                // Apply the identifier values to the order
-                orderIdentifier.ApplyTo(order);
-                order.IsManual = false;
-
-                // Set defaults
-                order.OnlineStatus = "";
-                order.LocalStatus = "";
-                PersonAdapter.ApplyDefaults(order, "Bill");
-                PersonAdapter.ApplyDefaults(order, "Ship");
-
-                // Rollup defaults
-                order.RollupNoteCount = 0;
-                order.RollupItemCount = 0;
-                order.RollupItemTotalWeight = 0;
-
-                order.ShipSenseHashKey = string.Empty;
-                order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
+                return GenericResult.FromError<OrderEntity>("Combined");
             }
+
+            order = CreateOrder(orderIdentifier);
+            return GenericResult.FromSuccess(order);
+        }
+
+        /// <summary>
+        /// Create an order for the given order identifier.
+        /// </summary>
+        private OrderEntity CreateOrder(OrderIdentifier orderIdentifier)
+        {
+            log.Debug($"{orderIdentifier} not found, creating");
+
+            // Create a new order
+            OrderEntity order = StoreType.CreateOrder();
+
+            // Its for this store
+            order.StoreID = Store.StoreID;
+
+            // Apply the identifier values to the order
+            orderIdentifier.ApplyTo(order);
+            order.IsManual = false;
+
+            // Set defaults
+            order.OnlineStatus = "";
+            order.LocalStatus = "";
+            PersonAdapter.ApplyDefaults(order, "Bill");
+            PersonAdapter.ApplyDefaults(order, "Ship");
+
+            // Roll-up defaults
+            order.RollupNoteCount = 0;
+            order.RollupItemCount = 0;
+            order.RollupItemTotalWeight = 0;
+
+            order.ShipSenseHashKey = string.Empty;
+            order.ShipSenseRecognitionStatus = (int) ShipSenseOrderRecognitionStatus.NotRecognized;
+
+            order.CombineSplitStatus = CombineSplitStatusType.None;
 
             return order;
+        }
+
+        /// <summary>
+        /// Is this a combined order
+        /// </summary>
+        private async Task<bool> IsCombinedOrder(OrderIdentifier orderIdentifier)
+        {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                QueryFactory factory = new QueryFactory();
+                QuerySpec combinedSearchQuery = orderIdentifier.CreateCombinedSearchQuery(factory);
+                combinedSearchQuery.AndWhere(OrderSearchFields.StoreID == this.Store.StoreID);
+                combinedSearchQuery.AndWhere(OrderSearchFields.IsManual == false);
+                DynamicQuery query = factory.Create().Select(combinedSearchQuery.Any());
+
+                return (await sqlAdapter.FetchScalarAsync<bool?>(query).ConfigureAwait(false)) ?? false;
+            }
         }
 
         /// <summary>
@@ -405,7 +439,7 @@ namespace ShipWorks.Stores.Communication
         /// Create a new order charge based on the given order, type, description and amount
         /// </summary>
         protected OrderChargeEntity InstantiateOrderCharge(OrderEntity order, string type, string description, decimal amount) =>
-            new OrderChargeEntity()
+            new OrderChargeEntity
             {
                 Order = order,
                 Type = type,
@@ -748,7 +782,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Get a customer for the given order using CustomerProvider
+        /// Get Customer
         /// </summary>
         private async Task<CustomerEntity> GetCustomer(OrderEntity order, ISqlAdapter adapter)
         {
@@ -1162,7 +1196,7 @@ namespace ShipWorks.Stores.Communication
         }
 
         #region Order Element Factory
-        // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without 
+        // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
 
         /// <summary>
@@ -1175,19 +1209,19 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item) =>
             InstantiateOrderItemAttribute(item);
-        
+
         /// <summary>
         /// Create an item attribute for the given item
         /// </summary>
         OrderItemAttributeEntity IOrderElementFactory.CreateItemAttribute(OrderItemEntity item, string name,
             string description, decimal unitPrice,
             bool isManual) => InstantiateOrderItemAttribute(item, name, description, unitPrice, isManual);
-        
+
         /// <summary>
         /// Create an order charge for the given order
         /// </summary>
         OrderChargeEntity IOrderElementFactory.CreateCharge(OrderEntity order) => InstantiateOrderCharge(order);
-        
+
         /// <summary>
         /// Create an order charge for the given order
         /// </summary>
@@ -1209,7 +1243,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Create a payment for the given order
         /// </summary>
-        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) => 
+        OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
 
         #endregion

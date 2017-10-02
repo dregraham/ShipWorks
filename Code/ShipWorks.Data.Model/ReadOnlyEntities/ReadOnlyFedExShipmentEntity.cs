@@ -193,10 +193,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Currency = source.Currency;
             InternationalTrafficInArmsService = source.InternationalTrafficInArmsService;
             
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
             
-            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IFedExPackageEntity>().ToReadOnly() ??
                 Enumerable.Empty<IFedExPackageEntity>();
 
             CopyCustomFedExShipmentData(source);
@@ -1155,6 +1155,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFedExShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

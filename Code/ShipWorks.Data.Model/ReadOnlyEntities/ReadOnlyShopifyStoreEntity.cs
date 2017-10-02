@@ -92,12 +92,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IShopifyStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IShopifyStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IShopifyStoreEntity AsReadOnlyShopifyStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IShopifyStoreEntity AsReadOnlyShopifyStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

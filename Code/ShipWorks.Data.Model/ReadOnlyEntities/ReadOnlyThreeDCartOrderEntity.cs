@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            ThreeDCartOrderSearch = source.ThreeDCartOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IThreeDCartOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IThreeDCartOrderSearchEntity>();
 
             CopyCustomThreeDCartOrderData(source);
         }
@@ -54,15 +56,29 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
+        public IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

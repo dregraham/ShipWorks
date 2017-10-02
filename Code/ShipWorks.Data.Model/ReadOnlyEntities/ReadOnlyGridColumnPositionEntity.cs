@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Position = source.Position;
             
             
-            GridColumnLayout = source.GridColumnLayout?.AsReadOnly(objectMap);
+            GridColumnLayout = (IGridColumnLayoutEntity) source.GridColumnLayout?.AsReadOnly(objectMap);
             
 
             CopyCustomGridColumnPositionData(source);
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IGridColumnPositionEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

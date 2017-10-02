@@ -139,15 +139,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGenericModuleStoreEntity AsReadOnly();
+        IGenericModuleStoreEntity AsReadOnlyGenericModuleStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IGenericModuleStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IGenericModuleStoreEntity AsReadOnlyGenericModuleStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -168,13 +170,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGenericModuleStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IGenericModuleStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -185,5 +187,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyGenericModuleStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IGenericModuleStoreEntity AsReadOnlyGenericModuleStore() =>
+            (IGenericModuleStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IGenericModuleStoreEntity AsReadOnlyGenericModuleStore(IDictionary<object, object> objectMap) =>
+            (IGenericModuleStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

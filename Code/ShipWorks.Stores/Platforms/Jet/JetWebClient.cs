@@ -6,7 +6,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Jet.DTO;
 using ShipWorks.Stores.Platforms.Jet.DTO.Requests;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Get jet orders, with order details, that have a status of "ready"
         /// </summary>
-        public GenericResult<JetOrderResponse> GetOrders(JetStoreEntity store)
+        public GenericResult<JetOrderResponse> GetOrders(IJetStoreEntity store)
         {
             IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
             request.Uri = new Uri($"{orderEndpointPath}/ready");
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Gets jet product details for the given item
         /// </summary>
-        public GenericResult<JetProduct> GetProduct(JetOrderItem item, JetStoreEntity store)
+        public GenericResult<JetProduct> GetProduct(JetOrderItem item, IJetStoreEntity store)
         {
             IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
             request.Uri = new Uri($"{productEndpointPath}/{item.MerchantSku}");
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Acknowledges the order will be fulfilled by the seller
         /// </summary>
-        public void Acknowledge(JetOrderDetailsResult order, JetStoreEntity store)
+        public void Acknowledge(JetOrderDetailsResult order, IJetStoreEntity store)
         {
             JetAcknowledgementRequest jetAcknowledgment = new JetAcknowledgementRequest
             {
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Gets the order details for the given order url
         /// </summary>
-        public GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, JetStoreEntity store)
+        public GenericResult<JetOrderDetailsResult> GetOrderDetails(string orderUrl, IJetStoreEntity store)
         {
             IHttpRequestSubmitter request = submitterFactory.GetHttpVariableRequestSubmitter();
             request.Uri = new Uri(EndpointBase + orderUrl);
@@ -107,11 +107,8 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment, JetStoreEntity store)
+        public void UploadShipmentDetails(string merchantOrderId, ShipmentEntity shipment, IJetStoreEntity store)
         {
-            JetOrderEntity order = (JetOrderEntity) shipment.Order;
-            string merchantOrderId = order.MerchantOrderId;
-
             JetShipmentRequest shipmentRequest = jetShipmentRequestFactory.Create(shipment);
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(shipmentRequest, jsonSerializerSettings),
                 "application/json");
@@ -119,9 +116,9 @@ namespace ShipWorks.Stores.Platforms.Jet
             submitter.Uri = new Uri($"{orderEndpointPath}/{merchantOrderId}/shipped");
             submitter.Verb = HttpVerb.Put;
             submitter.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NoContent);
-            
-            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.Submit<JetShipResponse>("UploadShipmentDetails", submitter, (JetStoreEntity) order.Store);
-            
+
+            GenericResult<JetShipResponse> result = jetAuthenticatedRequest.Submit<JetShipResponse>("UploadShipmentDetails", submitter, store);
+
             if (result.Failure)
             {
                 throw new JetException(result.Message);

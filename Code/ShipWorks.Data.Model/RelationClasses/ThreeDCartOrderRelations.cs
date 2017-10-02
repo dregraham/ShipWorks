@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.ThreeDCartOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -95,6 +96,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between ThreeDCartOrderEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ThreeDCartOrder.OrderID - OrderSearch.OrderID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(ThreeDCartOrderFields.OrderID, OrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between ThreeDCartOrderEntity and ShipmentEntity over the 1:n relation they have, using the relation between the fields:
 		/// ThreeDCartOrder.OrderID - Shipment.OrderID
 		/// </summary>
@@ -106,6 +122,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(ThreeDCartOrderFields.OrderID, ShipmentFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ThreeDCartOrderEntity and ThreeDCartOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ThreeDCartOrder.OrderID - ThreeDCartOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation ThreeDCartOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ThreeDCartOrderSearch" , true);
+				relation.AddEntityFieldPair(ThreeDCartOrderFields.OrderID, ThreeDCartOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ThreeDCartOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -197,7 +228,9 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().OrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().ShipmentEntityUsingOrderID;
+		internal static readonly IEntityRelation ThreeDCartOrderSearchEntityUsingOrderIDStatic = new ThreeDCartOrderRelations().ThreeDCartOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ThreeDCartOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new ThreeDCartOrderRelations().CustomerEntityUsingCustomerID;
 		internal static readonly IEntityRelation StoreEntityUsingStoreIDStatic = new ThreeDCartOrderRelations().StoreEntityUsingStoreID;

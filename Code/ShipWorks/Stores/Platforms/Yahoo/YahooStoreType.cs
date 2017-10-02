@@ -8,13 +8,11 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Email;
 using ShipWorks.Email.Accounts;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -38,20 +36,17 @@ namespace ShipWorks.Stores.Platforms.Yahoo
     public class YahooStoreType : StoreType
     {
         static readonly ILog log = LogManager.GetLogger(typeof(YahooStoreType));
-        private readonly Func<YahooStoreEntity, YahooApiOnlineUpdater> createOnlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public YahooStoreType(StoreEntity store, Func<YahooStoreEntity, YahooApiOnlineUpdater> createOnlineUpdater)
+        public YahooStoreType(StoreEntity store)
             : base(store)
         {
             if (store != null && !(store is YahooStoreEntity))
             {
                 throw new ArgumentException("StoreEntity is not instance of YahooStoreEntity.");
             }
-
-            this.createOnlineUpdater = createOnlineUpdater;
         }
 
         /// <summary>
@@ -129,9 +124,9 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Create the identifier to uniquely identify the order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            YahooOrderEntity yahooOrder = order as YahooOrderEntity;
+            IYahooOrderEntity yahooOrder = order as IYahooOrderEntity;
 
             if (yahooOrder == null)
             {
@@ -194,56 +189,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             ElementOutline outline = container.AddElement("Yahoo");
             outline.AddElement("ProductID", () => item.Value.YahooProductID);
-        }
-
-        /// <summary>
-        /// Upload shipment details for the selected orders
-        /// </summary>
-        private void OnUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                    "Upload Shipment Details",
-                    "ShipWorks is uploading the tracking number.",
-                    "Updating order {0} of {1}...");
-
-            List<EmailOutboundEntity> generatedEmail = new List<EmailOutboundEntity>();
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                // Start emailing for the yahoo email account after generating the online update emails
-                EmailCommunicator.StartEmailingMessages(generatedEmail);
-
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(UploadShipmentDetailsCallback, context.SelectedKeys, generatedEmail);
-        }
-
-        /// <summary>
-        /// The worker thread function that does the actual details uploading
-        /// </summary>
-        private void UploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            List<EmailOutboundEntity> generatedEmail = (List<EmailOutboundEntity>) userState;
-
-            try
-            {
-                YahooEmailOnlineUpdater updater = new YahooEmailOnlineUpdater();
-                EmailOutboundEntity email = updater.GenerateOrderShipmentUpdateEmail(orderID);
-
-                if (email != null)
-                {
-                    generatedEmail.Add(email);
-                }
-            }
-            catch (YahooException ex)
-            {
-                //log it
-                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
-
-                //add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
-            }
         }
 
         #region Api Integration
@@ -313,45 +258,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         }
 
         /// <summary>
-        /// Creates the online update instance commands.
-        /// </summary>
-        /// <returns></returns>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            YahooStoreEntity store = (YahooStoreEntity) Store;
-
-            if (store == null)
-            {
-                throw new YahooException("Attempted to create Yahoo instance commands for a non Yahoo store");
-            }
-
-            if (store.YahooStoreID.IsNullOrWhiteSpace())
-            {
-                commands.Add(new MenuCommand("Upload Shipment Details", OnUploadShipmentDetails));
-                return commands;
-            }
-
-            commands.Add(new MenuCommand("Upload Shipment Details", OnApiUploadShipmentDetails)
-            {
-                BreakAfter = true
-            });
-
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.OK), OnSetOnlineStatus));
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Fraudulent), OnSetOnlineStatus));
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Cancelled), OnSetOnlineStatus));
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.Returned), OnSetOnlineStatus));
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.OnHold), OnSetOnlineStatus));
-            commands.Add(new MenuCommand(EnumHelper.GetDescription(YahooApiOrderStatus.PendingReview), OnSetOnlineStatus)
-            {
-                BreakAfter = true
-            });
-
-            return commands;
-        }
-
-        /// <summary>
         ///     Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
@@ -372,13 +278,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         }
 
         /// <summary>
-        ///     Indicates what basic grid fields we support hyperlinking for
+        /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
-        public override bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
-            YahooStoreEntity store = (YahooStoreEntity) Store;
+            IYahooStoreEntity yahooStore = (IYahooStoreEntity) store;
 
-            if (store.YahooStoreID.IsNullOrWhiteSpace())
+            if (yahooStore.YahooStoreID.IsNullOrWhiteSpace())
             {
                 return false;
             }
@@ -398,57 +304,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         ///     Handle a link click for the given field
         /// </summary>
-        public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public override void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
             YahooOrderItemEntity item = entity as YahooOrderItemEntity;
 
             if (item != null && !item.Url.IsNullOrWhiteSpace())
             {
                 WebHelper.OpenUrl(item.Url, owner);
-            }
-        }
-
-        /// <summary>
-        /// Command handler for setting online order status
-        /// </summary>
-        private void OnSetOnlineStatus(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-               "Set Status",
-               "ShipWorks is setting the online status.",
-               "Updating order {0} of {1}...");
-
-            MenuCommand command = context.MenuCommand;
-            string statusCode = command.Text;
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-            executor.ExecuteAsync(SetOnlineStatusCallback, context.SelectedKeys, statusCode);
-        }
-
-        /// <summary>
-        /// Worker thread method for updating online order status
-        /// </summary>
-        private void SetOnlineStatusCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            log.Debug(Store.StoreName);
-
-            string statusCode = userState.ToString();
-
-            try
-            {
-                YahooApiOnlineUpdater updater = createOnlineUpdater((YahooStoreEntity) Store);
-                updater.UpdateOrderStatus(orderID, statusCode);
-            }
-            catch (YahooException ex)
-            {
-                // log it
-                log.ErrorFormat("Error updating online status of orderID {0}: {1}", orderID, ex.Message);
-
-                // add the error to issues so we can react later
-                issueAdder.Add(orderID, ex);
             }
         }
 
@@ -465,68 +327,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             }
 
             return store.YahooStoreID.IsNullOrWhiteSpace() ? null : new OnlineUpdateShipmentUpdateActionControl(typeof(YahooShipmentUploadTask));
-        }
-
-        /// <summary>
-        /// Called when [API upload shipment details].
-        /// </summary>
-        /// <param name="context">The context.</param>
-        private void OnApiUploadShipmentDetails(MenuCommandExecutionContext context)
-        {
-            YahooStoreEntity store = (YahooStoreEntity) Store;
-
-            if (store == null)
-            {
-                throw new YahooException("Attempted to upload Yahoo shipment details for a non Yahoo store");
-            }
-
-            if (store.YahooStoreID.IsNullOrWhiteSpace())
-            {
-                return;
-            }
-
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ApiUploadShipmentDetailsCallback, context.SelectedKeys, context.SelectedKeys);
-        }
-
-        /// <summary>
-        /// APIs the upload shipment details callback.
-        /// </summary>
-        /// <param name="orderID">The order identifier.</param>
-        /// <param name="userState">State of the user.</param>
-        /// <param name="issueAdder">The issue adder.</param>
-        private void ApiUploadShipmentDetailsCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            List<long> orders = userState as List<long>;
-
-            try
-            {
-                YahooApiOnlineUpdater shipmentUpdater = createOnlineUpdater((YahooStoreEntity) Store);
-                shipmentUpdater.UpdateShipmentDetails(orders);
-            }
-            catch (YahooException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                if (orders != null)
-                {
-                    foreach (long order in orders)
-                    {
-                        // add the error to issues for the user
-                        issueAdder.Add(order, ex);
-                    }
-                }
-            }
         }
         #endregion
     }

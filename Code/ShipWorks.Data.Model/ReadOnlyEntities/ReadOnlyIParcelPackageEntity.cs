@@ -54,7 +54,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             SkuAndQuantities = source.SkuAndQuantities;
             
             
-            IParcelShipment = source.IParcelShipment?.AsReadOnly(objectMap);
+            IParcelShipment = (IIParcelShipmentEntity) source.IParcelShipment?.AsReadOnly(objectMap);
             
 
             CopyCustomIParcelPackageData(source);
@@ -171,6 +171,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IIParcelPackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

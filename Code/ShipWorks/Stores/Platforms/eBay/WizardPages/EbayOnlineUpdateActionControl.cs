@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Collections.Generic;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
@@ -29,11 +23,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
         /// <summary>
         /// Create the tasks configured in the control
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (markShipped.Checked || markPaid.Checked)
             {
-                EbayOnlineUpdateTask task = (EbayOnlineUpdateTask) new ActionTaskDescriptorBinding(typeof(EbayOnlineUpdateTask), store).CreateInstance();
+                EbayOnlineUpdateTask task = (EbayOnlineUpdateTask) new ActionTaskDescriptorBinding(typeof(EbayOnlineUpdateTask), store).CreateInstance(lifetimeScope);
                 task.MarkShipped = markShipped.Checked;
                 task.MarkPaid = markPaid.Checked;
 

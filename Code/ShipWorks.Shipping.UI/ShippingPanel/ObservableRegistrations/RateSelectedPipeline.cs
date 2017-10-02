@@ -36,8 +36,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             subscription = messages.OfType<SelectedRateChangedMessage>()
                 .ObserveOn(schedulerProvider.Dispatcher)
                 .Where(x => IsSenderOutsideShippingPanel(x.Sender, viewModel) &&
-                       viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success &&
-                       IsValidShipmentType(x.RateResult.ShipmentType))
+                       viewModel.LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
                 .Subscribe(x => SelectRate(viewModel, x.RateResult));
         }
 
@@ -47,14 +46,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         private bool IsSenderOutsideShippingPanel(object sender, ShippingPanelViewModel viewModel)
         {
             return sender != viewModel && sender != viewModel.ShipmentViewModel;
-        }
-
-        /// <summary>
-        /// Is the shipment type valid for rating in the panel
-        /// </summary>
-        private bool IsValidShipmentType(ShipmentTypeCode shipmentTypeCode)
-        {
-            return shipmentTypeCode != ShipmentTypeCode.Amazon;
         }
 
         /// <summary>

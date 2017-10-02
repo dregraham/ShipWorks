@@ -6,10 +6,10 @@ using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
@@ -19,6 +19,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters.Orders;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -28,8 +29,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     /// Store implementation for ChannelAdvisor
     /// </summary>
     [KeyedComponent(typeof(StoreType), StoreTypeCode.ChannelAdvisor)]
-    [Component(RegistrationType.Self)]
-    public class ChannelAdvisorStoreType : StoreType
+    [Component]
+    public class ChannelAdvisorStoreType : StoreType, IChannelAdvisorStoreType
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
@@ -95,19 +96,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            ChannelAdvisorOrderEntity entity = new ChannelAdvisorOrderEntity();
-
-            entity.CustomOrderIdentifier = "";
-            entity.ResellerID = "";
-            entity.OnlinePaymentStatus = (int) ChannelAdvisorPaymentStatus.NoChange;
-            entity.OnlineCheckoutStatus = (int) ChannelAdvisorCheckoutStatus.NoChange;
-            entity.OnlineShippingStatus = (int) ChannelAdvisorShippingStatus.NoChange;
-            entity.FlagStyle = "";
-            entity.FlagDescription = "";
-            entity.FlagType = (int) ChannelAdvisorFlagType.NoFlag;
-            entity.MarketplaceNames = "";
-
-            return entity;
+            return new ChannelAdvisorOrderEntity()
+            {
+                CustomOrderIdentifier = "",
+                ResellerID = "",
+                OnlinePaymentStatus = (int) ChannelAdvisorPaymentStatus.NoChange,
+                OnlineCheckoutStatus = (int) ChannelAdvisorCheckoutStatus.NoChange,
+                OnlineShippingStatus = (int) ChannelAdvisorShippingStatus.NoChange,
+                FlagStyle = "",
+                FlagDescription = "",
+                FlagType = (int) ChannelAdvisorFlagType.NoFlag,
+                MarketplaceNames = ""
+            };
         }
 
         /// <summary>
@@ -115,24 +115,23 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            ChannelAdvisorOrderItemEntity entity = new ChannelAdvisorOrderItemEntity();
-
-            entity.MarketplaceName = "";
-            entity.MarketplaceStoreName = "";
-            entity.MarketplaceBuyerID = "";
-            entity.MarketplaceSalesID = "";
-            entity.Classification = "";
-            entity.DistributionCenter = "";
-            entity.IsFBA = false;
-            entity.DistributionCenterID = -1;
-
-            return entity;
+            return new ChannelAdvisorOrderItemEntity()
+            {
+                MarketplaceName = "",
+                MarketplaceStoreName = "",
+                MarketplaceBuyerID = "",
+                MarketplaceSalesID = "",
+                Classification = "",
+                DistributionCenter = "",
+                IsFBA = false,
+                DistributionCenterID = -1
+            };
         }
 
         /// <summary>
         /// Creates the order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order) =>
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
             new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
@@ -284,7 +283,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             notFba.Value = false;
             everyItem.Container.FirstGroup.Conditions.Add(notFba);
 
-
             ChannelAdvisorPaymentStatusCondition channelAdvisorPaymentStatus = new ChannelAdvisorPaymentStatusCondition();
             channelAdvisorPaymentStatus.Operator = EqualityOperator.Equals;
             channelAdvisorPaymentStatus.Value = ChannelAdvisorPaymentStatus.Cleared;
@@ -314,10 +312,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             ConditionGroup group = new ConditionGroup();
 
-            ChannelAdvisorOrderIDCondition caCondition = new ChannelAdvisorOrderIDCondition();
-            caCondition.TargetValue = search;
-            caCondition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(caCondition);
+            ChannelAdvisorOrderIDCondition orderIdConditon = new ChannelAdvisorOrderIDCondition();
+            orderIdConditon.TargetValue = search;
+            orderIdConditon.Operator = StringOperator.BeginsWith;
+
+            ChannelAdvisorMarketplaceBuyerCondition buyerCondition = new ChannelAdvisorMarketplaceBuyerCondition();
+            buyerCondition.TargetValue = search;
+            buyerCondition.Operator = StringOperator.BeginsWith;
+
+            ForAnyItemCondition anyItemCondition = new ForAnyItemCondition();
+            anyItemCondition.Container.FirstGroup.JoinType = ConditionJoinType.Any;
+            anyItemCondition.Container.FirstGroup.Conditions.Add(buyerCondition);
+
+            group.JoinType = ConditionJoinType.Any;
+            group.Conditions.Add(orderIdConditon);
+            group.Conditions.Add(anyItemCondition);
 
             return group;
         }
@@ -390,64 +399,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Create menu commands for uploading shipment details
+        /// Determines whether the shipping address is editable for the specified shipment.
         /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
+        /// <param name="shipment">The shipment.</param>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
         {
-            List<MenuCommand> commands = new List<MenuCommand>();
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
 
-            // shipment details
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// MenuCommand handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<long> executor = new BackgroundExecutor<long>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                "Updating order {0} of {1}...");
-
-            executor.ExecuteCompleted += (o, e) =>
-                {
-                    context.Complete(e.Issues, MenuCommandResult.Error);
-                };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, context.SelectedKeys, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(long orderID, object userState, BackgroundIssueAdder<long> issueAdder)
-        {
-            // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
-            if (shipment == null)
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
             {
-                log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
+                return ShippingAddressEditStateType.AmazonSfp;
             }
-            else
-            {
-                try
-                {
-                    ChannelAdvisorOnlineUpdater updater = new ChannelAdvisorOnlineUpdater((ChannelAdvisorStoreEntity) Store);
-                    updater.UploadTrackingNumber(shipment);
-                }
-                catch (ChannelAdvisorException ex)
-                {
-                    // log it
-                    log.ErrorFormat("Error uploading shipment information for orderID {0}: {1}", orderID, ex.Message);
 
-                    // add the error to issues so we can react later
-                    issueAdder.Add(orderID, ex);
-                }
-            }
+            return editable;
         }
     }
 }

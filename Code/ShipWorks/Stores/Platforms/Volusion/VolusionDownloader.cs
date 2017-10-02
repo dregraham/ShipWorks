@@ -12,9 +12,11 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 
@@ -26,6 +28,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Volusion)]
     public class VolusionDownloader : StoreDownloader
     {
+        private readonly IVolusionWebClient webClient;
+        private readonly ILog log;
+
         // total number of orders to be imported
         // shipping method map
         VolusionShippingMethods shippingMethods;
@@ -36,10 +41,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Constructor
         /// </summary>
-        public VolusionDownloader(StoreEntity store)
-            : base(store)
+        public VolusionDownloader(StoreEntity store, IVolusionWebClient webClient, IStoreTypeManager storeTypeManager, Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store))
         {
-
+            this.webClient = webClient;
+            log = createLogger(GetType());
         }
 
         /// <summary>
@@ -71,10 +77,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
                     Progress.Detail = string.Format("Downloading {0} Orders...", status);
 
-                    VolusionWebClient client = new VolusionWebClient((VolusionStoreEntity) Store);
-
                     // get all the orders - volusion just gives them all. At once.
-                    IXPathNavigable ordersResponse = client.GetOrders(status);
+                    IXPathNavigable ordersResponse = webClient.GetOrders(Store as IVolusionStoreEntity, status);
 
                     // check for cancel
                     if (Progress.IsCancelRequested)
@@ -107,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved, totalCount);
 
                         // load each order
-                        await LoadOrder(client, orders.Current.Clone()).ConfigureAwait(false);
+                        await LoadOrder(orders.Current.Clone()).ConfigureAwait(false);
 
                         Progress.PercentComplete = Math.Min(100, 100 * (quantitySaved) / totalCount);
 
@@ -134,13 +138,19 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Processes a single order
         /// </summary>
-        private async Task LoadOrder(VolusionWebClient client, XPathNavigator xpath)
+        private async Task LoadOrder(XPathNavigator xpath)
         {
             long orderNumber = XPathUtility.Evaluate(xpath, "OrderID", 0);
 
             // find an existing order in ShipWorks or create a new one
-            OrderNumberIdentifier orderIdentifier = new OrderNumberIdentifier(orderNumber);
-            OrderEntity order = await InstantiateOrder(orderIdentifier).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             order.OrderDate = GetDate(xpath, "OrderDate");
 
@@ -160,7 +170,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             order.RequestedShipping = shippingMethods.GetShippingMethods(XPathUtility.Evaluate(xpath, "ShippingMethodID", -1));
 
             // shipping/billing address
-            LoadAddressInfo(order, client, xpath);
+            LoadAddressInfo(order, xpath);
 
             // do the remaining only on new orders
             if (order.IsNew)
@@ -362,7 +372,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Looks up a customer's email address
         /// </summary>
-        private string GetCustomerEmail(VolusionWebClient client, object customerId)
+        private string GetCustomerEmail(object customerId)
         {
             if (customerId == null)
             {
@@ -371,7 +381,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             try
             {
-                IXPathNavigable response = client.GetCustomer((long) customerId);
+                IXPathNavigable response = webClient.GetCustomer(Store as IVolusionStoreEntity, (long) customerId);
 
                 return XPathUtility.Evaluate(response.CreateNavigator(), "//EmailAddress", "");
             }
@@ -384,7 +394,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Loads Shipping and Billing address into the order entity
         /// </summary>
-        private void LoadAddressInfo(OrderEntity order, VolusionWebClient client, XPathNavigator xpath)
+        private void LoadAddressInfo(OrderEntity order, XPathNavigator xpath)
         {
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
@@ -393,7 +403,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             LoadAddressInfo(shipAdapter, xpath, "Ship");
             LoadAddressInfo(billAdapter, xpath, "Billing");
 
-            billAdapter.Email = GetCustomerEmail(client, order.OnlineCustomerID);
+            billAdapter.Email = GetCustomerEmail(order.OnlineCustomerID);
 
             // fix bad/missing shipping information, take from the customer record
             if (shipAdapter.FirstName.Length == 0 && shipAdapter.LastName.Length == 0 && shipAdapter.City.Length == 0)

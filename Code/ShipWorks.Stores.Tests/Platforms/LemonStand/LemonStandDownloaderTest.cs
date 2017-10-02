@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -87,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal(36, order.OrderNumber);
+            Assert.Equal(36, order.Value.OrderNumber);
         }
 
         [Fact]
@@ -97,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal("Priority Mail", order.RequestedShipping);
+            Assert.Equal("Priority Mail", order.Value.RequestedShipping);
         }
 
         [Fact]
@@ -107,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal("204 S Friedline Dr", order.ShipStreet1);
+            Assert.Equal("204 S Friedline Dr", order.Value.ShipStreet1);
         }
 
         [Fact]
@@ -117,7 +113,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal("Stan", order.BillFirstName);
+            Assert.Equal("Stan", order.Value.BillFirstName);
         }
 
         [Fact]
@@ -127,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal("Carbondale", order.BillCity);
+            Assert.Equal("Carbondale", order.Value.BillCity);
         }
 
         [Fact]
@@ -137,7 +133,7 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
 
             var order = await testObject.PrepareOrder(JObject.Parse(singleOrder));
 
-            Assert.Equal("Baseball cap", order.OrderItems.First().Name);
+            Assert.Equal("Baseball cap", order.Value.OrderItems.First().Name);
         }
 
         [Fact]

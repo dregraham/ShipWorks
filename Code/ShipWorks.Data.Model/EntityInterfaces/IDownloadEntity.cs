@@ -106,6 +106,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IUserEntity User { get; }
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -155,5 +157,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyDownloadEntity(this, objectMap);
         }
+
+        
     }
 }

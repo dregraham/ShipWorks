@@ -65,6 +65,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between ChannelAdvisorStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// ChannelAdvisorStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(ChannelAdvisorStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ChannelAdvisorStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between ChannelAdvisorStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// ChannelAdvisorStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -122,6 +137,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new ChannelAdvisorStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new ChannelAdvisorStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new ChannelAdvisorStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new ChannelAdvisorStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

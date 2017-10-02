@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -158,6 +159,7 @@ namespace ShipWorks.Stores
             newOrder.ShipAddressType = (int) AddressType.NotChecked;
 
             newOrder.RequestedShipping = string.Empty;
+            newOrder.CombineSplitStatus = CombineSplitStatusType.None;
 
             return newOrder;
         }
@@ -173,10 +175,9 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Creates a store-specific instance of an OrderItemEntity
         /// </summary>
-        public virtual OrderItemEntity CreateOrderItemInstance()
-        {
-            return new OrderItemEntity();
-        }
+        /// <returns></returns>
+        public virtual OrderItemEntity CreateOrderItemInstance() =>
+            new OrderItemEntity();
 
         /// <summary>
         /// Creates a store-specific instance of OrderItemAttributeEntity
@@ -189,7 +190,12 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Get the store-specific OrderIdentifier that can be used to identify the specified order.
         /// </summary>
-        public abstract OrderIdentifier CreateOrderIdentifier(OrderEntity order);
+        public abstract OrderIdentifier CreateOrderIdentifier(IOrderEntity order);
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public virtual string GetAuditDescription(IOrderEntity order) => order?.OrderNumberComplete ?? string.Empty;
 
         /// <summary>
         /// Get the store-specific fields that are used to uniquely identify an online customer record.  Such
@@ -204,6 +210,7 @@ namespace ShipWorks.Stores
 
             return null;
         }
+
 
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
@@ -368,18 +375,14 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create any MenuCommand's that are applied to the whole StoreType - regardless of how many specific store instances there are.
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateCommonCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Create any MenuCommand's that are applied to this specific store instance
         /// </summary>
-        public virtual List<MenuCommand> CreateOnlineUpdateInstanceCommands()
-        {
-            return new List<MenuCommand>();
-        }
+        public virtual IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands() =>
+            Enumerable.Empty<IMenuCommand>();
 
         /// <summary>
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
@@ -439,7 +442,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Indicates if the StoreType supports hyperlinking the grid for the given field
         /// </summary>
-        public virtual bool GridHyperlinkSupported(EntityBase2 entity, EntityField2 field)
+        public virtual bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)
         {
             return false;
         }
@@ -447,7 +450,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Handle a hyperlink click for the given field and entity from the grid
         /// </summary>
-        public virtual void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
+        public virtual void GridHyperlinkClick(IStoreEntity store, EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
 
         }

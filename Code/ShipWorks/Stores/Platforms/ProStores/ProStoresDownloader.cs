@@ -10,11 +10,12 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {
@@ -24,6 +25,9 @@ namespace ShipWorks.Stores.Platforms.ProStores
     [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.ProStores)]
     public class ProStoresDownloader : StoreDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ProStoresDownloader));
+        private readonly IProStoresWebClient webClient;
+
         // total download count
         int totalCount = 0;
 
@@ -33,10 +37,10 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProStoresDownloader(StoreEntity store)
+        public ProStoresDownloader(StoreEntity store, IProStoresWebClient webClient)
             : base(store)
         {
-
+            this.webClient = webClient;
         }
 
         /// <summary>
@@ -46,17 +50,19 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// associate any store-specific download properties/metrics.</param>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            var proStore = (ProStoresStoreEntity) Store;
+
             try
             {
                 Progress.Detail = "Checking for orders...";
 
                 // For legacy login methods, checks the version has been updated and tokens are now supported
-                ProStoresWebClient.CheckTokenLoginMethodAvailability((ProStoresStoreEntity) Store);
+                webClient.CheckTokenLoginMethodAvailability(proStore);
 
                 // Downloading based on the last modified time
-                DateTime? lastModified = GetOnlineLastModifiedStartingPoint();
+                DateTime? lastModified = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
 
-                totalCount = ProStoresWebClient.GetOrderCount((ProStoresStoreEntity) Store, lastModified);
+                totalCount = webClient.GetOrderCount(proStore, lastModified);
 
                 if (totalCount == 0)
                 {
@@ -100,7 +106,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
         {
             try
             {
-                XmlDocument response = ProStoresWebClient.GetNextOrderPage((ProStoresStoreEntity) Store, GetOnlineLastModifiedStartingPoint(), isProVersion);
+                DateTime? startDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+                XmlDocument response = webClient.GetNextOrderPage((IProStoresStoreEntity) Store, startDate, isProVersion);
                 XPathNavigator xpath = response.CreateNavigator();
 
                 XPathNodeIterator invoiceIterator = xpath.Select("/XTE/Response/Invoice");
@@ -187,7 +194,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
             // Now extract the Order#
             int orderNumber = XPathUtility.Evaluate(xpath, "InvoiceNumber", 0);
 
-            ProStoresOrderEntity order = (ProStoresOrderEntity) await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(orderNumber).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            ProStoresOrderEntity order = (ProStoresOrderEntity) result.Value;
 
             // Setup the basic properties
             order.OrderNumber = orderNumber;
@@ -437,7 +451,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
 
             OrderChargeEntity charge = InstantiateOrderCharge(order);
 
-            charge.Type = type.ToUpper();
+            charge.Type = type.ToUpperInvariant();
             charge.Description = name;
             charge.Amount = amount;
         }

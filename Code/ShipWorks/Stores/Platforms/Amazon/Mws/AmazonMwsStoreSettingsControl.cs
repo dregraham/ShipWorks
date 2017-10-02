@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Data.SqlTypes;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using System.IO;
-using ShipWorks.Common.Threading;
 using System.Threading;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using System.Data.SqlTypes;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
@@ -22,12 +23,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// </summary>
     public partial class AmazonMwsStoreSettingsControl : StoreSettingsControlBase
     {
+        private const string amazonVATSWarning =
+            "Enabling the Amazon VATS toggle will stop ShipWorks from downloading \"Tax\" order charges, because the VATS tax is already included in each item total. Are you sure you want to do this?";
+
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonMwsStoreSettingsControl()
         {
             InitializeComponent();
+
+            amazonVATS.ValueMember = "Key";
+            amazonVATS.DisplayMember = "Value";
+            amazonVATS.DataSource = new Dictionary<bool, string>
+            {
+                { false, "Disabled" },
+                { true, "Enabled" }
+            }.ToList();
         }
 
         /// <summary>
@@ -35,6 +47,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
+            amazonVATS.SelectedValueChanged -= OnAmazonVATSSelectedValueChanged;
+
             AmazonStoreEntity amazonStore = store as AmazonStoreEntity;
             if (amazonStore == null)
             {
@@ -42,6 +56,19 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             excludeFba.Checked = amazonStore.ExcludeFBA;
+
+            bool showVATS = ShowVATS(amazonStore);
+
+            amazonVATS.SelectedValue = amazonStore.AmazonVATS;
+            amazonVATS.Visible = showVATS;
+            amazonVATSLabel.Visible = showVATS;
+
+            if (!showVATS)
+            {
+                Height -= 20;
+            }
+
+            amazonVATS.SelectedValueChanged += OnAmazonVATSSelectedValueChanged;
         }
 
         /// <summary>
@@ -56,8 +83,31 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
 
             amazonStore.ExcludeFBA = excludeFba.Checked;
+            if (ShowVATS(amazonStore))
+            {
+                amazonStore.AmazonVATS = (bool) amazonVATS.SelectedValue;
+            }
 
             return true;
+        }
+
+        /// <summary>
+        /// Should we show the VATS UI
+        /// </summary>
+        private bool ShowVATS(IAmazonStoreEntity store) => store.AmazonApiRegion == "UK";
+
+        /// <summary>
+        /// Handle changing the Amazon VATS option
+        /// </summary>
+        private void OnAmazonVATSSelectedValueChanged(object sender, EventArgs e)
+        {
+            ComboBox vats = sender as ComboBox;
+            if (vats == null || (bool) vats.SelectedValue == false)
+            {
+                return;
+            }
+
+            vats.SelectedValue = MessageBox.Show(this, amazonVATSWarning, "Amazon VATS", MessageBoxButtons.YesNo) == DialogResult.Yes;
         }
     }
 }

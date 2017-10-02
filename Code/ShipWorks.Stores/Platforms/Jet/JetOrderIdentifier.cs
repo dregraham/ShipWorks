@@ -1,5 +1,8 @@
 ﻿using System;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Jet
@@ -38,6 +41,15 @@ namespace ShipWorks.Stores.Platforms.Jet
         {
             downloadDetail.ExtraStringData1 = merchantOrderId;
         }
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.JetOrderSearch,
+                JetOrderSearchFields.OriginalOrderID,
+                JetOrderSearchFields.MerchantOrderID == merchantOrderId);
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

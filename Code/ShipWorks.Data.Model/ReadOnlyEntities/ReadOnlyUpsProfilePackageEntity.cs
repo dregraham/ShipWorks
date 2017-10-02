@@ -57,7 +57,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DryIceIsForMedicalUse = source.DryIceIsForMedicalUse;
             
             
-            UpsProfile = source.UpsProfile?.AsReadOnly(objectMap);
+            UpsProfile = (IUpsProfileEntity) source.UpsProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomUpsProfilePackageData(source);
@@ -192,6 +192,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -80,8 +80,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 // Get the total number of orders for the range
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria =
-                    orderSearchCriteriaFactory.Create(Store, BigCommerceWebClientOrderDateSearchType.CreatedDate);
-                totalCount = WebClient.GetOrderCount(orderSearchCriteria);
+                    await orderSearchCriteriaFactory.Create(Store, BigCommerceWebClientOrderDateSearchType.CreatedDate).ConfigureAwait(false);
+                totalCount = await WebClient.GetOrderCount(orderSearchCriteria).ConfigureAwait(false);
 
                 if (totalCount != 0)
                 {
@@ -96,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     orderSearchCriteria.OrderDateSearchType = BigCommerceWebClientOrderDateSearchType.ModifiedDate;
                     orderSearchCriteria.LastModifiedFromDate = DateTime.UtcNow.AddDays(-bigCommerceStore.DownloadModifiedNumberOfDaysBack);
 
-                    int modifiedCount = WebClient.GetOrderCount(orderSearchCriteria);
+                    int modifiedCount = await WebClient.GetOrderCount(orderSearchCriteria).ConfigureAwait(false);
 
                     if (modifiedCount == 0)
                     {
@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 orderSearchCriteria.OrderDateSearchType == BigCommerceWebClientOrderDateSearchType.CreatedDate ? "new" : "modified");
 
             // Download the orders to process
-            List<BigCommerceOrder> orders = WebClient.GetOrders(orderSearchCriteria);
+            List<BigCommerceOrder> orders = await WebClient.GetOrders(orderSearchCriteria).ConfigureAwait(false);
 
             // Check to see that we received some orders to process (just in case another ShipWorks instance downloaded them before we got to them)
             if (orders.Count == 0)
@@ -278,7 +278,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             BigCommerceOrderIdentifier bigCommerceOrderIdentifier = new BigCommerceOrderIdentifier(order.id, orderNumberPostfix);
 
             // Get the order instance.
-            OrderEntity orderEntity = await InstantiateOrder(bigCommerceOrderIdentifier).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(bigCommerceOrderIdentifier).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", order.id, result.Message);
+                return;
+            }
+
+            OrderEntity orderEntity = result.Value;
 
             // If the order does not have sub orders, set the order total.  If it does have sub orders, each order should be calculated based on it's
             // content

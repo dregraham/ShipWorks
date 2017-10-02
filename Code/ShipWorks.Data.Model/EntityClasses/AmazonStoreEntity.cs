@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 		}
 		#endregion
 		
@@ -363,6 +365,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ExcludeFBA", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DomainName", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AmazonVATS", fieldHashtable);
 		}
 		#endregion
 
@@ -584,6 +588,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonStoreFieldIndex.DomainName, true); }
 			set	{ SetValue((int)AmazonStoreFieldIndex.DomainName, value); }
+		}
+
+		/// <summary> The AmazonVATS property of the Entity AmazonStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AmazonStore"."AmazonVATS"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AmazonVATS
+		{
+			get { return (System.Boolean)GetValue((int)AmazonStoreFieldIndex.AmazonVATS, true); }
+			set	{ SetValue((int)AmazonStoreFieldIndex.AmazonVATS, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

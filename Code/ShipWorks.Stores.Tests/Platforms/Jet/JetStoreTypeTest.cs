@@ -1,11 +1,9 @@
 ﻿using System;
 using Autofac;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet

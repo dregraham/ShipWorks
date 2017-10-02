@@ -762,6 +762,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -902,6 +907,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new AmazonOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new AmazonOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -921,6 +931,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ConditionNote
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderItemFieldIndex.ConditionNote);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity AmazonOrderSearchEntity</summary>
+	public partial class AmazonOrderSearchFields
+	{
+		/// <summary>Creates a new AmazonOrderSearchEntity.AmazonOrderSearchID field instance</summary>
+		public static EntityField2 AmazonOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.AmazonOrderSearchID);}
+		}
+		/// <summary>Creates a new AmazonOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new AmazonOrderSearchEntity.AmazonOrderID field instance</summary>
+		public static EntityField2 AmazonOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.AmazonOrderID);}
+		}
+		/// <summary>Creates a new AmazonOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -972,6 +1007,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.Weight);}
 		}
+		/// <summary>Creates a new AmazonProfileEntity.ShippingServiceID field instance</summary>
+		public static EntityField2 ShippingServiceID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonProfileFieldIndex.ShippingServiceID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity AmazonServiceTypeEntity</summary>
+	public partial class AmazonServiceTypeFields
+	{
+		/// <summary>Creates a new AmazonServiceTypeEntity.AmazonServiceTypeID field instance</summary>
+		public static EntityField2 AmazonServiceTypeID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.AmazonServiceTypeID);}
+		}
+		/// <summary>Creates a new AmazonServiceTypeEntity.ApiValue field instance</summary>
+		public static EntityField2 ApiValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.ApiValue);}
+		}
+		/// <summary>Creates a new AmazonServiceTypeEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonServiceTypeFieldIndex.Description);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonShipmentEntity</summary>
@@ -996,11 +1056,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShippingServiceID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceID);}
-		}
-		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceOfferID field instance</summary>
-		public static EntityField2 ShippingServiceOfferID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceOfferID);}
 		}
 		/// <summary>Creates a new AmazonShipmentEntity.InsuranceValue field instance</summary>
 		public static EntityField2 InsuranceValue
@@ -1296,6 +1351,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DomainName
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomainName);}
+		}
+		/// <summary>Creates a new AmazonStoreEntity.AmazonVATS field instance</summary>
+		public static EntityField2 AmazonVATS
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AmazonVATS);}
 		}
 	}
 
@@ -1827,6 +1887,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new BigCommerceOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new BigCommerceOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2166,6 +2231,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HarmonizedCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new BuyDotComOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComOrderItemFieldIndex.OriginalOrderID);}
 		}
 		/// <summary>Creates a new BuyDotComOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -2747,6 +2817,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -2902,6 +2977,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -2956,6 +3036,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 DistributionCenterName
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderItemFieldIndex.DistributionCenterName);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ChannelAdvisorOrderSearchEntity</summary>
+	public partial class ChannelAdvisorOrderSearchFields
+	{
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity.ChannelAdvisorOrderSearchID field instance</summary>
+		public static EntityField2 ChannelAdvisorOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.ChannelAdvisorOrderSearchID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity.CustomOrderIdentifier field instance</summary>
+		public static EntityField2 CustomOrderIdentifier
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.CustomOrderIdentifier);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -3532,6 +3637,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -3541,6 +3651,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ClickCartProOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.ClickCartProOrderID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ClickCartProOrderSearchEntity</summary>
+	public partial class ClickCartProOrderSearchFields
+	{
+		/// <summary>Creates a new ClickCartProOrderSearchEntity.ClickCartProOrderSearchID field instance</summary>
+		public static EntityField2 ClickCartProOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.ClickCartProOrderSearchID);}
+		}
+		/// <summary>Creates a new ClickCartProOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ClickCartProOrderSearchEntity.ClickCartProOrderID field instance</summary>
+		public static EntityField2 ClickCartProOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.ClickCartProOrderID);}
+		}
+		/// <summary>Creates a new ClickCartProOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -3917,6 +4052,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -3926,6 +4066,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CommerceInterfaceOrderNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.CommerceInterfaceOrderNumber);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity CommerceInterfaceOrderSearchEntity</summary>
+	public partial class CommerceInterfaceOrderSearchFields
+	{
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity.CommerceInterfaceOrderSearchID field instance</summary>
+		public static EntityField2 CommerceInterfaceOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.CommerceInterfaceOrderSearchID);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity.CommerceInterfaceOrderNumber field instance</summary>
+		public static EntityField2 CommerceInterfaceOrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.CommerceInterfaceOrderNumber);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -4026,6 +4191,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UseParallelActionQueue
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.UseParallelActionQueue);}
+		}
+		/// <summary>Creates a new ConfigurationEntity.AllowEbayCombineLocally field instance</summary>
+		public static EntityField2 AllowEbayCombineLocally
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ConfigurationFieldIndex.AllowEbayCombineLocally);}
 		}
 	}
 
@@ -4762,6 +4932,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new EbayOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -4987,6 +5162,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new EbayOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new EbayOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -5076,6 +5256,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PayPalAddressStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.PayPalAddressStatus);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity EbayOrderSearchEntity</summary>
+	public partial class EbayOrderSearchFields
+	{
+		/// <summary>Creates a new EbayOrderSearchEntity.EbayOrderSearchID field instance</summary>
+		public static EntityField2 EbayOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.EbayOrderSearchID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.EbayOrderID field instance</summary>
+		public static EntityField2 EbayOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.EbayOrderID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.EbayBuyerID field instance</summary>
+		public static EntityField2 EbayBuyerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.EbayBuyerID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.SellingManagerRecord field instance</summary>
+		public static EntityField2 SellingManagerRecord
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.SellingManagerRecord);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -6222,6 +6437,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new EtsyOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new EtsyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -6336,6 +6556,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HarmonizedCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new EtsyOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderItemFieldIndex.OriginalOrderID);}
 		}
 		/// <summary>Creates a new EtsyOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -9342,6 +9567,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new GrouponOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new GrouponOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -9351,6 +9581,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 GrouponOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.GrouponOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.ParentOrderID field instance</summary>
+		public static EntityField2 ParentOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.ParentOrderID);}
 		}
 	}
 
@@ -9452,6 +9687,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new GrouponOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new GrouponOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -9481,6 +9721,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 GrouponLineItemID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.GrouponLineItemID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity GrouponOrderSearchEntity</summary>
+	public partial class GrouponOrderSearchFields
+	{
+		/// <summary>Creates a new GrouponOrderSearchEntity.GrouponOrderSearchID field instance</summary>
+		public static EntityField2 GrouponOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.GrouponOrderSearchID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.GrouponOrderID field instance</summary>
+		public static EntityField2 GrouponOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.GrouponOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.ParentOrderID field instance</summary>
+		public static EntityField2 ParentOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.ParentOrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -9751,6 +10021,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HarmonizedCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new InfopiaOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaOrderItemFieldIndex.OriginalOrderID);}
 		}
 		/// <summary>Creates a new InfopiaOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -10687,6 +10962,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new JetOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new JetOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -10797,6 +11077,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new JetOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new JetOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -10811,6 +11096,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 JetOrderItemID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderItemFieldIndex.JetOrderItemID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity JetOrderSearchEntity</summary>
+	public partial class JetOrderSearchFields
+	{
+		/// <summary>Creates a new JetOrderSearchEntity.JetOrderSearchID field instance</summary>
+		public static EntityField2 JetOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.JetOrderSearchID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.MerchantOrderID field instance</summary>
+		public static EntityField2 MerchantOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.MerchantOrderID);}
+		}
+		/// <summary>Creates a new JetOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -11427,6 +11737,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new LemonStandOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new LemonStandOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -11537,6 +11852,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new LemonStandOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new LemonStandOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -11556,6 +11876,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Category
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderItemFieldIndex.Category);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity LemonStandOrderSearchEntity</summary>
+	public partial class LemonStandOrderSearchFields
+	{
+		/// <summary>Creates a new LemonStandOrderSearchEntity.LemonStandOrderSearchID field instance</summary>
+		public static EntityField2 LemonStandOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.LemonStandOrderSearchID);}
+		}
+		/// <summary>Creates a new LemonStandOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderSearchEntity.LemonStandOrderID field instance</summary>
+		public static EntityField2 LemonStandOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.LemonStandOrderID);}
+		}
+		/// <summary>Creates a new LemonStandOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -12107,6 +12452,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -12116,6 +12466,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 MagentoOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.MagentoOrderID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity MagentoOrderSearchEntity</summary>
+	public partial class MagentoOrderSearchFields
+	{
+		/// <summary>Creates a new MagentoOrderSearchEntity.MagentoOrderSearchID field instance</summary>
+		public static EntityField2 MagentoOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.MagentoOrderSearchID);}
+		}
+		/// <summary>Creates a new MagentoOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new MagentoOrderSearchEntity.MagentoOrderID field instance</summary>
+		public static EntityField2 MagentoOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.MagentoOrderID);}
+		}
+		/// <summary>Creates a new MagentoOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -12762,6 +13137,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -12786,6 +13166,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ParcelID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.ParcelID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity MarketplaceAdvisorOrderSearchEntity</summary>
+	public partial class MarketplaceAdvisorOrderSearchFields
+	{
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.MarketplaceAdvisorOrderSearchID field instance</summary>
+		public static EntityField2 MarketplaceAdvisorOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.MarketplaceAdvisorOrderSearchID);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.InvoiceNumber field instance</summary>
+		public static EntityField2 InvoiceNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.InvoiceNumber);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.SellerOrderNumber field instance</summary>
+		public static EntityField2 SellerOrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.SellerOrderNumber);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -13687,6 +14097,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -13696,6 +14111,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 NetworkSolutionsOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.NetworkSolutionsOrderID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity NetworkSolutionsOrderSearchEntity</summary>
+	public partial class NetworkSolutionsOrderSearchFields
+	{
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity.NetworkSolutionsOrderSearchID field instance</summary>
+		public static EntityField2 NetworkSolutionsOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderSearchID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity.NetworkSolutionsOrderID field instance</summary>
+		public static EntityField2 NetworkSolutionsOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.NetworkSolutionsOrderID);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -14252,6 +14692,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new NeweggOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new NeweggOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -14371,6 +14816,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HarmonizedCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new NeweggOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderItemFieldIndex.OriginalOrderID);}
 		}
 		/// <summary>Creates a new NeweggOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
@@ -15577,6 +16027,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new OrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.CombineSplitStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderChargeEntity</summary>
@@ -15711,6 +16166,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HarmonizedCode
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new OrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderItemFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -16127,6 +16587,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new OrderMotionOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new OrderMotionOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -16146,6 +16611,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OrderMotionInvoiceNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OrderMotionOrderSearchEntity</summary>
+	public partial class OrderMotionOrderSearchFields
+	{
+		/// <summary>Creates a new OrderMotionOrderSearchEntity.OrderMotionOrderSearchID field instance</summary>
+		public static EntityField2 OrderMotionOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OrderMotionOrderSearchID);}
+		}
+		/// <summary>Creates a new OrderMotionOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OrderMotionOrderSearchEntity.OrderMotionShipmentID field instance</summary>
+		public static EntityField2 OrderMotionShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OrderMotionShipmentID);}
+		}
+		/// <summary>Creates a new OrderMotionOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -16346,6 +16836,46 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Value
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderPaymentDetailFieldIndex.Value);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity OrderSearchEntity</summary>
+	public partial class OrderSearchFields
+	{
+		/// <summary>Creates a new OrderSearchEntity.OrderSearchID field instance</summary>
+		public static EntityField2 OrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderSearchID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new OrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -16767,6 +17297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new PayPalOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new PayPalOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -16791,6 +17326,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PaymentStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.PaymentStatus);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity PayPalOrderSearchEntity</summary>
+	public partial class PayPalOrderSearchFields
+	{
+		/// <summary>Creates a new PayPalOrderSearchEntity.PayPalOrderSearchID field instance</summary>
+		public static EntityField2 PayPalOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.PayPalOrderSearchID);}
+		}
+		/// <summary>Creates a new PayPalOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new PayPalOrderSearchEntity.TransactionID field instance</summary>
+		public static EntityField2 TransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.TransactionID);}
+		}
+		/// <summary>Creates a new PayPalOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -17737,6 +18297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new ProStoresOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new ProStoresOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -17756,6 +18321,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AuthorizedBy
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.AuthorizedBy);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ProStoresOrderSearchEntity</summary>
+	public partial class ProStoresOrderSearchFields
+	{
+		/// <summary>Creates a new ProStoresOrderSearchEntity.ProStoresOrderSearchID field instance</summary>
+		public static EntityField2 ProStoresOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.ProStoresOrderSearchID);}
+		}
+		/// <summary>Creates a new ProStoresOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ProStoresOrderSearchEntity.ConfirmationNumber field instance</summary>
+		public static EntityField2 ConfirmationNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.ConfirmationNumber);}
+		}
+		/// <summary>Creates a new ProStoresOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -18462,6 +19052,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new SearsOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new SearsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -18592,6 +19187,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new SearsOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new SearsOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -18621,6 +19221,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OnlineStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderItemFieldIndex.OnlineStatus);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity SearsOrderSearchEntity</summary>
+	public partial class SearsOrderSearchFields
+	{
+		/// <summary>Creates a new SearsOrderSearchEntity.SearsOrderSearchID field instance</summary>
+		public static EntityField2 SearsOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.SearsOrderSearchID);}
+		}
+		/// <summary>Creates a new SearsOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new SearsOrderSearchEntity.PoNumber field instance</summary>
+		public static EntityField2 PoNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.PoNumber);}
+		}
+		/// <summary>Creates a new SearsOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -20377,6 +21002,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new ShopifyOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new ShopifyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -20497,6 +21127,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new ShopifyOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new ShopifyOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -20511,6 +21146,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShopifyProductID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderItemFieldIndex.ShopifyProductID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ShopifyOrderSearchEntity</summary>
+	public partial class ShopifyOrderSearchFields
+	{
+		/// <summary>Creates a new ShopifyOrderSearchEntity.ShopifyOrderSearchID field instance</summary>
+		public static EntityField2 ShopifyOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.ShopifyOrderSearchID);}
+		}
+		/// <summary>Creates a new ShopifyOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ShopifyOrderSearchEntity.ShopifyOrderID field instance</summary>
+		public static EntityField2 ShopifyOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.ShopifyOrderID);}
+		}
+		/// <summary>Creates a new ShopifyOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -21952,6 +22612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new ThreeDCartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -22062,6 +22727,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new ThreeDCartOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new ThreeDCartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -22071,6 +22741,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ThreeDCartShipmentID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderItemFieldIndex.ThreeDCartShipmentID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ThreeDCartOrderSearchEntity</summary>
+	public partial class ThreeDCartOrderSearchFields
+	{
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity.ThreeDCartOrderSearchID field instance</summary>
+		public static EntityField2 ThreeDCartOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderSearchID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity.ThreeDCartOrderID field instance</summary>
+		public static EntityField2 ThreeDCartOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.ThreeDCartOrderID);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -23462,6 +24157,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoWeigh);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.DialogSettings field instance</summary>
+		public static EntityField2 DialogSettings
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.DialogSettings);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
@@ -24402,6 +25102,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new WalmartOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new WalmartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -24532,6 +25237,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new WalmartOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new WalmartOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -24546,6 +25256,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OnlineStatus
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderItemFieldIndex.OnlineStatus);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity WalmartOrderSearchEntity</summary>
+	public partial class WalmartOrderSearchFields
+	{
+		/// <summary>Creates a new WalmartOrderSearchEntity.WalmartOrderSearchID field instance</summary>
+		public static EntityField2 WalmartOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.WalmartOrderSearchID);}
+		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.PurchaseOrderID field instance</summary>
+		public static EntityField2 PurchaseOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.PurchaseOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
@@ -25807,6 +26542,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.ShipAddressType);}
 		}
+		/// <summary>Creates a new YahooOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.CombineSplitStatus);}
+		}
 		/// <summary>Creates a new YahooOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -25917,6 +26657,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.HarmonizedCode);}
 		}
+		/// <summary>Creates a new YahooOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.OriginalOrderID);}
+		}
 		/// <summary>Creates a new YahooOrderItemEntity.OrderItemID field instance</summary>
 		public static EntityField2 OrderItemID
 		{
@@ -25931,6 +26676,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Url
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderItemFieldIndex.Url);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity YahooOrderSearchEntity</summary>
+	public partial class YahooOrderSearchFields
+	{
+		/// <summary>Creates a new YahooOrderSearchEntity.YahooOrderSearchID field instance</summary>
+		public static EntityField2 YahooOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.YahooOrderSearchID);}
+		}
+		/// <summary>Creates a new YahooOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new YahooOrderSearchEntity.YahooOrderID field instance</summary>
+		public static EntityField2 YahooOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.YahooOrderID);}
+		}
+		/// <summary>Creates a new YahooOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 

@@ -54,9 +54,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
-            ActionQueueSelection = source.ActionQueueSelection?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            ActionQueueSelection = source.ActionQueueSelection?.Select(x => x.AsReadOnly(objectMap)).OfType<IActionQueueSelectionEntity>().ToReadOnly() ??
                 Enumerable.Empty<IActionQueueSelectionEntity>();
-            Steps = source.Steps?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Steps = source.Steps?.Select(x => x.AsReadOnly(objectMap)).OfType<IActionQueueStepEntity>().ToReadOnly() ??
                 Enumerable.Empty<IActionQueueStepEntity>();
 
             CopyCustomActionQueueData(source);
@@ -169,6 +169,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IActionQueueEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

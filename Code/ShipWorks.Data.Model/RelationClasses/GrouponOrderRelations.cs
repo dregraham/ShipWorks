@@ -30,10 +30,26 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.GrouponOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between GrouponOrderEntity and GrouponOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// GrouponOrder.OrderID - GrouponOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation GrouponOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "GrouponOrderSearch" , true);
+				relation.AddEntityFieldPair(GrouponOrderFields.OrderID, GrouponOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderSearchEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between GrouponOrderEntity and NoteEntity over the 1:n relation they have, using the relation between the fields:
 		/// GrouponOrder.OrderID - Note.EntityID
@@ -91,6 +107,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(GrouponOrderFields.OrderID, OrderPaymentDetailFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderPaymentDetailEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between GrouponOrderEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// GrouponOrder.OrderID - OrderSearch.OrderID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(GrouponOrderFields.OrderID, OrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -193,10 +224,12 @@ namespace ShipWorks.Data.Model.RelationClasses
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
 	internal static class StaticGrouponOrderRelations
 	{
+		internal static readonly IEntityRelation GrouponOrderSearchEntityUsingOrderIDStatic = new GrouponOrderRelations().GrouponOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation NoteEntityUsingEntityIDStatic = new GrouponOrderRelations().NoteEntityUsingEntityID;
 		internal static readonly IEntityRelation OrderChargeEntityUsingOrderIDStatic = new GrouponOrderRelations().OrderChargeEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new GrouponOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new GrouponOrderRelations().OrderPaymentDetailEntityUsingOrderID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingOrderIDStatic = new GrouponOrderRelations().OrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new GrouponOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new GrouponOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new GrouponOrderRelations().CustomerEntityUsingCustomerID;

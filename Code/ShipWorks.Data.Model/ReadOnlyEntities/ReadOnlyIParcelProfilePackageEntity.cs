@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DimsAddWeight = source.DimsAddWeight;
             
             
-            IParcelProfile = source.IParcelProfile?.AsReadOnly(objectMap);
+            IParcelProfile = (IIParcelProfileEntity) source.IParcelProfile?.AsReadOnly(objectMap);
             
 
             CopyCustomIParcelProfilePackageData(source);
@@ -122,6 +122,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IIParcelProfilePackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

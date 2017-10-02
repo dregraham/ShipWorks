@@ -30,16 +30,19 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IThreeDCartOrderSearchEntity> ThreeDCartOrderSearch { get; }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IThreeDCartOrderEntity AsReadOnly();
-
-        /// <summary>
-        /// Get a read only version of the entity
-        /// </summary>
-        new IThreeDCartOrderEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -56,17 +59,18 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IThreeDCartOrderSearchEntity> IThreeDCartOrderEntity.ThreeDCartOrderSearch => ThreeDCartOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IThreeDCartOrderEntity AsReadOnly() =>
+        public override IOrderEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IThreeDCartOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +81,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyThreeDCartOrderEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder() =>
+            (IThreeDCartOrderEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IThreeDCartOrderEntity AsReadOnlyThreeDCartOrder(IDictionary<object, object> objectMap) =>
+            (IThreeDCartOrderEntity) AsReadOnly(objectMap);
+        
     }
 }

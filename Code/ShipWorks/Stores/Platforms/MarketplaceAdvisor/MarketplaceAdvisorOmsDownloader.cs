@@ -7,6 +7,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,9 +20,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
     /// <summary>
     /// Downloader for OMS MarketplaceAdvisor stores
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     [Component]
     public class MarketplaceAdvisorOmsDownloader : StoreDownloader, IMarketplaceAdvisorOmsDownloader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(MarketplaceAdvisorOmsDownloader));
+
         // Download page size
         const int pageSize = 200;
 
@@ -173,7 +181,14 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private async Task<bool> CreateMasterOrder(OMOrder omsOrder)
         {
             // Create a new order instance
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(omsOrder.OrderUid)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
+                return false;
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);
@@ -228,9 +243,16 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         private async Task CreateParcelOrder(OMOrder omsOrder, OMOrderParcel parcel)
         {
             // Create a new order instance with parse information
-            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
+            GenericResult<OrderEntity> result = await InstantiateOrder(new MarketplaceAdvisorOrderNumberIdentifier(
                 omsOrder.OrderUid,
                 Array.IndexOf(omsOrder.Parcels.OrderParcels, parcel) + 1)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", omsOrder.OrderUid, result.Message);
+                return;
+            }
+
+            MarketplaceAdvisorOrderEntity order = (MarketplaceAdvisorOrderEntity) result.Value;
 
             // Setup the basic properties
             LoadCommonOrderProperties(order, omsOrder);

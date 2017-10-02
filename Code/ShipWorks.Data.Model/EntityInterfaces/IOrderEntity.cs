@@ -465,6 +465,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 ShipAddressType { get; }
+        /// <summary> The CombineSplitStatus property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."CombineSplitStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        Interapptive.Shared.Enums.CombineSplitStatusType CombineSplitStatus { get; }
         
         
         ICustomerEntity Customer { get; }
@@ -474,8 +480,11 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IEnumerable<IOrderChargeEntity> OrderCharges { get; }
         IEnumerable<IOrderItemEntity> OrderItems { get; }
         IEnumerable<IOrderPaymentDetailEntity> OrderPaymentDetails { get; }
+        IEnumerable<IOrderSearchEntity> OrderSearch { get; }
         IEnumerable<IShipmentEntity> Shipments { get; }
         IEnumerable<IValidatedAddressEntity> ValidatedAddress { get; }
+
+        
 
         /// <summary>
         /// Get a read only version of the entity
@@ -508,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IEnumerable<IOrderChargeEntity> IOrderEntity.OrderCharges => OrderCharges;
         IEnumerable<IOrderItemEntity> IOrderEntity.OrderItems => OrderItems;
         IEnumerable<IOrderPaymentDetailEntity> IOrderEntity.OrderPaymentDetails => OrderPaymentDetails;
+        IEnumerable<IOrderSearchEntity> IOrderEntity.OrderSearch => OrderSearch;
         IEnumerable<IShipmentEntity> IOrderEntity.Shipments => Shipments;
         IEnumerable<IValidatedAddressEntity> IOrderEntity.ValidatedAddress => ValidatedAddress;
 
@@ -531,5 +541,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyOrderEntity(this, objectMap);
         }
+
+        
     }
 }

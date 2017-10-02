@@ -209,7 +209,6 @@
     <Compile Include="Actions\Scheduling\QuartzNet\QuartzSchedulingEngineTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzNet\ActionJobTest.cs" />
     <Compile Include="Actions\Scheduling\SchedulerTest.cs" />
-    <Compile Include="Actions\Tasks\ActionTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\BackupDatabaseTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\DownloadOrdersTaskTest.cs" />
     <Compile Include="Actions\Tasks\Common\EmailTaskTest.cs" />
@@ -292,7 +291,6 @@
     <Compile Include="Core\RegistryTests.cs" />
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
-    <Compile Include="DatabaseManager.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00_Test.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepositoryTest.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01_Test.cs" />
@@ -606,6 +604,7 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
+    <Compile Include="Stores\Content\Combine\OrderCombineValidatorTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsResponseHandlerTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonMwsWebClientSettingsTest.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonOrderItemEntityTest.cs" />
@@ -658,13 +657,12 @@
     <Compile Include="Stores\Platforms\Shopify\IdentifierTests.cs" />
     <Compile Include="Stores\Platforms\Volusion\VolusionWebClientTest.cs" />
     <Compile Include="Stores\Platforms\Yahoo\YahooEmailOnlineUpdaterTest.cs" />
-    <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
-    <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
+    <Compile Include="Users\CurrentUserSettingsTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -121,15 +121,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IProStoresStoreEntity AsReadOnly();
+        IProStoresStoreEntity AsReadOnlyProStoresStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IProStoresStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IProStoresStoreEntity AsReadOnlyProStoresStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -150,13 +152,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IProStoresStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IProStoresStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -167,5 +169,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyProStoresStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IProStoresStoreEntity AsReadOnlyProStoresStore() =>
+            (IProStoresStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IProStoresStoreEntity AsReadOnlyProStoresStore(IDictionary<object, object> objectMap) =>
+            (IProStoresStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

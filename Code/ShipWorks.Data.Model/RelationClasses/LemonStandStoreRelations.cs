@@ -65,6 +65,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between LemonStandStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// LemonStandStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(LemonStandStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("LemonStandStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between LemonStandStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// LemonStandStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -122,6 +137,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new LemonStandStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new LemonStandStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new LemonStandStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new LemonStandStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

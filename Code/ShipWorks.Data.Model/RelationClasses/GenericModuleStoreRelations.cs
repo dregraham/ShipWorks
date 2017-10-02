@@ -65,6 +65,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between GenericModuleStoreEntity and OrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// GenericModuleStore.StoreID - OrderSearch.StoreID
+		/// </summary>
+		public override IEntityRelation OrderSearchEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "OrderSearch" , true);
+				relation.AddEntityFieldPair(GenericModuleStoreFields.StoreID, OrderSearchFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GenericModuleStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
 		/// <summary>Returns a new IEntityRelation object, between GenericModuleStoreEntity and StatusPresetEntity over the 1:n relation they have, using the relation between the fields:
 		/// GenericModuleStore.StoreID - StatusPreset.StoreID
 		/// </summary>
@@ -152,6 +167,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 	{
 		internal static readonly IEntityRelation DownloadEntityUsingStoreIDStatic = new GenericModuleStoreRelations().DownloadEntityUsingStoreID;
 		internal static readonly IEntityRelation OrderEntityUsingStoreIDStatic = new GenericModuleStoreRelations().OrderEntityUsingStoreID;
+		internal static readonly IEntityRelation OrderSearchEntityUsingStoreIDStatic = new GenericModuleStoreRelations().OrderSearchEntityUsingStoreID;
 		internal static readonly IEntityRelation StatusPresetEntityUsingStoreIDStatic = new GenericModuleStoreRelations().StatusPresetEntityUsingStoreID;
 
 		/// <summary>CTor</summary>

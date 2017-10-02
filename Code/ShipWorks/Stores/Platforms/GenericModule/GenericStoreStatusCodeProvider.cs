@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using log4net;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -38,8 +38,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override object ConvertCodeValue(object value)
         {
-            return StoreUsesNumericStatusCodes ? 
-                ConvertToNumeric(value) : 
+            return StoreUsesNumericStatusCodes ?
+                ConvertToNumeric(value) :
                 ConvertToText(value);
         }
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 return false;
             }
 
-            if (StoreUsesNumericStatusCodes && (code is long || code is int)) 
+            if (StoreUsesNumericStatusCodes && (code is long || code is int))
             {
                 return true;
             }
@@ -75,8 +75,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 GenericModuleStoreType storeType = (GenericModuleStoreType) StoreTypeManager.GetType(Store);
 
-                // Create and initialize the web client 
-                GenericStoreWebClient webClient = storeType.CreateWebClient();
+                // Create and initialize the web client
+                var webClient = storeType.CreateWebClient();
 
                 // execute the request to retrieve statuses
                 GenericModuleResponse response = webClient.GetStatusCodes();
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             get
             {
-                return ((GenericModuleStoreEntity)Store).ModuleOnlineStatusDataType == (int)GenericVariantDataType.Numeric;
+                return ((GenericModuleStoreEntity) Store).ModuleOnlineStatusDataType == (int) GenericVariantDataType.Numeric;
             }
         }
 

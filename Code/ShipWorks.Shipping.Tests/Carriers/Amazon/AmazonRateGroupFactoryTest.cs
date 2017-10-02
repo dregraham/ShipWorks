@@ -7,9 +7,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -23,6 +25,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))
                 .Returns<RateGroup>(x => x);
+
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                    new AmazonServiceTypeEntity()
+                    {
+                        AmazonServiceTypeID = 1,
+                        ApiValue = null
+                    }
+                });
         }
 
         [Fact]
@@ -36,6 +49,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 ShippingServiceOfferId = "Bar"
             });
 
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                                new AmazonServiceTypeEntity()
+                                {
+                                    AmazonServiceTypeID = 1,
+                                    ApiValue = "Foo"
+                                }
+                });
+
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
 
             RateGroup result = testObject.GetRateGroupFromResponse(response);
@@ -44,7 +68,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Equal("UPS", rateResult.Description);
             Assert.Equal(2.34M, rateResult.AmountOrDefault);
             Assert.Equal("Foo", ((AmazonRateTag) rateResult.Tag).ShippingServiceId);
-            Assert.Equal("Bar", ((AmazonRateTag) rateResult.Tag).ShippingServiceOfferId);
         }
 
         [Fact]
@@ -102,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             GetEligibleShippingServicesResponse response = GetEligibleShippingServicesResponse(tAndC, tAndC2);
 
             mock.Mock<IAmazonShippingWebClient>()
-                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<IAmazonMwsWebClientSettings>()))
+                .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonShipmentEntity>()))
                 .Returns(response);
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
@@ -141,8 +164,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             });
 
             AmazonRateGroupFactory testObject = mock.Create<AmazonRateGroupFactory>();
-
-
+            
             RateGroup result = testObject.GetRateGroupFromResponse(response);
             RateResult rateResult = result.Rates.FirstOrDefault();
 
@@ -161,6 +183,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                     ShippingServiceOfferId = "Bar",
                     CarrierName = x == 1 ? "UPS" : "FedEx"
                 }));
+
+            mock.Mock<IAmazonServiceTypeRepository>()
+                .Setup(f => f.Get())
+                .Returns(new List<AmazonServiceTypeEntity>()
+                {
+                    new AmazonServiceTypeEntity()
+                    {
+                        AmazonServiceTypeID = 1,
+                        ApiValue = "Foo"
+                    }
+                });
 
             mock.Mock<IAmazonRateGroupFilter>()
                 .Setup(x => x.Filter(It.IsAny<RateGroup>()))

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Infopia.WizardPages
@@ -16,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.Infopia.WizardPages
     /// <summary>
     /// Base for online update actions for the add store wizard
     /// </summary>
+    /// <remarks>
+    /// THIS STORE IS DEAD
+    /// This store is scheduled for removal as it no longer exists. Do not update this store when making
+    /// all-platform changes.
+    /// </remarks>
     public partial class InfopiaOnlineUpdateActionControl : OnlineUpdateActionControlBase
     {
         /// <summary>
@@ -48,13 +48,13 @@ namespace ShipWorks.Stores.Platforms.Infopia.WizardPages
         /// <summary>
         /// Create the tasks based on what the user has selected
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             if (statusUpdate.Checked)
             {
-                InfopiaOrderUpdateTask task = (InfopiaOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(InfopiaOrderUpdateTask), store).CreateInstance();
+                InfopiaOrderUpdateTask task = (InfopiaOrderUpdateTask) new ActionTaskDescriptorBinding(typeof(InfopiaOrderUpdateTask), store).CreateInstance(lifetimeScope);
                 task.Status = comboStatus.SelectedItem.ToString();
 
                 tasks.Add(task);
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WizardPages
 
             if (shipmentUpdate.Checked)
             {
-                tasks.Add(new ActionTaskDescriptorBinding(typeof(InfopiaShipmentUploadTask), store).CreateInstance());
+                tasks.Add(new ActionTaskDescriptorBinding(typeof(InfopiaShipmentUploadTask), store).CreateInstance(lifetimeScope));
             }
 
             return tasks;

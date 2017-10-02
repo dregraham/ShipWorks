@@ -1,6 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.GenericModule;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.Content

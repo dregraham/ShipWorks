@@ -47,7 +47,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             InsuranceValue = source.InsuranceValue;
             RequestedLabelFormat = source.RequestedLabelFormat;
             
-            Shipment = source.Shipment?.AsReadOnly(objectMap);
+            Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
             
 
@@ -129,6 +129,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IBestRateShipmentEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

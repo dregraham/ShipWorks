@@ -1,29 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI;
-using System.IO;
-using log4net;
-using System.Xml;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using System.Net;
-using Interapptive.Shared.UI;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Utility;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Stores.Platforms.Ebay.Requests;
-using Interapptive.Shared.Business;
+using Autofac;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.UI;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
 {
@@ -32,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
     /// </summary>
     public partial class EBayAccountPage : AddStoreWizardPage
     {
-        // Logger 
+        // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(EBayAccountPage));
 
         /// <summary>
@@ -89,14 +75,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
                 {
                     if (importDialog.Show(this) == DialogResult.OK)
                     {
-                        // A token file has been selected, so we'll import the token from file 
+                        // A token file has been selected, so we'll import the token from file
                         // and use the imported token to configure the eBay store
                         EbayToken token = importDialog.GetToken();
-                        
+
                         store.EBayToken = token.Token;
                         store.EBayTokenExpire = token.ExpirationDate;
                         store.EBayUserID = token.UserId;
-                        
+
                         createTokenControl.CancelWaiting();
                         OnCreateTokenCompleted(null, EventArgs.Empty);
 
@@ -115,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            EbayStoreEntity ebayStore = (EbayStoreEntity)((AddStoreWizard)Wizard).Store;
+            EbayStoreEntity ebayStore = (EbayStoreEntity) ((AddStoreWizard) Wizard).Store;
 
             if (ebayStore.EBayToken.Length == 0)
             {
@@ -131,23 +117,27 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
             // retrieve information from ebay to populate the store description
             try
             {
-                EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(ebayStore));
-
-                UserType eBayUser = webClient.GetUser();
-
-                ebayStore.StoreName = eBayUser.UserID;
-                ebayStore.Email = eBayUser.Email;
-
-                AddressType address = eBayUser.RegistrationAddress;
-                if (address != null)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    ebayStore.Company = address.CompanyName ?? "";
-                    ebayStore.Street1 = address.Street1 ?? "";
-                    ebayStore.Street2 = address.Street2 ?? "";
-                    ebayStore.City = address.CityName ?? "";
-                    ebayStore.StateProvCode = Geography.GetStateProvCode(address.StateOrProvince) ?? "";
-                    ebayStore.PostalCode = address.PostalCode ?? "";
-                    ebayStore.Phone = address.Phone ?? "";
+                    IEbayWebClient webClient = lifetimeScope.Resolve<IEbayWebClient>();
+
+                    var token = EbayToken.FromStore(ebayStore);
+                    UserType eBayUser = webClient.GetUser(token);
+
+                    ebayStore.StoreName = eBayUser.UserID;
+                    ebayStore.Email = eBayUser.Email;
+
+                    AddressType address = eBayUser.RegistrationAddress;
+                    if (address != null)
+                    {
+                        ebayStore.Company = address.CompanyName ?? "";
+                        ebayStore.Street1 = address.Street1 ?? "";
+                        ebayStore.Street2 = address.Street2 ?? "";
+                        ebayStore.City = address.CityName ?? "";
+                        ebayStore.StateProvCode = Geography.GetStateProvCode(address.StateOrProvince) ?? "";
+                        ebayStore.PostalCode = address.PostalCode ?? "";
+                        ebayStore.Phone = address.Phone ?? "";
+                    }
                 }
             }
             catch (EbayException ex)

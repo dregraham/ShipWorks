@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.ApplicationCore.Logging;
-using Interapptive.Shared.Utility;
-using System.Web.Services.Protocols;
-using log4net;
 using System.Globalization;
-using ShipWorks.Shipping;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Connection;
+using System.Linq;
+using System.Web.Services.Protocols;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using InterapptiveResult = Interapptive.Shared.Utility.Result;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
 {
     /// <summary>
     /// Web client for communicating with the AmeriCommerce SOAP api
     /// </summary>
-    public class AmeriCommerceWebClient
+    [Component]
+    public class AmeriCommerceWebClient : IAmeriCommerceWebClient
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(AmeriCommerceWebClient));
@@ -30,15 +34,20 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         Dictionary<int, string> stateCache = new Dictionary<int, string>();
         Dictionary<int, string> countryCache = new Dictionary<int, string>();
 
-        // the store
-        AmeriCommerceStoreEntity store;
+        private readonly AmeriCommerceStoreEntity store;
+        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly ICombineOrderNumberSearchProvider cominedOrderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceWebClient(AmeriCommerceStoreEntity store)
+        public AmeriCommerceWebClient(AmeriCommerceStoreEntity store,
+            AmeriCommerceCombineOrderNumberSearchProvider cominedOrderSearchProvider,
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.store = store;
+            this.shipmentTypeManager = shipmentTypeManager;
+            this.cominedOrderSearchProvider = cominedOrderSearchProvider;
         }
 
         /// <summary>
@@ -372,14 +381,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Updates the online status of orders
         /// </summary>
-        public void UpdateOrderStatus(int orderNumber, int statusCode)
+        public IResult UpdateOrderStatus(long orderNumber, int statusCode)
         {
             try
             {
                 using (AmeriCommerceDatabaseIO service = CreateWebService("UpdateOrderStatus"))
                 {
                     // find the order to be edited
-                    OrderTrans orderTrans = service.Order_GetByKey(orderNumber);
+                    OrderTrans orderTrans = service.Order_GetByKey((int) orderNumber);
 
                     // update the status id
                     orderTrans.orderStatusID = new DataInt32();
@@ -398,39 +407,33 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                         throw new AmeriCommerceException(string.Format("An unknown error occurred while saving order status."));
                     }
                 }
+
+                return InterapptiveResult.FromSuccess();
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException));
+                return InterapptiveResult.FromError(WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException)));
             }
         }
 
         /// <summary>
         /// Uploads the tracking number for shipments related to order OrderNumber
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment)
+        public IResult UploadShipmentDetails(long orderNumber, ShipmentEntity shipment)
         {
-            OrderEntity order = shipment.Order;
-
-            if (order.IsManual)
-            {
-                log.WarnFormat("Not uploading shipment details since order {0} is manual.", order.OrderID);
-                return;
-            }
-
             try
             {
                 using (AmeriCommerceDatabaseIO service = CreateWebService("UploadShipmentDetails"))
                 {
                     // retrieve the order
-                    OrderTrans orderTrans = service.Order_GetByKey(Convert.ToInt32(order.OrderNumber));
+                    OrderTrans orderTrans = service.Order_GetByKey((int) orderNumber);
                     orderTrans = service.Order_FillOrderShippingCollection(orderTrans);
 
                     // get the existing shipment records
                     List<OrderShippingTrans> shipmentRecords = orderTrans.OrderShippingColTrans.ToList();
 
                     // create and populate the OrderShipping record
-                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans(order, shipment);
+                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans((int) orderNumber, shipment);
                     shipmentRecords.Add(shippingTrans);
                     orderTrans.OrderShippingColTrans = shipmentRecords.ToArray();
 
@@ -441,26 +444,28 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     string result = service.Order_Validate(orderTrans);
                     if (string.Compare(result, "ok", true, CultureInfo.InvariantCulture) != 0)
                     {
-                        throw new AmeriCommerceException(string.Format("An error occurred while validating shipment details: {0}", result));
+                        throw new AmeriCommerceException($"An error occurred while validating shipment details: {result}");
                     }
 
                     // perform the save
                     if (!service.Order_Save(orderTrans))
                     {
-                        throw new AmeriCommerceException(string.Format("An unknown error occurred while saving tracking number."));
+                        throw new AmeriCommerceException("An unknown error occurred while saving tracking number.");
                     }
                 }
+
+                return InterapptiveResult.FromSuccess();
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException));
+                return InterapptiveResult.FromError(WebHelper.TranslateWebException(ex, typeof(AmeriCommerceException)));
             }
         }
 
         /// <summary>
         /// Creates the shipping record to be sent to AmeriCommerce
         /// </summary>
-        private OrderShippingTrans CreateOrderShippingTrans(OrderEntity order, ShipmentEntity shipment)
+        private OrderShippingTrans CreateOrderShippingTrans(int orderNumber, ShipmentEntity shipment)
         {
             OrderShippingTrans shippingTrans = new OrderShippingTrans();
 
@@ -468,7 +473,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.IsNew = true;
 
             shippingTrans.OrderID = new DataInt32();
-            shippingTrans.OrderID.Value = Convert.ToInt32(order.OrderNumber);
+            shippingTrans.OrderID.Value = orderNumber;
 
             shippingTrans.NumberOfPackages = new DataInt32();
             shippingTrans.NumberOfPackages.Value = GetPackageCount(shipment);
@@ -491,7 +496,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.ShippingDate = new DataDateTime();
             shippingTrans.ShippingDate.Value = shipment.ShipDate;
 
-            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenSerivceUsed(shipment);
+            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
             shippingTrans.TrackingNumbers = shipment.TrackingNumber;
 
             return shippingTrans;
@@ -509,14 +514,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     shipmentType == ShipmentTypeCode.UpsWorldShip)
                 {
                     // load the particular shipment type details
-                    ShipmentTypeManager.GetType(shipment).LoadShipmentData(shipment, true);
+                    shipmentTypeManager.Get(shipment).LoadShipmentData(shipment, true);
 
                     return shipment.Ups.Packages.Count;
                 }
                 else if (shipmentType == ShipmentTypeCode.FedEx)
                 {
                     // load the particular shipment type details
-                    ShipmentTypeManager.GetType(shipment).LoadShipmentData(shipment, true);
+                    shipmentTypeManager.Get(shipment).LoadShipmentData(shipment, true);
 
                     return shipment.FedEx.Packages.Count;
                 }

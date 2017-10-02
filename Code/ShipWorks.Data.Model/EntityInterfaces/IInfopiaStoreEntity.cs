@@ -31,15 +31,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IInfopiaStoreEntity AsReadOnly();
+        IInfopiaStoreEntity AsReadOnlyInfopiaStore();
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        new IInfopiaStoreEntity AsReadOnly(IDictionary<object, object> objectMap);
+        IInfopiaStoreEntity AsReadOnlyInfopiaStore(IDictionary<object, object> objectMap);
+        
     }
 }
 
@@ -60,13 +62,13 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IInfopiaStoreEntity AsReadOnly() =>
+        public override IStoreEntity AsReadOnly() =>
             AsReadOnly(new Dictionary<object, object>());
 
         /// <summary>
         /// Get a read only version of the entity that handles cyclic references
         /// </summary>
-        public new IInfopiaStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap)
         {
             if (objectMap.ContainsKey(this))
             {
@@ -77,5 +79,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyInfopiaStoreEntity(this, objectMap);
         }
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IInfopiaStoreEntity AsReadOnlyInfopiaStore() =>
+            (IInfopiaStoreEntity) AsReadOnly(new Dictionary<object, object>());
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IInfopiaStoreEntity AsReadOnlyInfopiaStore(IDictionary<object, object> objectMap) =>
+            (IInfopiaStoreEntity) AsReadOnly(objectMap);
+        
     }
 }

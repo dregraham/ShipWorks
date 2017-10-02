@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,31 +30,31 @@ namespace ShipWorks.Data.Connection
         private const int ForeignKeyReferentialIntegrityError = 547;
 
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapter));
 
         // Allows us to use a user-configured database.
-        static CatalogNameOverwriteHashtable catalogNameOverwrites = new CatalogNameOverwriteHashtable();
+        private static CatalogNameOverwriteHashtable catalogNameOverwrites = new CatalogNameOverwriteHashtable();
 
         // Indicates if we should be logging all InfoMessage events from the underlying connection
-        bool logInfoMessages = false;
+        private bool logInfoMessages = false;
 
         // Indicates if the SET IDENTITY INSERT should be set before inserts, allowing pk values to be explicitly set
-        bool identityInsert = false;
+        private bool identityInsert = false;
 
         // Lets us track if any entity is saved in a recursive save operation
-        bool entitySaved = false;
+        private bool entitySaved = false;
 
         // The user passes in the connection to use
-        DbConnection overrideConnection;
+        private DbConnection overrideConnection;
 
         // The active TransactionScope, of the adapter was instructed to be required to be in a transaction
-        System.Transactions.TransactionScope transactionScope;
+        private System.Transactions.TransactionScope transactionScope;
 
         // LLBLgen starts a new "regular" transaction when recursive saving\deleting\updating.  The problem is then if there is an error, it does a direct call to "Rollback",
         // even though it should really wait and see what the wrapping transaction scope vote ends up doing.  This way LLBLgen sees that there is already
         // a regular transaction and doesn't do that.  Doing "StartTransaction" when InSystemTransaction is true is basically just setting the internal
         // isTransactionInProgress flag to true.
-        bool inFakePhysicalTranscation = false;
+        private bool inFakePhysicalTranscation = false;
 
         /// <summary>
         /// Raised when the transaction completes if the adapter participates in an ambient transaction.
@@ -74,13 +75,13 @@ namespace ShipWorks.Data.Connection
             catalogNameOverwrites.Add("ShipWorks", "");
             catalogNameOverwrites.Add("ShipWorksLocal", "");
 
-            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
-
             fieldIsTransactionInProgress = typeof(DataAccessAdapterCore).GetField("_isTransactionInProgress", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (fieldIsTransactionInProgress == null)
             {
                 throw new InvalidOperationException("Could not get _isTransactionInProgress field");
             }
+
+            SetSqlServerCompatibilityLevel(SqlServerCompatibilityLevel.SqlServer2005);
 
             fieldPhysicalTransaction = typeof(DataAccessAdapterCore).GetField("_physicalTransaction", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             if (fieldPhysicalTransaction == null)
@@ -94,7 +95,6 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public SqlAdapter() : this(false)
         {
-
         }
 
         /// <summary>
@@ -131,7 +131,6 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(bool ensureTransacted) :
             this(ensureTransacted, System.Transactions.IsolationLevel.ReadCommitted)
         {
-
         }
 
         /// <summary>
@@ -140,7 +139,6 @@ namespace ShipWorks.Data.Connection
         public SqlAdapter(bool ensureTransacted, System.Transactions.IsolationLevel isolation) :
             this(StartTransactionScopeIfNeeded(ensureTransacted, isolation))
         {
-
         }
 
         /// <summary>
@@ -154,7 +152,7 @@ namespace ShipWorks.Data.Connection
             System.Transactions.Transaction ambient = System.Transactions.Transaction.Current;
             if (ambient != null)
             {
-                ambient.TransactionCompleted += new System.Transactions.TransactionCompletedEventHandler(OnTransactionCompleted);
+                ambient.TransactionCompleted += OnTransactionCompleted;
             }
 
             InitializeCommon();
@@ -175,7 +173,8 @@ namespace ShipWorks.Data.Connection
 
                 return new System.Transactions.TransactionScope(
                     System.Transactions.TransactionScopeOption.Required,
-                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout });
+                    new System.Transactions.TransactionOptions { IsolationLevel = isolation, Timeout = DbCommandProvider.DefaultTimeout },
+                    System.Transactions.TransactionScopeAsyncFlowOption.Enabled);
             }
 
             return null;
@@ -330,7 +329,7 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Called when the current System.Transactions Transaction completes
         /// </summary>
-        void OnTransactionCompleted(object sender, System.Transactions.TransactionEventArgs e)
+        private void OnTransactionCompleted(object sender, System.Transactions.TransactionEventArgs e)
         {
             TransactionCompleted?.Invoke(this, e);
         }
@@ -338,14 +337,18 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Fakes out LLBLGen to thinking a physical transaction is open.  See the docs of the field for information.
         /// </summary>
-        private void StartFakePyhsicalTransationIfNeeded()
+        private IDisposable StartFakePyhsicalTransationIfNeeded()
         {
             if (!inFakePhysicalTranscation && InSystemTransaction)
             {
                 inFakePhysicalTranscation = true;
 
                 fieldIsTransactionInProgress.SetValue(this, true);
+
+                return Disposable.Create(CloseFakePhysicalTransactionIfNeeded);
             }
+
+            return Disposable.Empty;
         }
 
         /// <summary>
@@ -367,7 +370,7 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-        #endregion
+        #endregion Connection \ Transaction
 
         #region InfoMessages
 
@@ -416,7 +419,7 @@ namespace ShipWorks.Data.Connection
             }
         }
 
-        #endregion
+        #endregion InfoMessages
 
         #region Utility
 
@@ -467,20 +470,17 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override bool SaveEntity(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
-                return base.SaveEntity(entityToSave, refetchAfterSave, updateRestriction, recurse);
-            }
-            catch (ORMQueryExecutionException ex)
-            {
-                TranslateException(ex);
-                throw;
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
+                try
+                {
+                    return base.SaveEntity(entityToSave, refetchAfterSave, updateRestriction, recurse);
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    TranslateException(ex);
+                    throw;
+                }
             }
         }
 
@@ -489,20 +489,17 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override async Task<bool> SaveEntityAsync(IEntity2 entityToSave, bool refetchAfterSave, IPredicateExpression updateRestriction, bool recurse, CancellationToken cancellationToken)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
-                return await base.SaveEntityAsync(entityToSave, refetchAfterSave, updateRestriction, recurse, cancellationToken).ConfigureAwait(false);
-            }
-            catch (ORMQueryExecutionException ex)
-            {
-                TranslateException(ex);
-                throw;
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
+                try
+                {
+                    return await base.SaveEntityAsync(entityToSave, refetchAfterSave, updateRestriction, recurse, cancellationToken).ConfigureAwait(false);
+                }
+                catch (ORMQueryExecutionException ex)
+                {
+                    TranslateException(ex);
+                    throw;
+                }
             }
         }
 
@@ -522,15 +519,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int DeleteEntitiesDirectly(string entityName, IRelationPredicateBucket filterBucket)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntitiesDirectly(entityName, filterBucket);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -541,15 +532,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override bool DeleteEntity(IEntity2 entityToDelete, IPredicateExpression deleteRestriction)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntity(entityToDelete, deleteRestriction);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -560,15 +545,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override async Task<bool> DeleteEntityAsync(IEntity2 entityToDelete, IPredicateExpression deleteRestriction, CancellationToken cancellationToken)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return await base.DeleteEntityAsync(entityToDelete, deleteRestriction, cancellationToken).ConfigureAwait(false);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -580,15 +559,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int DeleteEntityCollection(IEntityCollection2 collectionToDelete)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.DeleteEntityCollection(collectionToDelete);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -601,15 +574,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int UpdateEntitiesDirectly(IEntity2 entityWithNewValues, IRelationPredicateBucket filterBucket)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.UpdateEntitiesDirectly(entityWithNewValues, filterBucket);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -619,15 +586,9 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public override int SaveEntityCollection(IEntityCollection2 collectionToSave, bool refetchSavedEntitiesAfterSave, bool recurse)
         {
-            StartFakePyhsicalTransationIfNeeded();
-
-            try
+            using (StartFakePyhsicalTransationIfNeeded())
             {
                 return base.SaveEntityCollection(collectionToSave, refetchSavedEntitiesAfterSave, recurse);
-            }
-            finally
-            {
-                CloseFakePhysicalTransactionIfNeeded();
             }
         }
 
@@ -768,22 +729,11 @@ namespace ShipWorks.Data.Connection
         public static SqlAdapter Create(bool inTransaction) => new SqlAdapter(inTransaction);
 
         /// <summary>
-        /// Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
-        /// Fetches the query specified on the adapter specified. Uses the TEntity type to
-        /// produce an EntityCollection(Of TEntity) for the results to return
+        /// Get this SqlAdapter as an IDataAccessAdapter
         /// </summary>
-        public Task<IEntityCollection2> FetchQueryAsync<T>(EntityQuery<T> query) where T : IEntity2 =>
-            (this as IDataAccessAdapter).FetchQueryAsync<T>(query);
+        public IDataAccessAdapter AsDataAccessAdapter() => this;
 
-        /// <summary>
-        /// SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.Dynamic{``0}).
-        /// Fetches the query specified and returns the results in a list of TElement objects, 
-        /// which are created using the projectorFunc of the query specified.
-        /// </summary>
-        public List<TElement> FetchQuery<TElement>(DynamicQuery<TElement> query) =>
-            (this as IDataAccessAdapter).FetchQuery<TElement>(query);
-
-        #endregion
+        #endregion Utility
 
         #region Identity Inserts
 
@@ -914,6 +864,987 @@ namespace ShipWorks.Data.Connection
             return clone;
         }
 
+        #endregion Identity Inserts
+
+        #region "IDataAccessAdapter extension method explicit implementation"
+        //
+        // Summary:
+        //     Fetches the query as an open data reader.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   behavior:
+        //     The behavior.
+        //
+        // Remarks:
+        //     Ignores nested queries and projection logic embedded in a lambda specification
+        //     in the query. The DataReader returned will contain the resultset of the plain
+        //     SQL query.
+        public IDataReader FetchAsDataReader(DynamicQuery query, CommandBehavior behavior) =>
+            ((IDataAccessAdapter) this).FetchAsDataReader(query, behavior);
+        //
+        // Summary:
+        //     Fetches the specified query into a new DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Returns:
+        //     a new DataTable with the data fetched.
+        public DataTable FetchAsDataTable(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchAsDataTable(query);
+        //
+        // Summary:
+        //     Fetches the specified query into the DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   destination:
+        //     The destination datatable to fetch the data into.
+        //
+        // Returns:
+        //     the destination datatable specified.
+        //
+        // Remarks:
+        //     If the DataTable specified already has columns defined, they have to have compatible
+        //     types and have to be in the same order as the columns in the resultset of the
+        //     query. It's recommended to have columns with the same names as the resultset
+        //     of the query, to be able to convert null values to DBNull.Value.
+        public DataTable FetchAsDataTable(DynamicQuery query, DataTable destination) =>
+            ((IDataAccessAdapter) this).FetchAsDataTable(query, destination);
+        //
+        // Summary:
+        //     Fetches the query as a projection, using the projector specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   projector:
+        //     The projector.
+        //
+        // Remarks:
+        //     Will ignore nested queries. Use with queries without nested / hierarchical queries.
+        //     The projector has to be setup and ready to use when calling this method
+        public void FetchAsProjection(DynamicQuery query, IGeneralDataProjector projector) =>
+            ((IDataAccessAdapter) this).FetchAsProjection(query, projector);
+        //
+        // Summary:
+        //     Fetches the first entity of the set returned by the query and returns that entity,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset, or null if the resultset is empty.
+        public TEntity FetchFirst<TEntity>(EntityQuery<TEntity> query) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchFirst<TEntity>(query);
+        //
+        // Summary:
+        //     Fetches the first object of the set returned by the query and returns that object,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset, or null if the resultset is empty.
+        public T FetchFirst<T>(DynamicQuery<T> query) =>
+            ((IDataAccessAdapter) this).FetchFirst<T>(query);
+        //
+        // Summary:
+        //     Fetches the query specified on the adapter specified. Uses the TEntity type to
+        //     produce an EntityCollection(Of TEntity) for the results to return
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     EntityCollection(Of TEntity) with the results of the query fetch
+        public IEntityCollection2 FetchQuery<TEntity>(EntityQuery<TEntity> query) where TEntity : IEntity2 =>
+            ((IDataAccessAdapter) this).FetchQuery<TEntity>(query);
+        //
+        // Summary:
+        //     Fetches the query specified on the adapter specified into the collectionToFill
+        //     specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   collectionToFill:
+        //     The collection to fill.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        //   TCollection:
+        //     The type of the collection.
+        //
+        // Returns:
+        //     collectionToFill, filled with the query fetch results.
+        //
+        // Remarks:
+        //     Equal to calling adapter.FetchEntityCollection(), so entities already present
+        //     in collectionToFill are left as-is. If the fetch has to take into account a Context,
+        //     the passed collectionToFill has to be assigned to the context before calling
+        //     this method.
+        public TCollection FetchQuery<TEntity, TCollection>(EntityQuery<TEntity> query, TCollection collectionToFill)
+        where TEntity : IEntity2
+        where TCollection : IEntityCollection2 =>
+            ((IDataAccessAdapter) this).FetchQuery(query, collectionToFill);
+        //
+        // Summary:
+        //     Fetches the query specified and returns the results in plain object arrays, one
+        //     object array per returned row of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        public List<object[]> FetchQuery(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchQuery(query);
+        //
+        // Summary:
+        //     Fetches the query specified and returns the results in a list of TElement objects,
+        //     which are created using the projectorFunc of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+        public List<TElement> FetchQuery<TElement>(DynamicQuery<TElement> query) =>
+            ((IDataAccessAdapter) this).FetchQuery<TElement>(query);
+        //
+        // Summary:
+        //     Fetches the query with the projection specified from the source query specified.
+        //     Typically used to fetch a typed view from a stored procedure source.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   projectionDefinition:
+        //     The projection definition.
+        //
+        //   source:
+        //     The source.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+        //
+        // Returns:
+        //     List of TElement instances instantiated from each row in source
+        public List<TElement> FetchQueryFromSource<TElement>(DynamicQuery<TElement> projectionDefinition, IRetrievalQuery source) =>
+            ((IDataAccessAdapter) this).FetchQueryFromSource<TElement>(projectionDefinition, source);
+        //
+        // Summary:
+        //     Fetches a scalar value using the query specified, and returns this value typed
+        //     as TValue, using a cast. The query specified will be converted to a scalar query
+        //     prior to execution.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TValue:
+        //     The type of the value to return.
+        //
+        // Returns:
+        //     the value to fetch
+        //
+        // Remarks:
+        //     Use nullable(Of T) for scalars which are a value type, to avoid crashes when
+        //     the scalar query returns a NULL value.
+        public TValue FetchScalar<TValue>(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchScalar<TValue>(query);
+        //
+        // Summary:
+        //     Fetches the single entity of the set returned by the query and returns that entity.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+        public TEntity FetchSingle<TEntity>(EntityQuery<TEntity> query) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchSingle<TEntity>(query);
+        //
+        // Summary:
+        //     Fetches the single object of the set returned by the query and returns that object.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+        public T FetchSingle<T>(DynamicQuery<T> query) =>
+            ((IDataAccessAdapter) this).FetchSingle<T>(query);
+        #endregion
+
+        #region "IDataAccessAdapter async extension method explicit implementation"
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsDataReader(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery,System.Data.CommandBehavior).
+        //     Fetches the query as an open data reader.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   behavior:
+        //     The behavior.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Remarks:
+        //     Ignores nested queries and projection logic embedded in a lambda specification
+        //     in the query. The DataReader returned will contain the resultset of the plain
+        //     SQL query.
+        public Task<IDataReader> FetchAsDataReaderAsync(DynamicQuery query, CommandBehavior behavior, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchAsDataReaderAsync(query, behavior, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsDataTable(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches the specified query into a new DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Returns:
+        //     a new DataTable with the data fetched.
+        public Task<DataTable> FetchAsDataTableAsync(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchAsDataTableAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsDataTable(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery,System.Data.DataTable).
+        //     Fetches the specified query into the DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   destination:
+        //     The destination datatable to fetch the data into.
+        //
+        // Returns:
+        //     the destination datatable specified.
+        //
+        // Remarks:
+        //     If the DataTable specified already has columns defined, they have to have compatible
+        //     types and have to be in the same order as the columns in the resultset of the
+        //     query. It's recommended to have columns with the same names as the resultset
+        //     of the query, to be able to convert null values to DBNull.Value.
+        public Task<DataTable> FetchAsDataTableAsync(DynamicQuery query, DataTable destination) =>
+            ((IDataAccessAdapter) this).FetchAsDataTableAsync(query, destination);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsDataTable(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery,System.Data.DataTable).
+        //     Fetches the specified query into the DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   destination:
+        //     The destination datatable to fetch the data into.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Returns:
+        //     the destination datatable specified.
+        //
+        // Remarks:
+        //     If the DataTable specified already has columns defined, they have to have compatible
+        //     types and have to be in the same order as the columns in the resultset of the
+        //     query. It's recommended to have columns with the same names as the resultset
+        //     of the query, to be able to convert null values to DBNull.Value.
+
+        [DebuggerStepThrough]
+        public Task<DataTable> FetchAsDataTableAsync(DynamicQuery query, DataTable destination, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchAsDataTableAsync(query, destination, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsDataTable(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches the specified query into a new DataTable specified and returns that datatable.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Returns:
+        //     a new DataTable with the data fetched.
+        public Task<DataTable> FetchAsDataTableAsync(DynamicQuery query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchAsDataTableAsync(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsProjection(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery,SD.LLBLGen.Pro.ORMSupportClasses.IGeneralDataProjector).
+        //     Fetches the query as a projection, using the projector specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   projector:
+        //     The projector.
+        //
+        // Remarks:
+        //     Will ignore nested queries. Use with queries without nested / hierarchical queries.
+        //     The projector has to be setup and ready to use when calling this method
+        public Task FetchAsProjectionAsync(DynamicQuery query, IGeneralDataProjector projector) =>
+            ((IDataAccessAdapter) this).FetchAsProjectionAsync(query, projector);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchAsProjection(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery,SD.LLBLGen.Pro.ORMSupportClasses.IGeneralDataProjector).
+        //     Fetches the query as a projection, using the projector specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   projector:
+        //     The projector.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Remarks:
+        //     Will ignore nested queries. Use with queries without nested / hierarchical queries.
+        //     The projector has to be setup and ready to use when calling this method
+        public Task FetchAsProjectionAsync(DynamicQuery query, IGeneralDataProjector projector, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchAsProjectionAsync(query, projector, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchFirst``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the first object of the set returned by the query and returns that object,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset, or null if the resultset is empty.
+        public Task<T> FetchFirstAsync<T>(DynamicQuery<T> query) =>
+            ((IDataAccessAdapter) this).FetchFirstAsync<T>(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchFirst``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the first object of the set returned by the query and returns that object,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset, or null if the resultset is empty.
+
+        [DebuggerStepThrough]
+        public Task<T> FetchFirstAsync<T>(DynamicQuery<T> query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchFirstAsync<T>(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchFirst``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the first entity of the set returned by the query and returns that entity,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset, or null if the resultset is empty.
+        public Task<TEntity> FetchFirstAsync<TEntity>(EntityQuery<TEntity> query) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchFirstAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchFirst``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the first entity of the set returned by the query and returns that entity,
+        //     if any, otherwise null.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset, or null if the resultset is empty.
+
+        [DebuggerStepThrough]
+        public Task<TEntity> FetchFirstAsync<TEntity>(EntityQuery<TEntity> query, CancellationToken cancellationToken) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchFirstAsync(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the query specified and returns the results in a list of TElement objects,
+        //     which are created using the projectorFunc of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+
+        [DebuggerStepThrough]
+        public Task<List<TElement>> FetchQueryAsync<TElement>(DynamicQuery<TElement> query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchQueryAsync(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``2(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0},``1).
+        //     Fetches the query specified on the adapter specified into the collectionToFill
+        //     specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   collectionToFill:
+        //     The collection to fill.
+        //
+        //   cancellationToken:
+        //     The cancellation token
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        //   TCollection:
+        //     The type of the collection.
+        //
+        // Returns:
+        //     collectionToFill, filled with the query fetch results.
+        //
+        // Remarks:
+        //     Equal to calling adapter.FetchEntityCollection(), so entities already present
+        //     in collectionToFill are left as-is. If the fetch has to take into account a Context,
+        //     the passed collectionToFill has to be assigned to the context before calling
+        //     this method.
+        public Task<TCollection> FetchQueryAsync<TEntity, TCollection>(EntityQuery<TEntity> query, TCollection collectionToFill, CancellationToken cancellationToken)
+        where TEntity : IEntity2
+        where TCollection : IEntityCollection2 =>
+                ((IDataAccessAdapter) this).FetchQueryAsync(query, collectionToFill, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``2(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0},``1).
+        //     Fetches the query specified on the adapter specified into the collectionToFill
+        //     specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   collectionToFill:
+        //     The collection to fill.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        //   TCollection:
+        //     The type of the collection.
+        //
+        // Returns:
+        //     collectionToFill, filled with the query fetch results.
+        //
+        // Remarks:
+        //     Equal to calling adapter.FetchEntityCollection(), so entities already present
+        //     in collectionToFill are left as-is. If the fetch has to take into account a Context,
+        //     the passed collectionToFill has to be assigned to the context before calling
+        //     this method.
+        public Task<TCollection> FetchQueryAsync<TEntity, TCollection>(EntityQuery<TEntity> query, TCollection collectionToFill)
+        where TEntity : IEntity2
+        where TCollection : IEntityCollection2 =>
+                ((IDataAccessAdapter) this).FetchQueryAsync(query, collectionToFill);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the query specified on the adapter specified. Uses the TEntity type to
+        //     produce an EntityCollection(Of TEntity) for the results to return
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     EntityCollection(Of TEntity) with the results of the query fetch
+        public Task<IEntityCollection2> FetchQueryAsync<TEntity>(EntityQuery<TEntity> query, CancellationToken cancellationToken) where TEntity : IEntity2 =>
+            ((IDataAccessAdapter) this).FetchQueryAsync<TEntity>(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches the query specified and returns the results in plain object arrays, one
+        //     object array per returned row of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        public Task<List<object[]>> FetchQueryAsync(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchQueryAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches the query specified and returns the results in plain object arrays, one
+        //     object array per returned row of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+
+        [DebuggerStepThrough]
+        public Task<List<object[]>> FetchQueryAsync(DynamicQuery query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchQueryAsync(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the query specified and returns the results in a list of TElement objects,
+        //     which are created using the projectorFunc of the query specified.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+        public Task<List<TElement>> FetchQueryAsync<TElement>(DynamicQuery<TElement> query) =>
+            ((IDataAccessAdapter) this).FetchQueryAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQuery``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the query specified on the adapter specified. Uses the TEntity type to
+        //     produce an EntityCollection(Of TEntity) for the results to return
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     EntityCollection(Of TEntity) with the results of the query fetch
+        public Task<IEntityCollection2> FetchQueryAsync<TEntity>(EntityQuery<TEntity> query) where TEntity : IEntity2 =>
+            ((IDataAccessAdapter) this).FetchQueryAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQueryFromSource``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0},SD.LLBLGen.Pro.ORMSupportClasses.IRetrievalQuery)
+        //     Fetches the query which projection specified from the source query specified.
+        //     Typically used to fetch a typed view from a stored procedure source.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   projectionDefinition:
+        //     The projection definition.
+        //
+        //   source:
+        //     The source.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+        //
+        // Returns:
+        //     List of TElement instances instantiated from each row in source
+
+        [DebuggerStepThrough]
+        public Task<List<TElement>> FetchQueryFromSourceAsync<TElement>(DynamicQuery<TElement> projectionDefinition, IRetrievalQuery source, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchQueryFromSourceAsync(projectionDefinition, source, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchQueryFromSource``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0},SD.LLBLGen.Pro.ORMSupportClasses.IRetrievalQuery)
+        //     Fetches the query which projection specified from the source query specified.
+        //     Typically used to fetch a typed view from a stored procedure source.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   projectionDefinition:
+        //     The projection definition.
+        //
+        //   source:
+        //     The source.
+        //
+        // Type parameters:
+        //   TElement:
+        //     The type of the element.
+        //
+        // Returns:
+        //     List of TElement instances instantiated from each row in source
+        public Task<List<TElement>> FetchQueryFromSourceAsync<TElement>(DynamicQuery<TElement> projectionDefinition, IRetrievalQuery source) =>
+            ((IDataAccessAdapter) this).FetchQueryFromSourceAsync(projectionDefinition, source);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchScalar``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches a scalar value using the query specified, and returns this value typed
+        //     as TValue, using a cast. The query specified will be converted to a scalar query
+        //     prior to execution.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TValue:
+        //     The type of the value to return.
+        //
+        // Returns:
+        //     the value to fetch
+        //
+        // Remarks:
+        //     Use nullable(Of T) for scalars which are a value type, to avoid crashes when
+        //     the scalar query returns a NULL value.
+        public Task<TValue> FetchScalarAsync<TValue>(DynamicQuery query) =>
+            ((IDataAccessAdapter) this).FetchScalarAsync<TValue>(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchScalar``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery).
+        //     Fetches a scalar value using the query specified, and returns this value typed
+        //     as TValue, using a cast. The query specified will be converted to a scalar query
+        //     prior to execution.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   TValue:
+        //     The type of the value to return.
+        //
+        // Returns:
+        //     the value to fetch
+        //
+        // Remarks:
+        //     Use nullable(Of T) for scalars which are a value type, to avoid crashes when
+        //     the scalar query returns a NULL value.
+
+        [DebuggerStepThrough]
+        public Task<TValue> FetchScalarAsync<TValue>(DynamicQuery query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchScalarAsync<TValue>(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchSingle``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the single object of the set returned by the query and returns that object.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+
+        [DebuggerStepThrough]
+        public Task<T> FetchSingleAsync<T>(DynamicQuery<T> query, CancellationToken cancellationToken) =>
+            ((IDataAccessAdapter) this).FetchSingleAsync<T>(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchSingle``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.DynamicQuery{``0}).
+        //     Fetches the single object of the set returned by the query and returns that object.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   T:
+        //
+        // Returns:
+        //     the first object in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+        public Task<T> FetchSingleAsync<T>(DynamicQuery<T> query) =>
+            ((IDataAccessAdapter) this).FetchSingleAsync(query);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchSingle``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the single entity of the set returned by the query and returns that entity.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        //   cancellationToken:
+        //     The cancellation token.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+
+        [DebuggerStepThrough]
+        public Task<TEntity> FetchSingleAsync<TEntity>(EntityQuery<TEntity> query, CancellationToken cancellationToken) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchSingleAsync(query, cancellationToken);
+        //
+        // Summary:
+        //     Async variant of SD.LLBLGen.Pro.QuerySpec.Adapter.AdapterExtensionMethods.FetchSingle``1(SD.LLBLGen.Pro.ORMSupportClasses.IDataAccessAdapter,SD.LLBLGen.Pro.QuerySpec.EntityQuery{``0}).
+        //     Fetches the single entity of the set returned by the query and returns that entity.
+        //     If there are no elements or more than 1 element, a NotSupportedException will
+        //     be thrown.
+        //
+        // Parameters:
+        //   adapter:
+        //     The adapter.
+        //
+        //   query:
+        //     The query.
+        //
+        // Type parameters:
+        //   TEntity:
+        //     The type of the entity.
+        //
+        // Returns:
+        //     the first entity in the resultset
+        //
+        // Exceptions:
+        //   T:System.NotSupportedException:
+        //
+        //   T:System.NotSupportedException:
+        //     Thrown if the resultset has 0 or 2 or more elements, as Single requires a single
+        //     value in the resultset.
+        public Task<TEntity> FetchSingleAsync<TEntity>(EntityQuery<TEntity> query) where TEntity : EntityBase2, IEntity2 =>
+            ((IDataAccessAdapter) this).FetchSingleAsync(query);
         #endregion
     }
 }

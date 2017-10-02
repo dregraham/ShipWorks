@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive;
 using System.Threading;
-using Autofac;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -42,14 +43,11 @@ namespace ShipWorks.Actions
         public event ActionProcessedEventHandler ActionProcessed;
 
         /// <summary>
-        /// Createa a new instance of the processor that will use the given gateway for its queue source
+        /// Create a new instance of the processor that will use the given gateway for its queue source
         /// </summary>
         public ActionProcessor(ActionQueueGateway gateway)
         {
-            if (gateway == null)
-            {
-                throw new ArgumentNullException("gateway");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(gateway, nameof(gateway));
 
             this.gateway = gateway;
         }
@@ -62,6 +60,8 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Run any tasks that have been queued for running.  This method does not wait for the work to complete, the work is put on a background thread.
         /// </summary>
+        [SuppressMessage("Interapptive", "SW0001: Threads should be wrapped in an ExceptionMonitor",
+            Justification = "We are calling WrapWorkItem, but using the Async version")]
         public static void StartProcessing()
         {
             lock (runningLock)
@@ -74,7 +74,7 @@ namespace ShipWorks.Actions
 
                 if (ApplicationBusyManager.TryOperationStarting("running actions", out busyToken))
                 {
-                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapWorkItem(WorkerThread));
+                    ThreadPool.QueueUserWorkItem(ExceptionMonitor.WrapAsyncWorkItem(WorkerThread));
                 }
             }
         }
@@ -82,7 +82,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Worker thread for running action tasks
         /// </summary>
-        private static async void WorkerThread(object state)
+        private static async Task WorkerThread(object state)
         {
             try
             {
@@ -94,11 +94,11 @@ namespace ShipWorks.Actions
                     {
                         foreach (ActionProcessor actionProcessor in lifetimeScope.Resolve<IActionProcessorFactory>().CreateStandard())
                         {
-                            actionProcessorTasks.Add(StartTask(() =>
+                            actionProcessorTasks.Add(StartTask(async () =>
                             {
                                 if (actionProcessor.AnyWorkToDo())
                                 {
-                                    actionProcessor.ProcessQueues();
+                                    await actionProcessor.ProcessQueues().ConfigureAwait(false);
                                 }
                             }));
                         }
@@ -118,9 +118,9 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Execute the func in a new thread
+        /// Execute the function in a new thread
         /// </summary>
-        private static Task StartTask(Action processQueue)
+        private static Task StartTask(Func<Task> processQueue)
         {
             if (Program.ExecutionMode.IsUIDisplayed)
             {
@@ -147,7 +147,7 @@ namespace ShipWorks.Actions
             thread.Start();
             return tcs.Task;
         }
-        
+
         /// <summary>
         /// See if there is any work to do, and if so, cleanup any abandoned queues
         /// </summary>
@@ -217,7 +217,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Process all the queues returned by the configured gateway
         /// </summary>
-        public void ProcessQueues()
+        public async Task ProcessQueues()
         {
             // Make sure we have the latest set of actions
             ActionManager.CheckForChangesNeeded();
@@ -252,14 +252,10 @@ namespace ShipWorks.Actions
                                 ActionQueueEntity queueAtStart = EntityUtility.CloneEntity(runner.ActionQueue);
 
                                 // Run the queue
-                                ActionRunnerResult result = runner.RunQueue();
+                                ActionRunnerResult result = await runner.RunQueue().ConfigureAwait(false);
 
                                 // Raise the event
-                                ActionProcessedEventHandler handler = ActionProcessed;
-                                if (handler != null)
-                                {
-                                    handler(this, new ActionProcessedEventArgs(queueID, result, queueAtStart, EntityUtility.CloneEntity(runner.ActionQueue)));
-                                }
+                                ActionProcessed?.Invoke(this, new ActionProcessedEventArgs(queueID, result, queueAtStart, EntityUtility.CloneEntity(runner.ActionQueue)));
                             }
 
                             // If the the postponed count goes down, it means the queue consumed some previously postponed tasks.  When that happens,
@@ -295,7 +291,7 @@ namespace ShipWorks.Actions
                     }
 
                     // If there are still postponed steps in the context, we have to force them to complete with what they can now
-                } while (FlushPostponedQueues(context));
+                } while (await FlushPostponedQueues(context).ConfigureAwait(false));
             }
         }
 
@@ -320,7 +316,7 @@ namespace ShipWorks.Actions
         /// Flush all the postponed queues in the context, forcing them to complete whether they are "full" or not.  Returns true if there were
         /// any to flush, and false otherwise.
         /// </summary>
-        private bool FlushPostponedQueues(ActionProcessingContext context)
+        private async Task<bool> FlushPostponedQueues(ActionProcessingContext context)
         {
             if (context.Postponements.Count == 0)
             {
@@ -355,13 +351,9 @@ namespace ShipWorks.Actions
             // Run the queue
             using (ActionRunner runner = new ActionRunner(postponement.Queue, context))
             {
-                ActionRunnerResult result = runner.RunQueue();
+                ActionRunnerResult result = await runner.RunQueue().ConfigureAwait(false);
 
-                ActionProcessedEventHandler handler = ActionProcessed;
-                if (handler != null)
-                {
-                    handler(this, new ActionProcessedEventArgs(postponement.Queue.ActionQueueID, result, queueAtStart, EntityUtility.CloneEntity(runner.ActionQueue)));
-                }
+                ActionProcessed?.Invoke(this, new ActionProcessedEventArgs(postponement.Queue.ActionQueueID, result, queueAtStart, EntityUtility.CloneEntity(runner.ActionQueue)));
             }
 
             context.FlushingPostponed = false;

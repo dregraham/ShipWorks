@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Etsy.CoreExtensions.Actions;
 
 namespace ShipWorks.Stores.Platforms.Etsy.WizardPages
@@ -31,14 +26,14 @@ namespace ShipWorks.Stores.Platforms.Etsy.WizardPages
         /// <summary>
         /// Create the tasks the user has selected from the UI
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             List<ActionTask> tasks = new List<ActionTask>();
 
             // Shipment update task
             if (paidCheckBox.Checked || shippedCheckBox.Checked)
             {
-                EtsyUploadTask statusTask = (EtsyUploadTask)new ActionTaskDescriptorBinding(typeof(EtsyUploadTask), store).CreateInstance();
+                EtsyUploadTask statusTask = (EtsyUploadTask) new ActionTaskDescriptorBinding(typeof(EtsyUploadTask), store).CreateInstance(lifetimeScope);
 
                 statusTask.WithComment = shippedCheckBox.Checked && withComment.Checked;
                 statusTask.Comment = shippedCheckBox.Checked ? tokenBox.Text : string.Empty;
@@ -61,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.WizardPages
         }
 
         /// <summary>
-        /// Handles ShippedCheckBoxCheckChanged. 
+        /// Handles ShippedCheckBoxCheckChanged.
         /// </summary>
         private void OnShippedCheckBoxCheckedChanged(object sender, EventArgs e)
         {

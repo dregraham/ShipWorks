@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -25,23 +26,23 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         }
 
         [Fact]
-        public void Create_DelegatesToDownloaderStartingPoint()
+        public async Task Create_DelegatesToDownloaderStartingPoint()
         {
             var store = mock.Create<IBigCommerceStoreEntity>();
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            testObject.Create(store, BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            await testObject.Create(store, BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             mock.Mock<IDownloadStartingPoint>().Verify(x => x.OrderDate(store));
             mock.Mock<IDownloadStartingPoint>().Verify(x => x.OnlineLastModified(store));
         }
 
         [Fact]
-        public void Create_BothToDatesShouldBeNow()
+        public async Task Create_BothToDatesShouldBeNow()
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(now, result.LastCreatedToDate);
             Assert.Equal(now, result.LastModifiedToDate);
@@ -50,23 +51,23 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         [Theory]
         [InlineData("2017-04-22 10:04:06Z", "2017-04-22 10:04:06Z")]
         [InlineData("2017-04-22 10:04:06-600", "2017-04-22 16:04:06Z")]
-        public void Create_CreatedDateFromShouldBeSet_WhenStartingPointReturnsValue(string databaseDate, string expected)
+        public async Task Create_CreatedDateFromShouldBeSet_WhenStartingPointReturnsValue(string databaseDate, string expected)
         {
             var date = DateTime.Parse(databaseDate);
-            mock.Mock<IDownloadStartingPoint>().Setup(x => x.OrderDate(It.IsAny<IStoreEntity>())).Returns(date);
+            mock.Mock<IDownloadStartingPoint>().Setup(x => x.OrderDate(It.IsAny<IStoreEntity>())).ReturnsAsync(date);
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(expected, result.LastCreatedFromDate.ToString("u"));
         }
 
         [Fact]
-        public void Create_CreatedDateFromShouldBeSixMonthsAgo_WhenStartingPointReturnsNull()
+        public async Task Create_CreatedDateFromShouldBeSixMonthsAgo_WhenStartingPointReturnsNull()
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(new DateTime(2016, 10, 23, 8, 12, 6, DateTimeKind.Utc), result.LastCreatedFromDate);
         }
@@ -74,33 +75,33 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         [Theory]
         [InlineData("2017-04-22 10:04:06Z", "2017-04-22 10:04:06Z")]
         [InlineData("2017-04-22 10:04:06-600", "2017-04-22 16:04:06Z")]
-        public void Create_ModifiedDateFromShouldBeSet_WhenStartingPointReturnsValue(string databaseDate, string expected)
+        public async Task Create_ModifiedDateFromShouldBeSet_WhenStartingPointReturnsValue(string databaseDate, string expected)
         {
             var date = DateTime.Parse(databaseDate);
-            mock.Mock<IDownloadStartingPoint>().Setup(x => x.OnlineLastModified(It.IsAny<IStoreEntity>())).Returns(date);
+            mock.Mock<IDownloadStartingPoint>().Setup(x => x.OnlineLastModified(It.IsAny<IStoreEntity>())).ReturnsAsync(date);
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(expected, result.LastModifiedFromDate.ToString("u"));
         }
 
         [Fact]
-        public void Create_ModifiedDateFromShouldBeSixMonthsAgo_WhenStartingPointReturnsNull()
+        public async Task Create_ModifiedDateFromShouldBeSixMonthsAgo_WhenStartingPointReturnsNull()
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(new DateTime(2016, 10, 23, 8, 12, 6, DateTimeKind.Utc), result.LastModifiedFromDate);
         }
 
         [Fact]
-        public void Create_PageDetails_AreSet()
+        public async Task Create_PageDetails_AreSet()
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(1, result.Page);
             Assert.Equal(50, result.PageSize);

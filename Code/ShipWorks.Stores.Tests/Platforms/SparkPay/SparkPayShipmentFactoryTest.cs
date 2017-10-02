@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                Shipment result = testObject.Create(shipment);
+                Shipment result = testObject.Create(shipment, shipment.Order.OrderNumber);
 
                 Assert.Equal("USPS foo", result.ShipmentName);
             }
@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                Shipment result = testObject.Create(shipment);
+                Shipment result = testObject.Create(shipment, shipment.Order.OrderNumber);
 
                 Assert.Equal("USPS foo", result.ShippingMethod);
             }
@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                Shipment result = testObject.Create(shipment);
+                Shipment result = testObject.Create(shipment, shipment.Order.OrderNumber);
 
                 Assert.Equal(shipment.TrackingNumber, result.TrackingNumbers);
             }
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                testObject.Create(shipment);
+                testObject.Create(shipment, shipment.Order.OrderNumber);
 
                 shippingManager.Verify(s => s.GetOverriddenServiceUsed(shipment), Times.Once);
             }
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.SparkPay
                     Order = new OrderEntity { OrderNumber = 123 }
                 };
 
-                Shipment result = testObject.Create(shipment);
+                Shipment result = testObject.Create(shipment, shipment.Order.OrderNumber);
 
                 Assert.Equal("FedEx FedEx Priority Overnight", result.ShippingMethod);
             }

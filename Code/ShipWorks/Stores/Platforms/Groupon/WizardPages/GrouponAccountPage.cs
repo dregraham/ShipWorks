@@ -1,9 +1,11 @@
-﻿using System.Windows.Forms;
-using System;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Wizard;
+﻿using System;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
 {
@@ -50,10 +52,14 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
 
             try
             {
-                GrouponWebClient client = new GrouponWebClient(store);
-                //Check to see if we have access to Groupon with the new creds
-                //Ask for some orders
-                client.GetOrders(DateTime.UtcNow, 1);
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var client = lifetimeScope.Resolve<IGrouponWebClient>();
+
+                    //Check to see if we have access to Groupon with the new creds
+                    //Ask for some orders
+                    client.GetOrders(store, DateTime.UtcNow, 1);
+                }
             }
             catch (GrouponException ex)
             {

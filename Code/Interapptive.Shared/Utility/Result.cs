@@ -14,12 +14,28 @@ namespace Interapptive.Shared.Utility
         {
             Message = message;
             Success = success;
+            Exception = null;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        private Result(bool success, Exception exception)
+        {
+            Message = exception?.Message;
+            Exception = exception;
+            Success = success;
         }
 
         /// <summary>
         /// Message accompanying the object
         /// </summary>
         public string Message { get; }
+
+        /// <summary>
+        /// Exception accompanying the object
+        /// </summary>
+        public Exception Exception { get; }
 
         /// <summary>
         /// Whether or not the operation was a success
@@ -35,7 +51,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get a successful result
         /// </summary>
-        public static Result FromSuccess() => new Result(true, null);
+        public static Result FromSuccess() => new Result(true, (string) null);
 
         /// <summary>
         /// Get an error result
@@ -45,6 +61,12 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get an error result
         /// </summary>
-        public static Result FromError(Exception ex) => new Result(false, ex.Message);
+        public static Result FromError(Exception ex) => new Result(false, ex);
+
+        /// <summary>
+        /// Call a method and handle its exception
+        /// </summary>
+        public static ExceptionResultHandler<TException> Handle<TException>() where TException : Exception =>
+            new ExceptionResultHandler<TException>();
     }
 }

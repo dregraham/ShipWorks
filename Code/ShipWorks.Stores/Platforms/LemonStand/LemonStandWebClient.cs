@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;

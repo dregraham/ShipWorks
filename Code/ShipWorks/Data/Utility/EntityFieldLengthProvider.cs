@@ -369,7 +369,6 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.AmazonShipmentCarrierName: return AmazonShipmentFields.CarrierName;
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonShipmentFields.ShippingServiceID;
                 case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonShipmentFields.ShippingServiceName;
-                case EntityFieldLengthSource.AmazonShipmentShippingServiceOfferID: return AmazonShipmentFields.ShippingServiceOfferID;
 
                 case EntityFieldLengthSource.OdbcStoreCustomQuery: return OdbcStoreFields.UploadColumnSource;
                     

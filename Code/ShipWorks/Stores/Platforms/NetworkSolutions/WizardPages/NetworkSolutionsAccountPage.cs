@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions.WizardPages
 {
@@ -67,10 +61,10 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WizardPages
 
             // retrieve store details
             Cursor.Current = Cursors.WaitCursor;
-            NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient(store);
+            NetworkSolutionsWebClient webClient = new NetworkSolutionsWebClient();
             try
             {
-                SiteSettingType site = webClient.GetSiteSettings();
+                SiteSettingType site = webClient.GetSiteSettings(store);
 
                 store.Company = site.CompanyName;
                 store.StoreName = site.CompanyName;

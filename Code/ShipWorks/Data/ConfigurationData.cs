@@ -1,5 +1,4 @@
 using System.Threading;
-using Interapptive.Shared.Enums;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -91,29 +90,32 @@ namespace ShipWorks.Data
         /// </summary>
         public static void CreateInstance(SqlAdapter adapter)
         {
-            ConfigurationEntity config = new ConfigurationEntity();
-            config.ConfigurationID = true;
+            ConfigurationEntity newConfig = new ConfigurationEntity()
+            {
+                ConfigurationID = true,
 
-            config.LogOnMethod = (int) LogonMethod.SelectUsername;
-            config.AddressCasing = true;
+                LogOnMethod = (int) LogonMethod.SelectUsername,
+                AddressCasing = true,
 
-            config.CustomerCompareEmail = true;
-            config.CustomerCompareAddress = false;
+                CustomerCompareEmail = true,
+                CustomerCompareAddress = false,
 
-            config.CustomerUpdateBilling = true;
-            config.CustomerUpdateShipping = true;
+                CustomerUpdateBilling = true,
+                CustomerUpdateShipping = true,
 
-            config.CustomerUpdateModifiedBilling = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
-            config.CustomerUpdateModifiedShipping = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy;
+                CustomerUpdateModifiedBilling = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy,
+                CustomerUpdateModifiedShipping = (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy,
 
-            config.AuditNewOrders = false;
-            config.AuditDeletedOrders = false;
+                AuditNewOrders = false,
+                AuditDeletedOrders = false,
 
-            config.CustomerKey = string.Empty;
+                CustomerKey = string.Empty,
 
-            config.UseParallelActionQueue = true;
+                UseParallelActionQueue = true,
+                AllowEbayCombineLocally = false
+            };
 
-            adapter.SaveEntity(config);
+            adapter.SaveEntity(newConfig);
         }
     }
 }

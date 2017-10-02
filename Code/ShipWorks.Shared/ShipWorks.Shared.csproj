@@ -139,6 +139,7 @@
     <Compile Include="Stores\StoreTypeIdentityAttribute.cs" />
     <Compile Include="Templates\TemplateBuiltinFolders.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Users\DialogSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

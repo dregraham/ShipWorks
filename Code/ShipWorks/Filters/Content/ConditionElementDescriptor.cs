@@ -54,7 +54,8 @@ namespace ShipWorks.Filters.Content
 
             bool validNamespace = 
                 type.Namespace.StartsWith("ShipWorks.Filters.Content.Conditions") ||
-                type.Namespace.EndsWith("CoreExtensions.Filters");
+                type.Namespace.EndsWith("CoreExtensions.Filters") ||
+                type.Namespace.EndsWith("CoreExtensions.Filters.Orders");
 
             Debug.Assert(validNamespace,
                 @"When obfuscated, only types in the above namespaces will work.  This is due to the xr option we use with demeanor.  If a type truly

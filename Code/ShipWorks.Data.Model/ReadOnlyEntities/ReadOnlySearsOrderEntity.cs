@@ -44,6 +44,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            SearsOrderSearch = source.SearsOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<ISearsOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<ISearsOrderSearchEntity>();
 
             CopyCustomSearsOrderData(source);
         }
@@ -82,15 +84,29 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
+        public IEnumerable<ISearsOrderSearchEntity> SearsOrderSearch { get; }
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ISearsOrderEntity AsReadOnly() => this;
+        public override IOrderEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new ISearsOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IOrderEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public ISearsOrderEntity AsReadOnlySearsOrder() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public ISearsOrderEntity AsReadOnlySearsOrder(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

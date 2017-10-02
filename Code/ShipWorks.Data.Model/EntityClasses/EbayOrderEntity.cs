@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<EbayCombinedOrderRelationEntity> _ebayCombinedOrderRelation;
+		private EntityCollection<EbayOrderSearchEntity> _ebayOrderSearch;
 		private EntityCollection<EbayStoreEntity> _ebayStoreCollectionViaEbayCombinedOrderRelation;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -52,6 +53,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Store = "Store";
 			/// <summary>Member name EbayCombinedOrderRelation</summary>
 			public static readonly string EbayCombinedOrderRelation = "EbayCombinedOrderRelation";
+			/// <summary>Member name EbayOrderSearch</summary>
+			public static readonly string EbayOrderSearch = "EbayOrderSearch";
 			/// <summary>Member name Notes</summary>
 			public static readonly string Notes = "Notes";
 			/// <summary>Member name OrderCharges</summary>
@@ -60,6 +63,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string OrderItems = "OrderItems";
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name Shipments</summary>
 			public static readonly string Shipments = "Shipments";
 			/// <summary>Member name ValidatedAddress</summary>
@@ -131,6 +136,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_ebayCombinedOrderRelation = (EntityCollection<EbayCombinedOrderRelationEntity>)info.GetValue("_ebayCombinedOrderRelation", typeof(EntityCollection<EbayCombinedOrderRelationEntity>));
+				_ebayOrderSearch = (EntityCollection<EbayOrderSearchEntity>)info.GetValue("_ebayOrderSearch", typeof(EntityCollection<EbayOrderSearchEntity>));
 				_ebayStoreCollectionViaEbayCombinedOrderRelation = (EntityCollection<EbayStoreEntity>)info.GetValue("_ebayStoreCollectionViaEbayCombinedOrderRelation", typeof(EntityCollection<EbayStoreEntity>));
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -149,6 +155,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayCombinedOrderRelation":
 					this.EbayCombinedOrderRelation.Add((EbayCombinedOrderRelationEntity)entity);
+					break;
+				case "EbayOrderSearch":
+					this.EbayOrderSearch.Add((EbayOrderSearchEntity)entity);
 					break;
 				case "EbayStoreCollectionViaEbayCombinedOrderRelation":
 					this.EbayStoreCollectionViaEbayCombinedOrderRelation.IsReadOnly = false;
@@ -179,6 +188,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayCombinedOrderRelation":
 					toReturn.Add(Relations.EbayCombinedOrderRelationEntityUsingOrderID);
+					break;
+				case "EbayOrderSearch":
+					toReturn.Add(Relations.EbayOrderSearchEntityUsingOrderID);
 					break;
 				case "EbayStoreCollectionViaEbayCombinedOrderRelation":
 					toReturn.Add(Relations.EbayCombinedOrderRelationEntityUsingOrderID, "EbayOrderEntity__", "EbayCombinedOrderRelation_", JoinHint.None);
@@ -216,6 +228,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "EbayCombinedOrderRelation":
 					this.EbayCombinedOrderRelation.Add((EbayCombinedOrderRelationEntity)relatedEntity);
 					break;
+				case "EbayOrderSearch":
+					this.EbayOrderSearch.Add((EbayOrderSearchEntity)relatedEntity);
+					break;
 				default:
 					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
@@ -232,6 +247,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "EbayCombinedOrderRelation":
 					this.PerformRelatedEntityRemoval(this.EbayCombinedOrderRelation, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "EbayOrderSearch":
+					this.PerformRelatedEntityRemoval(this.EbayOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				default:
 					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
@@ -264,6 +282,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.EbayCombinedOrderRelation);
+			toReturn.Add(this.EbayOrderSearch);
 			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
@@ -294,6 +313,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_ebayCombinedOrderRelation", ((_ebayCombinedOrderRelation!=null) && (_ebayCombinedOrderRelation.Count>0) && !this.MarkedForDeletion)?_ebayCombinedOrderRelation:null);
+				info.AddValue("_ebayOrderSearch", ((_ebayOrderSearch!=null) && (_ebayOrderSearch.Count>0) && !this.MarkedForDeletion)?_ebayOrderSearch:null);
 				info.AddValue("_ebayStoreCollectionViaEbayCombinedOrderRelation", ((_ebayStoreCollectionViaEbayCombinedOrderRelation!=null) && (_ebayStoreCollectionViaEbayCombinedOrderRelation.Count>0) && !this.MarkedForDeletion)?_ebayStoreCollectionViaEbayCombinedOrderRelation:null);
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -326,6 +346,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'EbayOrderSearch' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoEbayOrderSearch()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(EbayOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			return bucket;
+		}
+
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'EbayStore' to this entity.</summary>
 		/// <returns></returns>
 		public virtual IRelationPredicateBucket GetRelationInfoEbayStoreCollectionViaEbayCombinedOrderRelation()
@@ -349,6 +378,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._ebayCombinedOrderRelation);
+			collectionsQueue.Enqueue(this._ebayOrderSearch);
 			collectionsQueue.Enqueue(this._ebayStoreCollectionViaEbayCombinedOrderRelation);
 		}
 		
@@ -358,6 +388,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._ebayCombinedOrderRelation = (EntityCollection<EbayCombinedOrderRelationEntity>) collectionsQueue.Dequeue();
+			this._ebayOrderSearch = (EntityCollection<EbayOrderSearchEntity>) collectionsQueue.Dequeue();
 			this._ebayStoreCollectionViaEbayCombinedOrderRelation = (EntityCollection<EbayStoreEntity>) collectionsQueue.Dequeue();
 
 		}
@@ -368,6 +399,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			bool toReturn = false;
 			toReturn |=(this._ebayCombinedOrderRelation != null);
+			toReturn |=(this._ebayOrderSearch != null);
 			toReturn |= (this._ebayStoreCollectionViaEbayCombinedOrderRelation != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
@@ -379,6 +411,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EbayCombinedOrderRelationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayCombinedOrderRelationEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EbayOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderSearchEntityFactory))) : null);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<EbayStoreEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayStoreEntityFactory))) : null);
 		}
 #endif
@@ -388,6 +421,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = base.GetRelatedData();
 			toReturn.Add("EbayCombinedOrderRelation", _ebayCombinedOrderRelation);
+			toReturn.Add("EbayOrderSearch", _ebayOrderSearch);
 			toReturn.Add("EbayStoreCollectionViaEbayCombinedOrderRelation", _ebayStoreCollectionViaEbayCombinedOrderRelation);
 			return toReturn;
 		}
@@ -490,6 +524,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public static IPrefetchPathElement2 PrefetchPathEbayCombinedOrderRelation
 		{
 			get	{ return new PrefetchPathElement2( new EntityCollection<EbayCombinedOrderRelationEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayCombinedOrderRelationEntityFactory))), (IEntityRelation)GetRelationsForField("EbayCombinedOrderRelation")[0], (int)ShipWorks.Data.Model.EntityType.EbayOrderEntity, (int)ShipWorks.Data.Model.EntityType.EbayCombinedOrderRelationEntity, 0, null, null, null, null, "EbayCombinedOrderRelation", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayOrderSearch' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathEbayOrderSearch
+		{
+			get	{ return new PrefetchPathElement2( new EntityCollection<EbayOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(EbayOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("EbayOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.EbayOrderEntity, (int)ShipWorks.Data.Model.EntityType.EbayOrderSearchEntity, 0, null, null, null, null, "EbayOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EbayStore' for this entity.</summary>
@@ -774,6 +815,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public virtual EntityCollection<EbayCombinedOrderRelationEntity> EbayCombinedOrderRelation
 		{
 			get { return GetOrCreateEntityCollection<EbayCombinedOrderRelationEntity, EbayCombinedOrderRelationEntityFactory>("EbayOrder", true, false, ref _ebayCombinedOrderRelation);	}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'EbayOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
+		[TypeContainedAttribute(typeof(EbayOrderSearchEntity))]
+		public virtual EntityCollection<EbayOrderSearchEntity> EbayOrderSearch
+		{
+			get { return GetOrCreateEntityCollection<EbayOrderSearchEntity, EbayOrderSearchEntityFactory>("EbayOrder", true, false, ref _ebayOrderSearch);	}
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EbayStoreEntity' which are related to this entity via a relation of type 'm:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

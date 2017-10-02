@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Data.SqlClient;
-using ShipWorks.Tests.Shared;
+using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
+using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Jet
@@ -24,53 +28,84 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new JetStoreEntity();
 
-            order = new OrderEntity() {OrderNumber = 42};
+            order = new OrderEntity() { OrderNumber = 42 };
             shipment = new ShipmentEntity { Order = order };
             mock.Mock<IOrderManager>()
                 .Setup(m => m.GetLatestActiveShipment(It.IsAny<long>()))
                 .Returns(() => shipment);
+
+            mock.Mock<IJetOrderSearchProvider>()
+                .Setup(x => x.GetOrderIdentifiers(It.IsAny<IOrderEntity>()))
+                .ReturnsAsync(new[] { "foo" });
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_DoesNotUpdateShipmentDetails_WhenOrderIsManual()
+        public async Task UpdateShipmentDetailsWithShipment_DelegatesToOrderSearchProvider()
         {
-            order.IsManual = true;
-
             testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(42, store);
+            await testObject.UpdateShipmentDetails(42, store);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Never);
+            mock.Mock<IJetOrderSearchProvider>()
+                .Verify(x => x.GetOrderIdentifiers(order));
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_CallsUpdateShipmentDetails_WhenOrderIsNotManual()
+        public async Task UpdateShipmentDetailsWithShipment_DoesNotSaveOrder_WhenNoOrdersFound()
         {
-            testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(42, store);
+            mock.Mock<IJetOrderSearchProvider>()
+                .Setup(x => x.GetOrderIdentifiers(It.IsAny<IOrderEntity>()))
+                .ReturnsAsync(Enumerable.Empty<string>());
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Once);
+            testObject = mock.Create<JetOnlineUpdater>();
+            await testObject.UpdateShipmentDetails(42, store);
+
+            mock.Mock<IOrderRepository>()
+                .Verify(x => x.Save(It.IsAny<OrderEntity>()), Times.Never);
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_SetsOnlineStatusToComplete()
+        public async Task UpdateShipmentDetailsWithShipment_UploadsMultipleTimes_WhenOrderWasCombined()
+        {
+            mock.Mock<IJetOrderSearchProvider>()
+                .Setup(x => x.GetOrderIdentifiers(It.IsAny<IOrderEntity>()))
+                .ReturnsAsync(new[] { "foo", "bar" });
+
+            testObject = mock.Create<JetOnlineUpdater>();
+            await testObject.UpdateShipmentDetails(42, store);
+
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails("foo", shipment, store));
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails("bar", shipment, store));
+        }
+
+        [Fact]
+        public async Task UpdateShipmentDetailsWithShipment_CallsUpdateShipmentDetails_WhenOrderIsNotManual()
         {
             testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(42, store);
+            await testObject.UpdateShipmentDetails(42, store);
+
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(It.IsAny<string>(), shipment, store), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateShipmentDetailsWithShipment_SetsOnlineStatusToComplete()
+        {
+            testObject = mock.Create<JetOnlineUpdater>();
+            await testObject.UpdateShipmentDetails(42, store);
 
             Assert.Equal("Complete", order.OnlineStatus);
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_SavesOrderToRepository()
+        public async Task UpdateShipmentDetailsWithShipment_SavesOrderToRepository()
         {
             testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(42, store);
+            await testObject.UpdateShipmentDetails(42, store);
 
             mock.Mock<IOrderRepository>().Verify(r => r.Save(order));
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_LogsSqlException()
+        public async Task UpdateShipmentDetailsWithShipment_LogsSqlException()
         {
             var sqlException = UninitializeObjectCreator.Create<SqlException>();
             mock.Mock<IOrderRepository>()
@@ -81,14 +116,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.MockFunc<Type, ILog>(log);
 
             testObject = mock.Create<JetOnlineUpdater>();
-            Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
+            await Assert.ThrowsAsync<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
             log.Verify(l => l.Error(errorMessage, sqlException), Times.Once);
         }
 
         [Fact]
-        public void UpdateShipmentDetailsWithShipment_ThrowsExpectedException()
+        public async Task UpdateShipmentDetailsWithShipment_ThrowsExpectedException()
         {
             var sqlException = Instantiate<SqlException>();
             mock.Mock<IOrderRepository>()
@@ -99,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             mock.MockFunc<Type, ILog>(log);
 
             testObject = mock.Create<JetOnlineUpdater>();
-            var exception = Assert.Throws<JetException>(() => testObject.UpdateShipmentDetails(42, store));
+            var exception = await Assert.ThrowsAsync<JetException>(() => testObject.UpdateShipmentDetails(42, store));
 
             string errorMessage = "Error saving online status for order 42.";
             Assert.Equal(errorMessage, exception.Message);
@@ -107,14 +142,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         }
 
         [Fact]
-        public void UpdateShipmentDetails_DoesNotUploadShipmentDetail_IfOrderNotFound()
+        public async Task UpdateShipmentDetails_DoesNotUploadShipmentDetail_IfOrderNotFound()
         {
             shipment = null;
 
             testObject = mock.Create<JetOnlineUpdater>();
-            testObject.UpdateShipmentDetails(22, store);
+            await testObject.UpdateShipmentDetails(22, store);
 
-            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(shipment, store), Times.Never);
+            mock.Mock<IJetWebClient>().Verify(r => r.UploadShipmentDetails(It.IsAny<string>(), shipment, store), Times.Never);
         }
 
         public static T Instantiate<T>() where T : class

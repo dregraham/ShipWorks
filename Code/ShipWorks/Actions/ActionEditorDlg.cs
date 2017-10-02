@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -40,12 +41,14 @@ namespace ShipWorks.Actions
         // needs deleted when we go to save.
         ActionTrigger originalTrigger;
         List<ActionTask> originalTasks;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ActionEditorDlg(ActionEntity action)
+        public ActionEditorDlg(ILifetimeScope lifetimeScope, ActionEntity action)
         {
+            this.lifetimeScope = lifetimeScope;
             InitializeComponent();
 
             if (action == null)
@@ -88,7 +91,7 @@ namespace ShipWorks.Actions
             CreateAddTaskMenu();
 
             // Load the existing tasks for the action
-            originalTasks = ActionManager.LoadTasks(action);
+            originalTasks = ActionManager.LoadTasks(lifetimeScope, action);
             foreach (ActionTask task in originalTasks)
             {
                 AddTaskBubble(task);
@@ -336,7 +339,7 @@ namespace ShipWorks.Actions
         void OnAddTask(object sender, EventArgs e)
         {
             ActionTaskDescriptorBinding binding = (ActionTaskDescriptorBinding) ((SandMenuItem) sender).Tag;
-            ActionTask task = binding.CreateInstance();
+            ActionTask task = binding.CreateInstance(lifetimeScope);
 
             ActionTaskBubble bubble = AddTaskBubble(task);
 
@@ -350,7 +353,7 @@ namespace ShipWorks.Actions
         private ActionTaskBubble AddTaskBubble(ActionTask task)
         {
             // Create the bubble that will hold it
-            ActionTaskBubble bubble = new ActionTaskBubble(task, ActiveBubbles);
+            ActionTaskBubble bubble = new ActionTaskBubble(lifetimeScope, task, ActiveBubbles);
             bubble.Width = panelTasks.DisplayRectangle.Width;
             bubble.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
 

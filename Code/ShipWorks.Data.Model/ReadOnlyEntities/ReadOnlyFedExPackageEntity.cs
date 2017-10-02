@@ -80,7 +80,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PackingDetailsPackingInstructions = source.PackingDetailsPackingInstructions;
             
             
-            FedExShipment = source.FedExShipment?.AsReadOnly(objectMap);
+            FedExShipment = (IFedExShipmentEntity) source.FedExShipment?.AsReadOnly(objectMap);
             
 
             CopyCustomFedExPackageData(source);
@@ -353,6 +353,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IFedExPackageEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

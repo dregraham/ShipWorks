@@ -74,10 +74,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UspsPackageID = source.UspsPackageID;
             CustomsDescription = source.CustomsDescription;
             
-            ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
-            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IUpsProfilePackageEntity>().ToReadOnly() ??
                 Enumerable.Empty<IUpsProfilePackageEntity>();
 
             CopyCustomUpsProfileData(source);
@@ -322,6 +322,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

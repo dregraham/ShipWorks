@@ -48,6 +48,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name EbayCombinedOrderRelation</summary>
 			public static readonly string EbayCombinedOrderRelation = "EbayCombinedOrderRelation";
+			/// <summary>Member name OrderSearch</summary>
+			public static readonly string OrderSearch = "OrderSearch";
 			/// <summary>Member name EbayOrderCollectionViaEbayCombinedOrderRelation</summary>
 			public static readonly string EbayOrderCollectionViaEbayCombinedOrderRelation = "EbayOrderCollectionViaEbayCombinedOrderRelation";
 		}

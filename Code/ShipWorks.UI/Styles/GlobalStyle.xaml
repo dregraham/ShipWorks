@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Colors.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/ButtonStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DatePickerStyle.xaml"/>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Controls/DataGridStyle.xaml"/>

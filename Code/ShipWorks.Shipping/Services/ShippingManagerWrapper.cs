@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -9,6 +10,8 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -63,12 +66,50 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        /// <remarks>
+        /// Normally, an async method should not just wrap a sync method in a Task.Run,
+        /// but in this case, we know that the majority of the blocking time will be in the database.
+        /// As time goes on, we can replace the original EnsureShipmentLoaded with an
+        /// async-first method and then we can remove the Task.Run.
+        /// </remarks>
+        public Task<ShipmentEntity> EnsureShipmentLoadedAsync(ShipmentEntity shipment) =>
+            Task.Run(() => EnsureShipmentLoaded(shipment));
+
+        /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         public ICarrierShipmentAdapter GetShipment(long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             return GetShipmentAdapter(shipment);
+        }
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        public async Task<ICarrierShipmentAdapter> GetShipmentAsync(long shipmentID)
+        {
+            ShipmentEntity shipment = await dataProvider.GetEntityAsync<ShipmentEntity>(shipmentID).ConfigureAwait(false);
+            if (shipment == null)
+            {
+                log.InfoFormat("Shipment {0} seems to be now deleted.", shipmentID);
+                return null;
+            }
+
+            await EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+
+            OrderEntity order = await dataProvider.GetEntityAsync<OrderEntity>(shipment.OrderID).ConfigureAwait(false);
+            if (order == null)
+            {
+                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+                return null;
+            }
+
+            shipment.Order = order;
+
+            return shipmentAdapterFactory.Get(shipment);
         }
 
         /// <summary>
@@ -242,13 +283,19 @@ namespace ShipWorks.Shipping.Services
         /// Gets the service used.
         /// </summary>
         public string GetOverriddenServiceUsed(ShipmentEntity shipment) =>
-            ShippingManager.GetOverriddenSerivceUsed(shipment);
+            ShippingManager.GetOverriddenServiceUsed(shipment);
 
         /// <summary>
         /// Gets the service used.
         /// </summary>
         public string GetCarrierName(ShipmentTypeCode shipmentTypeCode) =>
             ShippingManager.GetCarrierName(shipmentTypeCode);
+
+        /// <summary>
+        /// Get a description for the 'Other' carrier
+        /// </summary>
+        public CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipmentTypeCode) =>
+            ShippingManager.GetOtherCarrierDescription(shipmentTypeCode);
 
         /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.

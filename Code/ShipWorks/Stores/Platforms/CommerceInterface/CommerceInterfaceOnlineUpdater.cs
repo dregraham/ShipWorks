@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using log4net;
 using ShipWorks.Shipping;
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         /// <summary>
         /// Posts the tracking number for the identified shipment to the store
         /// </summary>
-        public void UploadTrackingNumber(long shipmentID, int statusCode)
+        public async Task UploadTrackingNumber(long shipmentID, int statusCode)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -32,13 +33,13 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
                 return;
             }
 
-            UploadTrackingNumber(shipment, statusCode);
+            await UploadTrackingNumber(shipment, statusCode).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Posts the tracking number for the identified shipment to the store
         /// </summary>
-        public void UploadTrackingNumber(ShipmentEntity shipment, int statusCode)
+        public async Task UploadTrackingNumber(ShipmentEntity shipment, int statusCode)
         {
             if (!shipment.Processed || shipment.Voided)
             {
@@ -51,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
             {
                 // Upload tracking number
                 CommerceInterfaceWebClient webClient = (CommerceInterfaceWebClient)GenericStoreType.CreateWebClient();
-                webClient.UploadShipmentDetails(order, shipment, statusCode);
+                await webClient.UploadShipmentDetails(order, shipment, statusCode).ConfigureAwait(false);
             }
             else
             {

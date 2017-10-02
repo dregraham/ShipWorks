@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.GenericModule.LegacyAdapter;
@@ -32,8 +34,8 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Constructor
         /// </summary>
-        public ClickCartProStoreType(StoreEntity store)
-            : base(store)
+        public ClickCartProStoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         {
 
         }
@@ -61,9 +63,9 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Creates order identifier
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order)
         {
-            ClickCartProOrderEntity ccpOrder = order as ClickCartProOrderEntity;
+            IClickCartProOrderEntity ccpOrder = order as IClickCartProOrderEntity;
             if (ccpOrder == null)
             {
                 throw new InvalidOperationException("A non ClickCartPro order was provided to CreateOrderIdentifier");
@@ -71,6 +73,12 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
 
             return new ClickCartProOrderIdentifier(ccpOrder.ClickCartProOrderID);
         }
+
+        /// <summary>
+        /// Get a description for use when auditing an order
+        /// </summary>
+        public override string GetAuditDescription(IOrderEntity order) =>
+            (order as IClickCartProOrderEntity)?.ClickCartProOrderID ?? string.Empty;
 
         /// <summary>
         /// ClickCartPro identifies orders by the ClickCartProID
@@ -89,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro
         /// <summary>
         /// Create the new web client
         /// </summary>
-        public override GenericStoreWebClient CreateWebClient()
+        public override IGenericStoreWebClient CreateWebClient()
         {
             // register parameter renaming and value transforming
             Dictionary<string, VariableTransformer> transformers = new Dictionary<string, VariableTransformer>

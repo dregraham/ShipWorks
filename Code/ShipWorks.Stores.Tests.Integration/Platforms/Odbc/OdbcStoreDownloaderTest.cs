@@ -88,8 +88,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "Odbc Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.Odbc)
-                .Set(x=>x.ImportMap = map)
-                .Set(x=>x.ImportStrategy = (int) OdbcImportStrategy.All)
+                .Set(x => x.ImportMap = map)
+                .Set(x => x.ImportStrategy = (int) OdbcImportStrategy.All)
                 .Save();
 
             Create.Entity<StatusPresetEntity>()
@@ -120,12 +120,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 
             Mock<IOdbcCommand> odbcCommand = mock.CreateMock<IOdbcCommand>();
             odbcCommand.Setup(c => c.Execute())
-                .Returns(() => new[] {odbcRecord});
+                .Returns(() => new[] { odbcRecord });
 
             mock.Mock<IOdbcDownloadCommandFactory>()
                 .Setup(f => f.CreateDownloadCommand(It.IsAny<OdbcStoreEntity>(), It.IsAny<IOdbcFieldMap>()))
                 .Returns(odbcCommand.Object);
-
 
             dbConnection = SqlSession.Current.OpenConnection();
         }

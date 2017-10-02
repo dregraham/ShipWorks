@@ -8,6 +8,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -25,17 +26,21 @@ namespace ShipWorks.Stores.Platforms.ShopSite
     {
         private int totalCount = 0;
         private readonly IShopSiteWebClient webClient;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShopSiteDownloader(StoreEntity store, IShopSiteWebClientFactory webClientFactory)
+        public ShopSiteDownloader(StoreEntity store,
+            IShopSiteWebClientFactory webClientFactory,
+            Func<Type, ILog> logFactory)
             : base(store)
         {
             IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));
 
             webClient = webClientFactory.Create(shopSiteStore);
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// </summary>
         private async Task<bool> DownloadNextOrdersPage()
         {
-            long lastOrderNumber = GetOrderNumberStartingPoint();
+            long lastOrderNumber = await GetOrderNumberStartingPoint();
 
             XmlDocument xmlDocument = webClient.GetOrders(lastOrderNumber + 1);
             XPathNavigator xpath = xmlDocument.CreateNavigator();
@@ -139,7 +144,14 @@ namespace ShipWorks.Stores.Platforms.ShopSite
             int orderNumber = XPathUtility.Evaluate(xpath, "OrderNumber", 0);
 
             // Get the order instance
-            OrderEntity order = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+                return;
+            }
+
+            OrderEntity order = result.Value;
 
             // Set the total.  It will be calculated and verified later.
             order.OrderTotal = XPathUtility.Evaluate(xpath, "Totals/GrandTotal", 0.0m);

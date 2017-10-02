@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared;
+using Autofac;
 using Interapptive.Shared.Security;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.UI.Wizard;
 using Interapptive.Shared.UI;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 {
@@ -78,7 +79,6 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
         /// <summary>
         /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             if (urlTextBox.Text.Length == 0)
@@ -113,54 +113,70 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 
             store.WebUserName = emailTextBox.Text;
 
-            // Automatic configuration
             if (SetupState.Configuration == VolusionSetupConfiguration.Automatic)
             {
-                if (passwordTextBox.Text.Length == 0)
-                {
-                    MessageHelper.ShowError(this, "Please enter the password used to login to your Volusion store.");
-                    e.NextPage = this;
-                    return;
-                }
-
-                store.WebPassword = SecureText.Encrypt(passwordTextBox.Text, store.WebUserName);
-
-                // attempt to auto-configure
-                if (RunAutoConfigure())
-                {
-                    if (!SetupState.AutoDownloadedPaymentMethods || !SetupState.AutoDownloadedShippingMethods)
-                    {
-                        MessageHelper.ShowWarning(this,
-                            "ShipWorks successfully connected to Volusion but was unable to download all of the necessary configuration.\n\n" +
-                            "You will be prompted for this information on the next page.");
-                    }
-                }
-                else
-                {
-                    // something really bad happened, an error would have been shown to the user already.  stay on page.
-                    e.NextPage = this;
-                    return;
-                }
+                PerformAutomaticConfiguration(e, store);
             }
-            // Manual configuration
             else
             {
-                if (apiPasswordTextBox.Text.Length == 0)
+                PerformManualConfiguration(e, store);
+            }
+        }
+
+        /// <summary>
+        /// Perform automatic configuration
+        /// </summary>
+        private void PerformAutomaticConfiguration(WizardStepEventArgs e, VolusionStoreEntity store)
+        {
+            if (passwordTextBox.Text.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Please enter the password used to login to your Volusion store.");
+                e.NextPage = this;
+                return;
+            }
+
+            store.WebPassword = SecureText.Encrypt(passwordTextBox.Text, store.WebUserName);
+
+            // attempt to auto-configure
+            if (RunAutoConfigure())
+            {
+                if (!SetupState.AutoDownloadedPaymentMethods || !SetupState.AutoDownloadedShippingMethods)
                 {
-                    MessageHelper.ShowError(this, "The encrypted password for your store is required.");
-                    e.NextPage = this;
-                    return;
+                    MessageHelper.ShowWarning(this,
+                        "ShipWorks successfully connected to Volusion but was unable to download all of the necessary configuration.\n\n" +
+                        "You will be prompted for this information on the next page.");
                 }
+            }
+            else
+            {
+                // something really bad happened, an error would have been shown to the user already.  stay on page.
+                e.NextPage = this;
+            }
+        }
 
-                store.ApiPassword = apiPasswordTextBox.Text;
+        /// <summary>
+        /// Perform manual configuration
+        /// </summary>
+        private void PerformManualConfiguration(WizardStepEventArgs e, VolusionStoreEntity store)
+        {
+            if (apiPasswordTextBox.Text.Length == 0)
+            {
+                MessageHelper.ShowError(this, "The encrypted password for your store is required.");
+                e.NextPage = this;
+                return;
+            }
 
-                // validate the credentials
-                VolusionWebClient client = new VolusionWebClient(store);
-                if (!client.ValidateCredentials())
+            store.ApiPassword = apiPasswordTextBox.Text;
+
+            // validate the credentials
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+
+                if (!webClient.ValidateCredentials(store))
                 {
                     MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
                     e.NextPage = this;
-                    return;
                 }
             }
         }
@@ -190,11 +206,15 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                         store.ApiPassword = encryptedPassword;
 
                         // test the encrypted password
-                        VolusionWebClient webClient = new VolusionWebClient(store);
-                        if (!webClient.ValidateCredentials())
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
-                            MessageHelper.ShowError(this, "ShipWorks located the encrypted password for your Volusion store, but it appears to be invalid.");
-                            return false;
+                            var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+
+                            if (!webClient.ValidateCredentials(store))
+                            {
+                                MessageHelper.ShowError(this, "ShipWorks located the encrypted password for your Volusion store, but it appears to be invalid.");
+                                return false;
+                            }
                         }
 
                         // default to nothing having worked yet
@@ -238,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
         }
 
         /// <summary>
-        /// Tries to download both the Paymetn Method and Shipping Methods
+        /// Tries to download both the Payment Method and Shipping Methods
         /// from the store's admin area web site.
         /// </summary>
         private void DownloadStoreDetails(VolusionWebSession session)

@@ -75,9 +75,17 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Double> Weight { get; }
+        /// <summary> The ShippingServiceID property of the Entity AmazonProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AmazonProfile"."ShippingServiceID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ShippingServiceID { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         
+        
+
         
 
         /// <summary>
@@ -127,5 +135,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyAmazonProfileEntity(this, objectMap);
         }
+
+        
     }
 }

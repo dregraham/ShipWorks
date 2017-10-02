@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.Data;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Actions.Tasks;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
-using ShipWorks.Data;
-using ShipWorks.Actions.Tasks;
 using ShipWorks.Templates.Media;
-using log4net;
-using Interapptive.Shared.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Actions
 {
     /// <summary>
     /// Provides context for an ActionTask during the duration of running a step
     /// </summary>
-    public class ActionStepContext
+    public class ActionStepContext : IActionStepContext
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ActionStepContext));
 
@@ -57,7 +56,7 @@ namespace ShipWorks.Actions
         }
 
         /// <summary>
-        /// Provides a way for steps to store a list of entities that need commited from the Run phase, to be committed in the Commit phase.  Anything in this list
+        /// Provides a way for steps to store a list of entities that need committed from the Run phase, to be committed in the Commit phase.  Anything in this list
         /// will be committed by the Commit phase by default, but that can be overridden.
         /// </summary>
         public UnitOfWork2 CommitWork

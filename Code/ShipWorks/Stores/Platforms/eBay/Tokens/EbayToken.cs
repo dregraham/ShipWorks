@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using log4net;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Ebay.Tokens.Readers;
 using ShipWorks.Stores.Platforms.Ebay.Tokens.Writers;
 
@@ -21,21 +18,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
         /// Initializes a new instance of the <see cref="Token"/> class.
         /// </summary>
         public EbayToken()
-        {            
+        {
 
         }
 
         /// <summary>
         /// Create a new instance based on the data in the given store
         /// </summary>
-        public static EbayToken FromStore(EbayStoreEntity store)
+        public static EbayToken FromStore(IEbayStoreEntity store)
         {
-            EbayToken data = new EbayToken();
-            data.Token = store.EBayToken;
-            data.UserId = store.EBayUserID;
-            data.ExpirationDate = store.EBayTokenExpire;
-
-            return data;
+            return new EbayToken
+            {
+                Token = store.EBayToken,
+                UserId = store.EBayUserID,
+                ExpirationDate = store.EBayTokenExpire
+            };
         }
 
         /// <summary>
@@ -77,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
                 log.Error(ex.Message, ex);
                 throw;
             }
-            
+
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using Autofac;
@@ -9,10 +8,9 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Dashboard.Content;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Properties;
@@ -97,26 +95,19 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Create the control for creating online update actions in the add store wizard
         /// </summary>
-        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {
-            return new ProStoresOnlineUpdateActionControl();
-        }
+        public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
+            new ProStoresOnlineUpdateActionControl();
 
         /// <summary>
         /// Create a new store-specific order instance
         /// </summary>
-        protected override OrderEntity CreateOrderInstance()
-        {
-            return new ProStoresOrderEntity();
-        }
+        protected override OrderEntity CreateOrderInstance() => new ProStoresOrderEntity();
 
         /// <summary>
         /// Create the OrderIdentifier instance used to uniquely identify this prostores order
         /// </summary>
-        public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
-        {
-            return new OrderNumberIdentifier(order.OrderNumber);
-        }
+        public override OrderIdentifier CreateOrderIdentifier(IOrderEntity order) =>
+            new OrderNumberIdentifier(order.OrderNumber);
 
         /// <summary>
         /// Returns the fields that identify the customer for an order
@@ -142,10 +133,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Identifier to uniquely identify the store
         /// </summary>
-        protected override string InternalLicenseIdentifier
-        {
-            get { return ((ProStoresStoreEntity) Store).ShortName.ToLower(); }
-        }
+        protected override string InternalLicenseIdentifier =>
+            ((ProStoresStoreEntity) Store).ShortName.ToLower();
 
         /// <summary>
         /// Create store specific conditions to use for ProStores for basic search
@@ -204,26 +193,14 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// ProStores has online update commands, but does not support OnlineStatus column
         /// </summary>
-        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
-        {
-            if (column == OnlineGridColumnSupport.LastModified)
-            {
-                return true;
-            }
-
-            return base.GridOnlineColumnSupported(column);
-        }
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column) =>
+            column == OnlineGridColumnSupport.LastModified || base.GridOnlineColumnSupported(column);
 
         /// <summary>
         /// Policy for how far back to go on an initial download
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
 
         /// <summary>
         /// Generate ProStores specific template XML output
@@ -237,57 +214,6 @@ namespace ShipWorks.Stores.Platforms.ProStores
             outline.AddElement("Authorized", () => order.Value.AuthorizedDate.HasValue);
             outline.AddElement("AuthorizedDate", () => order.Value.AuthorizedDate);
             outline.AddElement("AuthorizedBy", () => order.Value.AuthorizedBy);
-        }
-
-        /// <summary>
-        /// Create menu commands for upload shipment details
-        /// </summary>
-        public override List<MenuCommand> CreateOnlineUpdateCommonCommands()
-        {
-            List<MenuCommand> commands = new List<MenuCommand>();
-
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
-            commands.Add(command);
-
-            return commands;
-        }
-
-        /// <summary>
-        /// Command handler for uploading shipment details
-        /// </summary>
-        private void OnUploadDetails(MenuCommandExecutionContext context)
-        {
-            BackgroundExecutor<IEnumerable<long>> executor = new BackgroundExecutor<IEnumerable<long>>(context.Owner,
-                "Upload Shipment Details",
-                "ShipWorks is uploading shipment information.",
-                string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
-
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
-
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
-        }
-
-        /// <summary>
-        /// Worker thread method for uploading shipment details
-        /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> orderKeys, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
-        {
-            try
-            {
-                ProStoresOnlineUpdater shipmentUpdater = new ProStoresOnlineUpdater();
-                shipmentUpdater.UploadOrderShipmentDetails(orderKeys);
-            }
-            catch (ProStoresException ex)
-            {
-                // log it
-                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
-
-                // add the error to issues for the user
-                issueAdder.Add(orderKeys, ex);
-            }
         }
     }
 }

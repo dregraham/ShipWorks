@@ -12,13 +12,13 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         [Fact]
         public void ApplyTo_ThrowsArgumentNullException_WhenGivenNullOrder()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.ApplyTo((OrderEntity)null));
+            Assert.Throws<ArgumentNullException>(() => testObject.ApplyTo((OrderEntity) null));
         }
 
         [Fact]
         public void ToString_ReturnsCorrectString()
         {
-            Assert.Equal("pre-1-post", testObject.ToString());   
+            Assert.Equal("pre-1-post", testObject.ToString());
         }
     }
 }

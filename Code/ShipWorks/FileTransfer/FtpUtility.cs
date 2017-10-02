@@ -1,11 +1,11 @@
 ﻿extern alias rebex2015;
-
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Security;
+using log4net;
 using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using log4net;
 
 namespace ShipWorks.FileTransfer
 {
@@ -251,7 +251,7 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
-        /// Logon to the already connected FTP connection, with the credentials in teh given acount.
+        /// Logon to the already connected FTP connection, with the credentials in the given account.
         /// </summary>
         private static void InternalLogon(IFtp ftp, FtpAccountEntity account)
         {
@@ -273,7 +273,29 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
-        /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
+        /// Logon to the already connected FTP connection, with the credentials in the given account.
+        /// </summary>
+        private static async Task InternalLogonAsync(IFtp ftp, FtpAccountEntity account)
+        {
+            try
+            {
+                await ftp.LoginAsync(account.Username, SecureText.Decrypt(account.Password, account.Username)).ConfigureAwait(false);
+
+                // Apply settings
+                Ftp typedFtp = ftp as Ftp;
+                if (typedFtp != null)
+                {
+                    typedFtp.Passive = account.Passive;
+                }
+            }
+            catch (NetworkSessionException ex)
+            {
+                throw new FileTransferException("ShipWorks could not login with the given username and password.\n\nDetail: " + ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Attempt to open the given FTP connection, throws FileTransferException if not successful
         /// </summary>
         private static IFtp OpenConnection(FtpAccountEntity account)
         {
@@ -295,19 +317,53 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
-        /// Attempt to open the given SFTP connection, throws FileTransferException if not succesful
+        /// Attempt to open the given FTP connection, throws FileTransferException if not successful
+        /// </summary>
+        private static async Task<IFtp> OpenConnectionAsync(FtpAccountEntity account)
+        {
+            try
+            {
+                return account.SecurityType == (int) FtpSecurityType.Sftp ?
+                    await OpenSftpConnectionAsync(account).ConfigureAwait(false) :
+                    await OpenFtpConnectionAsync(account).ConfigureAwait(false);
+            }
+            catch (NetworkSessionException ex)
+            {
+                throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
+            }
+            catch (ArgumentException ex)
+            {
+                // Can happen when the host name is invalid
+                throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Attempt to open the given SFTP connection, throws FileTransferException if not successful
         /// </summary>
         private static IFtp OpenSftpConnection(FtpAccountEntity account)
         {
             Sftp ftp = new Sftp();
-            ftp.Timeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
             ftp.Connect(account.Host, account.Port);
 
             return ftp;
         }
 
         /// <summary>
-        /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
+        /// Attempt to open the given SFTP connection, throws FileTransferException if not successful
+        /// </summary>
+        private static async Task<IFtp> OpenSftpConnectionAsync(FtpAccountEntity account)
+        {
+            Sftp ftp = new Sftp();
+            ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            await ftp.ConnectAsync(account.Host, account.Port).ConfigureAwait(false);
+
+            return ftp;
+        }
+
+        /// <summary>
+        /// Attempt to open the given FTP connection, throws FileTransferException if not successful
         /// </summary>
         private static IFtp OpenFtpConnection(FtpAccountEntity account)
         {
@@ -316,9 +372,27 @@ namespace ShipWorks.FileTransfer
 
             Ftp ftp = new Ftp();
             ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
-            ftp.Settings.ReuseControlConnectionSession = (bool)account.ReuseControlConnectionSession;
+            ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
 
             ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+
+            return ftp;
+        }
+
+        /// <summary>
+        /// Attempt to open the given FTP connection, throws FileTransferException if not successful
+        /// </summary>
+        private static async Task<IFtp> OpenFtpConnectionAsync(FtpAccountEntity account)
+        {
+            TlsParameters tls = new TlsParameters();
+            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
+
+            Ftp ftp = new Ftp();
+            ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Settings.ReuseControlConnectionSession = (bool) account.ReuseControlConnectionSession;
+            ftp.Settings.SslAcceptAllCertificates = true;
+
+            await ftp.ConnectAsync(account.Host, account.Port, (FtpSecurity) account.SecurityType).ConfigureAwait(false);
 
             return ftp;
         }
@@ -331,6 +405,18 @@ namespace ShipWorks.FileTransfer
             IFtp ftp = OpenConnection(account);
 
             InternalLogon(ftp, account);
+
+            return ftp;
+        }
+
+        /// <summary>
+        /// Connect an login to the given FTP account
+        /// </summary>
+        public static async Task<IFtp> LogonToFtpAsync(FtpAccountEntity account)
+        {
+            IFtp ftp = await OpenConnectionAsync(account).ConfigureAwait(false);
+
+            await InternalLogonAsync(ftp, account).ConfigureAwait(false);
 
             return ftp;
         }

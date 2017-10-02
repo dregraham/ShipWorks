@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.Fortune3
@@ -15,8 +17,8 @@ namespace ShipWorks.Stores.Platforms.Fortune3
         /// <summary>
         /// Initializes a new instance of the <see cref="Fortune3StoreType"/> class.
         /// </summary>
-        public Fortune3StoreType(StoreEntity store)
-            : base(store)
+        public Fortune3StoreType(StoreEntity store, IMessageHelper messageHelper, IOrderManager orderManager)
+            : base(store, messageHelper, orderManager)
         { }
 
         /// <summary>

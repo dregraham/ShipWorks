@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AttemptCount = source.AttemptCount;
             
             
-            ActionQueue = source.ActionQueue?.AsReadOnly(objectMap);
+            ActionQueue = (IActionQueueEntity) source.ActionQueue?.AsReadOnly(objectMap);
             
 
             CopyCustomActionQueueStepData(source);
@@ -185,6 +185,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IActionQueueStepEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

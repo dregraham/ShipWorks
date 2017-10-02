@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
-using System.Net;
 using System.IO;
+using System.Net;
 using System.Xml;
 using System.Xml.XPath;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.Stores.Platforms.Ebay.Requests;
-using ShipWorks.Stores.Platforms.Ebay.Tokens;
+using Autofac;
+using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Tokens
@@ -36,27 +31,30 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
         /// </summary>
         public EbayToken GetTokenData()
         {
-            // We're just going to merge/combine the results from a request to tango (to obtain 
-            // the token and expiration date values) and then a request to eBay using the token/key 
+            // We're just going to merge/combine the results from a request to tango (to obtain
+            // the token and expiration date values) and then a request to eBay using the token/key
             // value to obtain the user ID and returned in the form of an XML string.
 
             // Instantiate a tango request to obtain the token/key and expiration date XML
             XmlDocument tokenDocument = SubmitTangoRequest();
-            
-            // Extract the token        
-            EbayToken token = new EbayToken 
-                { 
-                    Token = SelectTokenNode(tokenDocument, "//Token").InnerText 
-                };
 
-            // Get the user info
-            EbayWebClient webClient = new EbayWebClient(token);
-            token.UserId = webClient.GetUser().UserID;
+            // Extract the token
+            EbayToken token = new EbayToken
+            {
+                Token = SelectTokenNode(tokenDocument, "//Token").InnerText
+            };
 
-            // Set the expiration
-            token.ExpirationDate = DateTime.Parse(SelectTokenNode(tokenDocument, "//Expiration").InnerText);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                // Get the user info
+                IEbayWebClient webClient = lifetimeScope.Resolve<IEbayWebClient>();
+                token.UserId = webClient.GetUser(token).UserID;
 
-            return token;
+                // Set the expiration
+                token.ExpirationDate = DateTime.Parse(SelectTokenNode(tokenDocument, "//Expiration").InnerText);
+
+                return token;
+            }
         }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
         private XmlNode SelectTokenNode(XmlDocument tokenDocument, string xPath)
         {
             XmlNode node = tokenDocument.SelectSingleNode(xPath);
-            
+
             if (node == null)
             {
                 string message = string.Format("ShipWorks was unable to find the {0} node in the token XML: {1}", xPath, tokenDocument.OuterXml);

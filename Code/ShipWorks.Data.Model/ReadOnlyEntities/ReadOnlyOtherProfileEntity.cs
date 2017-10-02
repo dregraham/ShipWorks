@@ -40,7 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Carrier = source.Carrier;
             Service = source.Service;
             
-            ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
 
@@ -80,6 +80,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOtherProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

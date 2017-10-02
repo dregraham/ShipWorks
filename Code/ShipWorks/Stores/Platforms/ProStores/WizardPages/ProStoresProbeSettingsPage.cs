@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
-using Interapptive.Shared.UI;
 using System.Net;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Windows.Forms;
 using System.Xml;
-using Interapptive.Shared;
-using ShipWorks.Stores.Management;
+using Autofac;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
 {
@@ -35,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
         /// <summary>
         /// Stepping next
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             string url = storeUrl.Text.Trim();
@@ -63,6 +57,14 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
 
             Cursor.Current = Cursors.WaitCursor;
 
+            LoadApiInfo(e, url, store);
+        }
+
+        /// <summary>
+        /// Load the api info into the store
+        /// </summary>
+        private void LoadApiInfo(WizardStepEventArgs e, string url, ProStoresStoreEntity store)
+        {
             try
             {
                 WebRequest request = WebRequest.Create(url);
@@ -72,9 +74,13 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
 
                     if (!string.IsNullOrEmpty(apiEntryPoint))
                     {
-                        XmlDocument apiInfoResponse = ProStoresWebClient.GetStoreApiInfo(apiEntryPoint);
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            var webClient = lifetimeScope.Resolve<IProStoresWebClient>();
+                            XmlDocument apiInfoResponse = webClient.GetStoreApiInfo(apiEntryPoint);
 
-                        ((ProStoresStoreType) StoreTypeManager.GetType(store)).LoadApiInfo(apiEntryPoint, apiInfoResponse);
+                            ((ProStoresStoreType) StoreTypeManager.GetType(store)).LoadApiInfo(apiEntryPoint, apiInfoResponse);
+                        }
                     }
                 }
             }

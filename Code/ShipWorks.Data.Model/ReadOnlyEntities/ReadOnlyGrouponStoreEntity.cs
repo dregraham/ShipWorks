@@ -64,12 +64,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponStoreEntity AsReadOnly() => this;
+        public override IStoreEntity AsReadOnly() => this;
 
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
-        public new IGrouponStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+        public override IStoreEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
+        /// <summary>
+        /// Get a read only version of the entity
+        /// </summary>
+        public IGrouponStoreEntity AsReadOnlyGrouponStore() => this;
+
+        /// <summary>
+        /// Get a read only version of the entity that handles cyclic references
+        /// </summary>
+        public IGrouponStoreEntity AsReadOnlyGrouponStore(IDictionary<object, object> objectMap) => this;
+        
 
         /// <summary>
         /// Copy any custom data

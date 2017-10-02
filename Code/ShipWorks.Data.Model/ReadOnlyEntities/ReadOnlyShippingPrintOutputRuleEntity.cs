@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             TemplateID = source.TemplateID;
             
             
-            ShippingPrintOutput = source.ShippingPrintOutput?.AsReadOnly(objectMap);
+            ShippingPrintOutput = (IShippingPrintOutputEntity) source.ShippingPrintOutput?.AsReadOnly(objectMap);
             
 
             CopyCustomShippingPrintOutputRuleData(source);
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IShippingPrintOutputRuleEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

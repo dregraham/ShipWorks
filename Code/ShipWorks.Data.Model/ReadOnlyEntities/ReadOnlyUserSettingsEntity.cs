@@ -54,8 +54,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NextGlobalPostNotificationDate = source.NextGlobalPostNotificationDate;
             SingleScanSettings = source.SingleScanSettings;
             AutoWeigh = source.AutoWeigh;
+            DialogSettings = source.DialogSettings;
             
-            User = source.User?.AsReadOnly(objectMap);
+            User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
             
 
@@ -171,6 +172,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AutoWeigh { get; }
+        /// <summary> The DialogSettings property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."DialogSettings"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String DialogSettings { get; }
         
         public IUserEntity User { get; }
         
@@ -185,6 +192,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUserSettingsEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

@@ -45,12 +45,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ShippingServiceID { get; }
-        /// <summary> The ShippingServiceOfferID property of the Entity AmazonShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AmazonShipment"."ShippingServiceOfferID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 250<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String ShippingServiceOfferID { get; }
         /// <summary> The InsuranceValue property of the Entity AmazonShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AmazonShipment"."InsuranceValue"<br/>
@@ -116,6 +110,8 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
 
+        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -163,5 +159,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyAmazonShipmentEntity(this, objectMap);
         }
+
+        
     }
 }

@@ -1,4 +1,8 @@
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Content
 {
@@ -18,5 +22,27 @@ namespace ShipWorks.Stores.Content
         /// Apply the order identifier values to the download history entry
         /// </summary>
         public abstract void ApplyTo(DownloadDetailEntity downloadDetail);
+
+        /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public abstract QuerySpec CreateCombinedSearchQuery(QueryFactory factory);
+
+        /// <summary>
+        /// Create the combined search query
+        /// </summary>
+        protected QuerySpec CreateCombinedSearchQueryInternal<T>(QueryFactory factory,
+            EntityQuery<T> entityQuery, EntityField2 originalOrderIDField, IPredicate predicate)
+            where T : IEntityCore
+        {
+            var from = entityQuery
+                .InnerJoin(factory.OrderSearch)
+                .On(originalOrderIDField == OrderSearchFields.OriginalOrderID);
+
+            return factory.Create()
+                .From(from)
+                .Select(originalOrderIDField)
+                .Where(predicate);
+        }
     }
 }

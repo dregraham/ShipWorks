@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Description = source.Description;
             
             
-            ScanFormBatch = source.ScanFormBatch?.AsReadOnly(objectMap);
+            ScanFormBatch = (IScanFormBatchEntity) source.ScanFormBatch?.AsReadOnly(objectMap);
             
 
             CopyCustomUspsScanFormData(source);
@@ -108,6 +108,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUspsScanFormEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

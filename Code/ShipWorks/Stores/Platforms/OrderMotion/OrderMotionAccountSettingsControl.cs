@@ -1,9 +1,12 @@
 ﻿using System;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Net;
+using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion
 {
@@ -21,11 +24,16 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         }
 
         /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
+
+        /// <summary>
         /// Load the settings from the store into the UI
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
-            OrderMotionStoreEntity orderMotion = (OrderMotionStoreEntity)store;
+            OrderMotionStoreEntity orderMotion = (OrderMotionStoreEntity) store;
 
             emailAccountControl.InitializeForStore(orderMotion);
 
@@ -35,9 +43,9 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Save the settings from the store into the UI
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
-            OrderMotionStoreEntity orderMotion = (OrderMotionStoreEntity)store;
+            OrderMotionStoreEntity orderMotion = (OrderMotionStoreEntity) store;
 
             // cleanup the BizID
             string bizId = bizIdTextBox.Text.Replace(Environment.NewLine, "");
@@ -47,8 +55,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             // test connection
             try
             {
-                OrderMotionWebClient client = new OrderMotionWebClient(orderMotion);
-                client.TestConnection();
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    var client = lifetimeScope.Resolve<IOrderMotionWebClient>();
+                    await client.TestConnection(orderMotion).ConfigureAwait(true);
+                }
             }
             catch (OrderMotionException ex)
             {

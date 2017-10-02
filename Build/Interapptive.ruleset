@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Interapptive Ruleset" Description="This is based off of Microsoft All Rules and supresses certain rules that do not make sense for ShipWorks.  It also contains custom Interapptive rules." ToolsVersion="10.0">
+<RuleSet Name="Interapptive Ruleset" Description="This is based off of Microsoft All Rules and supresses certain rules that do not make sense for ShipWorks.  It also contains custom Interapptive rules." ToolsVersion="15.0">
   <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="Microsoft.AnalyzerPowerPack.Common" RuleNamespace="Microsoft.AnalyzerPowerPack.Common">
+    <Rule Id="CA1715" Action="Info" />
+    <Rule Id="CA2235" Action="None" />
+  </Rules>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1001" Action="None" />
     <Rule Id="CA1002" Action="None" />
@@ -79,12 +83,35 @@
     <Rule Id="CA2241" Action="Warning" />
     <Rule Id="CA2242" Action="Warning" />
   </Rules>
+  <Rules AnalyzerId="RefactoringEssentials" RuleNamespace="RefactoringEssentials">
+    <Rule Id="RECS0145" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <Rule Id="S112" Action="Info" />
+    <Rule Id="S1698" Action="Info" />
+    <Rule Id="S1944" Action="Info" />
+    <Rule Id="S2201" Action="Info" />
+    <Rule Id="S2259" Action="Info" />
+    <Rule Id="S2583" Action="Info" />
+    <Rule Id="S3010" Action="Info" />
+    <Rule Id="S3168" Action="Info" />
+    <Rule Id="S3241" Action="Info" />
+    <Rule Id="S3264" Action="Info" />
+    <Rule Id="S3265" Action="Info" />
+    <Rule Id="S3440" Action="Info" />
+    <Rule Id="S3453" Action="Info" />
+    <Rule Id="S3459" Action="Info" />
+  </Rules>
   <Rules AnalyzerId="SonarLint" RuleNamespace="SonarLint">
+    <Rule Id="S1066" Action="None" />
+    <Rule Id="S108" Action="None" />
+    <Rule Id="S1117" Action="None" />
     <Rule Id="S1118" Action="None" />
     <Rule Id="S1121" Action="None" />
     <Rule Id="S1125" Action="None" />
     <Rule Id="S1145" Action="None" />
     <Rule Id="S1155" Action="None" />
+    <Rule Id="S1172" Action="None" />
     <Rule Id="S1186" Action="None" />
     <Rule Id="S121" Action="None" />
     <Rule Id="S1226" Action="None" />
@@ -96,9 +123,12 @@
     <Rule Id="S1301" Action="None" />
     <Rule Id="S131" Action="None" />
     <Rule Id="S1313" Action="None" />
+    <Rule Id="S1481" Action="None" />
     <Rule Id="S1694" Action="None" />
     <Rule Id="S1699" Action="None" />
     <Rule Id="S1764" Action="None" />
+    <Rule Id="S1848" Action="None" />
+    <Rule Id="S1854" Action="None" />
     <Rule Id="S1862" Action="None" />
     <Rule Id="S1871" Action="None" />
     <Rule Id="S1905" Action="None" />
@@ -121,6 +151,7 @@
     <Rule Id="S2486" Action="None" />
     <Rule Id="S2551" Action="None" />
     <Rule Id="S2681" Action="None" />
+    <Rule Id="S2692" Action="None" />
     <Rule Id="S2696" Action="None" />
     <Rule Id="S2760" Action="None" />
     <Rule Id="S2761" Action="None" />
@@ -136,84 +167,52 @@
     <Rule Id="S3052" Action="None" />
     <Rule Id="S3172" Action="None" />
     <Rule Id="S3215" Action="None" />
+    <Rule Id="S3217" Action="None" />
     <Rule Id="S3218" Action="None" />
     <Rule Id="S3237" Action="None" />
+    <Rule Id="S3240" Action="None" />
     <Rule Id="S3249" Action="None" />
     <Rule Id="S907" Action="None" />
     <Rule Id="S927" Action="None" />
-    <Rule Id="S1066" Action="None" />
-    <Rule Id="S1117" Action="None" />
-    <Rule Id="S1481" Action="None" />
-    <Rule Id="S1172" Action="None" />
-    <Rule Id="S108" Action="None" />
-    <Rule Id="S2692" Action="None" />
-    <Rule Id="S3217" Action="None" />
-    <Rule Id="S1854" Action="None" />
-    <Rule Id="S1848" Action="None" />
-    <Rule Id="S3240" Action="None" />
   </Rules>
-  <Rules AnalyzerId="System.Runtime.InteropServices.Analyzers" RuleNamespace="System.Runtime.InteropServices.Analyzers">
-    <Rule Id="CA1060" Action="None" />
-    <Rule Id="CA1401" Action="None" />
-    <Rule Id="CA2101" Action="None" />
-  </Rules>
-  <Rules AnalyzerId="Microsoft.AnalyzerPowerPack.Common" RuleNamespace="Microsoft.AnalyzerPowerPack.Common">
-    <Rule Id="CA2235" Action="None" />
-    <Rule Id="CA1715" Action="Info" />
-  </Rules>
-  <Rules AnalyzerId="Microsoft.AnalyzerPowerPack.CSharp" RuleNamespace="Microsoft.AnalyzerPowerPack.CSharp">
-    <Rule Id="CA1033" Action="None" />
-  </Rules>
-  <Rules AnalyzerId="System.Runtime.CSharp.Analyzers" RuleNamespace="System.Runtime.CSharp.Analyzers">
-    <Rule Id="CA2213" Action="None" />
-    <Rule Id="CA2002" Action="Info" />
+  <Rules AnalyzerId="SonarLint.CSharp" RuleNamespace="SonarLint.CSharp">
+    <Rule Id="S100" Action="Info" />
+    <Rule Id="S101" Action="Info" />
+    <Rule Id="S103" Action="Info" />
+    <Rule Id="S104" Action="Info" />
+    <Rule Id="S1067" Action="Info" />
+    <Rule Id="S107" Action="Info" />
+    <Rule Id="S122" Action="Info" />
+    <Rule Id="S1449" Action="Info" />
+    <Rule Id="S1479" Action="Info" />
+    <Rule Id="S1541" Action="Info" />
+    <Rule Id="S1643" Action="Info" />
+    <Rule Id="S1659" Action="Info" />
+    <Rule Id="S2219" Action="Info" />
+    <Rule Id="S2292" Action="Info" />
+    <Rule Id="S2333" Action="Info" />
+    <Rule Id="S2344" Action="Info" />
+    <Rule Id="S2345" Action="Info" />
+    <Rule Id="S2346" Action="Info" />
+    <Rule Id="S2360" Action="Info" />
+    <Rule Id="S2372" Action="Info" />
+    <Rule Id="S2376" Action="Info" />
+    <Rule Id="S3216" Action="Info" />
+    <Rule Id="S3220" Action="None" />
+    <Rule Id="S3236" Action="Info" />
+    <Rule Id="S3246" Action="Info" />
+    <Rule Id="S818" Action="Info" />
   </Rules>
   <Rules AnalyzerId="System.Runtime.Analyzers" RuleNamespace="System.Runtime.Analyzers">
     <Rule Id="CA1001" Action="None" />
     <Rule Id="CA1036" Action="Info" />
   </Rules>
-  <Rules AnalyzerId="SonarLint.CSharp" RuleNamespace="SonarLint.CSharp">
-    <Rule Id="S2292" Action="Info" />
-    <Rule Id="S104" Action="Info" />
-    <Rule Id="S103" Action="Info" />
-    <Rule Id="S1541" Action="Info" />
-    <Rule Id="S122" Action="Info" />
-    <Rule Id="S1067" Action="Info" />
-    <Rule Id="S107" Action="Info" />
-    <Rule Id="S818" Action="Info" />
-    <Rule Id="S1643" Action="Info" />
-    <Rule Id="S2376" Action="Info" />
-    <Rule Id="S2360" Action="Info" />
-    <Rule Id="S100" Action="Info" />
-    <Rule Id="S1659" Action="Info" />
-    <Rule Id="S2372" Action="Info" />
-    <Rule Id="S1479" Action="Info" />
-    <Rule Id="S101" Action="Info" />
-    <Rule Id="S3246" Action="Info" />
-    <Rule Id="S2333" Action="Info" />
-    <Rule Id="S2219" Action="Info" />
-    <Rule Id="S2345" Action="Info" />
-    <Rule Id="S2346" Action="Info" />
-    <Rule Id="S2344" Action="Info" />
-    <Rule Id="S3220" Action="None" />
-    <Rule Id="S1449" Action="Info" />
-    <Rule Id="S3216" Action="Info" />
-    <Rule Id="S3236" Action="Info" />
+  <Rules AnalyzerId="System.Runtime.CSharp.Analyzers" RuleNamespace="System.Runtime.CSharp.Analyzers">
+    <Rule Id="CA2002" Action="Info" />
+    <Rule Id="CA2213" Action="None" />
   </Rules>
-  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
-    <Rule Id="S1698" Action="Info" />
-    <Rule Id="S1944" Action="Info" />
-    <Rule Id="S2201" Action="Info" />
-    <Rule Id="S3241" Action="Info" />
-    <Rule Id="S3265" Action="Info" />
-    <Rule Id="S3453" Action="Info" />
-    <Rule Id="S2583" Action="Info" />
-    <Rule Id="S2259" Action="Info" />
-    <Rule Id="S3264" Action="Info" />
-    <Rule Id="S3440" Action="Info" />
-    <Rule Id="S3459" Action="Info" />
-    <Rule Id="S3168" Action="Info" />
-    <Rule Id="S112" Action="Info" />
-    <Rule Id="S3010" Action="Info" />
+  <Rules AnalyzerId="System.Runtime.InteropServices.Analyzers" RuleNamespace="System.Runtime.InteropServices.Analyzers">
+    <Rule Id="CA1401" Action="None" />
+    <Rule Id="CA2101" Action="None" />
   </Rules>
 </RuleSet>

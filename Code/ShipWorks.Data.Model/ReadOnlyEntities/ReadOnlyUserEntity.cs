@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsAdmin = source.IsAdmin;
             IsDeleted = source.IsDeleted;
             
-            Settings = source.Settings?.AsReadOnly(objectMap);
+            Settings = (IUserSettingsEntity) source.Settings?.AsReadOnly(objectMap);
             
             
 
@@ -108,6 +108,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUserEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

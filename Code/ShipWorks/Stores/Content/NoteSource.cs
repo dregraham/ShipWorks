@@ -8,9 +8,9 @@ using System.ComponentModel;
 namespace ShipWorks.Stores.Content
 {
     /// <summary>
-    /// Type\classification of ntoes.
+    /// Type\classification of notes.
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum NoteSource
     {
         /// <summary>
@@ -23,6 +23,12 @@ namespace ShipWorks.Stores.Content
         /// A note that was entered b\c it was downloaded from an online store
         /// </summary>
         [Description("Downloaded")]
-        Downloaded = 1
+        Downloaded = 1,
+
+        /// <summary>
+        /// A note that was combined from other order(s)
+        /// </summary>
+        [Description("Combined Order")]
+        CombinedOrder = 2
     }
 }

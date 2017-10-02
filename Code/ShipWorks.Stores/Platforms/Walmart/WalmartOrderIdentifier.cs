@@ -1,5 +1,8 @@
 ﻿using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Walmart
@@ -11,10 +14,10 @@ namespace ShipWorks.Stores.Platforms.Walmart
     /// The reason we are using the order identifier instead of OrderNumberIdentifier
     /// is that when the Walmart integration was first released we stored the customer order number as the
     /// order number. We updated the integration to store PurchaseOrderNumber as the OrderNumber.
-    /// 
+    ///
     /// If we use the OrderNumberIdentifier with the PurchaseOrderNumber and downloaded an existing order, the
     /// version in the order table would be ignored and a new order would be created.  Since there is an index on the PurchaseOrderId,
-    /// this should be just as efficient as using the OrderNumberIdentifier. 
+    /// this should be just as efficient as using the OrderNumberIdentifier.
     /// </remarks>
     public class WalmartOrderIdentifier : OrderIdentifier
     {
@@ -50,11 +53,17 @@ namespace ShipWorks.Stores.Platforms.Walmart
         }
 
         /// <summary>
+        /// Create an entity query that can be used to retrieve the search record for a combined order
+        /// </summary>
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
+            CreateCombinedSearchQueryInternal(factory,
+                factory.WalmartOrderSearch,
+                WalmartOrderSearchFields.OriginalOrderID,
+                WalmartOrderSearchFields.PurchaseOrderID == purchaseOrderId);
+
+        /// <summary>
         /// String representation
         /// </summary>
-        public override string ToString()
-        {
-            return $"WalmartPurchaseOrderID:{purchaseOrderId}";
-        }
+        public override string ToString() => $"WalmartPurchaseOrderID:{purchaseOrderId}";
     }
 }

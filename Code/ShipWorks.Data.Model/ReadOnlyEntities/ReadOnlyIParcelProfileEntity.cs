@@ -45,10 +45,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IsDeliveryDutyPaid = source.IsDeliveryDutyPaid;
             SkuAndQuantities = source.SkuAndQuantities;
             
-            ShippingProfile = source.ShippingProfile?.AsReadOnly(objectMap);
+            ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
-            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).ToReadOnly() ??
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IIParcelProfilePackageEntity>().ToReadOnly() ??
                 Enumerable.Empty<IIParcelProfilePackageEntity>();
 
             CopyCustomIParcelProfileData(source);
@@ -119,6 +119,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IIParcelProfileEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
+        
 
         /// <summary>
         /// Copy any custom data

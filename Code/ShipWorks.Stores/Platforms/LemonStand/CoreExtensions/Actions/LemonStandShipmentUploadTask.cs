@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Autofac;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -29,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         ///     Instantiates the editor for the action
         /// </summary>
         public override ActionTaskEditor CreateEditor() => new BasicShipmentUploadTaskEditor();
-        
+
         /// <summary>
         ///     Indicates if the task is supported for the specified store
         /// </summary>
@@ -40,9 +43,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
         }
 
         /// <summary>
+        /// This ActionTask should be run async
+        /// </summary>
+        public override bool IsAsync => true;
+
+        /// <summary>
         ///     Run the task
         /// </summary>
-        public override void Run(List<long> inputKeys, ActionStepContext context)
+        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             if (StoreID <= 0)
             {
@@ -68,24 +76,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions
                 context.ConsumingPostponed();
 
                 // Upload the details, first starting with all the postponed input, plus the current input
-                UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys));
+                await UpdloadShipmentDetails(store, postponedKeys.Concat(inputKeys)).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         ///     Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private static void UpdloadShipmentDetails(LemonStandStoreEntity store, IEnumerable<long> shipmentKeys)
+        private static async Task UpdloadShipmentDetails(LemonStandStoreEntity store, IEnumerable<long> shipmentKeys)
         {
             try
             {
-                foreach (long shipmentKey in shipmentKeys)
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    LemonStandOnlineUpdater updater = new LemonStandOnlineUpdater(store);
+                    LemonStandOnlineUpdater updater = scope.Resolve<LemonStandOnlineUpdater>(TypedParameter.From(store));
 
-                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+                    foreach (long shipmentKey in shipmentKeys)
+                    {
+                        ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
 
-                    updater.UpdateShipmentDetails(shipment);
+                        await updater.UpdateShipmentDetails(shipment).ConfigureAwait(false);
+                    }
                 }
             }
             catch (LemonStandException ex)

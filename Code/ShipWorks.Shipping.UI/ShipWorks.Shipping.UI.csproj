@@ -218,6 +218,7 @@
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeShipmentTypePipeline.cs" />
+    <Compile Include="ShippingPanel\ObservableRegistrations\RatesRetrievedPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShippingDialogOpeningPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\SaveAfterAddressValidationPipeline.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ShipmentSelectionChangedPipeline.cs" />

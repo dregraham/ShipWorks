@@ -1,4 +1,6 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation
 {
     /// <summary>
@@ -11,6 +13,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <returns>Returns true if the credentials are valid; otherwise false.</returns>
-        bool AreCredentialsValid(Credentials credentials);
+        Task<bool> AreCredentialsValid(Credentials credentials);
     }
 }

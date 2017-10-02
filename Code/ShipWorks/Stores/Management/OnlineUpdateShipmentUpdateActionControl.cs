@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
+using Autofac;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
 {
@@ -37,11 +32,11 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Create the configured tasks
         /// </summary>
-        public override List<ActionTask> CreateActionTasks(StoreEntity store)
+        public override List<ActionTask> CreateActionTasks(ILifetimeScope lifetimeScope, StoreEntity store)
         {
             if (createTask.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(taskType, store).CreateInstance() };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(taskType, store).CreateInstance(lifetimeScope) };
             }
             else
             {
