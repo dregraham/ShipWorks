@@ -4930,6 +4930,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [UspsAutomaticExpress1] [bit] NOT NULL,
 [UspsAutomaticExpress1Account] [bigint] NOT NULL,
 [UspsInsuranceProvider] [int] NOT NULL,
+[UspsShippingDateCutoffEnabled] bit NOT NULL,
+[UspsShippingDateCutoffTime] time(0) NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
@@ -5816,12 +5818,12 @@ GO
 PRINT N'Creating table to [dbo].[EtsyOrderItem]'
 GO
 CREATE TABLE [dbo].[EtsyOrderItem](
-	[OrderItemID] [bigint] NOT NULL,
-	[TransactionID] [int] NOT NULL,
-	[ListingID] [int] NOT NULL
+    [OrderItemID] [bigint] NOT NULL,
+    [TransactionID] [int] NOT NULL,
+    [ListingID] [int] NOT NULL
  CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
 (
-	[OrderItemID] ASC
+    [OrderItemID] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

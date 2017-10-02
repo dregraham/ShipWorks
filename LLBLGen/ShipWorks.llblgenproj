@@ -2432,6 +2432,8 @@
           <Field Name="UspsAutomaticExpress1" Type="bool" FieldIndex="27" />
           <Field Name="UspsAutomaticExpress1Account" Type="long" FieldIndex="28" />
           <Field Name="UspsInsuranceProvider" Type="int" FieldIndex="29" />
+          <Field Name="UspsShippingDateCutoffEnabled" Type="bool" FieldIndex="53" />
+          <Field Name="UspsShippingDateCutoffTime" Type="timespan" FieldIndex="54" />
           <Field Name="WorldShipLaunch" Type="bool" FieldIndex="26" />
           <Field Name="WorldShipMailInnovationsEnabled" Type="bool" FieldIndex="41" />
         </Fields>
@@ -4055,7 +4057,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-25T14:31:30.5398359Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-02T16:20:24.8238493Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7689,6 +7691,8 @@
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="UspsShippingDateCutoffEnabled" Ordinal="54" DbType="2" />
+                    <Field Name="UspsShippingDateCutoffTime" Ordinal="55" DbType="31" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -12143,6 +12147,8 @@
             <FieldMapping FieldName="UspsAutomaticExpress1" TargetFieldName="UspsAutomaticExpress1" />
             <FieldMapping FieldName="UspsAutomaticExpress1Account" TargetFieldName="UspsAutomaticExpress1Account" />
             <FieldMapping FieldName="UspsInsuranceProvider" TargetFieldName="UspsInsuranceProvider" />
+            <FieldMapping FieldName="UspsShippingDateCutoffEnabled" TargetFieldName="UspsShippingDateCutoffEnabled" />
+            <FieldMapping FieldName="UspsShippingDateCutoffTime" TargetFieldName="UspsShippingDateCutoffTime" />
             <FieldMapping FieldName="WorldShipLaunch" TargetFieldName="WorldShipLaunch" />
             <FieldMapping FieldName="WorldShipMailInnovationsEnabled" TargetFieldName="WorldShipMailInnovationsEnabled" />
           </FieldMappings>

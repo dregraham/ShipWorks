@@ -2858,7 +2858,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShippingSettingsEntity's mappings</summary>
 		private void InitShippingSettingsEntityMappings()
 		{
-			this.AddElementMapping("ShippingSettingsEntity", @"ShipWorksLocal", @"dbo", "ShippingSettings", 53, 0);
+			this.AddElementMapping("ShippingSettingsEntity", @"ShipWorksLocal", @"dbo", "ShippingSettings", 55, 0);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShippingSettingsID", "ShippingSettingsID", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 0);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalActivated", "Activated", false, "VarChar", 45, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "InternalConfigured", "Configured", false, "VarChar", 45, 0, 0, false, "", null, typeof(System.String), 2);
@@ -2912,6 +2912,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingSettingsEntity", "FedExFimsPassword", "FedExFimsPassword", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 50);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipmentEditLimit", "ShipmentEditLimit", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 51);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", "ShipmentsLoaderEnsureFiltersLoadedTimeout", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 52);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "UspsShippingDateCutoffEnabled", "UspsShippingDateCutoffEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 53);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "UspsShippingDateCutoffTime", "UspsShippingDateCutoffTime", false, "Time", 0, 0, 0, false, "", null, typeof(System.TimeSpan), 54);
 		}
 
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>

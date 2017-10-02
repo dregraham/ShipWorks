@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -11,8 +13,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Insurance;
-using System.Text;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -193,7 +193,7 @@ namespace ShipWorks.Shipping.Settings
 
             // Grab the ShipmentTypeCodes description excluding express 1 because we need a more explicit description
             List<string> shipmentTypeDescriptions = settings.ActivatedTypes.Except(settings.ExcludedTypes)
-                .Except(new [] { ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps })
+                .Except(new[] { ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Usps })
                 .Select(t => EnumHelper.GetDescription(t))
                 .ToList();
 
@@ -268,6 +268,8 @@ namespace ShipWorks.Shipping.Settings
             settings.UspsAutomaticExpress1 = false;
             settings.UspsAutomaticExpress1Account = 0;
             settings.UspsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            settings.UspsShippingDateCutoffEnabled = false;
+            settings.UspsShippingDateCutoffTime = new TimeSpan(17, 0, 0);
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

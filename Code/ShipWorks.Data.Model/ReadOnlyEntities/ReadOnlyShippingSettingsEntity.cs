@@ -89,6 +89,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FedExFimsPassword = source.FedExFimsPassword;
             ShipmentEditLimit = source.ShipmentEditLimit;
             ShipmentsLoaderEnsureFiltersLoadedTimeout = source.ShipmentsLoaderEnsureFiltersLoadedTimeout;
+            UspsShippingDateCutoffEnabled = source.UspsShippingDateCutoffEnabled;
+            UspsShippingDateCutoffTime = source.UspsShippingDateCutoffTime;
             
             
             
@@ -415,6 +417,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipmentsLoaderEnsureFiltersLoadedTimeout { get; }
+        /// <summary> The UspsShippingDateCutoffEnabled property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."UspsShippingDateCutoffEnabled"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean UspsShippingDateCutoffEnabled { get; }
+        /// <summary> The UspsShippingDateCutoffTime property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."UspsShippingDateCutoffTime"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Time, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.TimeSpan UspsShippingDateCutoffTime { get; }
         
         
         
