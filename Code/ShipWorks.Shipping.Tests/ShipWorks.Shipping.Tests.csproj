@@ -272,6 +272,7 @@
     <Compile Include="Carriers\Other\OtherLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

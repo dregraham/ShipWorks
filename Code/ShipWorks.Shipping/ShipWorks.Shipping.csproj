@@ -378,6 +378,10 @@
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\IShipEngineClient.cs" />
+    <Compile Include="ShipEngine\IShipEnginePartnerClient.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\ShipEngineException.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerClient.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

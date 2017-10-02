@@ -9,5 +9,10 @@
         /// Ensures the ApiKey contains a value
         /// </summary>
         void Configure();
+
+        /// <summary>
+        /// Actual API Key value
+        /// </summary>
+        string Value { get; }
     }
 }
