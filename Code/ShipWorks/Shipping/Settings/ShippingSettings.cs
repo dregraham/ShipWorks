@@ -291,6 +291,8 @@ namespace ShipWorks.Shipping.Settings
             settings.FedExFimsUsername = string.Empty;
             settings.FedExFimsPassword = string.Empty;
 
+            settings.ShipEngineApiKey = string.Empty;
+
             adapter.SaveAndRefetch(settings);
         }
     }

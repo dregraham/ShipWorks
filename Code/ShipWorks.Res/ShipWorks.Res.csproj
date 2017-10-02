@@ -289,6 +289,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.14\5.14.0.13.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.4.0.sql" />
+    <Content Include="Data\Administration\Scripts\Update\5.19\5.19.0.0.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <EmbeddedResource Include="Templates\Distribution\Source.zip" />
   </ItemGroup>
