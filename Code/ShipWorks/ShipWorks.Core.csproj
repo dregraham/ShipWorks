@@ -1301,6 +1301,12 @@
     <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.Designer.cs">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
@@ -8088,6 +8094,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ShippingDateCutoffControl.resx">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>
