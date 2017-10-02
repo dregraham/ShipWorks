@@ -31,14 +31,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
         static readonly ILog log = LogManager.GetLogger(typeof(ShopifyDownloader));
         private readonly ShopifyRequestedShippingField requestedShippingField = ShopifyRequestedShippingField.Code;
         private readonly IShopifyWebClient webClient = null;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShopifyDownloader(StoreEntity store,
-            Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> webClientFactory)
+            Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> webClientFactory,
+            IDateTimeProvider dateTimeProvider)
             : base(store)
         {
+            this.dateTimeProvider = dateTimeProvider;
             requestedShippingField = (ShopifyRequestedShippingField) ((ShopifyStoreEntity) store).ShopifyRequestedShippingOption;
             OrdersPerPage = ShopifyConstants.ShopifyOrdersPerPage;
             webClient = webClientFactory(store as ShopifyStoreEntity, Progress);
@@ -146,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             if (!startDate.HasValue)
             {
-                startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(180));
+                startDate = dateTimeProvider.UtcNow.Subtract(TimeSpan.FromDays(180));
             }
 
             // Use the web servers ending time, backed off by a little so we don't have to worry about race conditions

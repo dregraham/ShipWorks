@@ -54,7 +54,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
 
                 webClient.Setup(w => w.GetOrderCount(It.IsInRange(updatedAfter, DateTime.MaxValue, Moq.Range.Inclusive),
                                                      It.IsInRange(DateTime.MinValue, updatedBefore, Moq.Range.Inclusive)))
-                                                     .Returns(0);
+                    .Returns(0);
                 webClient.Setup(w => w.GetOrderCount(It.IsInRange(DateTime.MinValue, updatedAt, Moq.Range.Inclusive),
                                                      It.IsInRange(updatedAt, DateTime.MaxValue, Moq.Range.Inclusive)))
                     .Returns(7);
