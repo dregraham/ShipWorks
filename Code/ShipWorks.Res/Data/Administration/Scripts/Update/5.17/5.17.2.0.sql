@@ -26,9 +26,4 @@ INSERT INTO [dbo].[EtsyOrderItem]
      INNER JOIN [Store] ON [Store].[StoreID] = [Order].[StoreID] 
      WHERE [TypeCode] = 33 
      AND [OrderItemID] NOT IN (SELECT [OrderItemID] FROM [EtsyOrderItem]) 
-GO 
- 
-ALTER TABLE [EtsyOrderItem] ALTER COLUMN [TransactionID] [nvarchar] (300) NOT NULL 
-GO 
-ALTER TABLE [EtsyOrderItem] ALTER COLUMN [ListingID] [nvarchar] (100) NOT NULL 
 GO
