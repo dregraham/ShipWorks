@@ -89,6 +89,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FedExFimsPassword = source.FedExFimsPassword;
             ShipmentEditLimit = source.ShipmentEditLimit;
             ShipmentsLoaderEnsureFiltersLoadedTimeout = source.ShipmentsLoaderEnsureFiltersLoadedTimeout;
+            ShipEngineApiKey = source.ShipEngineApiKey;
             
             
             
@@ -415,6 +416,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ShipmentsLoaderEnsureFiltersLoadedTimeout { get; }
+        /// <summary> The ShipEngineApiKey property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipEngineApiKey"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ShipEngineApiKey { get; }
         
         
         

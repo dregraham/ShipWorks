@@ -55,6 +55,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ComputerEntity": return EntityType.ComputerEntity;
 				case "ConfigurationEntity": return EntityType.ConfigurationEntity;
 				case "CustomerEntity": return EntityType.CustomerEntity;
+				case "DhlExpressAccountEntity": return EntityType.DhlExpressAccountEntity;
 				case "DimensionsProfileEntity": return EntityType.DimensionsProfileEntity;
 				case "DownloadEntity": return EntityType.DownloadEntity;
 				case "DownloadDetailEntity": return EntityType.DownloadDetailEntity;

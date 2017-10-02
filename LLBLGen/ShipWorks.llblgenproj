@@ -579,6 +579,26 @@
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="31" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
+        <Fields>
+          <Field Name="AccountNumber" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
+          <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="13" />
+          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="DhlExpressAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
+          <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
+          <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
+          <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="DimensionsProfile" ObjectID="049d2daa-2d00-456e-b841-05c6e40adfab">
         <Fields>
           <Field Name="DimensionsProfileID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
@@ -2418,6 +2438,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
+          <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -4055,7 +4076,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-25T14:31:30.5398359Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-02T19:03:07.4328879Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4625,6 +4646,27 @@
                     <Field Name="RollupOrderCount" Ordinal="33" DbType="8" Precision="10" />
                     <Field Name="RollupOrderTotal" Ordinal="34" DbType="9" Precision="19" Scale="4" />
                     <Field Name="RollupNoteCount" Ordinal="35" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressAccount">
+                  <PkConstraintName Name="PK_DhlExpressAccount" />
+                  <Fields>
+                    <Field Name="DhlExpressAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
+                    <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
+                    <Field Name="LastName" Ordinal="8" DbType="12" Length="30" />
+                    <Field Name="Company" Ordinal="9" DbType="12" Length="30" />
+                    <Field Name="Street1" Ordinal="10" DbType="12" Length="43" />
+                    <Field Name="City" Ordinal="11" DbType="12" Length="25" />
+                    <Field Name="StateProvCode" Ordinal="12" DbType="12" Length="50" />
+                    <Field Name="PostalCode" Ordinal="13" DbType="12" Length="10" />
+                    <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
+                    <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
+                    <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -7689,6 +7731,7 @@
                     <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineApiKey" Ordinal="54" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -10256,6 +10299,26 @@
             <FieldMapping FieldName="ShipWebsite" TargetFieldName="ShipWebsite" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressAccount" TargetName="ShipWorksLocal:dbo:DhlExpressAccount">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
+            <FieldMapping FieldName="City" TargetFieldName="City" />
+            <FieldMapping FieldName="Company" TargetFieldName="Company" />
+            <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="Email" TargetFieldName="Email" />
+            <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
+            <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
+            <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
+            <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
+            <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":DimensionsProfile" TargetName="ShipWorksLocal:dbo:DimensionsProfile">
           <FieldMappings>
             <FieldMapping FieldName="DimensionsProfileID" TargetFieldName="DimensionsProfileID" SequenceToUse="SCOPE_IDENTITY()" />
@@ -12129,6 +12192,7 @@
             <FieldMapping FieldName="IParcelInsuranceProvider" TargetFieldName="iParcelInsuranceProvider" />
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
+            <FieldMapping FieldName="ShipEngineApiKey" TargetFieldName="ShipEngineApiKey" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
             <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />
