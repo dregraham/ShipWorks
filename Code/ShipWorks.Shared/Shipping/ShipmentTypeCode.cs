@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping
 
         [Description("DHL Express")]
         [ShipmentTypeIcon("dhl")]
-        DHLExpress = 16,
+        DhlExpress = 16,
 
         [Description("None")]
         None = 99
