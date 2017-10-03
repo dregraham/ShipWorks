@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             ShippingSettingsEntity settings = shippingSettings.Fetch();
             Value = settings.ShipEngineApiKey;
-            if (settings.ShipEngineApiKey == string.Empty)
+            if (string.IsNullOrEmpty(settings.ShipEngineApiKey))
             {
                 Value = GetNewApiKey();
                 settings.ShipEngineApiKey = Value;
