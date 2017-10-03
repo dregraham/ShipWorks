@@ -35,6 +35,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string refreshToken);
 
         /// <summary>
+        /// Gets the next batch of distribution centers.
+        /// </summary>
+        ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string nextToken, string refreshToken);
+        
+        /// <summary>
         /// Gets the product.
         /// </summary>
         ChannelAdvisorProduct GetProduct(int productID, string refreshToken);

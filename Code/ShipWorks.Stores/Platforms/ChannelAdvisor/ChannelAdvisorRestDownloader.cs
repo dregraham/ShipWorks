@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return;
                 }
 
-                distributionCenters = restClient.GetDistributionCenters(refreshToken).DistributionCenters;
+                UpdateDistributionCenters();
 
                 DateTime start = (await GetOrderDateStartingPoint().ConfigureAwait(false)) ??
                     DateTime.UtcNow.AddDays(-30);
@@ -116,6 +116,27 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
+        }
+
+        /// <summary>
+        /// Updates local copy of Distribution Centers
+        /// </summary>
+        private void UpdateDistributionCenters()
+        {
+            List<ChannelAdvisorDistributionCenter> refreshedDistributionCenters = new List<ChannelAdvisorDistributionCenter>();
+
+            ChannelAdvisorDistributionCenterResponse response = restClient.GetDistributionCenters(refreshToken);
+            
+            while(response?.DistributionCenters?.Any() ?? false)
+            {
+                refreshedDistributionCenters.AddRange(response.DistributionCenters);
+
+                response = string.IsNullOrEmpty(response.OdataNextLink) 
+                    ? null 
+                    : restClient.GetDistributionCenters(response.OdataNextLink, refreshToken);
+            }
+
+            distributionCenters = refreshedDistributionCenters;
         }
 
         /// <summary>

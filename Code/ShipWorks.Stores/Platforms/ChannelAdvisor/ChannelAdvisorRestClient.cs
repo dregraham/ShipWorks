@@ -129,6 +129,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Gets the next batch of distribution centers
+        /// </summary>
+        public ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string nextToken, string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(nextToken, HttpVerb.Get);
+
+            return ProcessRequest<ChannelAdvisorDistributionCenterResponse>(submitter, "GetDistributionCenters", refreshToken);
+        }
+
+        /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
@@ -147,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Get orders from the start date for the store
+        /// Gets the next batch of orders
         /// </summary>
         public ChannelAdvisorOrderResult GetOrders(string nextToken, string refreshToken)
         {
