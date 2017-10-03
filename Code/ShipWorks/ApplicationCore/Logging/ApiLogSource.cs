@@ -130,6 +130,11 @@ namespace ShipWorks.ApplicationCore.Logging
 		GeekSeller,
         UpsLocalRating,
         GoogleMaps,
-        Jet
+        Jet,
+
+        [ApiPrivateLogSource]
+        ShipEngine,
+        [ApiPrivateLogSource]
+        DHLExpress,
     }
 }
