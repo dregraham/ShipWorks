@@ -2,6 +2,7 @@
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipEngine.ApiClient.Api;
@@ -71,6 +72,17 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             accountsApi.Verify(i =>
                 i.DHLExpressAccountCarrierConnectAccountAsync(
                     It.Is<DHLExpressAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd"));
+        }
+
+        [Fact]
+        public void ConnectDHLAccount_SetsLoggingActionsOnCarrierAccountsApi()
+        {
+            var apiEntry = mock.CreateMock<IApiLogEntry>();
+            mock.MockFunc(apiEntry);
+            testObject.ConnectDHLAccount("AccountNumber");
+            
+            accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
+            accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
         }
 
         public void Dispose()
