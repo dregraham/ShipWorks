@@ -24,6 +24,9 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IHttpRequestSubmitterFactory requestFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipEnginePartnerClient(IHttpRequestSubmitterFactory requestFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
