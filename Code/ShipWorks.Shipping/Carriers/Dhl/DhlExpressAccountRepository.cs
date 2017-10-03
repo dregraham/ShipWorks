@@ -25,8 +25,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Gets the default profile account.
         /// </summary>
-        public override DhlExpressAccountEntity DefaultProfileAccount => 
-            throw new NotImplementedException();
+        public override DhlExpressAccountEntity DefaultProfileAccount
+        {
+            get
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the accounts for the carrier.

@@ -29,7 +29,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Applies account to shipment
         /// </summary>
-        public void ApplyTo(ShipmentEntity shipment) => throw new NotImplementedException();
+        public void ApplyTo(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Copy custom data
