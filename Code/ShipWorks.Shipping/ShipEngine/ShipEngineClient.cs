@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
@@ -15,6 +16,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Client for interacting with ShipEngine
     /// </summary>
+    [Component]
     public class ShipEngineClient
     {
         private ShipEngineApiKey apiKey;
