@@ -756,7 +756,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(DhlExpressAccountFieldIndex), "DhlExpressAccountEntity");
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "DhlExpressAccountID", typeof(System.Int64), true, false, true, false,  (int)DhlExpressAccountFieldIndex.DhlExpressAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)DhlExpressAccountFieldIndex.RowVersion, 2147483647, 0, 0);
-			this.AddElementFieldInfo("DhlExpressAccountEntity", "AccountNumber", typeof(System.Int32), false, false, false, false,  (int)DhlExpressAccountFieldIndex.AccountNumber, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)DhlExpressAccountFieldIndex.AccountNumber, 0, 0, 19);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.FirstName, 30, 0, 0);

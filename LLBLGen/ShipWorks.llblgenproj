@@ -581,7 +581,7 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
         <Fields>
-          <Field Name="AccountNumber" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="AccountNumber" Type="long" FieldIndex="2" />
           <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
           <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="13" />
@@ -4076,7 +4076,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-02T19:03:07.4328879Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-03T17:18:10.4598382Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4653,7 +4653,7 @@
                   <Fields>
                     <Field Name="DhlExpressAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="AccountNumber" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
                     <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
