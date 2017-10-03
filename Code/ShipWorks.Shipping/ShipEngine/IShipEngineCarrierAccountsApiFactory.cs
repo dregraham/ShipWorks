@@ -12,5 +12,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns></returns>
         ICarrierAccountsApi CreateCarrierAccountsApi();
+
+        /// <summary>
+        /// Create the CarrierApi
+        /// </summary>
+        /// <returns></returns>
+        ICarriersApi CreateCarrierApi();
     }
 }
