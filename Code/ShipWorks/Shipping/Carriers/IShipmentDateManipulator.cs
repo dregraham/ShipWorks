@@ -10,6 +10,6 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Manipulate the date of the given shipment
         /// </summary>
-        bool Manipulate(ShipmentEntity shipment);
+        void Manipulate(ShipmentEntity shipment);
     }
 }
