@@ -8,15 +8,19 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
+    /// <summary>
+    /// Manage Dhl Express Accounts
+    /// </summary>
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    [Component]
     public class DhlExpressAccountManager : IInitializeForCurrentSession
     {
         static TableSynchronizer<DhlExpressAccountEntity> synchronizer;

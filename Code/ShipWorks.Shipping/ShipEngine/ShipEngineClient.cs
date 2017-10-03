@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             Task<string> key = GetApiKey();
             ICarriersApi carrierApi = carrierAccountsApiFactory.CreateCarrierApi();
-
+            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}");
             try
             {
                 CarrierListResponse result = await carrierApi.CarriersListAsync(key.Result);
