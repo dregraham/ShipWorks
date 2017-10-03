@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Default manipulator of shipment date
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class DefaultShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IDateTimeProvider dateTimeProvider;
