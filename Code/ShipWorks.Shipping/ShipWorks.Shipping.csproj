@@ -104,7 +104,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ShipEngine.ApiClient.dll.1.0.0\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.0\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.15.1.0.41\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
@@ -237,6 +237,7 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\ShipEngine\ShipEngineClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
