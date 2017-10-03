@@ -2,6 +2,7 @@
 using Interapptive.Shared.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,17 +15,20 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Client to the ShipEngine Partner API
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipEnginePartnerClient : IShipEnginePartnerClient
     {
         private const string CreateAccountUrl = "https://api.shipengine.com/v1/partners/accounts";
         private const string CreateApiKeyUrl = "https://api.shipengine.com/v1/partners/accounts/{0}/api_keys";
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
+        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
-        public ShipEnginePartnerClient(IHttpRequestSubmitterFactory requestFactory)
+        public ShipEnginePartnerClient(IHttpRequestSubmitterFactory requestFactory,
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             this.requestFactory = requestFactory;
+            this.apiLogEntryFactory = apiLogEntryFactory;
         }
 
         /// <summary>
@@ -38,15 +42,25 @@ namespace ShipWorks.Shipping.ShipEngine
             IHttpResponseReader response;
             JToken accountToken;
 
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, "CreateNewAccount");
+            apiLogEntry.LogRequest(createAccountRequest);
+
             try
             {
                 response = createAccountRequest.GetResponse();
                 string result = response.ReadResult();
+
+                apiLogEntry.LogResponse(result);
                 accountToken = JObject.Parse(result)["account_id"];
             }
-            catch(Exception ex) when (ex is WebException || ex is JsonReaderException)
+            catch(JsonReaderException ex)
             {
                 throw new ShipEngineException("Error reading response from ShipEngine.", ex);
+            }
+            catch (WebException ex)
+            {
+                apiLogEntry.LogResponse(ex);
+                throw new ShipEngineException("Error communicating with ShipEngine.", ex);
             }
 
             if (accountToken == null)
@@ -72,15 +86,25 @@ namespace ShipWorks.Shipping.ShipEngine
             IHttpResponseReader response;
             JToken apiKeyToken;
 
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, "CreateNewAccount");
+            apiLogEntry.LogRequest(createAccountRequest);
+
             try
             {
                 response = createAccountRequest.GetResponse();
                 string result = response.ReadResult();
+
+                apiLogEntry.LogResponse(result);
                 apiKeyToken = JObject.Parse(result)["encrypted_api_key"];
             }
-            catch (Exception ex) when (ex is WebException || ex is JsonReaderException)
+            catch (JsonReaderException ex)
             {
                 throw new ShipEngineException("Error reading response from ShipEngine.", ex);
+            }
+            catch (WebException ex)
+            {
+                apiLogEntry.LogResponse(ex);
+                throw new ShipEngineException("Error communicating with ShipEngine.", ex);
             }
 
             if (apiKeyToken == null)
