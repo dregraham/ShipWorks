@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client for interacting with ShipEngine
     /// </summary>
     [Component]
-    public class ShipEngineClient
+    public class ShipEngineClient : IShipEngineClient
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;

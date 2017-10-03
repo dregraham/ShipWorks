@@ -10,7 +10,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// DHL Express implementation of shipment type
     /// </summary>
     /// <seealso cref="ShipWorks.Shipping.ShipmentType" />
-    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.DhlExpress)]
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.DhlExpress, SingleInstance = true)]
     public class DhlExpressShipmentType : ShipmentType
     {
         /// <summary>

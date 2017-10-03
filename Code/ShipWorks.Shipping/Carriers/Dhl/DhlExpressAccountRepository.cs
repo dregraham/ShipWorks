@@ -3,18 +3,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
-    [Component(RegistrationType.Self)]
-    [Component(RegistrationType.ImplementedInterfaces)]
+    [Component]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressAccountRepository : CarrierAccountRepositoryBase<DhlExpressAccountEntity, IDhlExpressAccountEntity>,
-        ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>
-
+    public class DhlExpressAccountRepository : CarrierAccountRepositoryBase<DhlExpressAccountEntity, IDhlExpressAccountEntity>, IDhlExpressAccountRepository
     {
         /// <summary>
         /// Gets the accounts for the carrier.
@@ -36,31 +30,31 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public override IEnumerable<IDhlExpressAccountEntity> AccountsReadOnly => 
+        public override IEnumerable<IDhlExpressAccountEntity> AccountsReadOnly =>
             DhlExpressAccountManager.AccountsReadOnly;
 
         /// <summary>
         /// Force a check for changes
         /// </summary>
-        public override void CheckForChangesNeeded() => 
+        public override void CheckForChangesNeeded() =>
             DhlExpressAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
-        public override DhlExpressAccountEntity GetAccount(long accountID) => 
+        public override DhlExpressAccountEntity GetAccount(long accountID) =>
             DhlExpressAccountManager.GetAccount(accountID);
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
-        public override IDhlExpressAccountEntity GetAccountReadOnly(long accountID) => 
+        public override IDhlExpressAccountEntity GetAccountReadOnly(long accountID) =>
             DhlExpressAccountManager.GetAccountReadOnly(accountID);
 
         /// <summary>
         /// Saves the specified account.
         /// </summary>
-        public override void Save(DhlExpressAccountEntity account) => 
+        public override void Save(DhlExpressAccountEntity account) =>
             DhlExpressAccountManager.SaveAccount(account);
 
         /// <summary>
