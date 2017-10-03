@@ -154,6 +154,8 @@
     <Compile Include="Custom\EntityClasses\ActionEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Custom\EntityClasses\GrouponOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />

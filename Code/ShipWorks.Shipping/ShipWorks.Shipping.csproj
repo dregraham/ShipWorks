@@ -178,6 +178,8 @@
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountManager.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />

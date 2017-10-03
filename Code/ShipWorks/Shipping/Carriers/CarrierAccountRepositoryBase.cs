@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Get a readonly account with the given id
         /// </summary>
-        public abstract TInterface GetAccountReadOnly(long uspsAccountID);
+        public abstract TInterface GetAccountReadOnly(long accountID);
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
