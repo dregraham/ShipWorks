@@ -6,9 +6,6 @@ using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -19,15 +16,14 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineClient
     {
-        private readonly ShipEngineApiKey apiKey;
+        private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="apiKey"></param>
-        public ShipEngineClient(ShipEngineApiKey apiKey,
+        public ShipEngineClient(IShipEngineApiKey apiKey,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory)
         {
@@ -37,37 +33,21 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// The SE Api Key
-        /// </summary>
-        public string ApiKey
-        {
-            get
-            {
-                if (apiKey.Value == string.Empty)
-                {
-                    apiKey.Configure();
-                }
-
-                return apiKey.Value;
-            }
-        }
-
-        /// <summary>
         /// Connect the accout number to ShipEngine
         /// </summary>
-        /// <param name="accountNumber"></param>
-        /// <returns></returns>
         public async Task<GenericResult<string>> ConnectDHLAccount(string accountNumber)
         {
+            Task<string> key = GetApiKey();
+
+            DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO() { AccountNumber = accountNumber, Nickname = string.Empty };
+
+            ICarrierAccountsApi apiInstance = carrierAccountsApiFactory.CreateCarrierAccountsApi();
+
+            ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount");
+
             try
             {
-                ICarrierAccountsApi apiInstance = carrierAccountsApiFactory.CreateCarrierAccountsApi();
-
-                ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount");
-
-                DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO() { AccountNumber = accountNumber, Nickname = string.Empty };
-
-                ConnectAccountResponseDTO result = await apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, ApiKey);
+                ConnectAccountResponseDTO result = await apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key.Result).ConfigureAwait(false);
 
                 return GenericResult.FromSuccess(result.CarrierId);
             }
@@ -75,6 +55,19 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 return GenericResult.FromError<string>(ex);
             }
+        }
+
+        /// <summary>
+        /// Get the api key
+        /// </summary>
+        private async Task<string> GetApiKey()
+        {
+            if (string.IsNullOrWhiteSpace(apiKey.Value))
+            {
+                await Task.Run(() => apiKey.Configure()).ConfigureAwait(false);
+            }
+
+            return apiKey.Value;
         }
 
         /// <summary>
