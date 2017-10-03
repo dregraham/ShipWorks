@@ -239,7 +239,9 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
-    <Compile Include="Carriers\ShipEngine\ShipEngineClient.cs" />
+    <Compile Include="ShipEngine\IShipEngineCarrierAccountsApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineCarrierAccountsApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />

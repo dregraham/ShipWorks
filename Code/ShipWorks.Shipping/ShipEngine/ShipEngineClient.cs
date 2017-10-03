@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineClient
     {
-        private ShipEngineApiKey apiKey;
+        private readonly ShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory;
 
