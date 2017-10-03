@@ -13,6 +13,13 @@ namespace ShipWorks.Shipping.Carriers
         private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
+        /// Constructor for unit tests
+        /// </summary>
+        protected DefaultShipmentDateManipulator()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public DefaultShipmentDateManipulator(IDateTimeProvider dateTimeProvider)
@@ -23,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Manipulate the date of the given shipment
         /// </summary>
-        public void Manipulate(ShipmentEntity shipment)
+        public virtual void Manipulate(ShipmentEntity shipment)
         {
             var now = dateTimeProvider.Now;
 
