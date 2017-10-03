@@ -4,7 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
              mc:Ignorable="d"
@@ -21,6 +23,7 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
+            <vc:ShipmentDateCutoffConverter x:Key="ShipmentDateCutoff" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -43,13 +46,23 @@
                       SelectedValue="{Binding ServiceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="Key"
                       DisplayMemberPath="Value" />
-
-            <TextBlock Grid.Row="1" Grid.Column="0"
+            <Border Grid.Row="1" Grid.Column="0" 
+                    Margin="0,5,0,0"
+                    BorderThickness="0">
+                <TextBlock VerticalAlignment="Top"
                        Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
-            <DatePicker Grid.Row="1" Grid.Column="1"
+            </Border>
+            <WrapPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                <DatePicker
                         Style="{StaticResource Grid.DatePicker.Default}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                             ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
+                <TextBlock Text=" " />
+                <TextBlock Text="{Binding ShipmentType, Converter={StaticResource ShipmentDateCutoff}}"
+                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingSettingsChangedMessage}"
+                           VerticalAlignment="Center"
+                           Margin="0,3,0,5" />
+            </WrapPanel>
         </Grid>
         <Grid Visibility="{Binding SupportsMultiplePackages,Converter={StaticResource BooleanToVisibility}}">
             <Grid.ColumnDefinitions>

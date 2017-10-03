@@ -356,38 +356,37 @@
 
                                 <StackPanel IsEnabled="{Binding DataContext.AllowEditing,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             Style="{StaticResource Expander.Content}">
-                                        <ContentControl
+                                    <ContentControl
                                             Content="{Binding DataContext.ShipmentViewModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ShippingPanelControl}}}"
                                             ContentTemplateSelector="{StaticResource TypeBasedTemplateSelector}">
-                                            <ContentControl.Style>
-                                                <Style TargetType="ContentControl">
-                                                    <!-- Don't let the row be selected -->
-                                                    <Setter Property="Focusable" Value="false"/>
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <!-- Don't let the row be selected -->
+                                                <Setter Property="Focusable" Value="false"/>
 
-                                                    <!-- Hide hover color change -->
-                                                    <Setter Property="Background" Value="Transparent" />
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type ContentControl}">
-                                                                <ContentPresenter />
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </ContentControl.Style>
-                                        </ContentControl>
-                                        <ui:TypeBasedTemplateSelector.Templates>
-
-                                            <ui:Template Value="{x:Type shipmentControl:OtherShipmentViewModel}"
+                                                <!-- Hide hover color change -->
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ContentControl}">
+                                                            <ContentPresenter />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                    <ui:TypeBasedTemplateSelector.Templates>
+                                        <ui:Template Value="{x:Type shipmentControl:OtherShipmentViewModel}"
                                                  DataTemplate="{StaticResource OtherShipmentViewModelTemplate}" />
 
-                                            <ui:Template Value="{x:Type shipmentControl:BestRateShipmentViewModel}"
+                                        <ui:Template Value="{x:Type shipmentControl:BestRateShipmentViewModel}"
                                                  DataTemplate="{StaticResource BestRateShipmentViewModelTemplate}" />
 
-                                            <ui:Template Value="{x:Type shipmentControl:ShipmentViewModel}"
+                                        <ui:Template Value="{x:Type shipmentControl:ShipmentViewModel}"
                                                  DataTemplate="{StaticResource ShipmentViewModelTemplate}" />
                                     </ui:TypeBasedTemplateSelector.Templates>
-                                    </StackPanel>
+                                </StackPanel>
                             </Expander>
                         </Border>
                         <Border DataContext="{Binding ShipmentViewModel}"

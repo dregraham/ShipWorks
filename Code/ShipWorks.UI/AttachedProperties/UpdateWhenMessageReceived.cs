@@ -31,7 +31,7 @@ namespace ShipWorks.UI.AttachedProperties
         /// </summary>
         private static void OnMessageTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ItemsControl control = d as ItemsControl;
+            FrameworkElement control = d as FrameworkElement;
             if (control == null)
             {
                 return;
@@ -45,12 +45,12 @@ namespace ShipWorks.UI.AttachedProperties
                 throw new InvalidOperationException("MessageType must be an implementation of IShipWorksMessage");
             }
 
-            IDisposable subscription = Messenger.Current.AsObservable<IShipWorksMessage>()
+            IDisposable subscription = Messenger.Current.AsObservable()
                 .Where(x => x.GetType() == messageType)
                 .ObserveOn(DispatcherScheduler.Current)
                 .Subscribe(x =>
                 {
-                    BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
+                    UpdateTarget(control);
                     ResetSelection(control as Selector);
                 });
 
@@ -58,6 +58,22 @@ namespace ShipWorks.UI.AttachedProperties
 
             control.Unloaded -= DisposeSubscription;
             control.Unloaded += DisposeSubscription;
+        }
+
+        /// <summary>
+        /// Update the binding target, if possible
+        /// </summary>
+        private static void UpdateTarget(FrameworkElement control)
+        {
+            if (control is ItemsControl)
+            {
+                BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
+            }
+
+            if (control is TextBlock)
+            {
+                BindingOperations.GetBindingExpressionBase(control, TextBlock.TextProperty)?.UpdateTarget();
+            }
         }
 
         /// <summary>
