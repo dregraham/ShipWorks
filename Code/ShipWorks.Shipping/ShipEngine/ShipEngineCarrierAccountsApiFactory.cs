@@ -1,10 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using ShipEngine.ApiClient.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -18,5 +13,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create the CarrierAccountsApi
         /// </summary>
         public ICarrierAccountsApi CreateCarrierAccountsApi() => new CarrierAccountsApi();
+
+        /// <summary>
+        /// Create the CarrierApi
+        /// </summary>
+        /// <returns></returns>
+        public ICarriersApi CreateCarrierApi() => new CarriersApi();
     }
 }
