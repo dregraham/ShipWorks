@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void ConnectDHLAccount_DelegatesToIShipEngineApiKey()
         {
-            testObject.ConnectDHLAccount("abcd");
+            testObject.ConnectDhlAccount("abcd");
 
             apiKey.Verify(i => i.Configure());
         }
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void ConnectDHLAccount_DelegatesToIShipEngineCarrierAccountsApiFactory()
         {
-            testObject.ConnectDHLAccount("abcd");
+            testObject.ConnectDhlAccount("abcd");
 
             accountsApiFactory.Verify(i => i.CreateCarrierAccountsApi());
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
                     It.IsAny<string>())).Throws(new Exception("you dun goofed"));
 
-            GenericResult<string> result = await testObject.ConnectDHLAccount("abcd");
+            GenericResult<string> result = await testObject.ConnectDhlAccount("abcd");
             
             Assert.False(result.Success);
             Assert.Equal("you dun goofed", result.Message);
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void ConnectDHLAccount_DelegatesToICarrierAccountsApiWithAccountNumber()
         {
-            testObject.ConnectDHLAccount("AccountNumber");
+            testObject.ConnectDhlAccount("AccountNumber");
 
             accountsApi.Verify(i =>
                 i.DHLExpressAccountCarrierConnectAccountAsync(
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             var apiEntry = mock.CreateMock<IApiLogEntry>();
             mock.MockFunc(apiEntry);
-            testObject.ConnectDHLAccount("AccountNumber");
+            testObject.ConnectDhlAccount("AccountNumber");
             
             accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
             accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);

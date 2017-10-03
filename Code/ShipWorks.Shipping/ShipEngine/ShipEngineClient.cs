@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client for interacting with ShipEngine
     /// </summary>
     [Component]
-    public class ShipEngineClient
+    public class ShipEngineClient : IShipEngineClient
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connect the accout number to ShipEngine
         /// </summary>
-        public async Task<GenericResult<string>> ConnectDHLAccount(string accountNumber)
+        public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
         {
             // First check and see if we already have the account connected
             string accountId = await GetCarrierIdByAccountNumber(accountNumber);
