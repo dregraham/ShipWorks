@@ -35,11 +35,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connect the accout number to ShipEngine
         /// </summary>
-        public async Task<GenericResult<string>> ConnectDHLAccount(string accountNumber)
+        public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
         {
             Task<string> key = GetApiKey();
 
-            DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO() { AccountNumber = accountNumber, Nickname = string.Empty };
+            DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO() { AccountNumber = accountNumber, Nickname = accountNumber };
 
             ICarrierAccountsApi apiInstance = carrierAccountsApiFactory.CreateCarrierAccountsApi();
 

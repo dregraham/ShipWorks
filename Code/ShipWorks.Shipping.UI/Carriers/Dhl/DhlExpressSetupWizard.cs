@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -143,6 +144,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         private void SaveAccount()
         {
+            account.Description = GetDefaultDescription(account);
+
             accountRepository.Save(account);
             shippingSettings.MarkAsConfigured(ShipmentTypeCode.DhlExpress);
         }
@@ -172,10 +175,43 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             WebHelper.OpenUrl(DhlExpressAccountUrl, this);
         }
 
+        /// <summary>
+        /// Shows the error message and prevents the user from proceeding through the wizard
+        /// </summary>
         private void ShowWizardError(string errorMessage, WizardStepEventArgs e)
         {
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
+        }
+
+        /// <summary>
+        /// Get the default description to use for the given account
+        /// </summary>
+        public static string GetDefaultDescription(DhlExpressAccountEntity account)
+        {
+            StringBuilder description = new StringBuilder(account.AccountNumber.ToString());
+
+            if (account.Street1.Length > 0)
+            {
+                if (description.Length > 0)
+                {
+                    description.Append(", ");
+                }
+
+                description.Append(account.Street1);
+            }
+
+            if (account.PostalCode.Length > 0)
+            {
+                if (description.Length > 0)
+                {
+                    description.Append(", ");
+                }
+
+                description.Append(account.PostalCode);
+            }
+
+            return description.ToString();
         }
     }
 }
