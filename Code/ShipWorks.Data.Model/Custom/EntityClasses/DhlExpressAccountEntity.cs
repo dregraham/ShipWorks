@@ -28,7 +28,12 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the address of the account
         /// </summary>
         public PersonAdapter Address => new PersonAdapter(this, string.Empty);
-        
+
+        /// <summary>
+        /// Gets the account description.
+        /// </summary>
+        public string AccountDescription => Description;
+
         /// <summary>
         /// Applies account number to DhlExpress Shipment
         /// </summary>
