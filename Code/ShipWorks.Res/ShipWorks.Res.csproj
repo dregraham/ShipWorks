@@ -430,6 +430,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.5.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\5.17\5.17.6.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\5.18\5.18.0.2.sql" />

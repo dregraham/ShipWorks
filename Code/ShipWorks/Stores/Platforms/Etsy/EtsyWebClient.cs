@@ -254,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Gets a list of products
         /// </summary>
-        public JToken GetProduct(int listingId, int productId)
+        public JToken GetProduct(string listingId, string productId)
         {
             OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetProductUrl(listingId, productId));
             oAuth.OtherParameters.Add("scope", EtsyEndpoints.DefaultScope);

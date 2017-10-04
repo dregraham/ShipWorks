@@ -49,15 +49,15 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ListingID property of the Entity EtsyOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EtsyOrderItem"."ListingID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 ListingID { get; }
+        public System.String ListingID { get; }
         /// <summary> The TransactionID property of the Entity EtsyOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EtsyOrderItem"."TransactionID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 TransactionID { get; }
+        public System.String TransactionID { get; }
         
         
         
