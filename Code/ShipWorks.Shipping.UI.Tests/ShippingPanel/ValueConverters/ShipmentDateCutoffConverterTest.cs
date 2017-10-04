@@ -25,10 +25,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
         }
 
         [Theory]
-        [InlineData(false, "15:00", "")]
-        [InlineData(true, "6:00", "6:00 AM")]
-        [InlineData(true, "15:00", "3:00 PM")]
-        public void Convert_ReturnsExpectedValue_ForUspsWhenTargetIsString(bool cutoffEnabled, string cutoffDate, string expected)
+        [InlineData(false, "15:00", "", "")]
+        [InlineData(true, "6:00", "6:00 AM", "USPS")]
+        [InlineData(true, "15:00", "3:00 PM", "USPS")]
+        public void Convert_ReturnsExpectedValue_ForUspsWhenTargetIsString(bool cutoffEnabled, string cutoffDate, 
+            string expectedTime, string expectedCarrierName)
         {
             var settings = mock.FromFactory<IShippingSettings>()
                 .Mock(x => x.FetchReadOnly());
@@ -38,7 +39,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
             var result = testObject.Convert(ShipmentTypeCode.Usps, typeof(string), null, null) as string;
 
-            Assert.Contains(expected, result);
+            Assert.Contains(expectedTime, result);
+            Assert.Contains(expectedCarrierName, result);
         }
 
         [Theory]

@@ -8,6 +8,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls.Design;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Core.UI.ValueConverters
 {
@@ -59,25 +60,28 @@ namespace ShipWorks.Core.UI.ValueConverters
                 throw new ArgumentException("Target type must be string or Visibility");
             }
 
-            switch (value as ShipmentTypeCode?)
+            ShipmentTypeCode? shipmentTypeCode = value as ShipmentTypeCode?;
+
+            switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
                     return withShippingSettings(targetType, x =>
-                        GetConvertedValue(targetType, x.UspsShippingDateCutoffEnabled, x.UspsShippingDateCutoffTime));
+                        GetConvertedValue(targetType, x.UspsShippingDateCutoffEnabled, x.UspsShippingDateCutoffTime, EnumHelper.GetDescription(shipmentTypeCode)));
                 default:
-                    return GetConvertedValue(targetType, false, TimeSpan.MinValue);
+                    return GetConvertedValue(targetType, false, TimeSpan.MinValue, string.Empty);
             }
         }
 
         /// <summary>
         /// Get the converted value
         /// </summary>
-        private object GetConvertedValue(Type targetType, bool enabled, TimeSpan cutoffTime)
+        private object GetConvertedValue(Type targetType, bool enabled, TimeSpan cutoffTime, string carrierName)
         {
             if (targetType == typeof(string))
             {
                 return enabled ?
-                    $"Labels created after {FormatTime(cutoffTime)} today will have a ship date of the next valid shipping day." :
+                    $"Shipments processed after {FormatTime(cutoffTime)} today will have a ship date of the next valid shipping day." +
+                    $"{Environment.NewLine}To update this setting, go to Manage > Shipping Settings > {carrierName} > Settings." :
                     string.Empty;
             }
 
