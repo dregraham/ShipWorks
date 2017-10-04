@@ -67,8 +67,6 @@ namespace ShipWorks.Core.UI.ValueConverters
                 default:
                     return GetConvertedValue(targetType, false, TimeSpan.MinValue);
             }
-
-            return string.Empty;
         }
 
         /// <summary>
