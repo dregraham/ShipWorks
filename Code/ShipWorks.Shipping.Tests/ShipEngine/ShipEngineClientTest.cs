@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipEngine.ApiClient.Api;
+using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using Xunit;
 
@@ -69,14 +70,17 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public async void ConnectDHLAccount_ReturnsFailureWhenConnectAccountThrowsException()
         {
+            string error =
+                "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"\'account_number\' must be 9 characters in length. You entered 3 characters.\"\r\n    }\r\n  ]\r\n}";
+
             accountsApi.Setup(a =>
                 a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
-                    It.IsAny<string>())).Throws(new Exception("you dun goofed"));
+                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
             GenericResult<string> result = await testObject.ConnectDhlAccount("abcd");
             
             Assert.False(result.Success);
-            Assert.Equal("you dun goofed", result.Message);
+            Assert.Equal("'account_number' must be 9 characters in length. You entered 3 characters.", result.Message);
         }
 
         [Fact]
