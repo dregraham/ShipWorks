@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
 
                 orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
             }
-            catch (Exception ex)
+            catch (Exception ex) when(ex.GetType() != typeof(WalmartException))
             {
                 // yes catching a general exception here is heavy handed however we have had
                 // 3 instances where the Walmart api has gone down or given us bad data which
