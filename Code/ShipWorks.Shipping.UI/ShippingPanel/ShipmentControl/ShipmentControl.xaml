@@ -6,7 +6,6 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:sw="http://schemas.shipworks.com/sw"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:vc="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.ValueConverters"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ins="clr-namespace:ShipWorks.Shipping.UI.ShippingPanel.Insurance"
              mc:Ignorable="d"
@@ -23,7 +22,7 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:StringEmptyWhenEqualToParameterConverter x:Key="StringEmptyWhenEqualToParameter" />
             <ui:EmptyMoneyConverter x:Key="EmptyMoney" />
-            <vc:ShipmentDateCutoffConverter x:Key="ShipmentDateCutoff" />
+            <sw:ShipmentDateCutoffConverter x:Key="ShipmentDateCutoff" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -46,22 +45,40 @@
                       SelectedValue="{Binding ServiceType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="Key"
                       DisplayMemberPath="Value" />
-            <Border Grid.Row="1" Grid.Column="0" 
-                    Margin="0,5,0,0"
-                    BorderThickness="0">
-                <TextBlock VerticalAlignment="Top"
+            <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource Grid.TextBlock.Label}">Ship date:</TextBlock>
-            </Border>
             <WrapPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                 <DatePicker
                         Style="{StaticResource Grid.DatePicker.Default}"
                         SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
                             ValidatesOnDataErrors=true, NotifyOnValidationError=true}"/>
-                <TextBlock Text=" " />
-                <TextBlock Text="{Binding ShipmentType, Converter={StaticResource ShipmentDateCutoff}}"
-                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingSettingsChangedMessage}"
-                           VerticalAlignment="Center"
-                           Margin="0,3,0,5" />
+                <Image Style="{StaticResource Image.InfoTip}"
+                       Visibility="{Binding ShipmentType, Converter={StaticResource ShipmentDateCutoff}}"
+                        Margin="8,1,0,0"
+                       ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingSettingsChangedMessage}"
+                       ui:UpdateWhenMessageReceived.Property="{x:Static UIElement.VisibilityProperty}"
+                        ToolTipService.ShowDuration="30000"
+                        Width="12" Height="12">
+                    <Image.ToolTip>
+                        <Grid Width="425">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Style="{StaticResource Image.Info20x20}"
+                                               VerticalAlignment="Top" />
+
+                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                <TextBlock FontWeight="Bold">Shipment cutoff time</TextBlock>
+                                <TextBlock TextWrapping="Wrap"
+                                           Margin="0,4,0,4"
+                                           Text="{Binding ShipmentType, Converter={StaticResource ShipmentDateCutoff}}"
+                                           ui:UpdateWhenMessageReceived.MessageType="{x:Type sw:ShippingSettingsChangedMessage}" />
+                            </StackPanel>
+                        </Grid>
+                    </Image.ToolTip>
+                </Image>
             </WrapPanel>
         </Grid>
         <Grid Visibility="{Binding SupportsMultiplePackages,Converter={StaticResource BooleanToVisibility}}">

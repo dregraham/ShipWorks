@@ -23,6 +23,12 @@ namespace ShipWorks.UI.AttachedProperties
         public static readonly DependencyProperty MessageTypeProperty = DependencyProperty.RegisterAttached("MessageType", typeof(Type),
                 typeof(UpdateWhenMessageReceived), new PropertyMetadata(null, OnMessageTypeChanged));
 
+        /// <summary>
+        /// Target property dependency property
+        /// </summary>
+        public static readonly DependencyProperty PropertyProperty = DependencyProperty.RegisterAttached("Property", typeof(DependencyProperty),
+            typeof(UpdateWhenMessageReceived));
+
         private static readonly DependencyProperty SubscriptionProperty =
             DependencyProperty.RegisterAttached("Subscription", typeof(IDisposable), typeof(UpdateWhenMessageReceived));
 
@@ -65,12 +71,16 @@ namespace ShipWorks.UI.AttachedProperties
         /// </summary>
         private static void UpdateTarget(FrameworkElement control)
         {
-            if (control is ItemsControl)
+            var boundProperty = control.GetValue(PropertyProperty) as DependencyProperty;
+            if (boundProperty != null)
+            {
+                BindingOperations.GetBindingExpressionBase(control, boundProperty)?.UpdateTarget();
+            }
+            else if (control is ItemsControl)
             {
                 BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
             }
-
-            if (control is TextBlock)
+            else if (control is TextBlock)
             {
                 BindingOperations.GetBindingExpressionBase(control, TextBlock.TextProperty)?.UpdateTarget();
             }
@@ -85,6 +95,16 @@ namespace ShipWorks.UI.AttachedProperties
         /// Set the current value of the property
         /// </summary>
         public static void SetMessageType(DependencyObject d, Type value) => d.SetValue(MessageTypeProperty, value);
+
+        /// <summary>
+        /// Get the current value of the property
+        /// </summary>
+        public static DependencyProperty GetProperty(DependencyObject d) => (DependencyProperty) d.GetValue(PropertyProperty);
+
+        /// <summary>
+        /// Set the current value of the property
+        /// </summary>
+        public static void SetProperty(DependencyObject d, DependencyProperty value) => d.SetValue(PropertyProperty, value);
 
         /// <summary>
         /// Get the current value of the property

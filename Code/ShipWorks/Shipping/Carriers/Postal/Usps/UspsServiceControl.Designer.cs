@@ -53,6 +53,7 @@
             this.labelMemoWarning = new System.Windows.Forms.Label();
             this.noPostage = new System.Windows.Forms.CheckBox();
             this.labelNoPostage = new System.Windows.Forms.Label();
+            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -87,6 +88,10 @@
             // 
             // sectionRecipient.ContentPanel
             // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
@@ -121,6 +126,8 @@
             // 
             // sectionShipment.ContentPanel
             // 
+            this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
+            this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.noPostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelNoPostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo2);
@@ -133,6 +140,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemoWarning);
             this.sectionShipment.ContentPanel.Controls.Add(this.pictureBoxMemoWarning);
+            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(378, 465);
             // 
@@ -389,6 +397,17 @@
             this.labelNoPostage.TabIndex = 59;
             this.labelNoPostage.Text = "No Postage:";
             // 
+            // cutoffDateDisplay
+            // 
+            this.cutoffDateDisplay.AutoSize = true;
+            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
+            this.cutoffDateDisplay.Location = new System.Drawing.Point(220, 68);
+            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
+            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.Usps;
+            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 13);
+            this.cutoffDateDisplay.TabIndex = 6;
+            this.cutoffDateDisplay.Text = "Cutoff time is 3:00 PM";
+            // 
             // UspsServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -451,5 +470,6 @@
         private System.Windows.Forms.Label labelMemoWarning;
         private System.Windows.Forms.CheckBox noPostage;
         private System.Windows.Forms.Label labelNoPostage;
+        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }

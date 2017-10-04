@@ -1309,6 +1309,9 @@
     <Compile Include="Shipping\Editing\ShippingDateCutoffControl.Designer.cs">
       <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffDisplayControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
     <Compile Include="Shipping\IDownloadedLabelData.cs" />
@@ -6785,6 +6788,7 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ValueConverters\ShipmentDateCutoffConverter.cs" />
     <Compile Include="Users\Audit\AuditDisplayFormatAttribute.cs" />
     <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.resx">
