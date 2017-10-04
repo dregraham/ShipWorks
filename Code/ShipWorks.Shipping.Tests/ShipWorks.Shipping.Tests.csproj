@@ -276,7 +276,7 @@
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
-    <Compile Include="ShipEngine\ShipEngineClientTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
