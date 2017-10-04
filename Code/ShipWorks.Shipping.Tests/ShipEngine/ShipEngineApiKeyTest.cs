@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             mock.Mock<IShipEnginePartnerWebClient>()
                 .Setup(c => c.GetApiKey(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns("newkey");
+                .ReturnsAsync("newkey");
 
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             mock.Mock<IShipEnginePartnerWebClient>()
                 .Setup(c => c.CreateNewAccount(It.IsAny<string>()))
-                .Returns("accountId");
+                .ReturnsAsync("accountId");
 
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
