@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
@@ -19,15 +20,18 @@ namespace ShipWorks.Shipping.ShipEngine
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            Func<Type, ILog> logFactory)
         {
             this.requestFactory = requestFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            log = logFactory(typeof(ShipEnginePartnerClient));
         }
 
         /// <summary>
@@ -35,39 +39,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public string CreateNewAccount(string partnerApiKey)
         {
-            IHttpRequestSubmitter createAccountRequest = requestFactory.GetHttpTextPostRequestSubmitter(string.Empty, "application/json");
-            createAccountRequest.Headers.Add("api-key", partnerApiKey);
-            createAccountRequest.Uri = new Uri(CreateAccountUrl);
-            IHttpResponseReader response;
-            JToken accountToken;
-
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, "CreateNewAccount");
-            apiLogEntry.LogRequest(createAccountRequest);
-
-            try
-            {
-                response = createAccountRequest.GetResponse();
-                string result = response.ReadResult();
-
-                apiLogEntry.LogResponse(result);
-                accountToken = JObject.Parse(result)["account_id"];
-            }
-            catch(JsonReaderException ex)
-            {
-                throw new ShipEngineException("Error reading response from ShipEngine.", ex);
-            }
-            catch (WebException ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                throw new ShipEngineException("Error communicating with ShipEngine.", ex);
-            }
-
-            if (accountToken == null)
-            {
-                throw new ShipEngineException("Unable to retrieve an account id from ShipEngine.");
-            }
-
-            return accountToken.ToString();
+            return SendPartnerRequest(partnerApiKey, CreateAccountUrl, string.Empty, "CreateNewAccount", "account_id");
         }
 
         /// <summary>
@@ -75,43 +47,51 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public string GetApiKey(string partnerApiKey, string shipEngineAccountId)
         {
-            string descriptionJson = "{\"description\": \"ShipWorks Access Key\"}";
-            string createApiKeyUrl = string.Format(CreateApiKeyUrl, shipEngineAccountId);
+            string requestUrl = string.Format(CreateApiKeyUrl, shipEngineAccountId);
+            string postText = "{\"description\": \"ShipWorks Access Key\"}";
 
-            IHttpRequestSubmitter createAccountRequest = requestFactory.GetHttpTextPostRequestSubmitter(descriptionJson, "application/json");
-            createAccountRequest.Headers.Add("api-key", partnerApiKey);
-            createAccountRequest.Uri = new Uri(createApiKeyUrl);
+            return SendPartnerRequest(partnerApiKey, requestUrl, postText, "GetApiKey", "encrypted_api_key");
+        }
 
-            IHttpResponseReader response;
-            JToken apiKeyToken;
+        /// <summary>
+        /// Send actual request to ShipEngine
+        /// </summary>
+        private string SendPartnerRequest(string partnerApiKey, string requestUrl, string postText, string logName, string responseFieldName)
+        {
+            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(postText, "application/json");
+            request.Headers.Add("api-key", partnerApiKey);
+            request.Uri = new Uri(requestUrl);
 
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, "CreateNewAccount");
-            apiLogEntry.LogRequest(createAccountRequest);
+            JToken responseToken = null;
+
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, logName);
+            apiLogEntry.LogRequest(request);
 
             try
             {
-                response = createAccountRequest.GetResponse();
+                IHttpResponseReader response = request.GetResponse();
                 string result = response.ReadResult();
 
                 apiLogEntry.LogResponse(result);
-                apiKeyToken = JObject.Parse(result)["encrypted_api_key"];
+                responseToken = JObject.Parse(result)[responseFieldName];
             }
             catch (JsonReaderException ex)
             {
-                throw new ShipEngineException("Error reading response from ShipEngine.", ex);
+                log.Error(ex);
             }
             catch (WebException ex)
             {
+                log.Error(ex);
                 apiLogEntry.LogResponse(ex);
-                throw new ShipEngineException("Error communicating with ShipEngine.", ex);
             }
 
-            if (apiKeyToken == null)
+            if (responseToken == null)
             {
-                throw new ShipEngineException("Unable to retrieve an api key from ShipEngine.");
+                log.Error($"Unable to get {responseFieldName} from ShipEngine");
+                throw new ShipEngineException($"Unable to get {responseFieldName} from ShipEngine.");
             }
 
-            return apiKeyToken.ToString();
+            return responseToken.ToString();
         }
     }
 }
