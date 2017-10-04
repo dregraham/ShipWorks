@@ -1949,10 +1949,17 @@ namespace ShipWorks.Shipping
                 {
                     RateGroup rateGroup = runWorkerCompletedEventArgs.Result as RateGroup;
 
-                    SendRatesRetrievedMessage(rateGroup, loadedShipmentEntities.FirstOrDefault());
+                    ShipmentEntity shipment = loadedShipmentEntities.FirstOrDefault();
 
-                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates(rateGroup);
+                    // If the shipment for which rates are being retrieved has been removed from the loaded list,
+                    // shipment will be null, so don't do the sending/loading code.
+                    if (shipment != null)
+                    {
+                        SendRatesRetrievedMessage(rateGroup, shipment);
+
+                        // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
+                        LoadDisplayedRates(rateGroup);
+                    }
                 }
                 catch (ObjectDisposedException ex)
                 {
@@ -1973,6 +1980,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void SendRatesRetrievedMessage(RateGroup rateGroup, ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(messenger, nameof(messenger));
+            MethodConditions.EnsureArgumentIsNotNull(rateGroup, nameof(rateGroup));
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
                 GenericResult.FromSuccess(rateGroup) :
                 GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
