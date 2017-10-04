@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     shippingSettings.Save(settings);
                 }
             }
-            catch (ShipEngineException ex)
+            catch (ShipEngineException)
             {
                 // do nothing. if this exception was thrown, apiKey will be blank and that
                 // is what value will be set as...

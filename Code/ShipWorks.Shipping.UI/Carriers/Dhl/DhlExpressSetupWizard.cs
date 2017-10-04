@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             if (long.TryParse(accountNumber.Text, out dhlAccountNumber))
             {
-                GenericResult<string> connectAccountResult = await shipEngineWebClient.ConnectDhlAccount(dhlAccountNumber.ToString());
+                GenericResult<string> connectAccountResult = await shipEngineClient.ConnectDhlAccount(dhlAccountNumber.ToString());
                 if (connectAccountResult.Success)
                 {
                     account.AccountNumber = dhlAccountNumber;
