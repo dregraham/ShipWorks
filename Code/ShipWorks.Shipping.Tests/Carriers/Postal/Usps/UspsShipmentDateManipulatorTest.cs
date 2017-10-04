@@ -58,8 +58,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             Assert.Equal(now, shipment.ShipDate);
         }
 
-
-
         [Theory]
         // now TimeOfDay < cutoff   =>  ShipDate does not change
         // now Date < ShipDate.Date =>  ShipDate does not change
@@ -120,13 +118,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Never);
             Assert.Equal(DateTime.Parse(expectedText).Date, shipment.ShipDate.Date);
         }
-
-
-
-
-
-
-
 
         private void SetupDefaultMocks()
         {
