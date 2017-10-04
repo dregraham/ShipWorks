@@ -74,11 +74,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));        
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));        
         }
 
         [Fact]
-        public void CreateNewAccount_ThrowsShipEngineException_WhenWebExceptionEncountered()
+        public async Task CreateNewAccount_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
                 .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));
         }
 
 
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void GetApiKey_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
+        public async Task GetApiKey_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
                 .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
@@ -151,11 +151,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
         }
 
         [Fact]
-        public void GetApiKey_ThrowsShipEngineException_WhenWebExceptionEncountered()
+        public async Task GetApiKey_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
                 .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
         }
 
 
