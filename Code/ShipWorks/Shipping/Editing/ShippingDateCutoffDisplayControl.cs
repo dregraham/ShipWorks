@@ -1,12 +1,13 @@
-﻿using System.Windows.Forms;
+﻿using System.Windows;
 using ShipWorks.Core.UI.ValueConverters;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Editing
 {
     /// <summary>
     /// Display the shipment cutoff date for a shipment type
     /// </summary>
-    public class ShippingDateCutoffDisplayControl : Label
+    public class ShippingDateCutoffDisplayControl : InfoTip
     {
         private ShipmentTypeCode shipmentType;
         private readonly ShipmentDateCutoffConverter converter;
@@ -17,7 +18,8 @@ namespace ShipWorks.Shipping.Editing
         public ShippingDateCutoffDisplayControl() : base()
         {
             converter = new ShipmentDateCutoffConverter();
-            base.Text = "Cutoff time is 3:00 PM";
+            base.Title = "Shipment cutoff time";
+            base.Caption = "Cutoff time is 3:00 PM";
         }
 
         /// <summary>
@@ -32,18 +34,33 @@ namespace ShipWorks.Shipping.Editing
             set
             {
                 shipmentType = value;
-                UpdateText();
+                UpdateUI();
             }
         }
 
         /// <summary>
-        /// Text
+        /// Title
         /// </summary>
-        public override string Text
+        public override string Title
         {
             get
             {
-                return base.Text;
+                return base.Title;
+            }
+            set
+            {
+                // Don't set because the title property should only be set internally
+            }
+        }
+
+        /// <summary>
+        /// Caption
+        /// </summary>
+        public override string Caption
+        {
+            get
+            {
+                return base.Caption;
             }
             set
             {
@@ -52,9 +69,12 @@ namespace ShipWorks.Shipping.Editing
         }
 
         /// <summary>
-        /// Update the text 
+        /// Update the UI
         /// </summary>
-        private void UpdateText() =>
-            base.Text = converter.Convert(shipmentType, typeof(string), null, null) as string;
+        private void UpdateUI()
+        {
+            base.Caption = converter.Convert(shipmentType, typeof(string), null, null) as string;
+            base.Visible = ((Visibility) converter.Convert(shipmentType, typeof(Visibility), null, null)) == Visibility.Visible;
+        }
     }
 }
