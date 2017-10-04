@@ -37,27 +37,33 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connect the account number to ShipEngine
         /// </summary>
+        /// <returns>The CarrierId</returns>
         public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
         {
+            string key = await GetApiKey();
+            // If for some reason the key is blank show an error because we have to have the key to make the request
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return GenericResult.FromError<string>("Unable to add your DHL Express account at this time. Please try again later.");
+            }
+
             // First check and see if we already have the account connected
-            string accountId = await GetCarrierIdByAccountNumber(accountNumber);
+            string accountId = await GetCarrierIdByAccountNumber(accountNumber, key);
             if (!string.IsNullOrWhiteSpace(accountId))
             {
                 return GenericResult.FromSuccess(accountId);
             }
             
-            Task<string> key = GetApiKey();
-
             DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO { AccountNumber = accountNumber, Nickname = accountNumber };
 
             ICarrierAccountsApi apiInstance = carrierAccountsApiFactory.CreateCarrierAccountsApi();
 
             ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount");
-
+            
             try
             {
                 ConnectAccountResponseDTO result = await apiInstance
-                    .DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key.Result).ConfigureAwait(false);
+                    .DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key).ConfigureAwait(false);
                 return GenericResult.FromSuccess(result.CarrierId);
             }
             catch (ApiException ex)
@@ -71,10 +77,17 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private static string GetErrorMessage(ApiException ex)
         {
-            ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-            if (error.Errors.Any())
+            try
             {
-                return error.Errors.First().Message;
+                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
+                if (error.Errors.Any())
+                {
+                    return error.Errors.First().Message;
+                }
+            }
+            catch (JsonReaderException)
+            {
+                return ex.Message;
             }
 
             return ex.Message;
@@ -83,16 +96,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the account if it exists
         /// </summary>
-        /// <param name="accountNumber"></param>
-        /// <returns></returns>
-        public async Task<string> GetCarrierIdByAccountNumber(string accountNumber)
+        public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
         {
-            Task<string> key = GetApiKey();
             ICarriersApi carrierApi = carrierAccountsApiFactory.CreateCarrierApi();
             ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}");
             try
             {
-                CarrierListResponse result = await carrierApi.CarriersListAsync(key.Result);
+                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
                 return result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
             }
             catch (ApiException ex)

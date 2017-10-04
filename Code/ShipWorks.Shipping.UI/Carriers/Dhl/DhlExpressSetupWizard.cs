@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShippingSettings shippingSettings;
         private readonly IMessageHelper messageHelper;
-        private readonly IShipEngineWebClient shipEngineWebClient;
+        private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
@@ -46,14 +46,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressSetupWizard(DhlExpressShipmentType shipmentType, IDhlExpressAccountRepository accountRepository, IShipEngineWebClient shipEngineWebClient, IShippingSettings shippingSettings,
+        public DhlExpressSetupWizard(DhlExpressShipmentType shipmentType, IDhlExpressAccountRepository accountRepository, IShipEngineWebClient shipEngineClient, IShippingSettings shippingSettings,
             IMessageHelper messageHelper) : this()
         {
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
             this.shippingSettings = shippingSettings;
             this.messageHelper = messageHelper;
-            this.shipEngineWebClient = shipEngineWebClient;
+            this.shipEngineClient = shipEngineClient;
 
             account = new DhlExpressAccountEntity();
         }

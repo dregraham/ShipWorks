@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connects the given DHL account to the users ShipEngine account
         /// </summary>
+        /// <returns>The CarrierId</returns>
         Task<GenericResult<string>> ConnectDhlAccount(string accountNumber);
     }
 }
