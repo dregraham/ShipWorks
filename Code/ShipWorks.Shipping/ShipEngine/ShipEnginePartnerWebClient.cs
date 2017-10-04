@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             this.requestFactory = requestFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            log = logFactory(typeof(ShipEnginePartnerClient));
+            log = logFactory(typeof(ShipEnginePartnerWebClient));
         }
 
         /// <summary>
