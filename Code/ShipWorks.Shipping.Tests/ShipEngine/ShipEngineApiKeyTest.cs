@@ -105,6 +105,40 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
+        public void Configure_ValueIsBlank_WhenCreateNewAccountThrowsShipEngineException()
+        {
+            mock.Mock<IShippingSettings>()
+               .Setup(s => s.Fetch())
+               .Returns(new ShippingSettingsEntity());
+
+            mock.Mock<IShipEnginePartnerWebClient>()
+                .Setup(c => c.CreateNewAccount(It.IsAny<string>()))
+                .Throws(new ShipEngineException("error"));
+
+            var testObject = mock.Create<ShipEngineApiKey>();
+            testObject.Configure();
+
+            Assert.True(string.IsNullOrEmpty(testObject.Value));
+        }
+        
+        [Fact]
+        public void Configure_ValueIsBlank_WhenGetApiKeyThrowsShipEngineException()
+        {
+            mock.Mock<IShippingSettings>()
+               .Setup(s => s.Fetch())
+               .Returns(new ShippingSettingsEntity());
+
+            mock.Mock<IShipEnginePartnerWebClient>()
+                .Setup(c => c.GetApiKey(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new ShipEngineException("error"));
+
+            var testObject = mock.Create<ShipEngineApiKey>();
+            testObject.Configure();
+
+            Assert.True(string.IsNullOrEmpty(testObject.Value));
+        }
+
+        [Fact]
         public void Configure_DecryptsPartnerApiKey()
         {
             mock.Mock<IShippingSettings>()
