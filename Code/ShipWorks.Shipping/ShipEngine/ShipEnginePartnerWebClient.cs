@@ -4,11 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -16,7 +12,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client to the ShipEngine Partner API
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ShipEnginePartnerClient : IShipEnginePartnerClient
+    public class ShipEnginePartnerWebClient : IShipEnginePartnerWebClient
     {
         private const string CreateAccountUrl = "https://api.shipengine.com/v1/partners/accounts";
         private const string CreateApiKeyUrl = "https://api.shipengine.com/v1/partners/accounts/{0}/api_keys";
@@ -27,7 +23,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEnginePartnerClient(IHttpRequestSubmitterFactory requestFactory,
+        public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
             this.requestFactory = requestFactory;

@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -17,7 +16,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client for interacting with ShipEngine
     /// </summary>
     [Component]
-    public class ShipEngineClient : IShipEngineClient
+    public class ShipEngineWebClient : IShipEngineWebClient
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -26,7 +25,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineClient(IShipEngineApiKey apiKey,
+        public ShipEngineWebClient(IShipEngineApiKey apiKey,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
             IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory)
         {
@@ -36,7 +35,7 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Connect the accout number to ShipEngine
+        /// Connect the account number to ShipEngine
         /// </summary>
         public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
         {

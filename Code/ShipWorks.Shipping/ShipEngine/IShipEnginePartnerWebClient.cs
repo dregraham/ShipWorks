@@ -3,7 +3,7 @@
     /// <summary>
     /// Client to the ShipEngine Partner API
     /// </summary>
-    public interface IShipEnginePartnerClient
+    public interface IShipEnginePartnerWebClient
     {
         /// <summary>
         /// Creates a new ShipEngine account and returns the account ID
@@ -13,6 +13,6 @@
         /// <summary>
         /// Gets an ApiKey from the ShipEngine API
         /// </summary>
-        string GetApiKey(string partnerApiKey, string shipEngineAccountId);        
+        string GetApiKey(string partnerApiKey, string shipEngineAccountId);
     }
 }

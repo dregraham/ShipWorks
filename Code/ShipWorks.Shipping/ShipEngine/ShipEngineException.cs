@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -14,14 +10,16 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineException(string message) : base(message)
+        public ShipEngineException(string message)
+            : base(message)
         {
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineException(string message, Exception innerException) : base(message, innerException)
+        public ShipEngineException(string message, Exception innerException)
+            : base(message, innerException)
         {
         }
     }

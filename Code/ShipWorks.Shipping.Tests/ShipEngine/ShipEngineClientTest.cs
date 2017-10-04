@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         private readonly Mock<ICarrierAccountsApi> accountsApi;
         private readonly Mock<ICarriersApi> carriersApi;
 
-        private readonly ShipEngineClient testObject;
+        private readonly ShipEngineWebClient testObject;
 
         public ShipEngineClientTest()
         {
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             accountsApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
             accountsApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
 
-            testObject = mock.Create<ShipEngineClient>();
+            testObject = mock.Create<ShipEngineWebClient>();
         }
 
         [Fact]

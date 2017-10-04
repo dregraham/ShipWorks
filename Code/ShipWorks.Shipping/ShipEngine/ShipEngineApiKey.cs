@@ -1,14 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
-using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -22,18 +15,18 @@ namespace ShipWorks.Shipping.ShipEngine
 
         private readonly IShippingSettings shippingSettings;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
-        private readonly IShipEnginePartnerClient partnerClient;
+        private readonly IShipEnginePartnerWebClient partnerWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineApiKey(IShippingSettings shippingSettings,
             IEncryptionProviderFactory encryptionProviderFactory,
-            IShipEnginePartnerClient partnerClient)
+            IShipEnginePartnerWebClient partnerWebClient)
         {
             this.shippingSettings = shippingSettings;
             this.encryptionProviderFactory = encryptionProviderFactory;
-            this.partnerClient = partnerClient;
+            this.partnerWebClient = partnerWebClient;
         }
 
         /// <summary>
@@ -73,9 +66,9 @@ namespace ShipWorks.Shipping.ShipEngine
         private string GetNewApiKey()
         {
             string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = partnerClient.CreateNewAccount(partnerApiKey);
+            string shipEngineAccountId = partnerWebClient.CreateNewAccount(partnerApiKey);
 
-            return partnerClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
+            return partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
         }
 
         /// <summary>

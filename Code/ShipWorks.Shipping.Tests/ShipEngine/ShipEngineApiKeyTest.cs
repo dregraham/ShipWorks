@@ -6,10 +6,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
@@ -38,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                .Setup(s => s.Fetch())
                .Returns(new ShippingSettingsEntity());
 
-            mock.Mock<IShipEnginePartnerClient>()
+            mock.Mock<IShipEnginePartnerWebClient>()
                 .Setup(c => c.GetApiKey(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns("newkey");
 
@@ -55,14 +51,14 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                .Setup(s => s.Fetch())
                .Returns(new ShippingSettingsEntity());
 
-            mock.Mock<IShipEnginePartnerClient>()
+            mock.Mock<IShipEnginePartnerWebClient>()
                 .Setup(c => c.CreateNewAccount(It.IsAny<string>()))
                 .Returns("accountId");
 
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
 
-            mock.Mock<IShipEnginePartnerClient>()
+            mock.Mock<IShipEnginePartnerWebClient>()
                 .Verify(c => c.GetApiKey(It.IsAny<string>(), "accountId"), Times.Once());
         }
 
@@ -83,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
 
-            mock.Mock<IShipEnginePartnerClient>()
+            mock.Mock<IShipEnginePartnerWebClient>()
                 .Verify(c => c.GetApiKey("decrypted", It.IsAny<string>()), Times.Once());
         }
 
@@ -104,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
 
-            mock.Mock<IShipEnginePartnerClient>()
+            mock.Mock<IShipEnginePartnerWebClient>()
                 .Verify(c => c.CreateNewAccount("decrypted"), Times.Once());
         }
 

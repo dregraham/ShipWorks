@@ -4,11 +4,7 @@ using Moq;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
@@ -35,7 +31,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             var accountId = testObject.CreateNewAccount("partnerKey");
 
@@ -55,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             testObject.CreateNewAccount("partnerKey");
 
@@ -75,7 +71,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             Assert.Throws<ShipEngineException>(()=>testObject.CreateNewAccount("partnerKey"));           
         }
@@ -93,7 +89,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             Assert.Throws<ShipEngineException>(()=>testObject.CreateNewAccount("partnerKey"));
         }
@@ -112,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             var apiKey = testObject.GetApiKey("partnerKey", "accountId");
 
@@ -132,7 +128,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             testObject.GetApiKey("partnerKey", "accountId");
 
@@ -152,7 +148,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             Assert.Throws<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
         }
@@ -170,7 +166,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponse())
                 .Returns(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
             Assert.Throws<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
         }

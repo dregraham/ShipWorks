@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShippingSettings shippingSettings;
         private readonly IMessageHelper messageHelper;
-        private readonly IShipEngineClient shipEngineClient;
+        private readonly IShipEngineWebClient shipEngineWebClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
@@ -44,14 +44,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressSetupWizard(DhlExpressShipmentType shipmentType, IDhlExpressAccountRepository accountRepository, IShipEngineClient shipEngineClient, IShippingSettings shippingSettings,
+        public DhlExpressSetupWizard(DhlExpressShipmentType shipmentType, IDhlExpressAccountRepository accountRepository, IShipEngineWebClient shipEngineWebClient, IShippingSettings shippingSettings,
             IMessageHelper messageHelper) : this()
         {
             this.shipmentType = shipmentType;
             this.accountRepository = accountRepository;
             this.shippingSettings = shippingSettings;
             this.messageHelper = messageHelper;
-            this.shipEngineClient = shipEngineClient;
+            this.shipEngineWebClient = shipEngineWebClient;
 
             account = new DhlExpressAccountEntity();
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             if (long.TryParse(accountNumber.Text, out dhlAccountNumber))
             {
-                GenericResult<string> connectAccountResult = await shipEngineClient.ConnectDhlAccount(dhlAccountNumber.ToString());
+                GenericResult<string> connectAccountResult = await shipEngineWebClient.ConnectDhlAccount(dhlAccountNumber.ToString());
                 if (connectAccountResult.Success)
                 {
                     account.AccountNumber = dhlAccountNumber;
