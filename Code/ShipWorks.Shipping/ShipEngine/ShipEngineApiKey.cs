@@ -15,13 +15,14 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Api key for communicating with ShipEngine
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipEngineApiKey : IShipEngineApiKey
     {
+        private const string EncryptedPartnerApiKey = "Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA";
+
         private readonly IShippingSettings shippingSettings;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IShipEnginePartnerClient partnerClient;
-        private const string EncryptedPartnerApiKey = "Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA";
 
         /// <summary>
         /// Constructor
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// the ApiKey
+        /// Actual API Key value
         /// </summary>
         public string Value { get; private set; }
 
@@ -46,13 +47,24 @@ namespace ShipWorks.Shipping.ShipEngine
         public void Configure()
         {
             ShippingSettingsEntity settings = shippingSettings.Fetch();
-            Value = settings.ShipEngineApiKey;
-            if (string.IsNullOrEmpty(settings.ShipEngineApiKey))
+            string apiKey = settings.ShipEngineApiKey;
+            try
             {
-                Value = GetNewApiKey();
-                settings.ShipEngineApiKey = Value;
-                shippingSettings.Save(settings);
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    apiKey = GetNewApiKey();
+                    settings.ShipEngineApiKey = apiKey;
+
+                    shippingSettings.Save(settings);
+                }
             }
+            catch (ShipEngineException ex)
+            {
+                // do nothing. if this exception was thrown, apiKey will be blank and that
+                // is what value will be set as...
+            }
+
+            Value = apiKey;
         }
 
         /// <summary>
@@ -62,6 +74,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             string partnerApiKey = GetPartnerApiKey();
             string shipEngineAccountId = partnerClient.CreateNewAccount(partnerApiKey);
+
             return partnerClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
         }
 
