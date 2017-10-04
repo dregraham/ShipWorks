@@ -1949,7 +1949,7 @@ namespace ShipWorks.Shipping
                 {
                     RateGroup rateGroup = runWorkerCompletedEventArgs.Result as RateGroup;
 
-                    SendRatesRetrievedMessage(rateGroup, loadedShipmentEntities.FirstOrDefault());
+                    SendRatesRetrievedMessage(rateGroup);
 
                     // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
                     LoadDisplayedRates(rateGroup);
@@ -1971,16 +1971,25 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Sends the rates retrieved message.
         /// </summary>
-        private void SendRatesRetrievedMessage(RateGroup rateGroup, ShipmentEntity shipment)
+        private void SendRatesRetrievedMessage(RateGroup rateGroup)
         {
-            GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
-                GenericResult.FromSuccess(rateGroup) :
-                GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+            MethodConditions.EnsureArgumentIsNotNull(rateGroup, nameof(rateGroup));
 
-            string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
+            ShipmentEntity shipment = loadedShipmentEntities.FirstOrDefault();
 
-            messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates,
-                shipmentAdapterFactory.Get(shipment)));
+            // If the shipment for which rates are being retrieved has been removed from the loaded list,
+            // shipment will be null, so don't do the sending/loading code.
+            if (shipment != null)
+            {
+                GenericResult<RateGroup> rates = rateGroup.Rates.Any() ?
+                    GenericResult.FromSuccess(rateGroup) :
+                    GenericResult.FromError("ShipWorks could not get rates for this shipment", rateGroup);
+
+                string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
+
+                messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates, 
+                    shipmentAdapterFactory.Get(shipment)));
+            }
         }
 
         /// <summary>
