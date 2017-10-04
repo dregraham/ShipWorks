@@ -2,6 +2,8 @@
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -17,6 +19,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         private readonly Mock<IShipEngineApiKey> apiKey;
         private readonly Mock<IShipEngineCarrierAccountsApiFactory> accountsApiFactory;
         private readonly Mock<ICarrierAccountsApi> accountsApi;
+        private readonly Mock<ICarriersApi> carriersApi;
 
         private readonly ShipEngineClient testObject;
 
@@ -28,16 +31,28 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             apiKey.SetupGet(k => k.Value).Returns("abcd");
 
             accountsApi = mock.Mock<ICarrierAccountsApi>();
+            carriersApi = mock.Mock<ICarriersApi>();
+
+            CarrierListResponse carriers =
+                new CarrierListResponse(new List<Carrier>()
+                {
+                    new Carrier(AccountNumber: "1234", CarrierId: "se-12345")
+                });
+
+            carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>())).Returns(Task.FromResult(carriers));
 
             accountsApiFactory = mock.Mock<IShipEngineCarrierAccountsApiFactory>();
             accountsApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
-            
+            accountsApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
+
             testObject = mock.Create<ShipEngineClient>();
         }
 
         [Fact]
         public void ConnectDHLAccount_DelegatesToIShipEngineApiKey()
         {
+            apiKey.SetupGet(k => k.Value).Returns("");
+
             testObject.ConnectDhlAccount("abcd");
 
             apiKey.Verify(i => i.Configure());
@@ -80,9 +95,26 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             var apiEntry = mock.CreateMock<IApiLogEntry>();
             mock.MockFunc(apiEntry);
             testObject.ConnectDhlAccount("AccountNumber");
-            
-            accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
-            accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
+
+            // This does not work due to a bug in moq
+            // https://github.com/moq/moq4/issues/430
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
+
+            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.ResponseLogger);
+            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.RequestLogger);
+        }
+
+        [Fact]
+        public void ConnectDHLAccount_DelegatesToICarriersApiForExistingAccounts()
+        {
+            testObject.ConnectDhlAccount("1234");
+
+            accountsApi.Verify(a =>
+                a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
+                    It.IsAny<string>()),Times.Never);
+
+            carriersApi.Verify(c => c.CarriersListAsync("abcd"));
         }
 
         public void Dispose()

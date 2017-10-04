@@ -8,6 +8,8 @@ using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -55,14 +57,28 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                ConnectAccountResponseDTO result = await apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key.Result).ConfigureAwait(false);
-                
+                ConnectAccountResponseDTO result = await apiInstance
+                    .DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key.Result).ConfigureAwait(false);
                 return GenericResult.FromSuccess(result.CarrierId);
             }
-            catch (Exception ex)
+            catch (ApiException ex)
             {
-                return GenericResult.FromError<string>(ex);
+                return GenericResult.FromError<string>(GetErrorMessage(ex));
             }
+        }
+
+        /// <summary>
+        /// Get the error message from an ApiException
+        /// </summary>
+        private static string GetErrorMessage(ApiException ex)
+        {
+            ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
+            if (error.Errors.Any())
+            {
+                return error.Errors.First().Message;
+            }
+
+            return ex.Message;
         }
 
         /// <summary>
@@ -78,11 +94,11 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 CarrierListResponse result = await carrierApi.CarriersListAsync(key.Result);
-                return result.Carriers.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
+                return result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
             }
-            catch (Exception)
+            catch (ApiException ex)
             {
-                return string.Empty;
+                return GetErrorMessage(ex);
             }
         }
 
