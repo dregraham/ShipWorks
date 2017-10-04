@@ -9,11 +9,11 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
-    public class ShipEnginePartnerClientTest : IDisposable
+    public class ShipEnginePartnerWebClientTest : IDisposable
     {
         readonly AutoMock mock;
 
-        public ShipEnginePartnerClientTest()
+        public ShipEnginePartnerWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }

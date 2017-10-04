@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             var testObject = mock.Create<ShipEngineApiKey>();
             testObject.Configure();
 
-            encryptionProvider.Verify(p=>p.Decrypt("Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA"), Times.Once());
+            encryptionProvider.Verify(p => p.Decrypt("Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA"), Times.Once());
         }
 
         public void Dispose()

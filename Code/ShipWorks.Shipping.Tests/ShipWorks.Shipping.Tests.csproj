@@ -277,7 +277,7 @@
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="ShipEngine\ShipEngineClientTest.cs" />
-    <Compile Include="ShipEngine\ShipEnginePartnerClientTest.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
