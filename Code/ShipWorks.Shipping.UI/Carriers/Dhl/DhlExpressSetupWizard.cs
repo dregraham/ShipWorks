@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
@@ -54,6 +56,21 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.shipEngineWebClient = shipEngineWebClient;
 
             account = new DhlExpressAccountEntity();
+        }
+
+        /// <summary>
+        /// Gets the wizard without any wrapping wizards
+        /// </summary>
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
+
+        /// <summary>
+        /// Get the default description to use for the given account
+        /// </summary>
+        public static string GetDefaultDescription(DhlExpressAccountEntity account)
+        {
+            string[] descriptionComponents = { account.AccountNumber.ToString(), account.Street1, account.PostalCode };
+
+            return string.Join(",", descriptionComponents.Where(s => !string.IsNullOrWhiteSpace(s)));
         }
 
         /// <summary>
@@ -163,11 +180,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         }
 
         /// <summary>
-        /// Gets the wizard without any wrapping wizards
-        /// </summary>
-        public IShipmentTypeSetupWizard GetUnwrappedWizard() => this;
-
-        /// <summary>
         /// Called when [open account link clicked].
         /// </summary>
         private void OnOpenAccountLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
@@ -182,36 +194,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
-        }
-
-        /// <summary>
-        /// Get the default description to use for the given account
-        /// </summary>
-        public static string GetDefaultDescription(DhlExpressAccountEntity account)
-        {
-            StringBuilder description = new StringBuilder(account.AccountNumber.ToString());
-
-            if (account.Street1.Length > 0)
-            {
-                if (description.Length > 0)
-                {
-                    description.Append(", ");
-                }
-
-                description.Append(account.Street1);
-            }
-
-            if (account.PostalCode.Length > 0)
-            {
-                if (description.Length > 0)
-                {
-                    description.Append(", ");
-                }
-
-                description.Append(account.PostalCode);
-            }
-
-            return description.ToString();
         }
     }
 }

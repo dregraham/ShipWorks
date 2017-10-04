@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            DhlExpressAccountManager.Initialize();
+            Initialize();
         }
 
         /// <summary>
