@@ -9,10 +9,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// FedEx account repository
     /// </summary>
     [Component(RegistrationType.Self)]
-    [Component(RegistrationType.ImplementedInterfaces)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.FedEx)]
-    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>,
-        ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
+    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
@@ -57,10 +55,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(FedExAccountEntity account)
-        {
-            FedExAccountManager.SaveAccount(account);
-        }
+        public override void Save(FedExAccountEntity account) => FedExAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount(FedExAccountEntity account) => FedExAccountManager.DeleteAccount(account);
 
         /// <summary>
         /// Get a readonly version of the specified account

@@ -71,6 +71,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount(UpsAccountEntity account) => UpsAccountManager.DeleteAccount(account);
+
+        /// <summary>
         /// Get the account id from a given shipment
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>

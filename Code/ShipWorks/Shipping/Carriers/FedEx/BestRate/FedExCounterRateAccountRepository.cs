@@ -142,6 +142,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Nothing to save. This is a counter rate account.
         }
 
+        public void DeleteAccount(FedExAccountEntity account)
+        {
+            // Nothing to save for counter rate account.
+        }
+
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>

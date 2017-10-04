@@ -48,8 +48,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Saves the specified account.
         /// </summary>
-        public override void Save(DhlExpressAccountEntity account) =>
-            DhlExpressAccountManager.SaveAccount(account);
+        public override void Save(DhlExpressAccountEntity account) => DhlExpressAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override void DeleteAccount(DhlExpressAccountEntity account) => DhlExpressAccountManager.DeleteAccount(account);
 
         /// <summary>
         /// Get the account id from a given shipment

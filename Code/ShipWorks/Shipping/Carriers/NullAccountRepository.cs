@@ -80,6 +80,15 @@ namespace ShipWorks.Shipping.Carriers
         }
 
         /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount(NullCarrierAccount account)
+        {
+            //Nothing to delete for null account.
+        }
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>

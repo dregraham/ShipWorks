@@ -12,8 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     [Component]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>), ShipmentTypeCode.Endicia)]
-    public class EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity, IEndiciaAccountEntity>,
-        ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>
+    public class EndiciaAccountRepository : CarrierAccountRepositoryBase<EndiciaAccountEntity, IEndiciaAccountEntity>
     {
         /// <summary>
         /// Returns a list of Endicia accounts.
@@ -74,10 +73,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(EndiciaAccountEntity account)
-        {
-            EndiciaAccountManager.SaveAccount(account);
-        }
+        public override void Save(EndiciaAccountEntity account) => EndiciaAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount(EndiciaAccountEntity account) => EndiciaAccountManager.DeleteAccount(account);
 
         /// <summary>
         /// Get the account id from a given shipment

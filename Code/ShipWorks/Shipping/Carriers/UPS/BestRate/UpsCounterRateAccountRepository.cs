@@ -135,6 +135,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         }
 
         /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount(UpsAccountEntity account)
+        {
+            //Nothing to delete for counter rate account.
+        }
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
