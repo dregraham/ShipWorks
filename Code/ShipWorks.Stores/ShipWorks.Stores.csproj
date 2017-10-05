@@ -607,6 +607,7 @@
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartItemOnlineStatusCondition.cs" />
     <Compile Include="Platforms\Walmart\CoreExtensions\Filters\WalmartPurchaseOrderIDCondition.cs" />
     <Compile Include="Platforms\Walmart\DTO\CancelRequestV3.cs" />
+    <Compile Include="Platforms\Walmart\DTO\Errors.cs" />
     <Compile Include="Platforms\Walmart\DTO\PurchaseOrderV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\RefundRequestV3.cs" />
     <Compile Include="Platforms\Walmart\DTO\ShipConfirmRequestV3.cs" />
