@@ -2,10 +2,10 @@
 // This is generated code.
 //////////////////////////////////////////////////////////////
 // Code is generated using LLBLGen Pro version: 5.0
-// Code is generated on: 
+// Code is generated on:
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
-// Templates version: 
+// Templates version:
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
     /// Read-only representation of the entity 'OnTracAccount'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     [Serializable]
     public partial class ReadOnlyOnTracAccountEntity : IOnTracAccountEntity
@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             {
                 objectMap[source] = this;
             }
-            
+
             OnTracAccountID = source.OnTracAccountID;
             RowVersion = source.RowVersion;
             AccountNumber = source.AccountNumber;
@@ -52,14 +52,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CountryCode = source.CountryCode;
             Email = source.Email;
             Phone = source.Phone;
-            
-            
-            
 
             CopyCustomOnTracAccountData(source);
         }
 
-        
         /// <summary> The OnTracAccountID property of the Entity OnTracAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OnTracAccount"."OnTracAccountID"<br/>
@@ -156,9 +152,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Phone { get; }
-        
-        
-        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -168,8 +162,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IOnTracAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
-
-        
 
         /// <summary>
         /// Copy any custom data

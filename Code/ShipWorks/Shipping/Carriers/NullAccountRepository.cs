@@ -33,6 +33,22 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public IEnumerable<ICarrierAccount> AccountsReadOnly => new List<NullCarrierAccount> { new NullCarrierAccount() };
 
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        /// v
+        public void Save<T>(T account) => Save(account as NullCarrierAccount);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount<T>(T account) => DeleteAccount(account as NullCarrierAccount);
+
         /// <summary>
         /// Force a check for changes
         /// </summary>
@@ -80,6 +96,15 @@ namespace ShipWorks.Shipping.Carriers
         }
 
         /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount(NullCarrierAccount account)
+        {
+            //Nothing to delete for null account.
+        }
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
@@ -90,5 +115,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Returns a list of postal (w/o postage) accounts.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts as IEnumerable<ICarrierAccount>;
     }
 }

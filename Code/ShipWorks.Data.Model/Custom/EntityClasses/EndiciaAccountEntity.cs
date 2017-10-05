@@ -26,6 +26,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         public PersonAdapter Address => new PersonAdapter(this, string.Empty);
 
         /// <summary>
+        /// Gets the account description.
+        /// </summary>
+        public string AccountDescription => Description;
+
+        /// <summary>
         /// Applies account to shipment
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment) =>

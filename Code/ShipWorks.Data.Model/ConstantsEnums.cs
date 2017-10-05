@@ -1897,6 +1897,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressAccount.</summary>
+	public enum DhlExpressAccountFieldIndex
+	{
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DimensionsProfile.</summary>
 	public enum DimensionsProfileFieldIndex
 	{
@@ -8876,6 +8914,8 @@ namespace ShipWorks.Data.Model
 		ShipmentEditLimit,
 		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
 		ShipmentsLoaderEnsureFiltersLoadedTimeout,
+		///<summary>ShipEngineApiKey. </summary>
+		ShipEngineApiKey,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11693,6 +11733,8 @@ namespace ShipWorks.Data.Model
 		ConfigurationEntity,
 		///<summary>Customer</summary>
 		CustomerEntity,
+		///<summary>DhlExpressAccount</summary>
+		DhlExpressAccountEntity,
 		///<summary>DimensionsProfile</summary>
 		DimensionsProfileEntity,
 		///<summary>Download</summary>

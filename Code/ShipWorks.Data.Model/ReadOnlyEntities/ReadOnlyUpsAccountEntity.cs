@@ -2,10 +2,10 @@
 // This is generated code.
 //////////////////////////////////////////////////////////////
 // Code is generated using LLBLGen Pro version: 5.0
-// Code is generated on: 
+// Code is generated on:
 // Code is generated using templates: ShipWorks
 // Templates vendor: Solutions Design.
-// Templates version: 
+// Templates version:
 //////////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
     /// Read-only representation of the entity 'UpsAccount'. <br/><br/>
-    /// 
+    ///
     /// </summary>
     [Serializable]
     public partial class ReadOnlyUpsAccountEntity : IUpsAccountEntity
@@ -35,7 +35,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             {
                 objectMap[source] = this;
             }
-            
+
             UpsAccountID = source.UpsAccountID;
             RowVersion = source.RowVersion;
             Description = source.Description;
@@ -61,15 +61,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PromoStatus = source.PromoStatus;
             LocalRatingEnabled = source.LocalRatingEnabled;
             UpsRateTableID = source.UpsRateTableID;
-            
-            
+
             UpsRateTable = (IUpsRateTableEntity) source.UpsRateTable?.AsReadOnly(objectMap);
-            
 
             CopyCustomUpsAccountData(source);
         }
 
-        
         /// <summary> The UpsAccountID property of the Entity UpsAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UpsAccount"."UpsAccountID"<br/>
@@ -220,11 +217,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> UpsRateTableID { get; }
-        
-        
+
         public IUpsRateTableEntity UpsRateTable { get; }
-        
-        
+
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -234,8 +229,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IUpsAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
-
-        
 
         /// <summary>
         /// Copy any custom data

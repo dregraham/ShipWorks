@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -9,10 +9,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// FedEx account repository
     /// </summary>
     [Component(RegistrationType.Self)]
-    [Component(RegistrationType.ImplementedInterfaces)]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.FedEx)]
-    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>,
-        ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>
+    public class FedExAccountRepository : CarrierAccountRepositoryBase<FedExAccountEntity, IFedExAccountEntity>
     {
         /// <summary>
         /// Gets the accounts for the carrier.
@@ -57,10 +55,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(FedExAccountEntity account)
-        {
-            FedExAccountManager.SaveAccount(account);
-        }
+        public override void Save(FedExAccountEntity account) => FedExAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount(FedExAccountEntity account) => FedExAccountManager.DeleteAccount(account);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as FedExAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => DeleteAccount(account as FedExAccountEntity);
 
         /// <summary>
         /// Get a readonly version of the specified account

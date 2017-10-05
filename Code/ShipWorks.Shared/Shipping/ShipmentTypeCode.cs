@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 
@@ -15,56 +11,60 @@ namespace ShipWorks.Shipping
     public enum ShipmentTypeCode
     {
         [Description("UPS")]
-        [ShipmentTypeIconAttribute("ups")]
+        [ShipmentTypeIcon("ups")]
         UpsOnLineTools = 0,
 
         [Description("UPS (WorldShip)")]
-        [ShipmentTypeIconAttribute("ups")]
+        [ShipmentTypeIcon("ups")]
         UpsWorldShip = 1,
 
         [Description("USPS (Endicia)")]
-        [ShipmentTypeIconAttribute("endicia")]
+        [ShipmentTypeIcon("endicia")]
         Endicia = 2,
 
         [Description("USPS (w/o Postage)")]
-        [ShipmentTypeIconAttribute("usps")]
+        [ShipmentTypeIcon("usps")]
         PostalWebTools = 4,
 
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaShipmentType", "ShipmentTypeName")]
-        [ShipmentTypeIconAttribute("express1")]
+        [ShipmentTypeIcon("express1")]
         Express1Endicia = 9,
 
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Express1UspsShipmentType", "ShipmentTypeName")]
-        [ShipmentTypeIconAttribute("express1")]
+        [ShipmentTypeIcon("express1")]
         Express1Usps = 13,
 
         [Description("FedEx")]
-        [ShipmentTypeIconAttribute("fedex")]
+        [ShipmentTypeIcon("fedex")]
         FedEx = 6,
 
         [Description("OnTrac")]
-        [ShipmentTypeIconAttribute("ontrac")]
+        [ShipmentTypeIcon("ontrac")]
         OnTrac = 11,
 
         [Description("i-parcel")]
-        [ShipmentTypeIconAttribute("iparcel")]
+        [ShipmentTypeIcon("iparcel")]
         iParcel = 12,
 
         [Description("Other")]
-        [ShipmentTypeIconAttribute("other")]
+        [ShipmentTypeIcon("other")]
         Other = 5,
 
         [Description("Best Rate")]
-        [ShipmentTypeIconAttribute("bestrate")]
+        [ShipmentTypeIcon("bestrate")]
         BestRate = 14,
 
         [Description("USPS")]
-        [ShipmentTypeIconAttribute("usps")]
+        [ShipmentTypeIcon("usps")]
         Usps = 15,
 
         [Description("Amazon")]
-        [ShipmentTypeIconAttribute("amazon")]
+        [ShipmentTypeIcon("amazon")]
         Amazon = 16,
+
+        [Description("DHL Express")]
+        [ShipmentTypeIcon("dhl")]
+        DhlExpress = 17,
 
         [Description("None")]
         None = 99

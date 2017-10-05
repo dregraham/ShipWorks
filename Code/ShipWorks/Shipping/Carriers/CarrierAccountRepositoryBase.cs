@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         public abstract T DefaultProfileAccount { get; }
-
+        
         /// <summary>
         /// Readonly list of accounts
         /// </summary>
@@ -62,6 +62,24 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="account">The account.</param>
         public abstract void Save(T account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public abstract void DeleteAccount(T account);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public abstract void Save<TAccount>(TAccount account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public abstract void DeleteAccount<TAccount>(TAccount account);
 
         /// <summary>
         /// A helper method to gets the account associated withe the default profile. A null value is returned
@@ -110,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Get a readonly account with the given id
         /// </summary>
-        public abstract TInterface GetAccountReadOnly(long uspsAccountID);
+        public abstract TInterface GetAccountReadOnly(long accountID);
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
@@ -129,5 +147,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts.OfType<ICarrierAccount>();
     }
 }

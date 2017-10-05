@@ -158,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.Designer.cs">
+      <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
@@ -402,6 +408,9 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Dhl\DhlExpressSetupWizard.resx">
+      <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
@@ -575,6 +584,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dhl_logo.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
