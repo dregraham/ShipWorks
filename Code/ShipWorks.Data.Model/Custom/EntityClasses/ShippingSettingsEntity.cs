@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -80,6 +82,18 @@ namespace ShipWorks.Data.Model.EntityClasses
             get { return (ShipmentTypeCode) DefaultType; }
             set { DefaultType = (int) value; }
         }
+
+        /// <summary>
+        /// Get the shipment date cutoff for the given shipment type
+        /// </summary>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType) =>
+            throw new NotImplementedException("This is just a stub");
+
+        /// <summary>
+        /// Set the shipment date cutoff for the given shipment type
+        /// </summary>
+        public void SetShipmentDateCutoff(ShipmentTypeCode shipmentType, ShipmentDateCutoff cutoff) =>
+            throw new NotImplementedException("This is just a stub");
 
         ///// <summary>
         ///// List of shipments types that have been activated to by visible if selected in the shipping window.  This list will be the same as

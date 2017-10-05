@@ -4,7 +4,6 @@ using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -113,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (ShipmentTypeCode == ShipmentTypeCode.Usps)
             {
-                shippingCutoff.Value = new ShipmentDateCutoff(settings.UspsShippingDateCutoffEnabled, settings.UspsShippingDateCutoffTime);
+                shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
             }
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
@@ -202,9 +201,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 express1Settings.SaveSettings(settings);
                 log.Info("Finished saving Express1 settings");
 
-                var cutoffDetails = shippingCutoff.Value;
-                settings.UspsShippingDateCutoffEnabled = cutoffDetails.Enabled;
-                settings.UspsShippingDateCutoffTime = cutoffDetails.CutoffTime;
+                settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
             }
 
             if (uspsResellerType == UspsResellerType.None)

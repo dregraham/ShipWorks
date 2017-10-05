@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityInterfaces
@@ -34,5 +35,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Strongly typed default shipment type code
         /// </summary>
         ShipmentTypeCode DefaultShipmentTypeCode { get; }
+
+        /// <summary>
+        /// Get the shipment date cutoff for the given shipment type
+        /// </summary>
+        ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType);
     }
 }

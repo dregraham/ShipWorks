@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
@@ -36,6 +38,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Strongly typed default shipment type code
         /// </summary>
         public ShipmentTypeCode DefaultShipmentTypeCode { get; private set; }
+
+        /// <summary>
+        /// Get the shipment date cutoff for the given shipment type
+        /// </summary>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType) =>
+            throw new NotImplementedException("This is just a stub");
 
         /// <summary>
         /// Copy custom data
