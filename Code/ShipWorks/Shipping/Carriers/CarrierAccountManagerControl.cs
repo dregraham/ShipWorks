@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             sandGrid.Rows.Clear();
 
-            foreach (ICarrierAccount shipper in repo.AccountsReadOnly)
+            foreach (ICarrierAccount shipper in repo.Accounts)
             {
                 GridRow row = new GridRow(new [] { shipper.AccountDescription });
                 sandGrid.Rows.Add(row);

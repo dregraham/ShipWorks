@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="account">The account.</param>
-        public override void DeleteAccount<T>(T account) => Save(account as DhlExpressAccountEntity);
+        public override void DeleteAccount<T>(T account) => DeleteAccount(account as DhlExpressAccountEntity);
 
         /// <summary>
         /// Get the account id from a given shipment

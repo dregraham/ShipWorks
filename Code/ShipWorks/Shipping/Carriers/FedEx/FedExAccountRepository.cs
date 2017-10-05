@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="account">The account.</param>
-        public override void DeleteAccount<T>(T account) => Save(account as FedExAccountEntity);
+        public override void DeleteAccount<T>(T account) => DeleteAccount(account as FedExAccountEntity);
 
         /// <summary>
         /// Get a readonly version of the specified account

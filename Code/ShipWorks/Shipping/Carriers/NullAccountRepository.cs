@@ -115,5 +115,10 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Returns a list of postal (w/o postage) accounts.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts as IEnumerable<ICarrierAccount>;
     }
 }

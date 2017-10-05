@@ -18,6 +18,11 @@ namespace ShipWorks.Shipping.Carriers
         /// Get a read only version of the account on the given shipment
         /// </summary>
         ICarrierAccount GetAccountReadOnly(IShipmentEntity shipment);
+        
+        /// <summary>
+        /// Get a collection of read only accounts
+        /// </summary>
+        IEnumerable<ICarrierAccount> Accounts { get; }
 
         /// <summary>
         /// Get a collection of read only accounts
