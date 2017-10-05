@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 using Xunit;
 

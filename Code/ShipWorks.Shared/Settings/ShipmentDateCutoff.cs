@@ -2,7 +2,7 @@
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace ShipWorks.Shipping.Settings
+namespace ShipWorks.Settings
 {
     /// <summary>
     /// Shipment date cutoff DTO
@@ -10,6 +10,8 @@ namespace ShipWorks.Shipping.Settings
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ShipmentDateCutoff
     {
+        public static readonly ShipmentDateCutoff Default = new ShipmentDateCutoff(false, TimeSpan.FromHours(17));
+
         /// <summary>
         /// Constructor
         /// </summary>
