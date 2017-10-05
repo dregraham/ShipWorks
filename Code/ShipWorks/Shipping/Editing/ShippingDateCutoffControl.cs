@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using ShipWorks.Settings;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -19,19 +20,19 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Gets/Sets the cutoff time settings
         /// </summary>
-        public Tuple<bool, TimeSpan> Value
+        public ShipmentDateCutoff Value
         {
             get
             {
-                return Tuple.Create(
+                return new ShipmentDateCutoff(
                     cutoffEnabled.Checked,
                     cutoffTime.Value.TimeOfDay);
             }
             set
             {
-                cutoffEnabled.Checked = value.Item1;
+                cutoffEnabled.Checked = value.Enabled;
                 cutoffTime.Enabled = cutoffEnabled.Checked;
-                cutoffTime.Value = new DateTime(2000, 1, 1).Add(value.Item2);
+                cutoffTime.Value = new DateTime(2000, 1, 1).Add(value.CutoffTime);
             }
         }
 

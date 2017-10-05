@@ -1310,7 +1310,7 @@
       <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShippingDateCutoffDisplayControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
