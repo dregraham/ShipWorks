@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -347,32 +346,50 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-            return sqlDeadlockRetry.ExecuteWithRetryAsync(async () =>
+            return sqlDeadlockRetry.ExecuteWithRetryAsync(
+                retryNumber => PerformSave(order, abandonedItems, retryNumber, affectedOrders),
+                ex => ex is ORMEntityOutOfSyncException);
+        }
+
+        /// <summary>
+        /// Perform the actual save
+        /// </summary>
+        private async Task PerformSave(EbayOrderEntity order, List<OrderItemEntity> abandonedItems, int retryNumber, List<OrderEntity> affectedOrders)
+        {
+            var clonedOrder = EntityUtility.CloneEntity(order);
+            var clonedAffectedOrders = affectedOrders.Select(EntityUtility.CloneEntity).ToList();
+            var clonedAbandonedItems = abandonedItems.Select(EntityUtility.CloneEntity).ToList();
+
+            await connection.WithTransaction(async (transaction, adapter) =>
             {
-                using (DbTransaction transaction = connection.BeginTransaction())
+                // Save the new order
+                var postAction = await SaveDownloadedOrderWithoutPostAction(clonedOrder, transaction).ConfigureAwait(false);
+
+                // Remove the abandoned items
+                DeleteAbandonedItems(clonedAbandonedItems, clonedAffectedOrders, adapter);
+
+                // We've seen an entity out of sync exceptions in ShipSense when getting the store ID
+                if (retryNumber == 0)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
-                    {
-                        // Save the new order
-                        await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
-
-                        // Remove the abandoned items
-                        DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
-
-                        // Copy Notes, Shipments from affected orders into the combined order
-                        // delete the affected orders
-                        ConsolidateOrderResources(order, affectedOrders, adapter);
-                    }
+                    adapter.FetchEntity(clonedOrder);
                 }
 
-                await UpdateOrderStatusesAfterSave(order, sqlAdapterFactory.Create(connection));
-            });
+                // Copy Notes, Shipments from affected orders into the combined order
+                // delete the affected orders
+                await ConsolidateOrderResources(clonedOrder, clonedAffectedOrders, adapter).ConfigureAwait(false);
+
+                transaction.Commit();
+
+                postAction();
+            }).ConfigureAwait(false);
+
+            await UpdateOrderStatusesAfterSave(clonedOrder, sqlAdapterFactory.Create(connection)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Delete abandoned items from orders that are being combined
         /// </summary>
-        private void DeleteAbandonedItems(IEnumerable<OrderItemEntity> abandonedItems, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        private void DeleteAbandonedItems(IEnumerable<OrderItemEntity> abandonedItems, IEnumerable<OrderEntity> affectedOrders, ISqlAdapter adapter)
         {
             // Go through each abandoned item and delete it
             foreach (OrderItemEntity item in abandonedItems)
@@ -409,17 +426,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="order">The new order that the old</param>
         /// <param name="affectedOrders">Old orders to copy from and delete</param>
         /// <param name="adapter">The adapter to use</param>
-        private void ConsolidateOrderResources(OrderEntity order, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        private async Task ConsolidateOrderResources(OrderEntity order, IEnumerable<OrderEntity> affectedOrders, ISqlAdapter adapter)
         {
             // Find all the orders that have no items.  We're going to have to delete them, since they are now empty and pointless.  But before
             // we delete them, we need to migrate their shipments and notes so they don't just get lost.
             foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
             {
                 // Copy the notes from the old order
-                OrderUtility.CopyNotes(fromOrder.OrderID, order);
+                await OrderUtility.CopyNotes(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Copy the shipments from the old order
-                OrderUtility.CopyShipments(fromOrder.OrderID, order);
+                await OrderUtility.CopyShipments(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Delete the old order
                 DeletionService.DeleteOrder(fromOrder.OrderID, adapter);

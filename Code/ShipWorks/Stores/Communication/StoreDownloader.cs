@@ -539,6 +539,7 @@ namespace ShipWorks.Stores.Communication
             {
                 await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
 
+                transaction.Commit();
             }
 
             // Updating order/order item statuses have to be done outside of a transaction,
@@ -549,17 +550,27 @@ namespace ShipWorks.Stores.Communication
             }
         }
 
+
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        [SuppressMessage("ShipWorks", "SW0002",
-            Justification = "The parameter name is not used for binding.")]
         protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException(nameof(order));
-            }
+            var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
+            postAction();
+        }
+
+        /// <summary>
+        /// Save the given order that has been downloaded.
+        /// </summary>
+        /// <returns>
+        /// Action that should be executed at the end of the logical save procedure. This is intended to be used when a downloader
+        /// needs to do more work for saving an order than just calling this method.</returns>
+        [SuppressMessage("ShipWorks", "SW0002",
+            Justification = "The parameter name is not used for binding.")]
+        protected virtual async Task<Action> SaveDownloadedOrderWithoutPostAction(OrderEntity order, DbTransaction transaction)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             try
             {
@@ -614,16 +625,17 @@ namespace ShipWorks.Stores.Communication
 
                         // Dispatch the order downloaded action
                         ActionDispatcher.DispatchOrderDownloaded(order.OrderID, Store.StoreID, !isAlreadyDownloaded, adapter);
-
-                        adapter.Commit();
                     }
 
-                    QuantitySaved++;
-
-                    if (!isAlreadyDownloaded)
+                    return () =>
                     {
-                        QuantityNew++;
-                    }
+                        QuantitySaved++;
+
+                        if (!isAlreadyDownloaded)
+                        {
+                            QuantityNew++;
+                        }
+                    };
                 }
             }
             catch (AggregateException ae)

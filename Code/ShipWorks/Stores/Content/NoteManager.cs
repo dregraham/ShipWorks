@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Delete all notes used by the given entity
         /// </summary>
-        public static void DeleteNotesForDeletedEntity(long entityID, SqlAdapter adapter)
+        public static void DeleteNotesForDeletedEntity(long entityID, ISqlAdapter adapter)
         {
             EntityType relatedType = EntityUtility.GetEntityType(entityID);
 
