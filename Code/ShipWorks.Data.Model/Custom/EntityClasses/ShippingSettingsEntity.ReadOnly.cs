@@ -42,8 +42,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Get the shipment date cutoff for the given shipment type
         /// </summary>
-        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType) =>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType)
+        {
             throw new NotImplementedException("This is just a stub");
+        }
 
         /// <summary>
         /// Copy custom data

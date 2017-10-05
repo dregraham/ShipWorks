@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Windows;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Core.UI.ValueConverters;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -11,30 +14,55 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
     public class ShipmentDateCutoffConverterTest : IDisposable
     {
         readonly AutoMock mock;
+        private readonly Mock<IShippingSettingsEntity> settings;
 
         public ShipmentDateCutoffConverterTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            settings = mock.FromFactory<IShippingSettings>()
+                .Mock(x => x.FetchReadOnly());
+
+            settings.Setup(x => x.GetShipmentDateCutoff(It.IsAny<ShipmentTypeCode>()))
+                .Returns(new ShipmentDateCutoff(false, TimeSpan.MinValue));
         }
 
         [Fact]
-        public void Convert_ThrowsArgumentException_WhenTargetTypeIsNotStringOrVisibility()
+        public void Convert_ThrowsInvalidOperationException_WhenTargetTypeIsNotStringOrVisibility()
         {
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            Assert.Throws<ArgumentException>(() => testObject.Convert(ShipmentTypeCode.Usps, typeof(int), null, null));
+            Assert.Throws<InvalidOperationException>(() => testObject.Convert(ShipmentTypeCode.Usps, typeof(int), null, null));
+        }
+
+        [Theory]
+        [InlineData(ShipmentTypeCode.Usps)]
+        [InlineData(ShipmentTypeCode.FedEx)]
+        [InlineData(ShipmentTypeCode.UpsOnLineTools)]
+        public void ConvertString_DelegatesToShippingSettings_ToGetShipmentDateCutoff(ShipmentTypeCode shipmentType)
+        {
+            var testObject = mock.Create<ShipmentDateCutoffConverter>();
+            testObject.Convert(shipmentType, typeof(string), null, null);
+
+            settings.Verify(x => x.GetShipmentDateCutoff(shipmentType));
+        }
+
+        [Fact]
+        public void ConvertString_ReturnsEmpty_WhenShipmentTypeIsNull()
+        {
+            var testObject = mock.Create<ShipmentDateCutoffConverter>();
+            var result = testObject.Convert(null, typeof(string), null, null) as string;
+
+            Assert.Contains(string.Empty, result);
         }
 
         [Theory]
         [InlineData(false, "15:00", "", "")]
         [InlineData(true, "6:00", "6:00 AM", "USPS")]
         [InlineData(true, "15:00", "3:00 PM", "USPS")]
-        public void Convert_ReturnsExpectedValue_ForUspsWhenTargetIsString(bool cutoffEnabled, string cutoffDate, 
+        public void ConvertString_ReturnsExpectedValue_ForUspsWhenTargetIsString(bool cutoffEnabled, string cutoffDate,
             string expectedTime, string expectedCarrierName)
         {
-            var settings = mock.FromFactory<IShippingSettings>()
-                .Mock(x => x.FetchReadOnly());
-            settings.SetupGet(x => x.UspsShippingDateCutoffEnabled).Returns(cutoffEnabled);
-            settings.SetupGet(x => x.UspsShippingDateCutoffTime).Returns(TimeSpan.Parse(cutoffDate));
+            settings.Setup(x => x.GetShipmentDateCutoff(ShipmentTypeCode.Usps))
+                .Returns(new ShipmentDateCutoff(cutoffEnabled, TimeSpan.Parse(cutoffDate)));
 
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
             var result = testObject.Convert(ShipmentTypeCode.Usps, typeof(string), null, null) as string;
@@ -44,78 +72,37 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
         }
 
         [Theory]
-        [InlineData(ShipmentTypeCode.Amazon)]
-        [InlineData(ShipmentTypeCode.BestRate)]
-        [InlineData(ShipmentTypeCode.Endicia)]
-        [InlineData(ShipmentTypeCode.Express1Endicia)]
-        [InlineData(ShipmentTypeCode.Express1Usps)]
+        [InlineData(ShipmentTypeCode.Usps)]
         [InlineData(ShipmentTypeCode.FedEx)]
-        [InlineData(ShipmentTypeCode.iParcel)]
-        [InlineData(ShipmentTypeCode.None)]
-        [InlineData(ShipmentTypeCode.OnTrac)]
-        [InlineData(ShipmentTypeCode.Other)]
-        [InlineData(ShipmentTypeCode.PostalWebTools)]
         [InlineData(ShipmentTypeCode.UpsOnLineTools)]
-        [InlineData(ShipmentTypeCode.UpsWorldShip)]
-        public void Convert_ReturnsEmptyString_ForShipmentType(ShipmentTypeCode shipmentType)
+        public void ConvertVisibility_DelegatesToShippingSettings_ToGetShipmentDateCutoff(ShipmentTypeCode shipmentType)
         {
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            var result = testObject.Convert(shipmentType, typeof(string), null, null);
+            testObject.Convert(shipmentType, typeof(Visibility), null, null);
 
-            Assert.Equal(string.Empty, result);
-        }
-
-        [Fact]
-        public void Convert_ReturnsEmptyString_WhenTargetIsStringAndShipmentTypeIsNull()
-        {
-            var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            var result = testObject.Convert(null, typeof(string), null, null);
-
-            Assert.Equal(string.Empty, result);
+            settings.Verify(x => x.GetShipmentDateCutoff(shipmentType));
         }
 
         [Theory]
-        [InlineData(false, Visibility.Hidden)]
-        [InlineData(true, Visibility.Visible)]
-        public void Convert_ReturnsExpectedValue_ForUspsWhenTargetIsVisibility(bool cutoffEnabled, Visibility expected)
+        [InlineData(false, "15:00", Visibility.Hidden)]
+        [InlineData(true, "6:00", Visibility.Visible)]
+        public void ConvertVisibility_ReturnsExpectedValue_ForUspsWhenTargetIsString(bool cutoffEnabled, string cutoffDate,
+            Visibility expected)
         {
-            var settings = mock.FromFactory<IShippingSettings>()
-                .Mock(x => x.FetchReadOnly());
-            settings.SetupGet(x => x.UspsShippingDateCutoffEnabled).Returns(cutoffEnabled);
+            settings.Setup(x => x.GetShipmentDateCutoff(ShipmentTypeCode.Usps))
+                .Returns(new ShipmentDateCutoff(cutoffEnabled, TimeSpan.Parse(cutoffDate)));
 
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            var result = testObject.Convert(ShipmentTypeCode.Usps, typeof(Visibility), null, null);
+            var result = (Visibility) testObject.Convert(ShipmentTypeCode.Usps, typeof(Visibility), null, null);
 
             Assert.Equal(expected, result);
         }
 
-        [Theory]
-        [InlineData(ShipmentTypeCode.Amazon)]
-        [InlineData(ShipmentTypeCode.BestRate)]
-        [InlineData(ShipmentTypeCode.Endicia)]
-        [InlineData(ShipmentTypeCode.Express1Endicia)]
-        [InlineData(ShipmentTypeCode.Express1Usps)]
-        [InlineData(ShipmentTypeCode.FedEx)]
-        [InlineData(ShipmentTypeCode.iParcel)]
-        [InlineData(ShipmentTypeCode.None)]
-        [InlineData(ShipmentTypeCode.OnTrac)]
-        [InlineData(ShipmentTypeCode.Other)]
-        [InlineData(ShipmentTypeCode.PostalWebTools)]
-        [InlineData(ShipmentTypeCode.UpsOnLineTools)]
-        [InlineData(ShipmentTypeCode.UpsWorldShip)]
-        public void Convert_ReturnsHidden_ForShipmentTypeWhenTargetIsVisibility(ShipmentTypeCode shipmentType)
-        {
-            var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            var result = testObject.Convert(shipmentType, typeof(Visibility), null, null);
-
-            Assert.Equal(Visibility.Hidden, result);
-        }
-
         [Fact]
-        public void Convert_ReturnsHidden_WhenTargetIsVisibilityAndShipmentTypeIsNull()
+        public void ConvertVisibility_ReturnsHidden_WhenShipmentTypeIsNull()
         {
             var testObject = mock.Create<ShipmentDateCutoffConverter>();
-            var result = testObject.Convert(null, typeof(Visibility), null, null);
+            var result = (Visibility) testObject.Convert(null, typeof(Visibility), null, null);
 
             Assert.Equal(Visibility.Hidden, result);
         }

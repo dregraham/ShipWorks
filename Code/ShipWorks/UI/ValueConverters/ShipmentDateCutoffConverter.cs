@@ -3,12 +3,12 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls.Design;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Core.UI.ValueConverters
 {
@@ -17,37 +17,33 @@ namespace ShipWorks.Core.UI.ValueConverters
     /// </summary>
     public class ShipmentDateCutoffConverter : IValueConverter
     {
-        // Use a func<func> so that we can handle designer, production, and test execution more easily, since
-        // each environment has different methods of getting dependencies into the object
-        private readonly Func<Type, Func<IShippingSettingsEntity, object>, object> withShippingSettings;
+        readonly Func<ShipmentTypeCode, ShipmentDateCutoff> getShipmentDateCutoff;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipmentDateCutoffConverter()
         {
-            withShippingSettings = (targetType, action) =>
+            getShipmentDateCutoff = x =>
             {
                 if (DesignModeDetector.IsDesignerHosted())
                 {
-                    return targetType == typeof(string) ?
-                        "Cutoff time is 3:00 PM" :
-                        (object) Visibility.Visible;
+                    return new ShipmentDateCutoff(true, TimeSpan.FromHours(15));
                 }
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    return action(lifetimeScope.Resolve<IShippingSettings>().FetchReadOnly());
+                    return lifetimeScope.Resolve<IShippingSettings>().FetchReadOnly().GetShipmentDateCutoff(x);
                 }
             };
         }
 
-        /// <summary>
+        /// <summary><shippingsettingsentity
         /// Constructor
         /// </summary>
         public ShipmentDateCutoffConverter(IShippingSettings shippingSettings)
         {
-            withShippingSettings = (targetType, action) => action(shippingSettings.FetchReadOnly());
+            getShipmentDateCutoff = shippingSettings.FetchReadOnly().GetShipmentDateCutoff;
         }
 
         /// <summary>
@@ -55,39 +51,23 @@ namespace ShipWorks.Core.UI.ValueConverters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (targetType != typeof(string) && targetType != typeof(Visibility))
-            {
-                throw new ArgumentException("Target type must be string or Visibility");
-            }
+            ShipmentTypeCode? shipmentType = value as ShipmentTypeCode?;
 
-            ShipmentTypeCode? shipmentTypeCode = value as ShipmentTypeCode?;
+            var shipmentDateCutoff = shipmentType.HasValue ?
+                getShipmentDateCutoff(shipmentType.Value) :
+                new ShipmentDateCutoff(false, TimeSpan.FromHours(17));
 
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.Usps:
-                    return withShippingSettings(targetType, x =>
-                        GetConvertedValue(targetType, x.UspsShippingDateCutoffEnabled, x.UspsShippingDateCutoffTime, EnumHelper.GetDescription(shipmentTypeCode)));
-                default:
-                    return GetConvertedValue(targetType, false, TimeSpan.MinValue, string.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Get the converted value
-        /// </summary>
-        private object GetConvertedValue(Type targetType, bool enabled, TimeSpan cutoffTime, string carrierName)
-        {
             if (targetType == typeof(string))
             {
-                return enabled ?
-                    $"Shipments processed after {FormatTime(cutoffTime)} today will have a ship date of the next valid shipping day." +
-                    $"{Environment.NewLine}To update this setting, go to Manage > Shipping Settings > {carrierName} > Settings." :
+                return shipmentDateCutoff.Enabled ?
+                    $"Shipments processed after {FormatTime(shipmentDateCutoff.CutoffTime)} today will have a ship date of the next valid shipping day." +
+                    $"{Environment.NewLine}To update this setting, go to Manage > Shipping Settings > {EnumHelper.GetDescription(shipmentType.GetValueOrDefault())} > Settings." :
                     string.Empty;
             }
 
             if (targetType == typeof(Visibility))
             {
-                return enabled ? Visibility.Visible : Visibility.Hidden;
+                return shipmentDateCutoff.Enabled ? Visibility.Visible : Visibility.Hidden;
             }
 
             throw new InvalidOperationException("Target type must be string or Visibility");

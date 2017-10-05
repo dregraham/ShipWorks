@@ -86,14 +86,18 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get the shipment date cutoff for the given shipment type
         /// </summary>
-        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType) =>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType)
+        {
             throw new NotImplementedException("This is just a stub");
+        }
 
         /// <summary>
         /// Set the shipment date cutoff for the given shipment type
         /// </summary>
-        public void SetShipmentDateCutoff(ShipmentTypeCode shipmentType, ShipmentDateCutoff cutoff) =>
+        public void SetShipmentDateCutoff(ShipmentTypeCode shipmentType, ShipmentDateCutoff cutoff)
+        {
             throw new NotImplementedException("This is just a stub");
+        }
 
         ///// <summary>
         ///// List of shipments types that have been activated to by visible if selected in the shipping window.  This list will be the same as
