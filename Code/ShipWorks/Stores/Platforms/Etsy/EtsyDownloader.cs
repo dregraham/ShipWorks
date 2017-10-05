@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -505,17 +506,19 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     item.Code = item.SKU;
                     item.TransactionID = transaction.GetValue("transaction_id", "");
                 }
-
                 catch (EtsyException ex)
                 {
-                    if (ex.Message.IndexOf("(400) Bad Request", StringComparison.OrdinalIgnoreCase) == 0) 
-                    {
-                        throw;
-                    }
+                    HttpWebResponse httpWebReponse = ex.GetAllExceptions()
+                        .OfType<WebException>()
+                        .FirstOrDefault()?
+                        .Response as HttpWebResponse;
 
-                    log.Info($"Etsy threw a GetProduct exception for OrderNumber {order.OrderNumber} ", ex);
-                    item.Code = transaction.GetValue("transaction_id", "");
-                    item.SKU = transaction.GetValue("listing_id", "");
+                    if (httpWebReponse?.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        log.Info($"Etsy threw a GetProduct exception for OrderNumber {order.OrderNumber} ", ex);
+                        item.Code = transaction.GetValue("transaction_id", "");
+                        item.SKU = transaction.GetValue("listing_id", "");
+                    }
                 }
             }
             else
