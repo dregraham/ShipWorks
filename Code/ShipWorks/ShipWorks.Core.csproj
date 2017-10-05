@@ -1214,10 +1214,20 @@
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
+    <Compile Include="Shipping\Carriers\CarrierAccountManagerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\CarrierAccountManagerControl.Designer.cs">
+      <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountManager.cs" />
+    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountEditorDlg.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
@@ -7851,6 +7861,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.resx">
       <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\CarrierAccountManagerControl.resx">
+      <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExDangerousGoodsControl.resx">
       <DependentUpon>FedExDangerousGoodsControl.cs</DependentUpon>

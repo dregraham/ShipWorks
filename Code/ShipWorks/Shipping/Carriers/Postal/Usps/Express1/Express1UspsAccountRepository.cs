@@ -73,6 +73,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         public override void DeleteAccount(UspsAccountEntity account) => UspsAccountManager.DeleteAccount(account);
 
         /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as UspsAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => Save(account as UspsAccountEntity);
+
+        /// <summary>
         /// Get the account id from a given shipment
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>

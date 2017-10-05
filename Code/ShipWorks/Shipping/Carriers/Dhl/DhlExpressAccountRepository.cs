@@ -1,13 +1,14 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     [Component]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.DhlExpress)]
+    [KeyedComponent(typeof(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressAccountRepository : CarrierAccountRepositoryBase<DhlExpressAccountEntity, IDhlExpressAccountEntity>, IDhlExpressAccountRepository
     {
         /// <summary>
@@ -56,6 +57,20 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <param name="account">The account.</param>
         /// <exception cref="System.NotImplementedException"></exception>
         public override void DeleteAccount(DhlExpressAccountEntity account) => DhlExpressAccountManager.DeleteAccount(account);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as DhlExpressAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => Save(account as DhlExpressAccountEntity);
 
         /// <summary>
         /// Get the account id from a given shipment

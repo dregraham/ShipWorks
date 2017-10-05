@@ -40,7 +40,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         protected DhlExpressSetupWizard()
         {
             InitializeComponent();
-
         }
 
         /// <summary>

@@ -79,6 +79,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override void DeleteAccount(EndiciaAccountEntity account) =>
             EndiciaAccountManager.DeleteAccount(account);
 
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as EndiciaAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => Save(account as EndiciaAccountEntity);
 
         /// <summary>
         /// Get the account id from a given shipment

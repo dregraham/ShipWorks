@@ -33,6 +33,22 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public IEnumerable<ICarrierAccount> AccountsReadOnly => new List<NullCarrierAccount> { new NullCarrierAccount() };
 
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        /// v
+        public void Save<T>(T account) => Save(account as NullCarrierAccount);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount<T>(T account) => DeleteAccount(account as NullCarrierAccount);
+
         /// <summary>
         /// Force a check for changes
         /// </summary>

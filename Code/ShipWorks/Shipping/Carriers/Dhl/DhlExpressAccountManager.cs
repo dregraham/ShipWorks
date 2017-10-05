@@ -1,4 +1,9 @@
-﻿using Interapptive.Shared.Collections;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
@@ -8,11 +13,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.ComponentRegistration.Ordering;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {

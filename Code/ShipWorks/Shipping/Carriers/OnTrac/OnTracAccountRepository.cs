@@ -75,6 +75,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override void DeleteAccount(OnTracAccountEntity account) => OnTracAccountManager.DeleteAccount(account);
 
         /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as OnTracAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => Save(account as OnTracAccountEntity);
+
+        /// <summary>
         /// Get the account id from a given shipment
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>

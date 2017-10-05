@@ -70,6 +70,18 @@ namespace ShipWorks.Shipping.Carriers
         public abstract void DeleteAccount(T account);
 
         /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public abstract void Save<T>(T account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public abstract void DeleteAccount<T>(T account);
+
+        /// <summary>
         /// A helper method to gets the account associated withe the default profile. A null value is returned
         /// if there is not an account associated with the default profile.
         /// </summary>
