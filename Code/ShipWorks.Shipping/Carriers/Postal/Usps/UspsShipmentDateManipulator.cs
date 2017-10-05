@@ -1,9 +1,10 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider, 
+        public UspsShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider,
             DefaultShipmentDateManipulator defaultShipmentDateManipulator)
         {
             this.defaultShipmentDateManipulator = defaultShipmentDateManipulator;
@@ -39,14 +40,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             IShippingSettingsEntity shippingSettingsEntity = shippingSettings.FetchReadOnly();
+            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(ShipmentTypeCode.Usps);
 
-            if (!shippingSettingsEntity.UspsShippingDateCutoffEnabled)
+            if (!cutoff.Enabled)
             {
                 defaultShipmentDateManipulator.Manipulate(shipment);
                 return;
             }
 
-            TimeSpan shipDateCutoff = shippingSettingsEntity.UspsShippingDateCutoffTime;
+            TimeSpan shipDateCutoff = cutoff.CutoffTime;
             DateTime now = dateTimeProvider.Now;
 
             // Bring the past up to now
@@ -58,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
-                
+
                 if (shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);

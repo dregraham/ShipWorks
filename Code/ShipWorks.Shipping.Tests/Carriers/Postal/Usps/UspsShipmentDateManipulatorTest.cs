@@ -1,13 +1,14 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
-using System;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
@@ -15,7 +16,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
     public class UspsShipmentDateManipulatorTest
     {
         private Mock<DefaultShipmentDateManipulator> defaultShipmentDateManipulator;
-        private ShippingSettingsEntity shippingSettingsEntity = new ShippingSettingsEntity();
         private ShipmentEntity shipment = new ShipmentEntity();
         private DateTime now = new DateTime(2017, 7, 1, 12, 0, 0);
         private readonly AutoMock mock;
@@ -30,9 +30,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData(false)]
         public void Manipulate_DoesNotModifyShipDate_WhenShipmentIsProcessed(bool cutoffEnabled)
         {
-            SetupDefaultMocks();
+            SetupDefaultMocks(new ShipmentDateCutoff(cutoffEnabled, TimeSpan.FromHours(17)));
 
-            shippingSettingsEntity.UspsShippingDateCutoffEnabled = cutoffEnabled;
             shipment.Processed = true;
             shipment.IsDirty = false;
 
@@ -46,9 +45,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [Fact]
         public void Manipulate_DelegatesToDefaultShipmentDateManipulator_WhenUspsCutoffNotEnabled()
         {
-            SetupDefaultMocks();
-
-            shippingSettingsEntity.UspsShippingDateCutoffEnabled = false;
+            SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
             UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
@@ -94,15 +91,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         [InlineData("2017-09-25 10:00:00", "2017-09-28 12:00:00", "11:00:00", "2017-09-29 12:00:12")]
         [InlineData("2017-09-25 10:00:00", "2017-09-29 12:00:00", "11:00:00", "2017-09-30 13:00:13")]
         [InlineData("2017-09-25 10:00:00", "2017-09-30 12:00:00", "11:00:00", "2017-10-02 14:00:14")]
-
         public void Manipulate_SetsDate_Properly(string shipDateText, string nowText, string cutoffTimespanText, string expectedText)
         {
             TimeSpan cutoffTime = TimeSpan.Parse(cutoffTimespanText);
 
-            shippingSettingsEntity.UspsShippingDateCutoffEnabled = true;
-            shippingSettingsEntity.UspsShippingDateCutoffTime = cutoffTime;
-
-            SetupDefaultMocks();
+            SetupDefaultMocks(new ShipmentDateCutoff(true, cutoffTime));
 
             mock.Mock<IDateTimeProvider>().SetupGet(x => x.Now).Returns(DateTime.Parse(nowText));
 
@@ -119,9 +112,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             Assert.Equal(DateTime.Parse(expectedText).Date, shipment.ShipDate.Date);
         }
 
-        private void SetupDefaultMocks()
+        private void SetupDefaultMocks(ShipmentDateCutoff cutoff)
         {
-            mock.Mock<IShippingSettings>().Setup(ss => ss.FetchReadOnly()).Returns(shippingSettingsEntity);
+            mock.FromFactory<IShippingSettings>()
+                .Mock(x => x.FetchReadOnly())
+                .Setup(x => x.GetShipmentDateCutoff(ShipmentTypeCode.Usps))
+                .Returns(cutoff);
             mock.Mock<IDateTimeProvider>().Setup(dtp => dtp.Now).Returns(now);
 
             defaultShipmentDateManipulator = mock.Override<DefaultShipmentDateManipulator>();
