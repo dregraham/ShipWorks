@@ -372,6 +372,7 @@
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
+    <Compile Include="Settings\ShipmentDateCutoff.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
