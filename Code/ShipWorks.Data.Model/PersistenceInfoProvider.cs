@@ -1080,8 +1080,8 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("EtsyOrderItemEntity", @"ShipWorksLocal", @"dbo", "EtsyOrderItem", 3, 0);
 			this.AddElementFieldMapping("EtsyOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("EtsyOrderItemEntity", "ListingID", "ListingID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
-			this.AddElementFieldMapping("EtsyOrderItemEntity", "TransactionID", "TransactionID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("EtsyOrderItemEntity", "ListingID", "ListingID", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("EtsyOrderItemEntity", "TransactionID", "TransactionID", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits EtsyStoreEntity's mappings</summary>

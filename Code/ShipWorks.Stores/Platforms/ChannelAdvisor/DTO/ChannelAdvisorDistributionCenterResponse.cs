@@ -10,5 +10,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 
         [JsonProperty("value")]
         public IEnumerable<ChannelAdvisorDistributionCenter> DistributionCenters { get; set; }
+
+        [JsonProperty("@odata.nextLink")]
+        public string OdataNextLink { get; set; }
     }
 }

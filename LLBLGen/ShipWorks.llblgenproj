@@ -841,8 +841,8 @@
       </EntityDefinition>
       <EntityDefinition Name="EtsyOrderItem" ObjectID="63576b1d-238c-42d5-a8b7-c574008fc266" InheritanceType="2">
         <Fields>
-          <Field Name="ListingID" Type="int" FieldIndex="0" />
-          <Field Name="TransactionID" Type="int" Precision="10" FieldIndex="1" />
+          <Field Name="ListingID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="TransactionID" Type="string" MaxLength="300" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="EtsyStore" ObjectID="b71e1a57-e10a-461d-8ce4-df530fb72b96" InheritanceType="2">
@@ -4057,7 +4057,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-02T16:20:24.8238493Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-25T14:31:30.5398359Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4984,8 +4984,8 @@
                   <PkConstraintName Name="PK_EtsyOrderItem" />
                   <Fields>
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="TransactionID" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ListingID" Ordinal="3" DbType="8" Precision="10" />
+                    <Field Name="TransactionID" Ordinal="2" DbType="12" Length="300" />
+                    <Field Name="ListingID" Ordinal="3" DbType="12" Length="100" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyStore">

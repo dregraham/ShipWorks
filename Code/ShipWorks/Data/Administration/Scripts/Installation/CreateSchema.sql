@@ -5819,8 +5819,8 @@ PRINT N'Creating table to [dbo].[EtsyOrderItem]'
 GO
 CREATE TABLE [dbo].[EtsyOrderItem](
     [OrderItemID] [bigint] NOT NULL,
-    [TransactionID] [int] NOT NULL,
-    [ListingID] [int] NOT NULL
+	[TransactionID] [nvarchar] (300) NOT NULL,
+	[ListingID] [nvarchar] (100) NOT NULL
  CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
 (
     [OrderItemID] ASC

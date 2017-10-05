@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Interapptive.Shared.Business;
@@ -33,46 +34,56 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public void LoadOrder(Order downloadedOrder, WalmartOrderEntity orderToSave)
         {
-            if (orderToSave.IsNew)
+            try
             {
-                long pruchaseOrderId;
-                if (!long.TryParse(downloadedOrder.purchaseOrderId, out pruchaseOrderId))
+                if (orderToSave.IsNew)
                 {
-                    throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to a number");
+                    long pruchaseOrderId;
+                    if (!long.TryParse(downloadedOrder.purchaseOrderId, out pruchaseOrderId))
+                    {
+                        throw new WalmartException($"PurchaseOrderId '{downloadedOrder.purchaseOrderId}' could not be converted to a number");
+                    }
+                    orderToSave.OrderNumber = pruchaseOrderId;
+                    // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
+                    orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
+                    orderToSave.OrderDate = downloadedOrder.orderDate;
+
+                    orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate.Year > 1754
+                        ? downloadedOrder.shippingInfo.estimatedDeliveryDate
+                        : downloadedOrder.orderDate;
+
+                    orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate.Year > 1754
+                        ? downloadedOrder.shippingInfo.estimatedShipDate
+                        : downloadedOrder.orderDate;
+
+                    orderToSave.RequestedShipping = downloadedOrder.shippingInfo.methodCode.ToString();
+                    orderToSave.RequestedShippingMethodCode = orderToSave.RequestedShipping;
+
+                    LoadAddress(downloadedOrder, orderToSave);
                 }
-                orderToSave.OrderNumber = pruchaseOrderId;
-                // orderToSave.PurchaseOrderId is set via the WalmartOrderIdentifier, no need to do it here.
-                orderToSave.CustomerOrderID = downloadedOrder.customerOrderId;
-                orderToSave.OrderDate = downloadedOrder.orderDate;
+                else
+                {
+                    // Load existing charges and other detail from the database
+                    orderRepository.PopulateOrderDetails(orderToSave);
+                    ClearExistingCharges(orderToSave);
+                }
 
-                orderToSave.EstimatedDeliveryDate = downloadedOrder.shippingInfo.estimatedDeliveryDate.Year > 1754
-                    ? downloadedOrder.shippingInfo.estimatedDeliveryDate
-                    : downloadedOrder.orderDate;
+                IEnumerable<orderLineType> orderLines = downloadedOrder.orderLines ?? Enumerable.Empty<orderLineType>();
 
-                orderToSave.EstimatedShipDate = downloadedOrder.shippingInfo.estimatedShipDate.Year > 1754
-                    ? downloadedOrder.shippingInfo.estimatedShipDate
-                    : downloadedOrder.orderDate;
+                LoadItems(orderLines, orderToSave);
+                LoadOtherCharges(orderLines, orderToSave);
+                LoadTax(orderLines, orderToSave);
+                LoadRefunds(orderLines, orderToSave);
 
-                orderToSave.RequestedShipping = downloadedOrder.shippingInfo.methodCode.ToString();
-                orderToSave.RequestedShippingMethodCode = orderToSave.RequestedShipping;
-
-                LoadAddress(downloadedOrder, orderToSave);
+                orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
             }
-            else
+            catch (Exception ex) when(ex.GetType() != typeof(WalmartException))
             {
-                // Load existing charges and other detail from the database
-                orderRepository.PopulateOrderDetails(orderToSave);
-                ClearExistingCharges(orderToSave);
+                // yes catching a general exception here is heavy handed however we have had
+                // 3 instances where the Walmart api has gone down or given us bad data which
+                // causes issues when loading orders
+                throw new WalmartException($"Error occured while loading Walmart order: {ex.Message}");
             }
-
-            var orderLines = downloadedOrder.orderLines ?? Enumerable.Empty<orderLineType>();
-
-            LoadItems(orderLines, orderToSave);
-            LoadOtherCharges(orderLines, orderToSave);
-            LoadTax(orderLines, orderToSave);
-            LoadRefunds(orderLines, orderToSave);
-
-            orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
         }
 
         /// <summary>

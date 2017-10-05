@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.UI.Platforms.Walmart.WizardPages
             }
             catch (WalmartException ex)
             {
-                messageHelper.ShowError(this, $"Error connecting to Walmart:\n{ex.Message}");
+                messageHelper.ShowError(this, ex.Message);
             }
 
             if (!canMoveNext)
