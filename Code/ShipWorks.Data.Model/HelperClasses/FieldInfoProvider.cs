@@ -2763,6 +2763,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, 0, 0, 10);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UspsShippingDateCutoffEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsShippingDateCutoffEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "UspsShippingDateCutoffTime", typeof(System.TimeSpan), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, 0, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoff", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoff, 1000, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

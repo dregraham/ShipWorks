@@ -2418,6 +2418,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
+          <Field Name="ShipmentDateCutoff" Type="string" MaxLength="1000" FieldIndex="55" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -4057,7 +4058,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-25T14:31:30.5398359Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-05T16:30:19.2414648Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7668,31 +7669,32 @@
                     <Field Name="UspsAutomaticExpress1" Ordinal="28" DbType="2" />
                     <Field Name="UspsAutomaticExpress1Account" Ordinal="29" DbType="0" Precision="19" />
                     <Field Name="UspsInsuranceProvider" Ordinal="30" DbType="8" Precision="10" />
-                    <Field Name="Express1EndiciaCustomsCertify" Ordinal="31" DbType="2" />
-                    <Field Name="Express1EndiciaCustomsSigner" Ordinal="32" DbType="12" Length="100" />
-                    <Field Name="Express1EndiciaThermalDocTab" Ordinal="33" DbType="2" />
-                    <Field Name="Express1EndiciaThermalDocTabType" Ordinal="34" DbType="8" Precision="10" />
-                    <Field Name="Express1EndiciaSingleSource" Ordinal="35" DbType="2" />
-                    <Field Name="OnTracInsuranceProvider" Ordinal="36" DbType="8" Precision="10" />
-                    <Field Name="OnTracInsurancePennyOne" Ordinal="37" DbType="2" />
-                    <Field Name="iParcelInsuranceProvider" Ordinal="38" DbType="8" Precision="10" />
-                    <Field Name="iParcelInsurancePennyOne" Ordinal="39" DbType="2" />
-                    <Field Name="Express1UspsSingleSource" Ordinal="40" DbType="2" />
-                    <Field Name="UpsMailInnovationsEnabled" Ordinal="41" DbType="2" />
-                    <Field Name="WorldShipMailInnovationsEnabled" Ordinal="42" DbType="2" />
-                    <Field Name="BestRateExcludedShipmentTypes" Ordinal="43" DbType="12" Length="30" />
-                    <Field Name="ShipSenseEnabled" Ordinal="44" DbType="2" />
-                    <Field Name="ShipSenseUniquenessXml" Ordinal="45" DbType="26" Length="2147483647" />
-                    <Field Name="ShipSenseProcessedShipmentID" Ordinal="46" DbType="0" Precision="19" />
-                    <Field Name="ShipSenseEndShipmentID" Ordinal="47" DbType="0" Precision="19" />
-                    <Field Name="AutoCreateShipments" Ordinal="48" DbType="2" />
-                    <Field Name="FedExFimsEnabled" Ordinal="49" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="FedExFimsUsername" Ordinal="50" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="FedExFimsPassword" Ordinal="51" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
-                    <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="UspsShippingDateCutoffEnabled" Ordinal="54" DbType="2" />
-                    <Field Name="UspsShippingDateCutoffTime" Ordinal="55" DbType="31" />
+                    <Field Name="UspsShippingDateCutoffEnabled" Ordinal="31" DbType="2" />
+                    <Field Name="UspsShippingDateCutoffTime" Ordinal="32" DbType="31" />
+                    <Field Name="Express1EndiciaCustomsCertify" Ordinal="33" DbType="2" />
+                    <Field Name="Express1EndiciaCustomsSigner" Ordinal="34" DbType="12" Length="100" />
+                    <Field Name="Express1EndiciaThermalDocTab" Ordinal="35" DbType="2" />
+                    <Field Name="Express1EndiciaThermalDocTabType" Ordinal="36" DbType="8" Precision="10" />
+                    <Field Name="Express1EndiciaSingleSource" Ordinal="37" DbType="2" />
+                    <Field Name="OnTracInsuranceProvider" Ordinal="38" DbType="8" Precision="10" />
+                    <Field Name="OnTracInsurancePennyOne" Ordinal="39" DbType="2" />
+                    <Field Name="iParcelInsuranceProvider" Ordinal="40" DbType="8" Precision="10" />
+                    <Field Name="iParcelInsurancePennyOne" Ordinal="41" DbType="2" />
+                    <Field Name="Express1UspsSingleSource" Ordinal="42" DbType="2" />
+                    <Field Name="UpsMailInnovationsEnabled" Ordinal="43" DbType="2" />
+                    <Field Name="WorldShipMailInnovationsEnabled" Ordinal="44" DbType="2" />
+                    <Field Name="BestRateExcludedShipmentTypes" Ordinal="45" DbType="12" Length="30" />
+                    <Field Name="ShipSenseEnabled" Ordinal="46" DbType="2" />
+                    <Field Name="ShipSenseUniquenessXml" Ordinal="47" DbType="26" Length="2147483647" />
+                    <Field Name="ShipSenseProcessedShipmentID" Ordinal="48" DbType="0" Precision="19" />
+                    <Field Name="ShipSenseEndShipmentID" Ordinal="49" DbType="0" Precision="19" />
+                    <Field Name="AutoCreateShipments" Ordinal="50" DbType="2" />
+                    <Field Name="FedExFimsEnabled" Ordinal="51" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="FedExFimsUsername" Ordinal="52" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="FedExFimsPassword" Ordinal="53" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ShipmentEditLimit" Ordinal="54" DbType="8" Precision="10" />
+                    <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="55" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="ShipmentDateCutoff" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -12133,6 +12135,7 @@
             <FieldMapping FieldName="IParcelInsuranceProvider" TargetFieldName="iParcelInsuranceProvider" />
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
+            <FieldMapping FieldName="ShipmentDateCutoff" TargetFieldName="ShipmentDateCutoff" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
             <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />

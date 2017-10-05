@@ -406,6 +406,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UspsShippingDateCutoffEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UspsShippingDateCutoffTime", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentDateCutoff", fieldHashtable);
 		}
 		#endregion
 
@@ -1012,6 +1014,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.TimeSpan)GetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, value); }
+		}
+
+		/// <summary> The ShipmentDateCutoff property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentDateCutoff"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipmentDateCutoff
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoff, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoff, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
