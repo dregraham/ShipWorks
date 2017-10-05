@@ -1034,8 +1034,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			this.AddFieldIndexEnumForElementName(typeof(EtsyOrderItemFieldIndex), "EtsyOrderItemEntity");
 			this.AddElementFieldInfo("EtsyOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)EtsyOrderItemFieldIndex.OrderItemID, 0, 0, 19);
-			this.AddElementFieldInfo("EtsyOrderItemEntity", "ListingID", typeof(System.Int32), false, false, false, false,  (int)EtsyOrderItemFieldIndex.ListingID, 0, 0, 10);
-			this.AddElementFieldInfo("EtsyOrderItemEntity", "TransactionID", typeof(System.Int32), false, false, false, false,  (int)EtsyOrderItemFieldIndex.TransactionID, 0, 0, 10);
+			this.AddElementFieldInfo("EtsyOrderItemEntity", "ListingID", typeof(System.String), false, false, false, false,  (int)EtsyOrderItemFieldIndex.ListingID, 100, 0, 0);
+			this.AddElementFieldInfo("EtsyOrderItemEntity", "TransactionID", typeof(System.String), false, false, false, false,  (int)EtsyOrderItemFieldIndex.TransactionID, 300, 0, 0);
 		}
 		/// <summary>Inits EtsyStoreEntity's FieldInfo objects</summary>
 		private void InitEtsyStoreEntityInfos()

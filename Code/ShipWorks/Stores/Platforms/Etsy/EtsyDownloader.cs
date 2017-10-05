@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -491,16 +492,16 @@ namespace ShipWorks.Stores.Platforms.Etsy
             EtsyOrderItemEntity item = (EtsyOrderItemEntity) InstantiateOrderItem(order);
 
             item.Name = transaction.GetValue("title", "");
-            int productId = transaction["product_data"].GetValue("product_id", 0);
+            string productId = transaction["product_data"].GetValue("product_id", "");
 
 
-            if (productId != 0)
+            if (productId.IsNumeric())
             {
-                item.ListingID = transaction.GetValue("listing_id", 0);
+                item.ListingID = transaction.GetValue("listing_id", "");
                 JToken product = webClient.GetProduct(item.ListingID, productId);
                 item.SKU = product["results"]?.GetValue("sku", string.Empty) ?? string.Empty;
                 item.Code = item.SKU;
-                item.TransactionID = transaction.GetValue("transaction_id", 0);
+                item.TransactionID = transaction.GetValue("transaction_id", "");
             }
             else
             {

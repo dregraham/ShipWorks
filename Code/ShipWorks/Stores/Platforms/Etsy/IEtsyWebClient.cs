@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Gets a list of products
         /// </summary>
-        JToken GetProduct(int listingId, int productId);
+        JToken GetProduct(string listingId, string productId);
 
         /// <summary>
         /// Gets the URL a user will use to authorize their etsy account to use ShipWorks.
