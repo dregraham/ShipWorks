@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
-    public class ShipEngineClientWebTest : IDisposable
+    public class ShipEngineWebClientTest : IDisposable
     {
         readonly AutoMock mock;
         private readonly Mock<IShipEngineApiKey> apiKey;
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
         private readonly ShipEngineWebClient testObject;
 
-        public ShipEngineClientWebTest()
+        public ShipEngineWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
