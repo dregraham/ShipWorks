@@ -35,7 +35,7 @@
             // carrierAccountManagerControl
             // 
             this.carrierAccountManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.carrierAccountManagerControl.Location = new System.Drawing.Point(23, 33);
+            this.carrierAccountManagerControl.Location = new System.Drawing.Point(25, 33);
             this.carrierAccountManagerControl.Name = "carrierAccountManagerControl";
             this.carrierAccountManagerControl.Size = new System.Drawing.Size(400, 168);
             this.carrierAccountManagerControl.TabIndex = 0;
@@ -44,7 +44,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(10, 10);
+            this.label1.Location = new System.Drawing.Point(9, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 1;
