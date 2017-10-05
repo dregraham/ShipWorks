@@ -144,7 +144,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                     "</ns3:order>" +
                     "</ns3:elements>" +
                     "</ns3:list>");
-                
+
+            responseReader.SetupGet(r => r.HttpWebResponse.StatusCode)
+                .Returns(System.Net.HttpStatusCode.OK);
 
             var variableRequestSubmitter = mock.FromFactory<IHttpRequestSubmitterFactory>()
                 .Mock(f => f.GetHttpVariableRequestSubmitter());
