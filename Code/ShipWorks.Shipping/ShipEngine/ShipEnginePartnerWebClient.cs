@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -37,26 +38,26 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a new ShipEngine account and returns the account ID
         /// </summary>
-        public string CreateNewAccount(string partnerApiKey)
+        public async Task<string> CreateNewAccount(string partnerApiKey)
         {
-            return SendPartnerRequest(partnerApiKey, CreateAccountUrl, string.Empty, "CreateNewAccount", "account_id");
+            return await SendPartnerRequest(partnerApiKey, CreateAccountUrl, string.Empty, "CreateNewAccount", "account_id");
         }
 
         /// <summary>
         /// Gets an ApiKey from the ShipEngine API
         /// </summary>
-        public string GetApiKey(string partnerApiKey, string shipEngineAccountId)
+        public async Task<string> GetApiKey(string partnerApiKey, string shipEngineAccountId)
         {
             string requestUrl = string.Format(CreateApiKeyUrl, shipEngineAccountId);
             string postText = "{\"description\": \"ShipWorks Access Key\"}";
 
-            return SendPartnerRequest(partnerApiKey, requestUrl, postText, "GetApiKey", "encrypted_api_key");
+            return await SendPartnerRequest(partnerApiKey, requestUrl, postText, "GetApiKey", "encrypted_api_key");
         }
 
         /// <summary>
         /// Send actual request to ShipEngine
         /// </summary>
-        private string SendPartnerRequest(string partnerApiKey, string requestUrl, string postText, string logName, string responseFieldName)
+        private async Task<string> SendPartnerRequest(string partnerApiKey, string requestUrl, string postText, string logName, string responseFieldName)
         {
             IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(postText, "application/json");
             request.Headers.Add("api-key", partnerApiKey);
@@ -69,7 +70,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                IHttpResponseReader response = request.GetResponse();
+                IHttpResponseReader response = await request.GetResponseAsync();
                 string result = response.ReadResult();
 
                 apiLogEntry.LogResponse(result);

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.ShipEngine
+﻿using System.Threading.Tasks;
+
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Client to the ShipEngine Partner API
@@ -8,11 +10,11 @@
         /// <summary>
         /// Creates a new ShipEngine account and returns the account ID
         /// </summary>
-        string CreateNewAccount(string partnerApiKey);
+        Task<string> CreateNewAccount(string partnerApiKey);
 
         /// <summary>
         /// Gets an ApiKey from the ShipEngine API
         /// </summary>
-        string GetApiKey(string partnerApiKey, string shipEngineAccountId);
+        Task<string> GetApiKey(string partnerApiKey, string shipEngineAccountId);
     }
 }

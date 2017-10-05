@@ -2,6 +2,7 @@
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Ensures the ApiKey contains a value
         /// </summary>
-        public void Configure()
+        public async Task Configure()
         {
             ShippingSettingsEntity settings = shippingSettings.Fetch();
             string apiKey = settings.ShipEngineApiKey;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = GetNewApiKey();
+                    apiKey = await GetNewApiKey();
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -63,12 +64,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a new account and gets the API Key from ShipEngine
         /// </summary>
-        private string GetNewApiKey()
+        private async Task<string> GetNewApiKey()
         {
             string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = partnerWebClient.CreateNewAccount(partnerApiKey);
+            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey);
 
-            return partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
+            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
         }
 
         /// <summary>

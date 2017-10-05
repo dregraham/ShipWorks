@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             if (string.IsNullOrWhiteSpace(apiKey.Value))
             {
-                await Task.Run(() => apiKey.Configure()).ConfigureAwait(false);
+                await apiKey.Configure().ConfigureAwait(false);
             }
 
             return apiKey.Value;

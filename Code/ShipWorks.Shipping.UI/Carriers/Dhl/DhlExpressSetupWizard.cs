@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
+using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -109,6 +110,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             if (long.TryParse(accountNumber.Text, out dhlAccountNumber))
             {
+                this.Enabled = false;
+                this.Cursor = Cursors.WaitCursor;
+
                 GenericResult<string> connectAccountResult = await shipEngineClient.ConnectDhlAccount(dhlAccountNumber.ToString());
                 if (connectAccountResult.Success)
                 {
@@ -119,6 +123,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
                 {
                     ShowWizardError(connectAccountResult.Message, e);
                 }
+
+                this.Enabled = true;
+                this.Cursor = Cursors.Default;
             }
             else
             {
