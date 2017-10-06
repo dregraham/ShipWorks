@@ -6,6 +6,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Insurance;
@@ -58,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1PostageDiscountSettingsControl.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
             LoadExpress1Settings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Loads the Express1 settings.
         /// </summary>
-        private void LoadExpress1Settings(ShippingSettingsEntity settings)
+        private void LoadExpress1Settings(IShippingSettingsEntity settings)
         {
             this.settings = new Express1EndiciaSettingsFacade(settings);
 

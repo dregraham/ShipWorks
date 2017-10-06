@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// Initializes a new instance of the <see cref="Express1EndiciaSettingsFacade"/> class.
         /// </summary>
         /// <param name="settings">The shipping settings being used as the data source for the facade.</param>
-        public Express1EndiciaSettingsFacade(ShippingSettingsEntity settings)
+        public Express1EndiciaSettingsFacade(IShippingSettingsEntity settings)
         {
             if (settings == null)
             {
