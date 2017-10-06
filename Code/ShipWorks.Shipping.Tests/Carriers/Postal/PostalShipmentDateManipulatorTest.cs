@@ -4,9 +4,10 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Settings;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
     public class PostalShipmentDateManipulatorTest
     {
         private Mock<DefaultShipmentDateManipulator> defaultShipmentDateManipulator;
+        private Mock<IShippingSettingsEntity> shippingSettingsEntity;
         private ShipmentEntity shipment = new ShipmentEntity();
         private DateTime now = new DateTime(2017, 7, 1, 12, 0, 0);
         private readonly AutoMock mock;
@@ -54,6 +56,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             Assert.False(shipment.IsDirty);
             Assert.Equal(now, shipment.ShipDate);
         }
+
+        [Fact]
+        public void Manipulate_UsesShipment_ShipmentTypeCode()
+        {
+            SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
+
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Amazon;
+            testObject.Manipulate(shipment);
+
+            defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Once);
+            shippingSettingsEntity.Verify(x => x.GetShipmentDateCutoff(shipment.ShipmentTypeCode));
+        }
+
 
         [Theory]
         // now TimeOfDay < cutoff   =>  ShipDate does not change
@@ -114,9 +130,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
         private void SetupDefaultMocks(ShipmentDateCutoff cutoff)
         {
-            mock.FromFactory<IShippingSettings>()
-                .Mock(x => x.FetchReadOnly())
-                .Setup(x => x.GetShipmentDateCutoff(ShipmentTypeCode.Usps))
+            shippingSettingsEntity = mock.FromFactory<IShippingSettings>()
+                .Mock(x => x.FetchReadOnly());
+            shippingSettingsEntity.Setup(x => x.GetShipmentDateCutoff(It.IsAny<ShipmentTypeCode>()))
                 .Returns(cutoff);
             mock.Mock<IDateTimeProvider>().Setup(dtp => dtp.Now).Returns(now);
 

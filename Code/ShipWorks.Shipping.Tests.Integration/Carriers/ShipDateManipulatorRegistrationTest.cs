@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;

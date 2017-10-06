@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             IShippingSettingsEntity shippingSettingsEntity = shippingSettings.FetchReadOnly();
-            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(ShipmentTypeCode.Usps);
+            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(shipment.ShipmentTypeCode);
 
             if (!cutoff.Enabled)
             {
