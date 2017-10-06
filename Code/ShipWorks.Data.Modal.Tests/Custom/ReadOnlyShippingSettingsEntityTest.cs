@@ -16,7 +16,7 @@ namespace ShipWorks.Data.Modal.Tests.Custom
     public class ReadOnlyReadOnlyShippingSettingsEntityTest
     {
         private IShippingSettingsEntity readOnlyShippingSettingsEntity;
-        private IDictionary<ShipmentTypeCode, ShipmentDateCutoff> source;
+        private readonly IDictionary<ShipmentTypeCode, ShipmentDateCutoff> source;
 
         public ReadOnlyReadOnlyShippingSettingsEntityTest()
         {
