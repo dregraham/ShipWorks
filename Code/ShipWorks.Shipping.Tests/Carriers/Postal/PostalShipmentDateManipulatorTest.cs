@@ -13,14 +13,14 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
-    public class UspsShipmentDateManipulatorTest
+    public class PostalShipmentDateManipulatorTest
     {
         private Mock<DefaultShipmentDateManipulator> defaultShipmentDateManipulator;
         private ShipmentEntity shipment = new ShipmentEntity();
         private DateTime now = new DateTime(2017, 7, 1, 12, 0, 0);
         private readonly AutoMock mock;
 
-        public UspsShipmentDateManipulatorTest()
+        public PostalShipmentDateManipulatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             shipment.Processed = true;
             shipment.IsDirty = false;
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             Assert.False(shipment.IsDirty);
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         {
             SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Once);
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 ShipDate = DateTime.Parse(shipDateText)
             };
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Never);

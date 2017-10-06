@@ -183,7 +183,7 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilderTest.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />

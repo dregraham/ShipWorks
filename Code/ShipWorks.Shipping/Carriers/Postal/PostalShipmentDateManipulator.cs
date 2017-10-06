@@ -12,7 +12,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Manipulate the date of the given shipment
     /// </summary>
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Usps)]
-    public class UspsShipmentDateManipulator : IShipmentDateManipulator
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Endicia)]
+    public class PostalShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;
         private readonly DefaultShipmentDateManipulator defaultShipmentDateManipulator;
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider,
+        public PostalShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider,
             DefaultShipmentDateManipulator defaultShipmentDateManipulator)
         {
             this.defaultShipmentDateManipulator = defaultShipmentDateManipulator;
