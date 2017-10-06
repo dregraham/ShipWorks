@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // description
             // 
             this.description.Location = new System.Drawing.Point(92, 57);
-            this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaAccountDescription);
+            this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlExpressDescription);
             this.description.Name = "description";
             this.description.PromptColor = System.Drawing.SystemColors.GrayText;
             this.description.PromptText = null;
@@ -117,12 +117,12 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // contactInformation
             // 
             this.contactInformation.AddressSelector = null;
-            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-            | ShipWorks.Data.Controls.PersonFields.Street)
-            | ShipWorks.Data.Controls.PersonFields.City)
-            | ShipWorks.Data.Controls.PersonFields.State)
-            | ShipWorks.Data.Controls.PersonFields.Postal)
-            | ShipWorks.Data.Controls.PersonFields.Email)
+            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
+            | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.contactInformation.EnableValidationControls = false;
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -130,10 +130,10 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.contactInformation.Location = new System.Drawing.Point(15, 76);
             this.contactInformation.MaxStreetLines = 1;
             this.contactInformation.Name = "contactInformation";
-            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
-            | ShipWorks.Data.Controls.PersonFields.Street)
-            | ShipWorks.Data.Controls.PersonFields.City)
-            | ShipWorks.Data.Controls.PersonFields.State)
+            this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            | ShipWorks.Data.Controls.PersonFields.Street) 
+            | ShipWorks.Data.Controls.PersonFields.City) 
+            | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
             this.contactInformation.Size = new System.Drawing.Size(355, 279);
             this.contactInformation.TabIndex = 0;
