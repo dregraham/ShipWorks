@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Settings;
@@ -40,11 +40,21 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public ShipmentTypeCode DefaultShipmentTypeCode { get; private set; }
 
         /// <summary>
-        /// Get the shipment date cutoff for the given shipment type
+        /// Current list of shipment date cutoffs
         /// </summary>
-        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType)
+        public ReadOnlyDictionary<ShipmentTypeCode, ShipmentDateCutoff> ShipmentDateCutoffList { get; private set; }
+
+        /// <summary>
+        /// Get the shipment cutoff info for a given shipment type code
+        /// </summary>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentTypeCode)
         {
-            throw new NotImplementedException("This is just a stub");
+            if (ShipmentDateCutoffList.ContainsKey(shipmentTypeCode))
+            {
+                return ShipmentDateCutoffList[shipmentTypeCode];
+            }
+
+            return ShipmentDateCutoff.Default;
         }
 
         /// <summary>
@@ -57,6 +67,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ExcludedTypes = source.ExcludedTypes.ToReadOnly();
             BestRateExcludedTypes = source.BestRateExcludedTypes.ToReadOnly();
             DefaultShipmentTypeCode = source.DefaultShipmentTypeCode;
+            ShipmentDateCutoffList = source.ShipmentDateCutoffList.ToReadOnlyDictionary();
         }
     }
 }

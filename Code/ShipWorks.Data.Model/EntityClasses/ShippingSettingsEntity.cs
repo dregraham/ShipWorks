@@ -407,7 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UspsShippingDateCutoffTime", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShipmentDateCutoff", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
 		}
 		#endregion
 
@@ -1016,14 +1016,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, value); }
 		}
 
-		/// <summary> The ShipmentDateCutoff property of the Entity ShippingSettings<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentDateCutoff"<br/>
+		/// <summary> The ShipmentDateCutoffJson property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentDateCutoffJson"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShipmentDateCutoff
+		public virtual System.String ShipmentDateCutoffJson
 		{
-			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoff, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoff, value); }
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

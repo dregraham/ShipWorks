@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
@@ -12,6 +15,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class ShippingSettingsEntity
     {
+        private IDictionary<ShipmentTypeCode, ShipmentDateCutoff> loadedShipmentDateCutoffs;
+
         /// <summary>
         /// List of shipments types that have been activated to by visible if selected in the shipping window.  This list will be the same as
         /// the Configured list except in the case of upgrading from 2x where they would need to be visible, but maybe not been through configuration yet.
@@ -84,45 +89,78 @@ namespace ShipWorks.Data.Model.EntityClasses
         }
 
         /// <summary>
-        /// Get the shipment date cutoff for the given shipment type
+        /// Current list of shipment date cutoffs
         /// </summary>
-        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType)
+        public ReadOnlyDictionary<ShipmentTypeCode, ShipmentDateCutoff> ShipmentDateCutoffList
         {
-            throw new NotImplementedException("This is just a stub");
+            get
+            {
+                LoadShipmentDateCutoffJson();
+
+                return loadedShipmentDateCutoffs.ToReadOnlyDictionary(); 
+            }
         }
 
         /// <summary>
-        /// Set the shipment date cutoff for the given shipment type
+        /// Get the shipment cutoff info for a given shipment type code
         /// </summary>
-        public void SetShipmentDateCutoff(ShipmentTypeCode shipmentType, ShipmentDateCutoff cutoff)
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentTypeCode)
         {
-            throw new NotImplementedException("This is just a stub");
+            return ShipmentDateCutoffList.ContainsKey(shipmentTypeCode) ? ShipmentDateCutoffList[shipmentTypeCode] : ShipmentDateCutoff.Default;
         }
 
-        ///// <summary>
-        ///// List of shipments types that have been activated to by visible if selected in the shipping window.  This list will be the same as
-        ///// the Configured list except in the case of upgrading from 2x where they would need to be visible, but maybe not been through configuration yet.
-        ///// </summary>
-        //IEnumerable<ShipmentTypeCode> IShippingSettingsEntity.ActivatedTypes =>
-        //    ActivatedTypes.Select(x => (ShipmentTypeCode) x);
+        /// <summary>
+        /// Load shipment date cutoffs from JSON
+        /// </summary>
+        private void LoadShipmentDateCutoffJson()
+        {
+            if (loadedShipmentDateCutoffs != null && loadedShipmentDateCutoffs.Any())
+            {
+                return;
+            }
 
-        ///// <summary>
-        ///// The list of shipment types that have been fully configured for use within ShipWorks
-        ///// </summary>
-        //IEnumerable<ShipmentTypeCode> IShippingSettingsEntity.ConfiguredTypes =>
-        //    ConfiguredTypes.Select(x => (ShipmentTypeCode) x);
+            try
+            {
+                loadedShipmentDateCutoffs = JsonConvert.DeserializeObject<Dictionary<ShipmentTypeCode, ShipmentDateCutoff>>(ShipmentDateCutoffJson) ?? 
+                                            new Dictionary<ShipmentTypeCode, ShipmentDateCutoff>();
+            }
+            catch (Exception ex) when (ex is JsonSerializationException || ex is JsonException || 
+                                       ex is ArgumentNullException)
+            {
+                loadedShipmentDateCutoffs = new Dictionary<ShipmentTypeCode, ShipmentDateCutoff>();
+            }
+        }
 
-        ///// <summary>
-        ///// List of shipment types that the user has elected to have hidden from the ShipWorks UI for selection and configuration.  This list is independent
-        ///// of the Activated and Configured lists.
-        ///// </summary>
-        //IEnumerable<ShipmentTypeCode> IShippingSettingsEntity.ExcludedTypes =>
-        //    ExcludedTypes.Select(x => (ShipmentTypeCode) x);
+        /// <summary>
+        /// Get the shipment cutoff info for a given shipment type code
+        /// </summary>
+        public void SetShipmentDateCutoff(ShipmentTypeCode shipmentTypeCode, ShipmentDateCutoff shipmentDateCutoff)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentDateCutoff, nameof(shipmentDateCutoff));
 
-        ///// <summary>
-        ///// List of shipment types that the user has elected to exclude when attempting to get the cheapest rate.
-        ///// </summary>
-        //IEnumerable<ShipmentTypeCode> IShippingSettingsEntity.BestRateExcludedTypes =>
-        //    BestRateExcludedTypes.Select(x => (ShipmentTypeCode) x);
+            LoadShipmentDateCutoffJson();
+
+            loadedShipmentDateCutoffs[shipmentTypeCode] = shipmentDateCutoff;
+
+            SetShipmentDateCutoffJson();
+        }
+
+        /// <summary>
+        /// Load shipment date cutoffs from JSON
+        /// </summary>
+        private void SetShipmentDateCutoffJson()
+        {
+            if (loadedShipmentDateCutoffs != null)
+            {
+                try
+                {
+                    ShipmentDateCutoffJson = JsonConvert.SerializeObject(loadedShipmentDateCutoffs);
+                }
+                catch (Exception ex) when (ex is JsonSerializationException || ex is JsonException)
+                {
+                    loadedShipmentDateCutoffs = new Dictionary<ShipmentTypeCode, ShipmentDateCutoff>();
+                }
+            }
+        }
     }
 }

@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Business\PersonAdapterTest.cs" />
     <Compile Include="Collections\CollectionChangedEventArgsTest.cs" />
+    <Compile Include="Collections\EnumerableExtensionsTest.cs" />
     <Compile Include="Collections\ObservableExtensionsTest.cs" />
     <Compile Include="Filters\FilterTestingHelper.cs" />
     <Compile Include="Net\HttpVariableCollectionTest.cs" />

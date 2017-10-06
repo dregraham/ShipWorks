@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
@@ -37,8 +38,13 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         ShipmentTypeCode DefaultShipmentTypeCode { get; }
 
         /// <summary>
-        /// Get the shipment date cutoff for the given shipment type
+        /// Get the shipment cutoff info for a given shipment type code
         /// </summary>
-        ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentType);
+        ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Current list of shipment date cutoffs
+        /// </summary>
+        ReadOnlyDictionary<ShipmentTypeCode, ShipmentDateCutoff> ShipmentDateCutoffList { get; }
     }
 }

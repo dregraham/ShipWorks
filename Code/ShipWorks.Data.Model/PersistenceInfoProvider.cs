@@ -2914,7 +2914,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipmentsLoaderEnsureFiltersLoadedTimeout", "ShipmentsLoaderEnsureFiltersLoadedTimeout", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 52);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UspsShippingDateCutoffEnabled", "UspsShippingDateCutoffEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 53);
 			this.AddElementFieldMapping("ShippingSettingsEntity", "UspsShippingDateCutoffTime", "UspsShippingDateCutoffTime", false, "Time", 0, 0, 0, false, "", null, typeof(System.TimeSpan), 54);
-			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipmentDateCutoff", "ShipmentDateCutoff", false, "NVarChar", 1000, 0, 0, false, "", null, typeof(System.String), 55);
+			this.AddElementFieldMapping("ShippingSettingsEntity", "ShipmentDateCutoffJson", "ShipmentDateCutoffJson", false, "NVarChar", 1000, 0, 0, false, "", null, typeof(System.String), 55);
 		}
 
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>

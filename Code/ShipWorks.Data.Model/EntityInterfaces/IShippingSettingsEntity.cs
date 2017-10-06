@@ -351,12 +351,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Time, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.TimeSpan UspsShippingDateCutoffTime { get; }
-        /// <summary> The ShipmentDateCutoff property of the Entity ShippingSettings<br/><br/>
+        /// <summary> The ShipmentDateCutoffJson property of the Entity ShippingSettings<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ShippingSettings"."ShipmentDateCutoff"<br/>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipmentDateCutoffJson"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String ShipmentDateCutoff { get; }
+        System.String ShipmentDateCutoffJson { get; }
         
         
         

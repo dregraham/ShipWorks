@@ -2418,7 +2418,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
-          <Field Name="ShipmentDateCutoff" Type="string" MaxLength="1000" FieldIndex="55" />
+          <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="55" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -4058,7 +4058,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-05T16:30:19.2414648Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-05T17:49:08.3064349Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7694,7 +7694,7 @@
                     <Field Name="FedExFimsPassword" Ordinal="53" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="ShipmentEditLimit" Ordinal="54" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="55" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="ShipmentDateCutoff" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
+                    <Field Name="ShipmentDateCutoffJson" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -12135,7 +12135,7 @@
             <FieldMapping FieldName="IParcelInsuranceProvider" TargetFieldName="iParcelInsuranceProvider" />
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
-            <FieldMapping FieldName="ShipmentDateCutoff" TargetFieldName="ShipmentDateCutoff" />
+            <FieldMapping FieldName="ShipmentDateCutoffJson" TargetFieldName="ShipmentDateCutoffJson" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
             <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
             <FieldMapping FieldName="ShippingSettingsID" TargetFieldName="ShippingSettingsID" />

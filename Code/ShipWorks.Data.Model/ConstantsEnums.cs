@@ -8880,8 +8880,8 @@ namespace ShipWorks.Data.Model
 		UspsShippingDateCutoffEnabled,
 		///<summary>UspsShippingDateCutoffTime. </summary>
 		UspsShippingDateCutoffTime,
-		///<summary>ShipmentDateCutoff. </summary>
-		ShipmentDateCutoff,
+		///<summary>ShipmentDateCutoffJson. </summary>
+		ShipmentDateCutoffJson,
 		/// <summary></summary>
 		AmountOfFields
 	}
