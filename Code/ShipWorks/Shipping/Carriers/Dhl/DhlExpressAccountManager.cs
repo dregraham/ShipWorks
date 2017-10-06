@@ -161,15 +161,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.DhlExpress));
         }
-
-        /// <summary>
-        /// Get the default description to use for the given account
-        /// </summary>
-        public static string GetDefaultDescription(DhlExpressAccountEntity account)
-        {
-            string[] descriptionComponents = { account.AccountNumber.ToString(), account.Street1, account.PostalCode };
-
-            return string.Join(",", descriptionComponents.Where(s => !string.IsNullOrWhiteSpace(s)));
-        }
     }
 }

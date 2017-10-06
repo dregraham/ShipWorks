@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Dhl;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using Interapptive.Shared.Utility;
+using Autofac.Features.Indexed;
 
 namespace ShipWorks.Shipping.Carriers.DhlExpress
 {
@@ -19,12 +20,17 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
     public partial class DhlExpressAccountEditorDlg : Form, ICarrierAccountEditorDlg
     {
         private readonly DhlExpressAccountEntity account;
-        private readonly IDhlExpressAccountRepository accountRepository;
+        private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
+        private readonly IMessageHelper messageHelper;
+        private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressAccountEditorDlg(ICarrierAccount account, IDhlExpressAccountRepository accountRepository)
+        public DhlExpressAccountEditorDlg(ICarrierAccount account, 
+            ICarrierAccountRetrieverFactory accountRetrieverFactory,
+            IMessageHelper messageHelper, 
+            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
         {
             InitializeComponent();
 
@@ -32,7 +38,9 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             MethodConditions.EnsureArgumentIsNotNull(dhlAccount, "Dhl Account");
 
             this.account = dhlAccount;
-            this.accountRepository = accountRepository;
+            this.accountRetrieverFactory = accountRetrieverFactory;
+            this.messageHelper = messageHelper;
+            this.accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
         }
 
         /// <summary>
@@ -63,9 +71,9 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// <summary>
         /// Get the accoun description
         /// </summary>
-        private static string GetDescription(DhlExpressAccountEntity dhlAccount)
+        private string GetDescription(DhlExpressAccountEntity dhlAccount)
         {
-            return DhlExpressAccountManager.GetDefaultDescription(dhlAccount);
+            return accountDescription.GetDefaultAccountDescription(account);
         }
 
         /// <summary>
@@ -85,13 +93,13 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
                 }
 
                 contactInformation.SaveToEntity();
-                accountRepository.Save(account);
+                accountRetrieverFactory.Create(account.ShipmentType).Save(account);
 
                 DialogResult = DialogResult.OK;
             }
             catch (ORMConcurrencyException)
             {
-                MessageHelper.ShowError(
+                messageHelper.ShowError(
                     this, "Your changes cannot be saved because another use has deleted the account.");
 
                 DialogResult = DialogResult.Abort;

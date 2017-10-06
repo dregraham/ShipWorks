@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         public static string GetDefaultDescription(DhlExpressAccountEntity account)
         {
-            return DhlExpressAccountManager.GetDefaultDescription(account);
+            return new DhlExpressAccountDescription().GetDefaultAccountDescription(account);
         }
 
         /// <summary>
