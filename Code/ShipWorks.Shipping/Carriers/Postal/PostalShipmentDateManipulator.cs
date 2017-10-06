@@ -6,7 +6,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Manipulate the date of the given shipment

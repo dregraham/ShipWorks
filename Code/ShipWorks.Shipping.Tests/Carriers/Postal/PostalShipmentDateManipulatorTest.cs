@@ -11,7 +11,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Tests.Carriers.Postal
 {
     public class PostalShipmentDateManipulatorTest
     {
