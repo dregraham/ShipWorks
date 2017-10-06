@@ -364,7 +364,7 @@ namespace ShipWorks.Templates.Distribution
                 // Determine the list of siblings from the parent to see if this folder exists
                 var siblingFolders = (parent != null) ? parent.ChildFolders : tree.RootFolders;
 
-                TemplateFolderEntity folder = siblingFolders.SingleOrDefault(f => f.Name == folderName);
+                TemplateFolderEntity folder = siblingFolders.FirstOrDefault(f => f.Name == folderName);
 
                 if (folder != null)
                 {
