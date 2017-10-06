@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DhlExpressAccountEditorDlg));
             this.labelAccountNumber = new System.Windows.Forms.Label();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
@@ -41,13 +42,16 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
             this.accountNumber = new ShipWorks.UI.Controls.NumericTextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.labelNote = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // labelAccountNumber
             // 
             this.labelAccountNumber.AutoSize = true;
-            this.labelAccountNumber.Location = new System.Drawing.Point(25, 31);
+            this.labelAccountNumber.Location = new System.Drawing.Point(24, 31);
             this.labelAccountNumber.Name = "labelAccountNumber";
             this.labelAccountNumber.Size = new System.Drawing.Size(61, 13);
             this.labelAccountNumber.TabIndex = 171;
@@ -56,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(201, 362);
+            this.ok.Location = new System.Drawing.Point(201, 414);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 175;
@@ -68,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(282, 362);
+            this.cancel.Location = new System.Drawing.Point(282, 414);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 176;
@@ -79,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             this.labelOnTracAccount.AutoSize = true;
             this.labelOnTracAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOnTracAccount.Location = new System.Drawing.Point(12, 9);
+            this.labelOnTracAccount.Location = new System.Drawing.Point(17, 9);
             this.labelOnTracAccount.Name = "labelOnTracAccount";
             this.labelOnTracAccount.Size = new System.Drawing.Size(96, 13);
             this.labelOnTracAccount.TabIndex = 178;
@@ -88,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(24, 60);
+            this.labelDescription.Location = new System.Drawing.Point(21, 58);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 179;
@@ -98,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             this.labelOptional.AutoSize = true;
             this.labelOptional.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelOptional.Location = new System.Drawing.Point(260, 60);
+            this.labelOptional.Location = new System.Drawing.Point(257, 59);
             this.labelOptional.Name = "labelOptional";
             this.labelOptional.Size = new System.Drawing.Size(53, 13);
             this.labelOptional.TabIndex = 181;
@@ -106,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             // description
             // 
-            this.description.Location = new System.Drawing.Point(92, 57);
+            this.description.Location = new System.Drawing.Point(91, 55);
             this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlExpressDescription);
             this.description.Name = "description";
             this.description.PromptColor = System.Drawing.SystemColors.GrayText;
@@ -144,10 +148,30 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             this.accountNumber.BackColor = System.Drawing.SystemColors.Control;
             this.accountNumber.Enabled = false;
-            this.accountNumber.Location = new System.Drawing.Point(92, 28);
+            this.accountNumber.Location = new System.Drawing.Point(91, 28);
             this.accountNumber.Name = "accountNumber";
             this.accountNumber.Size = new System.Drawing.Size(162, 21);
             this.accountNumber.TabIndex = 169;
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
+            this.pictureBox.Location = new System.Drawing.Point(11, 363);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox.TabIndex = 183;
+            this.pictureBox.TabStop = false;
+            // 
+            // labelNote
+            // 
+            this.labelNote.ForeColor = System.Drawing.Color.DimGray;
+            this.labelNote.Location = new System.Drawing.Point(33, 363);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(325, 27);
+            this.labelNote.TabIndex = 182;
+            this.labelNote.Text = "Note: Any changes made to the address are only for ShipWorks.  Your address infor" +
+    "mation with DHL Express is not updated.";
             // 
             // DhlExpressAccountEditorDlg
             // 
@@ -155,7 +179,9 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(369, 397);
+            this.ClientSize = new System.Drawing.Size(369, 449);
+            this.Controls.Add(this.pictureBox);
+            this.Controls.Add(this.labelNote);
             this.Controls.Add(this.labelDescription);
             this.Controls.Add(this.description);
             this.Controls.Add(this.labelOptional);
@@ -176,6 +202,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.Text = "DHL Express Account";
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,5 +219,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         private System.Windows.Forms.Label labelDescription;
         private PromptTextBox description;
         private System.Windows.Forms.Label labelOptional;
+        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.Label labelNote;
     }
 }
