@@ -403,10 +403,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipmentsLoaderEnsureFiltersLoadedTimeout", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("UspsShippingDateCutoffEnabled", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("UspsShippingDateCutoffTime", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
 		}
 		#endregion
@@ -994,26 +990,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, value); }
-		}
-
-		/// <summary> The UspsShippingDateCutoffEnabled property of the Entity ShippingSettings<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsShippingDateCutoffEnabled"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean UspsShippingDateCutoffEnabled
-		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffEnabled, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffEnabled, value); }
-		}
-
-		/// <summary> The UspsShippingDateCutoffTime property of the Entity ShippingSettings<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsShippingDateCutoffTime"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Time, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.TimeSpan UspsShippingDateCutoffTime
-		{
-			get { return (System.TimeSpan)GetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsShippingDateCutoffTime, value); }
 		}
 
 		/// <summary> The ShipmentDateCutoffJson property of the Entity ShippingSettings<br/><br/></summary>

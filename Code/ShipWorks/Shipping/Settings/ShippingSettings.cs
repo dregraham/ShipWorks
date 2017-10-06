@@ -268,8 +268,7 @@ namespace ShipWorks.Shipping.Settings
             settings.UspsAutomaticExpress1 = false;
             settings.UspsAutomaticExpress1Account = 0;
             settings.UspsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-            settings.UspsShippingDateCutoffEnabled = false;
-            settings.UspsShippingDateCutoffTime = new TimeSpan(17, 0, 0);
+            settings.ShipmentDateCutoffJson = string.Empty;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

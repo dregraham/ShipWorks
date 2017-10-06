@@ -20612,16 +20612,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.UspsShippingDateCutoffEnabled field instance</summary>
-		public static EntityField2 UspsShippingDateCutoffEnabled
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsShippingDateCutoffEnabled);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.UspsShippingDateCutoffTime field instance</summary>
-		public static EntityField2 UspsShippingDateCutoffTime
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsShippingDateCutoffTime);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.ShipmentDateCutoffJson field instance</summary>
 		public static EntityField2 ShipmentDateCutoffJson
 		{

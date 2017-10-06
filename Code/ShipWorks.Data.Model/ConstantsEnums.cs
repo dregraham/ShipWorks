@@ -8876,10 +8876,6 @@ namespace ShipWorks.Data.Model
 		ShipmentEditLimit,
 		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
 		ShipmentsLoaderEnsureFiltersLoadedTimeout,
-		///<summary>UspsShippingDateCutoffEnabled. </summary>
-		UspsShippingDateCutoffEnabled,
-		///<summary>UspsShippingDateCutoffTime. </summary>
-		UspsShippingDateCutoffTime,
 		///<summary>ShipmentDateCutoffJson. </summary>
 		ShipmentDateCutoffJson,
 		/// <summary></summary>
