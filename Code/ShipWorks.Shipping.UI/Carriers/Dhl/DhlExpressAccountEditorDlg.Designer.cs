@@ -35,17 +35,17 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.labelAccountNumber = new System.Windows.Forms.Label();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
-            this.labelOnTracAccount = new System.Windows.Forms.Label();
+            this.labelDhlAccount = new System.Windows.Forms.Label();
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelOptional = new System.Windows.Forms.Label();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.labelNote = new System.Windows.Forms.Label();
             this.description = new ShipWorks.UI.Controls.PromptTextBox();
             this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
             this.accountNumber = new ShipWorks.UI.Controls.NumericTextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.labelNote = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // labelAccountNumber
@@ -79,15 +79,15 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
-            // labelOnTracAccount
+            // labelDhlAccount
             // 
-            this.labelOnTracAccount.AutoSize = true;
-            this.labelOnTracAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOnTracAccount.Location = new System.Drawing.Point(17, 9);
-            this.labelOnTracAccount.Name = "labelOnTracAccount";
-            this.labelOnTracAccount.Size = new System.Drawing.Size(96, 13);
-            this.labelOnTracAccount.TabIndex = 178;
-            this.labelOnTracAccount.Text = "OnTrac Account";
+            this.labelDhlAccount.AutoSize = true;
+            this.labelDhlAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDhlAccount.Location = new System.Drawing.Point(17, 9);
+            this.labelDhlAccount.Name = "labelDhlAccount";
+            this.labelDhlAccount.Size = new System.Drawing.Size(125, 13);
+            this.labelDhlAccount.TabIndex = 178;
+            this.labelDhlAccount.Text = "DHL Express Account";
             // 
             // labelDescription
             // 
@@ -102,20 +102,40 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             this.labelOptional.AutoSize = true;
             this.labelOptional.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelOptional.Location = new System.Drawing.Point(257, 59);
+            this.labelOptional.Location = new System.Drawing.Point(309, 59);
             this.labelOptional.Name = "labelOptional";
             this.labelOptional.Size = new System.Drawing.Size(53, 13);
             this.labelOptional.TabIndex = 181;
             this.labelOptional.Text = "(optional)";
             // 
+            // pictureBox
+            // 
+            this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
+            this.pictureBox.Location = new System.Drawing.Point(11, 363);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox.TabIndex = 183;
+            this.pictureBox.TabStop = false;
+            // 
+            // labelNote
+            // 
+            this.labelNote.ForeColor = System.Drawing.Color.DimGray;
+            this.labelNote.Location = new System.Drawing.Point(33, 363);
+            this.labelNote.Name = "labelNote";
+            this.labelNote.Size = new System.Drawing.Size(325, 27);
+            this.labelNote.TabIndex = 182;
+            this.labelNote.Text = "Note: Any changes made to the address are only for ShipWorks.  Your address infor" +
+    "mation with DHL Express is not updated.";
+            // 
             // description
             // 
-            this.description.Location = new System.Drawing.Point(91, 55);
+            this.description.Location = new System.Drawing.Point(91, 56);
             this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlExpressDescription);
             this.description.Name = "description";
             this.description.PromptColor = System.Drawing.SystemColors.GrayText;
             this.description.PromptText = null;
-            this.description.Size = new System.Drawing.Size(162, 21);
+            this.description.Size = new System.Drawing.Size(212, 21);
             this.description.TabIndex = 180;
             // 
             // contactInformation
@@ -153,26 +173,6 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.accountNumber.Size = new System.Drawing.Size(162, 21);
             this.accountNumber.TabIndex = 169;
             // 
-            // pictureBox
-            // 
-            this.pictureBox.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox.Image")));
-            this.pictureBox.Location = new System.Drawing.Point(11, 363);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox.TabIndex = 183;
-            this.pictureBox.TabStop = false;
-            // 
-            // labelNote
-            // 
-            this.labelNote.ForeColor = System.Drawing.Color.DimGray;
-            this.labelNote.Location = new System.Drawing.Point(33, 363);
-            this.labelNote.Name = "labelNote";
-            this.labelNote.Size = new System.Drawing.Size(325, 27);
-            this.labelNote.TabIndex = 182;
-            this.labelNote.Text = "Note: Any changes made to the address are only for ShipWorks.  Your address infor" +
-    "mation with DHL Express is not updated.";
-            // 
             // DhlExpressAccountEditorDlg
             // 
             this.AcceptButton = this.ok;
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.Controls.Add(this.labelDescription);
             this.Controls.Add(this.description);
             this.Controls.Add(this.labelOptional);
-            this.Controls.Add(this.labelOnTracAccount);
+            this.Controls.Add(this.labelDhlAccount);
             this.Controls.Add(this.contactInformation);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.cancel);
@@ -201,8 +201,8 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "DHL Express Account";
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
         private Data.Controls.PersonControl contactInformation;
-        private System.Windows.Forms.Label labelOnTracAccount;
+        private System.Windows.Forms.Label labelDhlAccount;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private NumericTextBox accountNumber;
         private System.Windows.Forms.Label labelDescription;
