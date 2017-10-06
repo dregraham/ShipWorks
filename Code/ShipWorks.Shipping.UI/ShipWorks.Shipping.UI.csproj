@@ -164,6 +164,12 @@
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.Designer.cs">
       <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressAccountEditorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressAccountEditorDlg.Designer.cs">
+      <DependentUpon>DhlExpressAccountEditorDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
@@ -410,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSetupWizard.resx">
       <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Dhl\DhlExpressAccountEditorDlg.resx">
+      <DependentUpon>DhlExpressAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
