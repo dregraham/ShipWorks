@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaOptionsControl : PostalOptionsControlBase
     {
         private bool showShippingCutoffDate = true;
-        private int originalCutoffDateTop;
+        private int originalCustomsTop;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaOptionsControl"/> class resulting
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             InitializeComponent();
             Reseller = reseller;
 
-            originalCutoffDateTop = shippingCutoff.Top;
+            originalCustomsTop = customsPanel.Top;
         }
 
         /// <summary>
@@ -60,14 +60,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private void UpdateUI()
         {
-            if (shippingCutoff.Visible == ShowShippingCutoffDate)
-            {
-                return;
-            }
-
             shippingCutoff.Visible = ShowShippingCutoffDate;
             customsPanel.Top = ShowShippingCutoffDate ?
-                originalCutoffDateTop :
+                originalCustomsTop :
                 shippingCutoff.Top;
 
             Height = customsPanel.Bottom;
