@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         }
 
         /// <summary>
-        /// Get the accoun description
+        /// Get the account description
         /// </summary>
         private string GetDescription(DhlExpressAccountEntity dhlAccount)
         {
