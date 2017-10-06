@@ -62,14 +62,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         {
             SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
-            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>();
             shipment.ShipmentTypeCode = ShipmentTypeCode.Amazon;
             testObject.Manipulate(shipment);
 
-            defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Once);
             shippingSettingsEntity.Verify(x => x.GetShipmentDateCutoff(shipment.ShipmentTypeCode));
         }
-
 
         [Theory]
         // now TimeOfDay < cutoff   =>  ShipDate does not change
