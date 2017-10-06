@@ -60,7 +60,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
 
             IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
-            LoadExpress1Settings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
             {
@@ -74,12 +73,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     panelInsurance.Visible = restrictionLevel == EditionRestrictionLevel.None;
                 }
+
+                optionsControl.ShowShippingCutoffDate = true;
             }
             else
             {
                 // Doesn't make sense to show Endicia insurance choosing to Express1
                 panelInsurance.Visible = false;
+                optionsControl.ShowShippingCutoffDate = false;
             }
+
+            express1Options.Top = optionsControl.Bottom;
+
+            LoadExpress1Settings(settings);
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
@@ -104,7 +110,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted || ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted ||
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
                 {
                     // Hide the express1 settings if Express1 is restricted or discounted rate messaging is turned off
                     express1PostageDiscountSettingsControl.Hide();
@@ -115,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     express1PostageDiscountSettingsControl.LoadSettings(this.settings);
-                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom;
 
                     panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
                 }

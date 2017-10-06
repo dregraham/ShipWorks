@@ -39,14 +39,14 @@
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
             this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.customsPanel = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
             this.customsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelLabels
             // 
             this.labelLabels.AutoSize = true;
-            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelLabels.Location = new System.Drawing.Point(8, 6);
             this.labelLabels.Name = "labelLabels";
             this.labelLabels.Size = new System.Drawing.Size(43, 13);
@@ -56,7 +56,7 @@
             // labelCustoms
             // 
             this.labelCustoms.AutoSize = true;
-            this.labelCustoms.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCustoms.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelCustoms.Location = new System.Drawing.Point(8, 2);
             this.labelCustoms.Name = "labelCustoms";
             this.labelCustoms.Size = new System.Drawing.Size(56, 13);
@@ -104,7 +104,7 @@
             // 
             // requestedLabelFormat
             // 
-            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.requestedLabelFormat.Location = new System.Drawing.Point(24, 27);
@@ -115,7 +115,7 @@
             // shippingCutoff
             // 
             this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.shippingCutoff.Location = new System.Drawing.Point(24, 58);
+            this.shippingCutoff.Location = new System.Drawing.Point(24, 53);
             this.shippingCutoff.Name = "shippingCutoff";
             this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
             this.shippingCutoff.TabIndex = 61;
@@ -127,9 +127,9 @@
             this.customsPanel.Controls.Add(this.labelSigner);
             this.customsPanel.Controls.Add(this.customsCertify);
             this.customsPanel.Controls.Add(this.labelCustoms);
-            this.customsPanel.Location = new System.Drawing.Point(0, 90);
+            this.customsPanel.Location = new System.Drawing.Point(0, 85);
             this.customsPanel.Name = "customsPanel";
-            this.customsPanel.Size = new System.Drawing.Size(520, 92);
+            this.customsPanel.Size = new System.Drawing.Size(520, 84);
             this.customsPanel.TabIndex = 62;
             // 
             // EndiciaOptionsControl
@@ -140,10 +140,10 @@
             this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.requestedLabelFormat);
             this.Controls.Add(this.labelLabels);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "EndiciaOptionsControl";
-            this.Size = new System.Drawing.Size(522, 182);
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            this.Size = new System.Drawing.Size(522, 169);
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
             this.customsPanel.ResumeLayout(false);
             this.customsPanel.PerformLayout();
             this.ResumeLayout(false);
