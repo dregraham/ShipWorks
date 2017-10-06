@@ -137,7 +137,6 @@ namespace ShipWorks.Data.Administration.Retry
             }
         }
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
@@ -146,7 +145,6 @@ namespace ShipWorks.Data.Administration.Retry
         public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method) =>
             ExecuteWithRetryAsync<T>(x => method(), ex => false);
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
@@ -166,7 +164,7 @@ namespace ShipWorks.Data.Administration.Retry
                     }
                     catch (Exception ex)
                     {
-                        var result = await HandleExceptionAsync(ex, retryCounter, exceptionCheck);
+                        var result = await HandleExceptionAsync(ex, retryCounter, exceptionCheck).ConfigureAwait(false);
 
                         if (result.Success)
                         {
@@ -183,7 +181,6 @@ namespace ShipWorks.Data.Administration.Retry
             }
         }
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
@@ -192,7 +189,6 @@ namespace ShipWorks.Data.Administration.Retry
         public Task ExecuteWithRetryAsync(Func<Task> method) =>
             ExecuteWithRetryAsync(method, ex => false);
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
@@ -201,7 +197,6 @@ namespace ShipWorks.Data.Administration.Retry
         public Task ExecuteWithRetryAsync(Func<Task> method, Func<Exception, bool> exceptionCheck) =>
             ExecuteWithRetryAsync(x => method(), exceptionCheck);
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///

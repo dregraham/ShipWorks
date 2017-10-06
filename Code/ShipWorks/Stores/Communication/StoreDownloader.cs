@@ -537,9 +537,10 @@ namespace ShipWorks.Stores.Communication
         {
             using (DbTransaction transaction = connection.BeginTransaction())
             {
-                await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
+                var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
 
                 transaction.Commit();
+                postAction();
             }
 
             // Updating order/order item statuses have to be done outside of a transaction,
@@ -550,22 +551,13 @@ namespace ShipWorks.Stores.Communication
             }
         }
 
-
-        /// <summary>
-        /// Save the given order that has been downloaded.
-        /// </summary>
-        protected virtual async Task SaveDownloadedOrder(OrderEntity order, DbTransaction transaction)
-        {
-            var postAction = await SaveDownloadedOrderWithoutPostAction(order, transaction).ConfigureAwait(false);
-            postAction();
-        }
-
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
         /// <returns>
         /// Action that should be executed at the end of the logical save procedure. This is intended to be used when a downloader
-        /// needs to do more work for saving an order than just calling this method.</returns>
+        /// needs to do more work for saving an order than just calling this method.
+        /// </returns>
         [SuppressMessage("ShipWorks", "SW0002",
             Justification = "The parameter name is not used for binding.")]
         protected virtual async Task<Action> SaveDownloadedOrderWithoutPostAction(OrderEntity order, DbTransaction transaction)
