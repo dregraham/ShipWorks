@@ -832,7 +832,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new DhlExpressPackageEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressPackageUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -853,7 +852,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new DhlExpressShipmentEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressShipmentUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code

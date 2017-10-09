@@ -3403,7 +3403,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="DhlExpressShipment.Shipment-Shipment.DhlExpressShipment" Start=":DhlExpressShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="DhlExpressShipment" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="DhlExpressShipment.Shipment-Shipment.DhlExpress" Start=":DhlExpressShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
