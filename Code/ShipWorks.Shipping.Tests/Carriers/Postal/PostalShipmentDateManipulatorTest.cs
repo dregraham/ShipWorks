@@ -4,23 +4,25 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Settings;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Tests.Carriers.Postal
 {
-    public class UspsShipmentDateManipulatorTest
+    public class PostalShipmentDateManipulatorTest
     {
         private Mock<DefaultShipmentDateManipulator> defaultShipmentDateManipulator;
+        private Mock<IShippingSettingsEntity> shippingSettingsEntity;
         private ShipmentEntity shipment = new ShipmentEntity();
         private DateTime now = new DateTime(2017, 7, 1, 12, 0, 0);
         private readonly AutoMock mock;
 
-        public UspsShipmentDateManipulatorTest()
+        public PostalShipmentDateManipulatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
@@ -35,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             shipment.Processed = true;
             shipment.IsDirty = false;
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             Assert.False(shipment.IsDirty);
@@ -47,12 +49,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         {
             SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Once);
             Assert.False(shipment.IsDirty);
             Assert.Equal(now, shipment.ShipDate);
+        }
+
+        [Fact]
+        public void Manipulate_UsesShipment_ShipmentTypeCode()
+        {
+            SetupDefaultMocks(new ShipmentDateCutoff(false, TimeSpan.MinValue));
+
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>();
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Amazon;
+            testObject.Manipulate(shipment);
+
+            shippingSettingsEntity.Verify(x => x.GetShipmentDateCutoff(shipment.ShipmentTypeCode));
         }
 
         [Theory]
@@ -105,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 ShipDate = DateTime.Parse(shipDateText)
             };
 
-            UspsShipmentDateManipulator testObject = mock.Create<UspsShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
+            PostalShipmentDateManipulator testObject = mock.Create<PostalShipmentDateManipulator>(TypedParameter.From(ShipmentTypeCode.Usps));
             testObject.Manipulate(shipment);
 
             defaultShipmentDateManipulator.Verify(d => d.Manipulate(shipment), Times.Never);
@@ -114,9 +128,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
         private void SetupDefaultMocks(ShipmentDateCutoff cutoff)
         {
-            mock.FromFactory<IShippingSettings>()
-                .Mock(x => x.FetchReadOnly())
-                .Setup(x => x.GetShipmentDateCutoff(ShipmentTypeCode.Usps))
+            shippingSettingsEntity = mock.FromFactory<IShippingSettings>()
+                .Mock(x => x.FetchReadOnly());
+            shippingSettingsEntity.Setup(x => x.GetShipmentDateCutoff(It.IsAny<ShipmentTypeCode>()))
                 .Returns(cutoff);
             mock.Mock<IDateTimeProvider>().Setup(dtp => dtp.Now).Returns(now);
 

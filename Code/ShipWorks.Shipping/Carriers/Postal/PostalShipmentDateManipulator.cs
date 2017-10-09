@@ -6,13 +6,14 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Manipulate the date of the given shipment
     /// </summary>
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Usps)]
-    public class UspsShipmentDateManipulator : IShipmentDateManipulator
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Endicia)]
+    public class PostalShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;
         private readonly DefaultShipmentDateManipulator defaultShipmentDateManipulator;
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider,
+        public PostalShipmentDateManipulator(IShippingSettings shippingSettings, IDateTimeProvider dateTimeProvider,
             DefaultShipmentDateManipulator defaultShipmentDateManipulator)
         {
             this.defaultShipmentDateManipulator = defaultShipmentDateManipulator;
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             IShippingSettingsEntity shippingSettingsEntity = shippingSettings.FetchReadOnly();
-            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(ShipmentTypeCode.Usps);
+            ShipmentDateCutoff cutoff = shippingSettingsEntity.GetShipmentDateCutoff(shipment.ShipmentTypeCode);
 
             if (!cutoff.Enabled)
             {
