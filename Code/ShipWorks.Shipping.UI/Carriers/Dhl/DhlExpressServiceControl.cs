@@ -9,12 +9,14 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
     /// Service Control for DhlExpress
     /// </summary>
+    [KeyedComponent(typeof(ServiceControlBase), ShipmentTypeCode.DhlExpress)]
     public partial class DhlExpressServiceControl : ServiceControlBase
     {
         /// <summary>

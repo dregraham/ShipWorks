@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return shipment.DhlExpress.DhlExpressAccountID;
         }
     }
 }

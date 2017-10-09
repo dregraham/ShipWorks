@@ -35,12 +35,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         public string AccountDescription => Description;
 
         /// <summary>
-        /// Applies account number to DhlExpress Shipment
+        /// Applies account to shipment
         /// </summary>
-        /// <param name="shipment"></param>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            shipment.DhlExpress.DhlExpressAccountID = AccountId;
         }
     }
 }

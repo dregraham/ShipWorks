@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
-
+            dhlExpressShipmentEntity.Service = (int) DhlExpressServiceType.ExpressWorldWide;
             dhlExpressShipmentEntity.DeliveredDutyPaid = false;
             dhlExpressShipmentEntity.NonMachinable = false;
             dhlExpressShipmentEntity.SaturdayDelivery = false;
