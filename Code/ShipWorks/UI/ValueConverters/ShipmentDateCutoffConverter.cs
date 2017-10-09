@@ -28,7 +28,7 @@ namespace ShipWorks.Core.UI.ValueConverters
             {
                 if (DesignModeDetector.IsDesignerHosted())
                 {
-                    return ShipmentDateCutoff.Default;
+                    return new ShipmentDateCutoff(true, TimeSpan.FromHours(17));
                 }
 
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
