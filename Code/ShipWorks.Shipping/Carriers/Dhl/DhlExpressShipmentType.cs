@@ -33,6 +33,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.DhlExpress;
 
         /// <summary>
+        /// Gets a value indicating whether multiple packages are supported by this shipment type.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
+        /// </value>
+        public override bool SupportsMultiplePackages => true;
+
+        /// <summary>
         /// Create and Initialize a new shipment
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
@@ -308,14 +316,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <param name="shipment"></param>
         /// <returns></returns>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment) => true;
-
-        /// <summary>
-        /// Gets a value indicating whether multiple packages are supported by this shipment type.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
-        /// </value>
-        public override bool SupportsMultiplePackages => true;
 
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
