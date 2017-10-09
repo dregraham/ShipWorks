@@ -92,12 +92,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             // even after processing
             foreach (Control control in sectionShipment.ContentPanel.Controls)
             {
-                if (control == packageControl)
+                if (control != packageControl)
                 {
-                    continue;
+                    control.Enabled = enableEditing;
                 }
-
-                control.Enabled = enableEditing;
             }
 
             // Load the origin
