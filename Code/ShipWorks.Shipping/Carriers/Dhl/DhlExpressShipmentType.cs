@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             double contentWeight = shipment.DhlExpress.Packages.Sum(p => p.Weight);
 
             // If the content weight changed outside of us, redistribute what the new weight among the packages
-            if (contentWeight != shipment.ContentWeight)
+            if (!contentWeight.IsEquivalentTo(shipment.ContentWeight))
             {
                 foreach (DhlExpressPackageEntity package in shipment.DhlExpress.Packages)
                 {
