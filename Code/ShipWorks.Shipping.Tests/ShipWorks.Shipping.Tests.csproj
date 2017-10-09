@@ -161,6 +161,7 @@
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressPackageAdapterTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
