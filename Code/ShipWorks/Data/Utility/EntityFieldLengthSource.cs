@@ -171,6 +171,8 @@ namespace ShipWorks.Data.Utility
         ReturnItemSku,
         ReturnItemCode,
         ReturnItemQuantity,
-        ReturnItemNote
+        ReturnItemNote,
+
+        DhlExpressDescription
     }
 }
