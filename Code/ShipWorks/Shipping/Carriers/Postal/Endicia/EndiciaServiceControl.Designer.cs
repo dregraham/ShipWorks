@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -57,34 +53,24 @@
             this.labelNoPostage = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.sectionEntryFacility = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.entryFacility = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.sortType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelEntryFacility = new System.Windows.Forms.Label();
             this.labelSortType = new System.Windows.Forms.Label();
-            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
+            this.entryFacility = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.sortType = new ShipWorks.UI.Controls.MultiValueComboBox();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.panelTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRubberStamps)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRubberStamps.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRubberStamps)).BeginInit();
             this.sectionRubberStamps.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRubberStampWarning)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEntryFacility)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEntryFacility.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxRubberStampWarning)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEntryFacility)).BeginInit();
             this.sectionEntryFacility.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,18 +81,11 @@
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 455);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 553);
             this.sectionExpress.Size = new System.Drawing.Size(375, 24);
             // 
             // sectionRecipient
             // 
-            // 
-            // sectionRecipient.ContentPanel
-            // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(375, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -117,33 +96,27 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 584);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 682);
             this.sectionReturns.Size = new System.Drawing.Size(375, 24);
+
+            this.sectionLabelOptions.Size = new System.Drawing.Size(375, 24);
             // 
             // sectionShipment
             // 
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
-            this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.noPostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelNoPostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.hidePostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelStealth);
-            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 161);
             this.sectionShipment.Size = new System.Drawing.Size(375, 358);
-            // 
-            // sectionLabelOptions
-            // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 613);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(375, 24);
             // 
             // sectionFrom
             // 
-            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFrom.Collapsed = true;
             // 
             // sectionFrom.ContentPanel
@@ -161,18 +134,18 @@
             // 
             // originControl
             // 
-            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Email) 
-            | ShipWorks.Data.Controls.PersonFields.Phone) 
-            | ShipWorks.Data.Controls.PersonFields.Fax)));
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.originControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+                        | ShipWorks.Data.Controls.PersonFields.Street)
+                        | ShipWorks.Data.Controls.PersonFields.City)
+                        | ShipWorks.Data.Controls.PersonFields.State)
+                        | ShipWorks.Data.Controls.PersonFields.Postal)
+                        | ShipWorks.Data.Controls.PersonFields.Email)
+                        | ShipWorks.Data.Controls.PersonFields.Phone)
+                        | ShipWorks.Data.Controls.PersonFields.Fax)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
-            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.originControl.Location = new System.Drawing.Point(4, 51);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
@@ -182,8 +155,8 @@
             // 
             // panelTop
             // 
-            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.BackColor = System.Drawing.Color.Transparent;
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.label1);
@@ -206,7 +179,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 13);
@@ -215,8 +188,8 @@
             // 
             // endiciaAccount
             // 
-            this.endiciaAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.endiciaAccount.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.endiciaAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.endiciaAccount.FormattingEnabled = true;
             this.endiciaAccount.Location = new System.Drawing.Point(79, 25);
@@ -228,8 +201,8 @@
             // 
             // sectionRubberStamps
             // 
-            this.sectionRubberStamps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionRubberStamps.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionRubberStamps.Collapsed = true;
             // 
             // sectionRubberStamps.ContentPanel
@@ -247,7 +220,7 @@
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelRubberStamp1);
             this.sectionRubberStamps.ExpandedHeight = 198;
             this.sectionRubberStamps.ExtraText = "";
-            this.sectionRubberStamps.Location = new System.Drawing.Point(3, 426);
+            this.sectionRubberStamps.Location = new System.Drawing.Point(3, 524);
             this.sectionRubberStamps.Name = "sectionRubberStamps";
             this.sectionRubberStamps.SectionName = "Rubber Stamps";
             this.sectionRubberStamps.SettingsKey = "{364567aa-cc02-475f-8261-d980a4b0ccf9}";
@@ -273,7 +246,6 @@
             this.referenceID.Name = "referenceID";
             this.referenceID.Size = new System.Drawing.Size(236, 21);
             this.referenceID.TabIndex = 3;
-            this.referenceID.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelReferenceID
             // 
@@ -315,7 +287,6 @@
             this.rubberStamp3.Name = "rubberStamp3";
             this.rubberStamp3.Size = new System.Drawing.Size(236, 21);
             this.rubberStamp3.TabIndex = 2;
-            this.rubberStamp3.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelRubberStamp3
             // 
@@ -335,7 +306,6 @@
             this.rubberStamp2.Name = "rubberStamp2";
             this.rubberStamp2.Size = new System.Drawing.Size(236, 21);
             this.rubberStamp2.TabIndex = 1;
-            this.rubberStamp2.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelRubberStamp2
             // 
@@ -355,7 +325,6 @@
             this.rubberStamp1.Name = "rubberStamp1";
             this.rubberStamp1.Size = new System.Drawing.Size(236, 21);
             this.rubberStamp1.TabIndex = 0;
-            this.rubberStamp1.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // labelRubberStamp1
             // 
@@ -409,44 +378,24 @@
             this.labelNoPostage.TabIndex = 57;
             this.labelNoPostage.Text = "No Postage:";
             // 
-            // sectionEntryFacility
+            // sectionParcelSelect
             // 
-            this.sectionEntryFacility.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionEntryFacility.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             // 
-            // sectionEntryFacility.ContentPanel
+            // sectionParcelSelect.ContentPanel
             // 
             this.sectionEntryFacility.ContentPanel.Controls.Add(this.entryFacility);
             this.sectionEntryFacility.ContentPanel.Controls.Add(this.sortType);
             this.sectionEntryFacility.ContentPanel.Controls.Add(this.labelEntryFacility);
             this.sectionEntryFacility.ContentPanel.Controls.Add(this.labelSortType);
             this.sectionEntryFacility.ExtraText = "";
-            this.sectionEntryFacility.Location = new System.Drawing.Point(3, 484);
+            this.sectionEntryFacility.Location = new System.Drawing.Point(3, 582);
             this.sectionEntryFacility.Name = "sectionEntryFacility";
             this.sectionEntryFacility.SectionName = "Entry Facility";
             this.sectionEntryFacility.SettingsKey = "{d3354c1d-46db-4293-b79f-e9e88d1cca7b}";
             this.sectionEntryFacility.Size = new System.Drawing.Size(375, 95);
             this.sectionEntryFacility.TabIndex = 13;
-            // 
-            // entryFacility
-            // 
-            this.entryFacility.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.entryFacility.FormattingEnabled = true;
-            this.entryFacility.Location = new System.Drawing.Point(83, 36);
-            this.entryFacility.Name = "entryFacility";
-            this.entryFacility.PromptText = "(Multiple Values)";
-            this.entryFacility.Size = new System.Drawing.Size(167, 21);
-            this.entryFacility.TabIndex = 101;
-            // 
-            // sortType
-            // 
-            this.sortType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sortType.FormattingEnabled = true;
-            this.sortType.Location = new System.Drawing.Point(83, 9);
-            this.sortType.Name = "sortType";
-            this.sortType.PromptText = "(Multiple Values)";
-            this.sortType.Size = new System.Drawing.Size(167, 21);
-            this.sortType.TabIndex = 100;
             // 
             // labelEntryFacility
             // 
@@ -468,19 +417,27 @@
             this.labelSortType.TabIndex = 23;
             this.labelSortType.Text = "Sort Type:";
             // 
-            // cutoffDateDisplay
+            // entryFacility
             // 
-            this.cutoffDateDisplay.AutoSize = true;
-            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
-            this.cutoffDateDisplay.Caption = "Shipments processed after 5:00 PM today will have a ship date of the next valid s" +
-    "hipping day.\r\nTo update this setting, go to Manage > Shipping Settings > USPS (E" +
-    "ndicia) > Settings.";
-            this.cutoffDateDisplay.Location = new System.Drawing.Point(220, 68);
-            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
-            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.Endicia;
-            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 15);
-            this.cutoffDateDisplay.TabIndex = 6;
-            this.cutoffDateDisplay.Title = "Shipment cutoff time";
+            this.entryFacility.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.entryFacility.FormattingEnabled = true;
+            this.entryFacility.Location = new System.Drawing.Point(83, 36);
+            this.entryFacility.Name = "entryFacility";
+            this.entryFacility.PromptText = "(Multiple Values)";
+            this.entryFacility.Size = new System.Drawing.Size(167, 21);
+            this.entryFacility.TabIndex = 101;
+            this.entryFacility.SelectedValueChanged += OnEntryFacilityDataChanged;
+            // 
+            // sortType
+            // 
+            this.sortType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortType.FormattingEnabled = true;
+            this.sortType.Location = new System.Drawing.Point(83, 9);
+            this.sortType.Name = "sortType";
+            this.sortType.PromptText = "(Multiple Values)";
+            this.sortType.Size = new System.Drawing.Size(167, 21);
+            this.sortType.TabIndex = 100;
+            this.sortType.SelectedValueChanged += OnEntryFacilityDataChanged;
             // 
             // EndiciaServiceControl
             // 
@@ -492,7 +449,6 @@
             this.Controls.Add(this.sectionEntryFacility);
             this.Name = "EndiciaServiceControl";
             this.Size = new System.Drawing.Size(381, 1019);
-            this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionEntryFacility, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
@@ -500,35 +456,28 @@
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionExpress)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
-            this.sectionShipment.ContentPanel.ResumeLayout(false);
-            this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
+            this.sectionShipment.ContentPanel.ResumeLayout(false);
+            this.sectionShipment.ContentPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRubberStamps.ContentPanel)).EndInit();
             this.sectionRubberStamps.ContentPanel.ResumeLayout(false);
             this.sectionRubberStamps.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRubberStamps)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRubberStampWarning)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEntryFacility.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRubberStamps)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBoxRubberStampWarning)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
             this.sectionEntryFacility.ContentPanel.ResumeLayout(false);
             this.sectionEntryFacility.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEntryFacility)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEntryFacility)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -563,6 +512,5 @@
         private System.Windows.Forms.Label labelSortType;
         private UI.Controls.MultiValueComboBox entryFacility;
         private UI.Controls.MultiValueComboBox sortType;
-        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }

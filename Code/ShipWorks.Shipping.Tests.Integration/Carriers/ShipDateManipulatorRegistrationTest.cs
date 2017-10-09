@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         public void EnsureShipmentDateManipulatorsAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Fact]
         public void EnsureAllShipmentTypesHaveShipmentDateManipulatorRegistered()
         {
-            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Endicia, ShipmentTypeCode.Other };
+            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Endicia, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Other };
 
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {
