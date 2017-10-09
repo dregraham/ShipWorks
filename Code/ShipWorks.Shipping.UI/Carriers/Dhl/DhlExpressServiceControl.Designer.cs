@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.panelTop = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -37,8 +36,6 @@
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelService = new System.Windows.Forms.Label();
-            this.referenceCustomer = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
-            this.labelReference = new System.Windows.Forms.Label();
             this.sectionOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.saturdayDelivery = new System.Windows.Forms.CheckBox();
             this.labelSaturdayDelivery = new System.Windows.Forms.Label();
@@ -46,7 +43,6 @@
             this.labelDutyPaid = new System.Windows.Forms.Label();
             this.labelNonMachineable = new System.Windows.Forms.Label();
             this.nonMachineable = new System.Windows.Forms.CheckBox();
-            this.sectionReference = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.packageControl = new ShipWorks.Shipping.Carriers.Dhl.DhlExpressPackageControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
@@ -65,9 +61,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionOptions.ContentPanel)).BeginInit();
             this.sectionOptions.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReference)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReference.ContentPanel)).BeginInit();
-            this.sectionReference.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionRecipient
@@ -213,25 +206,6 @@
             this.labelService.TabIndex = 2;
             this.labelService.Text = "Service:";
             // 
-            // referenceCustomer
-            // 
-            this.referenceCustomer.Location = new System.Drawing.Point(86, 8);
-            this.referenceCustomer.MaxLength = 32767;
-            this.referenceCustomer.Name = "referenceCustomer";
-            this.referenceCustomer.Size = new System.Drawing.Size(210, 21);
-            this.referenceCustomer.TabIndex = 3;
-            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
-            // 
-            // labelReference
-            // 
-            this.labelReference.AutoSize = true;
-            this.labelReference.BackColor = System.Drawing.Color.Transparent;
-            this.labelReference.Location = new System.Drawing.Point(8, 11);
-            this.labelReference.Name = "labelReference";
-            this.labelReference.Size = new System.Drawing.Size(72, 13);
-            this.labelReference.TabIndex = 2;
-            this.labelReference.Text = "Reference #:";
-            // 
             // sectionOptions
             // 
             this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -246,7 +220,7 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachineable);
             this.sectionOptions.ContentPanel.Controls.Add(this.nonMachineable);
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 420);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 391);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -313,25 +287,6 @@
             this.nonMachineable.TabIndex = 8;
             this.nonMachineable.UseVisualStyleBackColor = false;
             // 
-            // sectionReference
-            // 
-            this.sectionReference.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionReference.Collapsed = true;
-            // 
-            // sectionReference.ContentPanel
-            // 
-            this.sectionReference.ContentPanel.Controls.Add(this.referenceCustomer);
-            this.sectionReference.ContentPanel.Controls.Add(this.labelReference);
-            this.sectionReference.ExpandedHeight = 70;
-            this.sectionReference.ExtraText = "";
-            this.sectionReference.Location = new System.Drawing.Point(3, 391);
-            this.sectionReference.Name = "sectionReference";
-            this.sectionReference.SectionName = "Reference";
-            this.sectionReference.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
-            this.sectionReference.Size = new System.Drawing.Size(389, 24);
-            this.sectionReference.TabIndex = 8;
-            // 
             // packageControl
             // 
             this.packageControl.BackColor = System.Drawing.Color.White;
@@ -348,17 +303,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
-            this.Controls.Add(this.sectionReference);
             this.Controls.Add(this.sectionOptions);
             this.Name = "DhlExpressServiceControl";
             this.Size = new System.Drawing.Size(395, 795);
-            this.Controls.SetChildIndex(this.sectionOptions, 0);
-            this.Controls.SetChildIndex(this.sectionReference, 0);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
+            this.Controls.SetChildIndex(this.sectionOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
@@ -380,10 +333,6 @@
             this.sectionOptions.ContentPanel.ResumeLayout(false);
             this.sectionOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReference.ContentPanel)).EndInit();
-            this.sectionReference.ContentPanel.ResumeLayout(false);
-            this.sectionReference.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReference)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -398,10 +347,7 @@
         private ShipWorks.UI.Controls.MultiValueComboBox DhlExpressAccount;
         private ShipWorks.UI.Controls.MultiValueComboBox service;
         private System.Windows.Forms.Label labelService;
-        private ShipWorks.Templates.Tokens.TemplateTokenTextBox referenceCustomer;
-        private System.Windows.Forms.Label labelReference;
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionOptions;
-        private ShipWorks.UI.Controls.CollapsibleGroupControl sectionReference;
         private System.Windows.Forms.Label labelDutyPaid;
         private System.Windows.Forms.CheckBox dutyPaid;
         private DhlExpressPackageControl packageControl;
