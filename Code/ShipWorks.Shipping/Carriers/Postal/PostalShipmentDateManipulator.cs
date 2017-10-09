@@ -59,7 +59,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 shipment.ShipDate = now;
             }
 
-            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date)
+            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date ||
+                shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
 

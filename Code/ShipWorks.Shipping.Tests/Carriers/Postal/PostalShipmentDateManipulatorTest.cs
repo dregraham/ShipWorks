@@ -105,6 +105,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         [InlineData("2017-09-25 10:00:00", "2017-09-28 12:00:00", "11:00:00", "2017-09-29 12:00:12")]
         [InlineData("2017-09-25 10:00:00", "2017-09-29 12:00:00", "11:00:00", "2017-09-30 13:00:13")]
         [InlineData("2017-09-25 10:00:00", "2017-09-30 12:00:00", "11:00:00", "2017-10-02 14:00:14")]
+
+        [InlineData("2017-10-01 10:00:00", "2017-10-01 10:00:00", "11:00:00", "2017-10-02 12:00:15")]
+        [InlineData("2017-10-01 10:00:00", "2017-10-01 11:00:00", "11:00:00", "2017-10-02 13:00:16")]
+        [InlineData("2017-10-01 10:00:00", "2017-10-01 13:00:00", "11:00:00", "2017-10-02 14:00:17")]
+
         public void Manipulate_SetsDate_Properly(string shipDateText, string nowText, string cutoffTimespanText, string expectedText)
         {
             TimeSpan cutoffTime = TimeSpan.Parse(cutoffTimespanText);
