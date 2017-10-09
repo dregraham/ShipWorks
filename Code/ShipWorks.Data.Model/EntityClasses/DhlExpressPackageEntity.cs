@@ -376,7 +376,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncDhlExpressShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _dhlExpressShipment, new PropertyChangedEventHandler( OnDhlExpressShipmentPropertyChanged ), "DhlExpressShipment", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressPackageRelations.DhlExpressShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "DhlExpressPackage", resetFKFields, new int[] { (int)DhlExpressPackageFieldIndex.ShipmentID } );
+			this.PerformDesetupSyncRelatedEntity( _dhlExpressShipment, new PropertyChangedEventHandler( OnDhlExpressShipmentPropertyChanged ), "DhlExpressShipment", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressPackageRelations.DhlExpressShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)DhlExpressPackageFieldIndex.ShipmentID } );
 			_dhlExpressShipment = null;
 		}
 
@@ -589,7 +589,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "DhlExpressPackage", "DhlExpressShipment", _dhlExpressShipment, true); 
+					SetSingleRelatedEntityNavigator(value, "Packages", "DhlExpressShipment", _dhlExpressShipment, true); 
 				}
 			}
 		}

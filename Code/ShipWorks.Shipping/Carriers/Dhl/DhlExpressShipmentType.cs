@@ -19,6 +19,33 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.DhlExpress;
 
+        /// <summary>
+        /// Create and Initialize a new shipment
+        /// </summary>
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
+        {
+            if (shipment.DhlExpress == null)
+            {
+                shipment.DhlExpress = new DhlExpressShipmentEntity(shipment.ShipmentID);
+            }
+
+            DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
+
+            dhlExpressShipmentEntity.DeliveredDutyPaid = false;
+            dhlExpressShipmentEntity.NonMachinable = false;
+            dhlExpressShipmentEntity.SaturdayDelivery = false;
+            
+            //DhlExpressPackageEntity package = CreateDefaultPackage();
+
+            //dhlExpressShipmentEntity.Packages.Add(package);
+            //shipment.IParcel.Packages.RemovedEntitiesTracker = new IParcelPackageCollection();
+
+            //// Weight of the first package equals the total shipment content weight
+            //package.Weight = shipment.ContentWeight;
+
+            //base.ConfigureNewShipment(shipment);
+        }
+
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
             throw new System.NotImplementedException();

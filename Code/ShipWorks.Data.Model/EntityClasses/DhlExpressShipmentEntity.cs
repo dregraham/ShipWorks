@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<DhlExpressPackageEntity> _dhlExpressPackage;
+		private EntityCollection<DhlExpressPackageEntity> _packages;
 		private ShipmentEntity _shipment;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
@@ -46,8 +46,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name DhlExpressPackage</summary>
-			public static readonly string DhlExpressPackage = "DhlExpressPackage";
+			/// <summary>Member name Packages</summary>
+			public static readonly string Packages = "Packages";
 			/// <summary>Member name Shipment</summary>
 			public static readonly string Shipment = "Shipment";
 		}
@@ -107,7 +107,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_dhlExpressPackage = (EntityCollection<DhlExpressPackageEntity>)info.GetValue("_dhlExpressPackage", typeof(EntityCollection<DhlExpressPackageEntity>));
+				_packages = (EntityCollection<DhlExpressPackageEntity>)info.GetValue("_packages", typeof(EntityCollection<DhlExpressPackageEntity>));
 				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
 				if(_shipment!=null)
 				{
@@ -143,8 +143,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "DhlExpressPackage":
-					this.DhlExpressPackage.Add((DhlExpressPackageEntity)entity);
+				case "Packages":
+					this.Packages.Add((DhlExpressPackageEntity)entity);
 					break;
 				case "Shipment":
 					this.Shipment = (ShipmentEntity)entity;
@@ -171,7 +171,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "DhlExpressPackage":
+				case "Packages":
 					toReturn.Add(Relations.DhlExpressPackageEntityUsingShipmentID);
 					break;
 				case "Shipment":
@@ -205,8 +205,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressPackage":
-					this.DhlExpressPackage.Add((DhlExpressPackageEntity)relatedEntity);
+				case "Packages":
+					this.Packages.Add((DhlExpressPackageEntity)relatedEntity);
 					break;
 				case "Shipment":
 					SetupSyncShipment(relatedEntity);
@@ -224,8 +224,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressPackage":
-					this.PerformRelatedEntityRemoval(this.DhlExpressPackage, relatedEntity, signalRelatedEntityManyToOne);
+				case "Packages":
+					this.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "Shipment":
 					DesetupSyncShipment(false, true);
@@ -264,7 +264,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.DhlExpressPackage);
+			toReturn.Add(this.Packages);
 			return toReturn;
 		}
 
@@ -276,7 +276,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_dhlExpressPackage", ((_dhlExpressPackage!=null) && (_dhlExpressPackage.Count>0) && !this.MarkedForDeletion)?_dhlExpressPackage:null);
+				info.AddValue("_packages", ((_packages!=null) && (_packages.Count>0) && !this.MarkedForDeletion)?_packages:null);
 				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -295,7 +295,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DhlExpressPackage' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDhlExpressPackage()
+		public virtual IRelationPredicateBucket GetRelationInfoPackages()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlExpressPackageFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
@@ -323,7 +323,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._dhlExpressPackage);
+			collectionsQueue.Enqueue(this._packages);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -331,7 +331,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._dhlExpressPackage = (EntityCollection<DhlExpressPackageEntity>) collectionsQueue.Dequeue();
+			this._packages = (EntityCollection<DhlExpressPackageEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -340,7 +340,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._dhlExpressPackage != null);
+			toReturn |=(this._packages != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -358,7 +358,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("DhlExpressPackage", _dhlExpressPackage);
+			toReturn.Add("Packages", _packages);
 			toReturn.Add("Shipment", _shipment);
 			return toReturn;
 		}
@@ -462,9 +462,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlExpressPackage' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDhlExpressPackage
+		public static IPrefetchPathElement2 PrefetchPathPackages
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<DhlExpressPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressPackageEntityFactory))), (IEntityRelation)GetRelationsForField("DhlExpressPackage")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity, 0, null, null, null, null, "DhlExpressPackage", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<DhlExpressPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressPackageEntityFactory))), (IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
@@ -560,9 +560,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DhlExpressPackageEntity))]
-		public virtual EntityCollection<DhlExpressPackageEntity> DhlExpressPackage
+		public virtual EntityCollection<DhlExpressPackageEntity> Packages
 		{
-			get { return GetOrCreateEntityCollection<DhlExpressPackageEntity, DhlExpressPackageEntityFactory>("DhlExpressShipment", true, false, ref _dhlExpressPackage);	}
+			get { return GetOrCreateEntityCollection<DhlExpressPackageEntity, DhlExpressPackageEntityFactory>("DhlExpressShipment", true, false, ref _packages);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
