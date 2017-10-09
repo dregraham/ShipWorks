@@ -55,8 +55,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Email = source.Email;
             Website = source.Website;
             
+            
+            
+
             CopyCustomIParcelAccountData(source);
         }
+
         
         /// <summary> The IParcelAccountID property of the Entity IParcelAccount<br/><br/>
         /// </summary>
@@ -167,6 +171,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Website { get; }
         
+        
+        
         /// <summary>
         /// Get a read only version of the entity
         /// </summary>
@@ -176,7 +182,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Get a read only version of the entity
         /// </summary>
         public virtual IIParcelAccountEntity AsReadOnly(IDictionary<object, object> objectMap) => this;
+
         
+
         /// <summary>
         /// Copy any custom data
         /// </summary>
