@@ -15,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.Design;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -700,7 +701,10 @@ namespace ShipWorks.Shipping.Editing
                 ShipmentTypeChanged = null;
                 ClearRatesAction = null;
 
-                UnloadShipments();
+                if (!DesignMode && !DesignModeDetector.IsDesignerHosted())
+                {
+                    UnloadShipments();
+                }
             }
 
             base.Dispose(disposing);

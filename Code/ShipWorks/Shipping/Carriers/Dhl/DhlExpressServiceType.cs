@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.Core.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
     /// Available DHL service types

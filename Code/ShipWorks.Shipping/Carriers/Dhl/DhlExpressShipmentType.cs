@@ -14,7 +14,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Dhl

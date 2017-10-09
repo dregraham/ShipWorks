@@ -23,7 +23,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.UI.Controls;
-using ShipWorks.Core.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Users.Audit
 {
