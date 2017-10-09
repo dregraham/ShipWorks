@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             if (!shipment.DhlExpress.Packages.Any())
             {
-                throw new Exception("There must be at least one package to create the Dhl Express package adapter.");
+                throw new DhlExpressException("There must be at least one package to create the Dhl Express package adapter.");
             }
 
             // Return an adapter per package
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             for (int index = 0; index < shipment.DhlExpress.Packages.Count; index++)
             {
                 DhlExpressPackageEntity packageEntity = shipment.DhlExpress.Packages[index];
-                //adapters.Add(new iParcelPackageAdapter(shipment, packageEntity, index + 1));
+                adapters.Add(new DhlExpressPackageAdapter(shipment, packageEntity, index + 1));
             }
 
             return adapters;
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Ensures that the carrier specific data for the shipment, such as the IParcel data, are loaded for the shipment.  If the data
+        /// Ensures that the carrier specific data for the shipment, such as the DhlExpress data, are loaded for the shipment.  If the data
         /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
         /// had been deleted.
@@ -241,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 }
 
                 // We reloaded the packages, so reset the tracker
-                dhlExpressShipmentEntity.Packages.RemovedEntitiesTracker = new IParcelPackageCollection();
+                dhlExpressShipmentEntity.Packages.RemovedEntitiesTracker = new DhlExpressPackageCollection();
             }
 
             // There has to be at least one package.  Really the only way there would not already be a package is if this is a new shipment,
