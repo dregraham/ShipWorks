@@ -839,6 +839,48 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty DhlExpressProfileEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressProfileEntityFactory : EntityFactoryBase2<DhlExpressProfileEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressProfileEntityFactory() : base("DhlExpressProfileEntity", ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressProfileEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressProfilePackageEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressProfilePackageEntityFactory : EntityFactoryBase2<DhlExpressProfilePackageEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressProfilePackageEntityFactory() : base("DhlExpressProfilePackageEntity", ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressProfilePackageEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressProfilePackageUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty DhlExpressShipmentEntity objects.</summary>
 	[Serializable]
 	public partial class DhlExpressShipmentEntityFactory : EntityFactoryBase2<DhlExpressShipmentEntity> {
@@ -4521,6 +4563,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity:
 					factoryToUse = new DhlExpressPackageEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity:
+					factoryToUse = new DhlExpressProfileEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity:
+					factoryToUse = new DhlExpressProfilePackageEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity:
 					factoryToUse = new DhlExpressShipmentEntityFactory();

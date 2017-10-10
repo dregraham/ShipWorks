@@ -614,6 +614,29 @@
           <Field Name="Weight" Type="double" Precision="38" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="DhlExpressProfile" ObjectID="dcb08b8b-2494-4a85-908e-2da80b2a65f6">
+        <Fields>
+          <Field Name="DeliveryDutyPaid" Type="bool" IsOptional="true" FieldIndex="3" />
+          <Field Name="DhlExpressAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="4" />
+          <Field Name="SaturdayDelivery" Type="bool" IsOptional="true" FieldIndex="5" />
+          <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
+          <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="DhlExpressProfilePackage" ObjectID="ee79dd76-ab08-4681-b775-af3fa62fc45f">
+        <Fields>
+          <Field Name="DhlExpressProfilePackageID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
+          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
+          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="4" />
+          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="3" />
+          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="7" />
+          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="5" />
+          <Field Name="ShippingProfileID" Type="long" FieldIndex="1" />
+          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="DhlExpressShipment" ObjectID="75fabbb6-2e0f-4566-b510-e8b363732b79">
         <Fields>
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
@@ -3403,6 +3426,16 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="DhlExpressProfile.ShippingProfile-ShippingProfile.DhlExpressProfile" Start=":DhlExpressProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlExpressProfile" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="DhlExpressProfilePackage.DhlExpressProfile-DhlExpressProfile.DhlExpressProfilePackage" Start=":DhlExpressProfilePackage" End=":DhlExpressProfile" StartNavigator="DhlExpressProfile" EndNavigator="DhlExpressProfilePackage" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="DhlExpressShipment.Shipment-Shipment.DhlExpress" Start=":DhlExpressShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -4111,7 +4144,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-09T15:14:35.9023566Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-10T14:07:48.5359893Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4718,6 +4751,31 @@
                     <Field Name="DimsWeight" Ordinal="9" DbType="6" Precision="38" />
                     <Field Name="DeclaredValue" Ordinal="10" DbType="9" Precision="19" Scale="4" />
                     <Field Name="TrackingNumber" Ordinal="11" DbType="24" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressProfile">
+                  <PkConstraintName Name="PK_DhlExpressProfile" />
+                  <Fields>
+                    <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="DhlExpressAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DeliveryDutyPaid" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="NonMachinable" Ordinal="5" IsOptional="true" DbType="2" />
+                    <Field Name="SaturdayDelivery" Ordinal="6" IsOptional="true" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressProfilePackage">
+                  <PkConstraintName Name="PK_DhlExpressPackageProfile" />
+                  <Fields>
+                    <Field Name="DhlExpressProfilePackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ShippingProfileID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="Weight" Ordinal="3" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="5" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="6" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="8" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="9" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressShipment">
@@ -9087,6 +9145,16 @@
                 <FieldPair PkField="dbo:DhlExpressShipment:ShipmentID" FkField="dbo:DhlExpressPackage:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressProfile:FK_DhlExpressProfile_ShippingProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:DhlExpressProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressProfilePackage:FK_DhlExpressPackageProfile_DhlExpressProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:DhlExpressProfile:ShippingProfileID" FkField="dbo:DhlExpressProfilePackage:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:DhlExpressShipment:FK_DhlExpressShipment_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:DhlExpressShipment:ShipmentID" />
@@ -10423,6 +10491,29 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressProfile" TargetName="ShipWorksLocal:dbo:DhlExpressProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="DeliveryDutyPaid" TargetFieldName="DeliveryDutyPaid" />
+            <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressProfilePackage" TargetName="ShipWorksLocal:dbo:DhlExpressProfilePackage">
+          <FieldMappings>
+            <FieldMapping FieldName="DhlExpressProfilePackageID" TargetFieldName="DhlExpressProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>

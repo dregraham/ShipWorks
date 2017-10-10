@@ -2115,6 +2115,120 @@ namespace ShipWorks.Data.Model.Custom
 	
 	
 	/// <summary>
+	/// Strongly typed collection of DhlExpressProfileEntity
+	/// </summary>
+	public class DhlExpressProfileCollection : EntityCollection<DhlExpressProfileEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DhlExpressProfileEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DhlExpressProfileEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DhlExpressProfileEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DhlExpressProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DhlExpressProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DhlExpressProfileCollection collection = new DhlExpressProfileCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of DhlExpressProfilePackageEntity
+	/// </summary>
+	public class DhlExpressProfilePackageCollection : EntityCollection<DhlExpressProfilePackageEntity>
+	{
+        /// <summary>
+        /// Gets the count of all DhlExpressProfilePackageEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all DhlExpressProfilePackageEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new DhlExpressProfilePackageEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static DhlExpressProfilePackageCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static DhlExpressProfilePackageCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            DhlExpressProfilePackageCollection collection = new DhlExpressProfilePackageCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
 	/// Strongly typed collection of DhlExpressShipmentEntity
 	/// </summary>
 	public class DhlExpressShipmentCollection : EntityCollection<DhlExpressShipmentEntity>

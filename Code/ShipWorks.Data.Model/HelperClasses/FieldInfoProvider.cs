@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (215 + 0));
+			this.InitClass( (217 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -87,6 +87,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitCustomerEntityInfos();
 			InitDhlExpressAccountEntityInfos();
 			InitDhlExpressPackageEntityInfos();
+			InitDhlExpressProfileEntityInfos();
+			InitDhlExpressProfilePackageEntityInfos();
 			InitDhlExpressShipmentEntityInfos();
 			InitDimensionsProfileEntityInfos();
 			InitDownloadEntityInfos();
@@ -788,6 +790,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DimsWeight, 0, 0, 38);
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "DeclaredValue", typeof(System.Decimal), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)DhlExpressPackageFieldIndex.TrackingNumber, 50, 0, 0);
+		}
+		/// <summary>Inits DhlExpressProfileEntity's FieldInfo objects</summary>
+		private void InitDhlExpressProfileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(DhlExpressProfileFieldIndex), "DhlExpressProfileEntity");
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)DhlExpressProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "DhlExpressAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.DhlExpressAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "DeliveryDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.DeliveryDutyPaid, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonMachinable, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
+		}
+		/// <summary>Inits DhlExpressProfilePackageEntity's FieldInfo objects</summary>
+		private void InitDhlExpressProfilePackageEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(DhlExpressProfilePackageFieldIndex), "DhlExpressProfilePackageEntity");
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DhlExpressProfilePackageID", typeof(System.Int64), true, false, true, false,  (int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "ShippingProfileID", typeof(System.Int64), false, true, false, false,  (int)DhlExpressProfilePackageFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("DhlExpressProfilePackageEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfilePackageFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits DhlExpressShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlExpressShipmentEntityInfos()

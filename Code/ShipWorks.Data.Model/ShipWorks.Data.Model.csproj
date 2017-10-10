@@ -2869,6 +2869,30 @@
     <Compile Include=".\RelationClasses\DhlExpressShipmentRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressProfilePackageRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressProfileRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

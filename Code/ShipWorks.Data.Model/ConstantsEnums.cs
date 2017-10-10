@@ -1963,6 +1963,48 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressProfile.</summary>
+	public enum DhlExpressProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveryDutyPaid. </summary>
+		DeliveryDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressProfilePackage.</summary>
+	public enum DhlExpressProfilePackageFieldIndex
+	{
+		///<summary>DhlExpressProfilePackageID. </summary>
+		DhlExpressProfilePackageID,
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressShipment.</summary>
 	public enum DhlExpressShipmentFieldIndex
 	{
@@ -11783,6 +11825,10 @@ namespace ShipWorks.Data.Model
 		DhlExpressAccountEntity,
 		///<summary>DhlExpressPackage</summary>
 		DhlExpressPackageEntity,
+		///<summary>DhlExpressProfile</summary>
+		DhlExpressProfileEntity,
+		///<summary>DhlExpressProfilePackage</summary>
+		DhlExpressProfilePackageEntity,
 		///<summary>DhlExpressShipment</summary>
 		DhlExpressShipmentEntity,
 		///<summary>DimensionsProfile</summary>

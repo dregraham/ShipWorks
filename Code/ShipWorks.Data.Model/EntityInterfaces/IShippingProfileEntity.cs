@@ -90,6 +90,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         IAmazonProfileEntity Amazon { get; }
         IBestRateProfileEntity BestRate { get; }
+        IDhlExpressProfileEntity DhlExpressProfile { get; }
         IFedExProfileEntity FedEx { get; }
         IIParcelProfileEntity IParcel { get; }
         IOnTracProfileEntity OnTrac { get; }
@@ -126,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         IAmazonProfileEntity IShippingProfileEntity.Amazon => Amazon;
         IBestRateProfileEntity IShippingProfileEntity.BestRate => BestRate;
+        IDhlExpressProfileEntity IShippingProfileEntity.DhlExpressProfile => DhlExpressProfile;
         IFedExProfileEntity IShippingProfileEntity.FedEx => FedEx;
         IIParcelProfileEntity IShippingProfileEntity.IParcel => IParcel;
         IOnTracProfileEntity IShippingProfileEntity.OnTrac => OnTrac;

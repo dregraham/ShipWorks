@@ -328,6 +328,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<DhlExpressPackageEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressProfile entity</summary>
+		public EntityQuery<DhlExpressProfileEntity> DhlExpressProfile
+		{
+			get { return Create<DhlExpressProfileEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressProfilePackage entity</summary>
+		public EntityQuery<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
+		{
+			get { return Create<DhlExpressProfilePackageEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the DhlExpressShipment entity</summary>
 		public EntityQuery<DhlExpressShipmentEntity> DhlExpressShipment
 		{
