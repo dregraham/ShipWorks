@@ -2020,6 +2020,8 @@ namespace ShipWorks.Data.Model
 		NonMachinable,
 		///<summary>SaturdayDelivery. </summary>
 		SaturdayDelivery,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}

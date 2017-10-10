@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeliveredDutyPaid = source.DeliveredDutyPaid;
             NonMachinable = source.NonMachinable;
             SaturdayDelivery = source.SaturdayDelivery;
+            RequestedLabelFormat = source.RequestedLabelFormat;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -89,6 +90,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean SaturdayDelivery { get; }
+        /// <summary> The RequestedLabelFormat property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."RequestedLabelFormat"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 RequestedLabelFormat { get; }
         
         public IShipmentEntity Shipment { get; }
         

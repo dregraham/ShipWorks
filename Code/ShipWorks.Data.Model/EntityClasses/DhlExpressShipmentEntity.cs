@@ -393,6 +393,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("SaturdayDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 		}
 		#endregion
 
@@ -556,6 +558,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.SaturdayDelivery, true); }
 			set	{ SetValue((int)DhlExpressShipmentFieldIndex.SaturdayDelivery, value); }
+		}
+
+		/// <summary> The RequestedLabelFormat property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 RequestedLabelFormat
+		{
+			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

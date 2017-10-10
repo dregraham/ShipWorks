@@ -853,13 +853,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DhlExpressShipmentEntity's mappings</summary>
 		private void InitDhlExpressShipmentEntityMappings()
 		{
-			this.AddElementMapping("DhlExpressShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlExpressShipment", 6, 0);
+			this.AddElementMapping("DhlExpressShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlExpressShipment", 7, 0);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "DhlExpressAccountID", "DhlExpressAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "DeliveredDutyPaid", "DeliveredDutyPaid", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "SaturdayDelivery", "SaturdayDelivery", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("DhlExpressShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 		}
 
 		/// <summary>Inits DimensionsProfileEntity's mappings</summary>

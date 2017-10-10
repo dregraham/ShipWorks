@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Settings.Origin;
 using Interapptive.Shared;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -67,7 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.DeliveredDutyPaid = false;
             dhlExpressShipmentEntity.NonMachinable = false;
             dhlExpressShipmentEntity.SaturdayDelivery = false;
-            
+            dhlExpressShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+
             DhlExpressPackageEntity package = CreateDefaultPackage();
 
             dhlExpressShipmentEntity.Packages.Add(package);
@@ -518,9 +520,23 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <returns></returns>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment) => true;
 
+        /// <summary>
+        /// Gets a ShippingBroker
+        /// </summary>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.DhlExpress != null)
+            {
+                shipment.DhlExpress.RequestedLabelFormat = (int) requestedLabelFormat;
+            }
         }
     }
 }

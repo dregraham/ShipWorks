@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
         {
-            return format != ThermalLanguage.ZPL;
+            return format != ThermalLanguage.EPL;
         }
 
         /// <summary>
