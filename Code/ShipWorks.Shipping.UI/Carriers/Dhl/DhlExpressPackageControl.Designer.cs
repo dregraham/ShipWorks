@@ -55,7 +55,7 @@
             // 
             this.labelPackages.AutoSize = true;
             this.labelPackages.BackColor = System.Drawing.Color.Transparent;
-            this.labelPackages.Location = new System.Drawing.Point(46, 7);
+            this.labelPackages.Location = new System.Drawing.Point(44, 7);
             this.labelPackages.Name = "labelPackages";
             this.labelPackages.Size = new System.Drawing.Size(56, 13);
             this.labelPackages.TabIndex = 0;
@@ -76,7 +76,7 @@
             this.packagesGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.packagesGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumn});
-            this.packagesGrid.Location = new System.Drawing.Point(108, 27);
+            this.packagesGrid.Location = new System.Drawing.Point(106, 27);
             this.packagesGrid.Name = "packagesGrid";
             this.packagesGrid.Renderer = windowsXPRenderer1;
             this.packagesGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
@@ -152,7 +152,7 @@
             "8",
             "9",
             "10"});
-            this.packageCountCombo.Location = new System.Drawing.Point(108, 3);
+            this.packageCountCombo.Location = new System.Drawing.Point(106, 3);
             this.packageCountCombo.Name = "packageCountCombo";
             this.packageCountCombo.PromptText = "(Multiple Values)";
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);

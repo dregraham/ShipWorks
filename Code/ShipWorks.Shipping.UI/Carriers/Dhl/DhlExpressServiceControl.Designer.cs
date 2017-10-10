@@ -109,8 +109,9 @@
             // 
             // sectionLabelOptions
             // 
+            this.sectionLabelOptions.Collapsed = false;
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(389, 24);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(389, 70);
             // 
             // sectionFrom
             // 
@@ -194,7 +195,7 @@
             // 
             this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.service.FormattingEnabled = true;
-            this.service.Location = new System.Drawing.Point(110, 10);
+            this.service.Location = new System.Drawing.Point(108, 10);
             this.service.Name = "service";
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(175, 21);
@@ -204,7 +205,7 @@
             // 
             this.labelShipDate.AutoSize = true;
             this.labelShipDate.BackColor = System.Drawing.Color.Transparent;
-            this.labelShipDate.Location = new System.Drawing.Point(48, 45);
+            this.labelShipDate.Location = new System.Drawing.Point(46, 45);
             this.labelShipDate.Name = "labelShipDate";
             this.labelShipDate.Size = new System.Drawing.Size(56, 13);
             this.labelShipDate.TabIndex = 3;
@@ -213,7 +214,7 @@
             // shipDate
             // 
             this.shipDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.shipDate.Location = new System.Drawing.Point(110, 41);
+            this.shipDate.Location = new System.Drawing.Point(108, 41);
             this.shipDate.Name = "shipDate";
             this.shipDate.Size = new System.Drawing.Size(144, 21);
             this.shipDate.TabIndex = 4;
@@ -222,7 +223,7 @@
             // 
             this.labelService.AutoSize = true;
             this.labelService.BackColor = System.Drawing.Color.Transparent;
-            this.labelService.Location = new System.Drawing.Point(58, 13);
+            this.labelService.Location = new System.Drawing.Point(56, 13);
             this.labelService.Name = "labelService";
             this.labelService.Size = new System.Drawing.Size(46, 13);
             this.labelService.TabIndex = 2;
@@ -253,7 +254,7 @@
             // 
             this.saturdayDelivery.AutoSize = true;
             this.saturdayDelivery.BackColor = System.Drawing.Color.White;
-            this.saturdayDelivery.Location = new System.Drawing.Point(113, 39);
+            this.saturdayDelivery.Location = new System.Drawing.Point(145, 39);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(15, 14);
             this.saturdayDelivery.TabIndex = 8;
@@ -263,7 +264,7 @@
             // 
             this.labelSaturdayDelivery.AutoSize = true;
             this.labelSaturdayDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturdayDelivery.Location = new System.Drawing.Point(10, 38);
+            this.labelSaturdayDelivery.Location = new System.Drawing.Point(41, 38);
             this.labelSaturdayDelivery.Name = "labelSaturdayDelivery";
             this.labelSaturdayDelivery.Size = new System.Drawing.Size(97, 13);
             this.labelSaturdayDelivery.TabIndex = 7;
@@ -273,7 +274,7 @@
             // 
             this.dutyPaid.AutoSize = true;
             this.dutyPaid.BackColor = System.Drawing.Color.White;
-            this.dutyPaid.Location = new System.Drawing.Point(113, 16);
+            this.dutyPaid.Location = new System.Drawing.Point(145, 16);
             this.dutyPaid.Name = "dutyPaid";
             this.dutyPaid.Size = new System.Drawing.Size(15, 14);
             this.dutyPaid.TabIndex = 5;
@@ -283,7 +284,7 @@
             // 
             this.labelDutyPaid.AutoSize = true;
             this.labelDutyPaid.BackColor = System.Drawing.Color.Transparent;
-            this.labelDutyPaid.Location = new System.Drawing.Point(8, 15);
+            this.labelDutyPaid.Location = new System.Drawing.Point(39, 15);
             this.labelDutyPaid.Name = "labelDutyPaid";
             this.labelDutyPaid.Size = new System.Drawing.Size(99, 13);
             this.labelDutyPaid.TabIndex = 1;
@@ -293,17 +294,17 @@
             // 
             this.labelNonMachinable.AutoSize = true;
             this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachinable.Location = new System.Drawing.Point(15, 61);
+            this.labelNonMachinable.Location = new System.Drawing.Point(52, 61);
             this.labelNonMachinable.Name = "labelNonMachinable";
-            this.labelNonMachinable.Size = new System.Drawing.Size(92, 13);
+            this.labelNonMachinable.Size = new System.Drawing.Size(86, 13);
             this.labelNonMachinable.TabIndex = 7;
             this.labelNonMachinable.Text = "Non Machinable:";
             // 
-            // nonMachineable
+            // nonMachinable
             // 
             this.nonMachinable.AutoSize = true;
             this.nonMachinable.BackColor = System.Drawing.Color.White;
-            this.nonMachinable.Location = new System.Drawing.Point(113, 62);
+            this.nonMachinable.Location = new System.Drawing.Point(145, 62);
             this.nonMachinable.Name = "nonMachinable";
             this.nonMachinable.Size = new System.Drawing.Size(15, 14);
             this.nonMachinable.TabIndex = 8;
