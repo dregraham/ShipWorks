@@ -152,6 +152,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             base.UpdateDynamicShipmentData(shipment);
 
             RedistributeContentWeight(shipment);
+
+            shipment.RequestedLabelFormat = shipment.DhlExpress.RequestedLabelFormat;
         }
 
         /// <summary>
