@@ -291,6 +291,7 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\TelemetricUpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
