@@ -70,8 +70,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DeliveryDutyPaid, dutyDeliveryPaidState, dutyDeliveryPaid, labelDuty);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
-
-
+            
             packagesState.Checked = DhlExpressProfile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? DhlExpressProfile.Packages.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;
