@@ -29,6 +29,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             : base(ShipmentTypeCode.OnTrac, rateControl)
         {
             InitializeComponent();
+
+            this.residentialDetermination.TextChanged += OnRateCriteriaChanged;
+            this.codAmount.TextChanged += OnRateCriteriaChanged;
+            this.saturdayDelivery.CheckedChanged += OnRateCriteriaChanged;
+            this.insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
+            this.dimensionsControl.DimensionsChanged += OnRateCriteriaChanged;
+            this.weight.WeightChanged += OnRateCriteriaChanged;
+            this.packagingType.SelectedIndexChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>

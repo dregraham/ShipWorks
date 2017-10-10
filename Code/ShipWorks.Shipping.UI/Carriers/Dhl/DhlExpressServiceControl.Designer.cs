@@ -35,6 +35,8 @@
             this.DhlExpressAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.service = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.labelShipDate = new System.Windows.Forms.Label();
+            this.shipDate = new ShipWorks.UI.Controls.MultiValueDateTimePicker();
             this.labelService = new System.Windows.Forms.Label();
             this.sectionOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.saturdayDelivery = new System.Windows.Forms.CheckBox();
@@ -72,7 +74,7 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
             this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 5);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(389, 24);
             // 
             // personControl
@@ -89,7 +91,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 304);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 369);
             this.sectionReturns.Size = new System.Drawing.Size(389, 24);
             // 
             // sectionShipment
@@ -99,13 +101,15 @@
             // 
             this.sectionShipment.ContentPanel.Controls.Add(this.packageControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 34);
-            this.sectionShipment.Size = new System.Drawing.Size(389, 265);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
+            this.sectionShipment.Size = new System.Drawing.Size(389, 301);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 333);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
             this.sectionLabelOptions.Size = new System.Drawing.Size(389, 24);
             // 
             // sectionFrom
@@ -120,7 +124,7 @@
             this.sectionFrom.ContentPanel.Controls.Add(this.originControl);
             this.sectionFrom.ExpandedHeight = 513;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 362);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -196,6 +200,24 @@
             this.service.Size = new System.Drawing.Size(175, 21);
             this.service.TabIndex = 3;
             // 
+            // labelShipDate
+            // 
+            this.labelShipDate.AutoSize = true;
+            this.labelShipDate.BackColor = System.Drawing.Color.Transparent;
+            this.labelShipDate.Location = new System.Drawing.Point(48, 45);
+            this.labelShipDate.Name = "labelShipDate";
+            this.labelShipDate.Size = new System.Drawing.Size(56, 13);
+            this.labelShipDate.TabIndex = 3;
+            this.labelShipDate.Text = "Ship date:";
+            // 
+            // shipDate
+            // 
+            this.shipDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.shipDate.Location = new System.Drawing.Point(110, 41);
+            this.shipDate.Name = "shipDate";
+            this.shipDate.Size = new System.Drawing.Size(144, 21);
+            this.shipDate.TabIndex = 4;
+            // 
             // labelService
             // 
             this.labelService.AutoSize = true;
@@ -220,7 +242,7 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachineable);
             this.sectionOptions.ContentPanel.Controls.Add(this.nonMachineable);
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 391);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 398);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -291,7 +313,7 @@
             // 
             this.packageControl.BackColor = System.Drawing.Color.White;
             this.packageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packageControl.Location = new System.Drawing.Point(2, 37);
+            this.packageControl.Location = new System.Drawing.Point(2, 67);
             this.packageControl.Name = "packageControl";
             this.packageControl.Size = new System.Drawing.Size(412, 206);
             this.packageControl.TabIndex = 4;
@@ -355,5 +377,7 @@
         private System.Windows.Forms.Label labelSaturdayDelivery;
         private System.Windows.Forms.CheckBox nonMachineable;
         private System.Windows.Forms.Label labelNonMachineable;
+        private System.Windows.Forms.Label labelShipDate;
+        private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
     }
 }
