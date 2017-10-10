@@ -35,6 +35,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="accountRepository"></param>
         public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;

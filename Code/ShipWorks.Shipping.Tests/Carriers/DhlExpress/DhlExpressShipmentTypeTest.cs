@@ -1,5 +1,7 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Autofac.Extras.Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +11,15 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
-    public class DhlExpressShipmentTypeTest
+    public class DhlExpressShipmentTypeTest : IDisposable
     {
         private readonly DhlExpressShipmentType testObject;
+        readonly AutoMock mock;
+
         public DhlExpressShipmentTypeTest()
         {
-            testObject = new DhlExpressShipmentType();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<DhlExpressShipmentType>();
         }
 
         [Fact]
@@ -124,5 +129,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             Assert.Equal(3,testObject.GetParcelCount(shipment));
         }
 
+        public void Dispose()
+        {
+            mock.Dispose();
+        }
     }
 }
