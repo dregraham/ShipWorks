@@ -421,7 +421,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 // Go through each package that needs removed
                 foreach (DhlExpressPackageEntity package in dhlShipment.Packages.Skip(profilePackageCount).ToList())
                 {
-                    if (package.Weight != 0)
+                    if (!package.Weight.IsEquivalentTo(0))
                     {
                         changedPackageWeights = true;
                     }
