@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "DhlExpressProfile", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "DhlExpress", true);
 
 				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, DhlExpressProfileFields.ShippingProfileID);
 

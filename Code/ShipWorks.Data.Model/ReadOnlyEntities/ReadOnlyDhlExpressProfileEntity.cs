@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
             
-            DhlExpressProfilePackage = source.DhlExpressProfilePackage?.Select(x => x.AsReadOnly(objectMap)).OfType<IDhlExpressProfilePackageEntity>().ToReadOnly() ??
+            Packages = source.Packages?.Select(x => x.AsReadOnly(objectMap)).OfType<IDhlExpressProfilePackageEntity>().ToReadOnly() ??
                 Enumerable.Empty<IDhlExpressProfilePackageEntity>();
 
             CopyCustomDhlExpressProfileData(source);
@@ -94,7 +94,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         
         
         
-        public IEnumerable<IDhlExpressProfilePackageEntity> DhlExpressProfilePackage { get; }
+        public IEnumerable<IDhlExpressProfilePackageEntity> Packages { get; }
         
         /// <summary>
         /// Get a read only version of the entity

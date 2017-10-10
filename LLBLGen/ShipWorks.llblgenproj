@@ -3426,12 +3426,12 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="DhlExpressProfile.ShippingProfile-ShippingProfile.DhlExpressProfile" Start=":DhlExpressProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlExpressProfile" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="DhlExpressProfile.ShippingProfile-ShippingProfile.DhlExpress" Start=":DhlExpressProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="DhlExpressProfilePackage.DhlExpressProfile-DhlExpressProfile.DhlExpressProfilePackage" Start=":DhlExpressProfilePackage" End=":DhlExpressProfile" StartNavigator="DhlExpressProfile" EndNavigator="DhlExpressProfilePackage" Type="4" DeleteRuleAction="1">
+      <NormalRelationship Name="DhlExpressProfilePackage.DhlExpressProfile-DhlExpressProfile.Packages" Start=":DhlExpressProfilePackage" End=":DhlExpressProfile" StartNavigator="DhlExpressProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>

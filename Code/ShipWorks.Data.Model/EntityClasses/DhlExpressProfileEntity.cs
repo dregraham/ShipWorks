@@ -25,21 +25,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'DhlExpressProfile'.<br/><br/></summary>
 	[Serializable]
 	public partial class DhlExpressProfileEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<DhlExpressProfilePackageEntity> _dhlExpressProfilePackage;
+		private EntityCollection<DhlExpressProfilePackageEntity> _packages;
 		private ShippingProfileEntity _shippingProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -49,8 +46,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name DhlExpressProfilePackage</summary>
-			public static readonly string DhlExpressProfilePackage = "DhlExpressProfilePackage";
+			/// <summary>Member name Packages</summary>
+			public static readonly string Packages = "Packages";
 			/// <summary>Member name ShippingProfile</summary>
 			public static readonly string ShippingProfile = "ShippingProfile";
 		}
@@ -110,7 +107,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_dhlExpressProfilePackage = (EntityCollection<DhlExpressProfilePackageEntity>)info.GetValue("_dhlExpressProfilePackage", typeof(EntityCollection<DhlExpressProfilePackageEntity>));
+				_packages = (EntityCollection<DhlExpressProfilePackageEntity>)info.GetValue("_packages", typeof(EntityCollection<DhlExpressProfilePackageEntity>));
 				_shippingProfile = (ShippingProfileEntity)info.GetValue("_shippingProfile", typeof(ShippingProfileEntity));
 				if(_shippingProfile!=null)
 				{
@@ -120,7 +117,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -147,8 +143,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "DhlExpressProfilePackage":
-					this.DhlExpressProfilePackage.Add((DhlExpressProfilePackageEntity)entity);
+				case "Packages":
+					this.Packages.Add((DhlExpressProfilePackageEntity)entity);
 					break;
 				case "ShippingProfile":
 					this.ShippingProfile = (ShippingProfileEntity)entity;
@@ -175,7 +171,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "DhlExpressProfilePackage":
+				case "Packages":
 					toReturn.Add(Relations.DhlExpressProfilePackageEntityUsingShippingProfileID);
 					break;
 				case "ShippingProfile":
@@ -209,8 +205,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressProfilePackage":
-					this.DhlExpressProfilePackage.Add((DhlExpressProfilePackageEntity)relatedEntity);
+				case "Packages":
+					this.Packages.Add((DhlExpressProfilePackageEntity)relatedEntity);
 					break;
 				case "ShippingProfile":
 					SetupSyncShippingProfile(relatedEntity);
@@ -228,8 +224,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "DhlExpressProfilePackage":
-					this.PerformRelatedEntityRemoval(this.DhlExpressProfilePackage, relatedEntity, signalRelatedEntityManyToOne);
+				case "Packages":
+					this.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "ShippingProfile":
 					DesetupSyncShippingProfile(false, true);
@@ -268,7 +264,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.DhlExpressProfilePackage);
+			toReturn.Add(this.Packages);
 			return toReturn;
 		}
 
@@ -280,12 +276,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_dhlExpressProfilePackage", ((_dhlExpressProfilePackage!=null) && (_dhlExpressProfilePackage.Count>0) && !this.MarkedForDeletion)?_dhlExpressProfilePackage:null);
+				info.AddValue("_packages", ((_packages!=null) && (_packages.Count>0) && !this.MarkedForDeletion)?_packages:null);
 				info.AddValue("_shippingProfile", (!this.MarkedForDeletion?_shippingProfile:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -300,7 +295,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DhlExpressProfilePackage' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDhlExpressProfilePackage()
+		public virtual IRelationPredicateBucket GetRelationInfoPackages()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlExpressProfilePackageFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
@@ -328,7 +323,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._dhlExpressProfilePackage);
+			collectionsQueue.Enqueue(this._packages);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -336,7 +331,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._dhlExpressProfilePackage = (EntityCollection<DhlExpressProfilePackageEntity>) collectionsQueue.Dequeue();
+			this._packages = (EntityCollection<DhlExpressProfilePackageEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -345,7 +340,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._dhlExpressProfilePackage != null);
+			toReturn |=(this._packages != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -363,7 +358,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("DhlExpressProfilePackage", _dhlExpressProfilePackage);
+			toReturn.Add("Packages", _packages);
 			toReturn.Add("ShippingProfile", _shippingProfile);
 			return toReturn;
 		}
@@ -375,7 +370,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -407,7 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShippingProfile(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "DhlExpressProfile", false, new int[] { (int)DhlExpressProfileFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _shippingProfile, new PropertyChangedEventHandler( OnShippingProfilePropertyChanged ), "ShippingProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfileRelations.ShippingProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "DhlExpress", false, new int[] { (int)DhlExpressProfileFieldIndex.ShippingProfileID } );
 			_shippingProfile = null;
 		}
 		
@@ -447,7 +441,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -469,9 +462,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlExpressProfilePackage' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDhlExpressProfilePackage
+		public static IPrefetchPathElement2 PrefetchPathPackages
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<DhlExpressProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("DhlExpressProfilePackage")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, 0, null, null, null, null, "DhlExpressProfilePackage", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2( new EntityCollection<DhlExpressProfilePackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfilePackageEntityFactory))), (IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ShippingProfile' for this entity.</summary>
@@ -567,9 +560,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DhlExpressProfilePackageEntity))]
-		public virtual EntityCollection<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
+		public virtual EntityCollection<DhlExpressProfilePackageEntity> Packages
 		{
-			get { return GetOrCreateEntityCollection<DhlExpressProfilePackageEntity, DhlExpressProfilePackageEntityFactory>("DhlExpressProfile", true, false, ref _dhlExpressProfilePackage);	}
+			get { return GetOrCreateEntityCollection<DhlExpressProfilePackageEntity, DhlExpressProfilePackageEntityFactory>("DhlExpressProfile", true, false, ref _packages);	}
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
@@ -583,7 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(this.IsDeserializing)
 				{
 					SetupSyncShippingProfile(value);
-					CallSetRelatedEntityDuringDeserialization(value, "DhlExpressProfile");
+					CallSetRelatedEntityDuringDeserialization(value, "DhlExpress");
 				}
 				else
 				{
@@ -600,7 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_shippingProfile!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "DhlExpressProfile");
+							((IEntity2)value).SetRelatedEntity(this, "DhlExpress");
 							SetupSyncShippingProfile(value);
 						}
 					}
@@ -634,7 +627,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

@@ -25,20 +25,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 	/// <summary>Entity class which represents the entity 'DhlExpressProfilePackage'.<br/><br/></summary>
 	[Serializable]
 	public partial class DhlExpressProfilePackageEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 		private DhlExpressProfileEntity _dhlExpressProfile;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -116,7 +113,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -264,7 +260,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -340,7 +335,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -378,7 +372,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncDhlExpressProfile(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfilePackageRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "DhlExpressProfilePackage", resetFKFields, new int[] { (int)DhlExpressProfilePackageFieldIndex.ShippingProfileID } );
+			this.PerformDesetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressProfilePackageRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, true, signalRelatedEntity, "Packages", resetFKFields, new int[] { (int)DhlExpressProfilePackageFieldIndex.ShippingProfileID } );
 			_dhlExpressProfile = null;
 		}
 
@@ -418,7 +412,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 
@@ -572,7 +565,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 				else
 				{
-					SetSingleRelatedEntityNavigator(value, "DhlExpressProfilePackage", "DhlExpressProfile", _dhlExpressProfile, true); 
+					SetSingleRelatedEntityNavigator(value, "Packages", "DhlExpressProfile", _dhlExpressProfile, true); 
 				}
 			}
 		}
@@ -603,7 +596,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

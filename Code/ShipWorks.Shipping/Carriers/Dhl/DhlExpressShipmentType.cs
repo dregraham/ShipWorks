@@ -16,6 +16,11 @@ using System.ComponentModel;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Settings.Origin;
+using Interapptive.Shared;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Carriers.iParcel;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -27,6 +32,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.DhlExpress, SingleInstance = true)]
     public class DhlExpressShipmentType : ShipmentType
     {
+        private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
+
+        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository)
+        {
+            this.accountRepository = accountRepository;
+        }
+
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
         /// </summary>
@@ -206,8 +218,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
             DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
-            DhlExpressAccountEntity account = DhlExpressAccountManager.GetAccount(dhlExpressShipmentEntity.DhlExpressAccountID);
-
+            DhlExpressAccountEntity account = accountRepository.GetAccount(dhlExpressShipmentEntity.DhlExpressAccountID);
+            
             commonDetail.OriginAccount = (account == null) ? "" : account.Description;
             commonDetail.ServiceType = dhlExpressShipmentEntity.Service;
 
@@ -306,6 +318,195 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             throw new ArgumentException($"'{parcelIndex}' is out of range for the shipment.", "parcelIndex");
+        }
+
+        /// <summary>
+        /// Ensure the carrier specific profile data is created and loaded for the given profile
+        /// </summary>
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            bool existed = profile.DhlExpress != null;
+
+            ShipmentTypeDataService.LoadProfileData(profile, "DhlExpress", typeof(DhlExpressProfileEntity), refreshIfPresent);
+
+            DhlExpressProfileEntity dhlExpressProfileEntityParcel = profile.DhlExpress;
+
+            // If this is the first time loading it, or we are supposed to refresh, do it now
+            if (!existed || refreshIfPresent)
+            {
+                dhlExpressProfileEntityParcel.Packages.Clear();
+
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(dhlExpressProfileEntityParcel.Packages,
+                                                  new RelationPredicateBucket(DhlExpressProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
+
+                    dhlExpressProfileEntityParcel.Packages.Sort((int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, ListSortDirection.Ascending);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save carrier specific profile data to the database.  Return true if anything was dirty and saved, or was deleted.
+        /// </summary>
+        public override bool SaveProfileData(ShippingProfileEntity profile, SqlAdapter adapter)
+        {
+            bool changes = base.SaveProfileData(profile, adapter);
+
+            // First delete out anything that needs deleted
+            foreach (DhlExpressProfilePackageEntity package in profile.DhlExpress.Packages.ToList())
+            {
+                // If its new but deleted, just get rid of it
+                if (package.Fields.State == EntityState.Deleted)
+                {
+                    if (package.IsNew)
+                    {
+                        profile.DhlExpress.Packages.Remove(package);
+                    }
+
+                    // If its deleted, delete it
+                    else
+                    {
+                        package.Fields.State = EntityState.Fetched;
+                        profile.DhlExpress.Packages.Remove(package);
+
+                        adapter.DeleteEntity(package);
+
+                        changes = true;
+                    }
+                }
+            }
+
+            return changes;
+        }
+
+        /// <summary>
+        /// Get the default profile for the shipment type
+        /// </summary>
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+
+            long shipperID = accountRepository.AccountsReadOnly.Select(x => x.DhlExpressAccountID).FirstOrDefault();
+
+            profile.DhlExpress.DhlExpressAccountID = shipperID;
+            profile.OriginID = (int)ShipmentOriginSource.Account;
+
+            profile.DhlExpress.Service = (int)DhlExpressServiceType.ExpressWorldWide;
+            profile.DhlExpress.DeliveryDutyPaid = false;
+            profile.DhlExpress.NonMachinable = false;
+            profile.DhlExpress.SaturdayDelivery = false;
+        }
+
+        /// <summary>
+        /// Apply the given shipping profile to the shipment
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
+        {
+            DhlExpressShipmentEntity dhlShipment = shipment.DhlExpress;
+            
+            bool changedPackageWeights = ApplyDhlExpressPackageProfile(dhlShipment, profile);
+            int profilePackageCount = profile.DhlExpress.Packages.Count();
+
+            // Remove any packages that are too many for the profile
+            if (profilePackageCount > 0)
+            {
+                // Go through each package that needs removed
+                foreach (DhlExpressPackageEntity package in dhlShipment.Packages.Skip(profilePackageCount).ToList())
+                {
+                    if (package.Weight != 0)
+                    {
+                        changedPackageWeights = true;
+                    }
+
+                    // Remove it from the list
+                    dhlShipment.Packages.Remove(package);
+
+                    // If its saved in the database, we have to delete it
+                    if (!package.IsNew)
+                    {
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            adapter.DeleteEntity(package);
+                        }
+                    }
+                }
+            }
+
+            base.ApplyProfile(shipment, profile);
+
+            ApplyDhlExpressProfile(dhlShipment, profile);
+
+            if (changedPackageWeights)
+            {
+                UpdateTotalWeight(shipment);
+            }
+
+            UpdateDynamicShipmentData(shipment);
+        }
+
+        /// <summary>
+        /// Apply the dhl express package profile
+        /// </summary>
+        /// <returns>bool if the weight of the package has changed</returns>
+        private bool ApplyDhlExpressPackageProfile(DhlExpressShipmentEntity dhlShipment, IShippingProfileEntity profile)
+        {
+            bool changedPackageWeights = false;
+
+            int profilePackageCount = profile.DhlExpress.Packages.Count();
+
+            // Apply all package profiles
+            for (int i = 0; i < profilePackageCount; i++)
+            {
+                // Get the profile to apply
+                IDhlExpressProfilePackageEntity packageProfile = profile.DhlExpress.Packages.ElementAt(i);
+
+                DhlExpressPackageEntity package;
+
+                // Get the existing, or create a new package
+                if (dhlShipment.Packages.Count > i)
+                {
+                    package = dhlShipment.Packages[i];
+                }
+                else
+                {
+                    package = CreateDefaultPackage();
+                    dhlShipment.Packages.Add(package);
+                }
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.Weight, package, DhlExpressPackageFields.Weight);
+                changedPackageWeights |= (packageProfile.Weight != null);
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsProfileID, package, DhlExpressPackageFields.DimsProfileID);
+                if (packageProfile.DimsProfileID != null)
+                {
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsLength, package, DhlExpressPackageFields.DimsLength);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWidth, package, DhlExpressPackageFields.DimsWidth);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsHeight, package, DhlExpressPackageFields.DimsHeight);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsWeight, package, DhlExpressPackageFields.DimsWeight);
+                    ShippingProfileUtility.ApplyProfileValue(packageProfile.DimsAddWeight, package, DhlExpressPackageFields.DimsAddWeight);
+                }
+            }
+
+            return changedPackageWeights;
+        }
+
+        /// <summary>
+        /// Apply the DHL Express profile
+        /// </summary>
+        private void ApplyDhlExpressProfile(DhlExpressShipmentEntity dhlShipment, IShippingProfileEntity profile)
+        {
+            IDhlExpressProfileEntity source = profile.DhlExpress;
+            
+            long? accountID = (source.DhlExpressAccountID == 0 && accountRepository.Accounts.Any())
+                                  ? (long?)accountRepository.Accounts.First().DhlExpressAccountID
+                                  : source.DhlExpressAccountID;
+
+            ShippingProfileUtility.ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.DhlExpressAccountID);
+            ShippingProfileUtility.ApplyProfileValue(source.Service, dhlShipment, DhlExpressShipmentFields.Service);
+            ShippingProfileUtility.ApplyProfileValue(source.DeliveryDutyPaid, dhlShipment, DhlExpressShipmentFields.DeliveredDutyPaid);
+            ShippingProfileUtility.ApplyProfileValue(source.NonMachinable, dhlShipment, DhlExpressShipmentFields.NonMachinable);
+            ShippingProfileUtility.ApplyProfileValue(source.SaturdayDelivery, dhlShipment, DhlExpressShipmentFields.SaturdayDelivery);
         }
 
         /// <summary>

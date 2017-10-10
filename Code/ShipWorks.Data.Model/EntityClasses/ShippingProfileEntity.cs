@@ -34,7 +34,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#region Class Member Declarations
 		private AmazonProfileEntity _amazon;
 		private BestRateProfileEntity _bestRate;
-		private DhlExpressProfileEntity _dhlExpressProfile;
+		private DhlExpressProfileEntity _dhlExpress;
 		private FedExProfileEntity _fedEx;
 		private IParcelProfileEntity _iParcel;
 		private OnTracProfileEntity _onTrac;
@@ -57,8 +57,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Amazon = "Amazon";
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
-			/// <summary>Member name DhlExpressProfile</summary>
-			public static readonly string DhlExpressProfile = "DhlExpressProfile";
+			/// <summary>Member name DhlExpress</summary>
+			public static readonly string DhlExpress = "DhlExpress";
 			/// <summary>Member name FedEx</summary>
 			public static readonly string FedEx = "FedEx";
 			/// <summary>Member name IParcel</summary>
@@ -138,10 +138,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_bestRate.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				_dhlExpressProfile = (DhlExpressProfileEntity)info.GetValue("_dhlExpressProfile", typeof(DhlExpressProfileEntity));
-				if(_dhlExpressProfile!=null)
+				_dhlExpress = (DhlExpressProfileEntity)info.GetValue("_dhlExpress", typeof(DhlExpressProfileEntity));
+				if(_dhlExpress!=null)
 				{
-					_dhlExpressProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_dhlExpress.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_fedEx = (FedExProfileEntity)info.GetValue("_fedEx", typeof(FedExProfileEntity));
 				if(_fedEx!=null)
@@ -194,8 +194,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					this.BestRate = (BestRateProfileEntity)entity;
 					break;
-				case "DhlExpressProfile":
-					this.DhlExpressProfile = (DhlExpressProfileEntity)entity;
+				case "DhlExpress":
+					this.DhlExpress = (DhlExpressProfileEntity)entity;
 					break;
 				case "FedEx":
 					this.FedEx = (FedExProfileEntity)entity;
@@ -243,7 +243,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					toReturn.Add(Relations.BestRateProfileEntityUsingShippingProfileID);
 					break;
-				case "DhlExpressProfile":
+				case "DhlExpress":
 					toReturn.Add(Relations.DhlExpressProfileEntityUsingShippingProfileID);
 					break;
 				case "FedEx":
@@ -298,8 +298,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
 					break;
-				case "DhlExpressProfile":
-					SetupSyncDhlExpressProfile(relatedEntity);
+				case "DhlExpress":
+					SetupSyncDhlExpress(relatedEntity);
 					break;
 				case "FedEx":
 					SetupSyncFedEx(relatedEntity);
@@ -338,8 +338,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
 					break;
-				case "DhlExpressProfile":
-					DesetupSyncDhlExpressProfile(false, true);
+				case "DhlExpress":
+					DesetupSyncDhlExpress(false, true);
 					break;
 				case "FedEx":
 					DesetupSyncFedEx(false, true);
@@ -379,9 +379,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				toReturn.Add(_bestRate);
 			}
 
-			if(_dhlExpressProfile!=null)
+			if(_dhlExpress!=null)
 			{
-				toReturn.Add(_dhlExpressProfile);
+				toReturn.Add(_dhlExpress);
 			}
 
 			if(_fedEx!=null)
@@ -462,7 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
-				info.AddValue("_dhlExpressProfile", (!this.MarkedForDeletion?_dhlExpressProfile:null));
+				info.AddValue("_dhlExpress", (!this.MarkedForDeletion?_dhlExpress:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
 				info.AddValue("_onTrac", (!this.MarkedForDeletion?_onTrac:null));
@@ -504,7 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'DhlExpressProfile' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoDhlExpressProfile()
+		public virtual IRelationPredicateBucket GetRelationInfoDhlExpress()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlExpressProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
@@ -610,7 +610,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("Amazon", _amazon);
 			toReturn.Add("BestRate", _bestRate);
-			toReturn.Add("DhlExpressProfile", _dhlExpressProfile);
+			toReturn.Add("DhlExpress", _dhlExpress);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("IParcel", _iParcel);
 			toReturn.Add("OnTrac", _onTrac);
@@ -729,31 +729,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-		/// <summary> Removes the sync logic for member _dhlExpressProfile</summary>
+		/// <summary> Removes the sync logic for member _dhlExpress</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncDhlExpressProfile(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncDhlExpress(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
-			_dhlExpressProfile = null;
+			this.PerformDesetupSyncRelatedEntity( _dhlExpress, new PropertyChangedEventHandler( OnDhlExpressPropertyChanged ), "DhlExpress", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			_dhlExpress = null;
 		}
 		
-		/// <summary> setups the sync logic for member _dhlExpressProfile</summary>
+		/// <summary> setups the sync logic for member _dhlExpress</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncDhlExpressProfile(IEntityCore relatedEntity)
+		private void SetupSyncDhlExpress(IEntityCore relatedEntity)
 		{
-			if(_dhlExpressProfile!=relatedEntity)
+			if(_dhlExpress!=relatedEntity)
 			{
-				DesetupSyncDhlExpressProfile(true, true);
-				_dhlExpressProfile = (DhlExpressProfileEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _dhlExpressProfile, new PropertyChangedEventHandler( OnDhlExpressProfilePropertyChanged ), "DhlExpressProfile", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
+				DesetupSyncDhlExpress(true, true);
+				_dhlExpress = (DhlExpressProfileEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _dhlExpress, new PropertyChangedEventHandler( OnDhlExpressPropertyChanged ), "DhlExpress", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.DhlExpressProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnDhlExpressProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnDhlExpressPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1007,9 +1007,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlExpressProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathDhlExpressProfile
+		public static IPrefetchPathElement2 PrefetchPathDhlExpress
 		{
-			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfileEntityFactory))), (IEntityRelation)GetRelationsForField("DhlExpressProfile")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, 0, null, null, null, null, "DhlExpressProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressProfileEntityFactory))), (IEntityRelation)GetRelationsForField("DhlExpress")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, 0, null, null, null, null, "DhlExpress", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'FedExProfile' for this entity.</summary>
@@ -1263,33 +1263,33 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'DhlExpressProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
-		public virtual DhlExpressProfileEntity DhlExpressProfile
+		public virtual DhlExpressProfileEntity DhlExpress
 		{
-			get { return _dhlExpressProfile; }
+			get { return _dhlExpress; }
 			set
 			{
 				if(this.IsDeserializing)
 				{
-					SetupSyncDhlExpressProfile(value);
+					SetupSyncDhlExpress(value);
 					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
 				}
 				else
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_dhlExpressProfile !=null);
-						DesetupSyncDhlExpressProfile(true, true);
+						bool raisePropertyChanged = (_dhlExpress !=null);
+						DesetupSyncDhlExpress(true, true);
 						if(raisePropertyChanged)
 						{
-							OnPropertyChanged("DhlExpressProfile");
+							OnPropertyChanged("DhlExpress");
 						}
 					}
 					else
 					{
-						if(_dhlExpressProfile!=value)
+						if(_dhlExpress!=value)
 						{
 							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
-							SetupSyncDhlExpressProfile(value);
+							SetupSyncDhlExpress(value);
 						}
 					}
 				}

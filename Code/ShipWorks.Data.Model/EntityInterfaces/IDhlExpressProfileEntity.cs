@@ -61,7 +61,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         IShippingProfileEntity ShippingProfile { get; }
         
         
-        IEnumerable<IDhlExpressProfilePackageEntity> DhlExpressProfilePackage { get; }
+        IEnumerable<IDhlExpressProfilePackageEntity> Packages { get; }
 
         
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         IShippingProfileEntity IDhlExpressProfileEntity.ShippingProfile => ShippingProfile;
         
         
-        IEnumerable<IDhlExpressProfilePackageEntity> IDhlExpressProfileEntity.DhlExpressProfilePackage => DhlExpressProfilePackage;
+        IEnumerable<IDhlExpressProfilePackageEntity> IDhlExpressProfileEntity.Packages => Packages;
 
         /// <summary>
         /// Get a read only version of the entity
