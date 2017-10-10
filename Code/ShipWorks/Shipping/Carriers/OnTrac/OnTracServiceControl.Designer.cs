@@ -111,6 +111,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Location = new System.Drawing.Point(79, 358);
             this.residentialDetermination.Size = new System.Drawing.Size(300, 21);
+            this.residentialDetermination.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // sectionReturns
             //
