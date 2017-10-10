@@ -4557,6 +4557,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.SaturdayDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.RequestedLabelFormat);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DimensionsProfileEntity</summary>

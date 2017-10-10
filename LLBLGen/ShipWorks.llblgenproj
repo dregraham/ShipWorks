@@ -619,6 +619,7 @@
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlExpressAccountID" Type="long" Precision="19" FieldIndex="1" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
@@ -4111,7 +4112,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-09T15:14:35.9023566Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-10T14:22:02.3622759Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4749,6 +4750,7 @@
                         <CustomProperty Name="AuditFormat" Value="1" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -10431,6 +10433,7 @@
             <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
