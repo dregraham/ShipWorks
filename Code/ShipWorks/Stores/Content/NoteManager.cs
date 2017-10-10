@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Adjust the note count for the given object (and related objects) by the given amount
         /// </summary>
-        public static void AdjustNoteCount(SqlAdapter adapter, long objectID, int amount)
+        public static void AdjustNoteCount(ISqlAdapter adapter, long objectID, int amount)
         {
             if (amount == 0)
             {

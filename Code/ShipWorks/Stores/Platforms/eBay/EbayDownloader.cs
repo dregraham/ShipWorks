@@ -30,6 +30,7 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -433,13 +434,91 @@ namespace ShipWorks.Stores.Platforms.Ebay
             foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
             {
                 // Copy the notes from the old order
-                await OrderUtility.CopyNotes(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
+                await CopyNotes(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Copy the shipments from the old order
-                await OrderUtility.CopyShipments(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
+                await CopyShipments(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Delete the old order
                 DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
+            }
+        }
+
+        /// <summary>
+        /// Copies any shipment entities from one order to another
+        /// </summary>
+        private static async Task CopyShipments(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<ShipmentEntity> query = factory.Shipment
+                .Where(ShipmentFields.OrderID == fromOrderID);
+            query = FullShipmentPrefetchPath(query);
+
+            IEntityCollection2 shipments = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+
+            // Copy any existing shipments
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                // this is now a new shipment to be inserted
+                EntityUtility.MarkAsNew(shipment);
+                shipment.Order = toOrder;
+
+                // Mark all the carrier-specific stuff as new
+                foreach (IEntityCore entity in ((IEntityCore)shipment).GetDependingRelatedEntities())
+                {
+                    EntityUtility.MarkAsNew(entity);
+                }
+
+                // And all the customers stuff as new
+                foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
+                {
+                    EntityUtility.MarkAsNew(customsItem);
+                }
+
+                shipment.OrderID = toOrder.OrderID;
+
+                await sqlAdapter.SaveEntityAsync(shipment).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Create the pre-fetch path used to load a shipment
+        /// </summary>
+        private static EntityQuery<ShipmentEntity> FullShipmentPrefetchPath(EntityQuery<ShipmentEntity> entityQuery)
+        {
+            return entityQuery.WithPath(ShipmentEntity.PrefetchPathPostal.WithSubPath(PostalShipmentEntity.PrefetchPathUsps).WithSubPath(PostalShipmentEntity.PrefetchPathEndicia))
+                .WithPath(ShipmentEntity.PrefetchPathUps.WithSubPath(UpsShipmentEntity.PrefetchPathPackages))
+                .WithPath(ShipmentEntity.PrefetchPathFedEx.WithSubPath(FedExShipmentEntity.PrefetchPathPackages))
+                .WithPath(ShipmentEntity.PrefetchPathIParcel.WithSubPath(IParcelShipmentEntity.PrefetchPathPackages))
+                .WithPath(ShipmentEntity.PrefetchPathCustomsItems)
+                .WithPath(ShipmentEntity.PrefetchPathReturnItems)
+                .WithPath(ShipmentEntity.PrefetchPathAmazon)
+                .WithPath(ShipmentEntity.PrefetchPathBestRate)
+                .WithPath(ShipmentEntity.PrefetchPathOnTrac)
+                .WithPath(ShipmentEntity.PrefetchPathOther);
+        }
+
+        /// <summary>
+        /// Copies any note entities from one order to another.
+        /// </summary>
+        public static async Task CopyNotes(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
+        {
+            var factory = new QueryFactory();
+            var query = factory.Note.Where(NoteFields.EntityID == fromOrderID);
+            var newNotes = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+
+            foreach (NoteEntity note in newNotes)
+            {
+                EntityUtility.MarkAsNew(note);
+                note.Order = toOrder;
+
+                // If its new, we have to increment reference counts
+                if (note.IsNew)
+                {
+                    NoteManager.AdjustNoteCount(sqlAdapter, note.EntityID, 1);
+                }
+
+                await sqlAdapter.SaveEntityAsync(note).ConfigureAwait(false);
             }
         }
 
