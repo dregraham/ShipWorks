@@ -53,6 +53,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UpsInsuranceProvider;
             pennyOne.Checked = settings.UpsInsurancePennyOne;
 
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
+
             InitializeServicePicker(shipmentType);
             InitializePackagingTypePicker(shipmentType);
         }
@@ -111,6 +113,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             upsMailInnovationsOptions.SaveSettings(settings);
 
             optionsControl.SaveSettings();
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
 
             settings.UpsInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.UpsInsurancePennyOne = pennyOne.Checked;
