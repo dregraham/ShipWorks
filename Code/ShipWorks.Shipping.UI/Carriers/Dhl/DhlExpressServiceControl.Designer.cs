@@ -43,8 +43,8 @@
             this.labelSaturdayDelivery = new System.Windows.Forms.Label();
             this.dutyPaid = new System.Windows.Forms.CheckBox();
             this.labelDutyPaid = new System.Windows.Forms.Label();
-            this.labelNonMachineable = new System.Windows.Forms.Label();
-            this.nonMachineable = new System.Windows.Forms.CheckBox();
+            this.labelNonMachinable = new System.Windows.Forms.Label();
+            this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.packageControl = new ShipWorks.Shipping.Carriers.Dhl.DhlExpressPackageControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
@@ -239,8 +239,8 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.labelSaturdayDelivery);
             this.sectionOptions.ContentPanel.Controls.Add(this.dutyPaid);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelDutyPaid);
-            this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachineable);
-            this.sectionOptions.ContentPanel.Controls.Add(this.nonMachineable);
+            this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachinable);
+            this.sectionOptions.ContentPanel.Controls.Add(this.nonMachinable);
             this.sectionOptions.ExtraText = "";
             this.sectionOptions.Location = new System.Drawing.Point(3, 398);
             this.sectionOptions.Name = "sectionOptions";
@@ -289,25 +289,25 @@
             this.labelDutyPaid.TabIndex = 1;
             this.labelDutyPaid.Text = "Delivery Duty Paid:";
             // 
-            // labelNonMachineable
+            // labelNonMachinable
             // 
-            this.labelNonMachineable.AutoSize = true;
-            this.labelNonMachineable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachineable.Location = new System.Drawing.Point(15, 61);
-            this.labelNonMachineable.Name = "labelNonMachineable";
-            this.labelNonMachineable.Size = new System.Drawing.Size(92, 13);
-            this.labelNonMachineable.TabIndex = 7;
-            this.labelNonMachineable.Text = "Non Machineable:";
+            this.labelNonMachinable.AutoSize = true;
+            this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
+            this.labelNonMachinable.Location = new System.Drawing.Point(15, 61);
+            this.labelNonMachinable.Name = "labelNonMachinable";
+            this.labelNonMachinable.Size = new System.Drawing.Size(92, 13);
+            this.labelNonMachinable.TabIndex = 7;
+            this.labelNonMachinable.Text = "Non Machinable:";
             // 
             // nonMachineable
             // 
-            this.nonMachineable.AutoSize = true;
-            this.nonMachineable.BackColor = System.Drawing.Color.White;
-            this.nonMachineable.Location = new System.Drawing.Point(113, 62);
-            this.nonMachineable.Name = "nonMachineable";
-            this.nonMachineable.Size = new System.Drawing.Size(15, 14);
-            this.nonMachineable.TabIndex = 8;
-            this.nonMachineable.UseVisualStyleBackColor = false;
+            this.nonMachinable.AutoSize = true;
+            this.nonMachinable.BackColor = System.Drawing.Color.White;
+            this.nonMachinable.Location = new System.Drawing.Point(113, 62);
+            this.nonMachinable.Name = "nonMachinable";
+            this.nonMachinable.Size = new System.Drawing.Size(15, 14);
+            this.nonMachinable.TabIndex = 8;
+            this.nonMachinable.UseVisualStyleBackColor = false;
             // 
             // packageControl
             // 
@@ -375,8 +375,8 @@
         private DhlExpressPackageControl packageControl;
         private System.Windows.Forms.CheckBox saturdayDelivery;
         private System.Windows.Forms.Label labelSaturdayDelivery;
-        private System.Windows.Forms.CheckBox nonMachineable;
-        private System.Windows.Forms.Label labelNonMachineable;
+        private System.Windows.Forms.CheckBox nonMachinable;
+        private System.Windows.Forms.Label labelNonMachinable;
         private System.Windows.Forms.Label labelShipDate;
         private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
     }
