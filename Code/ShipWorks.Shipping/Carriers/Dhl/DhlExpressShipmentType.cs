@@ -69,6 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.NonMachinable = false;
             dhlExpressShipmentEntity.SaturdayDelivery = false;
             dhlExpressShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+            dhlExpressShipmentEntity.DhlExpressAccountID = 0;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
 
