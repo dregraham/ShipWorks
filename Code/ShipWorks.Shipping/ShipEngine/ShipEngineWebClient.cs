@@ -137,5 +137,10 @@ namespace ShipWorks.Shipping.ShipEngine
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
         }
+
+        public Task<RateShipmentResponse> RateShipment(RateShipmentRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
