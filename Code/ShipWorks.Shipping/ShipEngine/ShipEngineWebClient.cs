@@ -20,18 +20,18 @@ namespace ShipWorks.Shipping.ShipEngine
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IShipEngineApiFactory carrierAccountsApiFactory;
+        private readonly IShipEngineApiFactory shipEngineApiFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IShipEngineApiFactory carrierAccountsApiFactory)
+            IShipEngineApiFactory shipEngineApiFactory)
         {
             this.apiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            this.carrierAccountsApiFactory = carrierAccountsApiFactory;
+            this.shipEngineApiFactory = shipEngineApiFactory;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.ShipEngine
             
             DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO { AccountNumber = accountNumber, Nickname = accountNumber };
 
-            ICarrierAccountsApi apiInstance = carrierAccountsApiFactory.CreateCarrierAccountsApi();
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
             ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount");
             
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
         {
-            ICarriersApi carrierApi = carrierAccountsApiFactory.CreateCarrierApi();
+            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
             ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}");
             try
             {
@@ -138,9 +138,23 @@ namespace ShipWorks.Shipping.ShipEngine
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
         }
 
-        public Task<RateShipmentResponse> RateShipment(RateShipmentRequest request)
+        /// <summary>
+        /// Gets rates from ShipEngine using the given request
+        /// </summary>
+        /// <param name="request">The rate shipment request</param>
+        /// <returns>The rate shipment response</returns>
+        public async Task<RateShipmentResponse> RateShipment(RateShipmentRequest request)
         {
-            throw new NotImplementedException();
+            IRatesApi ratesApi = shipEngineApiFactory.CreateRatesApi();
+
+            try
+            {
+                return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
         }
     }
 }
