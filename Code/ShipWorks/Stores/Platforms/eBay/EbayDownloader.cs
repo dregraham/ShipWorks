@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -15,6 +16,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -23,6 +25,8 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -30,7 +34,6 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -55,8 +58,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, IEbayWebClient webClient,
-            IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+        public EbayDownloader(StoreEntity store,
+                IEbayWebClient webClient,
+                IStoreTypeManager storeTypeManager,
+                IConfigurationData configurationData,
+                ISqlAdapterFactory sqlAdapterFactory)
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.webClient = webClient;
@@ -117,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Controls whether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
             //bool usePagedDownload = true;
 
-            // Get the date\time to start downloading from
+            // Get the date/time to start downloading from
             DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false)) ??
                 DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
@@ -464,7 +470,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 shipment.Order = toOrder;
 
                 // Mark all the carrier-specific stuff as new
-                foreach (IEntityCore entity in ((IEntityCore)shipment).GetDependingRelatedEntities())
+                foreach (IEntityCore entity in ((IEntityCore) shipment).GetDependingRelatedEntities())
                 {
                     EntityUtility.MarkAsNew(entity);
                 }
@@ -484,18 +490,18 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the pre-fetch path used to load a shipment
         /// </summary>
-        private static EntityQuery<ShipmentEntity> FullShipmentPrefetchPath(EntityQuery<ShipmentEntity> entityQuery)
+        private static EntityQuery<ShipmentEntity> FullShipmentPrefetchPath(EntityQuery<ShipmentEntity> query)
         {
-            return entityQuery.WithPath(ShipmentEntity.PrefetchPathPostal.WithSubPath(PostalShipmentEntity.PrefetchPathUsps).WithSubPath(PostalShipmentEntity.PrefetchPathEndicia))
-                .WithPath(ShipmentEntity.PrefetchPathUps.WithSubPath(UpsShipmentEntity.PrefetchPathPackages))
-                .WithPath(ShipmentEntity.PrefetchPathFedEx.WithSubPath(FedExShipmentEntity.PrefetchPathPackages))
-                .WithPath(ShipmentEntity.PrefetchPathIParcel.WithSubPath(IParcelShipmentEntity.PrefetchPathPackages))
-                .WithPath(ShipmentEntity.PrefetchPathCustomsItems)
-                .WithPath(ShipmentEntity.PrefetchPathReturnItems)
-                .WithPath(ShipmentEntity.PrefetchPathAmazon)
-                .WithPath(ShipmentEntity.PrefetchPathBestRate)
-                .WithPath(ShipmentEntity.PrefetchPathOnTrac)
-                .WithPath(ShipmentEntity.PrefetchPathOther);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return Enum.GetValues(typeof(ShipmentTypeCode))
+                    .OfType<ShipmentTypeCode>()
+                    .Where(x => lifetimeScope.IsRegisteredWithKey<IShipmentTypePrefetchProvider>(x))
+                    .Select(x => lifetimeScope.ResolveKeyed<IShipmentTypePrefetchProvider>(x))
+                    .Aggregate(ShipmentTypePrefetchPath.Empty, (path, x) => path.With(x))
+                    .ApplyTo(query)
+                    .WithPath(ShipmentEntity.PrefetchPathCustomsItems);
+            }
         }
 
         /// <summary>
