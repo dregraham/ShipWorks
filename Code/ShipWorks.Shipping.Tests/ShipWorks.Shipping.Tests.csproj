@@ -282,6 +282,7 @@
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
