@@ -13,6 +13,7 @@ namespace ShipWorks.Shipping.Carriers
     /// </summary>
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsWorldShip)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.FedEx)]
     public class WeekdaysOnlyShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;
