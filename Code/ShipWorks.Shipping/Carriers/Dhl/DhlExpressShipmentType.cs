@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Data.Model.Custom;
 using System.Linq;
 using System;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -14,13 +13,10 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Settings.Origin;
-using Interapptive.Shared;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -56,6 +52,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <c>true</c> if [supports multiple packages]; otherwise, <c>false</c>.
         /// </value>
         public override bool SupportsMultiplePackages => true;
+
+        /// <summary>
+        /// Indicates if the shipment service type supports getting rates
+        /// </summary>
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Create and Initialize a new shipment
