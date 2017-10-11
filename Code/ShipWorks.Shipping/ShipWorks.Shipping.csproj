@@ -189,6 +189,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressRatingService.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
