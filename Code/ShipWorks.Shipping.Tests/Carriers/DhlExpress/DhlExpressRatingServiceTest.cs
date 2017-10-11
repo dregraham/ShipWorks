@@ -1,6 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Moq;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.ShipEngine;
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.GetRates(shipment);
 
-            mock.Mock<IRateShipmentRequestFactory>().Verify(r => r.Create(shipment));
+            mock.Mock<ICarrierRateShipmentRequestFactory>().Verify(r => r.Create(shipment));
         }
 
         [Fact]
@@ -40,14 +41,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             ShipmentEntity shipment = new ShipmentEntity();
             RateShipmentRequest request = new RateShipmentRequest();
 
-            Mock<IRateShipmentRequestFactory> requestFactory = mock.Mock<IRateShipmentRequestFactory>();
+            Mock<ICarrierRateShipmentRequestFactory> requestFactory = mock.Mock<ICarrierRateShipmentRequestFactory>();
             requestFactory.Setup(r => r.Create(shipment)).Returns(request);
 
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
             
             testObject.GetRates(shipment);
 
-            mock.Mock<IShipEngineWebClient>().Verify(r => r.RateShipment(request));
+            mock.Mock<IShipEngineWebClient>().Verify(r => r.RateShipment(request, ApiLogSource.DHLExpress));
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             ShipmentEntity shipment = new ShipmentEntity();
             RateShipmentResponse rateResponse = new RateShipmentResponse();
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>())).Returns(Task.FromResult(rateResponse));
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);

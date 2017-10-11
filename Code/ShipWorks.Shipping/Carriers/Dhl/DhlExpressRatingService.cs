@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly IRateShipmentRequestFactory rateRequestFactory;
+        private readonly ICarrierRateShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
 
@@ -23,11 +24,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            IRateShipmentRequestFactory rateRequestFactory, 
+            Func<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
             IShipEngineRateGroupFactory rateGroupFactory)
         {
-            this.rateRequestFactory = rateRequestFactory;
+            this.rateRequestFactory = rateRequestFactory(ShipmentTypeCode.DhlExpress);
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
         }
@@ -41,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 RateShipmentRequest request = rateRequestFactory.Create(shipment);
                 RateShipmentResponse rateResponse = Task.Run(async () => {
-                    return await shipEngineWebClient.RateShipment(request).ConfigureAwait(false);
+                    return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
                 }).Result;
                                 
                 return rateGroupFactory.Create(rateResponse, ShipmentTypeCode.DhlExpress);
