@@ -36,7 +36,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Fact]
         public void EnsureAllShipmentTypesHaveShipmentDateManipulatorRegistered()
         {
-            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Endicia, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Other };
+            IEnumerable<ShipmentTypeCode> excludedTypes = new[] { ShipmentTypeCode.Usps,
+                                                                  ShipmentTypeCode.Endicia,
+                                                                  ShipmentTypeCode.Express1Usps,
+                                                                  ShipmentTypeCode.PostalWebTools,
+                                                                  ShipmentTypeCode.Other };
 
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {
