@@ -246,6 +246,7 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
+    <Compile Include="ShipEngine\IRateShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
