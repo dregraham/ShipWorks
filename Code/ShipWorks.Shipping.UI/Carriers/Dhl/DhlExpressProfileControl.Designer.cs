@@ -36,13 +36,14 @@
             this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge11 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupOptions = new System.Windows.Forms.GroupBox();
+            this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.nonMachinableState = new System.Windows.Forms.CheckBox();
             this.labelDuty = new System.Windows.Forms.Label();
             this.labelNonMachinable = new System.Windows.Forms.Label();
+            this.labelSaturday = new System.Windows.Forms.Label();
             this.dutyDeliveryPaid = new System.Windows.Forms.CheckBox();
             this.dutyDeliveryPaidState = new System.Windows.Forms.CheckBox();
             this.saturdayDelivery = new System.Windows.Forms.CheckBox();
-            this.labelSaturday = new System.Windows.Forms.Label();
             this.saturdayState = new System.Windows.Forms.CheckBox();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.groupShipment = new System.Windows.Forms.GroupBox();
@@ -52,8 +53,8 @@
             this.serviceState = new System.Windows.Forms.CheckBox();
             this.groupBoxFrom = new System.Windows.Forms.GroupBox();
             this.labelAccount = new System.Windows.Forms.Label();
-            this.dhlExpressAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.accountState = new System.Windows.Forms.CheckBox();
+            this.dhlExpressAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.tabPagePackages = new System.Windows.Forms.TabPage();
             this.panelPackageControls = new System.Windows.Forms.Panel();
@@ -62,7 +63,6 @@
             this.packagesCount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackages = new System.Windows.Forms.Label();
             this.packagesState = new System.Windows.Forms.CheckBox();
-            this.nonMachinable = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupLabels.SuspendLayout();
@@ -122,7 +122,7 @@
             this.labelThermalNote.Name = "labelThermalNote";
             this.labelThermalNote.Size = new System.Drawing.Size(258, 13);
             this.labelThermalNote.TabIndex = 103;
-            this.labelThermalNote.Text = "Note: DHL Express only supports EPL thermal labels.";
+            this.labelThermalNote.Text = "Note: DHL Express only supports ZPL thermal labels.";
             this.labelThermalNote.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // requestedLabelFormat
@@ -175,6 +175,16 @@
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
             // 
+            // nonMachinable
+            // 
+            this.nonMachinable.AutoSize = true;
+            this.nonMachinable.Location = new System.Drawing.Point(128, 65);
+            this.nonMachinable.Name = "nonMachinable";
+            this.nonMachinable.Size = new System.Drawing.Size(102, 17);
+            this.nonMachinable.TabIndex = 86;
+            this.nonMachinable.Text = "Non-Machinable";
+            this.nonMachinable.UseVisualStyleBackColor = true;
+            // 
             // nonMachinableState
             // 
             this.nonMachinableState.AutoSize = true;
@@ -207,6 +217,16 @@
             this.labelNonMachinable.TabIndex = 77;
             this.labelNonMachinable.Text = "Non-Machinable:";
             // 
+            // labelSaturday
+            // 
+            this.labelSaturday.AutoSize = true;
+            this.labelSaturday.BackColor = System.Drawing.Color.Transparent;
+            this.labelSaturday.Location = new System.Drawing.Point(67, 20);
+            this.labelSaturday.Name = "labelSaturday";
+            this.labelSaturday.Size = new System.Drawing.Size(55, 13);
+            this.labelSaturday.TabIndex = 79;
+            this.labelSaturday.Text = "Saturday:";
+            // 
             // dutyDeliveryPaid
             // 
             this.dutyDeliveryPaid.AutoSize = true;
@@ -238,16 +258,6 @@
             this.saturdayDelivery.TabIndex = 78;
             this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = true;
-            // 
-            // labelSaturday
-            // 
-            this.labelSaturday.AutoSize = true;
-            this.labelSaturday.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturday.Location = new System.Drawing.Point(67, 20);
-            this.labelSaturday.Name = "labelSaturday";
-            this.labelSaturday.Size = new System.Drawing.Size(55, 13);
-            this.labelSaturday.TabIndex = 79;
-            this.labelSaturday.Text = "Saturday:";
             // 
             // saturdayState
             // 
@@ -354,16 +364,6 @@
             this.labelAccount.TabIndex = 16;
             this.labelAccount.Text = "Account:";
             // 
-            // dhlExpressAccount
-            // 
-            this.dhlExpressAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.dhlExpressAccount.FormattingEnabled = true;
-            this.dhlExpressAccount.Location = new System.Drawing.Point(128, 20);
-            this.dhlExpressAccount.Name = "dhlExpressAccount";
-            this.dhlExpressAccount.PromptText = "(Multiple Values)";
-            this.dhlExpressAccount.Size = new System.Drawing.Size(206, 21);
-            this.dhlExpressAccount.TabIndex = 1;
-            // 
             // accountState
             // 
             this.accountState.AutoSize = true;
@@ -375,6 +375,16 @@
             this.accountState.TabIndex = 0;
             this.accountState.Tag = "";
             this.accountState.UseVisualStyleBackColor = true;
+            // 
+            // dhlExpressAccount
+            // 
+            this.dhlExpressAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dhlExpressAccount.FormattingEnabled = true;
+            this.dhlExpressAccount.Location = new System.Drawing.Point(128, 20);
+            this.dhlExpressAccount.Name = "dhlExpressAccount";
+            this.dhlExpressAccount.PromptText = "(Multiple Values)";
+            this.dhlExpressAccount.Size = new System.Drawing.Size(206, 21);
+            this.dhlExpressAccount.TabIndex = 1;
             // 
             // kryptonBorderEdge1
             // 
@@ -477,16 +487,6 @@
             this.packagesState.TabIndex = 0;
             this.packagesState.Tag = "";
             this.packagesState.UseVisualStyleBackColor = true;
-            // 
-            // nonMachinable
-            // 
-            this.nonMachinable.AutoSize = true;
-            this.nonMachinable.Location = new System.Drawing.Point(128, 65);
-            this.nonMachinable.Name = "nonMachinable";
-            this.nonMachinable.Size = new System.Drawing.Size(102, 17);
-            this.nonMachinable.TabIndex = 86;
-            this.nonMachinable.Text = "Non-Machinable";
-            this.nonMachinable.UseVisualStyleBackColor = true;
             // 
             // DhlExpressProfileControl
             // 

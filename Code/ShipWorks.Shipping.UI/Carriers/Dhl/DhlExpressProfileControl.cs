@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             }
 
             // dhl does not support ZPL
-            requestedLabelFormat.ExcludeFormats(ThermalLanguage.ZPL);
+            requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
         /// <summary>
