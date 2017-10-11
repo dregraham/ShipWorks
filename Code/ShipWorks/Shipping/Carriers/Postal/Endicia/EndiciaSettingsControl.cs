@@ -76,7 +76,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 optionsControl.ShowShippingCutoffDate = true;
             }
-            
+            else
+            {
+                // Doesn't make sense to show Endicia insurance choosing to Express1
+                panelInsurance.Visible = false;
+            }
 
             express1Options.Top = optionsControl.Bottom;
 
