@@ -14,6 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Usps)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Endicia)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.PostalWebTools)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Express1Usps)]
     public class PostalShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;

@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
-using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Startup;
 using Xunit;
 using ShipWorks.Shipping.Carriers;
@@ -33,8 +24,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator))]
@@ -50,8 +42,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             IEnumerable<ShipmentTypeCode> excludedTypes = new[] {
                 ShipmentTypeCode.Usps,
                 ShipmentTypeCode.Endicia,
-                ShipmentTypeCode.FedEx,
+                ShipmentTypeCode.Express1Usps,
                 ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.FedEx,
                 ShipmentTypeCode.Other,
                 ShipmentTypeCode.UpsWorldShip,
                 ShipmentTypeCode.UpsOnLineTools};
