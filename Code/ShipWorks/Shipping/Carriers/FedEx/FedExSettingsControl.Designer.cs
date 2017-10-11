@@ -43,12 +43,13 @@
             this.fimsUsername = new System.Windows.Forms.TextBox();
             this.fimsPassword = new System.Windows.Forms.TextBox();
             this.fimsPasswordLabel = new System.Windows.Forms.Label();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.SuspendLayout();
             // 
             // shippersControl
             // 
             this.shippersControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.shippersControl.Location = new System.Drawing.Point(27, 149);
+            this.shippersControl.Location = new System.Drawing.Point(27, 174);
             this.shippersControl.Name = "shippersControl";
             this.shippersControl.Size = new System.Drawing.Size(407, 168);
             this.shippersControl.TabIndex = 2;
@@ -65,7 +66,7 @@
             // 
             this.labelShippers.AutoSize = true;
             this.labelShippers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShippers.Location = new System.Drawing.Point(8, 128);
+            this.labelShippers.Location = new System.Drawing.Point(8, 153);
             this.labelShippers.Name = "labelShippers";
             this.labelShippers.Size = new System.Drawing.Size(95, 13);
             this.labelShippers.TabIndex = 1;
@@ -75,7 +76,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 846);
+            this.label1.Location = new System.Drawing.Point(8, 871);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 3;
@@ -86,7 +87,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(FedEx Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "FedEx Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 865);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 890);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 4;
@@ -95,7 +96,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 898);
+            this.pennyOne.Location = new System.Drawing.Point(27, 923);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 5;
@@ -108,7 +109,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(319, 899);
+            this.pennyOneLink.Location = new System.Drawing.Point(319, 924);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 6;
@@ -119,7 +120,7 @@
             // 
             this.fimsLabel.AutoSize = true;
             this.fimsLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fimsLabel.Location = new System.Drawing.Point(8, 331);
+            this.fimsLabel.Location = new System.Drawing.Point(8, 356);
             this.fimsLabel.Name = "fimsLabel";
             this.fimsLabel.Size = new System.Drawing.Size(227, 13);
             this.fimsLabel.TabIndex = 7;
@@ -128,7 +129,7 @@
             // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 429);
+            this.servicePicker.Location = new System.Drawing.Point(9, 454);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(421, 200);
             this.servicePicker.TabIndex = 13;
@@ -136,7 +137,7 @@
             // packagePicker
             // 
             this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packagePicker.Location = new System.Drawing.Point(9, 639);
+            this.packagePicker.Location = new System.Drawing.Point(9, 664);
             this.packagePicker.Name = "packagePicker";
             this.packagePicker.Size = new System.Drawing.Size(421, 200);
             this.packagePicker.TabIndex = 14;
@@ -144,7 +145,7 @@
             // enableFims
             // 
             this.enableFims.AutoSize = true;
-            this.enableFims.Location = new System.Drawing.Point(27, 353);
+            this.enableFims.Location = new System.Drawing.Point(27, 378);
             this.enableFims.Name = "enableFims";
             this.enableFims.Size = new System.Drawing.Size(117, 17);
             this.enableFims.TabIndex = 8;
@@ -155,7 +156,7 @@
             // fimsUsernameLabel
             // 
             this.fimsUsernameLabel.AutoSize = true;
-            this.fimsUsernameLabel.Location = new System.Drawing.Point(45, 376);
+            this.fimsUsernameLabel.Location = new System.Drawing.Point(45, 401);
             this.fimsUsernameLabel.Name = "fimsUsernameLabel";
             this.fimsUsernameLabel.Size = new System.Drawing.Size(86, 13);
             this.fimsUsernameLabel.TabIndex = 9;
@@ -163,14 +164,14 @@
             // 
             // fimsUsername
             // 
-            this.fimsUsername.Location = new System.Drawing.Point(135, 374);
+            this.fimsUsername.Location = new System.Drawing.Point(135, 399);
             this.fimsUsername.Name = "fimsUsername";
             this.fimsUsername.Size = new System.Drawing.Size(201, 21);
             this.fimsUsername.TabIndex = 10;
             // 
             // fimsPassword
             // 
-            this.fimsPassword.Location = new System.Drawing.Point(135, 401);
+            this.fimsPassword.Location = new System.Drawing.Point(135, 426);
             this.fimsPassword.Name = "fimsPassword";
             this.fimsPassword.Size = new System.Drawing.Size(201, 21);
             this.fimsPassword.TabIndex = 12;
@@ -179,17 +180,26 @@
             // fimsPasswordLabel
             // 
             this.fimsPasswordLabel.AutoSize = true;
-            this.fimsPasswordLabel.Location = new System.Drawing.Point(47, 403);
+            this.fimsPasswordLabel.Location = new System.Drawing.Point(47, 428);
             this.fimsPasswordLabel.Name = "fimsPasswordLabel";
             this.fimsPasswordLabel.Size = new System.Drawing.Size(84, 13);
             this.fimsPasswordLabel.TabIndex = 11;
             this.fimsPasswordLabel.Text = "FIMS Password:";
+            // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(27, 119);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 15;
             // 
             // FedExSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.fimsPassword);
             this.Controls.Add(this.fimsPasswordLabel);
             this.Controls.Add(this.packagePicker);
@@ -206,7 +216,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(452, 922);
+            this.Size = new System.Drawing.Size(503, 977);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,5 +239,6 @@
         private System.Windows.Forms.TextBox fimsUsername;
         private System.Windows.Forms.TextBox fimsPassword;
         private System.Windows.Forms.Label fimsPasswordLabel;
+        private Editing.ShippingDateCutoffControl shippingCutoff;
     }
 }
