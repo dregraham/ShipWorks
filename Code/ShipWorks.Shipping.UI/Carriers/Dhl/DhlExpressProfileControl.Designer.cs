@@ -234,7 +234,7 @@
             this.dutyDeliveryPaid.Name = "dutyDeliveryPaid";
             this.dutyDeliveryPaid.Size = new System.Drawing.Size(114, 17);
             this.dutyDeliveryPaid.TabIndex = 83;
-            this.dutyDeliveryPaid.Text = "Duty Delivery Paid";
+            this.dutyDeliveryPaid.Text = "Delivery Duty Paid";
             this.dutyDeliveryPaid.UseVisualStyleBackColor = true;
             // 
             // dutyDeliveryPaidState

@@ -111,7 +111,7 @@
             // 
             this.sectionLabelOptions.Collapsed = false;
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
-            this.sectionLabelOptions.Size = new System.Drawing.Size(389, 70);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(389, 62);
             // 
             // sectionFrom
             // 
@@ -254,60 +254,63 @@
             // 
             this.saturdayDelivery.AutoSize = true;
             this.saturdayDelivery.BackColor = System.Drawing.Color.White;
-            this.saturdayDelivery.Location = new System.Drawing.Point(145, 39);
+            this.saturdayDelivery.Location = new System.Drawing.Point(108, 14);
             this.saturdayDelivery.Name = "saturdayDelivery";
-            this.saturdayDelivery.Size = new System.Drawing.Size(15, 14);
+            this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 8;
+            this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = false;
             // 
             // labelSaturdayDelivery
             // 
             this.labelSaturdayDelivery.AutoSize = true;
             this.labelSaturdayDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturdayDelivery.Location = new System.Drawing.Point(41, 38);
+            this.labelSaturdayDelivery.Location = new System.Drawing.Point(47, 15);
             this.labelSaturdayDelivery.Name = "labelSaturdayDelivery";
-            this.labelSaturdayDelivery.Size = new System.Drawing.Size(97, 13);
+            this.labelSaturdayDelivery.Size = new System.Drawing.Size(55, 13);
             this.labelSaturdayDelivery.TabIndex = 7;
-            this.labelSaturdayDelivery.Text = "Saturday Delivery:";
+            this.labelSaturdayDelivery.Text = "Saturday:";
             // 
             // dutyPaid
             // 
             this.dutyPaid.AutoSize = true;
             this.dutyPaid.BackColor = System.Drawing.Color.White;
-            this.dutyPaid.Location = new System.Drawing.Point(145, 16);
+            this.dutyPaid.Location = new System.Drawing.Point(108, 37);
             this.dutyPaid.Name = "dutyPaid";
-            this.dutyPaid.Size = new System.Drawing.Size(15, 14);
+            this.dutyPaid.Size = new System.Drawing.Size(114, 17);
             this.dutyPaid.TabIndex = 5;
+            this.dutyPaid.Text = "Delivery Duty Paid";
             this.dutyPaid.UseVisualStyleBackColor = false;
             // 
             // labelDutyPaid
             // 
             this.labelDutyPaid.AutoSize = true;
             this.labelDutyPaid.BackColor = System.Drawing.Color.Transparent;
-            this.labelDutyPaid.Location = new System.Drawing.Point(39, 15);
+            this.labelDutyPaid.Location = new System.Drawing.Point(68, 38);
             this.labelDutyPaid.Name = "labelDutyPaid";
-            this.labelDutyPaid.Size = new System.Drawing.Size(99, 13);
+            this.labelDutyPaid.Size = new System.Drawing.Size(34, 13);
             this.labelDutyPaid.TabIndex = 1;
-            this.labelDutyPaid.Text = "Delivery Duty Paid:";
+            this.labelDutyPaid.Text = "Duty:";
             // 
             // labelNonMachinable
             // 
             this.labelNonMachinable.AutoSize = true;
             this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachinable.Location = new System.Drawing.Point(52, 61);
+            this.labelNonMachinable.Location = new System.Drawing.Point(15, 61);
             this.labelNonMachinable.Name = "labelNonMachinable";
-            this.labelNonMachinable.Size = new System.Drawing.Size(86, 13);
+            this.labelNonMachinable.Size = new System.Drawing.Size(87, 13);
             this.labelNonMachinable.TabIndex = 7;
-            this.labelNonMachinable.Text = "Non Machinable:";
+            this.labelNonMachinable.Text = "Non-Machinable:";
             // 
             // nonMachinable
             // 
             this.nonMachinable.AutoSize = true;
             this.nonMachinable.BackColor = System.Drawing.Color.White;
-            this.nonMachinable.Location = new System.Drawing.Point(145, 62);
+            this.nonMachinable.Location = new System.Drawing.Point(108, 60);
             this.nonMachinable.Name = "nonMachinable";
-            this.nonMachinable.Size = new System.Drawing.Size(15, 14);
+            this.nonMachinable.Size = new System.Drawing.Size(102, 17);
             this.nonMachinable.TabIndex = 8;
+            this.nonMachinable.Text = "Non-Machinable";
             this.nonMachinable.UseVisualStyleBackColor = false;
             // 
             // packageControl
