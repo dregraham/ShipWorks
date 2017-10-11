@@ -90,6 +90,12 @@ public partial class Triggers
         AuditService.AuditExecutingTrigger("iParcelShipment");
     }
 
+    [SqlTrigger(Target = "DhlExpressShipment", Event = "FOR INSERT, UPDATE, DELETE")]
+    public static void DhlExpressShipmentAuditTrigger()
+    {
+        AuditService.AuditExecutingTrigger("DhlExpressShipment");
+    }
+
     [SqlTrigger(Target = "EbayOrder", Event = "FOR INSERT, UPDATE, DELETE")]
     public static void EbayOrderAuditTrigger()
     {

@@ -1935,6 +1935,54 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressPackage.</summary>
+	public enum DhlExpressPackageFieldIndex
+	{
+		///<summary>DhlExpressPackageID. </summary>
+		DhlExpressPackageID,
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
+		///<summary>TrackingNumber. </summary>
+		TrackingNumber,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressShipment.</summary>
+	public enum DhlExpressShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DimensionsProfile.</summary>
 	public enum DimensionsProfileFieldIndex
 	{
@@ -11735,6 +11783,10 @@ namespace ShipWorks.Data.Model
 		CustomerEntity,
 		///<summary>DhlExpressAccount</summary>
 		DhlExpressAccountEntity,
+		///<summary>DhlExpressPackage</summary>
+		DhlExpressPackageEntity,
+		///<summary>DhlExpressShipment</summary>
+		DhlExpressShipmentEntity,
 		///<summary>DimensionsProfile</summary>
 		DimensionsProfileEntity,
 		///<summary>Download</summary>

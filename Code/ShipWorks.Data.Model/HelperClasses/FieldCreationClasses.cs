@@ -4464,6 +4464,106 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>
+	public partial class DhlExpressPackageFields
+	{
+		/// <summary>Creates a new DhlExpressPackageEntity.DhlExpressPackageID field instance</summary>
+		public static EntityField2 DhlExpressPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DhlExpressPackageID);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.DeclaredValue field instance</summary>
+		public static EntityField2 DeclaredValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DeclaredValue);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.TrackingNumber field instance</summary>
+		public static EntityField2 TrackingNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.TrackingNumber);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity DhlExpressShipmentEntity</summary>
+	public partial class DhlExpressShipmentFields
+	{
+		/// <summary>Creates a new DhlExpressShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.DhlExpressAccountID field instance</summary>
+		public static EntityField2 DhlExpressAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.DhlExpressAccountID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.Service);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.DeliveredDutyPaid field instance</summary>
+		public static EntityField2 DeliveredDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.DeliveredDutyPaid);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.NonMachinable field instance</summary>
+		public static EntityField2 NonMachinable
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.NonMachinable);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.SaturdayDelivery field instance</summary>
+		public static EntityField2 SaturdayDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.SaturdayDelivery);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.RequestedLabelFormat);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity DimensionsProfileEntity</summary>
 	public partial class DimensionsProfileFields
 	{

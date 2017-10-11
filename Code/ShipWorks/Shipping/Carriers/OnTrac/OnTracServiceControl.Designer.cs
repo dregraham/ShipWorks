@@ -111,7 +111,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Location = new System.Drawing.Point(79, 358);
             this.residentialDetermination.Size = new System.Drawing.Size(300, 21);
-            this.residentialDetermination.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // sectionReturns
             //
@@ -377,7 +376,6 @@
             this.codAmount.Size = new System.Drawing.Size(94, 21);
             this.codAmount.TabIndex = 65;
             this.codAmount.Text = "$0.00";
-            this.codAmount.TextChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // saturdayDelivery
             //
@@ -389,7 +387,6 @@
             this.saturdayDelivery.TabIndex = 67;
             this.saturdayDelivery.Text = "Saturday Delivery";
             this.saturdayDelivery.UseVisualStyleBackColor = false;
-            this.saturdayDelivery.CheckedChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // labelService
             //
@@ -440,7 +437,6 @@
             this.insuranceControl.Name = "insuranceControl";
             this.insuranceControl.Size = new System.Drawing.Size(493, 50);
             this.insuranceControl.TabIndex = 74;
-            this.insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
             //
             // dimensionsControl
             //
@@ -451,7 +447,6 @@
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 73;
-            this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
             //
             // label3
@@ -485,7 +480,6 @@
             this.weight.Size = new System.Drawing.Size(269, 21);
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.weight.WeightChanged += OnShipSenseFieldChanged;
             this.weight.ShowShortcutInfo = true;
             //
@@ -498,7 +492,6 @@
             this.packagingType.PromptText = "(Multiple Values)";
             this.packagingType.Size = new System.Drawing.Size(175, 21);
             this.packagingType.TabIndex = 75;
-            this.packagingType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             //
             // labelPackaging
             //

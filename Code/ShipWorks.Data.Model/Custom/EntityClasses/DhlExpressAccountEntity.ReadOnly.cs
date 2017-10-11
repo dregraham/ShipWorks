@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            shipment.DhlExpress.DhlExpressAccountID = AccountId;
         }
 
         /// <summary>

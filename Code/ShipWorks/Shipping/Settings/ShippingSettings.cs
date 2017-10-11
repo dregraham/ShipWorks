@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private static void SetDefaultProviderIfNecessary(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeCode)
         {
-            if (!settings.ConfiguredTypes.Any() && settings.DefaultType == (int) ShipmentTypeCode.None)
+            if (!settings.ConfiguredTypes.Any(t => t != ShipmentTypeCode.BestRate) && settings.DefaultType == (int) ShipmentTypeCode.None)
             {
                 settings.DefaultType = (int) shipmentTypeCode;
             }

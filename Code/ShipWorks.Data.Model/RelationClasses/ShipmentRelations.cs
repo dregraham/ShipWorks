@@ -35,6 +35,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.ValidatedAddressEntityUsingConsumerID);
 			toReturn.Add(this.AmazonShipmentEntityUsingShipmentID);
 			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
+			toReturn.Add(this.DhlExpressShipmentEntityUsingShipmentID);
 			toReturn.Add(this.FedExShipmentEntityUsingShipmentID);
 			toReturn.Add(this.InsurancePolicyEntityUsingShipmentID);
 			toReturn.Add(this.IParcelShipmentEntityUsingShipmentID);
@@ -131,6 +132,25 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("BestRateShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and DhlExpressShipmentEntity over the 1:1 relation they have, using the relation between the fields:
+		/// Shipment.ShipmentID - DhlExpressShipment.ShipmentID
+		/// </summary>
+		public virtual IEntityRelation DhlExpressShipmentEntityUsingShipmentID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "DhlExpress", true);
+
+				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, DhlExpressShipmentFields.ShipmentID);
+
+
+
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DhlExpressShipmentEntity", false);
 				return relation;
 			}
 		}
@@ -357,6 +377,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new ShipmentRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation AmazonShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().AmazonShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation BestRateShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().BestRateShipmentEntityUsingShipmentID;
+		internal static readonly IEntityRelation DhlExpressShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().DhlExpressShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation FedExShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().FedExShipmentEntityUsingShipmentID;
 		internal static readonly IEntityRelation InsurancePolicyEntityUsingShipmentIDStatic = new ShipmentRelations().InsurancePolicyEntityUsingShipmentID;
 		internal static readonly IEntityRelation IParcelShipmentEntityUsingShipmentIDStatic = new ShipmentRelations().IParcelShipmentEntityUsingShipmentID;
