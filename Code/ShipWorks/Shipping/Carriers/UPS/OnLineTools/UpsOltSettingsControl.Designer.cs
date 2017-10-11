@@ -40,12 +40,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
             this.upsPackagingTypeServicePickerControl = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypePickerControl();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.SuspendLayout();
             // 
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.Location = new System.Drawing.Point(27, 79);
+            this.accountControl.Location = new System.Drawing.Point(27, 104);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(405, 168);
             this.accountControl.TabIndex = 1;
@@ -54,7 +55,7 @@
             // 
             this.labelAccounts.AutoSize = true;
             this.labelAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAccounts.Location = new System.Drawing.Point(8, 60);
+            this.labelAccounts.Location = new System.Drawing.Point(8, 85);
             this.labelAccounts.Name = "labelAccounts";
             this.labelAccounts.Size = new System.Drawing.Size(84, 13);
             this.labelAccounts.TabIndex = 1;
@@ -73,7 +74,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(UPS Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "UPS Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 768);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 793);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 6;
@@ -83,7 +84,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 749);
+            this.label1.Location = new System.Drawing.Point(9, 774);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 5;
@@ -95,7 +96,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(319, 800);
+            this.pennyOneLink.Location = new System.Drawing.Point(319, 825);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 8;
@@ -105,7 +106,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 799);
+            this.pennyOne.Location = new System.Drawing.Point(27, 824);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 7;
@@ -114,7 +115,7 @@
             // 
             // upsMailInnovationsOptions
             // 
-            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 292);
+            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 317);
             this.upsMailInnovationsOptions.Name = "upsMailInnovationsOptions";
             this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 23);
             this.upsMailInnovationsOptions.TabIndex = 11;
@@ -123,7 +124,7 @@
             // 
             this.labelInfo.AutoSize = true;
             this.labelInfo.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelInfo.Location = new System.Drawing.Point(9, 271);
+            this.labelInfo.Location = new System.Drawing.Point(9, 296);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(292, 13);
             this.labelInfo.TabIndex = 10;
@@ -133,7 +134,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 256);
+            this.label2.Location = new System.Drawing.Point(8, 281);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 9;
@@ -142,7 +143,7 @@
             // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 322);
+            this.servicePicker.Location = new System.Drawing.Point(9, 347);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(421, 200);
             this.servicePicker.TabIndex = 12;
@@ -150,16 +151,25 @@
             // upsPackagingTypeServicePickerControl
             // 
             this.upsPackagingTypeServicePickerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upsPackagingTypeServicePickerControl.Location = new System.Drawing.Point(9, 539);
+            this.upsPackagingTypeServicePickerControl.Location = new System.Drawing.Point(9, 564);
             this.upsPackagingTypeServicePickerControl.Name = "upsPackagingTypeServicePickerControl";
             this.upsPackagingTypeServicePickerControl.Size = new System.Drawing.Size(421, 200);
             this.upsPackagingTypeServicePickerControl.TabIndex = 13;
+            // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(24, 51);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 14;
             // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.upsPackagingTypeServicePickerControl);
             this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.upsMailInnovationsOptions);
@@ -173,7 +183,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(440, 844);
+            this.Size = new System.Drawing.Size(494, 869);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,5 +203,6 @@
         private System.Windows.Forms.Label label2;
         private UpsServiceTypeServicePickerControl servicePicker;
         private UpsPackagingTypePickerControl upsPackagingTypeServicePickerControl;
+        private Editing.ShippingDateCutoffControl shippingCutoff;
     }
 }
