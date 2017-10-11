@@ -23,9 +23,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the RatesApi
         /// </summary>
-        public IRatesApi CreateRatesApi()
-        {
-            throw new System.NotImplementedException();
-        }
+        public IRatesApi CreateRatesApi() => new RatesApi();
     }
 }
