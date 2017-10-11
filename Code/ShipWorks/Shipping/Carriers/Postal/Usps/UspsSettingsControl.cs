@@ -185,6 +185,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             log.Info("Saving settings to UspsOptionsControl");
             optionsControl.SaveSettings(settings);
             log.Info("Saved settings to UspsOptionsControl");
+
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Usps)
+            {
+                log.InfoFormat("Preparing to save Express1 options {0}", express1Options == null);
+                express1Options.SaveSettings(settings);
+                log.Info("Finished saving Express1 options");
+            }
+            else
+            {
+                log.InfoFormat("Preparing to save Express1 settings {0}", express1Settings == null);
+                express1Settings.SaveSettings(settings);
+                log.Info("Finished saving Express1 settings");
+            }
+
             settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
 
             if (uspsResellerType == UspsResellerType.None)
