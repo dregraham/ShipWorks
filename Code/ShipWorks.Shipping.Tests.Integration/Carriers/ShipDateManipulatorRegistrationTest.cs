@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.FedEx, typeof(PostalShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
