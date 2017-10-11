@@ -190,7 +190,7 @@
             this.nonMachinableState.AutoSize = true;
             this.nonMachinableState.Checked = true;
             this.nonMachinableState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.nonMachinableState.Location = new System.Drawing.Point(6, 66);
+            this.nonMachinableState.Location = new System.Drawing.Point(9, 66);
             this.nonMachinableState.Name = "nonMachinableState";
             this.nonMachinableState.Size = new System.Drawing.Size(15, 14);
             this.nonMachinableState.TabIndex = 75;
@@ -242,7 +242,7 @@
             this.dutyDeliveryPaidState.AutoSize = true;
             this.dutyDeliveryPaidState.Checked = true;
             this.dutyDeliveryPaidState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dutyDeliveryPaidState.Location = new System.Drawing.Point(6, 43);
+            this.dutyDeliveryPaidState.Location = new System.Drawing.Point(9, 43);
             this.dutyDeliveryPaidState.Name = "dutyDeliveryPaidState";
             this.dutyDeliveryPaidState.Size = new System.Drawing.Size(15, 14);
             this.dutyDeliveryPaidState.TabIndex = 82;
@@ -264,7 +264,7 @@
             this.saturdayState.AutoSize = true;
             this.saturdayState.Checked = true;
             this.saturdayState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saturdayState.Location = new System.Drawing.Point(6, 20);
+            this.saturdayState.Location = new System.Drawing.Point(9, 20);
             this.saturdayState.Name = "saturdayState";
             this.saturdayState.Size = new System.Drawing.Size(15, 14);
             this.saturdayState.TabIndex = 77;
@@ -277,9 +277,9 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge2.Location = new System.Drawing.Point(29, 19);
+            this.kryptonBorderEdge2.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
-            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 158);
+            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 67);
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
@@ -305,7 +305,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(29, 18);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 26);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 25);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // labelService
@@ -442,7 +442,7 @@
             this.kryptonBorderEdge3.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge3.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge3.Name = "kryptonBorderEdge3";
-            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 24);
+            this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 25);
             this.kryptonBorderEdge3.Text = "kryptonBorderEdge3";
             // 
             // packagesCount
