@@ -3,9 +3,9 @@
 namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
-    /// interface for creating the ShipEngine CarrierAccountsApi
+    /// interface for creating ShipEngine API Calls
     /// </summary>
-    public interface IShipEngineCarrierAccountsApiFactory
+    public interface IShipEngineApiFactory
     {
         /// <summary>
         /// Create the CarrierAccountsApi
@@ -18,5 +18,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns></returns>
         ICarriersApi CreateCarrierApi();
+
+        /// <summary>
+        /// Creates the Rate API
+        /// </summary>
+        IRatesApi CreateRatesApi();
     }
 }

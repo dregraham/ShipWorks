@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
     {
         readonly AutoMock mock;
         private readonly Mock<IShipEngineApiKey> apiKey;
-        private readonly Mock<IShipEngineCarrierAccountsApiFactory> accountsApiFactory;
+        private readonly Mock<IShipEngineApiFactory> accountsApiFactory;
         private readonly Mock<ICarrierAccountsApi> accountsApi;
         private readonly Mock<ICarriersApi> carriersApi;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>())).Returns(Task.FromResult(carriers));
 
-            accountsApiFactory = mock.Mock<IShipEngineCarrierAccountsApiFactory>();
+            accountsApiFactory = mock.Mock<IShipEngineApiFactory>();
             accountsApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
             accountsApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
 

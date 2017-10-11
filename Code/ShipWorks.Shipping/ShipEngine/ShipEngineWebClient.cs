@@ -20,14 +20,14 @@ namespace ShipWorks.Shipping.ShipEngine
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory;
+        private readonly IShipEngineApiFactory carrierAccountsApiFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            IShipEngineCarrierAccountsApiFactory carrierAccountsApiFactory)
+            IShipEngineApiFactory carrierAccountsApiFactory)
         {
             this.apiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
