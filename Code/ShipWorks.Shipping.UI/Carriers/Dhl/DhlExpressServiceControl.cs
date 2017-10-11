@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             this.saturdayDelivery.CheckStateChanged += this.OnRateCriteriaChanged;
             this.dutyPaid.CheckStateChanged += this.OnRateCriteriaChanged;
             this.packageControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
-            this.nonMachineable.CheckStateChanged += this.OnRateCriteriaChanged;
+            this.nonMachinable.CheckStateChanged += this.OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                     dutyPaid.ApplyMultiCheck(shipment.DhlExpress.DeliveredDutyPaid);
                     saturdayDelivery.ApplyMultiCheck(shipment.DhlExpress.SaturdayDelivery);
-                    nonMachineable.ApplyMultiCheck(shipment.DhlExpress.NonMachinable);
+                    nonMachinable.ApplyMultiCheck(shipment.DhlExpress.NonMachinable);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                 }
             }
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 dutyPaid.ReadMultiCheck(c => shipment.DhlExpress.DeliveredDutyPaid = c);
                 saturdayDelivery.ReadMultiCheck(c => shipment.DhlExpress.SaturdayDelivery = c);
-                nonMachineable.ReadMultiCheck(c => shipment.DhlExpress.NonMachinable = c);
+                nonMachinable.ReadMultiCheck(c => shipment.DhlExpress.NonMachinable = c);
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
             }
 
