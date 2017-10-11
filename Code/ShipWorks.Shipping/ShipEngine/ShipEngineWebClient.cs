@@ -19,14 +19,14 @@ namespace ShipWorks.Shipping.ShipEngine
     public class ShipEngineWebClient : IShipEngineWebClient
     {
         private readonly IShipEngineApiKey apiKey;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+            ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory)
         {
             this.apiKey = apiKey;
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
-            ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount");
+            ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount", LogActionType.Other);
             
             try
             {
@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
         {
             ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
-            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}");
+            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"FindAccount{accountNumber}", LogActionType.Other);
             try
             {
                 CarrierListResponse result = await carrierApi.CarriersListAsync(key);
@@ -108,6 +108,25 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (ApiException ex)
             {
                 return GetErrorMessage(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets rates from ShipEngine using the given request
+        /// </summary>
+        /// <param name="request">The rate shipment request</param>
+        /// <returns>The rate shipment response</returns>
+        public async Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource)
+        {
+            IRatesApi ratesApi = shipEngineApiFactory.CreateRatesApi();
+            ConfigureLogging(ratesApi, apiLogSource, "RateShipment", LogActionType.GetRates);
+            try
+            {
+                return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
             }
         }
 
@@ -130,31 +149,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <param name="apiAccessor">the api accessor to configure</param>
         /// <param name="logSource">the log source</param>
         /// <param name="action">the action being logged</param>
-        private void ConfigureLogging(IApiAccessor apiAccessor, ApiLogSource logSource, string action)
+        private void ConfigureLogging(IApiAccessor apiAccessor, ApiLogSource logSource, string action, LogActionType logActionType)
         {
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(logSource, action);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory.GetLogEntry(logSource, action, logActionType);
 
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
-        }
-
-        /// <summary>
-        /// Gets rates from ShipEngine using the given request
-        /// </summary>
-        /// <param name="request">The rate shipment request</param>
-        /// <returns>The rate shipment response</returns>
-        public async Task<RateShipmentResponse> RateShipment(RateShipmentRequest request)
-        {
-            IRatesApi ratesApi = shipEngineApiFactory.CreateRatesApi();
-
-            try
-            {
-                return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
-            }
-            catch (ApiException ex)
-            {
-                throw new ShipEngineException(GetErrorMessage(ex));
-            }
         }
     }
 }

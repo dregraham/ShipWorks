@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -20,6 +21,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="request">The rate shipment request</param>
         /// <returns>The rate shipment response</returns>
-        Task<RateShipmentResponse> RateShipment(RateShipmentRequest request);
+        Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
     }
 }
