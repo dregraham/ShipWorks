@@ -246,9 +246,12 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
+    <Compile Include="ShipEngine\ICarrierRateShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IRateShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
@@ -532,6 +535,7 @@
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
