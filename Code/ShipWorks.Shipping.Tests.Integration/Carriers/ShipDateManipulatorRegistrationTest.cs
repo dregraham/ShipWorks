@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
@@ -49,6 +50,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             IEnumerable<ShipmentTypeCode> excludedTypes = new[] {
                 ShipmentTypeCode.Usps,
                 ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.FedEx,
                 ShipmentTypeCode.PostalWebTools,
                 ShipmentTypeCode.Other,
                 ShipmentTypeCode.UpsWorldShip,
