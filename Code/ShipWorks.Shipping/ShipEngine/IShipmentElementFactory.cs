@@ -11,11 +11,16 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity
     /// </summary>
-    interface IRateShipmentRequestFactory
+    interface IShipmentElementFactory
     {
         /// <summary>
         ///  Create a RateShipmentRequest from a ShipmentEntity
         /// </summary>
-        RateShipmentRequest Create(ShipmentEntity shipment);
+        RateShipmentRequest CreateRateRequest(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Creates customs for a ShipEngine request
+        /// </summary>
+        InternationalOptions CreateCustoms(ShipmentEntity shipment);
     }
 }

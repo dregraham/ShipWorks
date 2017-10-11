@@ -247,9 +247,9 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
     <Compile Include="ShipEngine\ICarrierRateShipmentRequestFactory.cs" />
-    <Compile Include="ShipEngine\IRateShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\IShipmentElementFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
@@ -398,6 +398,7 @@
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineException.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\ShipmentElementFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
