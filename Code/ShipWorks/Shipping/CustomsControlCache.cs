@@ -70,6 +70,8 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.FedEx:
                     return (int)ShipmentTypeCode.FedEx;
+                case ShipmentTypeCode.DhlExpress:
+                    return (int)ShipmentTypeCode.DhlExpress;
 
                 default:
                     return DefaultCustomsControlBaseCacheKey;

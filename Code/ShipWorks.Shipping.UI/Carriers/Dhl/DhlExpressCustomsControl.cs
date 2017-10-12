@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
                     MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, "DhlExpress");
                     
                     contentType.ApplyMultiValue((ShipEngineContentsType) shipment.DhlExpress.Contents);
-                    contentType.ApplyMultiValue((ShipEngineNonDeliveryType)shipment.DhlExpress.NonDelivery);
+                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType)shipment.DhlExpress.NonDelivery);
                 }
             }
 

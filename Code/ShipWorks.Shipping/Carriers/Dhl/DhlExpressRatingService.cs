@@ -10,6 +10,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -47,10 +48,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 RateShipmentResponse rateResponse = Task.Run(async () => {
                     return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
                 }).Result;
-                                
+
                 return rateGroupFactory.Create(rateResponse, ShipmentTypeCode.DhlExpress);
             }
-            catch (Exception ex)
+            catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
                 throw new ShippingException(UnpackExceptionMessage(ex));
             }
