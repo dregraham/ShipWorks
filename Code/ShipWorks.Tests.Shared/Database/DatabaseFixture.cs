@@ -27,6 +27,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -59,8 +60,15 @@ namespace ShipWorks.Tests.Shared.Database
                 string gitPath = Path.GetPathRoot(AppDomain.CurrentDomain.BaseDirectory) +
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Split('\\').Skip(1).TakeWhile(x => x != "Code").ToArray());
 
-                databasePrefix = new DirectoryInfo(gitPath).Name.Split('-').LastOrDefault();
-                databasePrefix = databasePrefix.Substring(0, databasePrefix.Length > 50 ? 50 : databasePrefix.Length);
+                string branchName = new DirectoryInfo(gitPath).Name;
+                databasePrefix = branchName.Split('-').LastOrDefault();
+
+                if (!databasePrefix.IsNumeric())
+                {
+                    databasePrefix = branchName.Replace("feature", string.Empty);
+                }
+
+                databasePrefix = databasePrefix.Replace("(", string.Empty).Replace(")", string.Empty).Truncate(50);
             }
             catch (Exception ex)
             {
