@@ -8,12 +8,15 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
+using Interapptive.Shared.ComponentRegistration;
+using Autofac.Features.Indexed;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
     /// Dhl Express rating service
     /// </summary>
+    [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
         private readonly ICarrierRateShipmentRequestFactory rateRequestFactory;
@@ -24,11 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            Func<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
+            IIndex<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
             IShipEngineRateGroupFactory rateGroupFactory)
         {
-            this.rateRequestFactory = rateRequestFactory(ShipmentTypeCode.DhlExpress);
+            this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.DhlExpress];
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
         }

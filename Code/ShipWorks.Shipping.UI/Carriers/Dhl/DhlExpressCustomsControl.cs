@@ -60,10 +60,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
                         ShippingManager.EnsureShipmentLoaded(shipment);
                     }
 
-                    if (shipment.DhlExpress == null)
-                    {
-                        throw new NullReferenceException("shipment.DhlExpress cannot be null.");
-                    }
+                    MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, "DhlExpress");
                     
                     contentType.ApplyMultiValue((ShipEngineContentsType) shipment.DhlExpress.Contents);
                     contentType.ApplyMultiValue((ShipEngineNonDeliveryType)shipment.DhlExpress.NonDelivery);
