@@ -21,9 +21,13 @@ namespace ShipWorks.Shipping.ShipEngine
         RateShipmentRequest CreateRateRequest(ShipmentEntity shipment);
 
         /// <summary>
-        /// Creates customs for a ShipEngine request
+        /// Creates customs items for a ShipEngine request
         /// </summary>
-        InternationalOptions CreateCustoms(ShipmentEntity shipment, IShipEngineShipment shipEngineShipment);
+        List<CustomsItem> CreateCustomsItems(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Creates pacakges for a shipEngine
+        /// </summary>
         List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages);
     }
 }

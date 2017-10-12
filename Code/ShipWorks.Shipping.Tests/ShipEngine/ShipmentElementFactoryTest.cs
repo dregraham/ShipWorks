@@ -114,8 +114,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             };
             shipment.CustomsItems.Add(customsItem);
 
-            var customs = testObject.CreateCustoms(shipment);
-            var apiCustoms = customs.CustomsItems.Single();
+            var items = testObject.CreateCustomsItems(shipment);
+            var apiCustoms = items.Single();
 
             Assert.Equal(customsItem.CountryOfOrigin, apiCustoms.CountryOfOrigin);
             Assert.Equal(customsItem.Description, apiCustoms.Description);
@@ -139,12 +139,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             shipment.CustomsItems.Add(customsItem1);
             shipment.CustomsItems.Add(customsItem2);
 
-            var customs = testObject.CreateCustoms(shipment);
+            var items = testObject.CreateCustomsItems(shipment);
 
-            Assert.Equal(2, customs.CustomsItems.Count);
-            Assert.NotNull(customs.CustomsItems.Single(c => c.CountryOfOrigin == "China"));
-            Assert.NotNull(customs.CustomsItems.Single(c => c.CountryOfOrigin == "US"));
-
+            Assert.Equal(2, items.Count);
+            Assert.NotNull(items.Single(c => c.CountryOfOrigin == "China"));
+            Assert.NotNull(items.Single(c => c.CountryOfOrigin == "US"));
         }
 
         public void Dispose()

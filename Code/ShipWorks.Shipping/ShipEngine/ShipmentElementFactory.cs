@@ -59,12 +59,12 @@ namespace ShipWorks.Shipping.ShipEngine
             return request;
         }
 
-        public List<Package> CreatePackages(List<IPackageAdapter> packages)
+        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages)
         {
-            List<Package> apiPackages = new List<Package>();
+            List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
             foreach (IPackageAdapter package in packages)
             {
-                Package apiPackage = new Package()
+                ShipmentPackage apiPackage = new ShipmentPackage()
                 {
                     Dimensions = new Dimensions()
                     {
@@ -72,7 +72,8 @@ namespace ShipWorks.Shipping.ShipEngine
                         Width = package.DimsWidth,
                         Height = package.DimsHeight,
                         Unit = Dimensions.UnitEnum.Inch
-                    }
+                    },
+                    Weight = new Weight(package.Weight, Weight.UnitEnum.Pound)
                 };
                 apiPackages.Add(apiPackage);
             }
@@ -81,24 +82,9 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Creates customs for a ShipEngine request
-        /// </summary>
-        public InternationalOptions CreateCustoms(ShipmentEntity shipment, IShipEngineShipment shipEngineShipment)
-        {
-            InternationalOptions customs = new InternationalOptions()
-            {
-                Contents = (InternationalOptions.ContentsEnum) shipEngineShipment.Contents,
-                CustomsItems = CreateCustomsItems(shipment),
-                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipEngineShipment.NonDelivery
-            };
-
-            return customs;
-        }
-
-        /// <summary>
         /// Create the Customs Items
         /// </summary>
-        private List<CustomsItem> CreateCustomsItems(ShipmentEntity shipment)
+        public List<CustomsItem> CreateCustomsItems(ShipmentEntity shipment)
         {
             List<CustomsItem> customItems = new List<CustomsItem>();
 

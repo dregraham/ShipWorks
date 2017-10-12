@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             request.Shipment.AdvancedOptions.Add("non_machinable", shipment.DhlExpress.NonMachinable);
             request.Shipment.AdvancedOptions.Add("saturday_delivery", shipment.DhlExpress.SaturdayDelivery);
 
-            request.Shipment.Customs = shipmentElementFactory.CreateCustoms(shipment, shipment.DhlExpress);
+            request.Shipment.Customs =  CreateCustoms(shipment);
 
             List<IPackageAdapter> packages = new List<IPackageAdapter>();
             foreach (DhlExpressPackageEntity package in shipment.DhlExpress.Packages)
@@ -51,6 +51,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);
 
+            return request;
+        }
+
+        /// <summary>
+        /// Creates customs for a ShipEngine request
+        /// </summary>
+        private InternationalOptions CreateCustoms(ShipmentEntity shipment)
+        {
+            InternationalOptions customs = new InternationalOptions()
+            {
+                Contents = (InternationalOptions.ContentsEnum) shipment.DhlExpress.Contents,
+                CustomsItems = shipmentElementFactory.CreateCustomsItems(shipment),
+                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipment.DhlExpress.NonDelivery
+            };
+
+            return customs;
         }
     }
 }
