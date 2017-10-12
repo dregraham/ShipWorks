@@ -801,6 +801,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "DeliveryDutyPaid", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.DeliveryDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.Contents, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonDelivery, 0, 0, 10);
 		}
 		/// <summary>Inits DhlExpressProfilePackageEntity's FieldInfo objects</summary>
 		private void InitDhlExpressProfilePackageEntityInfos()

@@ -1978,6 +1978,10 @@ namespace ShipWorks.Data.Model
 		NonMachinable,
 		///<summary>SaturdayDelivery. </summary>
 		SaturdayDelivery,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}

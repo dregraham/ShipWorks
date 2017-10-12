@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             DeliveryDutyPaid = source.DeliveryDutyPaid;
             NonMachinable = source.NonMachinable;
             SaturdayDelivery = source.SaturdayDelivery;
+            Contents = source.Contents;
+            NonDelivery = source.NonDelivery;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -89,6 +91,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> SaturdayDelivery { get; }
+        /// <summary> The Contents property of the Entity DhlExpressProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressProfile"."Contents"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> Contents { get; }
+        /// <summary> The NonDelivery property of the Entity DhlExpressProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressProfile"."NonDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> NonDelivery { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

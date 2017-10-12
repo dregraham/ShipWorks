@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -74,6 +75,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.NonMachinable = false;
             dhlExpressShipmentEntity.SaturdayDelivery = false;
             dhlExpressShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+            dhlExpressShipmentEntity.Contents = (int)ShipEngineContentsType.Merchandise;
+            dhlExpressShipmentEntity.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
@@ -406,6 +409,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             profile.DhlExpress.DeliveryDutyPaid = false;
             profile.DhlExpress.NonMachinable = false;
             profile.DhlExpress.SaturdayDelivery = false;
+            profile.DhlExpress.Contents = (int)ShipEngineContentsType.Merchandise;
+            profile.DhlExpress.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
         }
 
         /// <summary>
@@ -517,6 +522,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             ShippingProfileUtility.ApplyProfileValue(source.DeliveryDutyPaid, dhlShipment, DhlExpressShipmentFields.DeliveredDutyPaid);
             ShippingProfileUtility.ApplyProfileValue(source.NonMachinable, dhlShipment, DhlExpressShipmentFields.NonMachinable);
             ShippingProfileUtility.ApplyProfileValue(source.SaturdayDelivery, dhlShipment, DhlExpressShipmentFields.SaturdayDelivery);
+            ShippingProfileUtility.ApplyProfileValue(source.NonDelivery, dhlShipment, DhlExpressShipmentFields.NonDelivery);
+            ShippingProfileUtility.ApplyProfileValue(source.Contents, dhlShipment, DhlExpressShipmentFields.Contents);
         }
 
         /// <summary>
