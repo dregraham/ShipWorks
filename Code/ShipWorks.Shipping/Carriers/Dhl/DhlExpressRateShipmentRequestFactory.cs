@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             request.RateOptions = new RateRequest() { CarrierIds = new List<string> { account.ShipEngineCarrierId } };
 
             request.Shipment.AdvancedOptions = new Dictionary<string, object>();
-            request.Shipment.AdvancedOptions.Add("delivery_duty_paid", shipment.DhlExpress.DeliveredDutyPaid);
+            request.Shipment.AdvancedOptions.Add("delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid);
             request.Shipment.AdvancedOptions.Add("non_machinable", shipment.DhlExpress.NonMachinable);
             request.Shipment.AdvancedOptions.Add("saturday_delivery", shipment.DhlExpress.SaturdayDelivery);
 

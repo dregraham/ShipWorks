@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             foreach (var apiRate in rateResponse.RateResponse.Rates)
             {
-                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString())
+                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) apiRate.ShippingAmount.Amount, apiRate.ServiceCode)
                 {
                     CarrierDescription = apiRate.CarrierNickname,
                     ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,

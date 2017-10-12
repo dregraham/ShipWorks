@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             int oldIndex = service.SelectedIndex;
 
-            DhlExpressServiceType servicetype = (DhlExpressServiceType) e.Rate.OriginalTag;
+            DhlExpressServiceType servicetype = EnumHelper.GetEnumByApiValue<DhlExpressServiceType>((string) e.Rate.OriginalTag);
 
             service.SelectedValue = servicetype;
             if (service.SelectedIndex == -1 && oldIndex != -1)
@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                         return false;
                     }
 
-                    return (DhlExpressServiceType) r.OriginalTag == serviceType;
+                    return EnumHelper.GetEnumByApiValue<DhlExpressServiceType>((string) r.OriginalTag) == serviceType;
                 });
 
                 RateControl.SelectRate(matchingRate);

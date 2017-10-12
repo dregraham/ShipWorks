@@ -183,6 +183,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressPackageAdapter.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressRateHashingService.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressRateShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentAdapter.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
       <SubType>UserControl</SubType>
