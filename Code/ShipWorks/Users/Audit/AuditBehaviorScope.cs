@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Transactions;
@@ -17,8 +19,8 @@ namespace ShipWorks.Users.Audit
     public class AuditBehaviorScope : IDisposable
     {
         static AsyncLocal<int> superUserCount = new AsyncLocal<int>();
-        static AsyncLocal<Stack<AuditReason>> reasonStack = new AsyncLocal<Stack<AuditReason>>();
-        static AsyncLocal<Stack<AuditState>> stateStack = new AsyncLocal<Stack<AuditState>>();
+        static AsyncLocal<StackContainer<AuditReason>> reasonStack = new AsyncLocal<StackContainer<AuditReason>>();
+        static AsyncLocal<StackContainer<AuditState>> stateStack = new AsyncLocal<StackContainer<AuditState>>();
 
         // The active user behavior
         AuditBehaviorUser userBehavior = AuditBehaviorUser.Default;
@@ -109,7 +111,7 @@ namespace ShipWorks.Users.Audit
 
             if (reasonStack.Value == null)
             {
-                reasonStack.Value = new Stack<AuditReason>();
+                reasonStack.Value = new StackContainer<AuditReason>();
             }
 
             bool changingReason = (reasonStack.Value.None() ||
@@ -135,7 +137,7 @@ namespace ShipWorks.Users.Audit
 
             if (stateStack.Value == null)
             {
-                stateStack.Value = new Stack<AuditState>();
+                stateStack.Value = new StackContainer<AuditState>();
             }
 
             bool changingState = (stateStack.Value.None() || stateStack.Value.Peek() != auditState);
@@ -191,6 +193,50 @@ namespace ShipWorks.Users.Audit
             {
                 stateStack.Value.Pop();
             }
+        }
+
+        /// <summary>
+        /// Container for an immutable stack that looks like a normal stack
+        /// </summary>
+        /// <remarks>
+        /// This class is necessary because of the way AsyncLocal works with sub tasks. Changing the value
+        /// of an AsyncLocal in a sub-task won't be seen by the parent task, but changing the contents
+        /// of the value should.  We're using an immutable stack here because we were getting an exception
+        /// iterating over the stack as something else changed it.
+        /// </remarks>
+        private class StackContainer<T> : IEnumerable<T>
+        {
+            /// <summary>
+            /// Immutable stack that holds the actual data
+            /// </summary>
+            private ImmutableStack<T> stack = ImmutableStack.Create<T>();
+
+            /// <summary>
+            /// Get the enumerator of the stack
+            /// </summary>
+            public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>) stack).GetEnumerator();
+
+            /// <summary>
+            /// Get the enumerator of the stack
+            /// </summary>
+            IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable) stack).GetEnumerator();
+
+            /// <summary>
+            /// Peek at the end of the stack
+            /// </summary>
+            internal T Peek() => stack.Peek();
+
+            /// <summary>
+            /// Push an item on the stack
+            /// </summary>
+            internal void Push(T item) =>
+                stack = stack.Push(item);
+
+            /// <summary>
+            /// Pop an item off the stack
+            /// </summary>
+            internal void Pop() =>
+                stack = stack.Pop();
         }
     }
 }
