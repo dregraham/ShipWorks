@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the CarrierApi
         /// </summary>
-        /// <returns></returns>
         public ICarriersApi CreateCarrierApi() => new CarriersApi();
 
         /// <summary>

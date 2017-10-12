@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
+    /// <summary>
+    /// Enumeration of instructions one could send with customs to ShipEngine
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ShipEngineNonDeliveryType
     {

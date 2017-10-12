@@ -18,7 +18,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constuctor
         /// </summary>
-        /// <param name="lifetimeScope"></param>
         public CustomsControlCache(ILifetimeScope lifetimeScope)
         {
             this.lifetimeScope = lifetimeScope;

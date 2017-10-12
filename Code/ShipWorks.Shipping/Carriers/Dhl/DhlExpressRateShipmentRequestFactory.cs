@@ -20,11 +20,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShipmentElementFactory shipmentElementFactory;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DhlExpressRateShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, IShipmentElementFactory shipmentElementFactory)
         {
             this.accountRepository = accountRepository;
             this.shipmentElementFactory = shipmentElementFactory;
         }
+
+        /// <summary>
+        /// Create a RateShipmentRequest
+        /// </summary>
         public RateShipmentRequest Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));

@@ -12,13 +12,17 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
+    /// <summary>
+    /// DHL Express Shipment Adapter
+    /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentAdapter), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressShipmentAdapter : CarrierShipmentAdapterBase
     {
         /// <summary>
         /// Copy constructor
         /// </summary>
-        private DhlExpressShipmentAdapter(DhlExpressShipmentAdapter adapterToCopy) : base(adapterToCopy)
+        private DhlExpressShipmentAdapter(DhlExpressShipmentAdapter adapterToCopy) :
+            base(adapterToCopy)
         {
 
         }
@@ -124,7 +128,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Perform the clone of the adapter using the cloned shipment
         /// </summary>
-        /// <returns></returns>
         public override ICarrierShipmentAdapter Clone() => new DhlExpressShipmentAdapter(this);
     }
 }

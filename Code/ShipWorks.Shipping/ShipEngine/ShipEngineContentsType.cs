@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
+    /// <summary>
+    /// ShipEngine Contents - This is used when sending customs content information to ShipEngine.
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum ShipEngineContentsType
     {

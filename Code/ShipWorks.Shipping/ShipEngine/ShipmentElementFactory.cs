@@ -61,6 +61,9 @@ namespace ShipWorks.Shipping.ShipEngine
             return request;
         }
 
+        /// <summary>
+        /// Creates ShipEngine api package DTOs from a list of package adapters.
+        /// </summary>
         public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages)
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
