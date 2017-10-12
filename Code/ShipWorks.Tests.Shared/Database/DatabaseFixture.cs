@@ -68,7 +68,10 @@ namespace ShipWorks.Tests.Shared.Database
                     databasePrefix = branchName.Replace("feature", string.Empty);
                 }
 
-                databasePrefix = databasePrefix.Replace("(", string.Empty).Replace(")", string.Empty).Truncate(50);
+                databasePrefix = databasePrefix
+                    .Replace("-", "_")
+                    .Replace("(", string.Empty)
+                    .Replace(")", string.Empty).Truncate(50);
             }
             catch (Exception ex)
             {
