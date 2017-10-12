@@ -52,8 +52,24 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception ex)
             {
-                throw new ShippingException(ex.Message);
+                throw new ShippingException(UnpackExceptionMessage(ex));
             }
+        }
+
+        /// <summary>
+        /// Find the deepest inner exceptions message
+        /// </summary>
+        private static string UnpackExceptionMessage(Exception ex)
+        {
+            string message = ex.Message;
+
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+                message = ex.Message;
+            }
+
+            return message;
         }
     }
 }
