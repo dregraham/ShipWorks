@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get a customs control base by shipment type
         /// </summary>
-        public CustomsControlBase Get(ShipmentType shipmentType, ILifetimeScope lifetimeScope)
+        public CustomsControlBase Get(ShipmentType shipmentType)
         {
             int cacheKey = CacheKey(shipmentType);
             if (customsControlCache.ContainsKey(cacheKey))
