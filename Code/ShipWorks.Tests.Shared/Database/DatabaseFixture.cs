@@ -4,10 +4,12 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using LibGit2Sharp;
 using Moq;
 using Respawn;
@@ -57,13 +59,8 @@ namespace ShipWorks.Tests.Shared.Database
                 string gitPath = Path.GetPathRoot(AppDomain.CurrentDomain.BaseDirectory) +
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Split('\\').Skip(1).TakeWhile(x => x != "Code").ToArray());
 
-                using (var repo = new Repository(gitPath))
-                {
-                    databasePrefix = repo.Branches.Where(x => !x.IsRemote)
-                        .Where(x => x.IsCurrentRepositoryHead)
-                        .Select(x => x.FriendlyName.Split('-').LastOrDefault())
-                        .FirstOrDefault();
-                }
+                databasePrefix = new DirectoryInfo(gitPath).Name.Split('-').LastOrDefault();
+                databasePrefix = databasePrefix.Substring(0, databasePrefix.Length > 50 ? 50 : databasePrefix.Length);
             }
             catch (Exception ex)
             {
