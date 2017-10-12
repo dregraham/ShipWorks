@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(PostalShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator))]
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
                 ShipmentTypeCode.Express1Usps,
                 ShipmentTypeCode.Express1Endicia,
                 ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.FedEx,
                 ShipmentTypeCode.Other,
                 ShipmentTypeCode.UpsWorldShip,
                 ShipmentTypeCode.UpsOnLineTools};

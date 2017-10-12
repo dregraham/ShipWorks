@@ -38,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
             this.sectionHoldAtLocation = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fedExHoldAtLocationControl = new ShipWorks.Shipping.Carriers.FedEx.FedExHoldAtLocationControl();
             this.sectionBilling = new ShipWorks.UI.Controls.CollapsibleGroupControl();
@@ -282,6 +283,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.saturdayDelivery);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.ContentPanel.Controls.Add(this.packageControl);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.packagingType);
@@ -688,6 +690,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.shipDate.Size = new System.Drawing.Size(147, 21);
             this.shipDate.TabIndex = 3;
             this.shipDate.ValueChanged += new System.EventHandler(this.OnChangeShipDate);
+            // 
+            // cutoffDateDisplay
+            // 
+            this.cutoffDateDisplay.AutoSize = true;
+            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
+            this.cutoffDateDisplay.Caption = "";
+            this.cutoffDateDisplay.Location = new System.Drawing.Point(247, 39);
+            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
+            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.FedEx;
+            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 15);
+            this.cutoffDateDisplay.TabIndex = 6;
+            this.cutoffDateDisplay.Title = "Shipment cutoff time";
             //
             // sectionHomeDelivery
             //
@@ -2298,5 +2312,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private CheckBox thirdPartyConsignee;
         private Label consigneeLabel;
         private Label labelReturnsClearance;
+        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }
