@@ -31,7 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             base(shipment, shipmentTypeManager, customsManager, storeManager)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
-            MethodConditions.EnsureArgumentIsNotNull(customsManager, nameof(customsManager));
         }
 
         /// <summary>
