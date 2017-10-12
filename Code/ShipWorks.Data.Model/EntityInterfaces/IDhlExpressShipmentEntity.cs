@@ -62,7 +62,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "DhlExpressShipment"."RequestedLabelFormat"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        new System.Int32 RequestedLabelFormat { get; }
+        System.Int32 RequestedLabelFormat { get; }
         /// <summary> The Contents property of the Entity DhlExpressShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressShipment"."Contents"<br/>
