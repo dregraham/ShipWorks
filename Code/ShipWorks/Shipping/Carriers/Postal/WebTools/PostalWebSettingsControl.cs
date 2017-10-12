@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
@@ -41,6 +42,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
             PostalUtility.InitializePackagePicker(packagePicker, shipmentType);
+
+            var settings = ShippingSettings.FetchReadOnly();
+
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Can be overridden in derived classes to save service settings
+        /// </summary>
+        protected override void SaveSettings(ShippingSettingsEntity settings)
+        {
+            base.SaveSettings(settings);
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
         }
 
         /// <summary>

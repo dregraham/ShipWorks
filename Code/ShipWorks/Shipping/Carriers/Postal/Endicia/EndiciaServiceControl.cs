@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -28,10 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public EndiciaServiceControl(RateControl rateControl)
-            : this (ShipmentTypeCode.Endicia, EndiciaReseller.None, rateControl)
+            : this(ShipmentTypeCode.Endicia, EndiciaReseller.None, rateControl)
         {
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaServiceControl"/> class.
@@ -127,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private bool LoadShipment(ShipmentEntity shipment)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
 
             endiciaAccount.ApplyMultiValue(shipment.Postal.Endicia.EndiciaAccountID);
 
@@ -140,8 +133,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             referenceID.ApplyMultiText(shipment.Postal.Endicia.ReferenceID);
 
-            sortType.ApplyMultiValue((PostalSortType)shipment.Postal.SortType);
-            entryFacility.ApplyMultiValue((PostalEntryFacility)shipment.Postal.EntryFacility);
+            sortType.ApplyMultiValue((PostalSortType) shipment.Postal.SortType);
+            entryFacility.ApplyMultiValue((PostalEntryFacility) shipment.Postal.EntryFacility);
 
             return PostalUtility.IsEntryFacilityRequired(serviceType);
         }

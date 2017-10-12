@@ -134,6 +134,8 @@
     <Compile Include="Custom\OnTracAccountEntityTest.cs" />
     <Compile Include="Custom\OrderItemAttributeEntityTest.cs" />
     <Compile Include="Custom\OrderItemEntityTest.cs" />
+    <Compile Include="Custom\ReadOnlyShippingSettingsEntityTest.cs" />
+    <Compile Include="Custom\ShippingSettingsEntityTest.cs" />
     <Compile Include="Custom\UpsAccountEntityTest.cs" />
     <Compile Include="Custom\UpsPackageEntityTest.cs" />
     <Compile Include="Custom\UspsAccountEntityTest.cs" />
@@ -164,6 +166,10 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
