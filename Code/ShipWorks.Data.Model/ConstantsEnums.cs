@@ -2022,6 +2022,10 @@ namespace ShipWorks.Data.Model
 		SaturdayDelivery,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}

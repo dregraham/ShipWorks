@@ -11,7 +11,9 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[DeliveredDutyPaid] [bit] NOT NULL,
 	[NonMachinable] [bit] NOT NULL,
 	[SaturdayDelivery] [bit] NOT NULL,
-	[RequestedLabelFormat] [int] NOT NULL
+	[RequestedLabelFormat] [int] NOT NULL,
+	[Contents][int] Not Null,
+	[NonDelivery] [int] Not Null
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'

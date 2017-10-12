@@ -639,8 +639,10 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressShipment" ObjectID="75fabbb6-2e0f-4566-b510-e8b363732b79">
         <Fields>
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlExpressAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
@@ -4145,7 +4147,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-10T14:22:02.3622759Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-12T14:36:09.3481102Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4809,6 +4811,8 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -10521,8 +10525,10 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressShipment" TargetName="ShipWorksLocal:dbo:DhlExpressShipment">
           <FieldMappings>
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
