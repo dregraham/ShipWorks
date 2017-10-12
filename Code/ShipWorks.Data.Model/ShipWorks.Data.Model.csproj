@@ -219,6 +219,8 @@
     <Compile Include="Custom\EntityCollections.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include="Custom\EntityInterfaces\IDhlExpressShipmentEntity.cs" />
+    <Compile Include="Custom\EntityInterfaces\IShipEngineShipment.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />
     <Compile Include="Custom\EntityExtensions.cs" />

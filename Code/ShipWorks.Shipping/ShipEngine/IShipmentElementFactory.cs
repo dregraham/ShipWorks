@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -21,6 +23,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates customs for a ShipEngine request
         /// </summary>
-        InternationalOptions CreateCustoms(ShipmentEntity shipment);
+        InternationalOptions CreateCustoms(ShipmentEntity shipment, IShipEngineShipment shipEngineShipment);
+        List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages);
     }
 }

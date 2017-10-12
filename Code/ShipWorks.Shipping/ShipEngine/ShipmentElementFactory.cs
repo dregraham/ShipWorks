@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -57,16 +59,37 @@ namespace ShipWorks.Shipping.ShipEngine
             return request;
         }
 
+        public List<Package> CreatePackages(List<IPackageAdapter> packages)
+        {
+            List<Package> apiPackages = new List<Package>();
+            foreach (IPackageAdapter package in packages)
+            {
+                Package apiPackage = new Package()
+                {
+                    Dimensions = new Dimensions()
+                    {
+                        Length = package.DimsLength,
+                        Width = package.DimsWidth,
+                        Height = package.DimsHeight,
+                        Unit = Dimensions.UnitEnum.Inch
+                    }
+                };
+                apiPackages.Add(apiPackage);
+            }
+
+            return apiPackages;
+        }
+
         /// <summary>
         /// Creates customs for a ShipEngine request
         /// </summary>
-        public InternationalOptions CreateCustoms(ShipmentEntity shipment)
+        public InternationalOptions CreateCustoms(ShipmentEntity shipment, IShipEngineShipment shipEngineShipment)
         {
             InternationalOptions customs = new InternationalOptions()
             {
-                Contents = InternationalOptions.ContentsEnum.Documents,
+                Contents = (InternationalOptions.ContentsEnum) shipEngineShipment.Contents,
                 CustomsItems = CreateCustomsItems(shipment),
-                NonDelivery = InternationalOptions.NonDeliveryEnum.Returntosender
+                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipEngineShipment.NonDelivery
             };
 
             return customs;
