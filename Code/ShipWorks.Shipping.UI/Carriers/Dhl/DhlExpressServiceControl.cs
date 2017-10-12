@@ -8,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.UI.Utility;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -221,6 +220,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
+        /// Handle rate selection from the grid
+        /// </summary>
+        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
+        {
+            int oldIndex = service.SelectedIndex;
+
+            DhlExpressServiceType servicetype = (DhlExpressServiceType) e.Rate.OriginalTag;
+
+            service.SelectedValue = servicetype;
+            if (service.SelectedIndex == -1 && oldIndex != -1)
+            {
+                service.SelectedIndex = oldIndex;
+            }
+        }
+
+        /// <summary>
         /// Selected origin has changed
         /// </summary>
         private void OnOriginChanged(object sender, EventArgs e)
@@ -273,7 +288,34 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             SyncSelectedRate();
         }
-               
+
+        /// <summary>
+        /// Synchronizes the selected rate in the rate control.
+        /// </summary>
+        public override void SyncSelectedRate()
+        {
+            if (!service.MultiValued && service.SelectedValue != null)
+            {
+                // Update the selected rate in the rate control to coincide with the service change
+                DhlExpressServiceType serviceType = (DhlExpressServiceType) service.SelectedValue;
+                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
+                {
+                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.DhlExpress)
+                    {
+                        return false;
+                    }
+
+                    return (DhlExpressServiceType) r.OriginalTag == serviceType;
+                });
+
+                RateControl.SelectRate(matchingRate);
+            }
+            else
+            {
+                RateControl.ClearSelection();
+            }
+        }
+
         /// <summary>
         /// Flush any in-progress changes before saving
         /// </summary>

@@ -5,7 +5,6 @@ using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
