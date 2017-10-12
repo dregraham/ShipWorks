@@ -252,6 +252,8 @@
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\IShipmentElementFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
+    <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
