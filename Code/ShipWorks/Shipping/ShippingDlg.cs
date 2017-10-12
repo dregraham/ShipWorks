@@ -1368,7 +1368,7 @@ namespace ShipWorks.Shipping
             if (shipments.Any(CustomsManager.IsCustomsRequired))
             {
                 // If its null, its multi select
-                newCustomsControl = customsControlCache.Get(shipmentType);
+                newCustomsControl = customsControlCache.Get(shipmentType, lifetimeScope);
 
                 newCustomsControl.LoadShipments(shipments, enableEditing);
 
