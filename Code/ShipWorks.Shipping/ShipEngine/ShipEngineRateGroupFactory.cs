@@ -35,7 +35,30 @@ namespace ShipWorks.Shipping.ShipEngine
                 results.Add(rate);
             }
 
-            return new RateGroup(results);
+
+            RateGroup rateGroup = new RateGroup(results);
+
+            AddInvalidRateErrors(rateGroup, rateResponse, shipmentType);
+
+            return rateGroup;
+        }
+
+        /// <summary>
+        /// Add any invalid rate errors
+        /// </summary>
+        private static void AddInvalidRateErrors(RateGroup rateGroup, RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType)
+        {
+            if (rateResponse.RateResponse.InvalidRates.Any())
+            {
+                StringBuilder errorBuilder = new StringBuilder();
+
+                foreach (Rate invalidRate in rateResponse.RateResponse.InvalidRates)
+                {
+                    invalidRate.ErrorMessages.ForEach(m => errorBuilder.AppendLine(m));
+                }
+
+                rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, errorBuilder.ToString()));
+            }
         }
     }
 }
