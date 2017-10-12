@@ -95,6 +95,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
 
+                        if (ShowShippingCutoffDate)
+                        {
+                        	shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode.Express1Endicia);
+						}
                         break;
                     }
 
@@ -129,6 +133,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         settings.Express1EndiciaCustomsCertify = customsCertify.Checked;
                         settings.Express1EndiciaCustomsSigner = customsSigner.Text;
+
+                        if (ShowShippingCutoffDate)
+                        {
+                        	settings.SetShipmentDateCutoff(ShipmentTypeCode.Express1Endicia, shippingCutoff.Value);
+                        }
 
                         break;
                     }
