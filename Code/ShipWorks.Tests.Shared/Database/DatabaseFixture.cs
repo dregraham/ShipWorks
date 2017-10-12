@@ -4,10 +4,12 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using LibGit2Sharp;
 using Moq;
 using Respawn;
@@ -25,6 +27,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -57,13 +60,15 @@ namespace ShipWorks.Tests.Shared.Database
                 string gitPath = Path.GetPathRoot(AppDomain.CurrentDomain.BaseDirectory) +
                     Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Split('\\').Skip(1).TakeWhile(x => x != "Code").ToArray());
 
-                using (var repo = new Repository(gitPath))
+                string branchName = new DirectoryInfo(gitPath).Name;
+                databasePrefix = branchName.Split('-').LastOrDefault();
+
+                if (!databasePrefix.IsNumeric())
                 {
-                    databasePrefix = repo.Branches.Where(x => !x.IsRemote)
-                        .Where(x => x.IsCurrentRepositoryHead)
-                        .Select(x => x.FriendlyName.Split('-').LastOrDefault())
-                        .FirstOrDefault();
+                    databasePrefix = branchName.Replace("feature", string.Empty);
                 }
+
+                databasePrefix = databasePrefix.Replace("(", string.Empty).Replace(")", string.Empty).Truncate(50);
             }
             catch (Exception ex)
             {
