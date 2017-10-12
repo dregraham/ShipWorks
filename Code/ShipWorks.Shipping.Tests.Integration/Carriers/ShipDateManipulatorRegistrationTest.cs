@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator))]
         public void EnsureShipmentDateManipulatorsAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             IShipmentDateManipulator retriever = container.ResolveKeyed<IShipmentDateManipulator>(shipmentType);
@@ -49,7 +50,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
                 ShipmentTypeCode.FedEx,
                 ShipmentTypeCode.Other,
                 ShipmentTypeCode.UpsWorldShip,
-                ShipmentTypeCode.UpsOnLineTools};
+                ShipmentTypeCode.UpsOnLineTools,
+                ShipmentTypeCode.OnTrac};
 
             foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
             {

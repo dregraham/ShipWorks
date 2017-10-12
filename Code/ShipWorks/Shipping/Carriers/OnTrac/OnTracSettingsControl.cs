@@ -54,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             InitializeServicePicker(shipmentType);
             InitializePackagePicker(shipmentType);
+
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode.OnTrac);
         }
 
         /// <summary>
@@ -94,6 +96,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             settings.OnTracInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.OnTracInsurancePennyOne = pennyOne.Checked;
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode.OnTrac, shippingCutoff.Value);
         }
 
         /// <summary>
