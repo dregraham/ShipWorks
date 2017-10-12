@@ -2,13 +2,13 @@
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Postal
+namespace ShipWorks.Shipping.Carriers.WebTools
 {
     /// <summary>
-    /// Provide a prefetch path for a Postal shipment
+    /// Provide a prefetch path for a WebTools shipment
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypePrefetchProvider), ShipmentTypeCode.PostalWebTools)]
-    public class PostalPrefetchProvider : IShipmentTypePrefetchProvider
+    public class WebToolsPrefetchProvider : IShipmentTypePrefetchProvider
     {
         /// <summary>
         /// Get the path
