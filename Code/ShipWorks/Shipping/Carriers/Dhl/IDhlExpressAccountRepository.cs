@@ -9,14 +9,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     public interface IDhlExpressAccountRepository : ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>
     {
-        /// <summary>
-        /// Gets all dhl accounts in database
-        /// </summary>
-        IEnumerable<DhlExpressAccountEntity> Accounts { get; }
-
-        /// <summary>
-        /// Saves the given DHL Express account entity to the underlying data source.
-        /// </summary>
-        void Save(DhlExpressAccountEntity account);
     }
 }

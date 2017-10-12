@@ -14,7 +14,7 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
 
-    [KeyedComponent(typeof(ICarrierConfigurationShipmentRefresher), ShipmentTypeCode.DhlExpress)]
+    [KeyedComponent(typeof(ICarrierRateShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRateShipmentRequestFactory : ICarrierRateShipmentRequestFactory
     {
         private readonly IDhlExpressAccountRepository accountRepository;
