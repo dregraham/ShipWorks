@@ -7,12 +7,14 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity
     /// </summary>
+    [Component(SingleInstance = true)]
     public class ShipmentElementFactory : IShipmentElementFactory
     {
         /// <summary>
