@@ -24,7 +24,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// UserControl for editing ups specific profile settings
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class UpsProfileControl : ShippingProfileControlBase
     {
         /// <summary>

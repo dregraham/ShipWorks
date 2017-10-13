@@ -28,7 +28,6 @@ namespace ShipWorks.Stores.Management
     /// <summary>
     /// Window for managing the settings of a single store
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class StoreSettingsDlg : Form
     {
         StoreEntity store;

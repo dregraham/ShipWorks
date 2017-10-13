@@ -38,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Setup wizard for processing shipments with USPS
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Usps)]
-    [NDependIgnoreLongTypes]
     public partial class UspsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private UspsRegistration uspsRegistration;

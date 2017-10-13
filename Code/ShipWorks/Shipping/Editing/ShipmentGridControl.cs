@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Editing
     /// The control to select shipments for the main shipping grid
     /// </summary>
     [ToolboxItem(false)]
-    [NDependIgnoreLongTypes]
     public partial class ShipmentGridControl : UserControl
     {
         // Maps a shipment to its row
