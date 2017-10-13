@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.ShipEngine
     public enum ShipEngineContentsType
     {
         [Description("Merchandise")]
-        [ApiValue("Merchandise")]
+        [ApiValue("merchandise")]
         Merchandise = 0,
 
         [Description("Documents")]

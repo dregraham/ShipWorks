@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        public override RatingFields RatingFields
+        protected override RatingFields RatingFields
         {
             get
             {

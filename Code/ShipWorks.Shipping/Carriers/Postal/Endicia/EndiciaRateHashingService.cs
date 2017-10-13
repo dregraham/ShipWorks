@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        public override RatingFields RatingFields
+        protected override RatingFields RatingFields
         {
             get
             {

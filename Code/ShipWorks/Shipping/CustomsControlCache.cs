@@ -34,7 +34,10 @@ namespace ShipWorks.Shipping
                 return customsControlCache[cacheKey];
             }
 
-            CustomsControlBase customsControl = cacheKey == DefaultCustomsControlBaseCacheKey ? new CustomsControlBase() : shipmentType.CreateCustomsControl(lifetimeScope);
+            CustomsControlBase customsControl =
+                cacheKey == DefaultCustomsControlBaseCacheKey ?
+                new CustomsControlBase() :
+                shipmentType.CreateCustomsControl(lifetimeScope);
             
             customsControl.Initialize();
             customsControl.Dock = DockStyle.Fill;

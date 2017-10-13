@@ -13,7 +13,9 @@ using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
-
+    /// <summary>
+    /// Factory for creating DHL RateShipmentRequests
+    /// </summary>
     [KeyedComponent(typeof(ICarrierRateShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRateShipmentRequestFactory : ICarrierRateShipmentRequestFactory
     {

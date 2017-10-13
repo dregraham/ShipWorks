@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             List<RateResult> results = new List<RateResult>();
 
-            foreach (var apiRate in rateResponse.RateResponse.Rates)
+            foreach (Rate apiRate in rateResponse.RateResponse.Rates)
             {
                 RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) apiRate.ShippingAmount.Amount, apiRate.ServiceCode)
                 {
