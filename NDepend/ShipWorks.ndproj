@@ -151,13 +151,19 @@
   <Queries>
     <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
-warnif count > 0 from t in JustMyCode.Types where 
-   t.NbLinesOfCode > 500 
+warnif count > 0 from t in JustMyCode.Types 
+
+// Exclude the InitializeComponent() method in designer files
+   let linesToExclude  = t.Methods.Where(m => m.Name == "InitializeComponent()" && 
+m.SourceDecls.Any(s => s.SourceFile.FilePath.ToStringOrIfNullToEmptyString().ToLower().Contains(".designer.cs"))).Sum(m => m.NbLinesOfCode)
+  
+where
+   t.NbLinesOfCode - linesToExclude  > 500
    // We've commented # IL Instructions, because with LINQ syntax, a few lines of code can compile to hundreds of IL instructions.
    // || t.NbILInstructions > 3000
    orderby t.NbLinesOfCode descending
 select new { t, t.NbLinesOfCode, t.NbILInstructions,
-                t.Methods, t.Fields }
+                t.Methods, t.Fields}
 
 // Types where NbLinesOfCode > 500 are extremely complex 
 // and should be split in a smaller group of types. 
