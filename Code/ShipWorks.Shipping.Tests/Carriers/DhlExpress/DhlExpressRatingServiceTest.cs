@@ -15,9 +15,10 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
-    class DhlExpressRatingServiceTest
+    class DhlExpressRatingServiceTest : IDisposable
     {
         readonly AutoMock mock;
+
         public DhlExpressRatingServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -62,6 +63,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             testObject.GetRates(shipment);
 
             mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress));
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

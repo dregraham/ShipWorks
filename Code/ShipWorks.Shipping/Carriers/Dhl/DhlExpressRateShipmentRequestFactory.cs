@@ -19,14 +19,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     {
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShipmentElementFactory shipmentElementFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressRateShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, IShipmentElementFactory shipmentElementFactory)
+        public DhlExpressRateShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, 
+            IShipmentElementFactory shipmentElementFactory, 
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
             this.shipmentElementFactory = shipmentElementFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -49,13 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             request.Shipment.Customs =  CreateCustoms(shipment);
 
-            List<IPackageAdapter> packages = new List<IPackageAdapter>();
-            foreach (DhlExpressPackageEntity package in shipment.DhlExpress.Packages)
-            {
-                DhlExpressPackageAdapter packageAdapter = new DhlExpressPackageAdapter(shipment, package, 0);
-                packages.Add(packageAdapter);
-            }
-
+            List<IPackageAdapter> packages = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
             request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);
 
             return request;
