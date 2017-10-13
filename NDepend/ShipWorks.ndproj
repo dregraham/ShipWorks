@@ -4239,8 +4239,11 @@ warnif count > 16 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Con
 
 select new { m, m.NbParameters }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
-warnif count > 2 from  t in JustMyCode.Types where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
- t.NbLinesOfCode > 500 &&
+warnif count > 2 from  t in JustMyCode.Types 
+   let linesToExclude  = t.Methods.Where(m => m.Name == "InitializeComponent()" && 
+    m.SourceDecls.Any(s => s.SourceFile.FilePath.ToStringOrIfNullToEmptyString().ToLower().Contains(".designer.cs"))).Sum(m => m.NbLinesOfCode)
+where !t.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
+ t.NbLinesOfCode - linesToExclude > 500 &&
   !t.HasAttribute("Interapptive.Shared.NDependIgnoreLongTypesAttribute")
  orderby t.NbLinesOfCode
 
