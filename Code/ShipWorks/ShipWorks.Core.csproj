@@ -8525,6 +8525,7 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\Audit\IAuditUtility.cs" />
+    <Compile Include="Users\Audit\ImmutableStackContainer.cs" />
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />

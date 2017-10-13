@@ -662,6 +662,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
     <Compile Include="UI\Controls\WeightConverterTest.cs" />
     <Compile Include="UI\PropertyChangedHandlerTest.cs" />
+    <Compile Include="Users\Audit\ImmutableStackContainerTest.cs" />
     <Compile Include="Users\CurrentUserSettingsTest.cs" />
     <Compile Include="Users\UserServiceTest.cs" />
   </ItemGroup>
