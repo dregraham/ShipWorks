@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -48,15 +49,26 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private static void AddInvalidRateErrors(RateGroup rateGroup, RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType)
         {
+            StringBuilder errorBuilder = new StringBuilder();
+
             if (rateResponse.RateResponse.InvalidRates.Any())
             {
-                StringBuilder errorBuilder = new StringBuilder();
-
                 foreach (Rate invalidRate in rateResponse.RateResponse.InvalidRates)
                 {
                     invalidRate.ErrorMessages.ForEach(m => errorBuilder.AppendLine(m));
                 }
+            }
 
+            if (rateResponse.RateResponse.Errors.Any())
+            {
+                foreach (ProviderError error in rateResponse.RateResponse.Errors)
+                {
+                    errorBuilder.AppendLine(error.Message);
+                }
+            }
+            
+            if (errorBuilder.Length > 0)
+            {
                 rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType, errorBuilder.ToString()));
             }
         }
