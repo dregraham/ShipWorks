@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Common.Logging;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -16,6 +16,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -24,6 +25,8 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -55,8 +58,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
-        public EbayDownloader(StoreEntity store, IEbayWebClient webClient,
-            IStoreTypeManager storeTypeManager, IConfigurationData configurationData, ISqlAdapterFactory sqlAdapterFactory)
+        public EbayDownloader(StoreEntity store,
+                IEbayWebClient webClient,
+                IStoreTypeManager storeTypeManager,
+                IConfigurationData configurationData,
+                ISqlAdapterFactory sqlAdapterFactory)
             : base(store, storeTypeManager.GetType(store), configurationData, sqlAdapterFactory)
         {
             this.webClient = webClient;
@@ -117,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // Controls whether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
             //bool usePagedDownload = true;
 
-            // Get the date\time to start downloading from
+            // Get the date/time to start downloading from
             DateTime rangeStart = (await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false)) ??
                 DateTime.UtcNow.AddDays(-7);
             DateTime rangeEnd = eBayOfficialTime.AddMinutes(-5);
@@ -347,32 +353,50 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-            return sqlDeadlockRetry.ExecuteWithRetryAsync(async () =>
+            return sqlDeadlockRetry.ExecuteWithRetryAsync(
+                retryNumber => PerformSave(order, abandonedItems, retryNumber, affectedOrders),
+                ex => ex is ORMEntityOutOfSyncException);
+        }
+
+        /// <summary>
+        /// Perform the actual save
+        /// </summary>
+        private async Task PerformSave(EbayOrderEntity order, List<OrderItemEntity> abandonedItems, int retryNumber, List<OrderEntity> affectedOrders)
+        {
+            var clonedOrder = EntityUtility.CloneEntity(order);
+            var clonedAffectedOrders = affectedOrders.Select(EntityUtility.CloneEntity).ToList();
+            var clonedAbandonedItems = abandonedItems.Select(EntityUtility.CloneEntity).ToList();
+
+            await connection.WithTransaction(async (transaction, adapter) =>
             {
-                using (DbTransaction transaction = connection.BeginTransaction())
+                // Save the new order
+                var postAction = await SaveDownloadedOrderWithoutPostAction(clonedOrder, transaction).ConfigureAwait(false);
+
+                // Remove the abandoned items
+                DeleteAbandonedItems(clonedAbandonedItems, clonedAffectedOrders, adapter);
+
+                // We've seen an entity out of sync exceptions in ShipSense when getting the store ID
+                if (retryNumber == 0)
                 {
-                    using (SqlAdapter adapter = new SqlAdapter(connection, transaction))
-                    {
-                        // Save the new order
-                        await SaveDownloadedOrder(order, transaction).ConfigureAwait(false);
-
-                        // Remove the abandoned items
-                        DeleteAbandonedItems(abandonedItems, affectedOrders, adapter);
-
-                        // Copy Notes, Shipments from affected orders into the combined order
-                        // delete the affected orders
-                        ConsolidateOrderResources(order, affectedOrders, adapter);
-                    }
+                    adapter.FetchEntity(clonedOrder);
                 }
 
-                await UpdateOrderStatusesAfterSave(order, sqlAdapterFactory.Create(connection));
-            });
+                // Copy Notes, Shipments from affected orders into the combined order
+                // delete the affected orders
+                await ConsolidateOrderResources(clonedOrder, clonedAffectedOrders, adapter).ConfigureAwait(false);
+
+                transaction.Commit();
+
+                postAction();
+            }).ConfigureAwait(false);
+
+            await UpdateOrderStatusesAfterSave(clonedOrder, sqlAdapterFactory.Create(connection)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Delete abandoned items from orders that are being combined
         /// </summary>
-        private void DeleteAbandonedItems(IEnumerable<OrderItemEntity> abandonedItems, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        private void DeleteAbandonedItems(IEnumerable<OrderItemEntity> abandonedItems, IEnumerable<OrderEntity> affectedOrders, ISqlAdapter adapter)
         {
             // Go through each abandoned item and delete it
             foreach (OrderItemEntity item in abandonedItems)
@@ -409,20 +433,98 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="order">The new order that the old</param>
         /// <param name="affectedOrders">Old orders to copy from and delete</param>
         /// <param name="adapter">The adapter to use</param>
-        private void ConsolidateOrderResources(OrderEntity order, IEnumerable<OrderEntity> affectedOrders, SqlAdapter adapter)
+        private async Task ConsolidateOrderResources(OrderEntity order, IEnumerable<OrderEntity> affectedOrders, ISqlAdapter adapter)
         {
             // Find all the orders that have no items.  We're going to have to delete them, since they are now empty and pointless.  But before
             // we delete them, we need to migrate their shipments and notes so they don't just get lost.
             foreach (OrderEntity fromOrder in affectedOrders.Where(o => o.OrderItems.Count == 0))
             {
                 // Copy the notes from the old order
-                OrderUtility.CopyNotes(fromOrder.OrderID, order);
+                await CopyNotes(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Copy the shipments from the old order
-                OrderUtility.CopyShipments(fromOrder.OrderID, order);
+                await CopyShipments(fromOrder.OrderID, order, adapter).ConfigureAwait(false);
 
                 // Delete the old order
                 DeletionService.DeleteOrder(fromOrder.OrderID, adapter);
+            }
+        }
+
+        /// <summary>
+        /// Copies any shipment entities from one order to another
+        /// </summary>
+        private static async Task CopyShipments(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            EntityQuery<ShipmentEntity> query = factory.Shipment
+                .Where(ShipmentFields.OrderID == fromOrderID);
+            query = FullShipmentPrefetchPath(query);
+
+            IEntityCollection2 shipments = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+
+            // Copy any existing shipments
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                // this is now a new shipment to be inserted
+                EntityUtility.MarkAsNew(shipment);
+                shipment.Order = toOrder;
+
+                // Mark all the carrier-specific stuff as new
+                foreach (IEntityCore entity in ((IEntityCore) shipment).GetDependingRelatedEntities())
+                {
+                    EntityUtility.MarkAsNew(entity);
+                }
+
+                // And all the customers stuff as new
+                foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
+                {
+                    EntityUtility.MarkAsNew(customsItem);
+                }
+
+                shipment.OrderID = toOrder.OrderID;
+
+                await sqlAdapter.SaveEntityAsync(shipment).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Create the pre-fetch path used to load a shipment
+        /// </summary>
+        private static EntityQuery<ShipmentEntity> FullShipmentPrefetchPath(EntityQuery<ShipmentEntity> query)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                return Enum.GetValues(typeof(ShipmentTypeCode))
+                    .OfType<ShipmentTypeCode>()
+                    .Where(x => lifetimeScope.IsRegisteredWithKey<IShipmentTypePrefetchProvider>(x))
+                    .Select(x => lifetimeScope.ResolveKeyed<IShipmentTypePrefetchProvider>(x))
+                    .Aggregate(ShipmentTypePrefetchPath.Empty, (path, x) => path.With(x))
+                    .ApplyTo(query)
+                    .WithPath(ShipmentEntity.PrefetchPathCustomsItems);
+            }
+        }
+
+        /// <summary>
+        /// Copies any note entities from one order to another.
+        /// </summary>
+        public static async Task CopyNotes(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
+        {
+            var factory = new QueryFactory();
+            var query = factory.Note.Where(NoteFields.EntityID == fromOrderID);
+            var newNotes = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+
+            foreach (NoteEntity note in newNotes)
+            {
+                EntityUtility.MarkAsNew(note);
+                note.Order = toOrder;
+
+                // If its new, we have to increment reference counts
+                if (note.IsNew)
+                {
+                    NoteManager.AdjustNoteCount(sqlAdapter, note.EntityID, 1);
+                }
+
+                await sqlAdapter.SaveEntityAsync(note).ConfigureAwait(false);
             }
         }
 

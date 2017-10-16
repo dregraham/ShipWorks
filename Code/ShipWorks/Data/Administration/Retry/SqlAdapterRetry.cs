@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -26,6 +28,7 @@ namespace ShipWorks.Data.Administration.Retry
         private readonly int retries = 5;
         private readonly int deadlockPriority = -5;
         private readonly string commandDescription = string.Empty;
+        private readonly TimeSpan retryDelay;
 
         /// <summary>
         /// Constructor
@@ -33,7 +36,19 @@ namespace ShipWorks.Data.Administration.Retry
         /// <param name="retries">Number of times to attempt execution before allowing the exception to throw.</param>
         /// <param name="deadlockPriority">Deadlock priority for the call.  Used with method that accepts a SqlAdapter parameter.</param>
         /// <param name="commandDescription">Description of the command to be run.</param>
-        public SqlAdapterRetry(int retries, int deadlockPriority, string commandDescription)
+        public SqlAdapterRetry(int retries, int deadlockPriority, string commandDescription) :
+            this(retries, deadlockPriority, commandDescription, TimeSpan.FromSeconds(1))
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="retries">Number of times to attempt execution before allowing the exception to throw.</param>
+        /// <param name="deadlockPriority">Deadlock priority for the call.  Used with method that accepts a SqlAdapter parameter.</param>
+        /// <param name="commandDescription">Description of the command to be run.</param>
+        public SqlAdapterRetry(int retries, int deadlockPriority, string commandDescription, TimeSpan retryDelay)
         {
             if (retries < 1)
             {
@@ -43,6 +58,7 @@ namespace ShipWorks.Data.Administration.Retry
             this.retries = retries;
             this.deadlockPriority = deadlockPriority;
             this.commandDescription = commandDescription;
+            this.retryDelay = retryDelay;
         }
 
         /// <summary>
@@ -53,61 +69,34 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public void ExecuteWithRetry(Action<SqlAdapter> method)
-        {
-            int retryCounter = retries;
+        public void ExecuteWithRetry(Action<ISqlAdapter> method) =>
+            ExecuteWithRetry(method, () => SqlAdapter.Create(true));
 
-            // TODO: May need to make sure we are not in a transaction, so that this is the ONLY transaction
-
-            lock (lockObject)
+        /// <summary>
+        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
+        /// if TException is detected.
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
+        /// and an exception is thrown, everything would be rolled back.
+        /// </summary>
+        /// <param name="method">Method to execute.  </param>
+        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter) =>
+            ExecuteWithRetry(() =>
             {
-                using (new LoggedStopwatch(log, string.Format("SqlAdapterRetry.ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
+                using (new SqlDeadlockPriorityScope(deadlockPriority))
                 {
-                    while (retryCounter >= 0)
+                    using (ISqlAdapter adapter = createSqlAdapter())
                     {
-                        try
-                        {
-                            using (new SqlDeadlockPriorityScope(deadlockPriority))
-                            {
-                                using (SqlAdapter adapter = SqlAdapter.Create(true))
-                                {
-                                    adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
+                        adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
 
-                                    method(adapter);
+                        method(adapter);
 
-                                    adapter.Commit();
+                        adapter.Commit();
 
-                                    return;
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (ex is TException || (ex.InnerException is TException))
-                            {
-                                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                                if (retryCounter == 0)
-                                {
-                                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                                    throw;
-                                }
-
-                                // Wait before trying again, give the other guy some time to resolve itself
-                                Thread.Sleep(1000);
-
-                                // Try again
-                                retryCounter--;
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
+                        return;
                     }
                 }
-            }
-        }
+            });
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
@@ -132,21 +121,11 @@ namespace ShipWorks.Data.Administration.Retry
                         }
                         catch (Exception ex)
                         {
-                            if (ex is TException || (ex.InnerException is TException))
+                            var result = HandleException(ex, retryCounter);
+
+                            if (result.Success)
                             {
-                                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                                if (retryCounter == 0)
-                                {
-                                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                                    throw;
-                                }
-
-                                // Wait before trying again, give the other guy some time to resolve itself
-                                Thread.Sleep(1000);
-
-                                // Try again
-                                retryCounter--;
+                                retryCounter = result.Value;
                             }
                             else
                             {
@@ -158,13 +137,20 @@ namespace ShipWorks.Data.Administration.Retry
             }
         }
 
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public async Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method)
+        public Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> method) =>
+            ExecuteWithRetryAsync<T>(x => method(), ex => false);
+
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public async Task<T> ExecuteWithRetryAsync<T>(Func<int, Task<T>> method, Func<Exception, bool> exceptionCheck)
         {
             int retryCounter = retries;
 
@@ -174,25 +160,15 @@ namespace ShipWorks.Data.Administration.Retry
                 {
                     try
                     {
-                        return await method().ConfigureAwait(false);
+                        return await method(retries - retryCounter).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
-                        if (ex is TException || (ex.InnerException is TException))
+                        var result = await HandleExceptionAsync(ex, retryCounter, exceptionCheck).ConfigureAwait(false);
+
+                        if (result.Success)
                         {
-                            log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                            if (retryCounter == 0)
-                            {
-                                log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                                throw;
-                            }
-
-                            // Wait before trying again, give the other guy some time to resolve itself
-                            Thread.Sleep(1000);
-
-                            // Try again
-                            retryCounter--;
+                            retryCounter = result.Value;
                         }
                         else
                         {
@@ -204,53 +180,34 @@ namespace ShipWorks.Data.Administration.Retry
                 return default(T);
             }
         }
-        
-        //TODO: Refactor the method below so that it doesn't duplicate most of the method above
+
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public async Task ExecuteWithRetryAsync(Func<Task> method)
-        {
-            int retryCounter = retries;
+        public Task ExecuteWithRetryAsync(Func<Task> method) =>
+            ExecuteWithRetryAsync(method, ex => false);
 
-            using (new LoggedStopwatch(log, string.Format("ExecuteWithRetryAsync for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public Task ExecuteWithRetryAsync(Func<Task> method, Func<Exception, bool> exceptionCheck) =>
+            ExecuteWithRetryAsync(x => method(), exceptionCheck);
+
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public Task ExecuteWithRetryAsync(Func<int, Task> method, Func<Exception, bool> exceptionCheck) =>
+            ExecuteWithRetryAsync(async (x) =>
             {
-                while (retryCounter >= 0)
-                {
-                    try
-                    {
-                        await method();
-
-                        return;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is TException || (ex.InnerException is TException))
-                        {
-                            log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                            if (retryCounter == 0)
-                            {
-                                log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                                throw;
-                            }
-
-                            // Wait before trying again, give the other guy some time to resolve itself
-                            Thread.Sleep(1000);
-
-                            // Try again
-                            retryCounter--;
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-            }
-        }
+                await method(x).ConfigureAwait(false);
+                return Unit.Default;
+            }, exceptionCheck);
 
         /// <summary>
         /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
@@ -260,55 +217,81 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
-        public async Task ExecuteWithRetryAsync(Func<SqlAdapter, Task> method)
-        {
-            int retryCounter = retries;
+        public Task ExecuteWithRetryAsync(Func<ISqlAdapter, Task> method) =>
+            ExecuteWithRetryAsync(method, () => SqlAdapter.Create(true));
 
-            using (new LoggedStopwatch(log, string.Format("SqlAdapterRetry.ExecuteWithRetryAsync for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
+        /// <summary>
+        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
+        /// if TException is detected.
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
+        /// and an exception is thrown, everything would be rolled back.
+        /// </summary>
+        /// <param name="method">Method to execute.  </param>
+        public Task ExecuteWithRetryAsync(Func<ISqlAdapter, Task> method, Func<ISqlAdapter> createSqlAdapter) =>
+            ExecuteWithRetryAsync(async () =>
             {
-                while (retryCounter >= 0)
+                using (new SqlDeadlockPriorityScope(deadlockPriority))
                 {
-                    try
+                    using (ISqlAdapter adapter = createSqlAdapter())
                     {
-                        using (new SqlDeadlockPriorityScope(deadlockPriority))
-                        {
-                            using (SqlAdapter adapter = SqlAdapter.Create(true))
-                            {
-                                adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
+                        adapter.CommandTimeOut = (int) TimeSpan.FromMinutes(10).TotalSeconds;
 
-                                await method(adapter).ConfigureAwait(false);
+                        await method(adapter).ConfigureAwait(false);
 
-                                adapter.Commit();
+                        adapter.Commit();
 
-                                return;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is TException || (ex.InnerException is TException))
-                        {
-                            log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
-
-                            if (retryCounter == 0)
-                            {
-                                log.ErrorFormat("Could not execute due to maximum retry failures reached.");
-                                throw;
-                            }
-
-                            // Wait before trying again, give the other guy some time to resolve itself
-                            Thread.Sleep(1000);
-
-                            // Try again
-                            retryCounter--;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        return;
                     }
                 }
+            });
+
+        /// <summary>
+        /// Handle the exception, if possible
+        /// </summary>
+        private GenericResult<int> HandleException(Exception ex, int retryCounter)
+        {
+            if (ex is TException || (ex.InnerException is TException))
+            {
+                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
+
+                if (retryCounter == 0)
+                {
+                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
+                    return GenericResult.FromError<int>(ex);
+                }
+
+                // Wait before trying again, give the other guy some time to resolve itself
+                Thread.Sleep(retryDelay);
+
+                return GenericResult.FromSuccess(retryCounter - 1);
             }
+
+            return GenericResult.FromError<int>(ex);
+        }
+
+        /// <summary>
+        /// Handle the exception, if possible
+        /// </summary>
+        private async Task<GenericResult<int>> HandleExceptionAsync(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
+        {
+            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
+            {
+                log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
+
+                if (retryCounter == 0)
+                {
+                    log.ErrorFormat("Could not execute due to maximum retry failures reached.");
+                    return GenericResult.FromError<int>(ex);
+                }
+
+                // Wait before trying again, give the other guy some time to resolve itself
+                await Task.Delay(retryDelay).ConfigureAwait(false);
+
+                return GenericResult.FromSuccess(retryCounter - 1);
+            }
+
+            return GenericResult.FromError<int>(ex);
         }
     }
 }

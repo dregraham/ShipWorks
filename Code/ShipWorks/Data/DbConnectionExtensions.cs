@@ -1,6 +1,9 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using SD.Tools.OrmProfiler.Interceptor;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data
 {
@@ -27,6 +30,28 @@ namespace ShipWorks.Data
 #endif
 
             return sqlConn;
+        }
+
+        /// <summary>
+        /// Perform an action with a transaction
+        /// </summary>
+        public static async Task WithTransaction(this DbConnection connection, Func<DbTransaction, ISqlAdapter, Task> operation)
+        {
+            using (DbTransaction transaction = connection.BeginTransaction())
+            {
+                using (ISqlAdapter adapter = new SqlAdapter(connection, transaction))
+                {
+                    try
+                    {
+                        await operation(transaction, adapter).ConfigureAwait(false);
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
         }
     }
 }

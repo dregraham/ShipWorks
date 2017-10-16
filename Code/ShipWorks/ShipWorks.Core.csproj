@@ -327,6 +327,9 @@
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -1015,6 +1018,7 @@
     <Compile Include="Data\JsonConverters\ShipmentEntityJsonConverter.cs" />
     <Compile Include="Data\JsonConverters\StoreEntityJsonConverter.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
+    <Compile Include="Data\PrefetchPathExtensions.cs" />
     <Compile Include="Data\Utility\IResourceLockFactory.cs" />
     <Compile Include="Data\Utility\ResourceLockFactory.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -1220,6 +1224,8 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -1249,6 +1255,8 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\PrefetchPathContainer.cs" />
+    <Compile Include="Shipping\Carriers\ShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />

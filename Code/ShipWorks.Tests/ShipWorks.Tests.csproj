@@ -125,6 +125,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.2.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -291,6 +294,7 @@
     <Compile Include="Core\RegistryTests.cs" />
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
+    <Compile Include="Data\Administration\Retry\SqlAdapterRetryTest.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_00_00_00_Test.cs" />
     <Compile Include="Data\Administration\SqlServerSetup\SqlInstallationFiles\SqlInstallerRepositoryTest.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01_Test.cs" />
@@ -531,6 +535,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\RatingFieldsTest.cs" />
+    <Compile Include="Shipping\Carriers\ShipmentTypePrefetchPathTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
