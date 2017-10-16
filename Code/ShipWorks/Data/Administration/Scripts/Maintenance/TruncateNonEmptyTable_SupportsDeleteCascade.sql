@@ -4,7 +4,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE [dbo].[TruncateNonEmptyTable_SupportsDeleteCascade]
+CREATE PROCEDURE [dbo].[TruncateNonEmptyTable_SupportsDeleteCascade]
   @TableToTruncate                 VARCHAR(255)
 AS 
 

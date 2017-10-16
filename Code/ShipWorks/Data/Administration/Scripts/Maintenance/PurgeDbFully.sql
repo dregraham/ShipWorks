@@ -29,7 +29,7 @@ BEGIN
 END
 GO
 
-declare @DatabaseName nvarchar(50) = N'ShipWorks_ToPurge'
+declare @DatabaseName nvarchar(50) = DB_NAME()
 
 IF OBJECT_ID('TruncateNonEmptyTable_SupportsDeleteCascade') IS NULL
 	THROW 50000, 'You must create the TruncateNonEmptyTable_SupportsDeleteCascade first!', 1;
