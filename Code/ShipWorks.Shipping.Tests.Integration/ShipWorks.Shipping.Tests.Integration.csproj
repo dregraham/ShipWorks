@@ -88,8 +88,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQL.LocalDB.Test, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQL.LocalDB.Test.1.0\lib\net40\SQL.LocalDB.Test.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\SQL.LocalDB.Test.1.1.2\lib\net40\SQL.LocalDB.Test.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.15.1.0.41\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
