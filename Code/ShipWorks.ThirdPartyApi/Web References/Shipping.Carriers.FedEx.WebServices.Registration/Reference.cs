@@ -23,15 +23,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="RegistrationServiceSoapBinding", Namespace="http://fedex.com/ws/registration/v7")]
     public partial class RegistrationService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
+        private System.Threading.SendOrPostCallback provideUploadLocationOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback packageIdSegmentDeactivationOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback validateAccountMeterOperationCompleted;
+        
         private System.Threading.SendOrPostCallback registerWebUserOperationCompleted;
         
+        private System.Threading.SendOrPostCallback packageIdSegmentUsageUpdateOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback meterAutoConfigurationStatusOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback updateParentAndChildMetersOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback meterAutoConfigurationOperationCompleted;
+        
         private System.Threading.SendOrPostCallback versionCaptureOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback packageIdSegmentOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback registerInternalUserOperationCompleted;
         
         private System.Threading.SendOrPostCallback subscriptionOperationCompleted;
         
@@ -74,13 +92,130 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        public event provideUploadLocationCompletedEventHandler provideUploadLocationCompleted;
+        
+        /// <remarks/>
+        public event packageIdSegmentDeactivationCompletedEventHandler packageIdSegmentDeactivationCompleted;
+        
+        /// <remarks/>
+        public event validateAccountMeterCompletedEventHandler validateAccountMeterCompleted;
+        
+        /// <remarks/>
         public event registerWebUserCompletedEventHandler registerWebUserCompleted;
+        
+        /// <remarks/>
+        public event packageIdSegmentUsageUpdateCompletedEventHandler packageIdSegmentUsageUpdateCompleted;
+        
+        /// <remarks/>
+        public event meterAutoConfigurationStatusCompletedEventHandler meterAutoConfigurationStatusCompleted;
+        
+        /// <remarks/>
+        public event updateParentAndChildMetersCompletedEventHandler updateParentAndChildMetersCompleted;
+        
+        /// <remarks/>
+        public event meterAutoConfigurationCompletedEventHandler meterAutoConfigurationCompleted;
         
         /// <remarks/>
         public event versionCaptureCompletedEventHandler versionCaptureCompleted;
         
         /// <remarks/>
+        public event packageIdSegmentCompletedEventHandler packageIdSegmentCompleted;
+        
+        /// <remarks/>
+        public event registerInternalUserCompletedEventHandler registerInternalUserCompleted;
+        
+        /// <remarks/>
         public event subscriptionCompletedEventHandler subscriptionCompleted;
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/provideUploadLocation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ProvideUploadLocationReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public ProvideUploadLocationReply provideUploadLocation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] ProvideUploadLocationRequest ProvideUploadLocationRequest) {
+            object[] results = this.Invoke("provideUploadLocation", new object[] {
+                        ProvideUploadLocationRequest});
+            return ((ProvideUploadLocationReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void provideUploadLocationAsync(ProvideUploadLocationRequest ProvideUploadLocationRequest) {
+            this.provideUploadLocationAsync(ProvideUploadLocationRequest, null);
+        }
+        
+        /// <remarks/>
+        public void provideUploadLocationAsync(ProvideUploadLocationRequest ProvideUploadLocationRequest, object userState) {
+            if ((this.provideUploadLocationOperationCompleted == null)) {
+                this.provideUploadLocationOperationCompleted = new System.Threading.SendOrPostCallback(this.OnprovideUploadLocationOperationCompleted);
+            }
+            this.InvokeAsync("provideUploadLocation", new object[] {
+                        ProvideUploadLocationRequest}, this.provideUploadLocationOperationCompleted, userState);
+        }
+        
+        private void OnprovideUploadLocationOperationCompleted(object arg) {
+            if ((this.provideUploadLocationCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.provideUploadLocationCompleted(this, new provideUploadLocationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/packageIdSegmentDeactivation", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("PackageIdSegmentDeactivationReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public PackageIdSegmentDeactivationReply packageIdSegmentDeactivation([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] PackageIdSegmentDeactivationRequest PackageIdSegmentDeactivationRequest) {
+            object[] results = this.Invoke("packageIdSegmentDeactivation", new object[] {
+                        PackageIdSegmentDeactivationRequest});
+            return ((PackageIdSegmentDeactivationReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentDeactivationAsync(PackageIdSegmentDeactivationRequest PackageIdSegmentDeactivationRequest) {
+            this.packageIdSegmentDeactivationAsync(PackageIdSegmentDeactivationRequest, null);
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentDeactivationAsync(PackageIdSegmentDeactivationRequest PackageIdSegmentDeactivationRequest, object userState) {
+            if ((this.packageIdSegmentDeactivationOperationCompleted == null)) {
+                this.packageIdSegmentDeactivationOperationCompleted = new System.Threading.SendOrPostCallback(this.OnpackageIdSegmentDeactivationOperationCompleted);
+            }
+            this.InvokeAsync("packageIdSegmentDeactivation", new object[] {
+                        PackageIdSegmentDeactivationRequest}, this.packageIdSegmentDeactivationOperationCompleted, userState);
+        }
+        
+        private void OnpackageIdSegmentDeactivationOperationCompleted(object arg) {
+            if ((this.packageIdSegmentDeactivationCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.packageIdSegmentDeactivationCompleted(this, new packageIdSegmentDeactivationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/validateAccountMeter", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ValidateMeterReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public ValidateMeterReply validateAccountMeter([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] ValidateMeterRequest ValidateMeterRequest) {
+            object[] results = this.Invoke("validateAccountMeter", new object[] {
+                        ValidateMeterRequest});
+            return ((ValidateMeterReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void validateAccountMeterAsync(ValidateMeterRequest ValidateMeterRequest) {
+            this.validateAccountMeterAsync(ValidateMeterRequest, null);
+        }
+        
+        /// <remarks/>
+        public void validateAccountMeterAsync(ValidateMeterRequest ValidateMeterRequest, object userState) {
+            if ((this.validateAccountMeterOperationCompleted == null)) {
+                this.validateAccountMeterOperationCompleted = new System.Threading.SendOrPostCallback(this.OnvalidateAccountMeterOperationCompleted);
+            }
+            this.InvokeAsync("validateAccountMeter", new object[] {
+                        ValidateMeterRequest}, this.validateAccountMeterOperationCompleted, userState);
+        }
+        
+        private void OnvalidateAccountMeterOperationCompleted(object arg) {
+            if ((this.validateAccountMeterCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.validateAccountMeterCompleted(this, new validateAccountMeterCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/registerWebUser", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
@@ -113,6 +248,126 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/packageIdSegmentUsageUpdate", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("PackageIdSegmentUsageUpdateReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public PackageIdSegmentUsageUpdateReply packageIdSegmentUsageUpdate([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] PackageIdSegmentUsageUpdateRequest PackageIdSegmentUsageUpdateRequest) {
+            object[] results = this.Invoke("packageIdSegmentUsageUpdate", new object[] {
+                        PackageIdSegmentUsageUpdateRequest});
+            return ((PackageIdSegmentUsageUpdateReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentUsageUpdateAsync(PackageIdSegmentUsageUpdateRequest PackageIdSegmentUsageUpdateRequest) {
+            this.packageIdSegmentUsageUpdateAsync(PackageIdSegmentUsageUpdateRequest, null);
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentUsageUpdateAsync(PackageIdSegmentUsageUpdateRequest PackageIdSegmentUsageUpdateRequest, object userState) {
+            if ((this.packageIdSegmentUsageUpdateOperationCompleted == null)) {
+                this.packageIdSegmentUsageUpdateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnpackageIdSegmentUsageUpdateOperationCompleted);
+            }
+            this.InvokeAsync("packageIdSegmentUsageUpdate", new object[] {
+                        PackageIdSegmentUsageUpdateRequest}, this.packageIdSegmentUsageUpdateOperationCompleted, userState);
+        }
+        
+        private void OnpackageIdSegmentUsageUpdateOperationCompleted(object arg) {
+            if ((this.packageIdSegmentUsageUpdateCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.packageIdSegmentUsageUpdateCompleted(this, new packageIdSegmentUsageUpdateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/meterAutoConfigurationStatus", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("MeterAutoConfigurationStatusReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public MeterAutoConfigurationStatusReply meterAutoConfigurationStatus([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] MeterAutoConfigurationStatusRequest MeterAutoConfigurationStatusRequest) {
+            object[] results = this.Invoke("meterAutoConfigurationStatus", new object[] {
+                        MeterAutoConfigurationStatusRequest});
+            return ((MeterAutoConfigurationStatusReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void meterAutoConfigurationStatusAsync(MeterAutoConfigurationStatusRequest MeterAutoConfigurationStatusRequest) {
+            this.meterAutoConfigurationStatusAsync(MeterAutoConfigurationStatusRequest, null);
+        }
+        
+        /// <remarks/>
+        public void meterAutoConfigurationStatusAsync(MeterAutoConfigurationStatusRequest MeterAutoConfigurationStatusRequest, object userState) {
+            if ((this.meterAutoConfigurationStatusOperationCompleted == null)) {
+                this.meterAutoConfigurationStatusOperationCompleted = new System.Threading.SendOrPostCallback(this.OnmeterAutoConfigurationStatusOperationCompleted);
+            }
+            this.InvokeAsync("meterAutoConfigurationStatus", new object[] {
+                        MeterAutoConfigurationStatusRequest}, this.meterAutoConfigurationStatusOperationCompleted, userState);
+        }
+        
+        private void OnmeterAutoConfigurationStatusOperationCompleted(object arg) {
+            if ((this.meterAutoConfigurationStatusCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.meterAutoConfigurationStatusCompleted(this, new meterAutoConfigurationStatusCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/updateParentAndChildMeters", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ParentAndChildMetersUpdateReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public ParentAndChildMetersUpdateReply updateParentAndChildMeters([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] ParentAndChildMetersUpdateRequest ParentAndChildMetersUpdateRequest) {
+            object[] results = this.Invoke("updateParentAndChildMeters", new object[] {
+                        ParentAndChildMetersUpdateRequest});
+            return ((ParentAndChildMetersUpdateReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void updateParentAndChildMetersAsync(ParentAndChildMetersUpdateRequest ParentAndChildMetersUpdateRequest) {
+            this.updateParentAndChildMetersAsync(ParentAndChildMetersUpdateRequest, null);
+        }
+        
+        /// <remarks/>
+        public void updateParentAndChildMetersAsync(ParentAndChildMetersUpdateRequest ParentAndChildMetersUpdateRequest, object userState) {
+            if ((this.updateParentAndChildMetersOperationCompleted == null)) {
+                this.updateParentAndChildMetersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnupdateParentAndChildMetersOperationCompleted);
+            }
+            this.InvokeAsync("updateParentAndChildMeters", new object[] {
+                        ParentAndChildMetersUpdateRequest}, this.updateParentAndChildMetersOperationCompleted, userState);
+        }
+        
+        private void OnupdateParentAndChildMetersOperationCompleted(object arg) {
+            if ((this.updateParentAndChildMetersCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.updateParentAndChildMetersCompleted(this, new updateParentAndChildMetersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/meterAutoConfiguration", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("MeterAutoConfigurationReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public MeterAutoConfigurationReply meterAutoConfiguration([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] MeterAutoConfigurationRequest MeterAutoConfigurationRequest) {
+            object[] results = this.Invoke("meterAutoConfiguration", new object[] {
+                        MeterAutoConfigurationRequest});
+            return ((MeterAutoConfigurationReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void meterAutoConfigurationAsync(MeterAutoConfigurationRequest MeterAutoConfigurationRequest) {
+            this.meterAutoConfigurationAsync(MeterAutoConfigurationRequest, null);
+        }
+        
+        /// <remarks/>
+        public void meterAutoConfigurationAsync(MeterAutoConfigurationRequest MeterAutoConfigurationRequest, object userState) {
+            if ((this.meterAutoConfigurationOperationCompleted == null)) {
+                this.meterAutoConfigurationOperationCompleted = new System.Threading.SendOrPostCallback(this.OnmeterAutoConfigurationOperationCompleted);
+            }
+            this.InvokeAsync("meterAutoConfiguration", new object[] {
+                        MeterAutoConfigurationRequest}, this.meterAutoConfigurationOperationCompleted, userState);
+        }
+        
+        private void OnmeterAutoConfigurationOperationCompleted(object arg) {
+            if ((this.meterAutoConfigurationCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.meterAutoConfigurationCompleted(this, new meterAutoConfigurationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/versionCapture", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
         [return: System.Xml.Serialization.XmlElementAttribute("VersionCaptureReply", Namespace="http://fedex.com/ws/registration/v7")]
         public VersionCaptureReply versionCapture([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] VersionCaptureRequest VersionCaptureRequest) {
@@ -139,6 +394,66 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
             if ((this.versionCaptureCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.versionCaptureCompleted(this, new versionCaptureCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/packageIdSegment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("PackageIdSegmentReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public PackageIdSegmentReply packageIdSegment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] PackageIdSegmentRequest PackageIdSegmentRequest) {
+            object[] results = this.Invoke("packageIdSegment", new object[] {
+                        PackageIdSegmentRequest});
+            return ((PackageIdSegmentReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentAsync(PackageIdSegmentRequest PackageIdSegmentRequest) {
+            this.packageIdSegmentAsync(PackageIdSegmentRequest, null);
+        }
+        
+        /// <remarks/>
+        public void packageIdSegmentAsync(PackageIdSegmentRequest PackageIdSegmentRequest, object userState) {
+            if ((this.packageIdSegmentOperationCompleted == null)) {
+                this.packageIdSegmentOperationCompleted = new System.Threading.SendOrPostCallback(this.OnpackageIdSegmentOperationCompleted);
+            }
+            this.InvokeAsync("packageIdSegment", new object[] {
+                        PackageIdSegmentRequest}, this.packageIdSegmentOperationCompleted, userState);
+        }
+        
+        private void OnpackageIdSegmentOperationCompleted(object arg) {
+            if ((this.packageIdSegmentCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.packageIdSegmentCompleted(this, new packageIdSegmentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/registration/v7/registerInternalUser", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("RegisterInternalUserReply", Namespace="http://fedex.com/ws/registration/v7")]
+        public RegisterInternalUserReply registerInternalUser([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/registration/v7")] RegisterInternalUserRequest RegisterInternalUserRequest) {
+            object[] results = this.Invoke("registerInternalUser", new object[] {
+                        RegisterInternalUserRequest});
+            return ((RegisterInternalUserReply)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void registerInternalUserAsync(RegisterInternalUserRequest RegisterInternalUserRequest) {
+            this.registerInternalUserAsync(RegisterInternalUserRequest, null);
+        }
+        
+        /// <remarks/>
+        public void registerInternalUserAsync(RegisterInternalUserRequest RegisterInternalUserRequest, object userState) {
+            if ((this.registerInternalUserOperationCompleted == null)) {
+                this.registerInternalUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OnregisterInternalUserOperationCompleted);
+            }
+            this.InvokeAsync("registerInternalUser", new object[] {
+                        RegisterInternalUserRequest}, this.registerInternalUserOperationCompleted, userState);
+        }
+        
+        private void OnregisterInternalUserOperationCompleted(object arg) {
+            if ((this.registerInternalUserCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.registerInternalUserCompleted(this, new registerInternalUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -192,30 +507,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class RegisterWebUserRequest {
+    public partial class ProvideUploadLocationRequest {
         
         private WebAuthenticationDetail webAuthenticationDetailField;
         
         private ClientDetail clientDetailField;
         
+        private UserDetail userDetailField;
+        
         private TransactionDetail transactionDetailField;
         
         private VersionId versionField;
         
-        private WebAuthenticationCredential parentCredentialField;
+        private ProvideUploadLocationServiceLevel serviceLevelField;
         
-        private WebServiceCategoryType[] categoriesField;
+        private bool serviceLevelFieldSpecified;
         
-        private Address shippingAddressField;
-        
-        private ParsedContactAndAddress userContactAndAddressField;
-        
-        private string secondaryEmailField;
+        private UploadType[] requestedTypesField;
         
         /// <remarks/>
         public WebAuthenticationDetail WebAuthenticationDetail {
@@ -234,6 +547,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
             }
             set {
                 this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
             }
         }
         
@@ -258,59 +581,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
-        public WebAuthenticationCredential ParentCredential {
+        public ProvideUploadLocationServiceLevel ServiceLevel {
             get {
-                return this.parentCredentialField;
+                return this.serviceLevelField;
             }
             set {
-                this.parentCredentialField = value;
+                this.serviceLevelField = value;
             }
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Categories")]
-        public WebServiceCategoryType[] Categories {
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ServiceLevelSpecified {
             get {
-                return this.categoriesField;
+                return this.serviceLevelFieldSpecified;
             }
             set {
-                this.categoriesField = value;
+                this.serviceLevelFieldSpecified = value;
             }
         }
         
         /// <remarks/>
-        public Address ShippingAddress {
+        [System.Xml.Serialization.XmlElementAttribute("RequestedTypes")]
+        public UploadType[] RequestedTypes {
             get {
-                return this.shippingAddressField;
+                return this.requestedTypesField;
             }
             set {
-                this.shippingAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public ParsedContactAndAddress UserContactAndAddress {
-            get {
-                return this.userContactAndAddressField;
-            }
-            set {
-                this.userContactAndAddressField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string SecondaryEmail {
-            get {
-                return this.secondaryEmailField;
-            }
-            set {
-                this.secondaryEmailField = value;
+                this.requestedTypesField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -343,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -376,102 +680,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class MeterDetail {
-        
-        private string meterNumberField;
-        
-        private string groundShipperNumberField;
-        
-        private string epdiCodeField;
-        
-        private System.DateTime reconcileTimeField;
-        
-        private bool reconcileTimeFieldSpecified;
-        
-        private string groundTrackingNumberStartField;
-        
-        private string groundTrackingNumberEndField;
-        
-        /// <remarks/>
-        public string MeterNumber {
-            get {
-                return this.meterNumberField;
-            }
-            set {
-                this.meterNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string GroundShipperNumber {
-            get {
-                return this.groundShipperNumberField;
-            }
-            set {
-                this.groundShipperNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string EpdiCode {
-            get {
-                return this.epdiCodeField;
-            }
-            set {
-                this.epdiCodeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
-        public System.DateTime ReconcileTime {
-            get {
-                return this.reconcileTimeField;
-            }
-            set {
-                this.reconcileTimeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ReconcileTimeSpecified {
-            get {
-                return this.reconcileTimeFieldSpecified;
-            }
-            set {
-                this.reconcileTimeFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string GroundTrackingNumberStart {
-            get {
-                return this.groundTrackingNumberStartField;
-            }
-            set {
-                this.groundTrackingNumberStartField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string GroundTrackingNumberEnd {
-            get {
-                return this.groundTrackingNumberEndField;
-            }
-            set {
-                this.groundTrackingNumberEndField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -479,8 +688,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     public partial class SubscriptionReply {
         
         private NotificationSeverityType highestSeverityField;
-        
-        private bool highestSeverityFieldSpecified;
         
         private Notification[] notificationsField;
         
@@ -499,17 +706,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
             }
             set {
                 this.highestSeverityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool HighestSeveritySpecified {
-            get {
-                return this.highestSeverityFieldSpecified;
-            }
-            set {
-                this.highestSeverityFieldSpecified = value;
             }
         }
         
@@ -567,7 +763,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
     public enum NotificationSeverityType {
@@ -589,7 +785,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -684,7 +880,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -717,7 +913,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -727,6 +923,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         private string customerTransactionIdField;
         
         private Localization localizationField;
+        
+        private string internalTransactionIdField;
+        
+        private bool tracingField;
+        
+        private bool tracingFieldSpecified;
+        
+        private TransactionSourceFormat sourceFormatField;
+        
+        private bool sourceFormatFieldSpecified;
+        
+        private WebServiceEnvironment environmentField;
+        
+        private bool environmentFieldSpecified;
         
         /// <remarks/>
         public string CustomerTransactionId {
@@ -747,10 +957,83 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
                 this.localizationField = value;
             }
         }
+        
+        /// <remarks/>
+        public string InternalTransactionId {
+            get {
+                return this.internalTransactionIdField;
+            }
+            set {
+                this.internalTransactionIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool Tracing {
+            get {
+                return this.tracingField;
+            }
+            set {
+                this.tracingField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TracingSpecified {
+            get {
+                return this.tracingFieldSpecified;
+            }
+            set {
+                this.tracingFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionSourceFormat SourceFormat {
+            get {
+                return this.sourceFormatField;
+            }
+            set {
+                this.sourceFormatField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool SourceFormatSpecified {
+            get {
+                return this.sourceFormatFieldSpecified;
+            }
+            set {
+                this.sourceFormatFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public WebServiceEnvironment Environment {
+            get {
+                return this.environmentField;
+            }
+            set {
+                this.environmentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EnvironmentSpecified {
+            get {
+                return this.environmentFieldSpecified;
+            }
+            set {
+                this.environmentFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -783,7 +1066,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum TransactionSourceFormat {
+        
+        /// <remarks/>
+        API_CTS,
+        
+        /// <remarks/>
+        API_XML,
+        
+        /// <remarks/>
+        DIRECT,
+        
+        /// <remarks/>
+        DIRECT_XML,
+        
+        /// <remarks/>
+        FXRS_CTS,
+        
+        /// <remarks/>
+        UNKNOWN,
+        
+        /// <remarks/>
+        WSI_XML,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum WebServiceEnvironment {
+        
+        /// <remarks/>
+        PRODUCTION,
+        
+        /// <remarks/>
+        TEST,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -847,7 +1171,102 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class MeterDetail {
+        
+        private string meterNumberField;
+        
+        private string groundShipperNumberField;
+        
+        private string epdiCodeField;
+        
+        private System.DateTime reconcileTimeField;
+        
+        private bool reconcileTimeFieldSpecified;
+        
+        private string groundTrackingNumberStartField;
+        
+        private string groundTrackingNumberEndField;
+        
+        /// <remarks/>
+        public string MeterNumber {
+            get {
+                return this.meterNumberField;
+            }
+            set {
+                this.meterNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string GroundShipperNumber {
+            get {
+                return this.groundShipperNumberField;
+            }
+            set {
+                this.groundShipperNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string EpdiCode {
+            get {
+                return this.epdiCodeField;
+            }
+            set {
+                this.epdiCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
+        public System.DateTime ReconcileTime {
+            get {
+                return this.reconcileTimeField;
+            }
+            set {
+                this.reconcileTimeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ReconcileTimeSpecified {
+            get {
+                return this.reconcileTimeFieldSpecified;
+            }
+            set {
+                this.reconcileTimeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string GroundTrackingNumberStart {
+            get {
+                return this.groundTrackingNumberStartField;
+            }
+            set {
+                this.groundTrackingNumberStartField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string GroundTrackingNumberEnd {
+            get {
+                return this.groundTrackingNumberEndField;
+            }
+            set {
+                this.groundTrackingNumberEndField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
     public enum SubscriptionServiceType {
@@ -860,14 +1279,203 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class TaxpayerIdentification {
+        
+        private TinType tinTypeField;
+        
+        private bool tinTypeFieldSpecified;
+        
+        private string numberField;
+        
+        private string usageField;
+        
+        private System.DateTime effectiveDateField;
+        
+        private bool effectiveDateFieldSpecified;
+        
+        private System.DateTime expirationDateField;
+        
+        private bool expirationDateFieldSpecified;
+        
+        /// <remarks/>
+        public TinType TinType {
+            get {
+                return this.tinTypeField;
+            }
+            set {
+                this.tinTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TinTypeSpecified {
+            get {
+                return this.tinTypeFieldSpecified;
+            }
+            set {
+                this.tinTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Number {
+            get {
+                return this.numberField;
+            }
+            set {
+                this.numberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Usage {
+            get {
+                return this.usageField;
+            }
+            set {
+                this.usageField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime EffectiveDate {
+            get {
+                return this.effectiveDateField;
+            }
+            set {
+                this.effectiveDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EffectiveDateSpecified {
+            get {
+                return this.effectiveDateFieldSpecified;
+            }
+            set {
+                this.effectiveDateFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime ExpirationDate {
+            get {
+                return this.expirationDateField;
+            }
+            set {
+                this.expirationDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ExpirationDateSpecified {
+            get {
+                return this.expirationDateFieldSpecified;
+            }
+            set {
+                this.expirationDateFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum TinType {
+        
+        /// <remarks/>
+        BUSINESS_NATIONAL,
+        
+        /// <remarks/>
+        BUSINESS_STATE,
+        
+        /// <remarks/>
+        PERSONAL_NATIONAL,
+        
+        /// <remarks/>
+        PERSONAL_STATE,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class Party {
+        
+        private string accountNumberField;
+        
+        private TaxpayerIdentification[] tinsField;
+        
+        private Contact contactField;
+        
+        private Address addressField;
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Tins")]
+        public TaxpayerIdentification[] Tins {
+            get {
+                return this.tinsField;
+            }
+            set {
+                this.tinsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Contact Contact {
+            get {
+                return this.contactField;
+            }
+            set {
+                this.contactField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address Address {
+            get {
+                return this.addressField;
+            }
+            set {
+                this.addressField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
     public partial class Contact {
         
+        private string contactIdField;
+        
         private string personNameField;
+        
+        private string titleField;
         
         private string companyNameField;
         
@@ -884,12 +1492,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         private string eMailAddressField;
         
         /// <remarks/>
+        public string ContactId {
+            get {
+                return this.contactIdField;
+            }
+            set {
+                this.contactIdField = value;
+            }
+        }
+        
+        /// <remarks/>
         public string PersonName {
             get {
                 return this.personNameField;
             }
             set {
                 this.personNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Title {
+            get {
+                return this.titleField;
+            }
+            set {
+                this.titleField = value;
             }
         }
         
@@ -965,52 +1593,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class Party {
-        
-        private string accountNumberField;
-        
-        private Contact contactField;
-        
-        private Address addressField;
-        
-        /// <remarks/>
-        public string AccountNumber {
-            get {
-                return this.accountNumberField;
-            }
-            set {
-                this.accountNumberField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Contact Contact {
-            get {
-                return this.contactField;
-            }
-            set {
-                this.contactField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Address Address {
-            get {
-                return this.addressField;
-            }
-            set {
-                this.addressField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1025,9 +1608,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         
         private string postalCodeField;
         
+        private string urbanizationCodeField;
+        
         private string countryCodeField;
         
         private string countryNameField;
+        
+        private bool residentialField;
+        
+        private bool residentialFieldSpecified;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("StreetLines")]
@@ -1071,6 +1660,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        public string UrbanizationCode {
+            get {
+                return this.urbanizationCodeField;
+            }
+            set {
+                this.urbanizationCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
         public string CountryCode {
             get {
                 return this.countryCodeField;
@@ -1089,10 +1688,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
                 this.countryNameField = value;
             }
         }
+        
+        /// <remarks/>
+        public bool Residential {
+            get {
+                return this.residentialField;
+            }
+            set {
+                this.residentialField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ResidentialSpecified {
+            get {
+                return this.residentialFieldSpecified;
+            }
+            set {
+                this.residentialFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1103,9 +1723,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         
         private ClientDetail clientDetailField;
         
+        private UserDetail userDetailField;
+        
         private TransactionDetail transactionDetailField;
         
         private VersionId versionField;
+        
+        private SubscriptionRequestServiceLevel serviceLevelField;
+        
+        private bool serviceLevelFieldSpecified;
         
         private string cspSolutionIdField;
         
@@ -1116,6 +1742,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         private Party subscriberField;
         
         private Address accountShippingAddressField;
+        
+        private PeripheralType peripheralTypeField;
+        
+        private bool peripheralTypeFieldSpecified;
+        
+        private bool masterField;
+        
+        private bool masterFieldSpecified;
+        
+        private string productKeyField;
         
         /// <remarks/>
         public WebAuthenticationDetail WebAuthenticationDetail {
@@ -1138,6 +1774,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
         public TransactionDetail TransactionDetail {
             get {
                 return this.transactionDetailField;
@@ -1154,6 +1800,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
             }
             set {
                 this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public SubscriptionRequestServiceLevel ServiceLevel {
+            get {
+                return this.serviceLevelField;
+            }
+            set {
+                this.serviceLevelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ServiceLevelSpecified {
+            get {
+                return this.serviceLevelFieldSpecified;
+            }
+            set {
+                this.serviceLevelFieldSpecified = value;
             }
         }
         
@@ -1207,10 +1874,62 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
                 this.accountShippingAddressField = value;
             }
         }
+        
+        /// <remarks/>
+        public PeripheralType PeripheralType {
+            get {
+                return this.peripheralTypeField;
+            }
+            set {
+                this.peripheralTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool PeripheralTypeSpecified {
+            get {
+                return this.peripheralTypeFieldSpecified;
+            }
+            set {
+                this.peripheralTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool Master {
+            get {
+                return this.masterField;
+            }
+            set {
+                this.masterField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool MasterSpecified {
+            get {
+                return this.masterFieldSpecified;
+            }
+            set {
+                this.masterFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ProductKey {
+            get {
+                return this.productKeyField;
+            }
+            set {
+                this.productKeyField = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1219,13 +1938,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         
         private string accountNumberField;
         
+        private string groundShipperNumberField;
+        
         private string meterNumberField;
+        
+        private string masterMeterNumberField;
+        
+        private string meterInstanceField;
+        
+        private string companyIdField;
+        
+        private string softwareIdField;
+        
+        private string softwareReleaseField;
+        
+        private string clientProductIdField;
+        
+        private string clientProductVersionField;
+        
+        private string middlewareProductIdField;
+        
+        private string middlewareProductVersionField;
         
         private string integratorIdField;
         
         private ExpressRegionCode regionField;
         
         private bool regionFieldSpecified;
+        
+        private AutoConfigurationType autoConfigurationTypeField;
+        
+        private bool autoConfigurationTypeFieldSpecified;
         
         private Localization localizationField;
         
@@ -1240,12 +1983,112 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        public string GroundShipperNumber {
+            get {
+                return this.groundShipperNumberField;
+            }
+            set {
+                this.groundShipperNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
         public string MeterNumber {
             get {
                 return this.meterNumberField;
             }
             set {
                 this.meterNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MasterMeterNumber {
+            get {
+                return this.masterMeterNumberField;
+            }
+            set {
+                this.masterMeterNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MeterInstance {
+            get {
+                return this.meterInstanceField;
+            }
+            set {
+                this.meterInstanceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string CompanyId {
+            get {
+                return this.companyIdField;
+            }
+            set {
+                this.companyIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SoftwareId {
+            get {
+                return this.softwareIdField;
+            }
+            set {
+                this.softwareIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SoftwareRelease {
+            get {
+                return this.softwareReleaseField;
+            }
+            set {
+                this.softwareReleaseField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ClientProductId {
+            get {
+                return this.clientProductIdField;
+            }
+            set {
+                this.clientProductIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ClientProductVersion {
+            get {
+                return this.clientProductVersionField;
+            }
+            set {
+                this.clientProductVersionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MiddlewareProductId {
+            get {
+                return this.middlewareProductIdField;
+            }
+            set {
+                this.middlewareProductIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MiddlewareProductVersion {
+            get {
+                return this.middlewareProductVersionField;
+            }
+            set {
+                this.middlewareProductVersionField = value;
             }
         }
         
@@ -1281,6 +2124,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         }
         
         /// <remarks/>
+        public AutoConfigurationType AutoConfigurationType {
+            get {
+                return this.autoConfigurationTypeField;
+            }
+            set {
+                this.autoConfigurationTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool AutoConfigurationTypeSpecified {
+            get {
+                return this.autoConfigurationTypeFieldSpecified;
+            }
+            set {
+                this.autoConfigurationTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
         public Localization Localization {
             get {
                 return this.localizationField;
@@ -1292,7 +2156,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
     public enum ExpressRegionCode {
@@ -1314,7 +2178,84 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum AutoConfigurationType {
+        
+        /// <remarks/>
+        ENTERPRISE,
+        
+        /// <remarks/>
+        SHIPPING_SERVICE_PROVIDER,
+        
+        /// <remarks/>
+        SOFTWARE_ONLY,
+        
+        /// <remarks/>
+        TRADITIONAL,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class UserDetail {
+        
+        private string userIdField;
+        
+        private string passwordField;
+        
+        private string uniqueUserIdField;
+        
+        /// <remarks/>
+        public string UserId {
+            get {
+                return this.userIdField;
+            }
+            set {
+                this.userIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Password {
+            get {
+                return this.passwordField;
+            }
+            set {
+                this.passwordField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string UniqueUserId {
+            get {
+                return this.uniqueUserIdField;
+            }
+            set {
+                this.uniqueUserIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum SubscriptionRequestServiceLevel {
+        
+        /// <remarks/>
+        DO_NOT_VALIDATE_ACCOUNT,
+        
+        /// <remarks/>
+        VALIDATE_ACCOUNT,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
     public enum CspType {
@@ -1323,175 +2264,70 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         CERTIFIED_SOLUTION_PROVIDER,
         
         /// <remarks/>
+        CLIENT_SERVER,
+        
+        /// <remarks/>
+        DOT_NET_CLIENT_SERVER,
+        
+        /// <remarks/>
+        DOT_NET_PROPRIETARY,
+        
+        /// <remarks/>
+        DOT_NET_SOFTWARE_ONLY,
+        
+        /// <remarks/>
+        ENTERPRISE,
+        
+        /// <remarks/>
         HTML_WEB_SERVICES_TOOL,
+        
+        /// <remarks/>
+        MOBI_JAVA,
+        
+        /// <remarks/>
+        MOBI_WINDOWS,
+        
+        /// <remarks/>
+        OUTLOOK_2003_PLUGIN,
+        
+        /// <remarks/>
+        OUTLOOK_2007_PLUGIN,
+        
+        /// <remarks/>
+        SOFTWARE_ONLY,
         
         /// <remarks/>
         TRADITIONAL_API,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class VersionCaptureReply {
-        
-        private NotificationSeverityType highestSeverityField;
-        
-        private bool highestSeverityFieldSpecified;
-        
-        private Notification[] notificationsField;
-        
-        private TransactionDetail transactionDetailField;
-        
-        private VersionId versionField;
+    public enum PeripheralType {
         
         /// <remarks/>
-        public NotificationSeverityType HighestSeverity {
-            get {
-                return this.highestSeverityField;
-            }
-            set {
-                this.highestSeverityField = value;
-            }
-        }
+        CUSTOMER_PRINTER,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool HighestSeveritySpecified {
-            get {
-                return this.highestSeverityFieldSpecified;
-            }
-            set {
-                this.highestSeverityFieldSpecified = value;
-            }
-        }
+        NONE,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
-        public Notification[] Notifications {
-            get {
-                return this.notificationsField;
-            }
-            set {
-                this.notificationsField = value;
-            }
-        }
+        PREINSTALLED,
         
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
-                return this.transactionDetailField;
-            }
-            set {
-                this.transactionDetailField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public VersionId Version {
-            get {
-                return this.versionField;
-            }
-            set {
-                this.versionField = value;
-            }
-        }
+        SOFTWARE,
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class VersionCaptureRequest {
-        
-        private WebAuthenticationDetail webAuthenticationDetailField;
-        
-        private ClientDetail clientDetailField;
-        
-        private TransactionDetail transactionDetailField;
-        
-        private VersionId versionField;
-        
-        private string originLocationIdField;
-        
-        private string vendorProductPlatformField;
-        
-        /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
-                return this.webAuthenticationDetailField;
-            }
-            set {
-                this.webAuthenticationDetailField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
-                return this.clientDetailField;
-            }
-            set {
-                this.clientDetailField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
-                return this.transactionDetailField;
-            }
-            set {
-                this.transactionDetailField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public VersionId Version {
-            get {
-                return this.versionField;
-            }
-            set {
-                this.versionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string OriginLocationId {
-            get {
-                return this.originLocationIdField;
-            }
-            set {
-                this.originLocationIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string VendorProductPlatform {
-            get {
-                return this.vendorProductPlatformField;
-            }
-            set {
-                this.vendorProductPlatformField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class RegisterWebUserReply {
+    public partial class RegisterInternalUserReply {
         
         private NotificationSeverityType highestSeverityField;
-        
-        private bool highestSeverityFieldSpecified;
         
         private Notification[] notificationsField;
         
@@ -1501,8 +2337,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
         
         private WebAuthenticationCredential userCredentialField;
         
-        private string clientProductIdField;
-        
         /// <remarks/>
         public NotificationSeverityType HighestSeverity {
             get {
@@ -1510,17 +2344,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
             }
             set {
                 this.highestSeverityField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool HighestSeveritySpecified {
-            get {
-                return this.highestSeverityFieldSpecified;
-            }
-            set {
-                this.highestSeverityFieldSpecified = value;
             }
         }
         
@@ -1564,101 +2387,223 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
                 this.userCredentialField = value;
             }
         }
-        
-        /// <remarks/>
-        public string ClientProductId {
-            get {
-                return this.clientProductIdField;
-            }
-            set {
-                this.clientProductIdField = value;
-            }
-        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class ParsedPersonName {
+    public partial class RegisterInternalUserRequest {
         
-        private string prefixField;
+        private WebAuthenticationDetail webAuthenticationDetailField;
         
-        private string titleField;
+        private ClientDetail clientDetailField;
         
-        private string firstNameField;
+        private UserDetail userDetailField;
         
-        private string middleNameField;
+        private TransactionDetail transactionDetailField;
         
-        private string lastNameField;
+        private VersionId versionField;
         
-        private string suffixField;
+        private WebServiceEnvironment environmentField;
+        
+        private bool environmentFieldSpecified;
+        
+        private WebAuthenticationCredential parentCredentialField;
+        
+        private string securityTokenField;
+        
+        private WebServiceCategoryType[] categoriesField;
+        
+        private Address billingAddressField;
+        
+        private ParsedContactAndAddress userContactAndAddressField;
+        
+        private string secondaryEmailField;
         
         /// <remarks/>
-        public string Prefix {
+        public WebAuthenticationDetail WebAuthenticationDetail {
             get {
-                return this.prefixField;
+                return this.webAuthenticationDetailField;
             }
             set {
-                this.prefixField = value;
+                this.webAuthenticationDetailField = value;
             }
         }
         
         /// <remarks/>
-        public string Title {
+        public ClientDetail ClientDetail {
             get {
-                return this.titleField;
+                return this.clientDetailField;
             }
             set {
-                this.titleField = value;
+                this.clientDetailField = value;
             }
         }
         
         /// <remarks/>
-        public string FirstName {
+        public UserDetail UserDetail {
             get {
-                return this.firstNameField;
+                return this.userDetailField;
             }
             set {
-                this.firstNameField = value;
+                this.userDetailField = value;
             }
         }
         
         /// <remarks/>
-        public string MiddleName {
+        public TransactionDetail TransactionDetail {
             get {
-                return this.middleNameField;
+                return this.transactionDetailField;
             }
             set {
-                this.middleNameField = value;
+                this.transactionDetailField = value;
             }
         }
         
         /// <remarks/>
-        public string LastName {
+        public VersionId Version {
             get {
-                return this.lastNameField;
+                return this.versionField;
             }
             set {
-                this.lastNameField = value;
+                this.versionField = value;
             }
         }
         
         /// <remarks/>
-        public string Suffix {
+        public WebServiceEnvironment Environment {
             get {
-                return this.suffixField;
+                return this.environmentField;
             }
             set {
-                this.suffixField = value;
+                this.environmentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EnvironmentSpecified {
+            get {
+                return this.environmentFieldSpecified;
+            }
+            set {
+                this.environmentFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public WebAuthenticationCredential ParentCredential {
+            get {
+                return this.parentCredentialField;
+            }
+            set {
+                this.parentCredentialField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SecurityToken {
+            get {
+                return this.securityTokenField;
+            }
+            set {
+                this.securityTokenField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Categories")]
+        public WebServiceCategoryType[] Categories {
+            get {
+                return this.categoriesField;
+            }
+            set {
+                this.categoriesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address BillingAddress {
+            get {
+                return this.billingAddressField;
+            }
+            set {
+                this.billingAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ParsedContactAndAddress UserContactAndAddress {
+            get {
+                return this.userContactAndAddressField;
+            }
+            set {
+                this.userContactAndAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SecondaryEmail {
+            get {
+                return this.secondaryEmailField;
+            }
+            set {
+                this.secondaryEmailField = value;
             }
         }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum WebServiceCategoryType {
+        
+        /// <remarks/>
+        OFFICE_AND_PRINT,
+        
+        /// <remarks/>
+        SHIPPING,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ParsedContactAndAddress {
+        
+        private ParsedContact contactField;
+        
+        private Address addressField;
+        
+        /// <remarks/>
+        public ParsedContact Contact {
+            get {
+                return this.contactField;
+            }
+            set {
+                this.contactField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address Address {
+            get {
+                return this.addressField;
+            }
+            set {
+                this.addressField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -1787,19 +2732,699 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public partial class ParsedContactAndAddress {
+    public partial class ParsedPersonName {
         
-        private ParsedContact contactField;
+        private string prefixField;
+        
+        private string titleField;
+        
+        private string firstNameField;
+        
+        private string middleNameField;
+        
+        private string lastNameField;
+        
+        private string suffixField;
+        
+        /// <remarks/>
+        public string Prefix {
+            get {
+                return this.prefixField;
+            }
+            set {
+                this.prefixField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Title {
+            get {
+                return this.titleField;
+            }
+            set {
+                this.titleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string FirstName {
+            get {
+                return this.firstNameField;
+            }
+            set {
+                this.firstNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string MiddleName {
+            get {
+                return this.middleNameField;
+            }
+            set {
+                this.middleNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string LastName {
+            get {
+                return this.lastNameField;
+            }
+            set {
+                this.lastNameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Suffix {
+            get {
+                return this.suffixField;
+            }
+            set {
+                this.suffixField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private SegmentDetail[] segmentsField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Segments")]
+        public SegmentDetail[] Segments {
+            get {
+                return this.segmentsField;
+            }
+            set {
+                this.segmentsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class SegmentDetail {
+        
+        private PackageIdSegmentSpecification segmentSpecificationField;
+        
+        private string beginPackageIdSegmentField;
+        
+        private string endPackageIdSegmentField;
+        
+        private string lastUsedPackageIdField;
+        
+        private System.DateTime lastUsedTimestampField;
+        
+        private bool lastUsedTimestampFieldSpecified;
+        
+        private System.DateTime lastRollTimestampField;
+        
+        private bool lastRollTimestampFieldSpecified;
+        
+        /// <remarks/>
+        public PackageIdSegmentSpecification SegmentSpecification {
+            get {
+                return this.segmentSpecificationField;
+            }
+            set {
+                this.segmentSpecificationField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string BeginPackageIdSegment {
+            get {
+                return this.beginPackageIdSegmentField;
+            }
+            set {
+                this.beginPackageIdSegmentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string EndPackageIdSegment {
+            get {
+                return this.endPackageIdSegmentField;
+            }
+            set {
+                this.endPackageIdSegmentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string LastUsedPackageId {
+            get {
+                return this.lastUsedPackageIdField;
+            }
+            set {
+                this.lastUsedPackageIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime LastUsedTimestamp {
+            get {
+                return this.lastUsedTimestampField;
+            }
+            set {
+                this.lastUsedTimestampField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool LastUsedTimestampSpecified {
+            get {
+                return this.lastUsedTimestampFieldSpecified;
+            }
+            set {
+                this.lastUsedTimestampFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime LastRollTimestamp {
+            get {
+                return this.lastRollTimestampField;
+            }
+            set {
+                this.lastRollTimestampField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool LastRollTimestampSpecified {
+            get {
+                return this.lastRollTimestampFieldSpecified;
+            }
+            set {
+                this.lastRollTimestampFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentSpecification {
+        
+        private PackageIdRangeType rangeTypeField;
+        
+        private bool rangeTypeFieldSpecified;
+        
+        private RangeQualifierType rangeQualifierField;
+        
+        private bool rangeQualifierFieldSpecified;
+        
+        private SegmentType segmentTypeField;
+        
+        private bool segmentTypeFieldSpecified;
+        
+        /// <remarks/>
+        public PackageIdRangeType RangeType {
+            get {
+                return this.rangeTypeField;
+            }
+            set {
+                this.rangeTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RangeTypeSpecified {
+            get {
+                return this.rangeTypeFieldSpecified;
+            }
+            set {
+                this.rangeTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public RangeQualifierType RangeQualifier {
+            get {
+                return this.rangeQualifierField;
+            }
+            set {
+                this.rangeQualifierField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool RangeQualifierSpecified {
+            get {
+                return this.rangeQualifierFieldSpecified;
+            }
+            set {
+                this.rangeQualifierFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public SegmentType SegmentType {
+            get {
+                return this.segmentTypeField;
+            }
+            set {
+                this.segmentTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool SegmentTypeSpecified {
+            get {
+                return this.segmentTypeFieldSpecified;
+            }
+            set {
+                this.segmentTypeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum PackageIdRangeType {
+        
+        /// <remarks/>
+        EXPRESS,
+        
+        /// <remarks/>
+        FREIGHT,
+        
+        /// <remarks/>
+        GROUND,
+        
+        /// <remarks/>
+        INTERNAL,
+        
+        /// <remarks/>
+        SMART_POST_IMPB,
+        
+        /// <remarks/>
+        SMART_POST_LEGACY,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum RangeQualifierType {
+        
+        /// <remarks/>
+        GROUND_PICKUP,
+        
+        /// <remarks/>
+        RETURN,
+        
+        /// <remarks/>
+        SMART_POST_PICKUP,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum SegmentType {
+        
+        /// <remarks/>
+        CURRENT,
+        
+        /// <remarks/>
+        FUTURE,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private string smartPostReturnAccountNumberField;
+        
+        private PackageIdSegmentSpecification[] segmentSpecificationsField;
+        
+        private PackageIdSegmentRequestServiceLevel serviceLevelField;
+        
+        private bool serviceLevelFieldSpecified;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SmartPostReturnAccountNumber {
+            get {
+                return this.smartPostReturnAccountNumberField;
+            }
+            set {
+                this.smartPostReturnAccountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("SegmentSpecifications")]
+        public PackageIdSegmentSpecification[] SegmentSpecifications {
+            get {
+                return this.segmentSpecificationsField;
+            }
+            set {
+                this.segmentSpecificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public PackageIdSegmentRequestServiceLevel ServiceLevel {
+            get {
+                return this.serviceLevelField;
+            }
+            set {
+                this.serviceLevelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ServiceLevelSpecified {
+            get {
+                return this.serviceLevelFieldSpecified;
+            }
+            set {
+                this.serviceLevelFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum PackageIdSegmentRequestServiceLevel {
+        
+        /// <remarks/>
+        DO_NOT_VALIDATE_ACCOUNT_METER,
+        
+        /// <remarks/>
+        VALIDATE_ACCOUNT_METER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class VersionCaptureReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class VersionCaptureRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private string originLocationIdField;
+        
+        private string vendorProductPlatformField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string OriginLocationId {
+            get {
+                return this.originLocationIdField;
+            }
+            set {
+                this.originLocationIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string VendorProductPlatform {
+            get {
+                return this.vendorProductPlatformField;
+            }
+            set {
+                this.vendorProductPlatformField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ContactAndAddress {
+        
+        private Contact contactField;
         
         private Address addressField;
         
         /// <remarks/>
-        public ParsedContact Contact {
+        public Contact Contact {
             get {
                 return this.contactField;
             }
@@ -1820,24 +3445,1848 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
-    public enum WebServiceCategoryType {
+    public partial class MeterAutoConfigurationReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private ContactAndAddress contactAndAddressField;
+        
+        private ContactAndAddress dropShipContactAndAddressField;
+        
+        private string shippingCycleField;
+        
+        private MeterDetail meterDetailField;
         
         /// <remarks/>
-        OFFICE_AND_PRINT,
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
         
         /// <remarks/>
-        SHIPPING,
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ContactAndAddress ContactAndAddress {
+            get {
+                return this.contactAndAddressField;
+            }
+            set {
+                this.contactAndAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ContactAndAddress DropShipContactAndAddress {
+            get {
+                return this.dropShipContactAndAddressField;
+            }
+            set {
+                this.dropShipContactAndAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ShippingCycle {
+            get {
+                return this.shippingCycleField;
+            }
+            set {
+                this.shippingCycleField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public MeterDetail MeterDetail {
+            get {
+                return this.meterDetailField;
+            }
+            set {
+                this.meterDetailField = value;
+            }
+        }
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class MeterAutoConfigurationRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private CspType cspTypeField;
+        
+        private bool cspTypeFieldSpecified;
+        
+        private bool masterField;
+        
+        private bool masterFieldSpecified;
+        
+        private Address dropShipAddressField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CspType CspType {
+            get {
+                return this.cspTypeField;
+            }
+            set {
+                this.cspTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool CspTypeSpecified {
+            get {
+                return this.cspTypeFieldSpecified;
+            }
+            set {
+                this.cspTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool Master {
+            get {
+                return this.masterField;
+            }
+            set {
+                this.masterField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool MasterSpecified {
+            get {
+                return this.masterFieldSpecified;
+            }
+            set {
+                this.masterFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address DropShipAddress {
+            get {
+                return this.dropShipAddressField;
+            }
+            set {
+                this.dropShipAddressField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ParentAndChildMetersUpdateReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class MeterSpecification {
+        
+        private string numberField;
+        
+        private string accountNumberField;
+        
+        private CspType cspTypeField;
+        
+        private bool cspTypeFieldSpecified;
+        
+        /// <remarks/>
+        public string Number {
+            get {
+                return this.numberField;
+            }
+            set {
+                this.numberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string AccountNumber {
+            get {
+                return this.accountNumberField;
+            }
+            set {
+                this.accountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CspType CspType {
+            get {
+                return this.cspTypeField;
+            }
+            set {
+                this.cspTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool CspTypeSpecified {
+            get {
+                return this.cspTypeFieldSpecified;
+            }
+            set {
+                this.cspTypeFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ParentMeterSpecification {
+        
+        private MeterSpecification meterSpecificationField;
+        
+        private string numberOfChildMetersField;
+        
+        private MeterSpecification[] childMetersField;
+        
+        /// <remarks/>
+        public MeterSpecification MeterSpecification {
+            get {
+                return this.meterSpecificationField;
+            }
+            set {
+                this.meterSpecificationField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
+        public string NumberOfChildMeters {
+            get {
+                return this.numberOfChildMetersField;
+            }
+            set {
+                this.numberOfChildMetersField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("ChildMeters")]
+        public MeterSpecification[] ChildMeters {
+            get {
+                return this.childMetersField;
+            }
+            set {
+                this.childMetersField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ParentAndChildMetersUpdateRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private ParentMeterSpecification parentMeterSpecificationField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ParentMeterSpecification ParentMeterSpecification {
+            get {
+                return this.parentMeterSpecificationField;
+            }
+            set {
+                this.parentMeterSpecificationField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class MeterAutoConfigurationStatusReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class MeterAutoConfigurationStatusRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private DownloadComponentType[] statusField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Status")]
+        public DownloadComponentType[] Status {
+            get {
+                return this.statusField;
+            }
+            set {
+                this.statusField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum DownloadComponentType {
+        
+        /// <remarks/>
+        CANADA_RATES,
+        
+        /// <remarks/>
+        CONFIGURATION,
+        
+        /// <remarks/>
+        DOMESTIC_RATES,
+        
+        /// <remarks/>
+        INTERNATIONAL_RATES,
+        
+        /// <remarks/>
+        TRACKING_NUMBER_RANGE,
+        
+        /// <remarks/>
+        URSA,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentUsageUpdateReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentUsageUpdateRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private string smartPostReturnAccountNumberField;
+        
+        private SegmentDetail[] segmentsField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SmartPostReturnAccountNumber {
+            get {
+                return this.smartPostReturnAccountNumberField;
+            }
+            set {
+                this.smartPostReturnAccountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Segments")]
+        public SegmentDetail[] Segments {
+            get {
+                return this.segmentsField;
+            }
+            set {
+                this.segmentsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class RegisterWebUserReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private WebAuthenticationCredential userCredentialField;
+        
+        private string clientProductIdField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public WebAuthenticationCredential UserCredential {
+            get {
+                return this.userCredentialField;
+            }
+            set {
+                this.userCredentialField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ClientProductId {
+            get {
+                return this.clientProductIdField;
+            }
+            set {
+                this.clientProductIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class RegisterWebUserRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private WebServiceEnvironment environmentField;
+        
+        private bool environmentFieldSpecified;
+        
+        private WebAuthenticationCredential parentCredentialField;
+        
+        private string securityTokenField;
+        
+        private WebServiceCategoryType[] categoriesField;
+        
+        private Address shippingAddressField;
+        
+        private ParsedContactAndAddress userContactAndAddressField;
+        
+        private string secondaryEmailField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public WebServiceEnvironment Environment {
+            get {
+                return this.environmentField;
+            }
+            set {
+                this.environmentField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool EnvironmentSpecified {
+            get {
+                return this.environmentFieldSpecified;
+            }
+            set {
+                this.environmentFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public WebAuthenticationCredential ParentCredential {
+            get {
+                return this.parentCredentialField;
+            }
+            set {
+                this.parentCredentialField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SecurityToken {
+            get {
+                return this.securityTokenField;
+            }
+            set {
+                this.securityTokenField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Categories")]
+        public WebServiceCategoryType[] Categories {
+            get {
+                return this.categoriesField;
+            }
+            set {
+                this.categoriesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Address ShippingAddress {
+            get {
+                return this.shippingAddressField;
+            }
+            set {
+                this.shippingAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ParsedContactAndAddress UserContactAndAddress {
+            get {
+                return this.userContactAndAddressField;
+            }
+            set {
+                this.userContactAndAddressField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SecondaryEmail {
+            get {
+                return this.secondaryEmailField;
+            }
+            set {
+                this.secondaryEmailField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class GroupReferenceDetail {
+        
+        private CarrierCodeType carrierCodeField;
+        
+        private bool carrierCodeFieldSpecified;
+        
+        private CustomerReferenceType referenceField;
+        
+        private bool referenceFieldSpecified;
+        
+        /// <remarks/>
+        public CarrierCodeType CarrierCode {
+            get {
+                return this.carrierCodeField;
+            }
+            set {
+                this.carrierCodeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool CarrierCodeSpecified {
+            get {
+                return this.carrierCodeFieldSpecified;
+            }
+            set {
+                this.carrierCodeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public CustomerReferenceType Reference {
+            get {
+                return this.referenceField;
+            }
+            set {
+                this.referenceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ReferenceSpecified {
+            get {
+                return this.referenceFieldSpecified;
+            }
+            set {
+                this.referenceFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum CarrierCodeType {
+        
+        /// <remarks/>
+        FDXC,
+        
+        /// <remarks/>
+        FDXE,
+        
+        /// <remarks/>
+        FDXG,
+        
+        /// <remarks/>
+        FXCC,
+        
+        /// <remarks/>
+        FXFR,
+        
+        /// <remarks/>
+        FXSP,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum CustomerReferenceType {
+        
+        /// <remarks/>
+        BILL_OF_LADING,
+        
+        /// <remarks/>
+        CUSTOMER_REFERENCE,
+        
+        /// <remarks/>
+        DEPARTMENT_NUMBER,
+        
+        /// <remarks/>
+        ELECTRONIC_PRODUCT_CODE,
+        
+        /// <remarks/>
+        INTRACOUNTRY_REGULATORY_REFERENCE,
+        
+        /// <remarks/>
+        INVOICE_NUMBER,
+        
+        /// <remarks/>
+        PACKING_SLIP_NUMBER,
+        
+        /// <remarks/>
+        P_O_NUMBER,
+        
+        /// <remarks/>
+        RMA_ASSOCIATION,
+        
+        /// <remarks/>
+        SHIPMENT_INTEGRITY,
+        
+        /// <remarks/>
+        STORE_NUMBER,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ValidateMeterDetail {
+        
+        private string sysTypeField;
+        
+        private bool noUploadNoShipField;
+        
+        private bool noUploadNoShipFieldSpecified;
+        
+        private string revenueUploadPathField;
+        
+        private string transborderDropOffLocationIdField;
+        
+        private GroupReferenceDetail[] groupReferenceDetailsField;
+        
+        /// <remarks/>
+        public string SysType {
+            get {
+                return this.sysTypeField;
+            }
+            set {
+                this.sysTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool NoUploadNoShip {
+            get {
+                return this.noUploadNoShipField;
+            }
+            set {
+                this.noUploadNoShipField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool NoUploadNoShipSpecified {
+            get {
+                return this.noUploadNoShipFieldSpecified;
+            }
+            set {
+                this.noUploadNoShipFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string RevenueUploadPath {
+            get {
+                return this.revenueUploadPathField;
+            }
+            set {
+                this.revenueUploadPathField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string TransborderDropOffLocationId {
+            get {
+                return this.transborderDropOffLocationIdField;
+            }
+            set {
+                this.transborderDropOffLocationIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("GroupReferenceDetails")]
+        public GroupReferenceDetail[] GroupReferenceDetails {
+            get {
+                return this.groupReferenceDetailsField;
+            }
+            set {
+                this.groupReferenceDetailsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ValidateMeterReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private ValidateMeterDetail validateMeterDetailField;
+        
+        private string[] manifestField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ValidateMeterDetail ValidateMeterDetail {
+            get {
+                return this.validateMeterDetailField;
+            }
+            set {
+                this.validateMeterDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("Content", IsNullable=false)]
+        public string[] Manifest {
+            get {
+                return this.manifestField;
+            }
+            set {
+                this.manifestField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ValidateMeterRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private bool returnInitiativeControlManifestField;
+        
+        private bool returnInitiativeControlManifestFieldSpecified;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool ReturnInitiativeControlManifest {
+            get {
+                return this.returnInitiativeControlManifestField;
+            }
+            set {
+                this.returnInitiativeControlManifestField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ReturnInitiativeControlManifestSpecified {
+            get {
+                return this.returnInitiativeControlManifestFieldSpecified;
+            }
+            set {
+                this.returnInitiativeControlManifestFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentDeactivationReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class PackageIdSegmentDeactivationRequest {
+        
+        private WebAuthenticationDetail webAuthenticationDetailField;
+        
+        private ClientDetail clientDetailField;
+        
+        private UserDetail userDetailField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private System.DateTime dateOfDeActivationField;
+        
+        private bool dateOfDeActivationFieldSpecified;
+        
+        private string smartPostReturnAccountNumberField;
+        
+        private SegmentDetail segmentDetailField;
+        
+        /// <remarks/>
+        public WebAuthenticationDetail WebAuthenticationDetail {
+            get {
+                return this.webAuthenticationDetailField;
+            }
+            set {
+                this.webAuthenticationDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public ClientDetail ClientDetail {
+            get {
+                return this.clientDetailField;
+            }
+            set {
+                this.clientDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public UserDetail UserDetail {
+            get {
+                return this.userDetailField;
+            }
+            set {
+                this.userDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime DateOfDeActivation {
+            get {
+                return this.dateOfDeActivationField;
+            }
+            set {
+                this.dateOfDeActivationField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DateOfDeActivationSpecified {
+            get {
+                return this.dateOfDeActivationFieldSpecified;
+            }
+            set {
+                this.dateOfDeActivationFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string SmartPostReturnAccountNumber {
+            get {
+                return this.smartPostReturnAccountNumberField;
+            }
+            set {
+                this.smartPostReturnAccountNumberField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public SegmentDetail SegmentDetail {
+            get {
+                return this.segmentDetailField;
+            }
+            set {
+                this.segmentDetailField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class UploadLocationDetail {
+        
+        private UploadType uploadTypeField;
+        
+        private bool uploadTypeFieldSpecified;
+        
+        private string domainField;
+        
+        private string filepathField;
+        
+        /// <remarks/>
+        public UploadType UploadType {
+            get {
+                return this.uploadTypeField;
+            }
+            set {
+                this.uploadTypeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool UploadTypeSpecified {
+            get {
+                return this.uploadTypeFieldSpecified;
+            }
+            set {
+                this.uploadTypeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Domain {
+            get {
+                return this.domainField;
+            }
+            set {
+                this.domainField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Filepath {
+            get {
+                return this.filepathField;
+            }
+            set {
+                this.filepathField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum UploadType {
+        
+        /// <remarks/>
+        HOURLY_UPLOAD_FILE,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public partial class ProvideUploadLocationReply {
+        
+        private NotificationSeverityType highestSeverityField;
+        
+        private Notification[] notificationsField;
+        
+        private TransactionDetail transactionDetailField;
+        
+        private VersionId versionField;
+        
+        private UploadLocationDetail[] uploadLocationDetailsField;
+        
+        /// <remarks/>
+        public NotificationSeverityType HighestSeverity {
+            get {
+                return this.highestSeverityField;
+            }
+            set {
+                this.highestSeverityField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Notifications")]
+        public Notification[] Notifications {
+            get {
+                return this.notificationsField;
+            }
+            set {
+                this.notificationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public TransactionDetail TransactionDetail {
+            get {
+                return this.transactionDetailField;
+            }
+            set {
+                this.transactionDetailField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public VersionId Version {
+            get {
+                return this.versionField;
+            }
+            set {
+                this.versionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("UploadLocationDetails")]
+        public UploadLocationDetail[] UploadLocationDetails {
+            get {
+                return this.uploadLocationDetailsField;
+            }
+            set {
+                this.uploadLocationDetailsField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/registration/v7")]
+    public enum ProvideUploadLocationServiceLevel {
+        
+        /// <remarks/>
+        ERROR_ON_VALIDATION_ERROR,
+        
+        /// <remarks/>
+        WARN_ON_VALIDATION_ERROR,
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void provideUploadLocationCompletedEventHandler(object sender, provideUploadLocationCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class provideUploadLocationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal provideUploadLocationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ProvideUploadLocationReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ProvideUploadLocationReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void packageIdSegmentDeactivationCompletedEventHandler(object sender, packageIdSegmentDeactivationCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class packageIdSegmentDeactivationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal packageIdSegmentDeactivationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public PackageIdSegmentDeactivationReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((PackageIdSegmentDeactivationReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void validateAccountMeterCompletedEventHandler(object sender, validateAccountMeterCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class validateAccountMeterCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal validateAccountMeterCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ValidateMeterReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ValidateMeterReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void registerWebUserCompletedEventHandler(object sender, registerWebUserCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class registerWebUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1859,11 +5308,115 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void packageIdSegmentUsageUpdateCompletedEventHandler(object sender, packageIdSegmentUsageUpdateCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class packageIdSegmentUsageUpdateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal packageIdSegmentUsageUpdateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public PackageIdSegmentUsageUpdateReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((PackageIdSegmentUsageUpdateReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void meterAutoConfigurationStatusCompletedEventHandler(object sender, meterAutoConfigurationStatusCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class meterAutoConfigurationStatusCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal meterAutoConfigurationStatusCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public MeterAutoConfigurationStatusReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((MeterAutoConfigurationStatusReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void updateParentAndChildMetersCompletedEventHandler(object sender, updateParentAndChildMetersCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class updateParentAndChildMetersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal updateParentAndChildMetersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public ParentAndChildMetersUpdateReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((ParentAndChildMetersUpdateReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void meterAutoConfigurationCompletedEventHandler(object sender, meterAutoConfigurationCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class meterAutoConfigurationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal meterAutoConfigurationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public MeterAutoConfigurationReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((MeterAutoConfigurationReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void versionCaptureCompletedEventHandler(object sender, versionCaptureCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class versionCaptureCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1885,11 +5438,63 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void packageIdSegmentCompletedEventHandler(object sender, packageIdSegmentCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class packageIdSegmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal packageIdSegmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public PackageIdSegmentReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((PackageIdSegmentReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    public delegate void registerInternalUserCompletedEventHandler(object sender, registerInternalUserCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class registerInternalUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal registerInternalUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public RegisterInternalUserReply Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((RegisterInternalUserReply)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void subscriptionCompletedEventHandler(object sender, subscriptionCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.6.81.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class subscriptionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

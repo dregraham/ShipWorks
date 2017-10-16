@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:ns="http://fedex.com/ws/track/v12" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="TrackServiceDefinitions" targetNamespace="http://fedex.com/ws/track/v12" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/track/v14" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="TrackServiceDefinitions" targetNamespace="http://fedex.com/ws/track/v14" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/track/v12" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/track/v14" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="GetTrackingDocumentsReply" type="ns:GetTrackingDocumentsReply" />
+      <xs:element name="GetTrackingDocumentsRequest" type="ns:GetTrackingDocumentsRequest" />
       <xs:element name="SendNotificationsReply" type="ns:SendNotificationsReply" />
       <xs:element name="SendNotificationsRequest" type="ns:SendNotificationsRequest" />
-      <xs:element name="SignatureProofOfDeliveryFaxReply" type="ns:SignatureProofOfDeliveryFaxReply" />
-      <xs:element name="SignatureProofOfDeliveryFaxRequest" type="ns:SignatureProofOfDeliveryFaxRequest" />
-      <xs:element name="SignatureProofOfDeliveryLetterReply" type="ns:SignatureProofOfDeliveryLetterReply" />
-      <xs:element name="SignatureProofOfDeliveryLetterRequest" type="ns:SignatureProofOfDeliveryLetterRequest" />
       <xs:element name="TrackReply" type="ns:TrackReply" />
       <xs:element name="TrackRequest" type="ns:TrackRequest" />
       <xs:complexType name="Address">
@@ -53,6 +51,11 @@
           <xs:element minOccurs="0" name="Residential" type="xs:boolean">
             <xs:annotation>
               <xs:documentation>Indicates whether this address residential (as opposed to commercial).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="GeographicCoordinates" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The geographic coordinates cooresponding to this address.</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:sequence>
@@ -422,6 +425,23 @@
           <xs:enumeration value="MI" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="DocumentPart">
+        <xs:annotation>
+          <xs:documentation>Successive parts of the document (only one, for PDF documents).</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="SequenceNumber" type="xs:nonNegativeInteger">
+            <xs:annotation>
+              <xs:documentation>The one-origin position of this part within a document.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Content" type="xs:base64Binary">
+            <xs:annotation>
+              <xs:documentation>Graphic or printer commands for this image within a document.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="EMailDetail">
         <xs:sequence>
           <xs:element minOccurs="0" name="EmailAddress" type="xs:string" />
@@ -469,6 +489,29 @@
           <xs:enumeration value="FEDEX_SMART_POST_HUB" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="GetTrackingDocumentsReply">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="HighestSeverity" type="ns:NotificationSeverityType" />
+          <xs:element minOccurs="1" maxOccurs="unbounded" name="Notifications" type="ns:Notification" />
+          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail" />
+          <xs:element minOccurs="1" name="Version" type="ns:VersionId" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Documents" type="ns:TrackingDocument" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetTrackingDocumentsRequest">
+        <xs:sequence>
+          <xs:element minOccurs="1" name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail">
+            <xs:annotation>
+              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="1" name="ClientDetail" type="ns:ClientDetail" />
+          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail" />
+          <xs:element minOccurs="1" name="Version" type="ns:VersionId" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="SelectionDetails" type="ns:TrackSelectionDetail" />
+          <xs:element minOccurs="0" name="TrackingDocumentSpecification" type="ns:TrackingDocumentSpecification" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:simpleType name="ImageSizeType">
         <xs:restriction base="xs:string">
           <xs:enumeration value="LARGE" />
@@ -780,38 +823,6 @@
           <xs:element minOccurs="0" name="Description" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="QualifiedTrackingNumber">
-        <xs:annotation>
-          <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-          <xs:element minOccurs="0" name="TrackingNumber" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>FedEx assigned identifier for a package/shipment.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="ShipDate" type="xs:date">
-            <xs:annotation>
-              <xs:documentation>The date the package was shipped.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="AccountNumber" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>If the account number used to ship the package is provided in the request the shipper and recipient information is included on the letter or fax.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Carrier" type="ns:CarrierCodeType">
-            <xs:annotation>
-              <xs:documentation>FedEx operating company that delivered the package.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Destination" type="ns:Address">
-            <xs:annotation>
-              <xs:documentation>Only country is used for elimination of duplicate tracking numbers.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
       <xs:complexType name="SendNotificationsReply">
         <xs:sequence>
           <xs:element minOccurs="1" name="HighestSeverity" type="ns:NotificationSeverityType">
@@ -966,6 +977,7 @@
           <xs:enumeration value="INTERNATIONAL_FIRST" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY_DISTRIBUTION" />
+          <xs:enumeration value="INTERNATIONAL_PRIORITY_EXPRESS" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY_FREIGHT" />
           <xs:enumeration value="PRIORITY_OVERNIGHT" />
           <xs:enumeration value="SAME_DAY" />
@@ -1014,158 +1026,6 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="Image" type="xs:base64Binary" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="Notifications" type="ns:Notification" />
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="SignatureProofOfDeliveryFaxReply">
-        <xs:sequence>
-          <xs:element minOccurs="1" name="HighestSeverity" type="ns:NotificationSeverityType">
-            <xs:annotation>
-              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" maxOccurs="unbounded" name="Notifications" type="ns:Notification">
-            <xs:annotation>
-              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail">
-            <xs:annotation>
-              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="Version" type="ns:VersionId">
-            <xs:annotation>
-              <xs:documentation>Contains the version of the reply being used.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="FaxConfirmationNumber" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>Confirmation of fax transmission.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="SignatureProofOfDeliveryFaxRequest">
-        <xs:sequence>
-          <xs:element minOccurs="1" name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail">
-            <xs:annotation>
-              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="ClientDetail" type="ns:ClientDetail">
-            <xs:annotation>
-              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail">
-            <xs:annotation>
-              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="Version" type="ns:VersionId">
-            <xs:annotation>
-              <xs:documentation>The version of the request being used.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="QualifiedTrackingNumber" type="ns:QualifiedTrackingNumber">
-            <xs:annotation>
-              <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="AdditionalComments" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>Additional customer-supplied text to be added to the body of the letter.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="FaxSender" type="ns:ContactAndAddress">
-            <xs:annotation>
-              <xs:documentation>Contact and address information about the person requesting the fax to be sent.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="FaxRecipient" type="ns:ContactAndAddress">
-            <xs:annotation>
-              <xs:documentation>Contact and address information, including the fax number, about the person to receive the fax.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:simpleType name="SignatureProofOfDeliveryImageType">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="PDF" />
-          <xs:enumeration value="PNG" />
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:complexType name="SignatureProofOfDeliveryLetterReply">
-        <xs:sequence>
-          <xs:element minOccurs="1" name="HighestSeverity" type="ns:NotificationSeverityType">
-            <xs:annotation>
-              <xs:documentation>This contains the severity type of the most severe Notification in the Notifications array.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" maxOccurs="unbounded" name="Notifications" type="ns:Notification">
-            <xs:annotation>
-              <xs:documentation>Information about the request/reply such was the transaction successful or not, and any additional information relevant to the request and/or reply. There may be multiple Notifications in a reply.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail">
-            <xs:annotation>
-              <xs:documentation>Contains the CustomerTransactionDetail that is echoed back to the caller for matching requests and replies and a Localization element for defining the language/translation used in the reply data.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="Version" type="ns:VersionId">
-            <xs:annotation>
-              <xs:documentation>Image of letter encoded in Base64 format.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Letter" type="xs:base64Binary">
-            <xs:annotation>
-              <xs:documentation>Image of letter encoded in Base64 format.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="SignatureProofOfDeliveryLetterRequest">
-        <xs:sequence>
-          <xs:element minOccurs="1" name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail">
-            <xs:annotation>
-              <xs:documentation>Descriptive data to be used in authentication of the sender's identity (and right to use FedEx web services).</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="ClientDetail" type="ns:ClientDetail">
-            <xs:annotation>
-              <xs:documentation>Descriptive data identifying the client submitting the transaction.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="TransactionDetail" type="ns:TransactionDetail">
-            <xs:annotation>
-              <xs:documentation>Contains a free form field that is echoed back in the reply to match requests with replies and data that governs the data payload language/translations.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="1" name="Version" type="ns:VersionId">
-            <xs:annotation>
-              <xs:documentation>The version of the request being used.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="QualifiedTrackingNumber" type="ns:QualifiedTrackingNumber">
-            <xs:annotation>
-              <xs:documentation>Tracking number and additional shipment data used to identify a unique shipment for proof of delivery.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="AdditionalComments" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>Additional customer-supplied text to be added to the body of the letter.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="LetterFormat" type="ns:SignatureProofOfDeliveryImageType">
-            <xs:annotation>
-              <xs:documentation>Identifies the set of SPOD image types.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="Consignee" type="ns:ContactAndAddress">
-            <xs:annotation>
-              <xs:documentation>If provided this information will be print on the letter.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="SpecialInstructionStatusDetail">
@@ -1951,6 +1811,7 @@
           <xs:enumeration value="ALCOHOL" />
           <xs:enumeration value="AM_DELIVERY_GUARANTEE" />
           <xs:enumeration value="APPOINTMENT_DELIVERY" />
+          <xs:enumeration value="BATTERY" />
           <xs:enumeration value="BILL_RECIPIENT" />
           <xs:enumeration value="BROKER_SELECT_OPTION" />
           <xs:enumeration value="CALL_BEFORE_DELIVERY" />
@@ -1976,7 +1837,9 @@
           <xs:enumeration value="DRY_ICE_ADDED" />
           <xs:enumeration value="EAST_COAST_SPECIAL" />
           <xs:enumeration value="ELECTRONIC_COD" />
+          <xs:enumeration value="ELECTRONIC_DOCUMENTS_WITH_ORIGINALS" />
           <xs:enumeration value="ELECTRONIC_SIGNATURE_SERVICE" />
+          <xs:enumeration value="ELECTRONIC_TRADE_DOCUMENTS" />
           <xs:enumeration value="EVENING_DELIVERY" />
           <xs:enumeration value="EXCLUSIVE_USE" />
           <xs:enumeration value="EXTENDED_DELIVERY" />
@@ -2124,6 +1987,11 @@
           <xs:element minOccurs="0" maxOccurs="unbounded" name="AncillaryDetails" type="ns:TrackStatusAncillaryDetail" />
         </xs:sequence>
       </xs:complexType>
+      <xs:complexType name="TrackingBillOfLadingDocumentDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DocumentFormat" type="ns:TrackingDocumentFormat" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="TrackingDateOrTimestamp">
         <xs:sequence>
           <xs:element minOccurs="0" name="Type" type="ns:TrackingDateOrTimestampType" />
@@ -2142,6 +2010,101 @@
           <xs:enumeration value="SHIP" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:complexType name="TrackingDocument">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Type" type="ns:TrackingDocumentType" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Localizations" type="ns:Localization" />
+          <xs:element minOccurs="0" name="ImageType" type="ns:TrackingDocumentImageType" />
+          <xs:element minOccurs="0" name="Resolution" type="xs:nonNegativeInteger" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Parts" type="ns:DocumentPart" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackingDocumentDispositionDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DispositionType" type="ns:TrackingDocumentDispositionType" />
+          <xs:element minOccurs="0" name="EMailDetail" type="ns:TrackingDocumentEmailDetail" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TrackingDocumentDispositionType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EMAIL" />
+          <xs:enumeration value="FAX" />
+          <xs:enumeration value="RETURN" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackingDocumentEmailDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Recipients" type="ns:EMailDetail">
+            <xs:annotation>
+              <xs:documentation>Specifies the recipients of the email.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Sender" type="ns:EMailDetail">
+            <xs:annotation>
+              <xs:documentation>Identifies the person initiating the email.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Localization" type="ns:Localization">
+            <xs:annotation>
+              <xs:documentation>This is the localization of the email content.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="PersonalMessage" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>A message included in the body of the email.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackingDocumentFormat">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Dispositions" type="ns:TrackingDocumentDispositionDetail" />
+          <xs:element minOccurs="0" name="Grouping" type="ns:TrackingDocumentGroupingType" />
+          <xs:element minOccurs="0" name="ImageType" type="ns:TrackingDocumentImageType" />
+          <xs:element minOccurs="0" name="Localization" type="ns:Localization">
+            <xs:annotation>
+              <xs:documentation>The localization for the generated document.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TrackingDocumentGroupingType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CONSOLIDATED_BY_DOCUMENT_TYPE" />
+          <xs:enumeration value="INDIVIDUAL" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="TrackingDocumentImageType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="PDF" />
+          <xs:enumeration value="PNG" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackingDocumentSpecification">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="DocumentTypes" type="ns:TrackingDocumentType" />
+          <xs:element minOccurs="0" name="BillOfLadingDocumentDetail" type="ns:TrackingBillOfLadingDocumentDetail" />
+          <xs:element minOccurs="0" name="FreightBillingDocumentDetail" type="ns:TrackingFreightBillingDocumentDetail" />
+          <xs:element minOccurs="0" name="SignatureProofOfDeliveryDetail" type="ns:TrackingSignatureProofOfDeliveryDetail" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="TrackingDocumentType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BILL_OF_LADING" />
+          <xs:enumeration value="FREIGHT_BILLING_DOCUMENT" />
+          <xs:enumeration value="SIGNATURE_PROOF_OF_DELIVERY" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="TrackingFreightBillingDocumentDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DocumentFormat" type="ns:TrackingDocumentFormat" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="TrackingSignatureProofOfDeliveryDetail">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="DocumentFormat" type="ns:TrackingDocumentFormat" />
+        </xs:sequence>
+      </xs:complexType>
       <xs:complexType name="TransactionDetail">
         <xs:sequence>
           <xs:element minOccurs="0" name="CustomerTransactionId" type="xs:string">
@@ -2223,7 +2186,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" fixed="12" name="Major" type="xs:int">
+          <xs:element minOccurs="1" fixed="14" name="Major" type="xs:int">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -2245,17 +2208,11 @@
   <message name="SendNotificationsReply">
     <part name="SendNotificationsReply" element="ns:SendNotificationsReply" />
   </message>
-  <message name="SignatureProofOfDeliveryFaxReply">
-    <part name="SignatureProofOfDeliveryFaxReply" element="ns:SignatureProofOfDeliveryFaxReply" />
-  </message>
   <message name="TrackRequest">
     <part name="TrackRequest" element="ns:TrackRequest" />
   </message>
-  <message name="SignatureProofOfDeliveryFaxRequest">
-    <part name="SignatureProofOfDeliveryFaxRequest" element="ns:SignatureProofOfDeliveryFaxRequest" />
-  </message>
-  <message name="SignatureProofOfDeliveryLetterRequest">
-    <part name="SignatureProofOfDeliveryLetterRequest" element="ns:SignatureProofOfDeliveryLetterRequest" />
+  <message name="GetTrackingDocumentsRequest">
+    <part name="GetTrackingDocumentsRequest" element="ns:GetTrackingDocumentsRequest" />
   </message>
   <message name="SendNotificationsRequest">
     <part name="SendNotificationsRequest" element="ns:SendNotificationsRequest" />
@@ -2263,21 +2220,17 @@
   <message name="TrackReply">
     <part name="TrackReply" element="ns:TrackReply" />
   </message>
-  <message name="SignatureProofOfDeliveryLetterReply">
-    <part name="SignatureProofOfDeliveryLetterReply" element="ns:SignatureProofOfDeliveryLetterReply" />
+  <message name="GetTrackingDocumentsReply">
+    <part name="GetTrackingDocumentsReply" element="ns:GetTrackingDocumentsReply" />
   </message>
   <portType name="TrackPortType">
-    <operation name="retrieveSignatureProofOfDeliveryLetter" parameterOrder="SignatureProofOfDeliveryLetterRequest">
-      <input message="ns:SignatureProofOfDeliveryLetterRequest" />
-      <output message="ns:SignatureProofOfDeliveryLetterReply" />
-    </operation>
     <operation name="track" parameterOrder="TrackRequest">
       <input message="ns:TrackRequest" />
       <output message="ns:TrackReply" />
     </operation>
-    <operation name="sendSignatureProofOfDeliveryFax" parameterOrder="SignatureProofOfDeliveryFaxRequest">
-      <input message="ns:SignatureProofOfDeliveryFaxRequest" />
-      <output message="ns:SignatureProofOfDeliveryFaxReply" />
+    <operation name="getTrackingDocuments" parameterOrder="GetTrackingDocumentsRequest">
+      <input message="ns:GetTrackingDocumentsRequest" />
+      <output message="ns:GetTrackingDocumentsReply" />
     </operation>
     <operation name="sendNotifications" parameterOrder="SendNotificationsRequest">
       <input message="ns:SendNotificationsRequest" />
@@ -2286,17 +2239,8 @@
   </portType>
   <binding name="TrackServiceSoapBinding" type="ns:TrackPortType">
     <s1:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <operation name="retrieveSignatureProofOfDeliveryLetter">
-      <s1:operation soapAction="http://fedex.com/ws/track/v12/retrieveSignatureProofOfDeliveryLetter" style="document" />
-      <input>
-        <s1:body use="literal" />
-      </input>
-      <output>
-        <s1:body use="literal" />
-      </output>
-    </operation>
     <operation name="track">
-      <s1:operation soapAction="http://fedex.com/ws/track/v12/track" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/track/v14/track" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -2304,8 +2248,8 @@
         <s1:body use="literal" />
       </output>
     </operation>
-    <operation name="sendSignatureProofOfDeliveryFax">
-      <s1:operation soapAction="http://fedex.com/ws/track/v12/sendSignatureProofOfDeliveryFax" style="document" />
+    <operation name="getTrackingDocuments">
+      <s1:operation soapAction="http://fedex.com/ws/track/v14/getTrackingDocuments" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -2314,7 +2258,7 @@
       </output>
     </operation>
     <operation name="sendNotifications">
-      <s1:operation soapAction="http://fedex.com/ws/track/v12/sendNotifications" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/track/v14/sendNotifications" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
