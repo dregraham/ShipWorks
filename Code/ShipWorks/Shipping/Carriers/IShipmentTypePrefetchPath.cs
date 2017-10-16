@@ -1,7 +1,6 @@
 ﻿using System;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -13,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Apply to a shipment query
         /// </summary>
-        EntityQuery<ShipmentEntity> ApplyTo(EntityQuery<ShipmentEntity> query);
+        EntityQuery<T> ApplyTo<T>(EntityQuery<T> query) where T : IEntityCore;
 
         /// <summary>
         /// Apply to an existing prefetch path

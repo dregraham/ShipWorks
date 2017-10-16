@@ -1,5 +1,7 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Data
@@ -26,5 +28,11 @@ namespace ShipWorks.Data
         /// </summary>
         public static PrefetchPathContainer WithChild(this IPrefetchPathElement2 path, PrefetchPathContainer child) =>
             new PrefetchPathContainer(path, ImmutableList.Create<PrefetchPathContainer>(child));
+
+        /// <summary>
+        /// Apply a set of prefetch path providers to a query
+        /// </summary>
+        public static EntityQuery<T> WithPaths<T>(this EntityQuery<T> query, params IShipmentTypePrefetchProvider[] providers) where T : IEntityCore =>
+            providers.Aggregate(ShipmentTypePrefetchPath.Empty, (acc, x) => acc.With(x)).ApplyTo(query);
     }
 }

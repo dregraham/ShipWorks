@@ -5,7 +5,6 @@ using System.Linq;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -33,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Apply to a shipment query
         /// </summary>
-        public EntityQuery<ShipmentEntity> ApplyTo(EntityQuery<ShipmentEntity> query) =>
+        public EntityQuery<T> ApplyTo<T>(EntityQuery<T> query) where T : IEntityCore =>
             ApplyTo(query, (q, x) => q.WithPath(x));
 
         /// <summary>

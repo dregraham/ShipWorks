@@ -1,7 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Autofac;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
@@ -14,15 +19,12 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -39,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
         // Indicates if the monitor has been started
         static bool started = false;
-            // WS returns the names of the packages differently, so create a mapping of WS package type names 
+        // WS returns the names of the packages differently, so create a mapping of WS package type names 
 
         /// <summary>
         /// Starts monitoring for WorldShip shipments processed from WorldShip
@@ -179,16 +181,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         (i.VoidIndicator == null) ||
                         (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"));
 
-                        List<WorldShipProcessedGrouping> worldShipProcessedGroupings = 
-                worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
-                    (shipmentId, importEntries) =>
-                        new WorldShipProcessedGrouping(shipmentId,
-                            importEntries.Where(
-                                i =>
-                                    (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) &&
-                                    ((i.VoidIndicator == null) ||
-                                     (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
-                    ).ToList();
+            List<WorldShipProcessedGrouping> worldShipProcessedGroupings =
+    worldShipShipments.GroupBy(import => long.Parse(import.ShipmentID),
+        (shipmentId, importEntries) =>
+            new WorldShipProcessedGrouping(shipmentId,
+                importEntries.Where(
+                    i =>
+                        (i.ShipmentIdCalculated == shipmentId || i.ShipmentID == shipmentId.ToString()) &&
+                        ((i.VoidIndicator == null) ||
+                         (i.VoidIndicator != null && i.VoidIndicator.ToUpperInvariant() == "N"))).ToList())
+        ).ToList();
 
             // Process each shipped entry
             foreach (WorldShipProcessedGrouping worldShipProcessGroup in worldShipProcessedGroupings)
@@ -246,6 +248,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <returns>ShipmentEntity if a shipment is found for shipmentIdToTest, otherwise null is returned. </returns>
         private static ShipmentEntity GetShipment(long? shipmentIdToTest)
         {
+            using (var adapter = SqlAdapter.Create(false))
+            {
+                return GetShipment(adapter, shipmentIdToTest);
+            }
+        }
+
+        /// <summary>
+        /// Gets a shipment entity by string shipmentID
+        /// </summary>
+        /// <param name="shipmentIdToTest">String representation of the shipmentID to find</param>
+        /// <returns>ShipmentEntity if a shipment is found for shipmentIdToTest, otherwise null is returned. </returns>
+        private static ShipmentEntity GetShipment(ISqlAdapter sqlAdapter, long? shipmentIdToTest)
+        {
             // First we need to find the shipment
             ShipmentEntity shipment = null;
 
@@ -261,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     return null;
                 }
 
-                shipment = ShippingManager.GetShipment(shipmentID);
+                shipment = LoadShipmentWithUpsData(sqlAdapter, shipmentID); // ShippingManager.GetShipment(shipmentID);
                 if (shipment == null)
                 {
                     Log.WarnFormat("Shipment {0} has gone away since WorldShip processing.", shipmentIdToTest);
@@ -294,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     // Delete each import row to lock it
                     worldShipProcessedGrouping.OrderedWorldShipProcessedEntries.ForEach(worldShipProcessedEntry => adapter.DeleteEntity(new WorldShipProcessedEntity(worldShipProcessedEntry.WorldShipProcessedID)));
 
-                    ShipmentEntity shipment = GetShipment(worldShipProcessedGrouping.ShipmentID);
+                    ShipmentEntity shipment = GetShipment(adapter, worldShipProcessedGrouping.ShipmentID);
 
                     if (shipment == null)
                     {
@@ -314,9 +329,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     // Set the shipmentId so we can load up a shipment for Tango, OUTSIDE of the SqlAdapter transaction.
                     shipmentId = shipment.ShipmentID;
 
-                    // Now we need to make sure it is a UPS shipment
-                    ShippingManager.EnsureShipmentLoaded(shipment);
-
                     // Get the ups entity
                     UpsShipmentEntity upsShipment = shipment.Ups;
 
@@ -333,12 +345,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
             catch (ORMConcurrencyException ormConcurrencyException)
             {
-                string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException((IEntity2)ormConcurrencyException.EntityWhichFailed,
+                string ormConcurrencyExceptionMessage = LogExceptionUtility.LogOrmConcurrencyException((IEntity2) ormConcurrencyException.EntityWhichFailed,
                     $"ShipmentID:{shipmentId}", ormConcurrencyException);
                 throw new UpsException(ormConcurrencyExceptionMessage, ormConcurrencyException);
             }
 
             LogShipmentToTango(shipmentId);
+        }
+
+        /// <summary>
+        /// Load a shipment with UPS specific data
+        /// </summary>
+        private static ShipmentEntity LoadShipmentWithUpsData(ISqlAdapter sqlAdapter, long shipmentId)
+        {
+            var queryFactory = new QueryFactory();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var prefetchPathProvider = lifetimeScope.ResolveKeyed<IShipmentTypePrefetchProvider>(ShipmentTypeCode.UpsWorldShip);
+
+                var query = queryFactory.Shipment
+                    .Where(ShipmentFields.ShipmentID == shipmentId)
+                    .WithPath(ShipmentEntity.PrefetchPathOrder)
+                    .WithPaths(prefetchPathProvider);
+
+                return sqlAdapter.FetchSingle(query);
+            }
         }
 
         /// <summary>
@@ -351,8 +383,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 WorldShipPackageImporter importer = scope.Resolve<WorldShipPackageImporter>();
 
-                foreach (WorldShipProcessedEntity packageToImport in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries
-                    )
+                foreach (WorldShipProcessedEntity packageToImport in worldShipProcessedGrouping.OrderedWorldShipProcessedEntries)
                 {
                     ImportPackage(importer, shipment, packageToImport, adapter);
                 }
@@ -386,7 +417,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private static void SaveWorldShipStatus(UpsShipmentEntity upsShipment, SqlAdapter adapter, ShipmentEntity shipment)
         {
             // Mark the shipment as completed
-                    upsShipment.WorldShipStatus = (int)WorldShipStatusType.Completed;
+            upsShipment.WorldShipStatus = (int) WorldShipStatusType.Completed;
 
             // Save the updated ups world ship status
             adapter.SaveAndRefetch(shipment);
@@ -450,9 +481,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             if (shipment != null)
             {
-                // Now we need to make sure it is a UPS shipment
-                ShippingManager.EnsureShipmentLoaded(shipment);
-
                 // If it's already been voided, just skip voiding
                 if (!shipment.Voided && shipment.Ups != null)
                 {
@@ -505,6 +533,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 adapter.Commit();
             }
         }
-             
+
     }
 }
