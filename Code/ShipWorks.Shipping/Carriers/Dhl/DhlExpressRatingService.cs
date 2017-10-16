@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private readonly ICarrierRateShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly IDhlExpressAccountRepository accountRepository;
 
         /// <summary>
         /// Constructor
@@ -30,11 +31,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public DhlExpressRatingService(
             IIndex<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
-            IShipEngineRateGroupFactory rateGroupFactory)
+            IShipEngineRateGroupFactory rateGroupFactory,
+            IDhlExpressAccountRepository accountRepository)
         {
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.DhlExpress];
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -44,6 +47,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             try
             {
+                // We don't have any DHL Express accounts, so let the user know they need an account.
+                if (!accountRepository.Accounts.Any())
+                {
+                    throw new DhlExpressException($"An account is required to view DHL Express rates.");
+                }
+
                 RateShipmentRequest request = rateRequestFactory.Create(shipment);
                 RateShipmentResponse rateResponse = Task.Run(async () => {
                     return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);

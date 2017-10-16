@@ -45,6 +45,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
+            if (account==null)
+            {
+                throw new DhlExpressException("Invalid account associated with shipment.");
+            }
+
             RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
             request.RateOptions = new RateRequest() { CarrierIds = new List<string> { account.ShipEngineCarrierId } };
 
