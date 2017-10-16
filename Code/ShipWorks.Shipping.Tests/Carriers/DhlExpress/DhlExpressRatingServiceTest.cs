@@ -15,17 +15,31 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
-    class DhlExpressRatingServiceTest : IDisposable
+    public class DhlExpressRatingServiceTest : IDisposable
     {
         readonly AutoMock mock;
+        Mock<ICarrierRateShipmentRequestFactory> requestFactory;
+        RateShipmentRequest request;
 
         public DhlExpressRatingServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            request = new RateShipmentRequest();
+
+            requestFactory = mock.CreateKeyedMockOf<ICarrierRateShipmentRequestFactory>()
+                .For(ShipmentTypeCode.DhlExpress);
+
+            requestFactory.Setup(f => f.Create(It.IsAny<ShipmentEntity>()))
+                .Returns(new RateShipmentRequest());
+
+            mock.Mock<IDhlExpressAccountRepository>()
+                .SetupGet(r => r.Accounts)
+                .Returns(new[] { new DhlExpressAccountEntity() });
         }
 
         [Fact]
-        private void GetRates_DelegatesToRequestFactoryForRequest()
+        public void GetRates_DelegatesToRequestFactoryForRequest()
         {
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
@@ -33,17 +47,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.GetRates(shipment);
 
-            mock.Mock<ICarrierRateShipmentRequestFactory>().Verify(r => r.Create(shipment));
+            requestFactory.Verify(r => r.Create(shipment), Times.Once);
         }
 
         [Fact]
-        private void GetRates_DelegatesToShipEngineWebClientForRateShipmentResponse()
+        public void GetRates_DelegatesToShipEngineWebClientForRateShipmentResponse()
         {
             ShipmentEntity shipment = new ShipmentEntity();
-            RateShipmentRequest request = new RateShipmentRequest();
-
-            Mock<ICarrierRateShipmentRequestFactory> requestFactory = mock.Mock<ICarrierRateShipmentRequestFactory>();
-            requestFactory.Setup(r => r.Create(shipment)).Returns(request);
 
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
             
@@ -53,8 +63,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        private void GetRates_DelegatesToRateGroupFactoryForRateGroup()
+        public void GetRates_DelegatesToRateGroupFactoryForRateGroup()
         {
+            
             ShipmentEntity shipment = new ShipmentEntity();
             RateShipmentResponse rateResponse = new RateShipmentResponse();
             mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
