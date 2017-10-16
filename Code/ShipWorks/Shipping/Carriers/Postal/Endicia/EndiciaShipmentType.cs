@@ -277,51 +277,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 shipment.RequestedLabelFormat = shipment.Postal.Endicia.RequestedLabelFormat;
             }
         }
-
-        /// <summary>
-        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
-        /// the originID is no longer valid and the address could not be updated, false is returned.
-        /// </summary>
-        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
-        {
-
-            // A null reference error was being thrown.  Discovered by Crash Reports.
-            // Let's figure out what is null....
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            if (shipment.Processed)
-            {
-                return true;
-            }
-
-            // The Endicia or Postal object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Endicia != null)
-            {
-                IEndiciaAccountEntity account = EndiciaAccountManager.GetAccountReadOnly(shipment.Postal.Endicia.EndiciaAccountID);
-                if (account == null)
-                {
-                    if (Accounts == null)
-                    {
-                        throw new NullReferenceException("Account cannot be null.");
-                    }
-
-                    account = AccountRepository.AccountsReadOnly.FirstOrDefault();
-                }
-
-                if (account != null)
-                {
-                    account.Address.CopyTo(person);
-                    return true;
-                }
-                return false;
-            }
-
-            return base.UpdatePersonAddress(shipment, person, originID);
-        }
-
+               
         /// <summary>
         /// Checks to see if the shipment allows scan based payment returns
         /// </summary>

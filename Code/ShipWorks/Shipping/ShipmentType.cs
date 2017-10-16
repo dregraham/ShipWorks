@@ -723,16 +723,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensures the ShipDate on an unprocessed shipment is Up-To-Date
         /// </summary>
-        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
+        private void UpdateShipmentShipDate(ShipmentEntity shipment)
         {
-            if (shipment == null)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                throw new ArgumentNullException("shipment");
-            }
+                var manipulator = lifetimeScope.IsRegisteredWithKey<IShipmentDateManipulator>(ShipmentTypeCode) ?
+                    lifetimeScope.ResolveKeyed<IShipmentDateManipulator>(ShipmentTypeCode) :
+                    lifetimeScope.Resolve<DefaultShipmentDateManipulator>();
 
-            if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
-            {
-                shipment.ShipDate = now.Date.AddHours(12);
+                manipulator.Manipulate(shipment);
             }
         }
 
@@ -750,7 +749,7 @@ namespace ShipWorks.Shipping
             }
 
             // ensure the ship date is up-to-date
-            UpdateShipmentShipDate(shipment, IoC.UnsafeGlobalLifetimeScope.Resolve<IDateTimeProvider>().Now);
+            UpdateShipmentShipDate(shipment);
 
             // Ensure the from address is up-to-date
             if (!UpdateOriginAddress(shipment, shipment.OriginOriginID))
@@ -772,49 +771,22 @@ namespace ShipWorks.Shipping
         /// Update the person address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
         /// </summary>
-        public virtual bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
+        public bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            if (shipment.Processed)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return true;
-            }
+                IShippingOriginManager shippingOriginManager = lifetimeScope.Resolve<IShippingOriginManager>();
 
-            // Copy from the store
-            if (originID == (int) ShipmentOriginSource.Store)
-            {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                PersonAdapter originAddress = shippingOriginManager.GetOriginAddress(originID, shipment);
+
+                if (originAddress != null)
                 {
-                    // We need to use a temporary address so that we only do a single update on the destination address
-                    // This is necessary because the source has a null parsed name which causes the destination to
-                    // look dirty even if we end up setting the ParsedName to what it originally was.
-                    StoreEntity store = shipment.Order?.Store ?? lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment.OrderID);
-
-                    PersonAdapter storeCopy = new PersonAdapter();
-                    PersonAdapter.Copy(store, string.Empty, storeCopy);
-                    storeCopy.ParsedName = PersonName.Parse(store.StoreName);
-
-                    PersonAdapter.Copy(storeCopy, person);
+                    originAddress.CopyTo(person);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            // Other - no change.
-            if (originID == (int) ShipmentOriginSource.Other)
-            {
-                return true;
-            }
-
-            // Try looking it up as ShippingOriginID
-            IShippingOriginEntity origin = ShippingOriginManager.GetOriginReadOnly(originID);
-            if (origin != null)
-            {
-                PersonAdapter.Copy(origin.AsPersonAdapter(), person);
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -1152,6 +1124,6 @@ namespace ShipWorks.Shipping
         public virtual void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
             // Default will have nothing to update
-        }
+        }        
     }
 }

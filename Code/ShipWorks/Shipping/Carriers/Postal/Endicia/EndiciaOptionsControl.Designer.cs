@@ -36,17 +36,17 @@
             this.customsSigner = new System.Windows.Forms.TextBox();
             this.labelSignerInfo = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.thermalDocTabType = new System.Windows.Forms.ComboBox();
-            this.labelThermalDocTabType = new System.Windows.Forms.Label();
-            this.thermalDocTab = new System.Windows.Forms.CheckBox();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
+            this.customsPanel = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            this.customsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelLabels
             // 
             this.labelLabels.AutoSize = true;
-            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLabels.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelLabels.Location = new System.Drawing.Point(8, 6);
             this.labelLabels.Name = "labelLabels";
             this.labelLabels.Size = new System.Drawing.Size(43, 13);
@@ -56,8 +56,8 @@
             // labelCustoms
             // 
             this.labelCustoms.AutoSize = true;
-            this.labelCustoms.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCustoms.Location = new System.Drawing.Point(8, 62);
+            this.labelCustoms.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelCustoms.Location = new System.Drawing.Point(8, 2);
             this.labelCustoms.Name = "labelCustoms";
             this.labelCustoms.Size = new System.Drawing.Size(56, 13);
             this.labelCustoms.TabIndex = 5;
@@ -66,7 +66,7 @@
             // customsCertify
             // 
             this.customsCertify.AutoSize = true;
-            this.customsCertify.Location = new System.Drawing.Point(27, 82);
+            this.customsCertify.Location = new System.Drawing.Point(27, 22);
             this.customsCertify.Name = "customsCertify";
             this.customsCertify.Size = new System.Drawing.Size(267, 17);
             this.customsCertify.TabIndex = 6;
@@ -77,7 +77,7 @@
             // labelSigner
             // 
             this.labelSigner.AutoSize = true;
-            this.labelSigner.Location = new System.Drawing.Point(43, 104);
+            this.labelSigner.Location = new System.Drawing.Point(43, 44);
             this.labelSigner.Name = "labelSigner";
             this.labelSigner.Size = new System.Drawing.Size(142, 13);
             this.labelSigner.TabIndex = 7;
@@ -86,7 +86,7 @@
             // customsSigner
             // 
             this.customsSigner.Enabled = false;
-            this.customsSigner.Location = new System.Drawing.Point(189, 101);
+            this.customsSigner.Location = new System.Drawing.Point(189, 41);
             this.fieldLengthProvider.SetMaxLengthSource(this.customsSigner, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaCustomsSigner);
             this.customsSigner.Name = "customsSigner";
             this.customsSigner.Size = new System.Drawing.Size(229, 21);
@@ -96,74 +96,56 @@
             // 
             this.labelSignerInfo.AutoSize = true;
             this.labelSignerInfo.ForeColor = System.Drawing.Color.DimGray;
-            this.labelSignerInfo.Location = new System.Drawing.Point(186, 125);
+            this.labelSignerInfo.Location = new System.Drawing.Point(186, 65);
             this.labelSignerInfo.Name = "labelSignerInfo";
             this.labelSignerInfo.Size = new System.Drawing.Size(245, 13);
             this.labelSignerInfo.TabIndex = 9;
             this.labelSignerInfo.Text = "(MUST be a person\'s name, not a company name)";
             // 
-            // thermalDocTabType
-            // 
-            this.thermalDocTabType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.thermalDocTabType.Enabled = false;
-            this.thermalDocTabType.FormattingEnabled = true;
-            this.thermalDocTabType.Location = new System.Drawing.Point(321, 42);
-            this.thermalDocTabType.Name = "thermalDocTabType";
-            this.thermalDocTabType.Size = new System.Drawing.Size(149, 21);
-            this.thermalDocTabType.TabIndex = 49;
-            this.thermalDocTabType.Visible = false;
-            // 
-            // labelThermalDocTabType
-            // 
-            this.labelThermalDocTabType.AutoSize = true;
-            this.labelThermalDocTabType.Enabled = false;
-            this.labelThermalDocTabType.Location = new System.Drawing.Point(318, 26);
-            this.labelThermalDocTabType.Name = "labelThermalDocTabType";
-            this.labelThermalDocTabType.Size = new System.Drawing.Size(192, 13);
-            this.labelThermalDocTabType.TabIndex = 48;
-            this.labelThermalDocTabType.Text = "The doc-tab emerges from the printer:";
-            this.labelThermalDocTabType.Visible = false;
-            // 
-            // thermalDocTab
-            // 
-            this.thermalDocTab.AutoSize = true;
-            this.thermalDocTab.Enabled = false;
-            this.thermalDocTab.Location = new System.Drawing.Point(321, 6);
-            this.thermalDocTab.Name = "thermalDocTab";
-            this.thermalDocTab.Size = new System.Drawing.Size(166, 17);
-            this.thermalDocTab.TabIndex = 47;
-            this.thermalDocTab.Text = "My label stock has a doc-tab.";
-            this.thermalDocTab.UseVisualStyleBackColor = true;
-            this.thermalDocTab.Visible = false;
-            // 
             // requestedLabelFormat
             // 
-            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.requestedLabelFormat.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.requestedLabelFormat.Location = new System.Drawing.Point(24, 27);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
-            this.requestedLabelFormat.Size = new System.Drawing.Size(394, 25);
+            this.requestedLabelFormat.Size = new System.Drawing.Size(384, 25);
             this.requestedLabelFormat.TabIndex = 60;
+            // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(24, 53);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 61;
+            // 
+            // customsPanel
+            // 
+            this.customsPanel.Controls.Add(this.labelSignerInfo);
+            this.customsPanel.Controls.Add(this.customsSigner);
+            this.customsPanel.Controls.Add(this.labelSigner);
+            this.customsPanel.Controls.Add(this.customsCertify);
+            this.customsPanel.Controls.Add(this.labelCustoms);
+            this.customsPanel.Location = new System.Drawing.Point(0, 85);
+            this.customsPanel.Name = "customsPanel";
+            this.customsPanel.Size = new System.Drawing.Size(520, 84);
+            this.customsPanel.TabIndex = 62;
             // 
             // EndiciaOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.customsPanel);
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.requestedLabelFormat);
-            this.Controls.Add(this.thermalDocTabType);
-            this.Controls.Add(this.labelThermalDocTabType);
-            this.Controls.Add(this.thermalDocTab);
-            this.Controls.Add(this.labelSignerInfo);
-            this.Controls.Add(this.customsSigner);
-            this.Controls.Add(this.labelSigner);
-            this.Controls.Add(this.customsCertify);
-            this.Controls.Add(this.labelCustoms);
             this.Controls.Add(this.labelLabels);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "EndiciaOptionsControl";
-            this.Size = new System.Drawing.Size(435, 145);
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
+            this.Size = new System.Drawing.Size(522, 169);
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            this.customsPanel.ResumeLayout(false);
+            this.customsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -178,10 +160,8 @@
         private System.Windows.Forms.TextBox customsSigner;
         private System.Windows.Forms.Label labelSignerInfo;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private System.Windows.Forms.ComboBox thermalDocTabType;
-        private System.Windows.Forms.Label labelThermalDocTabType;
-        private System.Windows.Forms.CheckBox thermalDocTab;
         private Editing.RequestedLabelFormatOptionControl requestedLabelFormat;
-
+        private Editing.ShippingDateCutoffControl shippingCutoff;
+        private System.Windows.Forms.Panel customsPanel;
     }
 }

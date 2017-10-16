@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using ShipWorks.Core.UI.ValueConverters;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class UpsServiceControl : ServiceControlBase
     {
+        private readonly ShipmentDateCutoffConverter converter;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsServiceControl"/> class.
         /// </summary>
@@ -31,6 +34,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public UpsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
+            converter = new ShipmentDateCutoffConverter();
+
             InitializeComponent();
 
             originControl.Initialize(ShipmentTypeCode.UpsOnLineTools);
@@ -64,6 +69,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 sectionLabelOptions.Visible = false;
             }
+
+            infotipShipDate.Caption += $"{Environment.NewLine}{converter.Convert(shipmentTypeCode, typeof(string), null, null).ToString()}"; 
         }
 
         protected override void Initialize()

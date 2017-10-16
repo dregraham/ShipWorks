@@ -55,6 +55,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public override bool SupportsMultiplePackages => true;
 
         /// <summary>
+        /// Supports using an origin address from a shipping account
+        /// </summary>
+        public override bool SupportsAccountAsOrigin => true;
+
+        /// <summary>
         /// Indicates if the shipment service type supports getting rates
         /// </summary>
         public override bool SupportsGetRates => true;

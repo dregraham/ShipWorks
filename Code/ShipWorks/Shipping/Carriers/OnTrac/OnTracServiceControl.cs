@@ -59,6 +59,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
                 telemetryEvent.AddMetric(WeightControl.PackageQuantityTelemetryKey, 1);
             };
+
+            cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
 
         /// <summary>

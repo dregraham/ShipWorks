@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -61,7 +62,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void PositionControls()
         {
-            express1SettingsControl.Top = optionsControl.Bottom + 5;
+            shippingCutoff.Top = optionsControl.Bottom;
+            express1SettingsControl.Top = shippingCutoff.Bottom + 5;
 
             if (express1SettingsControl.Visible)
             {
@@ -73,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                panelBottom.Top = optionsControl.Bottom;
+                panelBottom.Top = shippingCutoff.Bottom + 5;
             }
 
             servicePicker.Top = panelBottom.Bottom + 4;
@@ -91,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             string reseller = UspsAccountManager.GetResellerName(uspsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             if (uspsResellerType == UspsResellerType.None)
             {
@@ -107,6 +109,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Doesn't make sense to show Stamps.com insurance choosing to Express1
                 panelInsurance.Visible = false;
             }
+            
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
@@ -194,6 +198,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 express1Settings.SaveSettings(settings);
                 log.Info("Finished saving Express1 settings");
             }
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
 
             if (uspsResellerType == UspsResellerType.None)
             {

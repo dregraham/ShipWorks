@@ -202,6 +202,7 @@
     <Compile Include="ShippingPanel\ShippingConfigurationTest.cs" />
     <Compile Include="ShippingPanel\ShippingPanelAutoMockExtensions.cs" />
     <Compile Include="ShippingPanel\ShippingPanelViewModelTest.cs" />
+    <Compile Include="ShippingPanel\ValueConverters\ShipmentDateCutoffConverterTest.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonRegistrationTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\OriginAddressListConverterTest.cs" />
     <Compile Include="ShippingPanel\ValueConverters\ShipmentTypeListConverterTest.cs" />

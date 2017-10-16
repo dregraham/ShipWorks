@@ -90,6 +90,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipmentEditLimit = source.ShipmentEditLimit;
             ShipmentsLoaderEnsureFiltersLoadedTimeout = source.ShipmentsLoaderEnsureFiltersLoadedTimeout;
             ShipEngineApiKey = source.ShipEngineApiKey;
+            ShipmentDateCutoffJson = source.ShipmentDateCutoffJson;
             
             
             
@@ -422,6 +423,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ShipEngineApiKey { get; }
+        /// <summary> The ShipmentDateCutoffJson property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."ShipmentDateCutoffJson"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ShipmentDateCutoffJson { get; }
         
         
         

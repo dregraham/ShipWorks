@@ -447,42 +447,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
-        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
-        /// the originID is no longer valid and the address could not be updated, false is returned.
-        /// </summary>
-        /// <returns>True if successful</returns>
-        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
-        {
-            bool isSuccessfull = false;
-
-            if (shipment.Processed)
-            {
-                isSuccessfull = true;
-            }
-            else
-            {
-                // shipment not processed
-                if (originID == (int) ShipmentOriginSource.Account && shipment.OnTrac != null)
-                {
-                    IOnTracAccountEntity account = OnTracAccountManager.GetAccountReadOnly(shipment.OnTrac.OnTracAccountID)
-                        ?? OnTracAccountManager.AccountsReadOnly.FirstOrDefault();
-
-                    if (account != null)
-                    {
-                        account.Address.CopyTo(person);
-                        isSuccessfull = true;
-                    }
-                }
-                else
-                {
-                    // origin not specified as an account. Use base behavior.
-                    isSuccessfull = base.UpdatePersonAddress(shipment, person, originID);
-                }
-            }
-            return isSuccessfull;
-        }
-
-        /// <summary>
         /// Update the total weight of the shipment
         /// </summary>
         public override void UpdateTotalWeight(ShipmentEntity shipment)

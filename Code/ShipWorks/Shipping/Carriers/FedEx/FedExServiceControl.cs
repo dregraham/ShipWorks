@@ -75,6 +75,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packageControl.Initialize();
 
             packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
+
+            cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
 
         /// <summary>

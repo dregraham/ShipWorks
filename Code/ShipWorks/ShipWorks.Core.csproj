@@ -1220,6 +1220,7 @@
     <Compile Include="Shipping\Carriers\CarrierAccountManagerControl.Designer.cs">
       <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountManager.cs" />
     <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Dhl\DhlExpressServiceType.cs" />
@@ -1232,6 +1233,7 @@
     <Compile Include="Shipping\Carriers\ICarrierAccountEditorDlg.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentDateManipulator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -1312,6 +1314,15 @@
     </Compile>
     <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.Designer.cs">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffDisplayControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
@@ -6789,6 +6800,7 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ValueConverters\ShipmentDateCutoffConverter.cs" />
     <Compile Include="Users\Audit\AuditDisplayFormatAttribute.cs" />
     <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.resx">
@@ -8103,6 +8115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ShippingDateCutoffControl.resx">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>
