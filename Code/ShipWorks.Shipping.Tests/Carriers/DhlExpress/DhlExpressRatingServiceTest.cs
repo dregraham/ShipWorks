@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
     public class DhlExpressRatingServiceTest : IDisposable
     {
         readonly AutoMock mock;
-        Mock<ICarrierRateShipmentRequestFactory> requestFactory;
-        RateShipmentRequest request;
+        readonly Mock<ICarrierRateShipmentRequestFactory> requestFactory;
+        readonly RateShipmentRequest request;
 
         public DhlExpressRatingServiceTest()
         {
