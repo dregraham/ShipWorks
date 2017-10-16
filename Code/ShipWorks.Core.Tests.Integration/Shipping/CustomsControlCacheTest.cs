@@ -23,6 +23,8 @@ using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using Xunit;
 using Autofac;
+using ShipWorks.Tests.Shared;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Core.Tests.Integration.Shipping
 {
@@ -57,9 +59,9 @@ namespace ShipWorks.Core.Tests.Integration.Shipping
 
             context.Mock.Provide<IUserSession>(session.Object);
 
-            Mock<ILifetimeScope> scope = new Mock<ILifetimeScope>();
-            
-            customsControlCache = new CustomsControlCache(scope.Object);
+            ContainerInitializer.Initialize();
+
+            customsControlCache = new CustomsControlCache(IoC.UnsafeGlobalLifetimeScope);
         }
 
         [Fact]
