@@ -276,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     return null;
                 }
 
-                shipment = LoadShipmentWithUpsData(sqlAdapter, shipmentID); // ShippingManager.GetShipment(shipmentID);
+                shipment = LoadShipmentWithUpsData(sqlAdapter, shipmentID);
                 if (shipment == null)
                 {
                     Log.WarnFormat("Shipment {0} has gone away since WorldShip processing.", shipmentIdToTest);
