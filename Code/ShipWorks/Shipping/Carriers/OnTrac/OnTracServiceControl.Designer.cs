@@ -32,6 +32,7 @@
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.accountSectionLabel = new System.Windows.Forms.Label();
@@ -139,6 +140,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(399, 332);
             //
@@ -426,6 +428,18 @@
             this.shipDate.Name = "shipDate";
             this.shipDate.Size = new System.Drawing.Size(144, 21);
             this.shipDate.TabIndex = 66;
+            // 
+            // cutoffDateDisplay
+            // 
+            this.cutoffDateDisplay.AutoSize = true;
+            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
+            this.cutoffDateDisplay.Caption = "";
+            this.cutoffDateDisplay.Location = new System.Drawing.Point(229, 43);
+            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
+            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.OnTrac;
+            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 15);
+            this.cutoffDateDisplay.TabIndex = 6;
+            this.cutoffDateDisplay.Title = "Shipment cutoff time";
             //
             // insuranceControl
             //
@@ -616,8 +630,6 @@
         private System.Windows.Forms.Label labelSignatureRequired;
         private System.Windows.Forms.CheckBox signatureRequired;
         private System.Windows.Forms.Label labelSaturday;
-
-
-
+        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }

@@ -209,6 +209,7 @@
     <Compile Include="Carriers\NullDownloadedLabelData.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
+    <Compile Include="Carriers\Other\OtherShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilder.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
@@ -305,6 +307,7 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\TelemetricUpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />

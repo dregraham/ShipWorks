@@ -9006,6 +9006,8 @@ namespace ShipWorks.Data.Model
 		ShipmentsLoaderEnsureFiltersLoadedTimeout,
 		///<summary>ShipEngineApiKey. </summary>
 		ShipEngineApiKey,
+		///<summary>ShipmentDateCutoffJson. </summary>
+		ShipmentDateCutoffJson,
 		/// <summary></summary>
 		AmountOfFields
 	}

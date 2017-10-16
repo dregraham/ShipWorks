@@ -86,6 +86,9 @@
       <HintPath>..\..\packages\Moq.4.7.0\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -162,6 +165,7 @@
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressPackageAdapterTest.cs" />
+    <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
@@ -179,10 +183,13 @@
     <Compile Include="Carriers\Other\OtherShipmentAdapterTest.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\Postal\Express1\Express1EndiciaShipmentPackageTypesBuilderTest.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\AlaskaHawaiiZoneExcelReaderTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\DeliveryAreaSurchargeUpsZoneExcelReaderTest.cs" />
@@ -278,6 +285,7 @@
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
+    <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
   </ItemGroup>

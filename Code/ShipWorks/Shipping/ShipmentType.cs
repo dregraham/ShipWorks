@@ -713,16 +713,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Ensures the ShipDate on an unprocessed shipment is Up-To-Date
         /// </summary>
-        protected virtual void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
+        private void UpdateShipmentShipDate(ShipmentEntity shipment)
         {
-            if (shipment == null)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                throw new ArgumentNullException("shipment");
-            }
+                var manipulator = lifetimeScope.IsRegisteredWithKey<IShipmentDateManipulator>(ShipmentTypeCode) ?
+                    lifetimeScope.ResolveKeyed<IShipmentDateManipulator>(ShipmentTypeCode) :
+                    lifetimeScope.Resolve<DefaultShipmentDateManipulator>();
 
-            if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
-            {
-                shipment.ShipDate = now.Date.AddHours(12);
+                manipulator.Manipulate(shipment);
             }
         }
 
@@ -740,7 +739,7 @@ namespace ShipWorks.Shipping
             }
 
             // ensure the ship date is up-to-date
-            UpdateShipmentShipDate(shipment, IoC.UnsafeGlobalLifetimeScope.Resolve<IDateTimeProvider>().Now);
+            UpdateShipmentShipDate(shipment);
 
             // Ensure the from address is up-to-date
             if (!UpdateOriginAddress(shipment, shipment.OriginOriginID))

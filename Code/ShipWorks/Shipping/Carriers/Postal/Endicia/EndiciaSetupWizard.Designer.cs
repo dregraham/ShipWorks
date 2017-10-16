@@ -147,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAddress);
+            this.mainPanel.Controls.Add(this.wizardPageOptions);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -774,15 +774,18 @@
             // 
             // personCreditCard
             // 
+            this.personCreditCard.AddressSelector = null;
             this.personCreditCard.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((ShipWorks.Data.Controls.PersonFields.Street | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
+            this.personCreditCard.EnableValidationControls = false;
             this.personCreditCard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personCreditCard.FullName = "";
             this.personCreditCard.Location = new System.Drawing.Point(42, 24);
             this.personCreditCard.Name = "personCreditCard";
             this.personCreditCard.Size = new System.Drawing.Size(358, 158);
             this.personCreditCard.TabIndex = 2;
+            this.personCreditCard.ValidatedAddressScope = null;
             // 
             // wizardPageFinish
             // 
@@ -974,7 +977,8 @@
             this.optionsControl.Location = new System.Drawing.Point(15, 9);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Reseller = ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller.None;
-            this.optionsControl.Size = new System.Drawing.Size(476, 170);
+            this.optionsControl.ShowShippingCutoffDate = false;
+            this.optionsControl.Size = new System.Drawing.Size(476, 162);
             this.optionsControl.TabIndex = 0;
             // 
             // wizardPageAccountNumber

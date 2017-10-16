@@ -494,14 +494,31 @@ namespace ShipWorks.Stores.Platforms.Etsy
             item.Name = transaction.GetValue("title", "");
             string productId = transaction["product_data"].GetValue("product_id", "");
 
-
             if (productId.IsNumeric())
             {
                 item.ListingID = transaction.GetValue("listing_id", "");
-                JToken product = webClient.GetProduct(item.ListingID, productId);
-                item.SKU = product["results"]?.GetValue("sku", string.Empty) ?? string.Empty;
-                item.Code = item.SKU;
-                item.TransactionID = transaction.GetValue("transaction_id", "");
+
+                try
+                {
+                    JToken product = webClient.GetProduct(item.ListingID, productId);
+                    item.SKU = product["results"]?.GetValue("sku", string.Empty) ?? string.Empty;
+                    item.Code = item.SKU;
+                    item.TransactionID = transaction.GetValue("transaction_id", "");
+                }
+                catch (EtsyException ex)
+                {
+                    HttpWebResponse httpWebReponse = ex.GetAllExceptions()
+                        .OfType<WebException>()
+                        .FirstOrDefault()?
+                        .Response as HttpWebResponse;
+
+                    if (httpWebReponse?.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        log.Info($"Etsy threw a GetProduct exception for OrderNumber {order.OrderNumber} ", ex);
+                        item.Code = transaction.GetValue("transaction_id", "");
+                        item.SKU = transaction.GetValue("listing_id", "");
+                    }
+                }
             }
             else
             {
