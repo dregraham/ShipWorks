@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
     /// Dhl Express Implmentation
     /// </summary>
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressLabelService : ILabelService
     {
         private readonly IShipEngineWebClient shipEngineWebClient;

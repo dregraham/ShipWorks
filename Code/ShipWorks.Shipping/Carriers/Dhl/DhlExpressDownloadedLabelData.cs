@@ -1,6 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using System;
-using System.Linq;
 using ShipEngine.ApiClient.Model;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
@@ -8,9 +7,6 @@ using ShipWorks.Shipping.ShipEngine;
 using static ShipEngine.ApiClient.Model.Label;
 using ShipWorks.ApplicationCore.Logging;
 using System.IO;
-using System.Drawing;
-using Interapptive.Shared.Imaging;
-using System.Drawing.Imaging;
 using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -45,18 +41,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             SaveLabelInfoToEntity(shipment, label);
 
             byte[] labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress, "GetLabel");
-            byte[] documentsResource = resourceDownloader.Download(new Uri(label.FormDownload.Href), ApiLogSource.DHLExpress, "GetResource");
 
             // None of this will work, need to smoke test and fix everything sorry in advance!
             switch (label.LabelFormat)
             {
                 case LabelFormatEnum.Pdf:
                     shipment.ActualLabelFormat = (int)ThermalLanguage.None;
-                    SavePdfLabel(labelResource, documentsResource);
+                    SavePdfLabel(labelResource);
                     break;
                 case LabelFormatEnum.Zpl:
                     shipment.ActualLabelFormat = (int)ThermalLanguage.ZPL;
-                    SaveZplLabel(labelResource, documentsResource);
+                    SaveZplLabel(labelResource);
                     break;
                 default:
                 case LabelFormatEnum.Png:
@@ -67,45 +62,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Save the ZPL label
         /// </summary>
-        private void SaveZplLabel(byte[] labelResource, byte[] documentsResource)
+        private void SaveZplLabel(byte[] labelResource)
         {
             resourceManager.CreateFromBytes(labelResource, shipment.ShipmentID, "LabelPrimary");
-
-            if (documentsResource.Any())
-            {
-                resourceManager.CreateFromBytes(documentsResource, shipment.ShipmentID, "LabelPrimary");
-            }
         }
 
         /// <summary>
         /// Save the PDF label
         /// </summary>
-        private void SavePdfLabel(byte[] labelResource, byte[] documentsResource)
+        private void SavePdfLabel(byte[] labelResource)
         {
             using (MemoryStream pdfBytes = new MemoryStream(labelResource))
             {
-                resourceManager.CreateFromPdf(pdfBytes, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", SaveCroppedLabel);
-            }
-
-            using (MemoryStream pdfBytes = new MemoryStream(documentsResource))
-            {
-                resourceManager.CreateFromPdf(pdfBytes, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", SaveCroppedLabel);
-            }
-        }
-
-        /// <summary>
-        /// Save the cropped label
-        /// </summary>
-        private byte[] SaveCroppedLabel(MemoryStream stream)
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (Bitmap labelImage = stream.CropImageStream())
-                {
-                    labelImage.Save(memoryStream, ImageFormat.Png);
-                }
-
-                return memoryStream.ToArray();
+                resourceManager.CreateFromPdf(pdfBytes, shipment.ShipmentID, "LabelPrimary");
             }
         }
 
