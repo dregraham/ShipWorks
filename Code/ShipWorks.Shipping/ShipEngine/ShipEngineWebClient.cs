@@ -109,6 +109,14 @@ namespace ShipWorks.Shipping.ShipEngine
                 return GetErrorMessage(ex);
             }
         }
+        
+        /// <summary>
+        /// Purchases a label from ShipEngine using the given request
+        /// </summary>
+        public Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
+        {
+            throw new System.NotImplementedException();
+        }
 
         /// <summary>
         /// Gets rates from ShipEngine using the given request
