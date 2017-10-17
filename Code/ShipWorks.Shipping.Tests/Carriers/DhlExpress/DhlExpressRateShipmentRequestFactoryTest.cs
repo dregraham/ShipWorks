@@ -445,9 +445,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 }
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment);
+            testObject.CreatePurchaseLabelRequest(shipment);
 
-            Assert.Equal(EnumHelper.GetApiValue(serviceType), request.Shipment.ServiceCode);
+            shipmentElementFactory.Verify(f=>f.CreatePurchaseLabelRequest(shipment, It.IsAny<List<IPackageAdapter>>(), EnumHelper.GetApiValue(serviceType)), Times.Once());
         }
 
         public void Dispose()
