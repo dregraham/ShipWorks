@@ -4667,6 +4667,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.NonDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.ShipEngineShipmentID field instance</summary>
+		public static EntityField2 ShipEngineShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipEngineShipmentID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DimensionsProfileEntity</summary>

@@ -399,6 +399,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Contents", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineShipmentID", fieldHashtable);
 		}
 		#endregion
 
@@ -592,6 +594,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.NonDelivery, true); }
 			set	{ SetValue((int)DhlExpressShipmentFieldIndex.NonDelivery, value); }
+		}
+
+		/// <summary> The ShipEngineShipmentID property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipEngineShipmentID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipEngineShipmentID
+		{
+			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.ShipEngineShipmentID, true); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ShipEngineShipmentID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

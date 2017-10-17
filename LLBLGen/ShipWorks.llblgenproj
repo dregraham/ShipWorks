@@ -649,6 +649,7 @@
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="ShipEngineShipmentID" Type="string" MaxLength="12" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -4150,7 +4151,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-16T15:11:11.7204625Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-17T14:05:15.020878Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4818,6 +4819,7 @@
                     <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
                     <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineShipmentID" Ordinal="10" DbType="12" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -10541,6 +10543,7 @@
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineShipmentID" TargetFieldName="ShipEngineShipmentID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
           </FieldMappings>
         </EntityMapping>
