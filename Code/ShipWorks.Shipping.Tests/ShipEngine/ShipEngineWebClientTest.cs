@@ -142,9 +142,9 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             ratesApi.Setup(a =>
                 a.RatesRateShipmentAsync(It.IsAny<RateShipmentRequest>(),
-                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+                    It.IsAny<string>())).ThrowsAsync(new ApiException(500, "", error));
 
-            Assert.ThrowsAsync<ShippingException>(async () => await testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
+            await Assert.ThrowsAsync<ShippingException>(() => testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
         }
         
         [Fact]
@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             var apiEntry = mock.CreateMock<IApiLogEntry>();
             mock.MockFunc(apiEntry);
-            testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
+            await testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
 
             // This does not work due to a bug in moq
             // https://github.com/moq/moq4/issues/430
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
                     It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
-            Assert.ThrowsAsync<ShippingException>(async () => await testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
+            await Assert.ThrowsAsync<ShippingException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
         }
 
         [Fact]
