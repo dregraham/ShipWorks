@@ -72,27 +72,6 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Get the error message from an ApiException
-        /// </summary>
-        private static string GetErrorMessage(ApiException ex)
-        {
-            try
-            {
-                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-                if (error.Errors.Any())
-                {
-                    return error.Errors.First().Message;
-                }
-            }
-            catch (JsonReaderException)
-            {
-                return ex.Message;
-            }
-
-            return ex.Message;
-        }
-
-        /// <summary>
         /// Get the account if it exists
         /// </summary>
         public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
@@ -113,9 +92,18 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
-        public Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
+        public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
         {
-            throw new System.NotImplementedException();
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.GetRates);
+            try
+            {
+                return await labelsApi.LabelsPurchaseLabelAsync(request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
         }
 
         /// <summary>
@@ -162,6 +150,27 @@ namespace ShipWorks.Shipping.ShipEngine
 
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
+        }
+        
+        /// <summary>
+        /// Get the error message from an ApiException
+        /// </summary>
+        private static string GetErrorMessage(ApiException ex)
+        {
+            try
+            {
+                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
+                if (error.Errors.Any())
+                {
+                    return error.Errors.First().Message;
+                }
+            }
+            catch (JsonReaderException)
+            {
+                return ex.Message;
+            }
+
+            return ex.Message;
         }
     }
 }

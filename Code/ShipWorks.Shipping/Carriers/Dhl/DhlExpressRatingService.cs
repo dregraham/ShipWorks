@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -10,7 +8,6 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {

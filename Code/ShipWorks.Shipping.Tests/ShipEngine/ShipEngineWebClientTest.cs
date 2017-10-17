@@ -1,26 +1,29 @@
 ﻿using Autofac.Extras.Moq;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using Xunit;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Tests.Shared;
+using Interapptive.Shared.Utility;
+using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
     public class ShipEngineWebClientTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
         private readonly Mock<IShipEngineApiKey> apiKey;
-        private readonly Mock<IShipEngineApiFactory> accountsApiFactory;
+        private readonly Mock<IShipEngineApiFactory> shipEngineApiFactory;
         private readonly Mock<ICarrierAccountsApi> accountsApi;
         private readonly Mock<ICarriersApi> carriersApi;
+        private readonly Mock<IRatesApi> ratesApi;
+        private readonly Mock<ILabelsApi> labelsApi;
 
         private readonly ShipEngineWebClient testObject;
 
@@ -33,6 +36,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             accountsApi = mock.Mock<ICarrierAccountsApi>();
             carriersApi = mock.Mock<ICarriersApi>();
+            ratesApi = mock.Mock<IRatesApi>();
+            labelsApi = mock.Mock<ILabelsApi>();
 
             CarrierListResponse carriers =
                 new CarrierListResponse(new List<Carrier>()
@@ -42,10 +47,12 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             carriersApi.Setup(c => c.CarriersListAsync(It.IsAny<string>())).Returns(Task.FromResult(carriers));
 
-            accountsApiFactory = mock.Mock<IShipEngineApiFactory>();
-            accountsApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
-            accountsApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
-
+            shipEngineApiFactory = mock.Mock<IShipEngineApiFactory>();
+            shipEngineApiFactory.Setup(c => c.CreateCarrierAccountsApi()).Returns(accountsApi);
+            shipEngineApiFactory.Setup(c => c.CreateCarrierApi()).Returns(carriersApi);
+            shipEngineApiFactory.Setup(c => c.CreateRatesApi()).Returns(ratesApi);
+            shipEngineApiFactory.Setup(c => c.CreateLabelsApi()).Returns(labelsApi);
+            
             testObject = mock.Create<ShipEngineWebClient>();
         }
 
@@ -60,11 +67,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void ConnectDHLAccount_DelegatesToIShipEngineCarrierAccountsApiFactory()
+        public void ConnectDHLAccount_DelegatesToIShipEngineApiFactory()
         {
             testObject.ConnectDhlAccount("abcd");
 
-            accountsApiFactory.Verify(i => i.CreateCarrierAccountsApi());
+            shipEngineApiFactory.Verify(i => i.CreateCarrierAccountsApi());
         }
 
         [Fact]
@@ -110,15 +117,97 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void ConnectDHLAccount_DelegatesToICarriersApiForExistingAccounts()
+        public void RateShipment_DelegatesToIShipEngineApiKey()
         {
-            testObject.ConnectDhlAccount("1234");
+            apiKey.SetupGet(k => k.Value).Returns("");
 
-            accountsApi.Verify(a =>
-                a.DHLExpressAccountCarrierConnectAccountAsync(It.IsAny<DHLExpressAccountInformationDTO>(),
-                    It.IsAny<string>()),Times.Never);
+            testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
 
-            carriersApi.Verify(c => c.CarriersListAsync("abcd"));
+            apiKey.Verify(i => i.Configure());
+        }
+
+        [Fact]
+        public void RateShipment_DelegatesToIShipEngineApiFactory()
+        {
+            testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
+
+            shipEngineApiFactory.Verify(i => i.CreateRatesApi());
+        }
+
+        [Fact]
+        public async void RateShipment_ThrowsShippingException_WhenRateShipmentThrowsException()
+        {
+            string error =
+                "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"Rating Error\"\r\n    }\r\n  ]\r\n}";
+
+            ratesApi.Setup(a =>
+                a.RatesRateShipmentAsync(It.IsAny<RateShipmentRequest>(),
+                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+
+            Assert.ThrowsAsync<ShippingException>(async () => await testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
+        }
+        
+        [Fact]
+        public async void RateShipment_SetsLoggingAction()
+        {
+            var apiEntry = mock.CreateMock<IApiLogEntry>();
+            mock.MockFunc(apiEntry);
+            testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine);
+
+            // This does not work due to a bug in moq
+            // https://github.com/moq/moq4/issues/430
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
+
+            Assert.NotNull(ratesApi.Object.Configuration.ApiClient.ResponseLogger);
+            Assert.NotNull(ratesApi.Object.Configuration.ApiClient.RequestLogger);
+        }
+
+        [Fact]
+        public void PurchaseLabelRequest_DelegatesToIShipEngineApiKey()
+        {
+            apiKey.SetupGet(k => k.Value).Returns("");
+
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+
+            apiKey.Verify(i => i.Configure());
+        }
+
+        [Fact]
+        public void PurchaseLabelRequest_DelegatesToIShipEngineApiFactory()
+        {
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+
+            shipEngineApiFactory.Verify(i => i.CreateLabelsApi());
+        }
+
+        [Fact]
+        public async void PurchaseLabelRequest_ThrowsShippingException_WhenRateShipmentThrowsException()
+        {
+            string error =
+                "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"Rating Error\"\r\n    }\r\n  ]\r\n}";
+
+            labelsApi.Setup(a =>
+                a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
+                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+
+            Assert.ThrowsAsync<ShippingException>(async () => await testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
+        }
+
+        [Fact]
+        public void PurchaseLabelRequest_SetsLoggingAction()
+        {
+            var apiEntry = mock.CreateMock<IApiLogEntry>();
+            mock.MockFunc(apiEntry);
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+
+            // This does not work due to a bug in moq
+            // https://github.com/moq/moq4/issues/430
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
+
+            Assert.NotNull(labelsApi.Object.Configuration.ApiClient.ResponseLogger);
+            Assert.NotNull(labelsApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
         public void Dispose()
