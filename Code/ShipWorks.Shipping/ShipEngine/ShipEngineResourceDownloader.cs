@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.ShipEngine
             }
             catch (Exception ex)
             {
-                throw new ShipEngineException($"An error occured while attempting to download reasource from {logSource}.");
+                throw new ShipEngineException($"An error occured while attempting to download reasource from {logSource}.", ex);
             }
         }
     }
