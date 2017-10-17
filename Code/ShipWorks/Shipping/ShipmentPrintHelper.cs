@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping
                     }
 
                     // This is for the "Commercial Invoice" group
-                    if (shipmentType == ShipmentTypeCode.FedEx || shipmentType == ShipmentTypeCode.UpsOnLineTools)
+                    if (shipmentType == ShipmentTypeCode.FedEx || shipmentType == ShipmentTypeCode.UpsOnLineTools || shipmentType == ShipmentTypeCode.DhlExpress)
                     {
                         if (!reinstallMissing || GroupMissing(existingGroups, "Commercial Invoice"))
                         {
