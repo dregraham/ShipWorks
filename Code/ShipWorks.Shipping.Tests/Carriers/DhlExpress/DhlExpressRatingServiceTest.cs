@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             requestFactory = mock.CreateKeyedMockOf<ICarrierShipmentRequestFactory>()
                 .For(ShipmentTypeCode.DhlExpress);
 
-            requestFactory.Setup(f => f.Create(It.IsAny<ShipmentEntity>()))
+            requestFactory.Setup(f => f.CreateRateShipmentRequest(It.IsAny<ShipmentEntity>()))
                 .Returns(new RateShipmentRequest());
 
             mock.Mock<IDhlExpressAccountRepository>()
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.GetRates(shipment);
 
-            requestFactory.Verify(r => r.Create(shipment), Times.Once);
+            requestFactory.Verify(r => r.CreateRateShipmentRequest(shipment), Times.Once);
         }
 
         [Fact]

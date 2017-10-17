@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a RateShipmentRequest with carrier specific details from the given shipment
         /// </summary>
-        RateShipmentRequest Create(ShipmentEntity shipment);
+        RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment);
 
         /// <summary>
         /// Creates a PurchaseLabelRequest with carrier specific details from the given shipment

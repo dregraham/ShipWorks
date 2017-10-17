@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     throw new DhlExpressException($"An account is required to view DHL Express rates.");
                 }
 
-                RateShipmentRequest request = rateRequestFactory.Create(shipment);
+                RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
                 RateShipmentResponse rateResponse = Task.Run(async () => {
                     return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
                 }).Result;
