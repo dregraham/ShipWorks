@@ -83,6 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.Contents = (int)ShipEngineContentsType.Merchandise;
             dhlExpressShipmentEntity.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
+            dhlExpressShipmentEntity.ShipEngineShipmentID = string.Empty;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
 
