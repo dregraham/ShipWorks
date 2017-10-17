@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Save Dhl label data
     /// </summary>
     [Component(RegistrationType.Self)]
-    class DhlExpressDownloadedLabelData : IDownloadedLabelData
+    public class DhlExpressDownloadedLabelData : IDownloadedLabelData
     {
         private readonly ShipmentEntity shipment;
         private readonly Label label;
