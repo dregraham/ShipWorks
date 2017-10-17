@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             byte[] labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress, "GetLabel");
             byte[] documentsResource = resourceDownloader.Download(new Uri(label.FormDownload.Href), ApiLogSource.DHLExpress, "GetResource");
 
-
+            // None of this will work, need to smoke test and fix everything sorry in advance!
             switch (label.LabelFormat)
             {
                 case LabelFormatEnum.Pdf:

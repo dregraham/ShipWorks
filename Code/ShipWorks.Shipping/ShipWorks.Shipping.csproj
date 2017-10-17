@@ -261,6 +261,7 @@
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
