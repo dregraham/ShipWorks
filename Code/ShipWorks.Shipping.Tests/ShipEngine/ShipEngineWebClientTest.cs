@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 a.RatesRateShipmentAsync(It.IsAny<RateShipmentRequest>(),
                     It.IsAny<string>())).ThrowsAsync(new ApiException(500, "", error));
 
-            await Assert.ThrowsAsync<ShippingException>(() => testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.RateShipment(new RateShipmentRequest(), ApiLogSource.ShipEngine));
         }
         
         [Fact]
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
                     It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
-            await Assert.ThrowsAsync<ShippingException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
         }
 
         [Fact]
