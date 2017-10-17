@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared.ComponentRegistration;
 
@@ -107,6 +103,14 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return customItems;
+        }
+
+        /// <summary>
+        /// Create a PurchaseLabelRequest from a shipment, packages and service code
+        /// </summary>
+        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode)
+        {
+            throw new NotImplementedException();
         }
     }
 }
