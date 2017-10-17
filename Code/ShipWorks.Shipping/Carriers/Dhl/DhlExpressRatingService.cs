@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly ICarrierRateShipmentRequestFactory rateRequestFactory;
+        private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
         private readonly IDhlExpressAccountRepository accountRepository;
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            IIndex<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
+            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
             IShipEngineRateGroupFactory rateGroupFactory,
             IDhlExpressAccountRepository accountRepository)

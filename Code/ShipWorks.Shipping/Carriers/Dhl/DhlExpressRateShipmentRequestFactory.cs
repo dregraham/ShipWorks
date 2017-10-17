@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Factory for creating DHL RateShipmentRequests
     /// </summary>
-    [KeyedComponent(typeof(ICarrierRateShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressRateShipmentRequestFactory : ICarrierRateShipmentRequestFactory
+    [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
+    public class DhlExpressRateShipmentRequestFactory : ICarrierShipmentRequestFactory
     {
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShipmentElementFactory shipmentElementFactory;
@@ -64,6 +64,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);
 
             return request;
+        }
+
+        /// <summary>
+        /// Creates a PurchaseLabelRequest with DHL Express specific details from the given shipment
+        /// </summary>
+        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
