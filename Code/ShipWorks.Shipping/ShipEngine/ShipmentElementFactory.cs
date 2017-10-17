@@ -4,6 +4,8 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Business;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -22,39 +24,58 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 Shipment = new AddressValidatingShipment()
                 {
-                    ShipTo = new AddressDTO()
-                    {
-                        AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,
-                        Name = shipment.ShipUnparsedName,
-                        Phone = shipment.ShipPhone,
-                        CompanyName = shipment.ShipCompany,
-                        AddressLine1 = shipment.ShipStreet1,
-                        AddressLine2 = shipment.ShipStreet2,
-                        AddressLine3 = shipment.ShipStreet3,
-                        CityLocality = shipment.ShipCity,
-                        StateProvince = shipment.ShipStateProvCode,
-                        PostalCode = shipment.ShipPostalCode,
-                        CountryCode = shipment.ShipCountryCode
-                    },
-                    ShipFrom= new AddressDTO()
-                    {
-                        AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,
-                        Name = shipment.OriginUnparsedName,
-                        Phone = shipment.OriginPhone,
-                        CompanyName = shipment.OriginCompany,
-                        AddressLine1 = shipment.OriginStreet1,
-                        AddressLine2 = shipment.OriginStreet2,
-                        AddressLine3 = shipment.OriginStreet3,
-                        CityLocality = shipment.OriginCity,
-                        StateProvince = shipment.OriginStateProvCode,
-                        PostalCode = shipment.OriginPostalCode,
-                        CountryCode = shipment.OriginCountryCode
-                    },
-                    Customs=null,
+                    ShipTo = CreateAddress(shipment, "Ship"),
+                    ShipFrom = CreateAddress(shipment, "Origin"),
                     TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
             return request;
+        }
+
+        /// <summary>
+        /// Create a PurchaseLabelRequest from a shipment, packages and service code
+        /// </summary>
+        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode)
+        {
+            PurchaseLabelRequest request = new PurchaseLabelRequest()
+            {
+                LabelFormat = GetLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
+                LabelLayout = "4x6",
+                Shipment = new Shipment()
+                {
+                    ShipTo = CreateAddress(shipment, "Ship"),
+                    ShipFrom = CreateAddress(shipment, "Origin"),
+                    TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
+                    Packages = CreatePackages(packages),
+                    ServiceCode = serviceCode
+                }
+            };
+            return request;
+        }
+
+        /// <summary>
+        /// Gets an AddressDTO from a shipment
+        /// </summary>
+        private AddressDTO CreateAddress(ShipmentEntity shipment, string fieldPrefix)
+        {
+            PersonAdapter personAdapter = new PersonAdapter(shipment, fieldPrefix);
+
+            AddressDTO address = new AddressDTO()
+            {
+                AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,
+                Name = personAdapter.UnparsedName,
+                Phone = personAdapter.Phone,
+                CompanyName = personAdapter.Company,
+                AddressLine1 = personAdapter.Street1,
+                AddressLine2 = personAdapter.Street2,
+                AddressLine3 = personAdapter.Street3,
+                CityLocality = personAdapter.City,
+                StateProvince = personAdapter.StateProvCode,
+                PostalCode = personAdapter.PostalCode,
+                CountryCode = personAdapter.CountryCode
+            };
+
+            return address;
         }
 
         /// <summary>
@@ -106,11 +127,24 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Create a PurchaseLabelRequest from a shipment, packages and service code
+        /// Return Api value for ThermalLanguage
         /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode)
+        /// <remarks>
+        /// ShipEngine doesn't support EPL if recieved, a ShipEngineException is thrown
+        /// </remarks>
+        private PurchaseLabelRequest.LabelFormatEnum? GetLabelFormat(ThermalLanguage requestedLabelFormat)
         {
-            throw new NotImplementedException();
+            switch (requestedLabelFormat)
+            {
+                case ThermalLanguage.None:
+                    return PurchaseLabelRequest.LabelFormatEnum.Pdf;
+                case ThermalLanguage.EPL:
+                    throw new ShipEngineException("Carrier does not support EPL.");
+                case ThermalLanguage.ZPL:
+                    return PurchaseLabelRequest.LabelFormatEnum.Zpl;
+            }
+
+            throw new ArgumentOutOfRangeException($"Invalid Thermal Language in GetLabelFormat: '{requestedLabelFormat}'");
         }
     }
 }
