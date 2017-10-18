@@ -25,7 +25,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressDownloadedLabelData(ShipmentEntity shipment, Label label, IDataResourceManager resourceManager, IShipEngineResourceDownloader resourceDownloader)
+        public DhlExpressDownloadedLabelData(ShipmentEntity shipment, 
+            Label label, 
+            IDataResourceManager resourceManager, 
+            IShipEngineResourceDownloader resourceDownloader)
         {
             this.shipment = shipment;
             this.label = label;
@@ -39,10 +42,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public void Save()
         {
             SaveLabelInfoToEntity(shipment, label);
+            byte[] labelResource;
 
-            byte[] labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress);
+            try
+            {
+                labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress);
+            }
+            catch (ShipEngineException ex)
+            {
+                throw new DhlExpressException(ex.Message);
+            }
             
-
             switch (label.LabelFormat)
             {
                 case LabelFormatEnum.Pdf:
