@@ -257,8 +257,8 @@
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
-    <Compile Include="ShipEngine\IShipmentElementFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
