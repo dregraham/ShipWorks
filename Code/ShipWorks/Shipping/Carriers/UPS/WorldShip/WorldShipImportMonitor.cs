@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading;
 using Autofac;
@@ -303,44 +304,48 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             try
             {
-                // Do in a transaction so only one shipworks can touch each one at a time
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                // Use a manual transaction instead of a transaction scope so that we don't run into ambient transaction problems
+                using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    // Delete each import row to lock it
-                    worldShipProcessedGrouping.OrderedWorldShipProcessedEntries.ForEach(worldShipProcessedEntry => adapter.DeleteEntity(new WorldShipProcessedEntity(worldShipProcessedEntry.WorldShipProcessedID)));
-
-                    ShipmentEntity shipment = GetShipment(adapter, worldShipProcessedGrouping.ShipmentID);
-
-                    if (shipment == null)
+                    connection.WithTransaction((transaction, adapter) =>
                     {
-                        // The shipment went away...
-                        // Ensure the original exported records are deleted
-                        if (worldShipProcessedGrouping.ShipmentID.HasValue)
+                        worldShipProcessedGrouping.OrderedWorldShipProcessedEntries.ForEach(worldShipProcessedEntry => adapter.DeleteEntity(new WorldShipProcessedEntity(worldShipProcessedEntry.WorldShipProcessedID)));
+
+                        ShipmentEntity shipment = GetShipment(adapter, worldShipProcessedGrouping.ShipmentID);
+
+                        if (shipment == null)
                         {
-                            adapter.DeleteEntity(new WorldShipShipmentEntity(worldShipProcessedGrouping.ShipmentID.Value));
+                            // The shipment went away...
+                            // Ensure the original exported records are deleted
+                            if (worldShipProcessedGrouping.ShipmentID.HasValue)
+                            {
+                                adapter.DeleteEntity(new WorldShipShipmentEntity(worldShipProcessedGrouping.ShipmentID.Value));
+                            }
+
+                            // Commit the delete and return.
+                            adapter.Commit();
+
+                            return;
                         }
 
-                        // Commit the delete and return.
+                        // Set the shipmentId so we can load up a shipment for Tango, OUTSIDE of the SqlAdapter transaction.
+                        shipmentId = shipment.ShipmentID;
+
+                        // Get the ups entity
+                        UpsShipmentEntity upsShipment = shipment.Ups;
+
+                        // Not a UPS shipment? should not be possible
+                        if (upsShipment == null)
+                        {
+                            throw new InvalidOperationException("How did it get processed by WorldShip if not a UPS shipment?");
+                        }
+
+                        ImportPackages(worldShipProcessedGrouping, shipment, adapter);
+
+                        SaveWorldShipStatus(upsShipment, adapter, shipment);
+
                         adapter.Commit();
-
-                        return;
-                    }
-
-                    // Set the shipmentId so we can load up a shipment for Tango, OUTSIDE of the SqlAdapter transaction.
-                    shipmentId = shipment.ShipmentID;
-
-                    // Get the ups entity
-                    UpsShipmentEntity upsShipment = shipment.Ups;
-
-                    // Not a UPS shipment? should not be possible
-                    if (upsShipment == null)
-                    {
-                        throw new InvalidOperationException("How did it get processed by WorldShip if not a UPS shipment?");
-                    }
-
-                    ImportPackages(worldShipProcessedGrouping, shipment, adapter);
-
-                    SaveWorldShipStatus(upsShipment, adapter, shipment);
+                    });
                 }
             }
             catch (ORMConcurrencyException ormConcurrencyException)
@@ -377,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// Imports packages from WorldShip
         /// </summary>
         private static void ImportPackages(WorldShipProcessedGrouping worldShipProcessedGrouping, ShipmentEntity shipment,
-            SqlAdapter adapter)
+            ISqlAdapter adapter)
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
@@ -394,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// Imports package from WorldShip
         /// </summary>
         private static void ImportPackage(WorldShipPackageImporter importer, ShipmentEntity shipment,
-            WorldShipProcessedEntity packageToImport, SqlAdapter adapter)
+            WorldShipProcessedEntity packageToImport, ISqlAdapter adapter)
         {
             try
             {
@@ -414,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Saves the world ship status.
         /// </summary>
-        private static void SaveWorldShipStatus(UpsShipmentEntity upsShipment, SqlAdapter adapter, ShipmentEntity shipment)
+        private static void SaveWorldShipStatus(UpsShipmentEntity upsShipment, ISqlAdapter adapter, ShipmentEntity shipment)
         {
             // Mark the shipment as completed
             upsShipment.WorldShipStatus = (int) WorldShipStatusType.Completed;
@@ -427,8 +432,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             // Ensure the original exported records are deleted
             adapter.DeleteEntity(new WorldShipShipmentEntity(shipment.ShipmentID));
-
-            adapter.Commit();
         }
 
         /// <summary>

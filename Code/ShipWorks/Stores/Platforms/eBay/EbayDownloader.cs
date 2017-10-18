@@ -367,7 +367,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             var clonedAffectedOrders = affectedOrders.Select(EntityUtility.CloneEntity).ToList();
             var clonedAbandonedItems = abandonedItems.Select(EntityUtility.CloneEntity).ToList();
 
-            await connection.WithTransaction(async (transaction, adapter) =>
+            await connection.WithTransactionAsync(async (transaction, adapter) =>
             {
                 // Save the new order
                 var postAction = await SaveDownloadedOrderWithoutPostAction(clonedOrder, transaction).ConfigureAwait(false);
