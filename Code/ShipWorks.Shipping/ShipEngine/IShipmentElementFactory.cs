@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity
     /// </summary>
-    public interface IShipmentElementFactory
+    public interface IShipEngineRequestFactory
     {
         /// <summary>
         ///  Create a RateShipmentRequest from a ShipmentEntity

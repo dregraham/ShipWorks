@@ -9,6 +9,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Download a resource from shipengine and return its contents.
         /// </summary>        
-        byte[] Download(Uri uri, ApiLogSource logSource);
+        byte[] Download(Uri uri);
     }
 }

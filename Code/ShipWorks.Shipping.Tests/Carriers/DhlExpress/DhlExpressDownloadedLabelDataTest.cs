@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Save_SetsLabelInfoOnShipment()
         {
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -62,21 +62,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Save_DelegatesToResourceDownloaderForLabelImage()
         {
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
-            mock.Mock<IShipEngineResourceDownloader>().Verify(r => r.Download(new Uri(link.Href), ApiLogSource.DHLExpress));
+            mock.Mock<IShipEngineResourceDownloader>().Verify(r => r.Download(new Uri(link.Href)));
         }
 
         [Fact]
         public void Save_DelegatesToDataResourceManagerWhenLabelIsPdf()
         {
-            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>(), ApiLogSource.DHLExpress)).Returns(new byte[0]);
+            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>())).Returns(new byte[0]);
 
             label.LabelFormat = Label.LabelFormatEnum.Pdf;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -88,11 +88,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         public void Save_DelegatesToDataResourceManagerWhenLabelIsZpl()
         {
             var resource = new byte[0];
-            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>(), ApiLogSource.DHLExpress)).Returns(resource);
+            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>())).Returns(resource);
 
             label.LabelFormat = Label.LabelFormatEnum.Zpl;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             label.LabelFormat = Label.LabelFormatEnum.Png;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             DhlExpressException ex = Assert.Throws<DhlExpressException>(() => testObject.Save());
 
@@ -114,8 +114,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Save_ThrowsDhlExpressException_WhenResourceDownloaderThrowsShipEngineException()
         {
-            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>(), ApiLogSource.DHLExpress)).Throws(new ShipEngineException("something went wrong"));
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(new TypedParameter(typeof(ShipmentEntity), shipment), new TypedParameter(typeof(Label), label));
+            mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>())).Throws(new ShipEngineException("something went wrong"));
+            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             DhlExpressException ex = Assert.Throws<DhlExpressException>(() => testObject.Save());
 

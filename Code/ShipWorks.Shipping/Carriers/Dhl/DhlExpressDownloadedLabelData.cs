@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             try
             {
-                labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress);
+                labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href));
             }
             catch (ShipEngineException ex)
             {
@@ -63,7 +63,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     SaveZplLabel(labelResource);
                     break;
                 default:
-                case LabelFormatEnum.Png:
                     throw new DhlExpressException("DHL Express returned an unsupported label format.");
             }
         }

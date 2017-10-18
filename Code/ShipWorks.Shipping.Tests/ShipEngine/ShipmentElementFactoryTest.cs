@@ -17,11 +17,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
     public class ShipmentElementFactoryTest : IDisposable
     {
         readonly AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-        readonly ShipmentElementFactory testObject;
+        readonly ShipEngineRequestFactory testObject;
 
         public ShipmentElementFactoryTest()
         {
-            testObject = mock.Create<ShipmentElementFactory>();
+            testObject = mock.Create<ShipEngineRequestFactory>();
         }
 
         [Fact]

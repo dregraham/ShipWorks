@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
     {
         readonly AutoMock mock;
         readonly Mock<IDhlExpressAccountRepository> accountRepo;
-        readonly Mock<IShipmentElementFactory> shipmentElementFactory;
+        readonly Mock<IShipEngineRequestFactory> shipmentElementFactory;
         readonly PurchaseLabelRequest purchaseLabelRequest;
 
         public DhlExpressRateShipmentRequestFactoryTest()
@@ -28,17 +29,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             accountRepo = mock.Mock<IDhlExpressAccountRepository>();
 
-            accountRepo.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>()))
+            accountRepo.Setup(r => r.GetAccount(AnyShipment))
                 .Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-1234" });
 
-            shipmentElementFactory = mock.Mock<IShipmentElementFactory>();
+            shipmentElementFactory = mock.Mock<IShipEngineRequestFactory>();
             shipmentElementFactory
-                .Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>()))
+                .Setup(f => f.CreateRateRequest(AnyShipment))
                 .Returns(new RateShipmentRequest() { Shipment = new AddressValidatingShipment() });
 
             purchaseLabelRequest = new PurchaseLabelRequest() { Shipment = new Shipment() };
             shipmentElementFactory
-                .Setup(f => f.CreatePurchaseLabelRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<IPackageAdapter>>(), It.IsAny<string>()))
+                .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString))
                 .Returns(purchaseLabelRequest);
         }
 
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var requestFromShipmentElementFactory = new RateShipmentRequest() { Shipment = new AddressValidatingShipment() };
             shipmentElementFactory
-                .Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>()))
+                .Setup(f => f.CreateRateRequest(AnyShipment))
                 .Returns(requestFromShipmentElementFactory);
 
             var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
@@ -130,7 +131,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var customsItems = new List<CustomsItem>();
             shipmentElementFactory
-                .Setup(f => f.CreateCustomsItems(It.IsAny<ShipmentEntity>()))
+                .Setup(f => f.CreateCustomsItems(AnyShipment))
                 .Returns(customsItems);
 
             var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
@@ -324,7 +325,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var customsItems = new List<CustomsItem>();
             shipmentElementFactory
-                .Setup(f => f.CreateCustomsItems(It.IsAny<ShipmentEntity>()))
+                .Setup(f => f.CreateCustomsItems(AnyShipment))
                 .Returns(customsItems);
 
             var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
@@ -427,7 +428,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.CreatePurchaseLabelRequest(shipment);
 
-            shipmentElementFactory.Verify(f=>f.CreatePurchaseLabelRequest(shipment, packageAdapters, It.IsAny<string>()), Times.Once());
+            shipmentElementFactory.Verify(f=>f.CreatePurchaseLabelRequest(shipment, packageAdapters, AnyString), Times.Once());
         }
 
         [Theory]

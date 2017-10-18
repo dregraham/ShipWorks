@@ -20,14 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     public class DhlExpressShipmentRequestFactory : ICarrierShipmentRequestFactory
     {
         private readonly IDhlExpressAccountRepository accountRepository;
-        private readonly IShipmentElementFactory shipmentElementFactory;
+        private readonly IShipEngineRequestFactory shipmentElementFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlExpressShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, 
-            IShipmentElementFactory shipmentElementFactory, 
+            IShipEngineRequestFactory shipmentElementFactory, 
             IShipmentTypeManager shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
-            if (account==null)
+            if (account == null)
             {
                 throw new DhlExpressException("Invalid account associated with shipment.");
             }
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             request.Shipment.AdvancedOptions.Add("non_machinable", shipment.DhlExpress.NonMachinable);
             request.Shipment.AdvancedOptions.Add("saturday_delivery", shipment.DhlExpress.SaturdayDelivery);
 
-            request.Shipment.Customs =  CreateCustoms(shipment);
+            request.Shipment.Customs = CreateCustoms(shipment);
 
             List<IPackageAdapter> packages = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
             request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);

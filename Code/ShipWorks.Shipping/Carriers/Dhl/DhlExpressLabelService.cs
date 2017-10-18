@@ -47,16 +47,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             try
             {
-                Label label = Task.Run(async () =>
+                Label label = Task.Run(() =>
                 {
-                    return await shipEngineWebClient.PurchaseLabel(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
+                    return shipEngineWebClient.PurchaseLabel(request, ApiLogSource.DHLExpress);
                 }).Result;
 
                 return createDownloadedLabelData(shipment, label);
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(ex.GetInnermostException().Message);
+                throw new ShippingException(ex.GetBaseException().Message);
             }
         }
 

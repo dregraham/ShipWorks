@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Factory to create a RateShipmentRequest from a ShipmentEntity
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ShipmentElementFactory : IShipmentElementFactory
+    public class ShipEngineRequestFactory : IShipEngineRequestFactory
     {
         /// <summary>
         ///  Create a RateShipmentRequest from a ShipmentEntity
@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 Shipment = new AddressValidatingShipment()
                 {
-                    ShipTo = CreateAddress(shipment, "Ship"),
-                    ShipFrom = CreateAddress(shipment, "Origin"),
+                    ShipTo = CreateAddress(shipment.ShipPerson),
+                    ShipFrom = CreateAddress(shipment.OriginPerson),
                     TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
@@ -43,8 +43,8 @@ namespace ShipWorks.Shipping.ShipEngine
                 LabelLayout = "4x6",
                 Shipment = new Shipment()
                 {
-                    ShipTo = CreateAddress(shipment, "Ship"),
-                    ShipFrom = CreateAddress(shipment, "Origin"),
+                    ShipTo = CreateAddress(shipment.ShipPerson),
+                    ShipFrom = CreateAddress(shipment.OriginPerson),
                     TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
                     Packages = CreatePackages(packages),
                     ServiceCode = serviceCode
@@ -56,10 +56,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Gets an AddressDTO from a shipment
         /// </summary>
-        private AddressDTO CreateAddress(ShipmentEntity shipment, string fieldPrefix)
+        private AddressDTO CreateAddress(PersonAdapter personAdapter)
         {
-            PersonAdapter personAdapter = new PersonAdapter(shipment, fieldPrefix);
-
             AddressDTO address = new AddressDTO()
             {
                 AddressResidentialIndicator = AddressDTO.AddressResidentialIndicatorEnum.Unknown,

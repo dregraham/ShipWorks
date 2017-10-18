@@ -11,10 +11,9 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             ShipEngineResourceDownloader testObject = new ShipEngineResourceDownloader();
 
-            ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Download(null, ApiLogSource.DHLExpress));
+            ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Download(null));
 
             Assert.Equal($"An error occured while attempting to download reasource from {ApiLogSource.DHLExpress}.", ex.Message);
-        }
-       
+        }       
     }
 }

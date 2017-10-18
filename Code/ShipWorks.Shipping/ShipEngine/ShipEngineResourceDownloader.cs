@@ -12,13 +12,13 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Download resources from ShipEngine
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipEngineResourceDownloader : IShipEngineResourceDownloader
     {
         /// <summary>
         /// Download the resourcce at the given uri
         /// </summary>
-        public byte[] Download(Uri uri, ApiLogSource logSource)
+        public byte[] Download(Uri uri)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine
             }
             catch (Exception ex)
             {
-                throw new ShipEngineException($"An error occured while attempting to download reasource from {logSource}.", ex);
+                throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
             }
         }
     }

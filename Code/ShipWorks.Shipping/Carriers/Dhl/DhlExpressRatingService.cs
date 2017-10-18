@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(ex.GetInnermostException().Message);
+                throw new ShippingException(ex.GetBaseException().Message);
             }
         }
     }

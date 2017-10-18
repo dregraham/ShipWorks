@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public async void ConnectDHLAccount_ReturnsFailureWhenConnectAccountThrowsException()
+        public async Task ConnectDHLAccount_ReturnsFailureWhenConnectAccountThrowsException()
         {
             string error =
                 "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"\'account_number\' must be 9 characters in length. You entered 3 characters.\"\r\n    }\r\n  ]\r\n}";
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public async void RateShipment_ThrowsShippingException_WhenRateShipmentThrowsException()
+        public async Task RateShipment_ThrowsShippingException_WhenRateShipmentThrowsException()
         {
             string error =
                 "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"Rating Error\"\r\n    }\r\n  ]\r\n}";
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
         
         [Fact]
-        public async void RateShipment_SetsLoggingAction()
+        public async Task RateShipment_SetsLoggingAction()
         {
             var apiEntry = mock.CreateMock<IApiLogEntry>();
             mock.MockFunc(apiEntry);
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public async void PurchaseLabelRequest_ThrowsShippingException_WhenRateShipmentThrowsException()
+        public async Task PurchaseLabelRequest_ThrowsShippingException_WhenRateShipmentThrowsException()
         {
             string error =
                 "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"Rating Error\"\r\n    }\r\n  ]\r\n}";

@@ -10,6 +10,7 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             label = new Label();
 
             shipmentRequestFactory = mock.CreateKeyedMockOf<ICarrierShipmentRequestFactory>().For(ShipmentTypeCode.DhlExpress);
-            shipmentRequestFactory.Setup(f => f.CreatePurchaseLabelRequest(It.IsAny<ShipmentEntity>())).Returns(request);            
+            shipmentRequestFactory.Setup(f => f.CreatePurchaseLabelRequest(AnyShipment)).Returns(request);            
         }
 
         [Fact]
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var labelData = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment));
             var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData>>();
-            labelDataFactory.Setup(f => f(It.IsAny<ShipmentEntity>(), It.IsAny<Label>())).Returns(labelData);
+            labelDataFactory.Setup(f => f(AnyShipment, It.IsAny<Label>())).Returns(labelData);
             mock.Provide(labelDataFactory.Object);
             mock.Mock<IShipEngineWebClient>().Setup(c => c.PurchaseLabel(request, ApiLogSource.DHLExpress)).Returns(Task.FromResult(label));
 

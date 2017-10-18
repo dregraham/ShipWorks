@@ -263,6 +263,7 @@
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
@@ -411,7 +412,6 @@
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineException.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
-    <Compile Include="ShipEngine\ShipmentElementFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

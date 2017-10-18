@@ -580,11 +580,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
+        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
 
-            return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+            return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
                 .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
                 .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
                     TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
