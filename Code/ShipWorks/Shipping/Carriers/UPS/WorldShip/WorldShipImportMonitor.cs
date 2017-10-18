@@ -304,7 +304,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 
             try
             {
-                // Use a manual transaction instead of a transaction scope so that we don't run into ambient transaction problems
+                // Use a manual transaction instead of a transaction scope so that we don't run into ambient transaction problems,
+                // where the Action Processor uses the ambient transaction, which causes DTC promotion.
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
                     connection.WithTransaction((transaction, adapter) =>
