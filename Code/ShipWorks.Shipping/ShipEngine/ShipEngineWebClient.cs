@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
-            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.GetRates);
+            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
             try
             {
                 return await labelsApi.LabelsPurchaseLabelAsync(request, await GetApiKey());

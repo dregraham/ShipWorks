@@ -4,6 +4,8 @@ using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using System.Net;
+using System.IO;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -13,40 +15,14 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineResourceDownloader : IShipEngineResourceDownloader
     {
-        private readonly ILogEntryFactory apiLogEntryFactory;
-        private readonly IHttpRequestSubmitterFactory httpRequestFactory;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ShipEngineResourceDownloader(ILogEntryFactory apiLogEntryFactory, IHttpRequestSubmitterFactory httpRequestFactory)
-        {
-            this.apiLogEntryFactory = apiLogEntryFactory;
-            this.httpRequestFactory = httpRequestFactory;
-        }
-
         /// <summary>
         /// Download the resourcce at the given uri
         /// </summary>
-        public byte[] Download(Uri uri, ApiLogSource logSource, string actionName)
+        public byte[] Download(Uri uri, ApiLogSource logSource)
         {
             try
             {
-                IHttpRequestSubmitter requestSubmitter = httpRequestFactory.GetHttpVariableRequestSubmitter();
-                requestSubmitter.Uri = uri;
-                requestSubmitter.Verb = HttpVerb.Get;
-
-                IApiLogEntry logEntry = apiLogEntryFactory.GetLogEntry(logSource, actionName, LogActionType.Other);
-                logEntry.LogRequest(requestSubmitter);
-
-
-                using (IHttpResponseReader responseReader = requestSubmitter.GetResponse())
-                {
-                    string response = responseReader.ReadResult();
-                    logEntry.LogResponse(response, "txt");
-
-                    return Encoding.ASCII.GetBytes(response);
-                }
+                return WebRequest.Create(uri).GetResponse().GetResponseStream().ToArray();
             }
             catch (Exception ex)
             {

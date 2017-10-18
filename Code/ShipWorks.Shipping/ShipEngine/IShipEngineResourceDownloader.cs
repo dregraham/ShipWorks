@@ -1,9 +1,6 @@
 ﻿using ShipWorks.ApplicationCore.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -12,6 +9,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Download a resource from shipengine and return its contents.
         /// </summary>        
-        byte[] Download(Uri uri, ApiLogSource logSource, string actionName);
+        byte[] Download(Uri uri, ApiLogSource logSource);
     }
 }

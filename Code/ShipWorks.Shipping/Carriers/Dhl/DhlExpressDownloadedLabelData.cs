@@ -40,13 +40,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             SaveLabelInfoToEntity(shipment, label);
 
-            byte[] labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress, "GetLabel");
+            byte[] labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href), ApiLogSource.DHLExpress);
+            
 
-            // None of this will work, need to smoke test and fix everything sorry in advance!
             switch (label.LabelFormat)
             {
                 case LabelFormatEnum.Pdf:
-                    shipment.ActualLabelFormat = (int)ThermalLanguage.None;
                     SavePdfLabel(labelResource);
                     break;
                 case LabelFormatEnum.Zpl:
@@ -72,9 +71,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         private void SavePdfLabel(byte[] labelResource)
         {
-            using (MemoryStream pdfBytes = new MemoryStream(labelResource))
+            using (MemoryStream pdfData = new MemoryStream(labelResource))
             {
-                resourceManager.CreateFromPdf(pdfBytes, shipment.ShipmentID, "LabelPrimary");
+                resourceManager.CreateFromPdf(pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray());
             }
         }
 
