@@ -8,6 +8,9 @@ using ShipWorks.ApplicationCore.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
+using System.Net;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -15,7 +18,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client for interacting with ShipEngine
     /// </summary>
     [Component]
-    public class ShipEngineWebClient : IShipEngineWebClient
+    public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
@@ -171,6 +174,21 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             return ex.Message;
+        }
+
+        /// <summary>
+        /// Download the resource at the given uri
+        /// </summary>
+        public byte[] Download(Uri uri)
+        {
+            try
+            {
+                return WebRequest.Create(uri).GetResponse().GetResponseStream().ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
+            }
         }
     }
 }

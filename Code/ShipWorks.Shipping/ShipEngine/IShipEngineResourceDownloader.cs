@@ -4,6 +4,9 @@ using System.IO;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
+    /// <summary>
+    /// Represents a resource downloader for shipengine
+    /// </summary>
     public interface IShipEngineResourceDownloader
     {
         /// <summary>

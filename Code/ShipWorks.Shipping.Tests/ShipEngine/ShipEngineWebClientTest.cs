@@ -210,6 +210,14 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.NotNull(labelsApi.Object.Configuration.ApiClient.RequestLogger);
         }
 
+        [Fact]
+        public void Download_ThrowsShipEngineExceptionWithLogSource_WhenWebRequestThrowsException()
+        {
+            ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Download(null));
+
+            Assert.Equal($"An error occured while attempting to download reasource.", ex.Message);
+        }
+
         public void Dispose()
         {
             mock?.Dispose();
