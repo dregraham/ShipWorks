@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         public DhlExpressLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipment = new ShipmentEntity();
+            shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
             request = new PurchaseLabelRequest();
             label = new Label();
 
@@ -74,6 +74,55 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             testObject.Create(shipment);
 
             labelDataFactory.Verify(f => f(shipment, label));
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient()
+        {
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .Returns(Task.FromResult(new VoidLabelResponse(true)));
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+
+            shipment.DhlExpress.ShipEngineLabelID = "blah";
+
+            testObject.Void(shipment);
+
+            webClient.Verify(c => c.VoidLabel("blah", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient_ThrowsShippingException_WhenWebClientThrowsShipEngineException()
+        {
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .ThrowsAsync(new ShipEngineException("blah"));
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+
+            shipment.DhlExpress.ShipEngineLabelID = "blah";
+
+            Assert.Throws<ShippingException>(() => testObject.Void(shipment));            
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient_ThrowsShippingException_WhenVoidLabelResponseApprovedIsFalse()
+        {
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .Returns(Task.FromResult(new VoidLabelResponse(false)));
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+
+            shipment.DhlExpress.ShipEngineLabelID = "blah";
+
+            testObject.Void(shipment);
+
+            Assert.Throws<ShippingException>(() => testObject.Void(shipment));
         }
     }
 }

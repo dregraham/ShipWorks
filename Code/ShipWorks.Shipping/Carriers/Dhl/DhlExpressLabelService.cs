@@ -65,7 +65,43 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            VoidLabelResponse response;
+            try
+            {
+                response = Task.Run(async () =>
+                {
+                    return await shipEngineWebClient.VoidLabel(shipment.DhlExpress.ShipEngineLabelID, ApiLogSource.DHLExpress).ConfigureAwait(false);
+                }).Result;
+            }
+            catch (Exception ex) when (ex.GetBaseException().GetType() == typeof(ShipEngineException))
+            {
+                Exception baseException = ex.GetBaseException();
+                throw new ShippingException(baseException);
+            }
+
+            if (!(response.Approved ?? false))
+            {
+                string message = GetVoidErrorMessage(response);
+                throw new ShippingException(message);
+            }
+        }
+
+        /// <summary>
+        /// Extract an error message out of the VoidLabelResponse
+        /// </summary>
+        private static string GetVoidErrorMessage(VoidLabelResponse response)
+        {
+            string message;
+            if (string.IsNullOrWhiteSpace(response.Message))
+            {
+                message = "An error ocurred voiding the shipment.";
+            }
+            else
+            {
+                message = response.Message;
+            }
+
+            return message;
         }
     }
 }
