@@ -43,7 +43,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 LabelDownload = link,
                 TrackingNumber = "aaaaaaaa",
                 ShipmentCost = new MoneyDTO() { Amount = 2 },
-                ShipmentId = "abcd"
+                ShipmentId = "abcd",
+                LabelId = "defg"
             };
         }
 
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             Assert.Equal("aaaaaaaa", shipment.TrackingNumber);
             Assert.Equal(2, shipment.ShipmentCost);
-            Assert.Equal("abcd", shipment.DhlExpress.ShipEngineLabelID);
+            Assert.Equal("defg", shipment.DhlExpress.ShipEngineLabelID);
         }
 
         [Fact]
