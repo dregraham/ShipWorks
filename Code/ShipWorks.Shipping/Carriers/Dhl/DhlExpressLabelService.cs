@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 return createDownloadedLabelData(shipment, label);
             }
-            catch (DhlExpressException ex)
+            catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(ex.Message, ex);
+                throw new ShippingException(ex.GetInnermostException().Message);
             }
         }
 

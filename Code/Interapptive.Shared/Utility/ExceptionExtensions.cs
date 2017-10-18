@@ -30,5 +30,18 @@ namespace Interapptive.Shared.Utility
                 yield return currentEx;
             }
         }
+
+        /// <summary>
+        /// Find the deepest inner exceptions message
+        /// </summary>
+        public static Exception GetInnermostException(this Exception ex)
+        {
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
+            }
+
+            return ex;
+        }
     }
 }

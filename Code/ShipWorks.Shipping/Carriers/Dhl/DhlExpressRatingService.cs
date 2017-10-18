@@ -8,6 +8,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -59,24 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(UnpackExceptionMessage(ex));
+                throw new ShippingException(ex.GetInnermostException().Message);
             }
-        }
-
-        /// <summary>
-        /// Find the deepest inner exceptions message
-        /// </summary>
-        private static string UnpackExceptionMessage(Exception ex)
-        {
-            string message = ex.Message;
-
-            while (ex.InnerException != null)
-            {
-                ex = ex.InnerException;
-                message = ex.Message;
-            }
-
-            return message;
         }
     }
 }

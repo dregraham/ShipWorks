@@ -630,40 +630,26 @@ namespace ShipWorks.Shipping
         {
             if (ShipmentTypeManager.IsFedEx(shipmentTypeCode))
             {
-                return "FedEx";
+                shipmentTypeCode = ShipmentTypeCode.FedEx;
             }
             else if (ShipmentTypeManager.IsUps(shipmentTypeCode))
             {
-                return "UPS";
+                shipmentTypeCode = ShipmentTypeCode.UpsOnLineTools;
             }
             else if (ShipmentTypeManager.IsPostal(shipmentTypeCode))
             {
-                return "USPS";
+                shipmentTypeCode = ShipmentTypeCode.Usps;
             }
-            else if (shipmentTypeCode == ShipmentTypeCode.Other)
+
+            try
             {
+                return EnumHelper.GetDescription(shipmentTypeCode);
+            }
+            catch
+            {
+                Debug.Fail("Unhandled shipping type in GetCarrierName");
                 return "Other";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
-            {
-                return "OnTrac";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
-            {
-                return "i-parcel";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.BestRate)
-            {
-                return "Best Rate";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.Amazon)
-            {
-                return "Amazon";
-            }
-
-            Debug.Fail("Unhandled shipping type in GetCarrierName");
-
-            return "Other";
+            }            
         }
 
         /// <summary>
