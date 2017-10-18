@@ -865,7 +865,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "Contents", "Contents", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "NonDelivery", "NonDelivery", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
-			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipEngineShipmentID", "ShipEngineShipmentID", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 9);
 		}
 
 		/// <summary>Inits DimensionsProfileEntity's mappings</summary>

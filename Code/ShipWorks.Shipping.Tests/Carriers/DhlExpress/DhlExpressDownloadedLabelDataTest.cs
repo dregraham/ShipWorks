@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             Assert.Equal("aaaaaaaa", shipment.TrackingNumber);
             Assert.Equal(2, shipment.ShipmentCost);
-            Assert.Equal("abcd", shipment.DhlExpress.ShipEngineShipmentID);
+            Assert.Equal("abcd", shipment.DhlExpress.ShipEngineLabelID);
         }
 
         [Fact]

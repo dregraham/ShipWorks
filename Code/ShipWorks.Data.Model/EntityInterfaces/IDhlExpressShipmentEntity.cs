@@ -75,12 +75,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 NonDelivery { get; }
-        /// <summary> The ShipEngineShipmentID property of the Entity DhlExpressShipment<br/><br/>
+        /// <summary> The ShipEngineLabelID property of the Entity DhlExpressShipment<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressShipment"."ShipEngineShipmentID"<br/>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String ShipEngineShipmentID { get; }
+        System.String ShipEngineLabelID { get; }
         
         IShipmentEntity Shipment { get; }
         

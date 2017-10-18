@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             shipment.TrackingNumber = label.TrackingNumber;
             shipment.ShipmentCost = (decimal)label.ShipmentCost.Amount;
-            shipment.DhlExpress.ShipEngineShipmentID = label.ShipmentId;
+            shipment.DhlExpress.ShipEngineLabelID = label.LabelId;
         }
     }
 }
