@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Amazon\AmazonPrefetchProvider.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
@@ -170,17 +171,20 @@
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\BestRate\BestRatePrefetchProvider.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapter.cs" />
+    <Compile Include="Carriers\iParcel\iParcelPrefetchProvider.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelData.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapter.cs" />
@@ -189,11 +193,13 @@
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
     <Compile Include="Carriers\None\NoneShipmentAdapter.cs" />
     <Compile Include="Carriers\NullShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracPrefetchProvider.cs" />
     <Compile Include="Carriers\OnTrac\OnTracDownloadedLabelData.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentAdapter.cs" />
     <Compile Include="Carriers\NullDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Other\OtherPrefetchProvider.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulator.cs" />
@@ -202,6 +208,7 @@
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapter.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Express1\Endicia\Express1EndiciaOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -224,6 +231,7 @@
     <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsRegistration.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
@@ -234,6 +242,8 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
+    <Compile Include="Carriers\Postal\WebTools\WebToolsPrefetchProvider.cs" />
+    <Compile Include="Carriers\Ups\UpsPrefetchProvider.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />

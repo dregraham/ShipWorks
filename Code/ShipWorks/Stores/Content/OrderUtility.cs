@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
@@ -251,10 +254,11 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Copies any note entities from one order to another.
         /// </summary>
-        public static void CopyNotes(long fromOrderID, OrderEntity toOrder)
+        public static async Task CopyNotes(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
         {
-            // Make the copies
-            List<NoteEntity> newNotes = EntityUtility.CloneEntityCollection(DataProvider.GetRelatedEntities(fromOrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
+            var factory = new QueryFactory();
+            var query = factory.Note.Where(NoteFields.EntityID == fromOrderID);
+            var newNotes = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
 
             foreach (NoteEntity note in newNotes)
             {
@@ -268,34 +272,35 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Copies any shipment entities from one order to another
         /// </summary>
-        public static void CopyShipments(long fromOrderID, OrderEntity toOrder)
+        public static async Task CopyShipments(long fromOrderID, OrderEntity toOrder, ISqlAdapter sqlAdapter)
         {
+            var factory = new QueryFactory();
+            var query = factory.Shipment.Where(ShipmentFields.OrderID == fromOrderID);
+            var shipments = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+
             // Copy any existing shipments
-            foreach (ShipmentEntity shipment in ShippingManager.GetShipments(fromOrderID, false))
+            foreach (ShipmentEntity shipment in shipments)
             {
                 // load all carrier and customs data
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
-                // clone the entity tree
-                ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment, true);
-
                 // this is now a new shipment to be inserted
-                EntityUtility.MarkAsNew(clonedShipment);
-                clonedShipment.Order = toOrder;
+                EntityUtility.MarkAsNew(shipment);
+                shipment.Order = toOrder;
 
                 // Mark all the carrier-specific stuff as new
-                foreach (IEntityCore entity in ((IEntityCore) clonedShipment).GetDependingRelatedEntities())
+                foreach (IEntityCore entity in ((IEntityCore) shipment).GetDependingRelatedEntities())
                 {
                     EntityUtility.MarkAsNew(entity);
                 }
 
                 // And all the customers stuff as new
-                foreach (ShipmentCustomsItemEntity customsItem in clonedShipment.CustomsItems)
+                foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
                 {
                     EntityUtility.MarkAsNew(customsItem);
                 }
 
-                ShippingManager.SaveShipment(clonedShipment);
+                ShippingManager.SaveShipment(shipment);
             }
         }
 

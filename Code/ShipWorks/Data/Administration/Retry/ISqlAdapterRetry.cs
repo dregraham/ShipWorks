@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Data.Administration.Retry
 {
@@ -18,7 +19,7 @@ namespace ShipWorks.Data.Administration.Retry
         /// <summary>
         /// Executes the given method with configured retry logic. A new SqlAdapter is created prior to execution.
         /// </summary>
-        void ExecuteWithRetry(Action<Connection.SqlAdapter> method);
+        void ExecuteWithRetry(Action<ISqlAdapter> method);
 
         /// <summary>
         /// Executes the given method with configured retry logic. A new SqlAdapter is created prior to execution.
