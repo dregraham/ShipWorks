@@ -125,6 +125,8 @@
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="IO\KeyboardShortcuts\KeyboardShortcutCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shipping\FedEx\FedExBatteryClassificationType.cs" />
+    <Compile Include="Shipping\FedEx\FedExPackageType.cs" />
     <Compile Include="Shipping\ShipmentStatus.cs" />
     <Compile Include="Shipping\ShipmentTypeCode.cs" />
     <Compile Include="Shipping\ShipmentTypeIconAttribute.cs" />

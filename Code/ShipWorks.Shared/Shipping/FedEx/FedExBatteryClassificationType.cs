@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
 using System.ComponentModel;
 
-namespace Interapptive.Shared.Enums
+namespace ShipWorks.Shipping.FedEx
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum BatteryClassificationType
+    public enum FedExBatteryClassificationType
     {
         [Description("Lithium Ion")]
         LithiumIon = 0,
