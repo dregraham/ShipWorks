@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Factory for creating ShipWorks TrackingResult from the ShipEngine TrackingInformation
     /// </summary>
-    [Component]
+    [Component(SingleInstance = true)]
     public class ShipEngineTrackingResultFactory : IShipEngineTrackingResultFactory
     {
         /// <summary>
@@ -19,17 +19,20 @@ namespace ShipWorks.Shipping.ShipEngine
             TrackingResult trackingResult = new TrackingResult();
             trackingResult.Summary = shipEngineTrackingInfo.StatusDescription;
 
-            foreach(TrackEvent trackEvent in shipEngineTrackingInfo.Events)
+            if (shipEngineTrackingInfo.Events != null)
             {
-                TrackingResultDetail trackingResultDetail = new TrackingResultDetail();
-                trackingResultDetail.Date = trackEvent.OccurredAt?.ToString("M/dd/yyy") ?? "";
-                trackingResultDetail.Time = trackEvent.OccurredAt?.ToString("h:mm tt") ?? "";
-                trackingResultDetail.Location = CreateTrackingLocation(trackEvent);
-                trackingResultDetail.Activity = trackEvent.Description;
+                foreach (TrackEvent trackEvent in shipEngineTrackingInfo.Events)
+                {
+                    TrackingResultDetail trackingResultDetail = new TrackingResultDetail();
+                    trackingResultDetail.Date = trackEvent.OccurredAt?.ToString("M/dd/yyy") ?? "";
+                    trackingResultDetail.Time = trackEvent.OccurredAt?.ToString("h:mm tt") ?? "";
+                    trackingResultDetail.Location = CreateTrackingLocation(trackEvent);
+                    trackingResultDetail.Activity = trackEvent.Description;
 
-                trackingResult.Details.Add(trackingResultDetail);
+                    trackingResult.Details.Add(trackingResultDetail);
+                }
             }
-            
+
             return trackingResult;
         }
 
@@ -45,7 +48,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 $"{trackEvent.CountryCode} {trackEvent.PostalCode}"
             };
 
-            return string.Join(",", locationMembers.Where(m => !string.IsNullOrWhiteSpace(m)));
+            return string.Join(", ", locationMembers.Where(m => !string.IsNullOrWhiteSpace(m)));
         }
     }
 }

@@ -293,6 +293,7 @@
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
