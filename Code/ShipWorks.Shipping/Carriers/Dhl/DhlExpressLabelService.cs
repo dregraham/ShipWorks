@@ -82,23 +82,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 log.Error(ex.GetBaseException());
             }
         }
-
-        /// <summary>
-        /// Extract an error message out of the VoidLabelResponse
-        /// </summary>
-        private static string GetVoidErrorMessage(VoidLabelResponse response)
-        {
-            string message;
-            if (string.IsNullOrWhiteSpace(response.Message))
-            {
-                message = "An error ocurred voiding the shipment.";
-            }
-            else
-            {
-                message = response.Message;
-            }
-
-            return message;
-        }
     }
 }
