@@ -30,6 +30,15 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
+        public ShippingException(Exception inner)
+            : base(inner.Message, inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShippingException(string message, Exception inner)
             : base(message, inner)
         {

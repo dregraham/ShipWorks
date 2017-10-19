@@ -129,6 +129,24 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Void a ShipEngine Label
+        /// </summary>
+        public async Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource)
+        {
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "VoidShipment", LogActionType.Other);
+
+            try
+            {
+                return await labelsApi.LabelsVoidLabelAsync(labelId, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+        
+        /// <summary>
         /// Track a shipment using the label ID
         /// </summary>
         public async Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource)
@@ -180,7 +198,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-                if (error.Errors.Any())
+                if (error?.Errors?.Any() ?? false)
                 {
                     return error.Errors.First().Message;
                 }
