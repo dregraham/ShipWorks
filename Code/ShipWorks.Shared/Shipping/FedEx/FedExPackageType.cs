@@ -6,10 +6,13 @@ namespace ShipWorks.Shipping.FedEx
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum FedExPackageType
     {
+        [Description("None")]
+        None = 0,
+
         [Description("Contained in equipment")]
-        ContainsInEquipement = 0,
+        ContainsInEquipement = 1,
 
         [Description("Packed with equipment")]
-        PackedWithEquipment = 1,
+        PackedWithEquipment = 2,
     }
 }
