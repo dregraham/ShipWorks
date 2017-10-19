@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using System.Xml.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.Net;
-using System.Xml;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -140,6 +140,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 FedExServiceType.InternationalFirst,
                 FedExServiceType.InternationalPriority,
+                FedExServiceType.InternationalPriorityExpress,
                 FedExServiceType.InternationalEconomy,
                 FedExServiceType.InternationalPriorityFreight,
                 FedExServiceType.InternationalEconomyFreight
@@ -155,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.AddRange(EnumHelper.GetEnumList<FedExServiceType>().Where(s=>IsFimsService(s.Value)).Select(s=>s.Value));
+                serviceTypes.AddRange(EnumHelper.GetEnumList<FedExServiceType>().Where(s => IsFimsService(s.Value)).Select(s => s.Value));
             }
 
             if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
@@ -199,28 +200,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FedExExpressSaver:
                 case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.InternationalPriority:
+                case FedExServiceType.InternationalPriorityExpress:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
                 case FedExServiceType.FedEx2DayAM:
-                {
-                    types.Add(FedExPackagingType.Envelope);
-                    types.Add(FedExPackagingType.Pak);
-                    types.Add(FedExPackagingType.Box);
-                    types.Add(FedExPackagingType.Tube);
+                    {
+                        types.Add(FedExPackagingType.Envelope);
+                        types.Add(FedExPackagingType.Pak);
+                        types.Add(FedExPackagingType.Box);
+                        types.Add(FedExPackagingType.Tube);
 
-                    break;
-                }
+                        break;
+                    }
             }
 
             switch (service)
             {
                 case FedExServiceType.InternationalPriority:
-                {
-                    types.Add(FedExPackagingType.Box10Kg);
-                    types.Add(FedExPackagingType.Box25Kg);
+                case FedExServiceType.InternationalPriorityExpress:
+                    {
+                        types.Add(FedExPackagingType.Box10Kg);
+                        types.Add(FedExPackagingType.Box25Kg);
 
-                    break;
-                }
+                        break;
+                    }
             }
 
             if (OneRateServiceTypes.Any(s => s == service))
@@ -290,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.PackingDetailsPackingInstructions = string.Empty;
 
             package.DangerousGoodsEnabled = false;
-            package.DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.Batteries;
+            package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
             package.DangerousGoodsCargoAircraftOnly = false;
             package.DangerousGoodsEmergencyContactPhone = string.Empty;
@@ -324,7 +327,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Indicates if the given service is a freight servce
+        /// Indicates if the given service is a freight service
         /// </summary>
         public static bool IsFreightService(FedExServiceType serviceType)
         {
@@ -367,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Indicates if saturday delivery is available for the given service and ship date
+        /// Indicates if Saturday delivery is available for the given service and ship date
         /// </summary>
         public static bool CanDeliverOnSaturday(FedExServiceType serviceType, DateTime shipDate)
         {
@@ -416,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Get all SmartPost Hub IDs accross all FedEx accounts
+        /// Get all SmartPost Hub IDs across all FedEx accounts
         /// </summary>
         public static List<string> GetSmartPostHubs()
         {
@@ -428,7 +431,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Load the ComboBox with the seletable list of SmartPost hubs
+        /// Load the ComboBox with the selectable list of SmartPost hubs
         /// </summary>
         public static void LoadSmartPostComboBox(ComboBox comboBox)
         {
@@ -437,7 +440,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             comboBox.ValueMember = "Value";
 
             List<string> hubList = GetSmartPostHubs();
-            List<KeyValuePair<string, string>> bindingList = new List<KeyValuePair<string,string>>();
+            List<KeyValuePair<string, string>> bindingList = new List<KeyValuePair<string, string>>();
 
             if (hubList.Count == 0)
             {
@@ -478,7 +481,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 XElement defaultHub = XElement.Parse(account.SmartPostHubList).Descendants("HubID").FirstOrDefault();
                 if (defaultHub != null)
                 {
-                    return (string)defaultHub;
+                    return (string) defaultHub;
                 }
             }
             catch (XmlException)
@@ -515,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Builds a filename for saving a certification file. If the isForDebugging is true, the unique ID will be
+        /// Builds a file name for saving a certification file. If the isForDebugging is true, the unique ID will be
         /// used to build the file name for easier troubleshooting purposes
         /// </summary>
         /// <param name="uniqueId">The unique id.</param>
@@ -560,7 +563,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static string BuildTrackingNumber(string trackingNumber, FedExShipmentEntity fedexShipment)
         {
-            return fedexShipment != null && (FedExServiceType)fedexShipment.Service == FedExServiceType.SmartPost ?
+            return fedexShipment != null && (FedExServiceType) fedexShipment.Service == FedExServiceType.SmartPost ?
                 fedexShipment.SmartPostUspsApplicationId + trackingNumber :
                 trackingNumber;
         }

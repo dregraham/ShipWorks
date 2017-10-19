@@ -6,8 +6,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             switch (dropoffType)
             {
                 case FedExDropoffType.BusinessServiceCenter: return DropoffType.BUSINESS_SERVICE_CENTER;
-                case FedExDropoffType.DropBox:return DropoffType.DROP_BOX;
+                case FedExDropoffType.DropBox: return DropoffType.DROP_BOX;
                 case FedExDropoffType.RegularPickup: return DropoffType.REGULAR_PICKUP;
                 case FedExDropoffType.RequestCourier: return DropoffType.REQUEST_COURIER;
                 case FedExDropoffType.Station: return DropoffType.STATION;
@@ -153,7 +153,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + dropoffType);
         }
-
 
         /// <summary>
         /// Get the API service type based on our internal value
@@ -189,6 +188,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     return ServiceType.FEDEX_EXPRESS_SAVER;
 
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
+                case FedExServiceType.InternationalPriorityExpress: return ServiceType.INTERNATIONAL_PRIORITY_EXPRESS;
                 case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
                 case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
                 case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
@@ -357,8 +357,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 MeterNumber = account.MeterNumber
             };
         }
-
-
 
         /// <summary>
         /// Creates the package movement API web authentication detail.

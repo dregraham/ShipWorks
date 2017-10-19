@@ -164,6 +164,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedEx2DayAM:
                 case FedExServiceType.OneRate2DayAM:
                 case FedExServiceType.InternationalPriority:
+                case FedExServiceType.InternationalPriorityExpress:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
                 case FedExServiceType.FedExGround:
@@ -219,8 +220,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Cleans the shipment and package so that any non-SmartPost fields are set to defaults that are
         /// valid for SmartPost
         /// </summary>
-        /// <param name="fedExShipmentEntity"></param>
-        [NDependIgnoreLongMethod]
         private static void CleanAndValidateShipmentForSmartPost(FedExShipmentEntity fedExShipmentEntity)
         {
             if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int) Insurance.InsuranceProvider.Carrier)
@@ -228,7 +227,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
-            // Clear out COD
+            ClearCOD(fedExShipmentEntity);
+            ClearHoldAtLocation(fedExShipmentEntity);
+
+            // Fix each package
+            foreach (FedExPackageEntity fedExPackageEntity in fedExShipmentEntity.Packages)
+            {
+                ClearPackage(fedExPackageEntity);
+            }
+        }
+
+        /// <summary>
+        /// Clear COD data
+        /// </summary>
+        private static void ClearCOD(FedExShipmentEntity fedExShipmentEntity)
+        {
             fedExShipmentEntity.CodAddFreight = false;
             fedExShipmentEntity.CodAmount = 0;
             fedExShipmentEntity.CodCity = string.Empty;
@@ -249,8 +262,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             fedExShipmentEntity.CodTIN = string.Empty;
             fedExShipmentEntity.CodTrackingFormID = string.Empty;
             fedExShipmentEntity.CodTrackingNumber = string.Empty;
+        }
 
-            // Clear out Hold At Location
+        /// <summary>
+        /// Clear Hold at Location data
+        /// </summary>
+        private static void ClearHoldAtLocation(FedExShipmentEntity fedExShipmentEntity)
+        {
             fedExShipmentEntity.FedExHoldAtLocationEnabled = false;
             fedExShipmentEntity.HoldCity = null;
             fedExShipmentEntity.HoldCompanyName = null;
@@ -272,30 +290,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             fedExShipmentEntity.HoldStreet3 = null;
             fedExShipmentEntity.HoldTitle = null;
             fedExShipmentEntity.HoldUrbanizationCode = null;
+        }
 
-            // Fix each package
-            foreach (FedExPackageEntity fedExPackageEntity in fedExShipmentEntity.Packages)
-            {
-                fedExPackageEntity.ContainsAlcohol = false;
-                fedExPackageEntity.DryIceWeight = 0;
-                fedExPackageEntity.PriorityAlert = false;
-                fedExPackageEntity.PriorityAlertDetailContent = string.Empty;
-                fedExPackageEntity.PriorityAlertEnhancementType = 0;
-                fedExPackageEntity.DangerousGoodsAccessibilityType = 0;
-                fedExPackageEntity.DangerousGoodsCargoAircraftOnly = false;
-                fedExPackageEntity.DangerousGoodsEmergencyContactPhone = string.Empty;
-                fedExPackageEntity.DangerousGoodsEnabled = false;
-                fedExPackageEntity.DangerousGoodsOfferor = string.Empty;
-                fedExPackageEntity.DangerousGoodsPackagingCount = 0;
-                fedExPackageEntity.DangerousGoodsType = 0;
-                fedExPackageEntity.HazardousMaterialClass = string.Empty;
-                fedExPackageEntity.HazardousMaterialNumber = string.Empty;
-                fedExPackageEntity.HazardousMaterialPackingGroup = 0;
-                fedExPackageEntity.HazardousMaterialProperName = string.Empty;
-                fedExPackageEntity.HazardousMaterialTechnicalName = string.Empty;
-                fedExPackageEntity.HazardousMaterialQuanityUnits = 0;
-                fedExPackageEntity.HazardousMaterialQuantityValue = 0;
-            }
+        /// <summary>
+        /// Clear package data
+        /// </summary>
+        private static void ClearPackage(FedExPackageEntity fedExPackageEntity)
+        {
+            fedExPackageEntity.ContainsAlcohol = false;
+            fedExPackageEntity.DryIceWeight = 0;
+            fedExPackageEntity.PriorityAlert = false;
+            fedExPackageEntity.PriorityAlertDetailContent = string.Empty;
+            fedExPackageEntity.PriorityAlertEnhancementType = 0;
+            fedExPackageEntity.DangerousGoodsAccessibilityType = 0;
+            fedExPackageEntity.DangerousGoodsCargoAircraftOnly = false;
+            fedExPackageEntity.DangerousGoodsEmergencyContactPhone = string.Empty;
+            fedExPackageEntity.DangerousGoodsEnabled = false;
+            fedExPackageEntity.DangerousGoodsOfferor = string.Empty;
+            fedExPackageEntity.DangerousGoodsPackagingCount = 0;
+            fedExPackageEntity.DangerousGoodsType = 0;
+            fedExPackageEntity.HazardousMaterialClass = string.Empty;
+            fedExPackageEntity.HazardousMaterialNumber = string.Empty;
+            fedExPackageEntity.HazardousMaterialPackingGroup = 0;
+            fedExPackageEntity.HazardousMaterialProperName = string.Empty;
+            fedExPackageEntity.HazardousMaterialTechnicalName = string.Empty;
+            fedExPackageEntity.HazardousMaterialQuanityUnits = 0;
+            fedExPackageEntity.HazardousMaterialQuantityValue = 0;
         }
 
         /// <summary>
@@ -358,7 +378,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 FedExGroundCloseResponse groundResponse = response as FedExGroundCloseResponse;
                 if (groundResponse == null)
                 {
-                    // We don't have a ground response for some reason, so we can't assign the close enity
+                    // We don't have a ground response for some reason, so we can't assign the close entity
                     log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", response.GetType().FullName));
                 }
                 else
@@ -396,7 +416,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 FedExSmartPostCloseResponse smartPostResponse = response as FedExSmartPostCloseResponse;
                 if (smartPostResponse == null)
                 {
-                    // We don't have a smart post response for some reason, so we can't assign the close enity
+                    // We don't have a smart post response for some reason, so we can't assign the close entity
                     log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", response.GetType().FullName));
                 }
                 else
@@ -871,7 +891,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             // Not sure if this is required. I suspect there to always be an actual rate and a corresponding ratedShipmentDetail. This
             // is here if I get confirmation for this from FedEx.
             RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsPreferredRequestedRateType) ??
-                                                        rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType) ??
+                                                      rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType) ??
                                                       rateDetail.RatedShipmentDetails[0];
             return ratedShipmentDetail;
         }
@@ -890,7 +910,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Is the rated shipment detail a fallback type requested by the customer
+        /// Is the rated shipment detail a fall-back type requested by the customer
         /// </summary>
         private bool IsSecondaryRequestedRateType(RatedShipmentDetail detail)
         {
@@ -935,6 +955,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 default:
                 case FedExServiceType.InternationalPriority:
+                case FedExServiceType.InternationalPriorityExpress:
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.InternationalPriorityFreight:
@@ -1013,7 +1034,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_EXPRESS_SAVER:
                     {
-                        // In canada fedex express saver is called FedEx Economy
+                        // In Canada fedex express saver is called FedEx Economy
                         if (shipment.OriginCountryCode == "CA")
                         {
                             return FedExServiceType.FedExEconomyCanada;
@@ -1023,6 +1044,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     }
 
                 case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
+                case ServiceType.INTERNATIONAL_PRIORITY_EXPRESS: return FedExServiceType.InternationalPriorityExpress;
                 case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
                 case ServiceType.INTERNATIONAL_FIRST: return FedExServiceType.InternationalFirst;
                 case ServiceType.FEDEX_1_DAY_FREIGHT: return FedExServiceType.FedEx1DayFreight;
@@ -1131,6 +1153,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
         }
 
+        /// <summary>
+        /// Track the shipment
+        /// </summary>
         public TrackingResult Track(ShipmentEntity shipmentEntity)
         {
             try
