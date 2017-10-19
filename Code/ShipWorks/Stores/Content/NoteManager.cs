@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Delete all notes used by the given entity
         /// </summary>
-        public static void DeleteNotesForDeletedEntity(long entityID, SqlAdapter adapter)
+        public static void DeleteNotesForDeletedEntity(long entityID, ISqlAdapter adapter)
         {
             EntityType relatedType = EntityUtility.GetEntityType(entityID);
 
@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Adjust the note count for the given object (and related objects) by the given amount
         /// </summary>
-        public static void AdjustNoteCount(SqlAdapter adapter, long objectID, int amount)
+        public static void AdjustNoteCount(ISqlAdapter adapter, long objectID, int amount)
         {
             if (amount == 0)
             {

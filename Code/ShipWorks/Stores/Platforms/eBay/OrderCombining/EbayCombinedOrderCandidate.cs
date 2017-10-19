@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -17,9 +19,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Data.Model.EntityInterfaces;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -298,7 +297,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry =
                         new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayCombinedOrderCandidate.CombineLocalOrders for ebayOrderID {0}", ebayOrderID));
 
-                    await sqlDeadlockRetry.ExecuteWithRetryAsync((SqlAdapter adapter) =>
+                    await sqlDeadlockRetry.ExecuteWithRetryAsync(adapter =>
                     {
                         return CombineLocalOrders(adapter, toCombine, ebayOrderID);
                         // Don't commit because sqlDeadlockRetry will do the commit
@@ -366,7 +365,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// is an actual combined order on eBay (not just local) ebayOrderID will be non-null
         /// </summary>
         [NDependIgnoreLongMethod]
-        private async Task<bool> CombineLocalOrders(SqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
+        private async Task<bool> CombineLocalOrders(ISqlAdapter adapter, List<EbayCombinedOrderComponent> toCombine, long? ebayOrderID)
         {
             // Do nothing
             if (toCombine.Count == 0)
@@ -470,9 +469,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             // Now we need to go through each old order, copy over the notes and shipments, and delete the original order
             foreach (OrderEntity order in toCombine.Select(c => c.Order))
             {
-                OrderUtility.CopyNotes(order.OrderID, newOrder);
+                await OrderUtility.CopyNotes(order.OrderID, newOrder, adapter).ConfigureAwait(false);
 
-                OrderUtility.CopyShipments(order.OrderID, newOrder);
+                await OrderUtility.CopyShipments(order.OrderID, newOrder, adapter).ConfigureAwait(false);
 
                 DeletionService.DeleteOrder(order.OrderID, adapter);
             }
