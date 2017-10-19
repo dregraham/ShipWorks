@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.Usps;
 using ShipWorks.Shipping.Carriers.WebTools;
 using ShipWorks.Startup;
 using Xunit;
+using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -43,6 +44,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(UpsPrefetchProvider))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(UpsPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsPrefetchProvider))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressPrefetchProvider))]
         public void EnsurePrefetchProvidersAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             IShipmentTypePrefetchProvider retriever = container.ResolveKeyed<IShipmentTypePrefetchProvider>(shipmentType);

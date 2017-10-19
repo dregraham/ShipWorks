@@ -182,6 +182,7 @@
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
