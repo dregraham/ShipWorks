@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -10,7 +8,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Collections;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -20,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly ICarrierRateShipmentRequestFactory rateRequestFactory;
+        private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
         private readonly IDhlExpressAccountRepository accountRepository;
@@ -29,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            IIndex<ShipmentTypeCode, ICarrierRateShipmentRequestFactory> rateRequestFactory, 
+            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
             IShipEngineRateGroupFactory rateGroupFactory,
             IDhlExpressAccountRepository accountRepository)
@@ -53,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     throw new DhlExpressException($"An account is required to view DHL Express rates.");
                 }
 
-                RateShipmentRequest request = rateRequestFactory.Create(shipment);
+                RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
                 RateShipmentResponse rateResponse = Task.Run(async () => {
                     return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
                 }).Result;
@@ -62,24 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(UnpackExceptionMessage(ex));
+                throw new ShippingException(ex.GetBaseException().Message);
             }
-        }
-
-        /// <summary>
-        /// Find the deepest inner exceptions message
-        /// </summary>
-        private static string UnpackExceptionMessage(Exception ex)
-        {
-            string message = ex.Message;
-
-            while (ex.InnerException != null)
-            {
-                ex = ex.InnerException;
-                message = ex.Message;
-            }
-
-            return message;
         }
     }
 }

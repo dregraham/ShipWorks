@@ -45,6 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequestedLabelFormat = source.RequestedLabelFormat;
             Contents = source.Contents;
             NonDelivery = source.NonDelivery;
+            ShipEngineLabelID = source.ShipEngineLabelID;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -110,6 +111,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 NonDelivery { get; }
+        /// <summary> The ShipEngineLabelID property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ShipEngineLabelID { get; }
         
         public IShipmentEntity Shipment { get; }
         

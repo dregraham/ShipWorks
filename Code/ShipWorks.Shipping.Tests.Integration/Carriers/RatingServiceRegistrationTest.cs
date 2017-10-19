@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Startup;
 using Xunit;
+using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(UpsRatingService))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(UpsRatingService))]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsRatingService))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressRatingService))]
         public void EnsureRatingServicesAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             IRatingService retriever = container.ResolveKeyed<IRatingService>(shipmentType);

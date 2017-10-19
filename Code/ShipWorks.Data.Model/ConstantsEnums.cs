@@ -2030,6 +2030,8 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
 		/// <summary></summary>
 		AmountOfFields
 	}

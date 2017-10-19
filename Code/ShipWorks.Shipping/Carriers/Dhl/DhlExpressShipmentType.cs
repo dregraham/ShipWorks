@@ -19,6 +19,9 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Data;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System.Drawing.Imaging;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -83,6 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.Contents = (int)ShipEngineContentsType.Merchandise;
             dhlExpressShipmentEntity.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
+            dhlExpressShipmentEntity.ShipEngineLabelID = string.Empty;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
 
@@ -328,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 DhlExpressPackageEntity package = shipment.DhlExpress.Packages[parcelIndex];
 
                 return new ShipmentParcel(shipment, package.DhlExpressPackageID, package.TrackingNumber,
-                    new InsuranceChoice(shipment, package, package, package),
+                    new DhlExpressInsuranceChoice(shipment),
                     new DimensionsAdapter(package))
                 {
                     TotalWeight = package.Weight + package.DimsWeight
@@ -557,6 +561,34 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 shipment.DhlExpress.RequestedLabelFormat = (int) requestedLabelFormat;
             }
+        }
+
+        /// <summary>
+        /// Create the XML input to the XSL engine
+        /// </summary>
+        public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
+        {
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+
+            // Add the labels content
+            container.AddElement(
+                "Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                ElementOutline.If(() => shipment().Processed));
+        }
+
+        /// <summary>
+        /// Load all the label data for the given shipmentID
+        /// </summary>
+        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
+
+            return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                .ToList();
         }
     }
 }

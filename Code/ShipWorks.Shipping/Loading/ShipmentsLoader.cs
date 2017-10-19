@@ -214,8 +214,9 @@ namespace ShipWorks.Shipping.Loading
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
 
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathDhlExpress);
-            
+            IPrefetchPathElement2 dhlShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathDhlExpress);
+            dhlShipmentPath.SubPath.Add(DhlExpressShipmentEntity.PrefetchPathPackages);
+
             IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
             fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);
 

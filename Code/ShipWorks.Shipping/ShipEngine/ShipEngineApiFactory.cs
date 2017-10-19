@@ -23,5 +23,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create the RatesApi
         /// </summary>
         public IRatesApi CreateRatesApi() => new RatesApi();
+
+        /// <summary>
+        /// Create the Labels Api
+        /// </summary>
+        public ILabelsApi CreateLabelsApi() => new LabelsApi();
     }
 }

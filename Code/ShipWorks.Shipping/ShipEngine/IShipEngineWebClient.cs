@@ -22,5 +22,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <param name="request">The rate shipment request</param>
         /// <returns>The rate shipment response</returns>
         Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// Purchases a label from ShipEngine using the given request
+        /// </summary>
+        Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource);
     }
 }

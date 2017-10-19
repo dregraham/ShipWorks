@@ -8,6 +8,9 @@ using ShipWorks.ApplicationCore.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
+using System.Net;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -15,7 +18,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Client for interacting with ShipEngine
     /// </summary>
     [Component]
-    public class ShipEngineWebClient : IShipEngineWebClient
+    public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
         private readonly IShipEngineApiKey apiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
@@ -72,27 +75,6 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Get the error message from an ApiException
-        /// </summary>
-        private static string GetErrorMessage(ApiException ex)
-        {
-            try
-            {
-                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
-                if (error.Errors.Any())
-                {
-                    return error.Errors.First().Message;
-                }
-            }
-            catch (JsonReaderException)
-            {
-                return ex.Message;
-            }
-
-            return ex.Message;
-        }
-
-        /// <summary>
         /// Get the account if it exists
         /// </summary>
         public async Task<string> GetCarrierIdByAccountNumber(string accountNumber, string key)
@@ -107,6 +89,23 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (ApiException ex)
             {
                 return GetErrorMessage(ex);
+            }
+        }
+        
+        /// <summary>
+        /// Purchases a label from ShipEngine using the given request
+        /// </summary>
+        public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
+        {
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
+            try
+            {
+                return await labelsApi.LabelsPurchaseLabelAsync(request, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
             }
         }
 
@@ -154,6 +153,42 @@ namespace ShipWorks.Shipping.ShipEngine
 
             apiAccessor.Configuration.ApiClient.RequestLogger = apiLogEntry.LogRequest;
             apiAccessor.Configuration.ApiClient.ResponseLogger = apiLogEntry.LogResponse;
+        }
+        
+        /// <summary>
+        /// Get the error message from an ApiException
+        /// </summary>
+        private static string GetErrorMessage(ApiException ex)
+        {
+            try
+            {
+                ApiErrorResponseDTO error = JsonConvert.DeserializeObject<ApiErrorResponseDTO>(ex.ErrorContent);
+                if (error.Errors.Any())
+                {
+                    return error.Errors.First().Message;
+                }
+            }
+            catch (JsonReaderException)
+            {
+                return ex.Message;
+            }
+
+            return ex.Message;
+        }
+
+        /// <summary>
+        /// Download the resource at the given uri
+        /// </summary>
+        public byte[] Download(Uri uri)
+        {
+            try
+            {
+                return WebRequest.Create(uri).GetResponse().GetResponseStream().ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
+            }
         }
     }
 }

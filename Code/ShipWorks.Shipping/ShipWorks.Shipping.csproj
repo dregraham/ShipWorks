@@ -179,11 +179,14 @@
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressLabelService.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPackageAdapter.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressRateHashingService.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressRateShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentAdapter.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -251,14 +254,16 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
-    <Compile Include="ShipEngine\ICarrierRateShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
-    <Compile Include="ShipEngine\IShipmentElementFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
@@ -406,7 +411,6 @@
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
     <Compile Include="ShipEngine\ShipEngineException.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
-    <Compile Include="ShipEngine\ShipmentElementFactory.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

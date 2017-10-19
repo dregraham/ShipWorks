@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            throw new NotImplementedException();
+            // Not handling insurance yet
         }
 
         /// <summary>

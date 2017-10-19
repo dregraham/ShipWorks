@@ -1,11 +1,6 @@
 ﻿using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -13,12 +8,17 @@ namespace ShipWorks.Shipping.ShipEngine
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity
     /// </summary>
-    public interface IShipmentElementFactory
+    public interface IShipEngineRequestFactory
     {
         /// <summary>
         ///  Create a RateShipmentRequest from a ShipmentEntity
         /// </summary>
         RateShipmentRequest CreateRateRequest(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Create a PurchaseLabelRequest from a shipment, packages and service code
+        /// </summary>
+        PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode);
 
         /// <summary>
         /// Creates customs items for a ShipEngine request

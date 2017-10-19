@@ -1,9 +1,5 @@
 ﻿using ShipWorks.Shipping.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using System.Reflection;
@@ -35,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             this.shipment = shipment;
             this.package = package;
             Index = packageIndex;
+            InsuranceChoice = new DhlExpressInsuranceChoice(shipment);
         }
 
         /// <summary>
@@ -155,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Gets or sets the insurance choice.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IInsuranceChoice InsuranceChoice{ get; set;}
+        public IInsuranceChoice InsuranceChoice { get; set;}
 
         /// <summary>
         /// Update the insurance fields on the package
