@@ -1,6 +1,11 @@
 ﻿using Autofac.Extras.Moq;
+using Moq;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
@@ -127,6 +133,96 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipment.DhlExpress = dhlShipment;
             
             Assert.Equal(3,testObject.GetParcelCount(shipment));
+        }
+
+        [Fact]
+        public void TrackShipment_DelegatesTrackingToWebClient()
+        {
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            var shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    ShipEngineLabelID = "test"
+                }
+            };
+
+            testObject.TrackShipment(shipment);
+
+            mock.Mock<IShipEngineWebClient>().Verify(c => c.Track("test", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void TrackShipment_DelegatesTrackingInformationFromWebClient_ToTrackingResultFactory()
+        {
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            var shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    ShipEngineLabelID = "test"
+                }
+            };
+
+            var trackingInformation = new TrackingInformation();
+
+            mock.Mock<IShipEngineWebClient>()
+                .Setup(c => c.Track(AnyString, ApiLogSource.DHLExpress))
+                .Returns(Task.FromResult(trackingInformation));
+
+            testObject.TrackShipment(shipment);
+
+            mock.Mock<IShipEngineTrackingResultFactory>().Verify(f => f.Create(trackingInformation));
+        }
+
+        [Fact]
+        public void TrackShipment_ReturnsTrackingResultCreatedByFactory()
+        {
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            var shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    ShipEngineLabelID = "test"
+                }
+            };
+
+            TrackingResult trackingResult = new TrackingResult();
+
+            mock.Mock<IShipEngineTrackingResultFactory>()
+                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
+                .Returns(trackingResult);
+
+            var testResult = testObject.TrackShipment(shipment);
+
+            Assert.Equal(trackingResult, testResult);
+        }
+
+        [Fact]
+        public void TrackShipment_ReturnsCannedResult_WhenExceptionIsThrown()
+        {
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            var shipment = new ShipmentEntity()
+            {
+                TrackingNumber = "test",
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    ShipEngineLabelID = "foo"
+                }
+            };
+            
+            mock.Mock<IShipEngineTrackingResultFactory>()
+                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
+                .Throws(new Exception());
+
+            var testResult = testObject.TrackShipment(shipment);
+            string expectedSummary = "<a href='http://www.dhl.com/en/express/tracking.html?AWB=test&brand=DHL' style='color:blue; background-color:white'>Click here to see tracking information</a>";
+
+            Assert.Equal(expectedSummary, testResult.Summary);
         }
 
         public void Dispose()
