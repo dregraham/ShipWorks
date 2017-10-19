@@ -13,19751 +13,23588 @@
 // 
 #pragma warning disable 1591
 
-namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
-    using System;
-    using System.Web.Services;
-    using System.Diagnostics;
-    using System.Web.Services.Protocols;
+namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
+{
     using System.Xml.Serialization;
-    using System.ComponentModel;
-    
-    
+
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Web.Services.WebServiceBindingAttribute(Name="ShipServiceSoapBinding", Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipService : System.Web.Services.Protocols.SoapHttpClientProtocol {
-        
+    [System.Web.Services.WebServiceBindingAttribute(Name = "ShipServiceSoapBinding", Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipService : System.Web.Services.Protocols.SoapHttpClientProtocol
+    {
+
         private System.Threading.SendOrPostCallback processTagOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback processShipmentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback deleteTagOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback deleteShipmentOperationCompleted;
-        
+
         private System.Threading.SendOrPostCallback validateShipmentOperationCompleted;
-        
+
         private bool useDefaultCredentialsSetExplicitly;
-        
+
         /// <remarks/>
-        public ShipService() {
+        public ShipService()
+        {
             this.Url = "https://wsbeta.fedex.com:443/web-services/ship";
-            if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
+            if ((this.IsLocalFileSystemWebService(this.Url) == true))
+            {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
             }
-            else {
+            else
+            {
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
-        public new string Url {
-            get {
+
+        public new string Url
+        {
+            get
+            {
                 return base.Url;
             }
-            set {
-                if ((((this.IsLocalFileSystemWebService(base.Url) == true) 
-                            && (this.useDefaultCredentialsSetExplicitly == false)) 
-                            && (this.IsLocalFileSystemWebService(value) == false))) {
+            set
+            {
+                if ((((this.IsLocalFileSystemWebService(base.Url) == true)
+                            && (this.useDefaultCredentialsSetExplicitly == false))
+                            && (this.IsLocalFileSystemWebService(value) == false)))
+                {
                     base.UseDefaultCredentials = false;
                 }
                 base.Url = value;
             }
         }
-        
-        public new bool UseDefaultCredentials {
-            get {
+
+        public new bool UseDefaultCredentials
+        {
+            get
+            {
                 return base.UseDefaultCredentials;
             }
-            set {
+            set
+            {
                 base.UseDefaultCredentials = value;
                 this.useDefaultCredentialsSetExplicitly = true;
             }
         }
-        
+
         /// <remarks/>
         public event processTagCompletedEventHandler processTagCompleted;
-        
+
         /// <remarks/>
         public event processShipmentCompletedEventHandler processShipmentCompleted;
-        
+
         /// <remarks/>
         public event deleteTagCompletedEventHandler deleteTagCompleted;
-        
+
         /// <remarks/>
         public event deleteShipmentCompletedEventHandler deleteShipmentCompleted;
-        
+
         /// <remarks/>
         public event validateShipmentCompletedEventHandler validateShipmentCompleted;
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/processTag", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ProcessTagReply", Namespace="http://fedex.com/ws/ship/v21")]
-        public ProcessTagReply processTag([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/ship/v21")] ProcessTagRequest ProcessTagRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/processTag", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ProcessTagReply", Namespace = "http://fedex.com/ws/ship/v21")]
+        public ProcessTagReply processTag([System.Xml.Serialization.XmlElementAttribute(Namespace = "http://fedex.com/ws/ship/v21")] ProcessTagRequest ProcessTagRequest)
+        {
             object[] results = this.Invoke("processTag", new object[] {
                         ProcessTagRequest});
-            return ((ProcessTagReply)(results[0]));
+            return ((ProcessTagReply) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void processTagAsync(ProcessTagRequest ProcessTagRequest) {
+        public void processTagAsync(ProcessTagRequest ProcessTagRequest)
+        {
             this.processTagAsync(ProcessTagRequest, null);
         }
-        
+
         /// <remarks/>
-        public void processTagAsync(ProcessTagRequest ProcessTagRequest, object userState) {
-            if ((this.processTagOperationCompleted == null)) {
+        public void processTagAsync(ProcessTagRequest ProcessTagRequest, object userState)
+        {
+            if ((this.processTagOperationCompleted == null))
+            {
                 this.processTagOperationCompleted = new System.Threading.SendOrPostCallback(this.OnprocessTagOperationCompleted);
             }
             this.InvokeAsync("processTag", new object[] {
                         ProcessTagRequest}, this.processTagOperationCompleted, userState);
         }
-        
-        private void OnprocessTagOperationCompleted(object arg) {
-            if ((this.processTagCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnprocessTagOperationCompleted(object arg)
+        {
+            if ((this.processTagCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.processTagCompleted(this, new processTagCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/processShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ProcessShipmentReply", Namespace="http://fedex.com/ws/ship/v21")]
-        public ProcessShipmentReply processShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/ship/v21")] ProcessShipmentRequest ProcessShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/processShipment", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ProcessShipmentReply", Namespace = "http://fedex.com/ws/ship/v21")]
+        public ProcessShipmentReply processShipment([System.Xml.Serialization.XmlElementAttribute(Namespace = "http://fedex.com/ws/ship/v21")] ProcessShipmentRequest ProcessShipmentRequest)
+        {
             object[] results = this.Invoke("processShipment", new object[] {
                         ProcessShipmentRequest});
-            return ((ProcessShipmentReply)(results[0]));
+            return ((ProcessShipmentReply) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void processShipmentAsync(ProcessShipmentRequest ProcessShipmentRequest) {
+        public void processShipmentAsync(ProcessShipmentRequest ProcessShipmentRequest)
+        {
             this.processShipmentAsync(ProcessShipmentRequest, null);
         }
-        
+
         /// <remarks/>
-        public void processShipmentAsync(ProcessShipmentRequest ProcessShipmentRequest, object userState) {
-            if ((this.processShipmentOperationCompleted == null)) {
+        public void processShipmentAsync(ProcessShipmentRequest ProcessShipmentRequest, object userState)
+        {
+            if ((this.processShipmentOperationCompleted == null))
+            {
                 this.processShipmentOperationCompleted = new System.Threading.SendOrPostCallback(this.OnprocessShipmentOperationCompleted);
             }
             this.InvokeAsync("processShipment", new object[] {
                         ProcessShipmentRequest}, this.processShipmentOperationCompleted, userState);
         }
-        
-        private void OnprocessShipmentOperationCompleted(object arg) {
-            if ((this.processShipmentCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnprocessShipmentOperationCompleted(object arg)
+        {
+            if ((this.processShipmentCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.processShipmentCompleted(this, new processShipmentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/deleteTag", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace="http://fedex.com/ws/ship/v21")]
-        public ShipmentReply deleteTag([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/ship/v21")] DeleteTagRequest DeleteTagRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/deleteTag", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace = "http://fedex.com/ws/ship/v21")]
+        public ShipmentReply deleteTag([System.Xml.Serialization.XmlElementAttribute(Namespace = "http://fedex.com/ws/ship/v21")] DeleteTagRequest DeleteTagRequest)
+        {
             object[] results = this.Invoke("deleteTag", new object[] {
                         DeleteTagRequest});
-            return ((ShipmentReply)(results[0]));
+            return ((ShipmentReply) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void deleteTagAsync(DeleteTagRequest DeleteTagRequest) {
+        public void deleteTagAsync(DeleteTagRequest DeleteTagRequest)
+        {
             this.deleteTagAsync(DeleteTagRequest, null);
         }
-        
+
         /// <remarks/>
-        public void deleteTagAsync(DeleteTagRequest DeleteTagRequest, object userState) {
-            if ((this.deleteTagOperationCompleted == null)) {
+        public void deleteTagAsync(DeleteTagRequest DeleteTagRequest, object userState)
+        {
+            if ((this.deleteTagOperationCompleted == null))
+            {
                 this.deleteTagOperationCompleted = new System.Threading.SendOrPostCallback(this.OndeleteTagOperationCompleted);
             }
             this.InvokeAsync("deleteTag", new object[] {
                         DeleteTagRequest}, this.deleteTagOperationCompleted, userState);
         }
-        
-        private void OndeleteTagOperationCompleted(object arg) {
-            if ((this.deleteTagCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OndeleteTagOperationCompleted(object arg)
+        {
+            if ((this.deleteTagCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.deleteTagCompleted(this, new deleteTagCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/deleteShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace="http://fedex.com/ws/ship/v21")]
-        public ShipmentReply deleteShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/ship/v21")] DeleteShipmentRequest DeleteShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/deleteShipment", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace = "http://fedex.com/ws/ship/v21")]
+        public ShipmentReply deleteShipment([System.Xml.Serialization.XmlElementAttribute(Namespace = "http://fedex.com/ws/ship/v21")] DeleteShipmentRequest DeleteShipmentRequest)
+        {
             object[] results = this.Invoke("deleteShipment", new object[] {
                         DeleteShipmentRequest});
-            return ((ShipmentReply)(results[0]));
+            return ((ShipmentReply) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest) {
+        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest)
+        {
             this.deleteShipmentAsync(DeleteShipmentRequest, null);
         }
-        
+
         /// <remarks/>
-        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest, object userState) {
-            if ((this.deleteShipmentOperationCompleted == null)) {
+        public void deleteShipmentAsync(DeleteShipmentRequest DeleteShipmentRequest, object userState)
+        {
+            if ((this.deleteShipmentOperationCompleted == null))
+            {
                 this.deleteShipmentOperationCompleted = new System.Threading.SendOrPostCallback(this.OndeleteShipmentOperationCompleted);
             }
             this.InvokeAsync("deleteShipment", new object[] {
                         DeleteShipmentRequest}, this.deleteShipmentOperationCompleted, userState);
         }
-        
-        private void OndeleteShipmentOperationCompleted(object arg) {
-            if ((this.deleteShipmentCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OndeleteShipmentOperationCompleted(object arg)
+        {
+            if ((this.deleteShipmentCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.deleteShipmentCompleted(this, new deleteShipmentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/validateShipment", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Bare)]
-        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace="http://fedex.com/ws/ship/v21")]
-        public ShipmentReply validateShipment([System.Xml.Serialization.XmlElementAttribute(Namespace="http://fedex.com/ws/ship/v21")] ValidateShipmentRequest ValidateShipmentRequest) {
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://fedex.com/ws/ship/v21/validateShipment", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Bare)]
+        [return: System.Xml.Serialization.XmlElementAttribute("ShipmentReply", Namespace = "http://fedex.com/ws/ship/v21")]
+        public ShipmentReply validateShipment([System.Xml.Serialization.XmlElementAttribute(Namespace = "http://fedex.com/ws/ship/v21")] ValidateShipmentRequest ValidateShipmentRequest)
+        {
             object[] results = this.Invoke("validateShipment", new object[] {
                         ValidateShipmentRequest});
-            return ((ShipmentReply)(results[0]));
+            return ((ShipmentReply) (results[0]));
         }
-        
+
         /// <remarks/>
-        public void validateShipmentAsync(ValidateShipmentRequest ValidateShipmentRequest) {
+        public void validateShipmentAsync(ValidateShipmentRequest ValidateShipmentRequest)
+        {
             this.validateShipmentAsync(ValidateShipmentRequest, null);
         }
-        
+
         /// <remarks/>
-        public void validateShipmentAsync(ValidateShipmentRequest ValidateShipmentRequest, object userState) {
-            if ((this.validateShipmentOperationCompleted == null)) {
+        public void validateShipmentAsync(ValidateShipmentRequest ValidateShipmentRequest, object userState)
+        {
+            if ((this.validateShipmentOperationCompleted == null))
+            {
                 this.validateShipmentOperationCompleted = new System.Threading.SendOrPostCallback(this.OnvalidateShipmentOperationCompleted);
             }
             this.InvokeAsync("validateShipment", new object[] {
                         ValidateShipmentRequest}, this.validateShipmentOperationCompleted, userState);
         }
-        
-        private void OnvalidateShipmentOperationCompleted(object arg) {
-            if ((this.validateShipmentCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+
+        private void OnvalidateShipmentOperationCompleted(object arg)
+        {
+            if ((this.validateShipmentCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs) (arg));
                 this.validateShipmentCompleted(this, new validateShipmentCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
-        
+
         /// <remarks/>
-        public new void CancelAsync(object userState) {
+        public new void CancelAsync(object userState)
+        {
             base.CancelAsync(userState);
         }
-        
-        private bool IsLocalFileSystemWebService(string url) {
-            if (((url == null) 
-                        || (url == string.Empty))) {
+
+        private bool IsLocalFileSystemWebService(string url)
+        {
+            if (((url == null)
+                        || (url == string.Empty)))
+            {
                 return false;
             }
             System.Uri wsUri = new System.Uri(url);
-            if (((wsUri.Port >= 1024) 
-                        && (string.Compare(wsUri.Host, "localHost", System.StringComparison.OrdinalIgnoreCase) == 0))) {
+            if (((wsUri.Port >= 1024)
+                        && (string.Compare(wsUri.Host, "localHost", System.StringComparison.OrdinalIgnoreCase) == 0)))
+            {
                 return true;
             }
             return false;
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ProcessTagRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ProcessTagRequest
+    {
+
         private WebAuthenticationDetail webAuthenticationDetailField;
-        
+
         private ClientDetail clientDetailField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private RequestedShipment requestedShipmentField;
-        
+
         /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
+        public WebAuthenticationDetail WebAuthenticationDetail
+        {
+            get
+            {
                 return this.webAuthenticationDetailField;
             }
-            set {
+            set
+            {
                 this.webAuthenticationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
+        public ClientDetail ClientDetail
+        {
+            get
+            {
                 return this.clientDetailField;
             }
-            set {
+            set
+            {
                 this.clientDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequestedShipment RequestedShipment {
-            get {
+        public RequestedShipment RequestedShipment
+        {
+            get
+            {
                 return this.requestedShipmentField;
             }
-            set {
+            set
+            {
                 this.requestedShipmentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class WebAuthenticationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class WebAuthenticationDetail
+    {
+
         private WebAuthenticationCredential parentCredentialField;
-        
+
         private WebAuthenticationCredential userCredentialField;
-        
+
         /// <remarks/>
-        public WebAuthenticationCredential ParentCredential {
-            get {
+        public WebAuthenticationCredential ParentCredential
+        {
+            get
+            {
                 return this.parentCredentialField;
             }
-            set {
+            set
+            {
                 this.parentCredentialField = value;
             }
         }
-        
+
         /// <remarks/>
-        public WebAuthenticationCredential UserCredential {
-            get {
+        public WebAuthenticationCredential UserCredential
+        {
+            get
+            {
                 return this.userCredentialField;
             }
-            set {
+            set
+            {
                 this.userCredentialField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class WebAuthenticationCredential {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class WebAuthenticationCredential
+    {
+
         private string keyField;
-        
+
         private string passwordField;
-        
+
         /// <remarks/>
-        public string Key {
-            get {
+        public string Key
+        {
+            get
+            {
                 return this.keyField;
             }
-            set {
+            set
+            {
                 this.keyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Password {
-            get {
+        public string Password
+        {
+            get
+            {
                 return this.passwordField;
             }
-            set {
+            set
+            {
                 this.passwordField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ValidateShipmentRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ValidateShipmentRequest
+    {
+
         private WebAuthenticationDetail webAuthenticationDetailField;
-        
+
         private ClientDetail clientDetailField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private RequestedShipment requestedShipmentField;
-        
+
         /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
+        public WebAuthenticationDetail WebAuthenticationDetail
+        {
+            get
+            {
                 return this.webAuthenticationDetailField;
             }
-            set {
+            set
+            {
                 this.webAuthenticationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
+        public ClientDetail ClientDetail
+        {
+            get
+            {
                 return this.clientDetailField;
             }
-            set {
+            set
+            {
                 this.clientDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequestedShipment RequestedShipment {
-            get {
+        public RequestedShipment RequestedShipment
+        {
+            get
+            {
                 return this.requestedShipmentField;
             }
-            set {
+            set
+            {
                 this.requestedShipmentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ClientDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ClientDetail
+    {
+
         private string accountNumberField;
-        
+
         private string meterNumberField;
-        
+
         private string integratorIdField;
-        
+
         private Localization localizationField;
-        
+
         /// <remarks/>
-        public string AccountNumber {
-            get {
+        public string AccountNumber
+        {
+            get
+            {
                 return this.accountNumberField;
             }
-            set {
+            set
+            {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string MeterNumber {
-            get {
+        public string MeterNumber
+        {
+            get
+            {
                 return this.meterNumberField;
             }
-            set {
+            set
+            {
                 this.meterNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IntegratorId {
-            get {
+        public string IntegratorId
+        {
+            get
+            {
                 return this.integratorIdField;
             }
-            set {
+            set
+            {
                 this.integratorIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Localization {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Localization
+    {
+
         private string languageCodeField;
-        
+
         private string localeCodeField;
-        
+
         /// <remarks/>
-        public string LanguageCode {
-            get {
+        public string LanguageCode
+        {
+            get
+            {
                 return this.languageCodeField;
             }
-            set {
+            set
+            {
                 this.languageCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LocaleCode {
-            get {
+        public string LocaleCode
+        {
+            get
+            {
                 return this.localeCodeField;
             }
-            set {
+            set
+            {
                 this.localeCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class TransactionDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class TransactionDetail
+    {
+
         private string customerTransactionIdField;
-        
+
         private Localization localizationField;
-        
+
         /// <remarks/>
-        public string CustomerTransactionId {
-            get {
+        public string CustomerTransactionId
+        {
+            get
+            {
                 return this.customerTransactionIdField;
             }
-            set {
+            set
+            {
                 this.customerTransactionIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class VersionId {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class VersionId
+    {
+
         private string serviceIdField;
-        
+
         private int majorField;
-        
+
         private int intermediateField;
-        
+
         private int minorField;
-        
-        public VersionId() {
+
+        public VersionId()
+        {
             this.serviceIdField = "ship";
             this.majorField = 21;
             this.intermediateField = 0;
             this.minorField = 0;
         }
-        
+
         /// <remarks/>
-        public string ServiceId {
-            get {
+        public string ServiceId
+        {
+            get
+            {
                 return this.serviceIdField;
             }
-            set {
+            set
+            {
                 this.serviceIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Major {
-            get {
+        public int Major
+        {
+            get
+            {
                 return this.majorField;
             }
-            set {
+            set
+            {
                 this.majorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Intermediate {
-            get {
+        public int Intermediate
+        {
+            get
+            {
                 return this.intermediateField;
             }
-            set {
+            set
+            {
                 this.intermediateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Minor {
-            get {
+        public int Minor
+        {
+            get
+            {
                 return this.minorField;
             }
-            set {
+            set
+            {
                 this.minorField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RequestedShipment {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RequestedShipment
+    {
+
         private System.DateTime shipTimestampField;
-        
+
         private DropoffType dropoffTypeField;
-        
+
         private ServiceType serviceTypeField;
-        
+
         private PackagingType packagingTypeField;
-        
+
         private ShipmentManifestDetail manifestDetailField;
-        
+
         private Weight totalWeightField;
-        
+
         private Money totalInsuredValueField;
-        
+
         private string preferredCurrencyField;
-        
+
         private ShipmentAuthorizationDetail shipmentAuthorizationDetailField;
-        
+
         private Party shipperField;
-        
+
         private Party recipientField;
-        
+
         private string recipientLocationNumberField;
-        
+
         private ContactAndAddress originField;
-        
+
         private Party soldToField;
-        
+
         private Payment shippingChargesPaymentField;
-        
+
         private ShipmentSpecialServicesRequested specialServicesRequestedField;
-        
+
         private ExpressFreightDetail expressFreightDetailField;
-        
+
         private FreightShipmentDetail freightShipmentDetailField;
-        
+
         private string deliveryInstructionsField;
-        
+
         private VariableHandlingChargeDetail variableHandlingChargeDetailField;
-        
+
         private CustomsClearanceDetail customsClearanceDetailField;
-        
+
         private PickupDetail pickupDetailField;
-        
+
         private SmartPostShipmentDetail smartPostDetailField;
-        
+
         private bool blockInsightVisibilityField;
-        
+
         private bool blockInsightVisibilityFieldSpecified;
-        
+
         private LabelSpecification labelSpecificationField;
-        
+
         private ShippingDocumentSpecification shippingDocumentSpecificationField;
-        
+
         private RateRequestType[] rateRequestTypesField;
-        
+
         private EdtRequestType edtRequestTypeField;
-        
+
         private bool edtRequestTypeFieldSpecified;
-        
+
         private TrackingId masterTrackingIdField;
-        
+
         private string packageCountField;
-        
+
         private DangerousGoodsDetail[] configurationDataField;
-        
+
         private RequestedPackageLineItem[] requestedPackageLineItemsField;
-        
+
         /// <remarks/>
-        public System.DateTime ShipTimestamp {
-            get {
+        public System.DateTime ShipTimestamp
+        {
+            get
+            {
                 return this.shipTimestampField;
             }
-            set {
+            set
+            {
                 this.shipTimestampField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DropoffType DropoffType {
-            get {
+        public DropoffType DropoffType
+        {
+            get
+            {
                 return this.dropoffTypeField;
             }
-            set {
+            set
+            {
                 this.dropoffTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ServiceType ServiceType {
-            get {
+        public ServiceType ServiceType
+        {
+            get
+            {
                 return this.serviceTypeField;
             }
-            set {
+            set
+            {
                 this.serviceTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackagingType PackagingType {
-            get {
+        public PackagingType PackagingType
+        {
+            get
+            {
                 return this.packagingTypeField;
             }
-            set {
+            set
+            {
                 this.packagingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentManifestDetail ManifestDetail {
-            get {
+        public ShipmentManifestDetail ManifestDetail
+        {
+            get
+            {
                 return this.manifestDetailField;
             }
-            set {
+            set
+            {
                 this.manifestDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalWeight {
-            get {
+        public Weight TotalWeight
+        {
+            get
+            {
                 return this.totalWeightField;
             }
-            set {
+            set
+            {
                 this.totalWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalInsuredValue {
-            get {
+        public Money TotalInsuredValue
+        {
+            get
+            {
                 return this.totalInsuredValueField;
             }
-            set {
+            set
+            {
                 this.totalInsuredValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PreferredCurrency {
-            get {
+        public string PreferredCurrency
+        {
+            get
+            {
                 return this.preferredCurrencyField;
             }
-            set {
+            set
+            {
                 this.preferredCurrencyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentAuthorizationDetail ShipmentAuthorizationDetail {
-            get {
+        public ShipmentAuthorizationDetail ShipmentAuthorizationDetail
+        {
+            get
+            {
                 return this.shipmentAuthorizationDetailField;
             }
-            set {
+            set
+            {
                 this.shipmentAuthorizationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Shipper {
-            get {
+        public Party Shipper
+        {
+            get
+            {
                 return this.shipperField;
             }
-            set {
+            set
+            {
                 this.shipperField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Recipient {
-            get {
+        public Party Recipient
+        {
+            get
+            {
                 return this.recipientField;
             }
-            set {
+            set
+            {
                 this.recipientField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RecipientLocationNumber {
-            get {
+        public string RecipientLocationNumber
+        {
+            get
+            {
                 return this.recipientLocationNumberField;
             }
-            set {
+            set
+            {
                 this.recipientLocationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContactAndAddress Origin {
-            get {
+        public ContactAndAddress Origin
+        {
+            get
+            {
                 return this.originField;
             }
-            set {
+            set
+            {
                 this.originField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party SoldTo {
-            get {
+        public Party SoldTo
+        {
+            get
+            {
                 return this.soldToField;
             }
-            set {
+            set
+            {
                 this.soldToField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Payment ShippingChargesPayment {
-            get {
+        public Payment ShippingChargesPayment
+        {
+            get
+            {
                 return this.shippingChargesPaymentField;
             }
-            set {
+            set
+            {
                 this.shippingChargesPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentSpecialServicesRequested SpecialServicesRequested {
-            get {
+        public ShipmentSpecialServicesRequested SpecialServicesRequested
+        {
+            get
+            {
                 return this.specialServicesRequestedField;
             }
-            set {
+            set
+            {
                 this.specialServicesRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ExpressFreightDetail ExpressFreightDetail {
-            get {
+        public ExpressFreightDetail ExpressFreightDetail
+        {
+            get
+            {
                 return this.expressFreightDetailField;
             }
-            set {
+            set
+            {
                 this.expressFreightDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightShipmentDetail FreightShipmentDetail {
-            get {
+        public FreightShipmentDetail FreightShipmentDetail
+        {
+            get
+            {
                 return this.freightShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.freightShipmentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeliveryInstructions {
-            get {
+        public string DeliveryInstructions
+        {
+            get
+            {
                 return this.deliveryInstructionsField;
             }
-            set {
+            set
+            {
                 this.deliveryInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingChargeDetail VariableHandlingChargeDetail {
-            get {
+        public VariableHandlingChargeDetail VariableHandlingChargeDetail
+        {
+            get
+            {
                 return this.variableHandlingChargeDetailField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargeDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsClearanceDetail CustomsClearanceDetail {
-            get {
+        public CustomsClearanceDetail CustomsClearanceDetail
+        {
+            get
+            {
                 return this.customsClearanceDetailField;
             }
-            set {
+            set
+            {
                 this.customsClearanceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PickupDetail PickupDetail {
-            get {
+        public PickupDetail PickupDetail
+        {
+            get
+            {
                 return this.pickupDetailField;
             }
-            set {
+            set
+            {
                 this.pickupDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SmartPostShipmentDetail SmartPostDetail {
-            get {
+        public SmartPostShipmentDetail SmartPostDetail
+        {
+            get
+            {
                 return this.smartPostDetailField;
             }
-            set {
+            set
+            {
                 this.smartPostDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool BlockInsightVisibility {
-            get {
+        public bool BlockInsightVisibility
+        {
+            get
+            {
                 return this.blockInsightVisibilityField;
             }
-            set {
+            set
+            {
                 this.blockInsightVisibilityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BlockInsightVisibilitySpecified {
-            get {
+        public bool BlockInsightVisibilitySpecified
+        {
+            get
+            {
                 return this.blockInsightVisibilityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.blockInsightVisibilityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelSpecification LabelSpecification {
-            get {
+        public LabelSpecification LabelSpecification
+        {
+            get
+            {
                 return this.labelSpecificationField;
             }
-            set {
+            set
+            {
                 this.labelSpecificationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentSpecification ShippingDocumentSpecification {
-            get {
+        public ShippingDocumentSpecification ShippingDocumentSpecification
+        {
+            get
+            {
                 return this.shippingDocumentSpecificationField;
             }
-            set {
+            set
+            {
                 this.shippingDocumentSpecificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RateRequestTypes")]
-        public RateRequestType[] RateRequestTypes {
-            get {
+        public RateRequestType[] RateRequestTypes
+        {
+            get
+            {
                 return this.rateRequestTypesField;
             }
-            set {
+            set
+            {
                 this.rateRequestTypesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public EdtRequestType EdtRequestType {
-            get {
+        public EdtRequestType EdtRequestType
+        {
+            get
+            {
                 return this.edtRequestTypeField;
             }
-            set {
+            set
+            {
                 this.edtRequestTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EdtRequestTypeSpecified {
-            get {
+        public bool EdtRequestTypeSpecified
+        {
+            get
+            {
                 return this.edtRequestTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.edtRequestTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId MasterTrackingId {
-            get {
+        public TrackingId MasterTrackingId
+        {
+            get
+            {
                 return this.masterTrackingIdField;
             }
-            set {
+            set
+            {
                 this.masterTrackingIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string PackageCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string PackageCount
+        {
+            get
+            {
                 return this.packageCountField;
             }
-            set {
+            set
+            {
                 this.packageCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("DangerousGoodsPackageConfigurations", IsNullable=false)]
-        public DangerousGoodsDetail[] ConfigurationData {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("DangerousGoodsPackageConfigurations", IsNullable = false)]
+        public DangerousGoodsDetail[] ConfigurationData
+        {
+            get
+            {
                 return this.configurationDataField;
             }
-            set {
+            set
+            {
                 this.configurationDataField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RequestedPackageLineItems")]
-        public RequestedPackageLineItem[] RequestedPackageLineItems {
-            get {
+        public RequestedPackageLineItem[] RequestedPackageLineItems
+        {
+            get
+            {
                 return this.requestedPackageLineItemsField;
             }
-            set {
+            set
+            {
                 this.requestedPackageLineItemsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DropoffType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DropoffType
+    {
+
         /// <remarks/>
         BUSINESS_SERVICE_CENTER,
-        
+
         /// <remarks/>
         DROP_BOX,
-        
+
         /// <remarks/>
         REGULAR_PICKUP,
-        
+
         /// <remarks/>
         REQUEST_COURIER,
-        
+
         /// <remarks/>
         STATION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ServiceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ServiceType
+    {
+
         /// <remarks/>
         EUROPE_FIRST_INTERNATIONAL_PRIORITY,
-        
+
         /// <remarks/>
         FEDEX_1_DAY_FREIGHT,
-        
+
         /// <remarks/>
         FEDEX_2_DAY,
-        
+
         /// <remarks/>
         FEDEX_2_DAY_AM,
-        
+
         /// <remarks/>
         FEDEX_2_DAY_FREIGHT,
-        
+
         /// <remarks/>
         FEDEX_3_DAY_FREIGHT,
-        
+
         /// <remarks/>
         FEDEX_DISTANCE_DEFERRED,
-        
+
         /// <remarks/>
         FEDEX_EXPRESS_SAVER,
-        
+
         /// <remarks/>
         FEDEX_FIRST_FREIGHT,
-        
+
         /// <remarks/>
         FEDEX_FREIGHT_ECONOMY,
-        
+
         /// <remarks/>
         FEDEX_FREIGHT_PRIORITY,
-        
+
         /// <remarks/>
         FEDEX_GROUND,
-        
+
         /// <remarks/>
         FEDEX_NEXT_DAY_AFTERNOON,
-        
+
         /// <remarks/>
         FEDEX_NEXT_DAY_EARLY_MORNING,
-        
+
         /// <remarks/>
         FEDEX_NEXT_DAY_END_OF_DAY,
-        
+
         /// <remarks/>
         FEDEX_NEXT_DAY_FREIGHT,
-        
+
         /// <remarks/>
         FEDEX_NEXT_DAY_MID_MORNING,
-        
+
         /// <remarks/>
         FIRST_OVERNIGHT,
-        
+
         /// <remarks/>
         GROUND_HOME_DELIVERY,
-        
+
         /// <remarks/>
         INTERNATIONAL_ECONOMY,
-        
+
         /// <remarks/>
         INTERNATIONAL_ECONOMY_FREIGHT,
-        
+
         /// <remarks/>
         INTERNATIONAL_FIRST,
-        
+
         /// <remarks/>
         INTERNATIONAL_PRIORITY,
-        
+
         /// <remarks/>
         INTERNATIONAL_PRIORITY_EXPRESS,
-        
+
         /// <remarks/>
         INTERNATIONAL_PRIORITY_FREIGHT,
-        
+
         /// <remarks/>
         PRIORITY_OVERNIGHT,
-        
+
         /// <remarks/>
         SAME_DAY,
-        
+
         /// <remarks/>
         SAME_DAY_CITY,
-        
+
         /// <remarks/>
         SMART_POST,
-        
+
         /// <remarks/>
         STANDARD_OVERNIGHT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PackagingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PackagingType
+    {
+
         /// <remarks/>
         FEDEX_10KG_BOX,
-        
+
         /// <remarks/>
         FEDEX_25KG_BOX,
-        
+
         /// <remarks/>
         FEDEX_BOX,
-        
+
         /// <remarks/>
         FEDEX_ENVELOPE,
-        
+
         /// <remarks/>
         FEDEX_EXTRA_LARGE_BOX,
-        
+
         /// <remarks/>
         FEDEX_LARGE_BOX,
-        
+
         /// <remarks/>
         FEDEX_MEDIUM_BOX,
-        
+
         /// <remarks/>
         FEDEX_PAK,
-        
+
         /// <remarks/>
         FEDEX_SMALL_BOX,
-        
+
         /// <remarks/>
         FEDEX_TUBE,
-        
+
         /// <remarks/>
         YOUR_PACKAGING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentManifestDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentManifestDetail
+    {
+
         private CustomerReferenceType manifestReferenceTypeField;
-        
+
         private bool manifestReferenceTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomerReferenceType ManifestReferenceType {
-            get {
+        public CustomerReferenceType ManifestReferenceType
+        {
+            get
+            {
                 return this.manifestReferenceTypeField;
             }
-            set {
+            set
+            {
                 this.manifestReferenceTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ManifestReferenceTypeSpecified {
-            get {
+        public bool ManifestReferenceTypeSpecified
+        {
+            get
+            {
                 return this.manifestReferenceTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.manifestReferenceTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomerReferenceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomerReferenceType
+    {
+
         /// <remarks/>
         CUSTOMER_REFERENCE,
-        
+
         /// <remarks/>
         DEPARTMENT_NUMBER,
-        
+
         /// <remarks/>
         INTRACOUNTRY_REGULATORY_REFERENCE,
-        
+
         /// <remarks/>
         INVOICE_NUMBER,
-        
+
         /// <remarks/>
         P_O_NUMBER,
-        
+
         /// <remarks/>
         RMA_ASSOCIATION,
-        
+
         /// <remarks/>
         SHIPMENT_INTEGRITY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Weight {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Weight
+    {
+
         private WeightUnits unitsField;
-        
+
         private decimal valueField;
-        
+
         /// <remarks/>
-        public WeightUnits Units {
-            get {
+        public WeightUnits Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum WeightUnits {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum WeightUnits
+    {
+
         /// <remarks/>
         KG,
-        
+
         /// <remarks/>
         LB,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Money {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Money
+    {
+
         private string currencyField;
-        
+
         private decimal amountField;
-        
+
         /// <remarks/>
-        public string Currency {
-            get {
+        public string Currency
+        {
+            get
+            {
                 return this.currencyField;
             }
-            set {
+            set
+            {
                 this.currencyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Amount {
-            get {
+        public decimal Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentAuthorizationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentAuthorizationDetail
+    {
+
         private string accountNumberField;
-        
+
         /// <remarks/>
-        public string AccountNumber {
-            get {
+        public string AccountNumber
+        {
+            get
+            {
                 return this.accountNumberField;
             }
-            set {
+            set
+            {
                 this.accountNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Party {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Party
+    {
+
         private string accountNumberField;
-        
+
         private TaxpayerIdentification[] tinsField;
-        
+
         private Contact contactField;
-        
+
         private Address addressField;
-        
+
         /// <remarks/>
-        public string AccountNumber {
-            get {
+        public string AccountNumber
+        {
+            get
+            {
                 return this.accountNumberField;
             }
-            set {
+            set
+            {
                 this.accountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Tins")]
-        public TaxpayerIdentification[] Tins {
-            get {
+        public TaxpayerIdentification[] Tins
+        {
+            get
+            {
                 return this.tinsField;
             }
-            set {
+            set
+            {
                 this.tinsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Contact Contact {
-            get {
+        public Contact Contact
+        {
+            get
+            {
                 return this.contactField;
             }
-            set {
+            set
+            {
                 this.contactField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Address Address {
-            get {
+        public Address Address
+        {
+            get
+            {
                 return this.addressField;
             }
-            set {
+            set
+            {
                 this.addressField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class TaxpayerIdentification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class TaxpayerIdentification
+    {
+
         private TinType tinTypeField;
-        
+
         private string numberField;
-        
+
         private string usageField;
-        
+
         private System.DateTime effectiveDateField;
-        
+
         private bool effectiveDateFieldSpecified;
-        
+
         private System.DateTime expirationDateField;
-        
+
         private bool expirationDateFieldSpecified;
-        
+
         /// <remarks/>
-        public TinType TinType {
-            get {
+        public TinType TinType
+        {
+            get
+            {
                 return this.tinTypeField;
             }
-            set {
+            set
+            {
                 this.tinTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Number {
-            get {
+        public string Number
+        {
+            get
+            {
                 return this.numberField;
             }
-            set {
+            set
+            {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Usage {
-            get {
+        public string Usage
+        {
+            get
+            {
                 return this.usageField;
             }
-            set {
+            set
+            {
                 this.usageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime EffectiveDate {
-            get {
+        public System.DateTime EffectiveDate
+        {
+            get
+            {
                 return this.effectiveDateField;
             }
-            set {
+            set
+            {
                 this.effectiveDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EffectiveDateSpecified {
-            get {
+        public bool EffectiveDateSpecified
+        {
+            get
+            {
                 return this.effectiveDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.effectiveDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime ExpirationDate {
-            get {
+        public System.DateTime ExpirationDate
+        {
+            get
+            {
                 return this.expirationDateField;
             }
-            set {
+            set
+            {
                 this.expirationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExpirationDateSpecified {
-            get {
+        public bool ExpirationDateSpecified
+        {
+            get
+            {
                 return this.expirationDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.expirationDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum TinType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum TinType
+    {
+
         /// <remarks/>
         BUSINESS_NATIONAL,
-        
+
         /// <remarks/>
         BUSINESS_STATE,
-        
+
         /// <remarks/>
         BUSINESS_UNION,
-        
+
         /// <remarks/>
         PERSONAL_NATIONAL,
-        
+
         /// <remarks/>
         PERSONAL_STATE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Contact {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Contact
+    {
+
         private string contactIdField;
-        
+
         private string personNameField;
-        
+
         private string titleField;
-        
+
         private string companyNameField;
-        
+
         private string phoneNumberField;
-        
+
         private string phoneExtensionField;
-        
+
         private string tollFreePhoneNumberField;
-        
+
         private string pagerNumberField;
-        
+
         private string faxNumberField;
-        
+
         private string eMailAddressField;
-        
+
         /// <remarks/>
-        public string ContactId {
-            get {
+        [XmlElement(Order = 0)]
+        public string ContactId
+        {
+            get
+            {
                 return this.contactIdField;
             }
-            set {
+            set
+            {
                 this.contactIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PersonName {
-            get {
+        [XmlElement(Order = 1)]
+        public string PersonName
+        {
+            get
+            {
                 return this.personNameField;
             }
-            set {
+            set
+            {
                 this.personNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Title {
-            get {
+        [XmlElement(Order = 2)]
+        public string Title
+        {
+            get
+            {
                 return this.titleField;
             }
-            set {
+            set
+            {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CompanyName {
-            get {
+        [XmlElement(Order = 3)]
+        public string CompanyName
+        {
+            get
+            {
                 return this.companyNameField;
             }
-            set {
+            set
+            {
                 this.companyNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        [XmlElement(Order = 4)]
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneExtension {
-            get {
+        [XmlElement(Order = 5)]
+        public string PhoneExtension
+        {
+            get
+            {
                 return this.phoneExtensionField;
             }
-            set {
+            set
+            {
                 this.phoneExtensionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TollFreePhoneNumber {
-            get {
+        [XmlElement(Order = 6)]
+        public string TollFreePhoneNumber
+        {
+            get
+            {
                 return this.tollFreePhoneNumberField;
             }
-            set {
+            set
+            {
                 this.tollFreePhoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PagerNumber {
-            get {
+        [XmlElement(Order = 7)]
+        public string PagerNumber
+        {
+            get
+            {
                 return this.pagerNumberField;
             }
-            set {
+            set
+            {
                 this.pagerNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FaxNumber {
-            get {
+        [XmlElement(Order = 8)]
+        public string FaxNumber
+        {
+            get
+            {
                 return this.faxNumberField;
             }
-            set {
+            set
+            {
                 this.faxNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EMailAddress {
-            get {
+        [XmlElement(Order = 9)]
+        public string EMailAddress
+        {
+            get
+            {
                 return this.eMailAddressField;
             }
-            set {
+            set
+            {
                 this.eMailAddressField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Address {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Address
+    {
+
         private string[] streetLinesField;
-        
+
         private string cityField;
-        
+
         private string stateOrProvinceCodeField;
-        
+
         private string postalCodeField;
-        
+
         private string urbanizationCodeField;
-        
+
         private string countryCodeField;
-        
+
         private string countryNameField;
-        
+
         private bool residentialField;
-        
+
         private bool residentialFieldSpecified;
-        
+
         private string geographicCoordinatesField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("StreetLines")]
-        public string[] StreetLines {
-            get {
+        public string[] StreetLines
+        {
+            get
+            {
                 return this.streetLinesField;
             }
-            set {
+            set
+            {
                 this.streetLinesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string City {
-            get {
+        [XmlElement(Order = 1)]
+        public string City
+        {
+            get
+            {
                 return this.cityField;
             }
-            set {
+            set
+            {
                 this.cityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string StateOrProvinceCode {
-            get {
+        [XmlElement(Order = 2)]
+        public string StateOrProvinceCode
+        {
+            get
+            {
                 return this.stateOrProvinceCodeField;
             }
-            set {
+            set
+            {
                 this.stateOrProvinceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PostalCode {
-            get {
+        [XmlElement(Order = 3)]
+        public string PostalCode
+        {
+            get
+            {
                 return this.postalCodeField;
             }
-            set {
+            set
+            {
                 this.postalCodeField = value;
             }
         }
-        
+
+        [XmlElement(Order = 4)]
         /// <remarks/>
-        public string UrbanizationCode {
-            get {
+        public string UrbanizationCode
+        {
+            get
+            {
                 return this.urbanizationCodeField;
             }
-            set {
+            set
+            {
                 this.urbanizationCodeField = value;
             }
         }
-        
+
+        [XmlElement(Order = 5)]
         /// <remarks/>
-        public string CountryCode {
-            get {
+        public string CountryCode
+        {
+            get
+            {
                 return this.countryCodeField;
             }
-            set {
+            set
+            {
                 this.countryCodeField = value;
             }
         }
-        
+
+        [XmlElement(Order = 6)]
         /// <remarks/>
-        public string CountryName {
-            get {
+        public string CountryName
+        {
+            get
+            {
                 return this.countryNameField;
             }
-            set {
+            set
+            {
                 this.countryNameField = value;
             }
         }
-        
+
+        [XmlElement(Order = 7)]
         /// <remarks/>
-        public bool Residential {
-            get {
+        public bool Residential
+        {
+            get
+            {
                 return this.residentialField;
             }
-            set {
+            set
+            {
                 this.residentialField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ResidentialSpecified {
-            get {
+        public bool ResidentialSpecified
+        {
+            get
+            {
                 return this.residentialFieldSpecified;
             }
-            set {
+            set
+            {
                 this.residentialFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string GeographicCoordinates {
-            get {
+        public string GeographicCoordinates
+        {
+            get
+            {
                 return this.geographicCoordinatesField;
             }
-            set {
+            set
+            {
                 this.geographicCoordinatesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ContactAndAddress {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ContactAndAddress
+    {
+
         private Contact contactField;
-        
+
         private Address addressField;
-        
+
         /// <remarks/>
-        public Contact Contact {
-            get {
+        public Contact Contact
+        {
+            get
+            {
                 return this.contactField;
             }
-            set {
+            set
+            {
                 this.contactField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Address Address {
-            get {
+        public Address Address
+        {
+            get
+            {
                 return this.addressField;
             }
-            set {
+            set
+            {
                 this.addressField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Payment {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Payment
+    {
+
         private PaymentType paymentTypeField;
-        
+
         private Payor payorField;
-        
+
         /// <remarks/>
-        public PaymentType PaymentType {
-            get {
+        public PaymentType PaymentType
+        {
+            get
+            {
                 return this.paymentTypeField;
             }
-            set {
+            set
+            {
                 this.paymentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Payor Payor {
-            get {
+        public Payor Payor
+        {
+            get
+            {
                 return this.payorField;
             }
-            set {
+            set
+            {
                 this.payorField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PaymentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PaymentType
+    {
+
         /// <remarks/>
         ACCOUNT,
-        
+
         /// <remarks/>
         COLLECT,
-        
+
         /// <remarks/>
         RECIPIENT,
-        
+
         /// <remarks/>
         SENDER,
-        
+
         /// <remarks/>
         THIRD_PARTY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Payor {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Payor
+    {
+
         private Party responsiblePartyField;
-        
+
         /// <remarks/>
-        public Party ResponsibleParty {
-            get {
+        public Party ResponsibleParty
+        {
+            get
+            {
                 return this.responsiblePartyField;
             }
-            set {
+            set
+            {
                 this.responsiblePartyField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentSpecialServicesRequested {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentSpecialServicesRequested
+    {
+
         private ShipmentSpecialServiceType[] specialServiceTypesField;
-        
+
         private CodDetail codDetailField;
-        
+
         private DeliveryOnInvoiceAcceptanceDetail deliveryOnInvoiceAcceptanceDetailField;
-        
+
         private HoldAtLocationDetail holdAtLocationDetailField;
-        
+
         private ShipmentEventNotificationDetail eventNotificationDetailField;
-        
+
         private ReturnShipmentDetail returnShipmentDetailField;
-        
+
         private PendingShipmentDetail pendingShipmentDetailField;
-        
+
         private InternationalControlledExportDetail internationalControlledExportDetailField;
-        
+
         private InternationalTrafficInArmsRegulationsDetail internationalTrafficInArmsRegulationsDetailField;
-        
+
         private ShipmentDryIceDetail shipmentDryIceDetailField;
-        
+
         private HomeDeliveryPremiumDetail homeDeliveryPremiumDetailField;
-        
+
         private FreightGuaranteeDetail freightGuaranteeDetailField;
-        
+
         private EtdDetail etdDetailField;
-        
+
         private CustomDeliveryWindowDetail customDeliveryWindowDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpecialServiceTypes")]
-        public ShipmentSpecialServiceType[] SpecialServiceTypes {
-            get {
+        public ShipmentSpecialServiceType[] SpecialServiceTypes
+        {
+            get
+            {
                 return this.specialServiceTypesField;
             }
-            set {
+            set
+            {
                 this.specialServiceTypesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodDetail CodDetail {
-            get {
+        public CodDetail CodDetail
+        {
+            get
+            {
                 return this.codDetailField;
             }
-            set {
+            set
+            {
                 this.codDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DeliveryOnInvoiceAcceptanceDetail DeliveryOnInvoiceAcceptanceDetail {
-            get {
+        public DeliveryOnInvoiceAcceptanceDetail DeliveryOnInvoiceAcceptanceDetail
+        {
+            get
+            {
                 return this.deliveryOnInvoiceAcceptanceDetailField;
             }
-            set {
+            set
+            {
                 this.deliveryOnInvoiceAcceptanceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HoldAtLocationDetail HoldAtLocationDetail {
-            get {
+        public HoldAtLocationDetail HoldAtLocationDetail
+        {
+            get
+            {
                 return this.holdAtLocationDetailField;
             }
-            set {
+            set
+            {
                 this.holdAtLocationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentEventNotificationDetail EventNotificationDetail {
-            get {
+        public ShipmentEventNotificationDetail EventNotificationDetail
+        {
+            get
+            {
                 return this.eventNotificationDetailField;
             }
-            set {
+            set
+            {
                 this.eventNotificationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ReturnShipmentDetail ReturnShipmentDetail {
-            get {
+        public ReturnShipmentDetail ReturnShipmentDetail
+        {
+            get
+            {
                 return this.returnShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.returnShipmentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PendingShipmentDetail PendingShipmentDetail {
-            get {
+        public PendingShipmentDetail PendingShipmentDetail
+        {
+            get
+            {
                 return this.pendingShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.pendingShipmentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public InternationalControlledExportDetail InternationalControlledExportDetail {
-            get {
+        public InternationalControlledExportDetail InternationalControlledExportDetail
+        {
+            get
+            {
                 return this.internationalControlledExportDetailField;
             }
-            set {
+            set
+            {
                 this.internationalControlledExportDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public InternationalTrafficInArmsRegulationsDetail InternationalTrafficInArmsRegulationsDetail {
-            get {
+        public InternationalTrafficInArmsRegulationsDetail InternationalTrafficInArmsRegulationsDetail
+        {
+            get
+            {
                 return this.internationalTrafficInArmsRegulationsDetailField;
             }
-            set {
+            set
+            {
                 this.internationalTrafficInArmsRegulationsDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentDryIceDetail ShipmentDryIceDetail {
-            get {
+        public ShipmentDryIceDetail ShipmentDryIceDetail
+        {
+            get
+            {
                 return this.shipmentDryIceDetailField;
             }
-            set {
+            set
+            {
                 this.shipmentDryIceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HomeDeliveryPremiumDetail HomeDeliveryPremiumDetail {
-            get {
+        public HomeDeliveryPremiumDetail HomeDeliveryPremiumDetail
+        {
+            get
+            {
                 return this.homeDeliveryPremiumDetailField;
             }
-            set {
+            set
+            {
                 this.homeDeliveryPremiumDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightGuaranteeDetail FreightGuaranteeDetail {
-            get {
+        public FreightGuaranteeDetail FreightGuaranteeDetail
+        {
+            get
+            {
                 return this.freightGuaranteeDetailField;
             }
-            set {
+            set
+            {
                 this.freightGuaranteeDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public EtdDetail EtdDetail {
-            get {
+        public EtdDetail EtdDetail
+        {
+            get
+            {
                 return this.etdDetailField;
             }
-            set {
+            set
+            {
                 this.etdDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomDeliveryWindowDetail CustomDeliveryWindowDetail {
-            get {
+        public CustomDeliveryWindowDetail CustomDeliveryWindowDetail
+        {
+            get
+            {
                 return this.customDeliveryWindowDetailField;
             }
-            set {
+            set
+            {
                 this.customDeliveryWindowDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShipmentSpecialServiceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShipmentSpecialServiceType
+    {
+
         /// <remarks/>
         BROKER_SELECT_OPTION,
-        
+
         /// <remarks/>
         CALL_BEFORE_DELIVERY,
-        
+
         /// <remarks/>
         COD,
-        
+
         /// <remarks/>
         CUSTOM_DELIVERY_WINDOW,
-        
+
         /// <remarks/>
         CUT_FLOWERS,
-        
+
         /// <remarks/>
         DANGEROUS_GOODS,
-        
+
         /// <remarks/>
         DELIVERY_ON_INVOICE_ACCEPTANCE,
-        
+
         /// <remarks/>
         DO_NOT_BREAK_DOWN_PALLETS,
-        
+
         /// <remarks/>
         DO_NOT_STACK_PALLETS,
-        
+
         /// <remarks/>
         DRY_ICE,
-        
+
         /// <remarks/>
         EAST_COAST_SPECIAL,
-        
+
         /// <remarks/>
         ELECTRONIC_TRADE_DOCUMENTS,
-        
+
         /// <remarks/>
         EVENT_NOTIFICATION,
-        
+
         /// <remarks/>
         EXCLUDE_FROM_CONSOLIDATION,
-        
+
         /// <remarks/>
         EXTREME_LENGTH,
-        
+
         /// <remarks/>
         FEDEX_ONE_RATE,
-        
+
         /// <remarks/>
         FOOD,
-        
+
         /// <remarks/>
         FREIGHT_GUARANTEE,
-        
+
         /// <remarks/>
         FREIGHT_TO_COLLECT,
-        
+
         /// <remarks/>
         FUTURE_DAY_SHIPMENT,
-        
+
         /// <remarks/>
         HOLD_AT_LOCATION,
-        
+
         /// <remarks/>
         HOME_DELIVERY_PREMIUM,
-        
+
         /// <remarks/>
         INSIDE_DELIVERY,
-        
+
         /// <remarks/>
         INSIDE_PICKUP,
-        
+
         /// <remarks/>
         INTERNATIONAL_CONTROLLED_EXPORT_SERVICE,
-        
+
         /// <remarks/>
         INTERNATIONAL_TRAFFIC_IN_ARMS_REGULATIONS,
-        
+
         /// <remarks/>
         LIFTGATE_DELIVERY,
-        
+
         /// <remarks/>
         LIFTGATE_PICKUP,
-        
+
         /// <remarks/>
         LIMITED_ACCESS_DELIVERY,
-        
+
         /// <remarks/>
         LIMITED_ACCESS_PICKUP,
-        
+
         /// <remarks/>
         PENDING_SHIPMENT,
-        
+
         /// <remarks/>
         PHARMACY_DELIVERY,
-        
+
         /// <remarks/>
         POISON,
-        
+
         /// <remarks/>
         PROTECTION_FROM_FREEZING,
-        
+
         /// <remarks/>
         RETURNS_CLEARANCE,
-        
+
         /// <remarks/>
         RETURN_SHIPMENT,
-        
+
         /// <remarks/>
         SATURDAY_DELIVERY,
-        
+
         /// <remarks/>
         SATURDAY_PICKUP,
-        
+
         /// <remarks/>
         THIRD_PARTY_CONSIGNEE,
-        
+
         /// <remarks/>
         TOP_LOAD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CodDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CodDetail
+    {
+
         private Money codCollectionAmountField;
-        
+
         private CodAddTransportationChargesDetail addTransportationChargesDetailField;
-        
+
         private CodCollectionType collectionTypeField;
-        
+
         private Party codRecipientField;
-        
+
         private ContactAndAddress financialInstitutionContactAndAddressField;
-        
+
         private string remitToNameField;
-        
+
         private CodReturnReferenceIndicatorType referenceIndicatorField;
-        
+
         private bool referenceIndicatorFieldSpecified;
-        
+
         private TrackingId returnTrackingIdField;
-        
+
         /// <remarks/>
-        public Money CodCollectionAmount {
-            get {
+        public Money CodCollectionAmount
+        {
+            get
+            {
                 return this.codCollectionAmountField;
             }
-            set {
+            set
+            {
                 this.codCollectionAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodAddTransportationChargesDetail AddTransportationChargesDetail {
-            get {
+        public CodAddTransportationChargesDetail AddTransportationChargesDetail
+        {
+            get
+            {
                 return this.addTransportationChargesDetailField;
             }
-            set {
+            set
+            {
                 this.addTransportationChargesDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodCollectionType CollectionType {
-            get {
+        public CodCollectionType CollectionType
+        {
+            get
+            {
                 return this.collectionTypeField;
             }
-            set {
+            set
+            {
                 this.collectionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party CodRecipient {
-            get {
+        public Party CodRecipient
+        {
+            get
+            {
                 return this.codRecipientField;
             }
-            set {
+            set
+            {
                 this.codRecipientField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContactAndAddress FinancialInstitutionContactAndAddress {
-            get {
+        public ContactAndAddress FinancialInstitutionContactAndAddress
+        {
+            get
+            {
                 return this.financialInstitutionContactAndAddressField;
             }
-            set {
+            set
+            {
                 this.financialInstitutionContactAndAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RemitToName {
-            get {
+        public string RemitToName
+        {
+            get
+            {
                 return this.remitToNameField;
             }
-            set {
+            set
+            {
                 this.remitToNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodReturnReferenceIndicatorType ReferenceIndicator {
-            get {
+        public CodReturnReferenceIndicatorType ReferenceIndicator
+        {
+            get
+            {
                 return this.referenceIndicatorField;
             }
-            set {
+            set
+            {
                 this.referenceIndicatorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ReferenceIndicatorSpecified {
-            get {
+        public bool ReferenceIndicatorSpecified
+        {
+            get
+            {
                 return this.referenceIndicatorFieldSpecified;
             }
-            set {
+            set
+            {
                 this.referenceIndicatorFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId ReturnTrackingId {
-            get {
+        public TrackingId ReturnTrackingId
+        {
+            get
+            {
                 return this.returnTrackingIdField;
             }
-            set {
+            set
+            {
                 this.returnTrackingIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CodAddTransportationChargesDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CodAddTransportationChargesDetail
+    {
+
         private RateTypeBasisType rateTypeBasisField;
-        
+
         private bool rateTypeBasisFieldSpecified;
-        
+
         private CodAddTransportationChargeBasisType chargeBasisField;
-        
+
         private bool chargeBasisFieldSpecified;
-        
+
         private ChargeBasisLevelType chargeBasisLevelField;
-        
+
         private bool chargeBasisLevelFieldSpecified;
-        
+
         /// <remarks/>
-        public RateTypeBasisType RateTypeBasis {
-            get {
+        public RateTypeBasisType RateTypeBasis
+        {
+            get
+            {
                 return this.rateTypeBasisField;
             }
-            set {
+            set
+            {
                 this.rateTypeBasisField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateTypeBasisSpecified {
-            get {
+        public bool RateTypeBasisSpecified
+        {
+            get
+            {
                 return this.rateTypeBasisFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateTypeBasisFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodAddTransportationChargeBasisType ChargeBasis {
-            get {
+        public CodAddTransportationChargeBasisType ChargeBasis
+        {
+            get
+            {
                 return this.chargeBasisField;
             }
-            set {
+            set
+            {
                 this.chargeBasisField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ChargeBasisSpecified {
-            get {
+        public bool ChargeBasisSpecified
+        {
+            get
+            {
                 return this.chargeBasisFieldSpecified;
             }
-            set {
+            set
+            {
                 this.chargeBasisFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ChargeBasisLevelType ChargeBasisLevel {
-            get {
+        public ChargeBasisLevelType ChargeBasisLevel
+        {
+            get
+            {
                 return this.chargeBasisLevelField;
             }
-            set {
+            set
+            {
                 this.chargeBasisLevelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ChargeBasisLevelSpecified {
-            get {
+        public bool ChargeBasisLevelSpecified
+        {
+            get
+            {
                 return this.chargeBasisLevelFieldSpecified;
             }
-            set {
+            set
+            {
                 this.chargeBasisLevelFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RateTypeBasisType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RateTypeBasisType
+    {
+
         /// <remarks/>
         ACCOUNT,
-        
+
         /// <remarks/>
         LIST,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CodAddTransportationChargeBasisType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CodAddTransportationChargeBasisType
+    {
+
         /// <remarks/>
         COD_SURCHARGE,
-        
+
         /// <remarks/>
         NET_CHARGE,
-        
+
         /// <remarks/>
         NET_FREIGHT,
-        
+
         /// <remarks/>
         TOTAL_CUSTOMER_CHARGE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ChargeBasisLevelType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ChargeBasisLevelType
+    {
+
         /// <remarks/>
         CURRENT_PACKAGE,
-        
+
         /// <remarks/>
         SUM_OF_PACKAGES,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CodCollectionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CodCollectionType
+    {
+
         /// <remarks/>
         ANY,
-        
+
         /// <remarks/>
         CASH,
-        
+
         /// <remarks/>
         COMPANY_CHECK,
-        
+
         /// <remarks/>
         GUARANTEED_FUNDS,
-        
+
         /// <remarks/>
         PERSONAL_CHECK,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CodReturnReferenceIndicatorType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CodReturnReferenceIndicatorType
+    {
+
         /// <remarks/>
         INVOICE,
-        
+
         /// <remarks/>
         PO,
-        
+
         /// <remarks/>
         REFERENCE,
-        
+
         /// <remarks/>
         TRACKING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class TrackingId {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class TrackingId
+    {
+
         private TrackingIdType trackingIdTypeField;
-        
+
         private bool trackingIdTypeFieldSpecified;
-        
+
         private string formIdField;
-        
+
         private string uspsApplicationIdField;
-        
+
         private string trackingNumberField;
-        
+
         /// <remarks/>
-        public TrackingIdType TrackingIdType {
-            get {
+        public TrackingIdType TrackingIdType
+        {
+            get
+            {
                 return this.trackingIdTypeField;
             }
-            set {
+            set
+            {
                 this.trackingIdTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TrackingIdTypeSpecified {
-            get {
+        public bool TrackingIdTypeSpecified
+        {
+            get
+            {
                 return this.trackingIdTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.trackingIdTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FormId {
-            get {
+        public string FormId
+        {
+            get
+            {
                 return this.formIdField;
             }
-            set {
+            set
+            {
                 this.formIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UspsApplicationId {
-            get {
+        public string UspsApplicationId
+        {
+            get
+            {
                 return this.uspsApplicationIdField;
             }
-            set {
+            set
+            {
                 this.uspsApplicationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TrackingNumber {
-            get {
+        public string TrackingNumber
+        {
+            get
+            {
                 return this.trackingNumberField;
             }
-            set {
+            set
+            {
                 this.trackingNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum TrackingIdType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum TrackingIdType
+    {
+
         /// <remarks/>
         EXPRESS,
-        
+
         /// <remarks/>
         FEDEX,
-        
+
         /// <remarks/>
         FREIGHT,
-        
+
         /// <remarks/>
         GROUND,
-        
+
         /// <remarks/>
         USPS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DeliveryOnInvoiceAcceptanceDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DeliveryOnInvoiceAcceptanceDetail
+    {
+
         private Party recipientField;
-        
+
         private TrackingId trackingIdField;
-        
+
         /// <remarks/>
-        public Party Recipient {
-            get {
+        public Party Recipient
+        {
+            get
+            {
                 return this.recipientField;
             }
-            set {
+            set
+            {
                 this.recipientField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId TrackingId {
-            get {
+        public TrackingId TrackingId
+        {
+            get
+            {
                 return this.trackingIdField;
             }
-            set {
+            set
+            {
                 this.trackingIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HoldAtLocationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HoldAtLocationDetail
+    {
+
         private string phoneNumberField;
-        
+
         private ContactAndAddress locationContactAndAddressField;
-        
+
         private FedExLocationType locationTypeField;
-        
+
         private bool locationTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContactAndAddress LocationContactAndAddress {
-            get {
+        public ContactAndAddress LocationContactAndAddress
+        {
+            get
+            {
                 return this.locationContactAndAddressField;
             }
-            set {
+            set
+            {
                 this.locationContactAndAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FedExLocationType LocationType {
-            get {
+        public FedExLocationType LocationType
+        {
+            get
+            {
                 return this.locationTypeField;
             }
-            set {
+            set
+            {
                 this.locationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LocationTypeSpecified {
-            get {
+        public bool LocationTypeSpecified
+        {
+            get
+            {
                 return this.locationTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.locationTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FedExLocationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FedExLocationType
+    {
+
         /// <remarks/>
         FEDEX_EXPRESS_STATION,
-        
+
         /// <remarks/>
         FEDEX_FACILITY,
-        
+
         /// <remarks/>
         FEDEX_FREIGHT_SERVICE_CENTER,
-        
+
         /// <remarks/>
         FEDEX_GROUND_TERMINAL,
-        
+
         /// <remarks/>
         FEDEX_HOME_DELIVERY_STATION,
-        
+
         /// <remarks/>
         FEDEX_OFFICE,
-        
+
         /// <remarks/>
         FEDEX_SHIPSITE,
-        
+
         /// <remarks/>
         FEDEX_SMART_POST_HUB,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentEventNotificationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentEventNotificationDetail
+    {
+
         private ShipmentNotificationAggregationType aggregationTypeField;
-        
+
         private bool aggregationTypeFieldSpecified;
-        
+
         private string personalMessageField;
-        
+
         private ShipmentEventNotificationSpecification[] eventNotificationsField;
-        
+
         /// <remarks/>
-        public ShipmentNotificationAggregationType AggregationType {
-            get {
+        public ShipmentNotificationAggregationType AggregationType
+        {
+            get
+            {
                 return this.aggregationTypeField;
             }
-            set {
+            set
+            {
                 this.aggregationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AggregationTypeSpecified {
-            get {
+        public bool AggregationTypeSpecified
+        {
+            get
+            {
                 return this.aggregationTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.aggregationTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PersonalMessage {
-            get {
+        public string PersonalMessage
+        {
+            get
+            {
                 return this.personalMessageField;
             }
-            set {
+            set
+            {
                 this.personalMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EventNotifications")]
-        public ShipmentEventNotificationSpecification[] EventNotifications {
-            get {
+        public ShipmentEventNotificationSpecification[] EventNotifications
+        {
+            get
+            {
                 return this.eventNotificationsField;
             }
-            set {
+            set
+            {
                 this.eventNotificationsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShipmentNotificationAggregationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShipmentNotificationAggregationType
+    {
+
         /// <remarks/>
         PER_PACKAGE,
-        
+
         /// <remarks/>
         PER_SHIPMENT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentEventNotificationSpecification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentEventNotificationSpecification
+    {
+
         private ShipmentNotificationRoleType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private NotificationEventType[] eventsField;
-        
+
         private NotificationDetail notificationDetailField;
-        
+
         private ShipmentNotificationFormatSpecification formatSpecificationField;
-        
+
         /// <remarks/>
-        public ShipmentNotificationRoleType Role {
-            get {
+        public ShipmentNotificationRoleType Role
+        {
+            get
+            {
                 return this.roleField;
             }
-            set {
+            set
+            {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
+        public bool RoleSpecified
+        {
+            get
+            {
                 return this.roleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.roleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Events")]
-        public NotificationEventType[] Events {
-            get {
+        public NotificationEventType[] Events
+        {
+            get
+            {
                 return this.eventsField;
             }
-            set {
+            set
+            {
                 this.eventsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NotificationDetail NotificationDetail {
-            get {
+        public NotificationDetail NotificationDetail
+        {
+            get
+            {
                 return this.notificationDetailField;
             }
-            set {
+            set
+            {
                 this.notificationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentNotificationFormatSpecification FormatSpecification {
-            get {
+        public ShipmentNotificationFormatSpecification FormatSpecification
+        {
+            get
+            {
                 return this.formatSpecificationField;
             }
-            set {
+            set
+            {
                 this.formatSpecificationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShipmentNotificationRoleType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShipmentNotificationRoleType
+    {
+
         /// <remarks/>
         BROKER,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         RECIPIENT,
-        
+
         /// <remarks/>
         SHIPPER,
-        
+
         /// <remarks/>
         THIRD_PARTY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NotificationEventType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NotificationEventType
+    {
+
         /// <remarks/>
         ON_DELIVERY,
-        
+
         /// <remarks/>
         ON_ESTIMATED_DELIVERY,
-        
+
         /// <remarks/>
         ON_EXCEPTION,
-        
+
         /// <remarks/>
         ON_SHIPMENT,
-        
+
         /// <remarks/>
         ON_TENDER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NotificationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NotificationDetail
+    {
+
         private NotificationType notificationTypeField;
-        
+
         private bool notificationTypeFieldSpecified;
-        
+
         private EMailDetail emailDetailField;
-        
+
         private Localization localizationField;
-        
+
         /// <remarks/>
-        public NotificationType NotificationType {
-            get {
+        public NotificationType NotificationType
+        {
+            get
+            {
                 return this.notificationTypeField;
             }
-            set {
+            set
+            {
                 this.notificationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NotificationTypeSpecified {
-            get {
+        public bool NotificationTypeSpecified
+        {
+            get
+            {
                 return this.notificationTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.notificationTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public EMailDetail EmailDetail {
-            get {
+        public EMailDetail EmailDetail
+        {
+            get
+            {
                 return this.emailDetailField;
             }
-            set {
+            set
+            {
                 this.emailDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NotificationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NotificationType
+    {
+
         /// <remarks/>
         EMAIL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EMailDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EMailDetail
+    {
+
         private string emailAddressField;
-        
+
         private string nameField;
-        
+
         /// <remarks/>
-        public string EmailAddress {
-            get {
+        public string EmailAddress
+        {
+            get
+            {
                 return this.emailAddressField;
             }
-            set {
+            set
+            {
                 this.emailAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentNotificationFormatSpecification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentNotificationFormatSpecification
+    {
+
         private NotificationFormatType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         /// <remarks/>
-        public NotificationFormatType Type {
-            get {
+        public NotificationFormatType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NotificationFormatType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NotificationFormatType
+    {
+
         /// <remarks/>
         HTML,
-        
+
         /// <remarks/>
         TEXT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ReturnShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ReturnShipmentDetail
+    {
+
         private ReturnType returnTypeField;
-        
+
         private Rma rmaField;
-        
+
         private ReturnEMailDetail returnEMailDetailField;
-        
+
         private ReturnAssociationDetail returnAssociationField;
-        
+
         /// <remarks/>
-        public ReturnType ReturnType {
-            get {
+        public ReturnType ReturnType
+        {
+            get
+            {
                 return this.returnTypeField;
             }
-            set {
+            set
+            {
                 this.returnTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Rma Rma {
-            get {
+        public Rma Rma
+        {
+            get
+            {
                 return this.rmaField;
             }
-            set {
+            set
+            {
                 this.rmaField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ReturnEMailDetail ReturnEMailDetail {
-            get {
+        public ReturnEMailDetail ReturnEMailDetail
+        {
+            get
+            {
                 return this.returnEMailDetailField;
             }
-            set {
+            set
+            {
                 this.returnEMailDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ReturnAssociationDetail ReturnAssociation {
-            get {
+        public ReturnAssociationDetail ReturnAssociation
+        {
+            get
+            {
                 return this.returnAssociationField;
             }
-            set {
+            set
+            {
                 this.returnAssociationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ReturnType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ReturnType
+    {
+
         /// <remarks/>
         FEDEX_TAG,
-        
+
         /// <remarks/>
         PENDING,
-        
+
         /// <remarks/>
         PRINT_RETURN_LABEL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Rma {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Rma
+    {
+
         private string reasonField;
-        
+
         /// <remarks/>
-        public string Reason {
-            get {
+        public string Reason
+        {
+            get
+            {
                 return this.reasonField;
             }
-            set {
+            set
+            {
                 this.reasonField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ReturnEMailDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ReturnEMailDetail
+    {
+
         private string merchantPhoneNumberField;
-        
+
         private ReturnEMailAllowedSpecialServiceType[] allowedSpecialServicesField;
-        
+
         /// <remarks/>
-        public string MerchantPhoneNumber {
-            get {
+        public string MerchantPhoneNumber
+        {
+            get
+            {
                 return this.merchantPhoneNumberField;
             }
-            set {
+            set
+            {
                 this.merchantPhoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AllowedSpecialServices")]
-        public ReturnEMailAllowedSpecialServiceType[] AllowedSpecialServices {
-            get {
+        public ReturnEMailAllowedSpecialServiceType[] AllowedSpecialServices
+        {
+            get
+            {
                 return this.allowedSpecialServicesField;
             }
-            set {
+            set
+            {
                 this.allowedSpecialServicesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ReturnEMailAllowedSpecialServiceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ReturnEMailAllowedSpecialServiceType
+    {
+
         /// <remarks/>
         SATURDAY_DELIVERY,
-        
+
         /// <remarks/>
         SATURDAY_PICKUP,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ReturnAssociationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ReturnAssociationDetail
+    {
+
         private string trackingNumberField;
-        
+
         private System.DateTime shipDateField;
-        
+
         private bool shipDateFieldSpecified;
-        
+
         /// <remarks/>
-        public string TrackingNumber {
-            get {
+        public string TrackingNumber
+        {
+            get
+            {
                 return this.trackingNumberField;
             }
-            set {
+            set
+            {
                 this.trackingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime ShipDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime ShipDate
+        {
+            get
+            {
                 return this.shipDateField;
             }
-            set {
+            set
+            {
                 this.shipDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShipDateSpecified {
-            get {
+        public bool ShipDateSpecified
+        {
+            get
+            {
                 return this.shipDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shipDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PendingShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PendingShipmentDetail
+    {
+
         private PendingShipmentType typeField;
-        
+
         private System.DateTime expirationDateField;
-        
+
         private bool expirationDateFieldSpecified;
-        
+
         private EMailLabelDetail emailLabelDetailField;
-        
+
         private PendingShipmentProcessingOptionType[] processingOptionsField;
-        
+
         private RecommendedDocumentType[] recommendedDocumentSpecificationField;
-        
+
         private UploadDocumentReferenceDetail[] documentReferencesField;
-        
+
         /// <remarks/>
-        public PendingShipmentType Type {
-            get {
+        public PendingShipmentType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime ExpirationDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime ExpirationDate
+        {
+            get
+            {
                 return this.expirationDateField;
             }
-            set {
+            set
+            {
                 this.expirationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExpirationDateSpecified {
-            get {
+        public bool ExpirationDateSpecified
+        {
+            get
+            {
                 return this.expirationDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.expirationDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public EMailLabelDetail EmailLabelDetail {
-            get {
+        public EMailLabelDetail EmailLabelDetail
+        {
+            get
+            {
                 return this.emailLabelDetailField;
             }
-            set {
+            set
+            {
                 this.emailLabelDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public PendingShipmentProcessingOptionType[] ProcessingOptions {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable = false)]
+        public PendingShipmentProcessingOptionType[] ProcessingOptions
+        {
+            get
+            {
                 return this.processingOptionsField;
             }
-            set {
+            set
+            {
                 this.processingOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Types", IsNullable=false)]
-        public RecommendedDocumentType[] RecommendedDocumentSpecification {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Types", IsNullable = false)]
+        public RecommendedDocumentType[] RecommendedDocumentSpecification
+        {
+            get
+            {
                 return this.recommendedDocumentSpecificationField;
             }
-            set {
+            set
+            {
                 this.recommendedDocumentSpecificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DocumentReferences")]
-        public UploadDocumentReferenceDetail[] DocumentReferences {
-            get {
+        public UploadDocumentReferenceDetail[] DocumentReferences
+        {
+            get
+            {
                 return this.documentReferencesField;
             }
-            set {
+            set
+            {
                 this.documentReferencesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PendingShipmentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PendingShipmentType
+    {
+
         /// <remarks/>
         EMAIL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EMailLabelDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EMailLabelDetail
+    {
+
         private string messageField;
-        
+
         private EMailRecipient[] recipientsField;
-        
+
         /// <remarks/>
-        public string Message {
-            get {
+        public string Message
+        {
+            get
+            {
                 return this.messageField;
             }
-            set {
+            set
+            {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Recipients")]
-        public EMailRecipient[] Recipients {
-            get {
+        public EMailRecipient[] Recipients
+        {
+            get
+            {
                 return this.recipientsField;
             }
-            set {
+            set
+            {
                 this.recipientsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EMailRecipient {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EMailRecipient
+    {
+
         private string emailAddressField;
-        
+
         private AccessorRoleType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private EmailOptionType[] optionsRequestedField;
-        
+
         private Localization localizationField;
-        
+
         /// <remarks/>
-        public string EmailAddress {
-            get {
+        public string EmailAddress
+        {
+            get
+            {
                 return this.emailAddressField;
             }
-            set {
+            set
+            {
                 this.emailAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AccessorRoleType Role {
-            get {
+        public AccessorRoleType Role
+        {
+            get
+            {
                 return this.roleField;
             }
-            set {
+            set
+            {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
+        public bool RoleSpecified
+        {
+            get
+            {
                 return this.roleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.roleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public EmailOptionType[] OptionsRequested {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable = false)]
+        public EmailOptionType[] OptionsRequested
+        {
+            get
+            {
                 return this.optionsRequestedField;
             }
-            set {
+            set
+            {
                 this.optionsRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum AccessorRoleType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum AccessorRoleType
+    {
+
         /// <remarks/>
         SHIPMENT_COMPLETOR,
-        
+
         /// <remarks/>
         SHIPMENT_INITIATOR,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EmailOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EmailOptionType
+    {
+
         /// <remarks/>
         SUPPRESS_ACCESS_EMAILS,
-        
+
         /// <remarks/>
         SUPPRESS_ADDITIONAL_LANGUAGES,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PendingShipmentProcessingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PendingShipmentProcessingOptionType
+    {
+
         /// <remarks/>
         ALLOW_MODIFICATIONS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RecommendedDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RecommendedDocumentType
+    {
+
         /// <remarks/>
         ANTIQUE_STATEMENT_EUROPEAN_UNION,
-        
+
         /// <remarks/>
         ANTIQUE_STATEMENT_UNITED_STATES,
-        
+
         /// <remarks/>
         ASSEMBLER_DECLARATION,
-        
+
         /// <remarks/>
         BEARING_WORKSHEET,
-        
+
         /// <remarks/>
         CERTIFICATE_OF_SHIPMENTS_TO_SYRIA,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE_FOR_THE_CARIBBEAN_COMMON_MARKET,
-        
+
         /// <remarks/>
         CONIFEROUS_SOLID_WOOD_PACKAGING_MATERIAL_TO_THE_PEOPLES_REPUBLIC_OF_CHINA,
-        
+
         /// <remarks/>
         DECLARATION_FOR_FREE_ENTRY_OF_RETURNED_AMERICAN_PRODUCTS,
-        
+
         /// <remarks/>
         DECLARATION_OF_BIOLOGICAL_STANDARDS,
-        
+
         /// <remarks/>
         DECLARATION_OF_IMPORTED_ELECTRONIC_PRODUCTS_SUBJECT_TO_RADIATION_CONTROL_STANDARD,
-        
+
         /// <remarks/>
         ELECTRONIC_INTEGRATED_CIRCUIT_WORKSHEET,
-        
+
         /// <remarks/>
         FILM_AND_VIDEO_CERTIFICATE,
-        
+
         /// <remarks/>
         INTERIM_FOOTWEAR_INVOICE,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN_CANADA_ENGLISH,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN_CANADA_FRENCH,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN_SPANISH,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN_UNITED_STATES,
-        
+
         /// <remarks/>
         PACKING_LIST,
-        
+
         /// <remarks/>
         PRINTED_CIRCUIT_BOARD_WORKSHEET,
-        
+
         /// <remarks/>
         REPAIRED_WATCH_BREAKOUT_WORKSHEET,
-        
+
         /// <remarks/>
         STATEMENT_REGARDING_THE_IMPORT_OF_RADIO_FREQUENCY_DEVICES,
-        
+
         /// <remarks/>
         TOXIC_SUBSTANCES_CONTROL_ACT,
-        
+
         /// <remarks/>
         UNITED_STATES_CARIBBEAN_BASIN_TRADE_PARTNERSHIP_ACT_CERTIFICATE_OF_ORIGIN_NON_TEXTILES,
-        
+
         /// <remarks/>
         UNITED_STATES_CARIBBEAN_BASIN_TRADE_PARTNERSHIP_ACT_CERTIFICATE_OF_ORIGIN_TEXTILES,
-        
+
         /// <remarks/>
         UNITED_STATES_NEW_WATCH_WORKSHEET,
-        
+
         /// <remarks/>
         UNITED_STATES_WATCH_REPAIR_DECLARATION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class UploadDocumentReferenceDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class UploadDocumentReferenceDetail
+    {
+
         private string lineNumberField;
-        
+
         private string customerReferenceField;
-        
+
         private string descriptionField;
-        
+
         private UploadDocumentProducerType documentProducerField;
-        
+
         private bool documentProducerFieldSpecified;
-        
+
         private UploadDocumentType documentTypeField;
-        
+
         private bool documentTypeFieldSpecified;
-        
+
         private string documentIdField;
-        
+
         private UploadDocumentIdProducer documentIdProducerField;
-        
+
         private bool documentIdProducerFieldSpecified;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string LineNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string LineNumber
+        {
+            get
+            {
                 return this.lineNumberField;
             }
-            set {
+            set
+            {
                 this.lineNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomerReference {
-            get {
+        public string CustomerReference
+        {
+            get
+            {
                 return this.customerReferenceField;
             }
-            set {
+            set
+            {
                 this.customerReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public UploadDocumentProducerType DocumentProducer {
-            get {
+        public UploadDocumentProducerType DocumentProducer
+        {
+            get
+            {
                 return this.documentProducerField;
             }
-            set {
+            set
+            {
                 this.documentProducerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DocumentProducerSpecified {
-            get {
+        public bool DocumentProducerSpecified
+        {
+            get
+            {
                 return this.documentProducerFieldSpecified;
             }
-            set {
+            set
+            {
                 this.documentProducerFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public UploadDocumentType DocumentType {
-            get {
+        public UploadDocumentType DocumentType
+        {
+            get
+            {
                 return this.documentTypeField;
             }
-            set {
+            set
+            {
                 this.documentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DocumentTypeSpecified {
-            get {
+        public bool DocumentTypeSpecified
+        {
+            get
+            {
                 return this.documentTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.documentTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DocumentId {
-            get {
+        public string DocumentId
+        {
+            get
+            {
                 return this.documentIdField;
             }
-            set {
+            set
+            {
                 this.documentIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public UploadDocumentIdProducer DocumentIdProducer {
-            get {
+        public UploadDocumentIdProducer DocumentIdProducer
+        {
+            get
+            {
                 return this.documentIdProducerField;
             }
-            set {
+            set
+            {
                 this.documentIdProducerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DocumentIdProducerSpecified {
-            get {
+        public bool DocumentIdProducerSpecified
+        {
+            get
+            {
                 return this.documentIdProducerFieldSpecified;
             }
-            set {
+            set
+            {
                 this.documentIdProducerFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum UploadDocumentProducerType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum UploadDocumentProducerType
+    {
+
         /// <remarks/>
         CUSTOMER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum UploadDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum UploadDocumentType
+    {
+
         /// <remarks/>
         CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE,
-        
+
         /// <remarks/>
         ETD_LABEL,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         NET_RATE_SHEET,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         PRO_FORMA_INVOICE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum UploadDocumentIdProducer {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum UploadDocumentIdProducer
+    {
+
         /// <remarks/>
         CUSTOMER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class InternationalControlledExportDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class InternationalControlledExportDetail
+    {
+
         private InternationalControlledExportType typeField;
-        
+
         private string foreignTradeZoneCodeField;
-        
+
         private string entryNumberField;
-        
+
         private string licenseOrPermitNumberField;
-        
+
         private System.DateTime licenseOrPermitExpirationDateField;
-        
+
         private bool licenseOrPermitExpirationDateFieldSpecified;
-        
+
         /// <remarks/>
-        public InternationalControlledExportType Type {
-            get {
+        public InternationalControlledExportType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ForeignTradeZoneCode {
-            get {
+        public string ForeignTradeZoneCode
+        {
+            get
+            {
                 return this.foreignTradeZoneCodeField;
             }
-            set {
+            set
+            {
                 this.foreignTradeZoneCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EntryNumber {
-            get {
+        public string EntryNumber
+        {
+            get
+            {
                 return this.entryNumberField;
             }
-            set {
+            set
+            {
                 this.entryNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LicenseOrPermitNumber {
-            get {
+        public string LicenseOrPermitNumber
+        {
+            get
+            {
                 return this.licenseOrPermitNumberField;
             }
-            set {
+            set
+            {
                 this.licenseOrPermitNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime LicenseOrPermitExpirationDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime LicenseOrPermitExpirationDate
+        {
+            get
+            {
                 return this.licenseOrPermitExpirationDateField;
             }
-            set {
+            set
+            {
                 this.licenseOrPermitExpirationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LicenseOrPermitExpirationDateSpecified {
-            get {
+        public bool LicenseOrPermitExpirationDateSpecified
+        {
+            get
+            {
                 return this.licenseOrPermitExpirationDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.licenseOrPermitExpirationDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum InternationalControlledExportType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum InternationalControlledExportType
+    {
+
         /// <remarks/>
         DEA_036,
-        
+
         /// <remarks/>
         DEA_236,
-        
+
         /// <remarks/>
         DEA_486,
-        
+
         /// <remarks/>
         DSP_05,
-        
+
         /// <remarks/>
         DSP_61,
-        
+
         /// <remarks/>
         DSP_73,
-        
+
         /// <remarks/>
         DSP_85,
-        
+
         /// <remarks/>
         DSP_94,
-        
+
         /// <remarks/>
         DSP_LICENSE_AGREEMENT,
-        
+
         /// <remarks/>
         FROM_FOREIGN_TRADE_ZONE,
-        
+
         /// <remarks/>
         WAREHOUSE_WITHDRAWAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class InternationalTrafficInArmsRegulationsDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class InternationalTrafficInArmsRegulationsDetail
+    {
+
         private string licenseOrExemptionNumberField;
-        
+
         /// <remarks/>
-        public string LicenseOrExemptionNumber {
-            get {
+        public string LicenseOrExemptionNumber
+        {
+            get
+            {
                 return this.licenseOrExemptionNumberField;
             }
-            set {
+            set
+            {
                 this.licenseOrExemptionNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentDryIceDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentDryIceDetail
+    {
+
         private string packageCountField;
-        
+
         private Weight totalWeightField;
-        
+
         private ShipmentDryIceProcessingOptionType[] processingOptionsField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string PackageCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string PackageCount
+        {
+            get
+            {
                 return this.packageCountField;
             }
-            set {
+            set
+            {
                 this.packageCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalWeight {
-            get {
+        public Weight TotalWeight
+        {
+            get
+            {
                 return this.totalWeightField;
             }
-            set {
+            set
+            {
                 this.totalWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public ShipmentDryIceProcessingOptionType[] ProcessingOptions {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable = false)]
+        public ShipmentDryIceProcessingOptionType[] ProcessingOptions
+        {
+            get
+            {
                 return this.processingOptionsField;
             }
-            set {
+            set
+            {
                 this.processingOptionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShipmentDryIceProcessingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShipmentDryIceProcessingOptionType
+    {
+
         /// <remarks/>
         SHIPMENT_LEVEL_DRY_ICE_ONLY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HomeDeliveryPremiumDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HomeDeliveryPremiumDetail
+    {
+
         private HomeDeliveryPremiumType homeDeliveryPremiumTypeField;
-        
+
         private System.DateTime dateField;
-        
+
         private bool dateFieldSpecified;
-        
+
         private string phoneNumberField;
-        
+
         /// <remarks/>
-        public HomeDeliveryPremiumType HomeDeliveryPremiumType {
-            get {
+        public HomeDeliveryPremiumType HomeDeliveryPremiumType
+        {
+            get
+            {
                 return this.homeDeliveryPremiumTypeField;
             }
-            set {
+            set
+            {
                 this.homeDeliveryPremiumTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime Date {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime Date
+        {
+            get
+            {
                 return this.dateField;
             }
-            set {
+            set
+            {
                 this.dateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateSpecified {
-            get {
+        public bool DateSpecified
+        {
+            get
+            {
                 return this.dateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PhoneNumber {
-            get {
+        public string PhoneNumber
+        {
+            get
+            {
                 return this.phoneNumberField;
             }
-            set {
+            set
+            {
                 this.phoneNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HomeDeliveryPremiumType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HomeDeliveryPremiumType
+    {
+
         /// <remarks/>
         APPOINTMENT,
-        
+
         /// <remarks/>
         DATE_CERTAIN,
-        
+
         /// <remarks/>
         EVENING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightGuaranteeDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightGuaranteeDetail
+    {
+
         private FreightGuaranteeType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private System.DateTime dateField;
-        
+
         private bool dateFieldSpecified;
-        
+
         /// <remarks/>
-        public FreightGuaranteeType Type {
-            get {
+        public FreightGuaranteeType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime Date {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime Date
+        {
+            get
+            {
                 return this.dateField;
             }
-            set {
+            set
+            {
                 this.dateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DateSpecified {
-            get {
+        public bool DateSpecified
+        {
+            get
+            {
                 return this.dateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightGuaranteeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightGuaranteeType
+    {
+
         /// <remarks/>
         GUARANTEED_DATE,
-        
+
         /// <remarks/>
         GUARANTEED_MORNING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EtdDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EtdDetail
+    {
+
         private EtdAttributeType[] attributesField;
-        
+
         private RequestedShippingDocumentType[] requestedDocumentCopiesField;
-        
+
         private UploadDocumentReferenceDetail[] documentReferencesField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Attributes")]
-        public EtdAttributeType[] Attributes {
-            get {
+        public EtdAttributeType[] Attributes
+        {
+            get
+            {
                 return this.attributesField;
             }
-            set {
+            set
+            {
                 this.attributesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RequestedDocumentCopies")]
-        public RequestedShippingDocumentType[] RequestedDocumentCopies {
-            get {
+        public RequestedShippingDocumentType[] RequestedDocumentCopies
+        {
+            get
+            {
                 return this.requestedDocumentCopiesField;
             }
-            set {
+            set
+            {
                 this.requestedDocumentCopiesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DocumentReferences")]
-        public UploadDocumentReferenceDetail[] DocumentReferences {
-            get {
+        public UploadDocumentReferenceDetail[] DocumentReferences
+        {
+            get
+            {
                 return this.documentReferencesField;
             }
-            set {
+            set
+            {
                 this.documentReferencesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EtdAttributeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EtdAttributeType
+    {
+
         /// <remarks/>
         POST_SHIPMENT_UPLOAD_REQUESTED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RequestedShippingDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RequestedShippingDocumentType
+    {
+
         /// <remarks/>
         CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE,
-        
+
         /// <remarks/>
         CUSTOMER_SPECIFIED_LABELS,
-        
+
         /// <remarks/>
         CUSTOM_PACKAGE_DOCUMENT,
-        
+
         /// <remarks/>
         CUSTOM_SHIPMENT_DOCUMENT,
-        
+
         /// <remarks/>
         DANGEROUS_GOODS_SHIPPERS_DECLARATION,
-        
+
         /// <remarks/>
         EXPORT_DECLARATION,
-        
+
         /// <remarks/>
         FREIGHT_ADDRESS_LABEL,
-        
+
         /// <remarks/>
         GENERAL_AGENCY_AGREEMENT,
-        
+
         /// <remarks/>
         LABEL,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         OP_900,
-        
+
         /// <remarks/>
         PRO_FORMA_INVOICE,
-        
+
         /// <remarks/>
         RETURN_INSTRUCTIONS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomDeliveryWindowDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomDeliveryWindowDetail
+    {
+
         private CustomDeliveryWindowType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private System.DateTime requestTimeField;
-        
+
         private bool requestTimeFieldSpecified;
-        
+
         private DateRange requestRangeField;
-        
+
         private System.DateTime requestDateField;
-        
+
         private bool requestDateFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomDeliveryWindowType Type {
-            get {
+        public CustomDeliveryWindowType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
-        public System.DateTime RequestTime {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "time")]
+        public System.DateTime RequestTime
+        {
+            get
+            {
                 return this.requestTimeField;
             }
-            set {
+            set
+            {
                 this.requestTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RequestTimeSpecified {
-            get {
+        public bool RequestTimeSpecified
+        {
+            get
+            {
                 return this.requestTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requestTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DateRange RequestRange {
-            get {
+        public DateRange RequestRange
+        {
+            get
+            {
                 return this.requestRangeField;
             }
-            set {
+            set
+            {
                 this.requestRangeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime RequestDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime RequestDate
+        {
+            get
+            {
                 return this.requestDateField;
             }
-            set {
+            set
+            {
                 this.requestDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RequestDateSpecified {
-            get {
+        public bool RequestDateSpecified
+        {
+            get
+            {
                 return this.requestDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requestDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomDeliveryWindowType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomDeliveryWindowType
+    {
+
         /// <remarks/>
         AFTER,
-        
+
         /// <remarks/>
         BEFORE,
-        
+
         /// <remarks/>
         BETWEEN,
-        
+
         /// <remarks/>
         ON,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DateRange {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DateRange
+    {
+
         private System.DateTime beginsField;
-        
+
         private bool beginsFieldSpecified;
-        
+
         private System.DateTime endsField;
-        
+
         private bool endsFieldSpecified;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime Begins {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime Begins
+        {
+            get
+            {
                 return this.beginsField;
             }
-            set {
+            set
+            {
                 this.beginsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BeginsSpecified {
-            get {
+        public bool BeginsSpecified
+        {
+            get
+            {
                 return this.beginsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.beginsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime Ends {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime Ends
+        {
+            get
+            {
                 return this.endsField;
             }
-            set {
+            set
+            {
                 this.endsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EndsSpecified {
-            get {
+        public bool EndsSpecified
+        {
+            get
+            {
                 return this.endsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.endsFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ExpressFreightDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ExpressFreightDetail
+    {
+
         private bool packingListEnclosedField;
-        
+
         private bool packingListEnclosedFieldSpecified;
-        
+
         private string shippersLoadAndCountField;
-        
+
         private string bookingConfirmationNumberField;
-        
+
         /// <remarks/>
-        public bool PackingListEnclosed {
-            get {
+        public bool PackingListEnclosed
+        {
+            get
+            {
                 return this.packingListEnclosedField;
             }
-            set {
+            set
+            {
                 this.packingListEnclosedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingListEnclosedSpecified {
-            get {
+        public bool PackingListEnclosedSpecified
+        {
+            get
+            {
                 return this.packingListEnclosedFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingListEnclosedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string ShippersLoadAndCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string ShippersLoadAndCount
+        {
+            get
+            {
                 return this.shippersLoadAndCountField;
             }
-            set {
+            set
+            {
                 this.shippersLoadAndCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string BookingConfirmationNumber {
-            get {
+        public string BookingConfirmationNumber
+        {
+            get
+            {
                 return this.bookingConfirmationNumberField;
             }
-            set {
+            set
+            {
                 this.bookingConfirmationNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightShipmentDetail
+    {
+
         private string fedExFreightAccountNumberField;
-        
+
         private ContactAndAddress fedExFreightBillingContactAndAddressField;
-        
+
         private Party alternateBillingField;
-        
+
         private PrintedReference[] printedReferencesField;
-        
+
         private FreightShipmentRoleType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private FreightCollectTermsType collectTermsTypeField;
-        
+
         private bool collectTermsTypeFieldSpecified;
-        
+
         private Money declaredValuePerUnitField;
-        
+
         private string declaredValueUnitsField;
-        
+
         private LiabilityCoverageDetail liabilityCoverageDetailField;
-        
+
         private string[] couponsField;
-        
+
         private string totalHandlingUnitsField;
-        
+
         private decimal clientDiscountPercentField;
-        
+
         private bool clientDiscountPercentFieldSpecified;
-        
+
         private Weight palletWeightField;
-        
+
         private Dimensions shipmentDimensionsField;
-        
+
         private string commentField;
-        
+
         private FreightSpecialServicePayment[] specialServicePaymentsField;
-        
+
         private string hazardousMaterialsEmergencyContactNumberField;
-        
+
         private string hazardousMaterialsOfferorField;
-        
+
         private FreightShipmentLineItem[] lineItemsField;
-        
+
         /// <remarks/>
-        public string FedExFreightAccountNumber {
-            get {
+        public string FedExFreightAccountNumber
+        {
+            get
+            {
                 return this.fedExFreightAccountNumberField;
             }
-            set {
+            set
+            {
                 this.fedExFreightAccountNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContactAndAddress FedExFreightBillingContactAndAddress {
-            get {
+        public ContactAndAddress FedExFreightBillingContactAndAddress
+        {
+            get
+            {
                 return this.fedExFreightBillingContactAndAddressField;
             }
-            set {
+            set
+            {
                 this.fedExFreightBillingContactAndAddressField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party AlternateBilling {
-            get {
+        public Party AlternateBilling
+        {
+            get
+            {
                 return this.alternateBillingField;
             }
-            set {
+            set
+            {
                 this.alternateBillingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PrintedReferences")]
-        public PrintedReference[] PrintedReferences {
-            get {
+        public PrintedReference[] PrintedReferences
+        {
+            get
+            {
                 return this.printedReferencesField;
             }
-            set {
+            set
+            {
                 this.printedReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightShipmentRoleType Role {
-            get {
+        public FreightShipmentRoleType Role
+        {
+            get
+            {
                 return this.roleField;
             }
-            set {
+            set
+            {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
+        public bool RoleSpecified
+        {
+            get
+            {
                 return this.roleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.roleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightCollectTermsType CollectTermsType {
-            get {
+        public FreightCollectTermsType CollectTermsType
+        {
+            get
+            {
                 return this.collectTermsTypeField;
             }
-            set {
+            set
+            {
                 this.collectTermsTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CollectTermsTypeSpecified {
-            get {
+        public bool CollectTermsTypeSpecified
+        {
+            get
+            {
                 return this.collectTermsTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.collectTermsTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money DeclaredValuePerUnit {
-            get {
+        public Money DeclaredValuePerUnit
+        {
+            get
+            {
                 return this.declaredValuePerUnitField;
             }
-            set {
+            set
+            {
                 this.declaredValuePerUnitField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeclaredValueUnits {
-            get {
+        public string DeclaredValueUnits
+        {
+            get
+            {
                 return this.declaredValueUnitsField;
             }
-            set {
+            set
+            {
                 this.declaredValueUnitsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public LiabilityCoverageDetail LiabilityCoverageDetail {
-            get {
+        public LiabilityCoverageDetail LiabilityCoverageDetail
+        {
+            get
+            {
                 return this.liabilityCoverageDetailField;
             }
-            set {
+            set
+            {
                 this.liabilityCoverageDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Coupons")]
-        public string[] Coupons {
-            get {
+        public string[] Coupons
+        {
+            get
+            {
                 return this.couponsField;
             }
-            set {
+            set
+            {
                 this.couponsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string TotalHandlingUnits {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string TotalHandlingUnits
+        {
+            get
+            {
                 return this.totalHandlingUnitsField;
             }
-            set {
+            set
+            {
                 this.totalHandlingUnitsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal ClientDiscountPercent {
-            get {
+        public decimal ClientDiscountPercent
+        {
+            get
+            {
                 return this.clientDiscountPercentField;
             }
-            set {
+            set
+            {
                 this.clientDiscountPercentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ClientDiscountPercentSpecified {
-            get {
+        public bool ClientDiscountPercentSpecified
+        {
+            get
+            {
                 return this.clientDiscountPercentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.clientDiscountPercentFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight PalletWeight {
-            get {
+        public Weight PalletWeight
+        {
+            get
+            {
                 return this.palletWeightField;
             }
-            set {
+            set
+            {
                 this.palletWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions ShipmentDimensions {
-            get {
+        public Dimensions ShipmentDimensions
+        {
+            get
+            {
                 return this.shipmentDimensionsField;
             }
-            set {
+            set
+            {
                 this.shipmentDimensionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Comment {
-            get {
+        public string Comment
+        {
+            get
+            {
                 return this.commentField;
             }
-            set {
+            set
+            {
                 this.commentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpecialServicePayments")]
-        public FreightSpecialServicePayment[] SpecialServicePayments {
-            get {
+        public FreightSpecialServicePayment[] SpecialServicePayments
+        {
+            get
+            {
                 return this.specialServicePaymentsField;
             }
-            set {
+            set
+            {
                 this.specialServicePaymentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HazardousMaterialsEmergencyContactNumber {
-            get {
+        public string HazardousMaterialsEmergencyContactNumber
+        {
+            get
+            {
                 return this.hazardousMaterialsEmergencyContactNumberField;
             }
-            set {
+            set
+            {
                 this.hazardousMaterialsEmergencyContactNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HazardousMaterialsOfferor {
-            get {
+        public string HazardousMaterialsOfferor
+        {
+            get
+            {
                 return this.hazardousMaterialsOfferorField;
             }
-            set {
+            set
+            {
                 this.hazardousMaterialsOfferorField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("LineItems")]
-        public FreightShipmentLineItem[] LineItems {
-            get {
+        public FreightShipmentLineItem[] LineItems
+        {
+            get
+            {
                 return this.lineItemsField;
             }
-            set {
+            set
+            {
                 this.lineItemsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PrintedReference {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PrintedReference
+    {
+
         private PrintedReferenceType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public PrintedReferenceType Type {
-            get {
+        public PrintedReferenceType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PrintedReferenceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PrintedReferenceType
+    {
+
         /// <remarks/>
         BILL_OF_LADING,
-        
+
         /// <remarks/>
         CONSIGNEE_ID_NUMBER,
-        
+
         /// <remarks/>
         SHIPPER_ID_NUMBER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightShipmentRoleType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightShipmentRoleType
+    {
+
         /// <remarks/>
         CONSIGNEE,
-        
+
         /// <remarks/>
         SHIPPER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightCollectTermsType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightCollectTermsType
+    {
+
         /// <remarks/>
         NON_RECOURSE_SHIPPER_SIGNED,
-        
+
         /// <remarks/>
         STANDARD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class LiabilityCoverageDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class LiabilityCoverageDetail
+    {
+
         private LiabilityCoverageType coverageTypeField;
-        
+
         private bool coverageTypeFieldSpecified;
-        
+
         private Money coverageAmountField;
-        
+
         /// <remarks/>
-        public LiabilityCoverageType CoverageType {
-            get {
+        public LiabilityCoverageType CoverageType
+        {
+            get
+            {
                 return this.coverageTypeField;
             }
-            set {
+            set
+            {
                 this.coverageTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CoverageTypeSpecified {
-            get {
+        public bool CoverageTypeSpecified
+        {
+            get
+            {
                 return this.coverageTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.coverageTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money CoverageAmount {
-            get {
+        public Money CoverageAmount
+        {
+            get
+            {
                 return this.coverageAmountField;
             }
-            set {
+            set
+            {
                 this.coverageAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LiabilityCoverageType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LiabilityCoverageType
+    {
+
         /// <remarks/>
         NEW,
-        
+
         /// <remarks/>
         USED_OR_RECONDITIONED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Dimensions {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Dimensions
+    {
+
         private string lengthField;
-        
+
         private string widthField;
-        
+
         private string heightField;
-        
+
         private LinearUnits unitsField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Length {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Length
+        {
+            get
+            {
                 return this.lengthField;
             }
-            set {
+            set
+            {
                 this.lengthField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Width {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Width
+        {
+            get
+            {
                 return this.widthField;
             }
-            set {
+            set
+            {
                 this.widthField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Height {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Height
+        {
+            get
+            {
                 return this.heightField;
             }
-            set {
+            set
+            {
                 this.heightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public LinearUnits Units {
-            get {
+        public LinearUnits Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LinearUnits {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LinearUnits
+    {
+
         /// <remarks/>
         CM,
-        
+
         /// <remarks/>
         IN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightSpecialServicePayment {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightSpecialServicePayment
+    {
+
         private ShipmentSpecialServiceType specialServiceField;
-        
+
         private bool specialServiceFieldSpecified;
-        
+
         private FreightShipmentRoleType paymentTypeField;
-        
+
         private bool paymentTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public ShipmentSpecialServiceType SpecialService {
-            get {
+        public ShipmentSpecialServiceType SpecialService
+        {
+            get
+            {
                 return this.specialServiceField;
             }
-            set {
+            set
+            {
                 this.specialServiceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SpecialServiceSpecified {
-            get {
+        public bool SpecialServiceSpecified
+        {
+            get
+            {
                 return this.specialServiceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.specialServiceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightShipmentRoleType PaymentType {
-            get {
+        public FreightShipmentRoleType PaymentType
+        {
+            get
+            {
                 return this.paymentTypeField;
             }
-            set {
+            set
+            {
                 this.paymentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PaymentTypeSpecified {
-            get {
+        public bool PaymentTypeSpecified
+        {
+            get
+            {
                 return this.paymentTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.paymentTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightShipmentLineItem {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightShipmentLineItem
+    {
+
         private FreightClassType freightClassField;
-        
+
         private bool freightClassFieldSpecified;
-        
+
         private bool classProvidedByCustomerField;
-        
+
         private bool classProvidedByCustomerFieldSpecified;
-        
+
         private string handlingUnitsField;
-        
+
         private PhysicalPackagingType packagingField;
-        
+
         private bool packagingFieldSpecified;
-        
+
         private string piecesField;
-        
+
         private string nmfcCodeField;
-        
+
         private HazardousCommodityOptionType hazardousMaterialsField;
-        
+
         private bool hazardousMaterialsFieldSpecified;
-        
+
         private string purchaseOrderNumberField;
-        
+
         private string descriptionField;
-        
+
         private Weight weightField;
-        
+
         private Dimensions dimensionsField;
-        
+
         private Volume volumeField;
-        
+
         /// <remarks/>
-        public FreightClassType FreightClass {
-            get {
+        public FreightClassType FreightClass
+        {
+            get
+            {
                 return this.freightClassField;
             }
-            set {
+            set
+            {
                 this.freightClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FreightClassSpecified {
-            get {
+        public bool FreightClassSpecified
+        {
+            get
+            {
                 return this.freightClassFieldSpecified;
             }
-            set {
+            set
+            {
                 this.freightClassFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ClassProvidedByCustomer {
-            get {
+        public bool ClassProvidedByCustomer
+        {
+            get
+            {
                 return this.classProvidedByCustomerField;
             }
-            set {
+            set
+            {
                 this.classProvidedByCustomerField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ClassProvidedByCustomerSpecified {
-            get {
+        public bool ClassProvidedByCustomerSpecified
+        {
+            get
+            {
                 return this.classProvidedByCustomerFieldSpecified;
             }
-            set {
+            set
+            {
                 this.classProvidedByCustomerFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string HandlingUnits {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string HandlingUnits
+        {
+            get
+            {
                 return this.handlingUnitsField;
             }
-            set {
+            set
+            {
                 this.handlingUnitsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPackagingType Packaging {
-            get {
+        public PhysicalPackagingType Packaging
+        {
+            get
+            {
                 return this.packagingField;
             }
-            set {
+            set
+            {
                 this.packagingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackagingSpecified {
-            get {
+        public bool PackagingSpecified
+        {
+            get
+            {
                 return this.packagingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packagingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Pieces {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Pieces
+        {
+            get
+            {
                 return this.piecesField;
             }
-            set {
+            set
+            {
                 this.piecesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NmfcCode {
-            get {
+        public string NmfcCode
+        {
+            get
+            {
                 return this.nmfcCodeField;
             }
-            set {
+            set
+            {
                 this.nmfcCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityOptionType HazardousMaterials {
-            get {
+        public HazardousCommodityOptionType HazardousMaterials
+        {
+            get
+            {
                 return this.hazardousMaterialsField;
             }
-            set {
+            set
+            {
                 this.hazardousMaterialsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool HazardousMaterialsSpecified {
-            get {
+        public bool HazardousMaterialsSpecified
+        {
+            get
+            {
                 return this.hazardousMaterialsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.hazardousMaterialsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PurchaseOrderNumber {
-            get {
+        public string PurchaseOrderNumber
+        {
+            get
+            {
                 return this.purchaseOrderNumberField;
             }
-            set {
+            set
+            {
                 this.purchaseOrderNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight Weight {
-            get {
+        public Weight Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions Dimensions {
-            get {
+        public Dimensions Dimensions
+        {
+            get
+            {
                 return this.dimensionsField;
             }
-            set {
+            set
+            {
                 this.dimensionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Volume Volume {
-            get {
+        public Volume Volume
+        {
+            get
+            {
                 return this.volumeField;
             }
-            set {
+            set
+            {
                 this.volumeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightClassType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightClassType
+    {
+
         /// <remarks/>
         CLASS_050,
-        
+
         /// <remarks/>
         CLASS_055,
-        
+
         /// <remarks/>
         CLASS_060,
-        
+
         /// <remarks/>
         CLASS_065,
-        
+
         /// <remarks/>
         CLASS_070,
-        
+
         /// <remarks/>
         CLASS_077_5,
-        
+
         /// <remarks/>
         CLASS_085,
-        
+
         /// <remarks/>
         CLASS_092_5,
-        
+
         /// <remarks/>
         CLASS_100,
-        
+
         /// <remarks/>
         CLASS_110,
-        
+
         /// <remarks/>
         CLASS_125,
-        
+
         /// <remarks/>
         CLASS_150,
-        
+
         /// <remarks/>
         CLASS_175,
-        
+
         /// <remarks/>
         CLASS_200,
-        
+
         /// <remarks/>
         CLASS_250,
-        
+
         /// <remarks/>
         CLASS_300,
-        
+
         /// <remarks/>
         CLASS_400,
-        
+
         /// <remarks/>
         CLASS_500,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PhysicalPackagingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PhysicalPackagingType
+    {
+
         /// <remarks/>
         BAG,
-        
+
         /// <remarks/>
         BARREL,
-        
+
         /// <remarks/>
         BASKET,
-        
+
         /// <remarks/>
         BOX,
-        
+
         /// <remarks/>
         BUCKET,
-        
+
         /// <remarks/>
         BUNDLE,
-        
+
         /// <remarks/>
         CARTON,
-        
+
         /// <remarks/>
         CASE,
-        
+
         /// <remarks/>
         CONTAINER,
-        
+
         /// <remarks/>
         CRATE,
-        
+
         /// <remarks/>
         CYLINDER,
-        
+
         /// <remarks/>
         DRUM,
-        
+
         /// <remarks/>
         ENVELOPE,
-        
+
         /// <remarks/>
         HAMPER,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         PAIL,
-        
+
         /// <remarks/>
         PALLET,
-        
+
         /// <remarks/>
         PIECE,
-        
+
         /// <remarks/>
         REEL,
-        
+
         /// <remarks/>
         ROLL,
-        
+
         /// <remarks/>
         SKID,
-        
+
         /// <remarks/>
         TANK,
-        
+
         /// <remarks/>
         TUBE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityOptionType
+    {
+
         /// <remarks/>
         BATTERY,
-        
+
         /// <remarks/>
         HAZARDOUS_MATERIALS,
-        
+
         /// <remarks/>
         LIMITED_QUANTITIES_COMMODITIES,
-        
+
         /// <remarks/>
         ORM_D,
-        
+
         /// <remarks/>
         REPORTABLE_QUANTITIES,
-        
+
         /// <remarks/>
         SMALL_QUANTITY_EXCEPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Volume {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Volume
+    {
+
         private VolumeUnits unitsField;
-        
+
         private bool unitsFieldSpecified;
-        
+
         private decimal valueField;
-        
+
         private bool valueFieldSpecified;
-        
+
         /// <remarks/>
-        public VolumeUnits Units {
-            get {
+        public VolumeUnits Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool UnitsSpecified {
-            get {
+        public bool UnitsSpecified
+        {
+            get
+            {
                 return this.unitsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.unitsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ValueSpecified {
-            get {
+        public bool ValueSpecified
+        {
+            get
+            {
                 return this.valueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.valueFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum VolumeUnits {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum VolumeUnits
+    {
+
         /// <remarks/>
         CUBIC_FT,
-        
+
         /// <remarks/>
         CUBIC_M,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class VariableHandlingChargeDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class VariableHandlingChargeDetail
+    {
+
         private Money fixedValueField;
-        
+
         private decimal percentValueField;
-        
+
         private bool percentValueFieldSpecified;
-        
+
         private RateElementBasisType rateElementBasisField;
-        
+
         private bool rateElementBasisFieldSpecified;
-        
+
         private RateTypeBasisType rateTypeBasisField;
-        
+
         private bool rateTypeBasisFieldSpecified;
-        
+
         /// <remarks/>
-        public Money FixedValue {
-            get {
+        public Money FixedValue
+        {
+            get
+            {
                 return this.fixedValueField;
             }
-            set {
+            set
+            {
                 this.fixedValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal PercentValue {
-            get {
+        public decimal PercentValue
+        {
+            get
+            {
                 return this.percentValueField;
             }
-            set {
+            set
+            {
                 this.percentValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PercentValueSpecified {
-            get {
+        public bool PercentValueSpecified
+        {
+            get
+            {
                 return this.percentValueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.percentValueFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RateElementBasisType RateElementBasis {
-            get {
+        public RateElementBasisType RateElementBasis
+        {
+            get
+            {
                 return this.rateElementBasisField;
             }
-            set {
+            set
+            {
                 this.rateElementBasisField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateElementBasisSpecified {
-            get {
+        public bool RateElementBasisSpecified
+        {
+            get
+            {
                 return this.rateElementBasisFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateElementBasisFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RateTypeBasisType RateTypeBasis {
-            get {
+        public RateTypeBasisType RateTypeBasis
+        {
+            get
+            {
                 return this.rateTypeBasisField;
             }
-            set {
+            set
+            {
                 this.rateTypeBasisField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateTypeBasisSpecified {
-            get {
+        public bool RateTypeBasisSpecified
+        {
+            get
+            {
                 return this.rateTypeBasisFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateTypeBasisFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RateElementBasisType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RateElementBasisType
+    {
+
         /// <remarks/>
         BASE_CHARGE,
-        
+
         /// <remarks/>
         NET_CHARGE,
-        
+
         /// <remarks/>
         NET_CHARGE_EXCLUDING_TAXES,
-        
+
         /// <remarks/>
         NET_FREIGHT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomsClearanceDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomsClearanceDetail
+    {
+
         private BrokerDetail[] brokersField;
-        
+
         private ClearanceBrokerageType clearanceBrokerageField;
-        
+
         private bool clearanceBrokerageFieldSpecified;
-        
+
         private CustomsOptionDetail customsOptionsField;
-        
+
         private Party importerOfRecordField;
-        
+
         private RecipientCustomsId recipientCustomsIdField;
-        
+
         private Payment dutiesPaymentField;
-        
+
         private InternationalDocumentContentType documentContentField;
-        
+
         private bool documentContentFieldSpecified;
-        
+
         private Money customsValueField;
-        
+
         private FreightOnValueType freightOnValueField;
-        
+
         private bool freightOnValueFieldSpecified;
-        
+
         private Money insuranceChargesField;
-        
+
         private bool partiesToTransactionAreRelatedField;
-        
+
         private bool partiesToTransactionAreRelatedFieldSpecified;
-        
+
         private CommercialInvoice commercialInvoiceField;
-        
+
         private Commodity[] commoditiesField;
-        
+
         private ExportDetail exportDetailField;
-        
+
         private RegulatoryControlType[] regulatoryControlsField;
-        
+
         private CustomsDeclarationStatementDetail declarationStatementDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Brokers")]
-        public BrokerDetail[] Brokers {
-            get {
+        public BrokerDetail[] Brokers
+        {
+            get
+            {
                 return this.brokersField;
             }
-            set {
+            set
+            {
                 this.brokersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClearanceBrokerageType ClearanceBrokerage {
-            get {
+        public ClearanceBrokerageType ClearanceBrokerage
+        {
+            get
+            {
                 return this.clearanceBrokerageField;
             }
-            set {
+            set
+            {
                 this.clearanceBrokerageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ClearanceBrokerageSpecified {
-            get {
+        public bool ClearanceBrokerageSpecified
+        {
+            get
+            {
                 return this.clearanceBrokerageFieldSpecified;
             }
-            set {
+            set
+            {
                 this.clearanceBrokerageFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsOptionDetail CustomsOptions {
-            get {
+        public CustomsOptionDetail CustomsOptions
+        {
+            get
+            {
                 return this.customsOptionsField;
             }
-            set {
+            set
+            {
                 this.customsOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party ImporterOfRecord {
-            get {
+        public Party ImporterOfRecord
+        {
+            get
+            {
                 return this.importerOfRecordField;
             }
-            set {
+            set
+            {
                 this.importerOfRecordField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RecipientCustomsId RecipientCustomsId {
-            get {
+        public RecipientCustomsId RecipientCustomsId
+        {
+            get
+            {
                 return this.recipientCustomsIdField;
             }
-            set {
+            set
+            {
                 this.recipientCustomsIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Payment DutiesPayment {
-            get {
+        public Payment DutiesPayment
+        {
+            get
+            {
                 return this.dutiesPaymentField;
             }
-            set {
+            set
+            {
                 this.dutiesPaymentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public InternationalDocumentContentType DocumentContent {
-            get {
+        public InternationalDocumentContentType DocumentContent
+        {
+            get
+            {
                 return this.documentContentField;
             }
-            set {
+            set
+            {
                 this.documentContentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DocumentContentSpecified {
-            get {
+        public bool DocumentContentSpecified
+        {
+            get
+            {
                 return this.documentContentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.documentContentFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money CustomsValue {
-            get {
+        public Money CustomsValue
+        {
+            get
+            {
                 return this.customsValueField;
             }
-            set {
+            set
+            {
                 this.customsValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightOnValueType FreightOnValue {
-            get {
+        public FreightOnValueType FreightOnValue
+        {
+            get
+            {
                 return this.freightOnValueField;
             }
-            set {
+            set
+            {
                 this.freightOnValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FreightOnValueSpecified {
-            get {
+        public bool FreightOnValueSpecified
+        {
+            get
+            {
                 return this.freightOnValueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.freightOnValueFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money InsuranceCharges {
-            get {
+        public Money InsuranceCharges
+        {
+            get
+            {
                 return this.insuranceChargesField;
             }
-            set {
+            set
+            {
                 this.insuranceChargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool PartiesToTransactionAreRelated {
-            get {
+        public bool PartiesToTransactionAreRelated
+        {
+            get
+            {
                 return this.partiesToTransactionAreRelatedField;
             }
-            set {
+            set
+            {
                 this.partiesToTransactionAreRelatedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PartiesToTransactionAreRelatedSpecified {
-            get {
+        public bool PartiesToTransactionAreRelatedSpecified
+        {
+            get
+            {
                 return this.partiesToTransactionAreRelatedFieldSpecified;
             }
-            set {
+            set
+            {
                 this.partiesToTransactionAreRelatedFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CommercialInvoice CommercialInvoice {
-            get {
+        public CommercialInvoice CommercialInvoice
+        {
+            get
+            {
                 return this.commercialInvoiceField;
             }
-            set {
+            set
+            {
                 this.commercialInvoiceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Commodities")]
-        public Commodity[] Commodities {
-            get {
+        public Commodity[] Commodities
+        {
+            get
+            {
                 return this.commoditiesField;
             }
-            set {
+            set
+            {
                 this.commoditiesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ExportDetail ExportDetail {
-            get {
+        public ExportDetail ExportDetail
+        {
+            get
+            {
                 return this.exportDetailField;
             }
-            set {
+            set
+            {
                 this.exportDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RegulatoryControls")]
-        public RegulatoryControlType[] RegulatoryControls {
-            get {
+        public RegulatoryControlType[] RegulatoryControls
+        {
+            get
+            {
                 return this.regulatoryControlsField;
             }
-            set {
+            set
+            {
                 this.regulatoryControlsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomsDeclarationStatementDetail DeclarationStatementDetail {
-            get {
+        public CustomsDeclarationStatementDetail DeclarationStatementDetail
+        {
+            get
+            {
                 return this.declarationStatementDetailField;
             }
-            set {
+            set
+            {
                 this.declarationStatementDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class BrokerDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class BrokerDetail
+    {
+
         private BrokerType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private Party brokerField;
-        
+
         /// <remarks/>
-        public BrokerType Type {
-            get {
+        public BrokerType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Broker {
-            get {
+        public Party Broker
+        {
+            get
+            {
                 return this.brokerField;
             }
-            set {
+            set
+            {
                 this.brokerField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BrokerType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BrokerType
+    {
+
         /// <remarks/>
         EXPORT,
-        
+
         /// <remarks/>
         IMPORT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ClearanceBrokerageType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ClearanceBrokerageType
+    {
+
         /// <remarks/>
         BROKER_INCLUSIVE,
-        
+
         /// <remarks/>
         BROKER_INCLUSIVE_NON_RESIDENT_IMPORTER,
-        
+
         /// <remarks/>
         BROKER_SELECT,
-        
+
         /// <remarks/>
         BROKER_SELECT_NON_RESIDENT_IMPORTER,
-        
+
         /// <remarks/>
         BROKER_UNASSIGNED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomsOptionDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomsOptionDetail
+    {
+
         private CustomsOptionType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
-        public CustomsOptionType Type {
-            get {
+        public CustomsOptionType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomsOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomsOptionType
+    {
+
         /// <remarks/>
         COURTESY_RETURN_LABEL,
-        
+
         /// <remarks/>
         EXHIBITION_TRADE_SHOW,
-        
+
         /// <remarks/>
         FAULTY_ITEM,
-        
+
         /// <remarks/>
         FOLLOWING_REPAIR,
-        
+
         /// <remarks/>
         FOR_REPAIR,
-        
+
         /// <remarks/>
         ITEM_FOR_LOAN,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         REJECTED,
-        
+
         /// <remarks/>
         REPLACEMENT,
-        
+
         /// <remarks/>
         TRIAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RecipientCustomsId {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RecipientCustomsId
+    {
+
         private RecipientCustomsIdType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public RecipientCustomsIdType Type {
-            get {
+        public RecipientCustomsIdType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RecipientCustomsIdType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RecipientCustomsIdType
+    {
+
         /// <remarks/>
         COMPANY,
-        
+
         /// <remarks/>
         INDIVIDUAL,
-        
+
         /// <remarks/>
         PASSPORT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum InternationalDocumentContentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum InternationalDocumentContentType
+    {
+
         /// <remarks/>
         DERIVED,
-        
+
         /// <remarks/>
         DOCUMENTS_ONLY,
-        
+
         /// <remarks/>
         NON_DOCUMENTS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightOnValueType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightOnValueType
+    {
+
         /// <remarks/>
         CARRIER_RISK,
-        
+
         /// <remarks/>
         OWN_RISK,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CommercialInvoice {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CommercialInvoice
+    {
+
         private string[] commentsField;
-        
+
         private Money freightChargeField;
-        
+
         private Money taxesOrMiscellaneousChargeField;
-        
+
         private TaxesOrMiscellaneousChargeType taxesOrMiscellaneousChargeTypeField;
-        
+
         private bool taxesOrMiscellaneousChargeTypeFieldSpecified;
-        
+
         private Money packingCostsField;
-        
+
         private Money handlingCostsField;
-        
+
         private string specialInstructionsField;
-        
+
         private string declarationStatementField;
-        
+
         private string paymentTermsField;
-        
+
         private PurposeOfShipmentType purposeField;
-        
+
         private bool purposeFieldSpecified;
-        
+
         private CustomerReference[] customerReferencesField;
-        
+
         private string originatorNameField;
-        
+
         private string termsOfSaleField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Comments")]
-        public string[] Comments {
-            get {
+        public string[] Comments
+        {
+            get
+            {
                 return this.commentsField;
             }
-            set {
+            set
+            {
                 this.commentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money FreightCharge {
-            get {
+        public Money FreightCharge
+        {
+            get
+            {
                 return this.freightChargeField;
             }
-            set {
+            set
+            {
                 this.freightChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TaxesOrMiscellaneousCharge {
-            get {
+        public Money TaxesOrMiscellaneousCharge
+        {
+            get
+            {
                 return this.taxesOrMiscellaneousChargeField;
             }
-            set {
+            set
+            {
                 this.taxesOrMiscellaneousChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TaxesOrMiscellaneousChargeType TaxesOrMiscellaneousChargeType {
-            get {
+        public TaxesOrMiscellaneousChargeType TaxesOrMiscellaneousChargeType
+        {
+            get
+            {
                 return this.taxesOrMiscellaneousChargeTypeField;
             }
-            set {
+            set
+            {
                 this.taxesOrMiscellaneousChargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaxesOrMiscellaneousChargeTypeSpecified {
-            get {
+        public bool TaxesOrMiscellaneousChargeTypeSpecified
+        {
+            get
+            {
                 return this.taxesOrMiscellaneousChargeTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.taxesOrMiscellaneousChargeTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money PackingCosts {
-            get {
+        public Money PackingCosts
+        {
+            get
+            {
                 return this.packingCostsField;
             }
-            set {
+            set
+            {
                 this.packingCostsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money HandlingCosts {
-            get {
+        public Money HandlingCosts
+        {
+            get
+            {
                 return this.handlingCostsField;
             }
-            set {
+            set
+            {
                 this.handlingCostsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecialInstructions {
-            get {
+        public string SpecialInstructions
+        {
+            get
+            {
                 return this.specialInstructionsField;
             }
-            set {
+            set
+            {
                 this.specialInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DeclarationStatement {
-            get {
+        public string DeclarationStatement
+        {
+            get
+            {
                 return this.declarationStatementField;
             }
-            set {
+            set
+            {
                 this.declarationStatementField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PaymentTerms {
-            get {
+        public string PaymentTerms
+        {
+            get
+            {
                 return this.paymentTermsField;
             }
-            set {
+            set
+            {
                 this.paymentTermsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PurposeOfShipmentType Purpose {
-            get {
+        public PurposeOfShipmentType Purpose
+        {
+            get
+            {
                 return this.purposeField;
             }
-            set {
+            set
+            {
                 this.purposeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PurposeSpecified {
-            get {
+        public bool PurposeSpecified
+        {
+            get
+            {
                 return this.purposeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.purposeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerReferences")]
-        public CustomerReference[] CustomerReferences {
-            get {
+        public CustomerReference[] CustomerReferences
+        {
+            get
+            {
                 return this.customerReferencesField;
             }
-            set {
+            set
+            {
                 this.customerReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OriginatorName {
-            get {
+        public string OriginatorName
+        {
+            get
+            {
                 return this.originatorNameField;
             }
-            set {
+            set
+            {
                 this.originatorNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TermsOfSale {
-            get {
+        public string TermsOfSale
+        {
+            get
+            {
                 return this.termsOfSaleField;
             }
-            set {
+            set
+            {
                 this.termsOfSaleField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum TaxesOrMiscellaneousChargeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum TaxesOrMiscellaneousChargeType
+    {
+
         /// <remarks/>
         COMMISSIONS,
-        
+
         /// <remarks/>
         DISCOUNTS,
-        
+
         /// <remarks/>
         HANDLING_FEES,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         ROYALTIES_AND_LICENSE_FEES,
-        
+
         /// <remarks/>
         TAXES,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PurposeOfShipmentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PurposeOfShipmentType
+    {
+
         /// <remarks/>
         GIFT,
-        
+
         /// <remarks/>
         NOT_SOLD,
-        
+
         /// <remarks/>
         PERSONAL_EFFECTS,
-        
+
         /// <remarks/>
         REPAIR_AND_RETURN,
-        
+
         /// <remarks/>
         SAMPLE,
-        
+
         /// <remarks/>
         SOLD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomerReference {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomerReference
+    {
+
         private CustomerReferenceType customerReferenceTypeField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public CustomerReferenceType CustomerReferenceType {
-            get {
+        public CustomerReferenceType CustomerReferenceType
+        {
+            get
+            {
                 return this.customerReferenceTypeField;
             }
-            set {
+            set
+            {
                 this.customerReferenceTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Commodity {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Commodity
+    {
+
         private string nameField;
-        
+
         private string numberOfPiecesField;
-        
+
         private string descriptionField;
-        
+
         private CommodityPurposeType purposeField;
-        
+
         private bool purposeFieldSpecified;
-        
+
         private string countryOfManufactureField;
-        
+
         private string harmonizedCodeField;
-        
+
         private Weight weightField;
-        
+
         private decimal quantityField;
-        
+
         private bool quantityFieldSpecified;
-        
+
         private string quantityUnitsField;
-        
+
         private Measure[] additionalMeasuresField;
-        
+
         private Money unitPriceField;
-        
+
         private Money customsValueField;
-        
+
         private EdtExciseCondition[] exciseConditionsField;
-        
+
         private string exportLicenseNumberField;
-        
+
         private System.DateTime exportLicenseExpirationDateField;
-        
+
         private bool exportLicenseExpirationDateFieldSpecified;
-        
+
         private string cIMarksAndNumbersField;
-        
+
         private string partNumberField;
-        
+
         private NaftaCommodityDetail naftaDetailField;
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string NumberOfPieces {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string NumberOfPieces
+        {
+            get
+            {
                 return this.numberOfPiecesField;
             }
-            set {
+            set
+            {
                 this.numberOfPiecesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CommodityPurposeType Purpose {
-            get {
+        public CommodityPurposeType Purpose
+        {
+            get
+            {
                 return this.purposeField;
             }
-            set {
+            set
+            {
                 this.purposeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PurposeSpecified {
-            get {
+        public bool PurposeSpecified
+        {
+            get
+            {
                 return this.purposeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.purposeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CountryOfManufacture {
-            get {
+        public string CountryOfManufacture
+        {
+            get
+            {
                 return this.countryOfManufactureField;
             }
-            set {
+            set
+            {
                 this.countryOfManufactureField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HarmonizedCode {
-            get {
+        public string HarmonizedCode
+        {
+            get
+            {
                 return this.harmonizedCodeField;
             }
-            set {
+            set
+            {
                 this.harmonizedCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight Weight {
-            get {
+        public Weight Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Quantity {
-            get {
+        public decimal Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool QuantitySpecified {
-            get {
+        public bool QuantitySpecified
+        {
+            get
+            {
                 return this.quantityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.quantityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string QuantityUnits {
-            get {
+        public string QuantityUnits
+        {
+            get
+            {
                 return this.quantityUnitsField;
             }
-            set {
+            set
+            {
                 this.quantityUnitsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AdditionalMeasures")]
-        public Measure[] AdditionalMeasures {
-            get {
+        public Measure[] AdditionalMeasures
+        {
+            get
+            {
                 return this.additionalMeasuresField;
             }
-            set {
+            set
+            {
                 this.additionalMeasuresField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money UnitPrice {
-            get {
+        public Money UnitPrice
+        {
+            get
+            {
                 return this.unitPriceField;
             }
-            set {
+            set
+            {
                 this.unitPriceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money CustomsValue {
-            get {
+        public Money CustomsValue
+        {
+            get
+            {
                 return this.customsValueField;
             }
-            set {
+            set
+            {
                 this.customsValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ExciseConditions")]
-        public EdtExciseCondition[] ExciseConditions {
-            get {
+        public EdtExciseCondition[] ExciseConditions
+        {
+            get
+            {
                 return this.exciseConditionsField;
             }
-            set {
+            set
+            {
                 this.exciseConditionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ExportLicenseNumber {
-            get {
+        public string ExportLicenseNumber
+        {
+            get
+            {
                 return this.exportLicenseNumberField;
             }
-            set {
+            set
+            {
                 this.exportLicenseNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime ExportLicenseExpirationDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime ExportLicenseExpirationDate
+        {
+            get
+            {
                 return this.exportLicenseExpirationDateField;
             }
-            set {
+            set
+            {
                 this.exportLicenseExpirationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExportLicenseExpirationDateSpecified {
-            get {
+        public bool ExportLicenseExpirationDateSpecified
+        {
+            get
+            {
                 return this.exportLicenseExpirationDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.exportLicenseExpirationDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CIMarksAndNumbers {
-            get {
+        public string CIMarksAndNumbers
+        {
+            get
+            {
                 return this.cIMarksAndNumbersField;
             }
-            set {
+            set
+            {
                 this.cIMarksAndNumbersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PartNumber {
-            get {
+        public string PartNumber
+        {
+            get
+            {
                 return this.partNumberField;
             }
-            set {
+            set
+            {
                 this.partNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaCommodityDetail NaftaDetail {
-            get {
+        public NaftaCommodityDetail NaftaDetail
+        {
+            get
+            {
                 return this.naftaDetailField;
             }
-            set {
+            set
+            {
                 this.naftaDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CommodityPurposeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CommodityPurposeType
+    {
+
         /// <remarks/>
         BUSINESS,
-        
+
         /// <remarks/>
         CONSUMER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Measure {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Measure
+    {
+
         private decimal quantityField;
-        
+
         private bool quantityFieldSpecified;
-        
+
         private string unitsField;
-        
+
         /// <remarks/>
-        public decimal Quantity {
-            get {
+        public decimal Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool QuantitySpecified {
-            get {
+        public bool QuantitySpecified
+        {
+            get
+            {
                 return this.quantityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.quantityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Units {
-            get {
+        public string Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EdtExciseCondition {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EdtExciseCondition
+    {
+
         private string categoryField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public string Category {
-            get {
+        public string Category
+        {
+            get
+            {
                 return this.categoryField;
             }
-            set {
+            set
+            {
                 this.categoryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NaftaCommodityDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NaftaCommodityDetail
+    {
+
         private NaftaPreferenceCriterionCode preferenceCriterionField;
-        
+
         private bool preferenceCriterionFieldSpecified;
-        
+
         private NaftaProducerDeterminationCode producerDeterminationField;
-        
+
         private bool producerDeterminationFieldSpecified;
-        
+
         private string producerIdField;
-        
+
         private NaftaNetCostMethodCode netCostMethodField;
-        
+
         private bool netCostMethodFieldSpecified;
-        
+
         private DateRange netCostDateRangeField;
-        
+
         /// <remarks/>
-        public NaftaPreferenceCriterionCode PreferenceCriterion {
-            get {
+        public NaftaPreferenceCriterionCode PreferenceCriterion
+        {
+            get
+            {
                 return this.preferenceCriterionField;
             }
-            set {
+            set
+            {
                 this.preferenceCriterionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PreferenceCriterionSpecified {
-            get {
+        public bool PreferenceCriterionSpecified
+        {
+            get
+            {
                 return this.preferenceCriterionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.preferenceCriterionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaProducerDeterminationCode ProducerDetermination {
-            get {
+        public NaftaProducerDeterminationCode ProducerDetermination
+        {
+            get
+            {
                 return this.producerDeterminationField;
             }
-            set {
+            set
+            {
                 this.producerDeterminationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ProducerDeterminationSpecified {
-            get {
+        public bool ProducerDeterminationSpecified
+        {
+            get
+            {
                 return this.producerDeterminationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.producerDeterminationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ProducerId {
-            get {
+        public string ProducerId
+        {
+            get
+            {
                 return this.producerIdField;
             }
-            set {
+            set
+            {
                 this.producerIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaNetCostMethodCode NetCostMethod {
-            get {
+        public NaftaNetCostMethodCode NetCostMethod
+        {
+            get
+            {
                 return this.netCostMethodField;
             }
-            set {
+            set
+            {
                 this.netCostMethodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NetCostMethodSpecified {
-            get {
+        public bool NetCostMethodSpecified
+        {
+            get
+            {
                 return this.netCostMethodFieldSpecified;
             }
-            set {
+            set
+            {
                 this.netCostMethodFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DateRange NetCostDateRange {
-            get {
+        public DateRange NetCostDateRange
+        {
+            get
+            {
                 return this.netCostDateRangeField;
             }
-            set {
+            set
+            {
                 this.netCostDateRangeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NaftaPreferenceCriterionCode {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NaftaPreferenceCriterionCode
+    {
+
         /// <remarks/>
         A,
-        
+
         /// <remarks/>
         B,
-        
+
         /// <remarks/>
         C,
-        
+
         /// <remarks/>
         D,
-        
+
         /// <remarks/>
         E,
-        
+
         /// <remarks/>
         F,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NaftaProducerDeterminationCode {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NaftaProducerDeterminationCode
+    {
+
         /// <remarks/>
         NO_1,
-        
+
         /// <remarks/>
         NO_2,
-        
+
         /// <remarks/>
         NO_3,
-        
+
         /// <remarks/>
         YES,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NaftaNetCostMethodCode {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NaftaNetCostMethodCode
+    {
+
         /// <remarks/>
         NC,
-        
+
         /// <remarks/>
         NO,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ExportDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ExportDetail
+    {
+
         private B13AFilingOptionType b13AFilingOptionField;
-        
+
         private bool b13AFilingOptionFieldSpecified;
-        
+
         private string exportComplianceStatementField;
-        
+
         private string permitNumberField;
-        
+
         private DestinationControlDetail destinationControlDetailField;
-        
+
         /// <remarks/>
-        public B13AFilingOptionType B13AFilingOption {
-            get {
+        public B13AFilingOptionType B13AFilingOption
+        {
+            get
+            {
                 return this.b13AFilingOptionField;
             }
-            set {
+            set
+            {
                 this.b13AFilingOptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool B13AFilingOptionSpecified {
-            get {
+        public bool B13AFilingOptionSpecified
+        {
+            get
+            {
                 return this.b13AFilingOptionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.b13AFilingOptionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ExportComplianceStatement {
-            get {
+        public string ExportComplianceStatement
+        {
+            get
+            {
                 return this.exportComplianceStatementField;
             }
-            set {
+            set
+            {
                 this.exportComplianceStatementField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PermitNumber {
-            get {
+        public string PermitNumber
+        {
+            get
+            {
                 return this.permitNumberField;
             }
-            set {
+            set
+            {
                 this.permitNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DestinationControlDetail DestinationControlDetail {
-            get {
+        public DestinationControlDetail DestinationControlDetail
+        {
+            get
+            {
                 return this.destinationControlDetailField;
             }
-            set {
+            set
+            {
                 this.destinationControlDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum B13AFilingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum B13AFilingOptionType
+    {
+
         /// <remarks/>
         FEDEX_TO_STAMP,
-        
+
         /// <remarks/>
         FILED_ELECTRONICALLY,
-        
+
         /// <remarks/>
         MANUALLY_ATTACHED,
-        
+
         /// <remarks/>
         NOT_REQUIRED,
-        
+
         /// <remarks/>
         SUMMARY_REPORTING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DestinationControlDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DestinationControlDetail
+    {
+
         private DestinationControlStatementType[] statementTypesField;
-        
+
         private string destinationCountriesField;
-        
+
         private string endUserField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("StatementTypes")]
-        public DestinationControlStatementType[] StatementTypes {
-            get {
+        public DestinationControlStatementType[] StatementTypes
+        {
+            get
+            {
                 return this.statementTypesField;
             }
-            set {
+            set
+            {
                 this.statementTypesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DestinationCountries {
-            get {
+        public string DestinationCountries
+        {
+            get
+            {
                 return this.destinationCountriesField;
             }
-            set {
+            set
+            {
                 this.destinationCountriesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EndUser {
-            get {
+        public string EndUser
+        {
+            get
+            {
                 return this.endUserField;
             }
-            set {
+            set
+            {
                 this.endUserField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DestinationControlStatementType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DestinationControlStatementType
+    {
+
         /// <remarks/>
         DEPARTMENT_OF_COMMERCE,
-        
+
         /// <remarks/>
         DEPARTMENT_OF_STATE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RegulatoryControlType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RegulatoryControlType
+    {
+
         /// <remarks/>
         FOOD_OR_PERISHABLE,
-        
+
         /// <remarks/>
         NAFTA,
-        
+
         /// <remarks/>
         NOT_APPLICABLE_FOR_LOW_CUSTOMS_VALUE_EXCEPTION,
-        
+
         /// <remarks/>
         NOT_IN_FREE_CIRCULATION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomsDeclarationStatementDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomsDeclarationStatementDetail
+    {
+
         private CustomsDeclarationStatementType[] typesField;
-        
+
         private NaftaLowValueStatementDetail naftaLowValueStatementDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Types")]
-        public CustomsDeclarationStatementType[] Types {
-            get {
+        public CustomsDeclarationStatementType[] Types
+        {
+            get
+            {
                 return this.typesField;
             }
-            set {
+            set
+            {
                 this.typesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaLowValueStatementDetail NaftaLowValueStatementDetail {
-            get {
+        public NaftaLowValueStatementDetail NaftaLowValueStatementDetail
+        {
+            get
+            {
                 return this.naftaLowValueStatementDetailField;
             }
-            set {
+            set
+            {
                 this.naftaLowValueStatementDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomsDeclarationStatementType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomsDeclarationStatementType
+    {
+
         /// <remarks/>
         NAFTA_LOW_VALUE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NaftaLowValueStatementDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NaftaLowValueStatementDetail
+    {
+
         private CustomsRoleType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomsRoleType Role {
-            get {
+        public CustomsRoleType Role
+        {
+            get
+            {
                 return this.roleField;
             }
-            set {
+            set
+            {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
+        public bool RoleSpecified
+        {
+            get
+            {
                 return this.roleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.roleFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomsRoleType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomsRoleType
+    {
+
         /// <remarks/>
         EXPORTER,
-        
+
         /// <remarks/>
         IMPORTER,
-        
+
         /// <remarks/>
         LEGAL_AGENT,
-        
+
         /// <remarks/>
         PRODUCER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PickupDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PickupDetail
+    {
+
         private System.DateTime readyDateTimeField;
-        
+
         private bool readyDateTimeFieldSpecified;
-        
+
         private System.DateTime latestPickupDateTimeField;
-        
+
         private bool latestPickupDateTimeFieldSpecified;
-        
+
         private string courierInstructionsField;
-        
+
         private PickupRequestType requestTypeField;
-        
+
         private bool requestTypeFieldSpecified;
-        
+
         private PickupRequestSourceType requestSourceField;
-        
+
         private bool requestSourceFieldSpecified;
-        
+
         /// <remarks/>
-        public System.DateTime ReadyDateTime {
-            get {
+        public System.DateTime ReadyDateTime
+        {
+            get
+            {
                 return this.readyDateTimeField;
             }
-            set {
+            set
+            {
                 this.readyDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ReadyDateTimeSpecified {
-            get {
+        public bool ReadyDateTimeSpecified
+        {
+            get
+            {
                 return this.readyDateTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.readyDateTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime LatestPickupDateTime {
-            get {
+        public System.DateTime LatestPickupDateTime
+        {
+            get
+            {
                 return this.latestPickupDateTimeField;
             }
-            set {
+            set
+            {
                 this.latestPickupDateTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LatestPickupDateTimeSpecified {
-            get {
+        public bool LatestPickupDateTimeSpecified
+        {
+            get
+            {
                 return this.latestPickupDateTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.latestPickupDateTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CourierInstructions {
-            get {
+        public string CourierInstructions
+        {
+            get
+            {
                 return this.courierInstructionsField;
             }
-            set {
+            set
+            {
                 this.courierInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PickupRequestType RequestType {
-            get {
+        public PickupRequestType RequestType
+        {
+            get
+            {
                 return this.requestTypeField;
             }
-            set {
+            set
+            {
                 this.requestTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RequestTypeSpecified {
-            get {
+        public bool RequestTypeSpecified
+        {
+            get
+            {
                 return this.requestTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requestTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public PickupRequestSourceType RequestSource {
-            get {
+        public PickupRequestSourceType RequestSource
+        {
+            get
+            {
                 return this.requestSourceField;
             }
-            set {
+            set
+            {
                 this.requestSourceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RequestSourceSpecified {
-            get {
+        public bool RequestSourceSpecified
+        {
+            get
+            {
                 return this.requestSourceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.requestSourceFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PickupRequestType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PickupRequestType
+    {
+
         /// <remarks/>
         FUTURE_DAY,
-        
+
         /// <remarks/>
         SAME_DAY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PickupRequestSourceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PickupRequestSourceType
+    {
+
         /// <remarks/>
         AUTOMATION,
-        
+
         /// <remarks/>
         CUSTOMER_SERVICE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class SmartPostShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class SmartPostShipmentDetail
+    {
+
         private SmartPostShipmentProcessingOptionType[] processingOptionsRequestedField;
-        
+
         private SmartPostIndiciaType indiciaField;
-        
+
         private bool indiciaFieldSpecified;
-        
+
         private SmartPostAncillaryEndorsementType ancillaryEndorsementField;
-        
+
         private bool ancillaryEndorsementFieldSpecified;
-        
+
         private string hubIdField;
-        
+
         private string customerManifestIdField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public SmartPostShipmentProcessingOptionType[] ProcessingOptionsRequested {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable = false)]
+        public SmartPostShipmentProcessingOptionType[] ProcessingOptionsRequested
+        {
+            get
+            {
                 return this.processingOptionsRequestedField;
             }
-            set {
+            set
+            {
                 this.processingOptionsRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SmartPostIndiciaType Indicia {
-            get {
+        public SmartPostIndiciaType Indicia
+        {
+            get
+            {
                 return this.indiciaField;
             }
-            set {
+            set
+            {
                 this.indiciaField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IndiciaSpecified {
-            get {
+        public bool IndiciaSpecified
+        {
+            get
+            {
                 return this.indiciaFieldSpecified;
             }
-            set {
+            set
+            {
                 this.indiciaFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public SmartPostAncillaryEndorsementType AncillaryEndorsement {
-            get {
+        public SmartPostAncillaryEndorsementType AncillaryEndorsement
+        {
+            get
+            {
                 return this.ancillaryEndorsementField;
             }
-            set {
+            set
+            {
                 this.ancillaryEndorsementField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AncillaryEndorsementSpecified {
-            get {
+        public bool AncillaryEndorsementSpecified
+        {
+            get
+            {
                 return this.ancillaryEndorsementFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ancillaryEndorsementFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HubId {
-            get {
+        public string HubId
+        {
+            get
+            {
                 return this.hubIdField;
             }
-            set {
+            set
+            {
                 this.hubIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomerManifestId {
-            get {
+        public string CustomerManifestId
+        {
+            get
+            {
                 return this.customerManifestIdField;
             }
-            set {
+            set
+            {
                 this.customerManifestIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SmartPostShipmentProcessingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SmartPostShipmentProcessingOptionType
+    {
+
         /// <remarks/>
         GROUND_TRACKING_NUMBER_REQUESTED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SmartPostIndiciaType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SmartPostIndiciaType
+    {
+
         /// <remarks/>
         MEDIA_MAIL,
-        
+
         /// <remarks/>
         PARCEL_RETURN,
-        
+
         /// <remarks/>
         PARCEL_SELECT,
-        
+
         /// <remarks/>
         PRESORTED_BOUND_PRINTED_MATTER,
-        
+
         /// <remarks/>
         PRESORTED_STANDARD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SmartPostAncillaryEndorsementType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SmartPostAncillaryEndorsementType
+    {
+
         /// <remarks/>
         ADDRESS_CORRECTION,
-        
+
         /// <remarks/>
         CARRIER_LEAVE_IF_NO_RESPONSE,
-        
+
         /// <remarks/>
         CHANGE_SERVICE,
-        
+
         /// <remarks/>
         FORWARDING_SERVICE,
-        
+
         /// <remarks/>
         RETURN_SERVICE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class LabelSpecification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class LabelSpecification
+    {
+
         private ShippingDocumentDispositionDetail[] dispositionsField;
-        
+
         private LabelFormatType labelFormatTypeField;
-        
+
         private ShippingDocumentImageType imageTypeField;
-        
+
         private bool imageTypeFieldSpecified;
-        
+
         private LabelStockType labelStockTypeField;
-        
+
         private bool labelStockTypeFieldSpecified;
-        
+
         private LabelPrintingOrientationType labelPrintingOrientationField;
-        
+
         private bool labelPrintingOrientationFieldSpecified;
-        
+
         private LabelOrderType labelOrderField;
-        
+
         private bool labelOrderFieldSpecified;
-        
+
         private ContactAndAddress printedLabelOriginField;
-        
+
         private CustomerSpecifiedLabelDetail customerSpecifiedDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Dispositions")]
-        public ShippingDocumentDispositionDetail[] Dispositions {
-            get {
+        public ShippingDocumentDispositionDetail[] Dispositions
+        {
+            get
+            {
                 return this.dispositionsField;
             }
-            set {
+            set
+            {
                 this.dispositionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelFormatType LabelFormatType {
-            get {
+        public LabelFormatType LabelFormatType
+        {
+            get
+            {
                 return this.labelFormatTypeField;
             }
-            set {
+            set
+            {
                 this.labelFormatTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentImageType ImageType {
-            get {
+        public ShippingDocumentImageType ImageType
+        {
+            get
+            {
                 return this.imageTypeField;
             }
-            set {
+            set
+            {
                 this.imageTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ImageTypeSpecified {
-            get {
+        public bool ImageTypeSpecified
+        {
+            get
+            {
                 return this.imageTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.imageTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelStockType LabelStockType {
-            get {
+        public LabelStockType LabelStockType
+        {
+            get
+            {
                 return this.labelStockTypeField;
             }
-            set {
+            set
+            {
                 this.labelStockTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelStockTypeSpecified {
-            get {
+        public bool LabelStockTypeSpecified
+        {
+            get
+            {
                 return this.labelStockTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelStockTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelPrintingOrientationType LabelPrintingOrientation {
-            get {
+        public LabelPrintingOrientationType LabelPrintingOrientation
+        {
+            get
+            {
                 return this.labelPrintingOrientationField;
             }
-            set {
+            set
+            {
                 this.labelPrintingOrientationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelPrintingOrientationSpecified {
-            get {
+        public bool LabelPrintingOrientationSpecified
+        {
+            get
+            {
                 return this.labelPrintingOrientationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelPrintingOrientationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelOrderType LabelOrder {
-            get {
+        public LabelOrderType LabelOrder
+        {
+            get
+            {
                 return this.labelOrderField;
             }
-            set {
+            set
+            {
                 this.labelOrderField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelOrderSpecified {
-            get {
+        public bool LabelOrderSpecified
+        {
+            get
+            {
                 return this.labelOrderFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelOrderFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ContactAndAddress PrintedLabelOrigin {
-            get {
+        public ContactAndAddress PrintedLabelOrigin
+        {
+            get
+            {
                 return this.printedLabelOriginField;
             }
-            set {
+            set
+            {
                 this.printedLabelOriginField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomerSpecifiedLabelDetail CustomerSpecifiedDetail {
-            get {
+        public CustomerSpecifiedLabelDetail CustomerSpecifiedDetail
+        {
+            get
+            {
                 return this.customerSpecifiedDetailField;
             }
-            set {
+            set
+            {
                 this.customerSpecifiedDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentDispositionDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentDispositionDetail
+    {
+
         private ShippingDocumentDispositionType dispositionTypeField;
-        
+
         private bool dispositionTypeFieldSpecified;
-        
+
         private ShippingDocumentGroupingType groupingField;
-        
+
         private bool groupingFieldSpecified;
-        
+
         private ShippingDocumentStorageDetail storageDetailField;
-        
+
         private ShippingDocumentEMailDetail eMailDetailField;
-        
+
         private ShippingDocumentPrintDetail printDetailField;
-        
+
         /// <remarks/>
-        public ShippingDocumentDispositionType DispositionType {
-            get {
+        public ShippingDocumentDispositionType DispositionType
+        {
+            get
+            {
                 return this.dispositionTypeField;
             }
-            set {
+            set
+            {
                 this.dispositionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DispositionTypeSpecified {
-            get {
+        public bool DispositionTypeSpecified
+        {
+            get
+            {
                 return this.dispositionTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dispositionTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentGroupingType Grouping {
-            get {
+        public ShippingDocumentGroupingType Grouping
+        {
+            get
+            {
                 return this.groupingField;
             }
-            set {
+            set
+            {
                 this.groupingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GroupingSpecified {
-            get {
+        public bool GroupingSpecified
+        {
+            get
+            {
                 return this.groupingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.groupingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentStorageDetail StorageDetail {
-            get {
+        public ShippingDocumentStorageDetail StorageDetail
+        {
+            get
+            {
                 return this.storageDetailField;
             }
-            set {
+            set
+            {
                 this.storageDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentEMailDetail EMailDetail {
-            get {
+        public ShippingDocumentEMailDetail EMailDetail
+        {
+            get
+            {
                 return this.eMailDetailField;
             }
-            set {
+            set
+            {
                 this.eMailDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentPrintDetail PrintDetail {
-            get {
+        public ShippingDocumentPrintDetail PrintDetail
+        {
+            get
+            {
                 return this.printDetailField;
             }
-            set {
+            set
+            {
                 this.printDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentDispositionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentDispositionType
+    {
+
         /// <remarks/>
         DEFERRED_STORED,
-        
+
         /// <remarks/>
         EMAILED,
-        
+
         /// <remarks/>
         QUEUED,
-        
+
         /// <remarks/>
         RETURNED,
-        
+
         /// <remarks/>
         STORED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentGroupingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentGroupingType
+    {
+
         /// <remarks/>
         CONSOLIDATED_BY_DOCUMENT_TYPE,
-        
+
         /// <remarks/>
         INDIVIDUAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentStorageDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentStorageDetail
+    {
+
         private ShippingDocumentStorageDetailType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string filePathField;
-        
+
         private ShippingDocumentNamingType fileNamingField;
-        
+
         private bool fileNamingFieldSpecified;
-        
+
         private string fileSuffixField;
-        
+
         /// <remarks/>
-        public ShippingDocumentStorageDetailType Type {
-            get {
+        public ShippingDocumentStorageDetailType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FilePath {
-            get {
+        public string FilePath
+        {
+            get
+            {
                 return this.filePathField;
             }
-            set {
+            set
+            {
                 this.filePathField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentNamingType FileNaming {
-            get {
+        public ShippingDocumentNamingType FileNaming
+        {
+            get
+            {
                 return this.fileNamingField;
             }
-            set {
+            set
+            {
                 this.fileNamingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FileNamingSpecified {
-            get {
+        public bool FileNamingSpecified
+        {
+            get
+            {
                 return this.fileNamingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.fileNamingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FileSuffix {
-            get {
+        public string FileSuffix
+        {
+            get
+            {
                 return this.fileSuffixField;
             }
-            set {
+            set
+            {
                 this.fileSuffixField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentStorageDetailType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentStorageDetailType
+    {
+
         /// <remarks/>
         ASYNC_SERVICE,
-        
+
         /// <remarks/>
         LOCAL_FILE_SYSTEM,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentNamingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentNamingType
+    {
+
         /// <remarks/>
         FAST,
-        
+
         /// <remarks/>
         LEGACY_FXRS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentEMailDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentEMailDetail
+    {
+
         private ShippingDocumentEMailRecipient[] eMailRecipientsField;
-        
+
         private ShippingDocumentEMailGroupingType groupingField;
-        
+
         private bool groupingFieldSpecified;
-        
+
         private Localization localizationField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EMailRecipients")]
-        public ShippingDocumentEMailRecipient[] EMailRecipients {
-            get {
+        public ShippingDocumentEMailRecipient[] EMailRecipients
+        {
+            get
+            {
                 return this.eMailRecipientsField;
             }
-            set {
+            set
+            {
                 this.eMailRecipientsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentEMailGroupingType Grouping {
-            get {
+        public ShippingDocumentEMailGroupingType Grouping
+        {
+            get
+            {
                 return this.groupingField;
             }
-            set {
+            set
+            {
                 this.groupingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GroupingSpecified {
-            get {
+        public bool GroupingSpecified
+        {
+            get
+            {
                 return this.groupingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.groupingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentEMailRecipient {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentEMailRecipient
+    {
+
         private EMailNotificationRecipientType recipientTypeField;
-        
+
         private bool recipientTypeFieldSpecified;
-        
+
         private string addressField;
-        
+
         /// <remarks/>
-        public EMailNotificationRecipientType RecipientType {
-            get {
+        public EMailNotificationRecipientType RecipientType
+        {
+            get
+            {
                 return this.recipientTypeField;
             }
-            set {
+            set
+            {
                 this.recipientTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RecipientTypeSpecified {
-            get {
+        public bool RecipientTypeSpecified
+        {
+            get
+            {
                 return this.recipientTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.recipientTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Address {
-            get {
+        public string Address
+        {
+            get
+            {
                 return this.addressField;
             }
-            set {
+            set
+            {
                 this.addressField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EMailNotificationRecipientType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EMailNotificationRecipientType
+    {
+
         /// <remarks/>
         BROKER,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         RECIPIENT,
-        
+
         /// <remarks/>
         SHIPPER,
-        
+
         /// <remarks/>
         THIRD_PARTY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentEMailGroupingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentEMailGroupingType
+    {
+
         /// <remarks/>
         BY_RECIPIENT,
-        
+
         /// <remarks/>
         NONE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentPrintDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentPrintDetail
+    {
+
         private string printerIdField;
-        
+
         /// <remarks/>
-        public string PrinterId {
-            get {
+        public string PrinterId
+        {
+            get
+            {
                 return this.printerIdField;
             }
-            set {
+            set
+            {
                 this.printerIdField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelFormatType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelFormatType
+    {
+
         /// <remarks/>
         COMMON2D,
-        
+
         /// <remarks/>
         FEDEX_FREIGHT_STRAIGHT_BILL_OF_LADING,
-        
+
         /// <remarks/>
         LABEL_DATA_ONLY,
-        
+
         /// <remarks/>
         VICS_BILL_OF_LADING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentImageType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentImageType
+    {
+
         /// <remarks/>
         DOC,
-        
+
         /// <remarks/>
         EPL2,
-        
+
         /// <remarks/>
         PDF,
-        
+
         /// <remarks/>
         PNG,
-        
+
         /// <remarks/>
         RTF,
-        
+
         /// <remarks/>
         TEXT,
-        
+
         /// <remarks/>
         ZPLII,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelStockType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelStockType
+    {
+
         /// <remarks/>
         PAPER_4X6,
-        
+
         /// <remarks/>
         PAPER_4X8,
-        
+
         /// <remarks/>
         PAPER_4X9,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("PAPER_7X4.75")]
         PAPER_7X475,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("PAPER_8.5X11_BOTTOM_HALF_LABEL")]
         PAPER_85X11_BOTTOM_HALF_LABEL,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("PAPER_8.5X11_TOP_HALF_LABEL")]
         PAPER_85X11_TOP_HALF_LABEL,
-        
+
         /// <remarks/>
         PAPER_LETTER,
-        
+
         /// <remarks/>
         STOCK_4X6,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("STOCK_4X6.75_LEADING_DOC_TAB")]
         STOCK_4X675_LEADING_DOC_TAB,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("STOCK_4X6.75_TRAILING_DOC_TAB")]
         STOCK_4X675_TRAILING_DOC_TAB,
-        
+
         /// <remarks/>
         STOCK_4X8,
-        
+
         /// <remarks/>
         STOCK_4X9_LEADING_DOC_TAB,
-        
+
         /// <remarks/>
         STOCK_4X9_TRAILING_DOC_TAB,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelPrintingOrientationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelPrintingOrientationType
+    {
+
         /// <remarks/>
         BOTTOM_EDGE_OF_TEXT_FIRST,
-        
+
         /// <remarks/>
         TOP_EDGE_OF_TEXT_FIRST,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelOrderType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelOrderType
+    {
+
         /// <remarks/>
         SHIPPING_LABEL_FIRST,
-        
+
         /// <remarks/>
         SHIPPING_LABEL_LAST,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomerSpecifiedLabelDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomerSpecifiedLabelDetail
+    {
+
         private DocTabContent docTabContentField;
-        
+
         private RelativeVerticalPositionType customContentPositionField;
-        
+
         private bool customContentPositionFieldSpecified;
-        
+
         private CustomLabelDetail customContentField;
-        
+
         private ConfigurableLabelReferenceEntry[] configurableReferenceEntriesField;
-        
+
         private LabelMaskableDataType[] maskedDataField;
-        
+
         private SecondaryBarcodeType secondaryBarcodeField;
-        
+
         private bool secondaryBarcodeFieldSpecified;
-        
+
         private Localization termsAndConditionsLocalizationField;
-        
+
         private RegulatoryLabelContentDetail[] regulatoryLabelsField;
-        
+
         private AdditionalLabelsDetail[] additionalLabelsField;
-        
+
         private string airWaybillSuppressionCountField;
-        
+
         /// <remarks/>
-        public DocTabContent DocTabContent {
-            get {
+        public DocTabContent DocTabContent
+        {
+            get
+            {
                 return this.docTabContentField;
             }
-            set {
+            set
+            {
                 this.docTabContentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RelativeVerticalPositionType CustomContentPosition {
-            get {
+        public RelativeVerticalPositionType CustomContentPosition
+        {
+            get
+            {
                 return this.customContentPositionField;
             }
-            set {
+            set
+            {
                 this.customContentPositionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomContentPositionSpecified {
-            get {
+        public bool CustomContentPositionSpecified
+        {
+            get
+            {
                 return this.customContentPositionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.customContentPositionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelDetail CustomContent {
-            get {
+        public CustomLabelDetail CustomContent
+        {
+            get
+            {
                 return this.customContentField;
             }
-            set {
+            set
+            {
                 this.customContentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ConfigurableReferenceEntries")]
-        public ConfigurableLabelReferenceEntry[] ConfigurableReferenceEntries {
-            get {
+        public ConfigurableLabelReferenceEntry[] ConfigurableReferenceEntries
+        {
+            get
+            {
                 return this.configurableReferenceEntriesField;
             }
-            set {
+            set
+            {
                 this.configurableReferenceEntriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("MaskedData")]
-        public LabelMaskableDataType[] MaskedData {
-            get {
+        public LabelMaskableDataType[] MaskedData
+        {
+            get
+            {
                 return this.maskedDataField;
             }
-            set {
+            set
+            {
                 this.maskedDataField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SecondaryBarcodeType SecondaryBarcode {
-            get {
+        public SecondaryBarcodeType SecondaryBarcode
+        {
+            get
+            {
                 return this.secondaryBarcodeField;
             }
-            set {
+            set
+            {
                 this.secondaryBarcodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SecondaryBarcodeSpecified {
-            get {
+        public bool SecondaryBarcodeSpecified
+        {
+            get
+            {
                 return this.secondaryBarcodeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.secondaryBarcodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization TermsAndConditionsLocalization {
-            get {
+        public Localization TermsAndConditionsLocalization
+        {
+            get
+            {
                 return this.termsAndConditionsLocalizationField;
             }
-            set {
+            set
+            {
                 this.termsAndConditionsLocalizationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RegulatoryLabels")]
-        public RegulatoryLabelContentDetail[] RegulatoryLabels {
-            get {
+        public RegulatoryLabelContentDetail[] RegulatoryLabels
+        {
+            get
+            {
                 return this.regulatoryLabelsField;
             }
-            set {
+            set
+            {
                 this.regulatoryLabelsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AdditionalLabels")]
-        public AdditionalLabelsDetail[] AdditionalLabels {
-            get {
+        public AdditionalLabelsDetail[] AdditionalLabels
+        {
+            get
+            {
                 return this.additionalLabelsField;
             }
-            set {
+            set
+            {
                 this.additionalLabelsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string AirWaybillSuppressionCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string AirWaybillSuppressionCount
+        {
+            get
+            {
                 return this.airWaybillSuppressionCountField;
             }
-            set {
+            set
+            {
                 this.airWaybillSuppressionCountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DocTabContent {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DocTabContent
+    {
+
         private DocTabContentType docTabContentTypeField;
-        
+
         private DocTabZoneSpecification[] zone001Field;
-        
+
         private DocTabContentBarcoded barcodedField;
-        
+
         /// <remarks/>
-        public DocTabContentType DocTabContentType {
-            get {
+        public DocTabContentType DocTabContentType
+        {
+            get
+            {
                 return this.docTabContentTypeField;
             }
-            set {
+            set
+            {
                 this.docTabContentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("DocTabZoneSpecifications", IsNullable=false)]
-        public DocTabZoneSpecification[] Zone001 {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("DocTabZoneSpecifications", IsNullable = false)]
+        public DocTabZoneSpecification[] Zone001
+        {
+            get
+            {
                 return this.zone001Field;
             }
-            set {
+            set
+            {
                 this.zone001Field = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocTabContentBarcoded Barcoded {
-            get {
+        public DocTabContentBarcoded Barcoded
+        {
+            get
+            {
                 return this.barcodedField;
             }
-            set {
+            set
+            {
                 this.barcodedField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DocTabContentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DocTabContentType
+    {
+
         /// <remarks/>
         BARCODED,
-        
+
         /// <remarks/>
         CUSTOM,
-        
+
         /// <remarks/>
         MINIMUM,
-        
+
         /// <remarks/>
         STANDARD,
-        
+
         /// <remarks/>
         ZONE001,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DocTabZoneSpecification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DocTabZoneSpecification
+    {
+
         private string zoneNumberField;
-        
+
         private string headerField;
-        
+
         private string dataFieldField;
-        
+
         private string literalValueField;
-        
+
         private DocTabZoneJustificationType justificationField;
-        
+
         private bool justificationFieldSpecified;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string ZoneNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string ZoneNumber
+        {
+            get
+            {
                 return this.zoneNumberField;
             }
-            set {
+            set
+            {
                 this.zoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Header {
-            get {
+        public string Header
+        {
+            get
+            {
                 return this.headerField;
             }
-            set {
+            set
+            {
                 this.headerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DataField {
-            get {
+        public string DataField
+        {
+            get
+            {
                 return this.dataFieldField;
             }
-            set {
+            set
+            {
                 this.dataFieldField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LiteralValue {
-            get {
+        public string LiteralValue
+        {
+            get
+            {
                 return this.literalValueField;
             }
-            set {
+            set
+            {
                 this.literalValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocTabZoneJustificationType Justification {
-            get {
+        public DocTabZoneJustificationType Justification
+        {
+            get
+            {
                 return this.justificationField;
             }
-            set {
+            set
+            {
                 this.justificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool JustificationSpecified {
-            get {
+        public bool JustificationSpecified
+        {
+            get
+            {
                 return this.justificationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.justificationFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DocTabZoneJustificationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DocTabZoneJustificationType
+    {
+
         /// <remarks/>
         LEFT,
-        
+
         /// <remarks/>
         RIGHT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DocTabContentBarcoded {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DocTabContentBarcoded
+    {
+
         private BarcodeSymbologyType symbologyField;
-        
+
         private bool symbologyFieldSpecified;
-        
+
         private DocTabZoneSpecification specificationField;
-        
+
         /// <remarks/>
-        public BarcodeSymbologyType Symbology {
-            get {
+        public BarcodeSymbologyType Symbology
+        {
+            get
+            {
                 return this.symbologyField;
             }
-            set {
+            set
+            {
                 this.symbologyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SymbologySpecified {
-            get {
+        public bool SymbologySpecified
+        {
+            get
+            {
                 return this.symbologyFieldSpecified;
             }
-            set {
+            set
+            {
                 this.symbologyFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocTabZoneSpecification Specification {
-            get {
+        public DocTabZoneSpecification Specification
+        {
+            get
+            {
                 return this.specificationField;
             }
-            set {
+            set
+            {
                 this.specificationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BarcodeSymbologyType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BarcodeSymbologyType
+    {
+
         /// <remarks/>
         CODABAR,
-        
+
         /// <remarks/>
         CODE128,
-        
+
         /// <remarks/>
         CODE128B,
-        
+
         /// <remarks/>
         CODE128C,
-        
+
         /// <remarks/>
         CODE128_WIDEBAR,
-        
+
         /// <remarks/>
         CODE39,
-        
+
         /// <remarks/>
         CODE93,
-        
+
         /// <remarks/>
         I2OF5,
-        
+
         /// <remarks/>
         PDF417,
-        
+
         /// <remarks/>
         POSTNET,
-        
+
         /// <remarks/>
         QR_CODE,
-        
+
         /// <remarks/>
         UCC128,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RelativeVerticalPositionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RelativeVerticalPositionType
+    {
+
         /// <remarks/>
         ABOVE,
-        
+
         /// <remarks/>
         BELOW,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelDetail
+    {
+
         private CustomLabelCoordinateUnits coordinateUnitsField;
-        
+
         private bool coordinateUnitsFieldSpecified;
-        
+
         private CustomLabelTextEntry[] textEntriesField;
-        
+
         private CustomLabelGraphicEntry[] graphicEntriesField;
-        
+
         private CustomLabelBoxEntry[] boxEntriesField;
-        
+
         private CustomLabelTextBoxEntry[] textBoxEntriesField;
-        
+
         private CustomLabelBarcodeEntry[] barcodeEntriesField;
-        
+
         /// <remarks/>
-        public CustomLabelCoordinateUnits CoordinateUnits {
-            get {
+        public CustomLabelCoordinateUnits CoordinateUnits
+        {
+            get
+            {
                 return this.coordinateUnitsField;
             }
-            set {
+            set
+            {
                 this.coordinateUnitsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CoordinateUnitsSpecified {
-            get {
+        public bool CoordinateUnitsSpecified
+        {
+            get
+            {
                 return this.coordinateUnitsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.coordinateUnitsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TextEntries")]
-        public CustomLabelTextEntry[] TextEntries {
-            get {
+        public CustomLabelTextEntry[] TextEntries
+        {
+            get
+            {
                 return this.textEntriesField;
             }
-            set {
+            set
+            {
                 this.textEntriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GraphicEntries")]
-        public CustomLabelGraphicEntry[] GraphicEntries {
-            get {
+        public CustomLabelGraphicEntry[] GraphicEntries
+        {
+            get
+            {
                 return this.graphicEntriesField;
             }
-            set {
+            set
+            {
                 this.graphicEntriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BoxEntries")]
-        public CustomLabelBoxEntry[] BoxEntries {
-            get {
+        public CustomLabelBoxEntry[] BoxEntries
+        {
+            get
+            {
                 return this.boxEntriesField;
             }
-            set {
+            set
+            {
                 this.boxEntriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TextBoxEntries")]
-        public CustomLabelTextBoxEntry[] TextBoxEntries {
-            get {
+        public CustomLabelTextBoxEntry[] TextBoxEntries
+        {
+            get
+            {
                 return this.textBoxEntriesField;
             }
-            set {
+            set
+            {
                 this.textBoxEntriesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BarcodeEntries")]
-        public CustomLabelBarcodeEntry[] BarcodeEntries {
-            get {
+        public CustomLabelBarcodeEntry[] BarcodeEntries
+        {
+            get
+            {
                 return this.barcodeEntriesField;
             }
-            set {
+            set
+            {
                 this.barcodeEntriesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomLabelCoordinateUnits {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomLabelCoordinateUnits
+    {
+
         /// <remarks/>
         MILS,
-        
+
         /// <remarks/>
         PIXELS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelTextEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelTextEntry
+    {
+
         private CustomLabelPosition positionField;
-        
+
         private string formatField;
-        
+
         private string[] dataFieldsField;
-        
+
         private string thermalFontIdField;
-        
+
         private string fontNameField;
-        
+
         private string fontSizeField;
-        
+
         private RotationType rotationField;
-        
+
         private bool rotationFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomLabelPosition Position {
-            get {
+        public CustomLabelPosition Position
+        {
+            get
+            {
                 return this.positionField;
             }
-            set {
+            set
+            {
                 this.positionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Format {
-            get {
+        public string Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DataFields")]
-        public string[] DataFields {
-            get {
+        public string[] DataFields
+        {
+            get
+            {
                 return this.dataFieldsField;
             }
-            set {
+            set
+            {
                 this.dataFieldsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ThermalFontId {
-            get {
+        public string ThermalFontId
+        {
+            get
+            {
                 return this.thermalFontIdField;
             }
-            set {
+            set
+            {
                 this.thermalFontIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FontName {
-            get {
+        public string FontName
+        {
+            get
+            {
                 return this.fontNameField;
             }
-            set {
+            set
+            {
                 this.fontNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string FontSize {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string FontSize
+        {
+            get
+            {
                 return this.fontSizeField;
             }
-            set {
+            set
+            {
                 this.fontSizeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RotationType Rotation {
-            get {
+        public RotationType Rotation
+        {
+            get
+            {
                 return this.rotationField;
             }
-            set {
+            set
+            {
                 this.rotationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RotationSpecified {
-            get {
+        public bool RotationSpecified
+        {
+            get
+            {
                 return this.rotationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rotationFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelPosition {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelPosition
+    {
+
         private string xField;
-        
+
         private int yField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string X {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string X
+        {
+            get
+            {
                 return this.xField;
             }
-            set {
+            set
+            {
                 this.xField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int Y {
-            get {
+        public int Y
+        {
+            get
+            {
                 return this.yField;
             }
-            set {
+            set
+            {
                 this.yField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RotationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RotationType
+    {
+
         /// <remarks/>
         LEFT,
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         RIGHT,
-        
+
         /// <remarks/>
         UPSIDE_DOWN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelGraphicEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelGraphicEntry
+    {
+
         private CustomLabelPosition positionField;
-        
+
         private string printerGraphicIdField;
-        
+
         private string fileGraphicFullNameField;
-        
+
         /// <remarks/>
-        public CustomLabelPosition Position {
-            get {
+        public CustomLabelPosition Position
+        {
+            get
+            {
                 return this.positionField;
             }
-            set {
+            set
+            {
                 this.positionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PrinterGraphicId {
-            get {
+        public string PrinterGraphicId
+        {
+            get
+            {
                 return this.printerGraphicIdField;
             }
-            set {
+            set
+            {
                 this.printerGraphicIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FileGraphicFullName {
-            get {
+        public string FileGraphicFullName
+        {
+            get
+            {
                 return this.fileGraphicFullNameField;
             }
-            set {
+            set
+            {
                 this.fileGraphicFullNameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelBoxEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelBoxEntry
+    {
+
         private CustomLabelPosition topLeftCornerField;
-        
+
         private CustomLabelPosition bottomRightCornerField;
-        
+
         /// <remarks/>
-        public CustomLabelPosition TopLeftCorner {
-            get {
+        public CustomLabelPosition TopLeftCorner
+        {
+            get
+            {
                 return this.topLeftCornerField;
             }
-            set {
+            set
+            {
                 this.topLeftCornerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelPosition BottomRightCorner {
-            get {
+        public CustomLabelPosition BottomRightCorner
+        {
+            get
+            {
                 return this.bottomRightCornerField;
             }
-            set {
+            set
+            {
                 this.bottomRightCornerField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelTextBoxEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelTextBoxEntry
+    {
+
         private CustomLabelPosition topLeftCornerField;
-        
+
         private CustomLabelPosition bottomRightCornerField;
-        
+
         private CustomLabelPosition positionField;
-        
+
         private string formatField;
-        
+
         private string[] dataFieldsField;
-        
+
         private string thermalFontIdField;
-        
+
         private string fontNameField;
-        
+
         private string fontSizeField;
-        
+
         private RotationType rotationField;
-        
+
         private bool rotationFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomLabelPosition TopLeftCorner {
-            get {
+        public CustomLabelPosition TopLeftCorner
+        {
+            get
+            {
                 return this.topLeftCornerField;
             }
-            set {
+            set
+            {
                 this.topLeftCornerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelPosition BottomRightCorner {
-            get {
+        public CustomLabelPosition BottomRightCorner
+        {
+            get
+            {
                 return this.bottomRightCornerField;
             }
-            set {
+            set
+            {
                 this.bottomRightCornerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelPosition Position {
-            get {
+        public CustomLabelPosition Position
+        {
+            get
+            {
                 return this.positionField;
             }
-            set {
+            set
+            {
                 this.positionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Format {
-            get {
+        public string Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DataFields")]
-        public string[] DataFields {
-            get {
+        public string[] DataFields
+        {
+            get
+            {
                 return this.dataFieldsField;
             }
-            set {
+            set
+            {
                 this.dataFieldsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ThermalFontId {
-            get {
+        public string ThermalFontId
+        {
+            get
+            {
                 return this.thermalFontIdField;
             }
-            set {
+            set
+            {
                 this.thermalFontIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string FontName {
-            get {
+        public string FontName
+        {
+            get
+            {
                 return this.fontNameField;
             }
-            set {
+            set
+            {
                 this.fontNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string FontSize {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string FontSize
+        {
+            get
+            {
                 return this.fontSizeField;
             }
-            set {
+            set
+            {
                 this.fontSizeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RotationType Rotation {
-            get {
+        public RotationType Rotation
+        {
+            get
+            {
                 return this.rotationField;
             }
-            set {
+            set
+            {
                 this.rotationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RotationSpecified {
-            get {
+        public bool RotationSpecified
+        {
+            get
+            {
                 return this.rotationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rotationFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomLabelBarcodeEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomLabelBarcodeEntry
+    {
+
         private CustomLabelPosition positionField;
-        
+
         private string formatField;
-        
+
         private string[] dataFieldsField;
-        
+
         private int barHeightField;
-        
+
         private bool barHeightFieldSpecified;
-        
+
         private int thinBarWidthField;
-        
+
         private bool thinBarWidthFieldSpecified;
-        
+
         private BarcodeSymbologyType barcodeSymbologyField;
-        
+
         /// <remarks/>
-        public CustomLabelPosition Position {
-            get {
+        public CustomLabelPosition Position
+        {
+            get
+            {
                 return this.positionField;
             }
-            set {
+            set
+            {
                 this.positionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Format {
-            get {
+        public string Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DataFields")]
-        public string[] DataFields {
-            get {
+        public string[] DataFields
+        {
+            get
+            {
                 return this.dataFieldsField;
             }
-            set {
+            set
+            {
                 this.dataFieldsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int BarHeight {
-            get {
+        public int BarHeight
+        {
+            get
+            {
                 return this.barHeightField;
             }
-            set {
+            set
+            {
                 this.barHeightField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BarHeightSpecified {
-            get {
+        public bool BarHeightSpecified
+        {
+            get
+            {
                 return this.barHeightFieldSpecified;
             }
-            set {
+            set
+            {
                 this.barHeightFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public int ThinBarWidth {
-            get {
+        public int ThinBarWidth
+        {
+            get
+            {
                 return this.thinBarWidthField;
             }
-            set {
+            set
+            {
                 this.thinBarWidthField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ThinBarWidthSpecified {
-            get {
+        public bool ThinBarWidthSpecified
+        {
+            get
+            {
                 return this.thinBarWidthFieldSpecified;
             }
-            set {
+            set
+            {
                 this.thinBarWidthFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public BarcodeSymbologyType BarcodeSymbology {
-            get {
+        public BarcodeSymbologyType BarcodeSymbology
+        {
+            get
+            {
                 return this.barcodeSymbologyField;
             }
-            set {
+            set
+            {
                 this.barcodeSymbologyField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ConfigurableLabelReferenceEntry {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ConfigurableLabelReferenceEntry
+    {
+
         private string zoneNumberField;
-        
+
         private string headerField;
-        
+
         private string dataFieldField;
-        
+
         private string literalValueField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string ZoneNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string ZoneNumber
+        {
+            get
+            {
                 return this.zoneNumberField;
             }
-            set {
+            set
+            {
                 this.zoneNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Header {
-            get {
+        public string Header
+        {
+            get
+            {
                 return this.headerField;
             }
-            set {
+            set
+            {
                 this.headerField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DataField {
-            get {
+        public string DataField
+        {
+            get
+            {
                 return this.dataFieldField;
             }
-            set {
+            set
+            {
                 this.dataFieldField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LiteralValue {
-            get {
+        public string LiteralValue
+        {
+            get
+            {
                 return this.literalValueField;
             }
-            set {
+            set
+            {
                 this.literalValueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelMaskableDataType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelMaskableDataType
+    {
+
         /// <remarks/>
         CUSTOMS_VALUE,
-        
+
         /// <remarks/>
         DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER,
-        
+
         /// <remarks/>
         SECONDARY_BARCODE,
-        
+
         /// <remarks/>
         SHIPPER_ACCOUNT_NUMBER,
-        
+
         /// <remarks/>
         TERMS_AND_CONDITIONS,
-        
+
         /// <remarks/>
         TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SecondaryBarcodeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SecondaryBarcodeType
+    {
+
         /// <remarks/>
         COMMON_2D,
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         SSCC_18,
-        
+
         /// <remarks/>
         USPS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RegulatoryLabelContentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RegulatoryLabelContentDetail
+    {
+
         private RegulatoryLabelType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private CustomerSpecifiedLabelGenerationOptionType[] generationOptionsField;
-        
+
         /// <remarks/>
-        public RegulatoryLabelType Type {
-            get {
+        public RegulatoryLabelType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GenerationOptions")]
-        public CustomerSpecifiedLabelGenerationOptionType[] GenerationOptions {
-            get {
+        public CustomerSpecifiedLabelGenerationOptionType[] GenerationOptions
+        {
+            get
+            {
                 return this.generationOptionsField;
             }
-            set {
+            set
+            {
                 this.generationOptionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RegulatoryLabelType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RegulatoryLabelType
+    {
+
         /// <remarks/>
         ALCOHOL_SHIPMENT_LABEL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomerSpecifiedLabelGenerationOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomerSpecifiedLabelGenerationOptionType
+    {
+
         /// <remarks/>
         CONTENT_ON_SHIPPING_LABEL_ONLY,
-        
+
         /// <remarks/>
         CONTENT_ON_SHIPPING_LABEL_PREFERRED,
-        
+
         /// <remarks/>
         CONTENT_ON_SUPPLEMENTAL_LABEL_ONLY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class AdditionalLabelsDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class AdditionalLabelsDetail
+    {
+
         private AdditionalLabelsType typeField;
-        
+
         private string countField;
-        
+
         /// <remarks/>
-        public AdditionalLabelsType Type {
-            get {
+        public AdditionalLabelsType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Count {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Count
+        {
+            get
+            {
                 return this.countField;
             }
-            set {
+            set
+            {
                 this.countField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum AdditionalLabelsType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum AdditionalLabelsType
+    {
+
         /// <remarks/>
         BROKER,
-        
+
         /// <remarks/>
         CONSIGNEE,
-        
+
         /// <remarks/>
         CUSTOMS,
-        
+
         /// <remarks/>
         DESTINATION,
-        
+
         /// <remarks/>
         FREIGHT_REFERENCE,
-        
+
         /// <remarks/>
         MANIFEST,
-        
+
         /// <remarks/>
         ORIGIN,
-        
+
         /// <remarks/>
         RECIPIENT,
-        
+
         /// <remarks/>
         SHIPPER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentSpecification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentSpecification
+    {
+
         private RequestedShippingDocumentType[] shippingDocumentTypesField;
-        
+
         private CertificateOfOriginDetail certificateOfOriginField;
-        
+
         private CommercialInvoiceDetail commercialInvoiceDetailField;
-        
+
         private CustomDocumentDetail[] customPackageDocumentDetailField;
-        
+
         private CustomDocumentDetail[] customShipmentDocumentDetailField;
-        
+
         private ExportDeclarationDetail exportDeclarationDetailField;
-        
+
         private GeneralAgencyAgreementDetail generalAgencyAgreementDetailField;
-        
+
         private NaftaCertificateOfOriginDetail naftaCertificateOfOriginDetailField;
-        
+
         private Op900Detail op900DetailField;
-        
+
         private DangerousGoodsShippersDeclarationDetail dangerousGoodsShippersDeclarationDetailField;
-        
+
         private FreightAddressLabelDetail freightAddressLabelDetailField;
-        
+
         private ReturnInstructionsDetail returnInstructionsDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShippingDocumentTypes")]
-        public RequestedShippingDocumentType[] ShippingDocumentTypes {
-            get {
+        public RequestedShippingDocumentType[] ShippingDocumentTypes
+        {
+            get
+            {
                 return this.shippingDocumentTypesField;
             }
-            set {
+            set
+            {
                 this.shippingDocumentTypesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CertificateOfOriginDetail CertificateOfOrigin {
-            get {
+        public CertificateOfOriginDetail CertificateOfOrigin
+        {
+            get
+            {
                 return this.certificateOfOriginField;
             }
-            set {
+            set
+            {
                 this.certificateOfOriginField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CommercialInvoiceDetail CommercialInvoiceDetail {
-            get {
+        public CommercialInvoiceDetail CommercialInvoiceDetail
+        {
+            get
+            {
                 return this.commercialInvoiceDetailField;
             }
-            set {
+            set
+            {
                 this.commercialInvoiceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomPackageDocumentDetail")]
-        public CustomDocumentDetail[] CustomPackageDocumentDetail {
-            get {
+        public CustomDocumentDetail[] CustomPackageDocumentDetail
+        {
+            get
+            {
                 return this.customPackageDocumentDetailField;
             }
-            set {
+            set
+            {
                 this.customPackageDocumentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomShipmentDocumentDetail")]
-        public CustomDocumentDetail[] CustomShipmentDocumentDetail {
-            get {
+        public CustomDocumentDetail[] CustomShipmentDocumentDetail
+        {
+            get
+            {
                 return this.customShipmentDocumentDetailField;
             }
-            set {
+            set
+            {
                 this.customShipmentDocumentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ExportDeclarationDetail ExportDeclarationDetail {
-            get {
+        public ExportDeclarationDetail ExportDeclarationDetail
+        {
+            get
+            {
                 return this.exportDeclarationDetailField;
             }
-            set {
+            set
+            {
                 this.exportDeclarationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public GeneralAgencyAgreementDetail GeneralAgencyAgreementDetail {
-            get {
+        public GeneralAgencyAgreementDetail GeneralAgencyAgreementDetail
+        {
+            get
+            {
                 return this.generalAgencyAgreementDetailField;
             }
-            set {
+            set
+            {
                 this.generalAgencyAgreementDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaCertificateOfOriginDetail NaftaCertificateOfOriginDetail {
-            get {
+        public NaftaCertificateOfOriginDetail NaftaCertificateOfOriginDetail
+        {
+            get
+            {
                 return this.naftaCertificateOfOriginDetailField;
             }
-            set {
+            set
+            {
                 this.naftaCertificateOfOriginDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Op900Detail Op900Detail {
-            get {
+        public Op900Detail Op900Detail
+        {
+            get
+            {
                 return this.op900DetailField;
             }
-            set {
+            set
+            {
                 this.op900DetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsShippersDeclarationDetail DangerousGoodsShippersDeclarationDetail {
-            get {
+        public DangerousGoodsShippersDeclarationDetail DangerousGoodsShippersDeclarationDetail
+        {
+            get
+            {
                 return this.dangerousGoodsShippersDeclarationDetailField;
             }
-            set {
+            set
+            {
                 this.dangerousGoodsShippersDeclarationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightAddressLabelDetail FreightAddressLabelDetail {
-            get {
+        public FreightAddressLabelDetail FreightAddressLabelDetail
+        {
+            get
+            {
                 return this.freightAddressLabelDetailField;
             }
-            set {
+            set
+            {
                 this.freightAddressLabelDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ReturnInstructionsDetail ReturnInstructionsDetail {
-            get {
+        public ReturnInstructionsDetail ReturnInstructionsDetail
+        {
+            get
+            {
                 return this.returnInstructionsDetailField;
             }
-            set {
+            set
+            {
                 this.returnInstructionsDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CertificateOfOriginDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CertificateOfOriginDetail
+    {
+
         private ShippingDocumentFormat documentFormatField;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat DocumentFormat {
-            get {
+        public ShippingDocumentFormat DocumentFormat
+        {
+            get
+            {
                 return this.documentFormatField;
             }
-            set {
+            set
+            {
                 this.documentFormatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentFormat {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentFormat
+    {
+
         private ShippingDocumentDispositionDetail[] dispositionsField;
-        
+
         private LinearMeasure topOfPageOffsetField;
-        
+
         private ShippingDocumentImageType imageTypeField;
-        
+
         private bool imageTypeFieldSpecified;
-        
+
         private ShippingDocumentStockType stockTypeField;
-        
+
         private bool stockTypeFieldSpecified;
-        
+
         private bool provideInstructionsField;
-        
+
         private bool provideInstructionsFieldSpecified;
-        
+
         private DocumentFormatOptionType[] optionsRequestedField;
-        
+
         private Localization localizationField;
-        
+
         private string customDocumentIdentifierField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Dispositions")]
-        public ShippingDocumentDispositionDetail[] Dispositions {
-            get {
+        public ShippingDocumentDispositionDetail[] Dispositions
+        {
+            get
+            {
                 return this.dispositionsField;
             }
-            set {
+            set
+            {
                 this.dispositionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public LinearMeasure TopOfPageOffset {
-            get {
+        public LinearMeasure TopOfPageOffset
+        {
+            get
+            {
                 return this.topOfPageOffsetField;
             }
-            set {
+            set
+            {
                 this.topOfPageOffsetField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentImageType ImageType {
-            get {
+        public ShippingDocumentImageType ImageType
+        {
+            get
+            {
                 return this.imageTypeField;
             }
-            set {
+            set
+            {
                 this.imageTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ImageTypeSpecified {
-            get {
+        public bool ImageTypeSpecified
+        {
+            get
+            {
                 return this.imageTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.imageTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentStockType StockType {
-            get {
+        public ShippingDocumentStockType StockType
+        {
+            get
+            {
                 return this.stockTypeField;
             }
-            set {
+            set
+            {
                 this.stockTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool StockTypeSpecified {
-            get {
+        public bool StockTypeSpecified
+        {
+            get
+            {
                 return this.stockTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.stockTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ProvideInstructions {
-            get {
+        public bool ProvideInstructions
+        {
+            get
+            {
                 return this.provideInstructionsField;
             }
-            set {
+            set
+            {
                 this.provideInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ProvideInstructionsSpecified {
-            get {
+        public bool ProvideInstructionsSpecified
+        {
+            get
+            {
                 return this.provideInstructionsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.provideInstructionsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable=false)]
-        public DocumentFormatOptionType[] OptionsRequested {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("Options", IsNullable = false)]
+        public DocumentFormatOptionType[] OptionsRequested
+        {
+            get
+            {
                 return this.optionsRequestedField;
             }
-            set {
+            set
+            {
                 this.optionsRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Localization Localization {
-            get {
+        public Localization Localization
+        {
+            get
+            {
                 return this.localizationField;
             }
-            set {
+            set
+            {
                 this.localizationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomDocumentIdentifier {
-            get {
+        public string CustomDocumentIdentifier
+        {
+            get
+            {
                 return this.customDocumentIdentifierField;
             }
-            set {
+            set
+            {
                 this.customDocumentIdentifierField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class LinearMeasure {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class LinearMeasure
+    {
+
         private decimal valueField;
-        
+
         private bool valueFieldSpecified;
-        
+
         private LinearUnits unitsField;
-        
+
         private bool unitsFieldSpecified;
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ValueSpecified {
-            get {
+        public bool ValueSpecified
+        {
+            get
+            {
                 return this.valueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.valueFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LinearUnits Units {
-            get {
+        public LinearUnits Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool UnitsSpecified {
-            get {
+        public bool UnitsSpecified
+        {
+            get
+            {
                 return this.unitsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.unitsFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ShippingDocumentStockType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ShippingDocumentStockType
+    {
+
         /// <remarks/>
         OP_900_LG_B,
-        
+
         /// <remarks/>
         OP_900_LL_B,
-        
+
         /// <remarks/>
         OP_950,
-        
+
         /// <remarks/>
         PAPER_4X6,
-        
+
         /// <remarks/>
         PAPER_4_PER_PAGE_PORTRAIT,
-        
+
         /// <remarks/>
         PAPER_LETTER,
-        
+
         /// <remarks/>
         STOCK_4X6,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("STOCK_4X6.75_LEADING_DOC_TAB")]
         STOCK_4X675_LEADING_DOC_TAB,
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("STOCK_4X6.75_TRAILING_DOC_TAB")]
         STOCK_4X675_TRAILING_DOC_TAB,
-        
+
         /// <remarks/>
         STOCK_4X8,
-        
+
         /// <remarks/>
         STOCK_4X9_LEADING_DOC_TAB,
-        
+
         /// <remarks/>
         STOCK_4X9_TRAILING_DOC_TAB,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DocumentFormatOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DocumentFormatOptionType
+    {
+
         /// <remarks/>
         SUPPRESS_ADDITIONAL_LANGUAGES,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomerImageUsage {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomerImageUsage
+    {
+
         private CustomerImageUsageType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private ImageId idField;
-        
+
         private bool idFieldSpecified;
-        
+
         /// <remarks/>
-        public CustomerImageUsageType Type {
-            get {
+        public CustomerImageUsageType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ImageId Id {
-            get {
+        public ImageId Id
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IdSpecified {
-            get {
+        public bool IdSpecified
+        {
+            get
+            {
                 return this.idFieldSpecified;
             }
-            set {
+            set
+            {
                 this.idFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CustomerImageUsageType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CustomerImageUsageType
+    {
+
         /// <remarks/>
         LETTER_HEAD,
-        
+
         /// <remarks/>
         SIGNATURE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ImageId {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ImageId
+    {
+
         /// <remarks/>
         IMAGE_1,
-        
+
         /// <remarks/>
         IMAGE_2,
-        
+
         /// <remarks/>
         IMAGE_3,
-        
+
         /// <remarks/>
         IMAGE_4,
-        
+
         /// <remarks/>
         IMAGE_5,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CommercialInvoiceDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CommercialInvoiceDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CustomDocumentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CustomDocumentDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private LabelPrintingOrientationType labelPrintingOrientationField;
-        
+
         private bool labelPrintingOrientationFieldSpecified;
-        
+
         private LabelRotationType labelRotationField;
-        
+
         private bool labelRotationFieldSpecified;
-        
+
         private string specificationIdField;
-        
+
         private string customDocumentIdentifierField;
-        
+
         private DocTabContent docTabContentField;
-        
+
         private CustomLabelDetail customContentField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelPrintingOrientationType LabelPrintingOrientation {
-            get {
+        public LabelPrintingOrientationType LabelPrintingOrientation
+        {
+            get
+            {
                 return this.labelPrintingOrientationField;
             }
-            set {
+            set
+            {
                 this.labelPrintingOrientationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelPrintingOrientationSpecified {
-            get {
+        public bool LabelPrintingOrientationSpecified
+        {
+            get
+            {
                 return this.labelPrintingOrientationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelPrintingOrientationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public LabelRotationType LabelRotation {
-            get {
+        public LabelRotationType LabelRotation
+        {
+            get
+            {
                 return this.labelRotationField;
             }
-            set {
+            set
+            {
                 this.labelRotationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelRotationSpecified {
-            get {
+        public bool LabelRotationSpecified
+        {
+            get
+            {
                 return this.labelRotationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelRotationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecificationId {
-            get {
+        public string SpecificationId
+        {
+            get
+            {
                 return this.specificationIdField;
             }
-            set {
+            set
+            {
                 this.specificationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomDocumentIdentifier {
-            get {
+        public string CustomDocumentIdentifier
+        {
+            get
+            {
                 return this.customDocumentIdentifierField;
             }
-            set {
+            set
+            {
                 this.customDocumentIdentifierField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocTabContent DocTabContent {
-            get {
+        public DocTabContent DocTabContent
+        {
+            get
+            {
                 return this.docTabContentField;
             }
-            set {
+            set
+            {
                 this.docTabContentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelDetail CustomContent {
-            get {
+        public CustomLabelDetail CustomContent
+        {
+            get
+            {
                 return this.customContentField;
             }
-            set {
+            set
+            {
                 this.customContentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum LabelRotationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum LabelRotationType
+    {
+
         /// <remarks/>
         LEFT,
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         RIGHT,
-        
+
         /// <remarks/>
         UPSIDE_DOWN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ExportDeclarationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ExportDeclarationDetail
+    {
+
         private ShippingDocumentFormat documentFormatField;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat DocumentFormat {
-            get {
+        public ShippingDocumentFormat DocumentFormat
+        {
+            get
+            {
                 return this.documentFormatField;
             }
-            set {
+            set
+            {
                 this.documentFormatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class GeneralAgencyAgreementDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class GeneralAgencyAgreementDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NaftaCertificateOfOriginDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NaftaCertificateOfOriginDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private DateRange blanketPeriodField;
-        
+
         private NaftaImporterSpecificationType importerSpecificationField;
-        
+
         private bool importerSpecificationFieldSpecified;
-        
+
         private Contact signatureContactField;
-        
+
         private NaftaProducerSpecificationType producerSpecificationField;
-        
+
         private bool producerSpecificationFieldSpecified;
-        
+
         private NaftaProducer[] producersField;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DateRange BlanketPeriod {
-            get {
+        public DateRange BlanketPeriod
+        {
+            get
+            {
                 return this.blanketPeriodField;
             }
-            set {
+            set
+            {
                 this.blanketPeriodField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaImporterSpecificationType ImporterSpecification {
-            get {
+        public NaftaImporterSpecificationType ImporterSpecification
+        {
+            get
+            {
                 return this.importerSpecificationField;
             }
-            set {
+            set
+            {
                 this.importerSpecificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ImporterSpecificationSpecified {
-            get {
+        public bool ImporterSpecificationSpecified
+        {
+            get
+            {
                 return this.importerSpecificationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.importerSpecificationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Contact SignatureContact {
-            get {
+        public Contact SignatureContact
+        {
+            get
+            {
                 return this.signatureContactField;
             }
-            set {
+            set
+            {
                 this.signatureContactField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NaftaProducerSpecificationType ProducerSpecification {
-            get {
+        public NaftaProducerSpecificationType ProducerSpecification
+        {
+            get
+            {
                 return this.producerSpecificationField;
             }
-            set {
+            set
+            {
                 this.producerSpecificationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ProducerSpecificationSpecified {
-            get {
+        public bool ProducerSpecificationSpecified
+        {
+            get
+            {
                 return this.producerSpecificationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.producerSpecificationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Producers")]
-        public NaftaProducer[] Producers {
-            get {
+        public NaftaProducer[] Producers
+        {
+            get
+            {
                 return this.producersField;
             }
-            set {
+            set
+            {
                 this.producersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NaftaImporterSpecificationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NaftaImporterSpecificationType
+    {
+
         /// <remarks/>
         IMPORTER_OF_RECORD,
-        
+
         /// <remarks/>
         RECIPIENT,
-        
+
         /// <remarks/>
         UNKNOWN,
-        
+
         /// <remarks/>
         VARIOUS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NaftaProducerSpecificationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NaftaProducerSpecificationType
+    {
+
         /// <remarks/>
         AVAILABLE_UPON_REQUEST,
-        
+
         /// <remarks/>
         MULTIPLE_SPECIFIED,
-        
+
         /// <remarks/>
         SAME,
-        
+
         /// <remarks/>
         SINGLE_SPECIFIED,
-        
+
         /// <remarks/>
         UNKNOWN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NaftaProducer {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NaftaProducer
+    {
+
         private string idField;
-        
+
         private Party producerField;
-        
+
         /// <remarks/>
-        public string Id {
-            get {
+        public string Id
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Producer {
-            get {
+        public Party Producer
+        {
+            get
+            {
                 return this.producerField;
             }
-            set {
+            set
+            {
                 this.producerField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Op900Detail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Op900Detail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private CustomerReferenceType referenceField;
-        
+
         private bool referenceFieldSpecified;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         private string signatureNameField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomerReferenceType Reference {
-            get {
+        public CustomerReferenceType Reference
+        {
+            get
+            {
                 return this.referenceField;
             }
-            set {
+            set
+            {
                 this.referenceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ReferenceSpecified {
-            get {
+        public bool ReferenceSpecified
+        {
+            get
+            {
                 return this.referenceFieldSpecified;
             }
-            set {
+            set
+            {
                 this.referenceFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SignatureName {
-            get {
+        public string SignatureName
+        {
+            get
+            {
                 return this.signatureNameField;
             }
-            set {
+            set
+            {
                 this.signatureNameField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DangerousGoodsShippersDeclarationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DangerousGoodsShippersDeclarationDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private CustomerImageUsage[] customerImageUsagesField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerImageUsages")]
-        public CustomerImageUsage[] CustomerImageUsages {
-            get {
+        public CustomerImageUsage[] CustomerImageUsages
+        {
+            get
+            {
                 return this.customerImageUsagesField;
             }
-            set {
+            set
+            {
                 this.customerImageUsagesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightAddressLabelDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightAddressLabelDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private string copiesField;
-        
+
         private PageQuadrantType startingPositionField;
-        
+
         private bool startingPositionFieldSpecified;
-        
+
         private DocTabContent docTabContentField;
-        
+
         private RelativeVerticalPositionType customContentPositionField;
-        
+
         private bool customContentPositionFieldSpecified;
-        
+
         private CustomLabelDetail customContentField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Copies {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Copies
+        {
+            get
+            {
                 return this.copiesField;
             }
-            set {
+            set
+            {
                 this.copiesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PageQuadrantType StartingPosition {
-            get {
+        public PageQuadrantType StartingPosition
+        {
+            get
+            {
                 return this.startingPositionField;
             }
-            set {
+            set
+            {
                 this.startingPositionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool StartingPositionSpecified {
-            get {
+        public bool StartingPositionSpecified
+        {
+            get
+            {
                 return this.startingPositionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.startingPositionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocTabContent DocTabContent {
-            get {
+        public DocTabContent DocTabContent
+        {
+            get
+            {
                 return this.docTabContentField;
             }
-            set {
+            set
+            {
                 this.docTabContentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RelativeVerticalPositionType CustomContentPosition {
-            get {
+        public RelativeVerticalPositionType CustomContentPosition
+        {
+            get
+            {
                 return this.customContentPositionField;
             }
-            set {
+            set
+            {
                 this.customContentPositionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomContentPositionSpecified {
-            get {
+        public bool CustomContentPositionSpecified
+        {
+            get
+            {
                 return this.customContentPositionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.customContentPositionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CustomLabelDetail CustomContent {
-            get {
+        public CustomLabelDetail CustomContent
+        {
+            get
+            {
                 return this.customContentField;
             }
-            set {
+            set
+            {
                 this.customContentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PageQuadrantType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PageQuadrantType
+    {
+
         /// <remarks/>
         BOTTOM_LEFT,
-        
+
         /// <remarks/>
         BOTTOM_RIGHT,
-        
+
         /// <remarks/>
         TOP_LEFT,
-        
+
         /// <remarks/>
         TOP_RIGHT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ReturnInstructionsDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ReturnInstructionsDetail
+    {
+
         private ShippingDocumentFormat formatField;
-        
+
         private string customTextField;
-        
+
         /// <remarks/>
-        public ShippingDocumentFormat Format {
-            get {
+        public ShippingDocumentFormat Format
+        {
+            get
+            {
                 return this.formatField;
             }
-            set {
+            set
+            {
                 this.formatField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomText {
-            get {
+        public string CustomText
+        {
+            get
+            {
                 return this.customTextField;
             }
-            set {
+            set
+            {
                 this.customTextField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RateRequestType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RateRequestType
+    {
+
         /// <remarks/>
         LIST,
-        
+
         /// <remarks/>
         NONE,
-        
+
         /// <remarks/>
         PREFERRED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EdtRequestType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EdtRequestType
+    {
+
         /// <remarks/>
         ALL,
-        
+
         /// <remarks/>
         NONE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DangerousGoodsDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DangerousGoodsDetail
+    {
+
         private string uploadedTrackingNumberField;
-        
+
         private HazardousCommodityRegulationType regulationField;
-        
+
         private bool regulationFieldSpecified;
-        
+
         private DangerousGoodsAccessibilityType accessibilityField;
-        
+
         private bool accessibilityFieldSpecified;
-        
+
         private bool cargoAircraftOnlyField;
-        
+
         private bool cargoAircraftOnlyFieldSpecified;
-        
+
         private HazardousCommodityOptionType[] optionsField;
-        
+
         private DangerousGoodsPackingOptionType packingOptionField;
-        
+
         private bool packingOptionFieldSpecified;
-        
+
         private string referenceIdField;
-        
+
         private DangerousGoodsContainer[] containersField;
-        
+
         private HazardousCommodityPackagingDetail packagingField;
-        
+
         private DangerousGoodsSignatory signatoryField;
-        
+
         private string emergencyContactNumberField;
-        
+
         private string offerorField;
-        
+
         private Contact infectiousSubstanceResponsibleContactField;
-        
+
         private string additionalHandlingField;
-        
+
         private RadioactivityDetail radioactivityDetailField;
-        
+
         /// <remarks/>
-        public string UploadedTrackingNumber {
-            get {
+        public string UploadedTrackingNumber
+        {
+            get
+            {
                 return this.uploadedTrackingNumberField;
             }
-            set {
+            set
+            {
                 this.uploadedTrackingNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityRegulationType Regulation {
-            get {
+        public HazardousCommodityRegulationType Regulation
+        {
+            get
+            {
                 return this.regulationField;
             }
-            set {
+            set
+            {
                 this.regulationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RegulationSpecified {
-            get {
+        public bool RegulationSpecified
+        {
+            get
+            {
                 return this.regulationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.regulationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsAccessibilityType Accessibility {
-            get {
+        public DangerousGoodsAccessibilityType Accessibility
+        {
+            get
+            {
                 return this.accessibilityField;
             }
-            set {
+            set
+            {
                 this.accessibilityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AccessibilitySpecified {
-            get {
+        public bool AccessibilitySpecified
+        {
+            get
+            {
                 return this.accessibilityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.accessibilityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool CargoAircraftOnly {
-            get {
+        public bool CargoAircraftOnly
+        {
+            get
+            {
                 return this.cargoAircraftOnlyField;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CargoAircraftOnlySpecified {
-            get {
+        public bool CargoAircraftOnlySpecified
+        {
+            get
+            {
                 return this.cargoAircraftOnlyFieldSpecified;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Options")]
-        public HazardousCommodityOptionType[] Options {
-            get {
+        public HazardousCommodityOptionType[] Options
+        {
+            get
+            {
                 return this.optionsField;
             }
-            set {
+            set
+            {
                 this.optionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsPackingOptionType PackingOption {
-            get {
+        public DangerousGoodsPackingOptionType PackingOption
+        {
+            get
+            {
                 return this.packingOptionField;
             }
-            set {
+            set
+            {
                 this.packingOptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingOptionSpecified {
-            get {
+        public bool PackingOptionSpecified
+        {
+            get
+            {
                 return this.packingOptionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingOptionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ReferenceId {
-            get {
+        public string ReferenceId
+        {
+            get
+            {
                 return this.referenceIdField;
             }
-            set {
+            set
+            {
                 this.referenceIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Containers")]
-        public DangerousGoodsContainer[] Containers {
-            get {
+        public DangerousGoodsContainer[] Containers
+        {
+            get
+            {
                 return this.containersField;
             }
-            set {
+            set
+            {
                 this.containersField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityPackagingDetail Packaging {
-            get {
+        public HazardousCommodityPackagingDetail Packaging
+        {
+            get
+            {
                 return this.packagingField;
             }
-            set {
+            set
+            {
                 this.packagingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsSignatory Signatory {
-            get {
+        public DangerousGoodsSignatory Signatory
+        {
+            get
+            {
                 return this.signatoryField;
             }
-            set {
+            set
+            {
                 this.signatoryField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EmergencyContactNumber {
-            get {
+        public string EmergencyContactNumber
+        {
+            get
+            {
                 return this.emergencyContactNumberField;
             }
-            set {
+            set
+            {
                 this.emergencyContactNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Offeror {
-            get {
+        public string Offeror
+        {
+            get
+            {
                 return this.offerorField;
             }
-            set {
+            set
+            {
                 this.offerorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Contact InfectiousSubstanceResponsibleContact {
-            get {
+        public Contact InfectiousSubstanceResponsibleContact
+        {
+            get
+            {
                 return this.infectiousSubstanceResponsibleContactField;
             }
-            set {
+            set
+            {
                 this.infectiousSubstanceResponsibleContactField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AdditionalHandling {
-            get {
+        public string AdditionalHandling
+        {
+            get
+            {
                 return this.additionalHandlingField;
             }
-            set {
+            set
+            {
                 this.additionalHandlingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadioactivityDetail RadioactivityDetail {
-            get {
+        public RadioactivityDetail RadioactivityDetail
+        {
+            get
+            {
                 return this.radioactivityDetailField;
             }
-            set {
+            set
+            {
                 this.radioactivityDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityRegulationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityRegulationType
+    {
+
         /// <remarks/>
         ADR,
-        
+
         /// <remarks/>
         DOT,
-        
+
         /// <remarks/>
         IATA,
-        
+
         /// <remarks/>
         ORMD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DangerousGoodsAccessibilityType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DangerousGoodsAccessibilityType
+    {
+
         /// <remarks/>
         ACCESSIBLE,
-        
+
         /// <remarks/>
         INACCESSIBLE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DangerousGoodsPackingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DangerousGoodsPackingOptionType
+    {
+
         /// <remarks/>
         OVERPACK,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DangerousGoodsContainer {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DangerousGoodsContainer
+    {
+
         private HazardousContainerPackingType packingTypeField;
-        
+
         private bool packingTypeFieldSpecified;
-        
+
         private string containerTypeField;
-        
+
         private RadioactiveContainerClassType radioactiveContainerClassField;
-        
+
         private bool radioactiveContainerClassFieldSpecified;
-        
+
         private string numberOfContainersField;
-        
+
         private HazardousCommodityContent[] hazardousCommoditiesField;
-        
+
         /// <remarks/>
-        public HazardousContainerPackingType PackingType {
-            get {
+        public HazardousContainerPackingType PackingType
+        {
+            get
+            {
                 return this.packingTypeField;
             }
-            set {
+            set
+            {
                 this.packingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingTypeSpecified {
-            get {
+        public bool PackingTypeSpecified
+        {
+            get
+            {
                 return this.packingTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ContainerType {
-            get {
+        public string ContainerType
+        {
+            get
+            {
                 return this.containerTypeField;
             }
-            set {
+            set
+            {
                 this.containerTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadioactiveContainerClassType RadioactiveContainerClass {
-            get {
+        public RadioactiveContainerClassType RadioactiveContainerClass
+        {
+            get
+            {
                 return this.radioactiveContainerClassField;
             }
-            set {
+            set
+            {
                 this.radioactiveContainerClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RadioactiveContainerClassSpecified {
-            get {
+        public bool RadioactiveContainerClassSpecified
+        {
+            get
+            {
                 return this.radioactiveContainerClassFieldSpecified;
             }
-            set {
+            set
+            {
                 this.radioactiveContainerClassFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string NumberOfContainers {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string NumberOfContainers
+        {
+            get
+            {
                 return this.numberOfContainersField;
             }
-            set {
+            set
+            {
                 this.numberOfContainersField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("HazardousCommodities")]
-        public HazardousCommodityContent[] HazardousCommodities {
-            get {
+        public HazardousCommodityContent[] HazardousCommodities
+        {
+            get
+            {
                 return this.hazardousCommoditiesField;
             }
-            set {
+            set
+            {
                 this.hazardousCommoditiesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousContainerPackingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousContainerPackingType
+    {
+
         /// <remarks/>
         ALL_PACKED_IN_ONE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RadioactiveContainerClassType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RadioactiveContainerClassType
+    {
+
         /// <remarks/>
         EXCEPTED_PACKAGE,
-        
+
         /// <remarks/>
         INDUSTRIAL_IP1,
-        
+
         /// <remarks/>
         INDUSTRIAL_IP2,
-        
+
         /// <remarks/>
         INDUSTRIAL_IP3,
-        
+
         /// <remarks/>
         TYPE_A,
-        
+
         /// <remarks/>
         TYPE_B_M,
-        
+
         /// <remarks/>
         TYPE_B_U,
-        
+
         /// <remarks/>
         TYPE_C,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityContent {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityContent
+    {
+
         private HazardousCommodityDescription descriptionField;
-        
+
         private HazardousCommodityQuantityDetail quantityField;
-        
+
         private HazardousCommodityInnerReceptacleDetail[] innerReceptaclesField;
-        
+
         private HazardousCommodityOptionDetail optionsField;
-        
+
         private RadionuclideDetail radionuclideDetailField;
-        
+
         private NetExplosiveDetail netExplosiveDetailField;
-        
+
         /// <remarks/>
-        public HazardousCommodityDescription Description {
-            get {
+        public HazardousCommodityDescription Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityQuantityDetail Quantity {
-            get {
+        public HazardousCommodityQuantityDetail Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("InnerReceptacles")]
-        public HazardousCommodityInnerReceptacleDetail[] InnerReceptacles {
-            get {
+        public HazardousCommodityInnerReceptacleDetail[] InnerReceptacles
+        {
+            get
+            {
                 return this.innerReceptaclesField;
             }
-            set {
+            set
+            {
                 this.innerReceptaclesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityOptionDetail Options {
-            get {
+        public HazardousCommodityOptionDetail Options
+        {
+            get
+            {
                 return this.optionsField;
             }
-            set {
+            set
+            {
                 this.optionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadionuclideDetail RadionuclideDetail {
-            get {
+        public RadionuclideDetail RadionuclideDetail
+        {
+            get
+            {
                 return this.radionuclideDetailField;
             }
-            set {
+            set
+            {
                 this.radionuclideDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NetExplosiveDetail NetExplosiveDetail {
-            get {
+        public NetExplosiveDetail NetExplosiveDetail
+        {
+            get
+            {
                 return this.netExplosiveDetailField;
             }
-            set {
+            set
+            {
                 this.netExplosiveDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityDescription {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityDescription
+    {
+
         private string idField;
-        
+
         private string sequenceNumberField;
-        
+
         private HazardousCommodityPackingGroupType packingGroupField;
-        
+
         private bool packingGroupFieldSpecified;
-        
+
         private HazardousCommodityPackingDetail packingDetailsField;
-        
+
         private bool reportableQuantityField;
-        
+
         private bool reportableQuantityFieldSpecified;
-        
+
         private string properShippingNameField;
-        
+
         private string technicalNameField;
-        
+
         private decimal percentageField;
-        
+
         private bool percentageFieldSpecified;
-        
+
         private string hazardClassField;
-        
+
         private string[] subsidiaryClassesField;
-        
+
         private string labelTextField;
-        
+
         private HazardousCommodityDescriptionProcessingOptionType[] processingOptionsField;
-        
+
         private string authorizationField;
-        
+
         /// <remarks/>
-        public string Id {
-            get {
+        public string Id
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string SequenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string SequenceNumber
+        {
+            get
+            {
                 return this.sequenceNumberField;
             }
-            set {
+            set
+            {
                 this.sequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityPackingGroupType PackingGroup {
-            get {
+        public HazardousCommodityPackingGroupType PackingGroup
+        {
+            get
+            {
                 return this.packingGroupField;
             }
-            set {
+            set
+            {
                 this.packingGroupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingGroupSpecified {
-            get {
+        public bool PackingGroupSpecified
+        {
+            get
+            {
                 return this.packingGroupFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingGroupFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityPackingDetail PackingDetails {
-            get {
+        public HazardousCommodityPackingDetail PackingDetails
+        {
+            get
+            {
                 return this.packingDetailsField;
             }
-            set {
+            set
+            {
                 this.packingDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ReportableQuantity {
-            get {
+        public bool ReportableQuantity
+        {
+            get
+            {
                 return this.reportableQuantityField;
             }
-            set {
+            set
+            {
                 this.reportableQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ReportableQuantitySpecified {
-            get {
+        public bool ReportableQuantitySpecified
+        {
+            get
+            {
                 return this.reportableQuantityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.reportableQuantityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ProperShippingName {
-            get {
+        public string ProperShippingName
+        {
+            get
+            {
                 return this.properShippingNameField;
             }
-            set {
+            set
+            {
                 this.properShippingNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TechnicalName {
-            get {
+        public string TechnicalName
+        {
+            get
+            {
                 return this.technicalNameField;
             }
-            set {
+            set
+            {
                 this.technicalNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Percentage {
-            get {
+        public decimal Percentage
+        {
+            get
+            {
                 return this.percentageField;
             }
-            set {
+            set
+            {
                 this.percentageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PercentageSpecified {
-            get {
+        public bool PercentageSpecified
+        {
+            get
+            {
                 return this.percentageFieldSpecified;
             }
-            set {
+            set
+            {
                 this.percentageFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HazardClass {
-            get {
+        public string HazardClass
+        {
+            get
+            {
                 return this.hazardClassField;
             }
-            set {
+            set
+            {
                 this.hazardClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SubsidiaryClasses")]
-        public string[] SubsidiaryClasses {
-            get {
+        public string[] SubsidiaryClasses
+        {
+            get
+            {
                 return this.subsidiaryClassesField;
             }
-            set {
+            set
+            {
                 this.subsidiaryClassesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelText {
-            get {
+        public string LabelText
+        {
+            get
+            {
                 return this.labelTextField;
             }
-            set {
+            set
+            {
                 this.labelTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProcessingOptions")]
-        public HazardousCommodityDescriptionProcessingOptionType[] ProcessingOptions {
-            get {
+        public HazardousCommodityDescriptionProcessingOptionType[] ProcessingOptions
+        {
+            get
+            {
                 return this.processingOptionsField;
             }
-            set {
+            set
+            {
                 this.processingOptionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Authorization {
-            get {
+        public string Authorization
+        {
+            get
+            {
                 return this.authorizationField;
             }
-            set {
+            set
+            {
                 this.authorizationField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityPackingGroupType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityPackingGroupType
+    {
+
         /// <remarks/>
         DEFAULT,
-        
+
         /// <remarks/>
         I,
-        
+
         /// <remarks/>
         II,
-        
+
         /// <remarks/>
         III,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityPackingDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityPackingDetail
+    {
+
         private bool cargoAircraftOnlyField;
-        
+
         private bool cargoAircraftOnlyFieldSpecified;
-        
+
         private string packingInstructionsField;
-        
+
         /// <remarks/>
-        public bool CargoAircraftOnly {
-            get {
+        public bool CargoAircraftOnly
+        {
+            get
+            {
                 return this.cargoAircraftOnlyField;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CargoAircraftOnlySpecified {
-            get {
+        public bool CargoAircraftOnlySpecified
+        {
+            get
+            {
                 return this.cargoAircraftOnlyFieldSpecified;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackingInstructions {
-            get {
+        public string PackingInstructions
+        {
+            get
+            {
                 return this.packingInstructionsField;
             }
-            set {
+            set
+            {
                 this.packingInstructionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityDescriptionProcessingOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityDescriptionProcessingOptionType
+    {
+
         /// <remarks/>
         INCLUDE_SPECIAL_PROVISIONS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityQuantityDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityQuantityDetail
+    {
+
         private decimal amountField;
-        
+
         private bool amountFieldSpecified;
-        
+
         private string unitsField;
-        
+
         private HazardousCommodityQuantityType quantityTypeField;
-        
+
         private bool quantityTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public decimal Amount {
-            get {
+        public decimal Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AmountSpecified {
-            get {
+        public bool AmountSpecified
+        {
+            get
+            {
                 return this.amountFieldSpecified;
             }
-            set {
+            set
+            {
                 this.amountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Units {
-            get {
+        public string Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityQuantityType QuantityType {
-            get {
+        public HazardousCommodityQuantityType QuantityType
+        {
+            get
+            {
                 return this.quantityTypeField;
             }
-            set {
+            set
+            {
                 this.quantityTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool QuantityTypeSpecified {
-            get {
+        public bool QuantityTypeSpecified
+        {
+            get
+            {
                 return this.quantityTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.quantityTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityQuantityType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityQuantityType
+    {
+
         /// <remarks/>
         GROSS,
-        
+
         /// <remarks/>
         NET,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityInnerReceptacleDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityInnerReceptacleDetail
+    {
+
         private HazardousCommodityQuantityDetail quantityField;
-        
+
         /// <remarks/>
-        public HazardousCommodityQuantityDetail Quantity {
-            get {
+        public HazardousCommodityQuantityDetail Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityOptionDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityOptionDetail
+    {
+
         private HazardousCommodityLabelTextOptionType labelTextOptionField;
-        
+
         private bool labelTextOptionFieldSpecified;
-        
+
         private string customerSuppliedLabelTextField;
-        
+
         /// <remarks/>
-        public HazardousCommodityLabelTextOptionType LabelTextOption {
-            get {
+        public HazardousCommodityLabelTextOptionType LabelTextOption
+        {
+            get
+            {
                 return this.labelTextOptionField;
             }
-            set {
+            set
+            {
                 this.labelTextOptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelTextOptionSpecified {
-            get {
+        public bool LabelTextOptionSpecified
+        {
+            get
+            {
                 return this.labelTextOptionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelTextOptionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CustomerSuppliedLabelText {
-            get {
+        public string CustomerSuppliedLabelText
+        {
+            get
+            {
                 return this.customerSuppliedLabelTextField;
             }
-            set {
+            set
+            {
                 this.customerSuppliedLabelTextField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityLabelTextOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityLabelTextOptionType
+    {
+
         /// <remarks/>
         APPEND,
-        
+
         /// <remarks/>
         OVERRIDE,
-        
+
         /// <remarks/>
         STANDARD,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RadionuclideDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RadionuclideDetail
+    {
+
         private string radionuclideField;
-        
+
         private RadionuclideActivity activityField;
-        
+
         private bool exceptedPackagingIsReportableQuantityField;
-        
+
         private bool exceptedPackagingIsReportableQuantityFieldSpecified;
-        
+
         private PhysicalFormType physicalFormField;
-        
+
         private bool physicalFormFieldSpecified;
-        
+
         private string chemicalFormField;
-        
+
         /// <remarks/>
-        public string Radionuclide {
-            get {
+        public string Radionuclide
+        {
+            get
+            {
                 return this.radionuclideField;
             }
-            set {
+            set
+            {
                 this.radionuclideField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadionuclideActivity Activity {
-            get {
+        public RadionuclideActivity Activity
+        {
+            get
+            {
                 return this.activityField;
             }
-            set {
+            set
+            {
                 this.activityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool ExceptedPackagingIsReportableQuantity {
-            get {
+        public bool ExceptedPackagingIsReportableQuantity
+        {
+            get
+            {
                 return this.exceptedPackagingIsReportableQuantityField;
             }
-            set {
+            set
+            {
                 this.exceptedPackagingIsReportableQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExceptedPackagingIsReportableQuantitySpecified {
-            get {
+        public bool ExceptedPackagingIsReportableQuantitySpecified
+        {
+            get
+            {
                 return this.exceptedPackagingIsReportableQuantityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.exceptedPackagingIsReportableQuantityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalFormType PhysicalForm {
-            get {
+        public PhysicalFormType PhysicalForm
+        {
+            get
+            {
                 return this.physicalFormField;
             }
-            set {
+            set
+            {
                 this.physicalFormField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PhysicalFormSpecified {
-            get {
+        public bool PhysicalFormSpecified
+        {
+            get
+            {
                 return this.physicalFormFieldSpecified;
             }
-            set {
+            set
+            {
                 this.physicalFormFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ChemicalForm {
-            get {
+        public string ChemicalForm
+        {
+            get
+            {
                 return this.chemicalFormField;
             }
-            set {
+            set
+            {
                 this.chemicalFormField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RadionuclideActivity {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RadionuclideActivity
+    {
+
         private decimal valueField;
-        
+
         private bool valueFieldSpecified;
-        
+
         private RadioactivityUnitOfMeasure unitOfMeasureField;
-        
+
         private bool unitOfMeasureFieldSpecified;
-        
+
         /// <remarks/>
-        public decimal Value {
-            get {
+        public decimal Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ValueSpecified {
-            get {
+        public bool ValueSpecified
+        {
+            get
+            {
                 return this.valueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.valueFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadioactivityUnitOfMeasure UnitOfMeasure {
-            get {
+        public RadioactivityUnitOfMeasure UnitOfMeasure
+        {
+            get
+            {
                 return this.unitOfMeasureField;
             }
-            set {
+            set
+            {
                 this.unitOfMeasureField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool UnitOfMeasureSpecified {
-            get {
+        public bool UnitOfMeasureSpecified
+        {
+            get
+            {
                 return this.unitOfMeasureFieldSpecified;
             }
-            set {
+            set
+            {
                 this.unitOfMeasureFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RadioactivityUnitOfMeasure {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RadioactivityUnitOfMeasure
+    {
+
         /// <remarks/>
         BQ,
-        
+
         /// <remarks/>
         GBQ,
-        
+
         /// <remarks/>
         KBQ,
-        
+
         /// <remarks/>
         MBQ,
-        
+
         /// <remarks/>
         PBQ,
-        
+
         /// <remarks/>
         TBQ,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PhysicalFormType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PhysicalFormType
+    {
+
         /// <remarks/>
         GAS,
-        
+
         /// <remarks/>
         LIQUID,
-        
+
         /// <remarks/>
         SOLID,
-        
+
         /// <remarks/>
         SPECIAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NetExplosiveDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NetExplosiveDetail
+    {
+
         private NetExplosiveClassificationType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private decimal amountField;
-        
+
         private bool amountFieldSpecified;
-        
+
         private string unitsField;
-        
+
         /// <remarks/>
-        public NetExplosiveClassificationType Type {
-            get {
+        public NetExplosiveClassificationType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Amount {
-            get {
+        public decimal Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AmountSpecified {
-            get {
+        public bool AmountSpecified
+        {
+            get
+            {
                 return this.amountFieldSpecified;
             }
-            set {
+            set
+            {
                 this.amountFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Units {
-            get {
+        public string Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NetExplosiveClassificationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NetExplosiveClassificationType
+    {
+
         /// <remarks/>
         NET_EXPLOSIVE_CONTENT,
-        
+
         /// <remarks/>
         NET_EXPLOSIVE_MASS,
-        
+
         /// <remarks/>
         NET_EXPLOSIVE_QUANTITY,
-        
+
         /// <remarks/>
         NET_EXPLOSIVE_WEIGHT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class HazardousCommodityPackagingDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class HazardousCommodityPackagingDetail
+    {
+
         private string countField;
-        
+
         private string unitsField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Count {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Count
+        {
+            get
+            {
                 return this.countField;
             }
-            set {
+            set
+            {
                 this.countField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Units {
-            get {
+        public string Units
+        {
+            get
+            {
                 return this.unitsField;
             }
-            set {
+            set
+            {
                 this.unitsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DangerousGoodsSignatory {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DangerousGoodsSignatory
+    {
+
         private string contactNameField;
-        
+
         private string titleField;
-        
+
         private string placeField;
-        
+
         /// <remarks/>
-        public string ContactName {
-            get {
+        public string ContactName
+        {
+            get
+            {
                 return this.contactNameField;
             }
-            set {
+            set
+            {
                 this.contactNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Title {
-            get {
+        public string Title
+        {
+            get
+            {
                 return this.titleField;
             }
-            set {
+            set
+            {
                 this.titleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Place {
-            get {
+        public string Place
+        {
+            get
+            {
                 return this.placeField;
             }
-            set {
+            set
+            {
                 this.placeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RadioactivityDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RadioactivityDetail
+    {
+
         private decimal transportIndexField;
-        
+
         private bool transportIndexFieldSpecified;
-        
+
         private decimal surfaceReadingField;
-        
+
         private bool surfaceReadingFieldSpecified;
-        
+
         private decimal criticalitySafetyIndexField;
-        
+
         private bool criticalitySafetyIndexFieldSpecified;
-        
+
         private Dimensions dimensionsField;
-        
+
         /// <remarks/>
-        public decimal TransportIndex {
-            get {
+        public decimal TransportIndex
+        {
+            get
+            {
                 return this.transportIndexField;
             }
-            set {
+            set
+            {
                 this.transportIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TransportIndexSpecified {
-            get {
+        public bool TransportIndexSpecified
+        {
+            get
+            {
                 return this.transportIndexFieldSpecified;
             }
-            set {
+            set
+            {
                 this.transportIndexFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal SurfaceReading {
-            get {
+        public decimal SurfaceReading
+        {
+            get
+            {
                 return this.surfaceReadingField;
             }
-            set {
+            set
+            {
                 this.surfaceReadingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SurfaceReadingSpecified {
-            get {
+        public bool SurfaceReadingSpecified
+        {
+            get
+            {
                 return this.surfaceReadingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.surfaceReadingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal CriticalitySafetyIndex {
-            get {
+        public decimal CriticalitySafetyIndex
+        {
+            get
+            {
                 return this.criticalitySafetyIndexField;
             }
-            set {
+            set
+            {
                 this.criticalitySafetyIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CriticalitySafetyIndexSpecified {
-            get {
+        public bool CriticalitySafetyIndexSpecified
+        {
+            get
+            {
                 return this.criticalitySafetyIndexFieldSpecified;
             }
-            set {
+            set
+            {
                 this.criticalitySafetyIndexFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions Dimensions {
-            get {
+        public Dimensions Dimensions
+        {
+            get
+            {
                 return this.dimensionsField;
             }
-            set {
+            set
+            {
                 this.dimensionsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RequestedPackageLineItem {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RequestedPackageLineItem
+    {
+
         private string sequenceNumberField;
-        
+
         private string groupNumberField;
-        
+
         private string groupPackageCountField;
-        
+
         private VariableHandlingChargeDetail variableHandlingChargeDetailField;
-        
+
         private Money insuredValueField;
-        
+
         private Weight weightField;
-        
+
         private Dimensions dimensionsField;
-        
+
         private PhysicalPackagingType physicalPackagingField;
-        
+
         private bool physicalPackagingFieldSpecified;
-        
+
         private string itemDescriptionField;
-        
+
         private string itemDescriptionForClearanceField;
-        
+
         private CustomerReference[] customerReferencesField;
-        
+
         private PackageSpecialServicesRequested specialServicesRequestedField;
-        
+
         private ContentRecord[] contentRecordsField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string SequenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string SequenceNumber
+        {
+            get
+            {
                 return this.sequenceNumberField;
             }
-            set {
+            set
+            {
                 this.sequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string GroupNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string GroupNumber
+        {
+            get
+            {
                 return this.groupNumberField;
             }
-            set {
+            set
+            {
                 this.groupNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string GroupPackageCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string GroupPackageCount
+        {
+            get
+            {
                 return this.groupPackageCountField;
             }
-            set {
+            set
+            {
                 this.groupPackageCountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingChargeDetail VariableHandlingChargeDetail {
-            get {
+        public VariableHandlingChargeDetail VariableHandlingChargeDetail
+        {
+            get
+            {
                 return this.variableHandlingChargeDetailField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargeDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money InsuredValue {
-            get {
+        public Money InsuredValue
+        {
+            get
+            {
                 return this.insuredValueField;
             }
-            set {
+            set
+            {
                 this.insuredValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight Weight {
-            get {
+        public Weight Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Dimensions Dimensions {
-            get {
+        public Dimensions Dimensions
+        {
+            get
+            {
                 return this.dimensionsField;
             }
-            set {
+            set
+            {
                 this.dimensionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PhysicalPackagingType PhysicalPackaging {
-            get {
+        public PhysicalPackagingType PhysicalPackaging
+        {
+            get
+            {
                 return this.physicalPackagingField;
             }
-            set {
+            set
+            {
                 this.physicalPackagingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PhysicalPackagingSpecified {
-            get {
+        public bool PhysicalPackagingSpecified
+        {
+            get
+            {
                 return this.physicalPackagingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.physicalPackagingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ItemDescription {
-            get {
+        public string ItemDescription
+        {
+            get
+            {
                 return this.itemDescriptionField;
             }
-            set {
+            set
+            {
                 this.itemDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ItemDescriptionForClearance {
-            get {
+        public string ItemDescriptionForClearance
+        {
+            get
+            {
                 return this.itemDescriptionForClearanceField;
             }
-            set {
+            set
+            {
                 this.itemDescriptionForClearanceField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerReferences")]
-        public CustomerReference[] CustomerReferences {
-            get {
+        public CustomerReference[] CustomerReferences
+        {
+            get
+            {
                 return this.customerReferencesField;
             }
-            set {
+            set
+            {
                 this.customerReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageSpecialServicesRequested SpecialServicesRequested {
-            get {
+        public PackageSpecialServicesRequested SpecialServicesRequested
+        {
+            get
+            {
                 return this.specialServicesRequestedField;
             }
-            set {
+            set
+            {
                 this.specialServicesRequestedField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ContentRecords")]
-        public ContentRecord[] ContentRecords {
-            get {
+        public ContentRecord[] ContentRecords
+        {
+            get
+            {
                 return this.contentRecordsField;
             }
-            set {
+            set
+            {
                 this.contentRecordsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PackageSpecialServicesRequested {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PackageSpecialServicesRequested
+    {
+
         private PackageSpecialServiceType[] specialServiceTypesField;
-        
+
         private CodDetail codDetailField;
-        
+
         private DangerousGoodsDetail dangerousGoodsDetailField;
-        
+
         private BatteryClassificationDetail[] batteryDetailsField;
-        
+
         private Weight dryIceWeightField;
-        
+
         private SignatureOptionDetail signatureOptionDetailField;
-        
+
         private PriorityAlertDetail priorityAlertDetailField;
-        
+
         private AlcoholDetail alcoholDetailField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpecialServiceTypes")]
-        public PackageSpecialServiceType[] SpecialServiceTypes {
-            get {
+        public PackageSpecialServiceType[] SpecialServiceTypes
+        {
+            get
+            {
                 return this.specialServiceTypesField;
             }
-            set {
+            set
+            {
                 this.specialServiceTypesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodDetail CodDetail {
-            get {
+        public CodDetail CodDetail
+        {
+            get
+            {
                 return this.codDetailField;
             }
-            set {
+            set
+            {
                 this.codDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsDetail DangerousGoodsDetail {
-            get {
+        public DangerousGoodsDetail DangerousGoodsDetail
+        {
+            get
+            {
                 return this.dangerousGoodsDetailField;
             }
-            set {
+            set
+            {
                 this.dangerousGoodsDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BatteryDetails")]
-        public BatteryClassificationDetail[] BatteryDetails {
-            get {
+        public BatteryClassificationDetail[] BatteryDetails
+        {
+            get
+            {
                 return this.batteryDetailsField;
             }
-            set {
+            set
+            {
                 this.batteryDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight DryIceWeight {
-            get {
+        public Weight DryIceWeight
+        {
+            get
+            {
                 return this.dryIceWeightField;
             }
-            set {
+            set
+            {
                 this.dryIceWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SignatureOptionDetail SignatureOptionDetail {
-            get {
+        public SignatureOptionDetail SignatureOptionDetail
+        {
+            get
+            {
                 return this.signatureOptionDetailField;
             }
-            set {
+            set
+            {
                 this.signatureOptionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PriorityAlertDetail PriorityAlertDetail {
-            get {
+        public PriorityAlertDetail PriorityAlertDetail
+        {
+            get
+            {
                 return this.priorityAlertDetailField;
             }
-            set {
+            set
+            {
                 this.priorityAlertDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AlcoholDetail AlcoholDetail {
-            get {
+        public AlcoholDetail AlcoholDetail
+        {
+            get
+            {
                 return this.alcoholDetailField;
             }
-            set {
+            set
+            {
                 this.alcoholDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PackageSpecialServiceType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PackageSpecialServiceType
+    {
+
         /// <remarks/>
         ALCOHOL,
-        
+
         /// <remarks/>
         APPOINTMENT_DELIVERY,
-        
+
         /// <remarks/>
         BATTERY,
-        
+
         /// <remarks/>
         COD,
-        
+
         /// <remarks/>
         DANGEROUS_GOODS,
-        
+
         /// <remarks/>
         DRY_ICE,
-        
+
         /// <remarks/>
         NON_STANDARD_CONTAINER,
-        
+
         /// <remarks/>
         PRIORITY_ALERT,
-        
+
         /// <remarks/>
         SIGNATURE_OPTION,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class BatteryClassificationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class BatteryClassificationDetail
+    {
+
         private BatteryMaterialType materialField;
-        
+
         private bool materialFieldSpecified;
-        
+
         private BatteryPackingType packingField;
-        
+
         private bool packingFieldSpecified;
-        
+
         private BatteryRegulatorySubType regulatorySubTypeField;
-        
+
         private bool regulatorySubTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public BatteryMaterialType Material {
-            get {
+        public BatteryMaterialType Material
+        {
+            get
+            {
                 return this.materialField;
             }
-            set {
+            set
+            {
                 this.materialField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MaterialSpecified {
-            get {
+        public bool MaterialSpecified
+        {
+            get
+            {
                 return this.materialFieldSpecified;
             }
-            set {
+            set
+            {
                 this.materialFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public BatteryPackingType Packing {
-            get {
+        public BatteryPackingType Packing
+        {
+            get
+            {
                 return this.packingField;
             }
-            set {
+            set
+            {
                 this.packingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingSpecified {
-            get {
+        public bool PackingSpecified
+        {
+            get
+            {
                 return this.packingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public BatteryRegulatorySubType RegulatorySubType {
-            get {
+        public BatteryRegulatorySubType RegulatorySubType
+        {
+            get
+            {
                 return this.regulatorySubTypeField;
             }
-            set {
+            set
+            {
                 this.regulatorySubTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RegulatorySubTypeSpecified {
-            get {
+        public bool RegulatorySubTypeSpecified
+        {
+            get
+            {
                 return this.regulatorySubTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.regulatorySubTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BatteryMaterialType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BatteryMaterialType
+    {
+
         /// <remarks/>
         LITHIUM_ION,
-        
+
         /// <remarks/>
         LITHIUM_METAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BatteryPackingType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BatteryPackingType
+    {
+
         /// <remarks/>
         CONTAINED_IN_EQUIPMENT,
-        
+
         /// <remarks/>
         PACKED_WITH_EQUIPMENT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BatteryRegulatorySubType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BatteryRegulatorySubType
+    {
+
         /// <remarks/>
         IATA_SECTION_II,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class SignatureOptionDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class SignatureOptionDetail
+    {
+
         private SignatureOptionType optionTypeField;
-        
+
         private string signatureReleaseNumberField;
-        
+
         /// <remarks/>
-        public SignatureOptionType OptionType {
-            get {
+        public SignatureOptionType OptionType
+        {
+            get
+            {
                 return this.optionTypeField;
             }
-            set {
+            set
+            {
                 this.optionTypeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SignatureReleaseNumber {
-            get {
+        public string SignatureReleaseNumber
+        {
+            get
+            {
                 return this.signatureReleaseNumberField;
             }
-            set {
+            set
+            {
                 this.signatureReleaseNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SignatureOptionType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SignatureOptionType
+    {
+
         /// <remarks/>
         ADULT,
-        
+
         /// <remarks/>
         DIRECT,
-        
+
         /// <remarks/>
         INDIRECT,
-        
+
         /// <remarks/>
         NO_SIGNATURE_REQUIRED,
-        
+
         /// <remarks/>
         SERVICE_DEFAULT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PriorityAlertDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PriorityAlertDetail
+    {
+
         private PriorityAlertEnhancementType[] enhancementTypesField;
-        
+
         private string[] contentField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("EnhancementTypes")]
-        public PriorityAlertEnhancementType[] EnhancementTypes {
-            get {
+        public PriorityAlertEnhancementType[] EnhancementTypes
+        {
+            get
+            {
                 return this.enhancementTypesField;
             }
-            set {
+            set
+            {
                 this.enhancementTypesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Content")]
-        public string[] Content {
-            get {
+        public string[] Content
+        {
+            get
+            {
                 return this.contentField;
             }
-            set {
+            set
+            {
                 this.contentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PriorityAlertEnhancementType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PriorityAlertEnhancementType
+    {
+
         /// <remarks/>
         PRIORITY_ALERT_PLUS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class AlcoholDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class AlcoholDetail
+    {
+
         private AlcoholRecipientType recipientTypeField;
-        
+
         private bool recipientTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public AlcoholRecipientType RecipientType {
-            get {
+        public AlcoholRecipientType RecipientType
+        {
+            get
+            {
                 return this.recipientTypeField;
             }
-            set {
+            set
+            {
                 this.recipientTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RecipientTypeSpecified {
-            get {
+        public bool RecipientTypeSpecified
+        {
+            get
+            {
                 return this.recipientTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.recipientTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum AlcoholRecipientType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum AlcoholRecipientType
+    {
+
         /// <remarks/>
         CONSUMER,
-        
+
         /// <remarks/>
         LICENSEE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ContentRecord {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ContentRecord
+    {
+
         private string partNumberField;
-        
+
         private string itemNumberField;
-        
+
         private string receivedQuantityField;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
-        public string PartNumber {
-            get {
+        public string PartNumber
+        {
+            get
+            {
                 return this.partNumberField;
             }
-            set {
+            set
+            {
                 this.partNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ItemNumber {
-            get {
+        public string ItemNumber
+        {
+            get
+            {
                 return this.itemNumberField;
             }
-            set {
+            set
+            {
                 this.itemNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string ReceivedQuantity {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string ReceivedQuantity
+        {
+            get
+            {
                 return this.receivedQuantityField;
             }
-            set {
+            set
+            {
                 this.receivedQuantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DeleteShipmentRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DeleteShipmentRequest
+    {
+
         private WebAuthenticationDetail webAuthenticationDetailField;
-        
+
         private ClientDetail clientDetailField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private System.DateTime shipTimestampField;
-        
+
         private bool shipTimestampFieldSpecified;
-        
+
         private TrackingId trackingIdField;
-        
+
         private DeletionControlType deletionControlField;
-        
+
         /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
+        public WebAuthenticationDetail WebAuthenticationDetail
+        {
+            get
+            {
                 return this.webAuthenticationDetailField;
             }
-            set {
+            set
+            {
                 this.webAuthenticationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
+        public ClientDetail ClientDetail
+        {
+            get
+            {
                 return this.clientDetailField;
             }
-            set {
+            set
+            {
                 this.clientDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime ShipTimestamp {
-            get {
+        public System.DateTime ShipTimestamp
+        {
+            get
+            {
                 return this.shipTimestampField;
             }
-            set {
+            set
+            {
                 this.shipTimestampField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShipTimestampSpecified {
-            get {
+        public bool ShipTimestampSpecified
+        {
+            get
+            {
                 return this.shipTimestampFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shipTimestampFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId TrackingId {
-            get {
+        public TrackingId TrackingId
+        {
+            get
+            {
                 return this.trackingIdField;
             }
-            set {
+            set
+            {
                 this.trackingIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DeletionControlType DeletionControl {
-            get {
+        public DeletionControlType DeletionControl
+        {
+            get
+            {
                 return this.deletionControlField;
             }
-            set {
+            set
+            {
                 this.deletionControlField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DeletionControlType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DeletionControlType
+    {
+
         /// <remarks/>
         DELETE_ALL_PACKAGES,
-        
+
         /// <remarks/>
         DELETE_ENTIRE_CONSOLIDATION,
-        
+
         /// <remarks/>
         DELETE_ONE_PACKAGE,
-        
+
         /// <remarks/>
         LEGACY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentReply {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentReply
+    {
+
         private NotificationSeverityType highestSeverityField;
-        
+
         private Notification[] notificationsField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         /// <remarks/>
-        public NotificationSeverityType HighestSeverity {
-            get {
+        public NotificationSeverityType HighestSeverity
+        {
+            get
+            {
                 return this.highestSeverityField;
             }
-            set {
+            set
+            {
                 this.highestSeverityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Notifications")]
-        public Notification[] Notifications {
-            get {
+        public Notification[] Notifications
+        {
+            get
+            {
                 return this.notificationsField;
             }
-            set {
+            set
+            {
                 this.notificationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum NotificationSeverityType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum NotificationSeverityType
+    {
+
         /// <remarks/>
         ERROR,
-        
+
         /// <remarks/>
         FAILURE,
-        
+
         /// <remarks/>
         NOTE,
-        
+
         /// <remarks/>
         SUCCESS,
-        
+
         /// <remarks/>
         WARNING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Notification {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Notification
+    {
+
         private NotificationSeverityType severityField;
-        
+
         private string sourceField;
-        
+
         private string codeField;
-        
+
         private string messageField;
-        
+
         private string localizedMessageField;
-        
+
         private NotificationParameter[] messageParametersField;
-        
+
         /// <remarks/>
-        public NotificationSeverityType Severity {
-            get {
+        public NotificationSeverityType Severity
+        {
+            get
+            {
                 return this.severityField;
             }
-            set {
+            set
+            {
                 this.severityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Source {
-            get {
+        public string Source
+        {
+            get
+            {
                 return this.sourceField;
             }
-            set {
+            set
+            {
                 this.sourceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Code {
-            get {
+        public string Code
+        {
+            get
+            {
                 return this.codeField;
             }
-            set {
+            set
+            {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Message {
-            get {
+        public string Message
+        {
+            get
+            {
                 return this.messageField;
             }
-            set {
+            set
+            {
                 this.messageField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LocalizedMessage {
-            get {
+        public string LocalizedMessage
+        {
+            get
+            {
                 return this.localizedMessageField;
             }
-            set {
+            set
+            {
                 this.localizedMessageField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("MessageParameters")]
-        public NotificationParameter[] MessageParameters {
-            get {
+        public NotificationParameter[] MessageParameters
+        {
+            get
+            {
                 return this.messageParametersField;
             }
-            set {
+            set
+            {
                 this.messageParametersField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class NotificationParameter {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class NotificationParameter
+    {
+
         private string idField;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public string Id {
-            get {
+        public string Id
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DeleteTagRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DeleteTagRequest
+    {
+
         private WebAuthenticationDetail webAuthenticationDetailField;
-        
+
         private ClientDetail clientDetailField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private string dispatchLocationIdField;
-        
+
         private System.DateTime dispatchDateField;
-        
+
         private bool dispatchDateFieldSpecified;
-        
+
         private Payment paymentField;
-        
+
         private string confirmationNumberField;
-        
+
         /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
+        public WebAuthenticationDetail WebAuthenticationDetail
+        {
+            get
+            {
                 return this.webAuthenticationDetailField;
             }
-            set {
+            set
+            {
                 this.webAuthenticationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
+        public ClientDetail ClientDetail
+        {
+            get
+            {
                 return this.clientDetailField;
             }
-            set {
+            set
+            {
                 this.clientDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DispatchLocationId {
-            get {
+        public string DispatchLocationId
+        {
+            get
+            {
                 return this.dispatchLocationIdField;
             }
-            set {
+            set
+            {
                 this.dispatchLocationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime DispatchDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime DispatchDate
+        {
+            get
+            {
                 return this.dispatchDateField;
             }
-            set {
+            set
+            {
                 this.dispatchDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DispatchDateSpecified {
-            get {
+        public bool DispatchDateSpecified
+        {
+            get
+            {
                 return this.dispatchDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dispatchDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Payment Payment {
-            get {
+        public Payment Payment
+        {
+            get
+            {
                 return this.paymentField;
             }
-            set {
+            set
+            {
                 this.paymentField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ProcessShipmentReply {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ProcessShipmentReply
+    {
+
         private NotificationSeverityType highestSeverityField;
-        
+
         private Notification[] notificationsField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private string jobIdField;
-        
+
         private CompletedShipmentDetail completedShipmentDetailField;
-        
+
         private ShippingDocument[] errorLabelsField;
-        
+
         /// <remarks/>
-        public NotificationSeverityType HighestSeverity {
-            get {
+        public NotificationSeverityType HighestSeverity
+        {
+            get
+            {
                 return this.highestSeverityField;
             }
-            set {
+            set
+            {
                 this.highestSeverityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Notifications")]
-        public Notification[] Notifications {
-            get {
+        public Notification[] Notifications
+        {
+            get
+            {
                 return this.notificationsField;
             }
-            set {
+            set
+            {
                 this.notificationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string JobId {
-            get {
+        public string JobId
+        {
+            get
+            {
                 return this.jobIdField;
             }
-            set {
+            set
+            {
                 this.jobIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedShipmentDetail CompletedShipmentDetail {
-            get {
+        public CompletedShipmentDetail CompletedShipmentDetail
+        {
+            get
+            {
                 return this.completedShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.completedShipmentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ErrorLabels")]
-        public ShippingDocument[] ErrorLabels {
-            get {
+        public ShippingDocument[] ErrorLabels
+        {
+            get
+            {
                 return this.errorLabelsField;
             }
-            set {
+            set
+            {
                 this.errorLabelsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedShipmentDetail
+    {
+
         private bool usDomesticField;
-        
+
         private bool usDomesticFieldSpecified;
-        
+
         private CarrierCodeType carrierCodeField;
-        
+
         private bool carrierCodeFieldSpecified;
-        
+
         private TrackingId masterTrackingIdField;
-        
+
         private string serviceTypeDescriptionField;
-        
+
         private string packagingDescriptionField;
-        
+
         private ShipmentOperationalDetail operationalDetailField;
-        
+
         private PendingShipmentAccessorDetail[] accessDetailField;
-        
+
         private CompletedTagDetail tagDetailField;
-        
+
         private CompletedSmartPostDetail smartPostDetailField;
-        
+
         private CompletedHazardousShipmentDetail hazardousShipmentDetailField;
-        
+
         private ShipmentRating shipmentRatingField;
-        
+
         private CompletedHoldAtLocationDetail completedHoldAtLocationDetailField;
-        
+
         private string exportComplianceStatementField;
-        
+
         private DocumentRequirementsDetail documentRequirementsField;
-        
+
         private CompletedEtdDetail completedEtdDetailField;
-        
+
         private ShippingDocument[] shipmentDocumentsField;
-        
+
         private AssociatedShipmentDetail[] associatedShipmentsField;
-        
+
         private CompletedCodDetail completedCodDetailField;
-        
+
         private CompletedPackageDetail[] completedPackageDetailsField;
-        
+
         /// <remarks/>
-        public bool UsDomestic {
-            get {
+        public bool UsDomestic
+        {
+            get
+            {
                 return this.usDomesticField;
             }
-            set {
+            set
+            {
                 this.usDomesticField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool UsDomesticSpecified {
-            get {
+        public bool UsDomesticSpecified
+        {
+            get
+            {
                 return this.usDomesticFieldSpecified;
             }
-            set {
+            set
+            {
                 this.usDomesticFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CarrierCodeType CarrierCode {
-            get {
+        public CarrierCodeType CarrierCode
+        {
+            get
+            {
                 return this.carrierCodeField;
             }
-            set {
+            set
+            {
                 this.carrierCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CarrierCodeSpecified {
-            get {
+        public bool CarrierCodeSpecified
+        {
+            get
+            {
                 return this.carrierCodeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.carrierCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId MasterTrackingId {
-            get {
+        public TrackingId MasterTrackingId
+        {
+            get
+            {
                 return this.masterTrackingIdField;
             }
-            set {
+            set
+            {
                 this.masterTrackingIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServiceTypeDescription {
-            get {
+        public string ServiceTypeDescription
+        {
+            get
+            {
                 return this.serviceTypeDescriptionField;
             }
-            set {
+            set
+            {
                 this.serviceTypeDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackagingDescription {
-            get {
+        public string PackagingDescription
+        {
+            get
+            {
                 return this.packagingDescriptionField;
             }
-            set {
+            set
+            {
                 this.packagingDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentOperationalDetail OperationalDetail {
-            get {
+        public ShipmentOperationalDetail OperationalDetail
+        {
+            get
+            {
                 return this.operationalDetailField;
             }
-            set {
+            set
+            {
                 this.operationalDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayItemAttribute("AccessorDetails", IsNullable=false)]
-        public PendingShipmentAccessorDetail[] AccessDetail {
-            get {
+        [System.Xml.Serialization.XmlArrayItemAttribute("AccessorDetails", IsNullable = false)]
+        public PendingShipmentAccessorDetail[] AccessDetail
+        {
+            get
+            {
                 return this.accessDetailField;
             }
-            set {
+            set
+            {
                 this.accessDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedTagDetail TagDetail {
-            get {
+        public CompletedTagDetail TagDetail
+        {
+            get
+            {
                 return this.tagDetailField;
             }
-            set {
+            set
+            {
                 this.tagDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedSmartPostDetail SmartPostDetail {
-            get {
+        public CompletedSmartPostDetail SmartPostDetail
+        {
+            get
+            {
                 return this.smartPostDetailField;
             }
-            set {
+            set
+            {
                 this.smartPostDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedHazardousShipmentDetail HazardousShipmentDetail {
-            get {
+        public CompletedHazardousShipmentDetail HazardousShipmentDetail
+        {
+            get
+            {
                 return this.hazardousShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.hazardousShipmentDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentRating ShipmentRating {
-            get {
+        public ShipmentRating ShipmentRating
+        {
+            get
+            {
                 return this.shipmentRatingField;
             }
-            set {
+            set
+            {
                 this.shipmentRatingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedHoldAtLocationDetail CompletedHoldAtLocationDetail {
-            get {
+        public CompletedHoldAtLocationDetail CompletedHoldAtLocationDetail
+        {
+            get
+            {
                 return this.completedHoldAtLocationDetailField;
             }
-            set {
+            set
+            {
                 this.completedHoldAtLocationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ExportComplianceStatement {
-            get {
+        public string ExportComplianceStatement
+        {
+            get
+            {
                 return this.exportComplianceStatementField;
             }
-            set {
+            set
+            {
                 this.exportComplianceStatementField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DocumentRequirementsDetail DocumentRequirements {
-            get {
+        public DocumentRequirementsDetail DocumentRequirements
+        {
+            get
+            {
                 return this.documentRequirementsField;
             }
-            set {
+            set
+            {
                 this.documentRequirementsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedEtdDetail CompletedEtdDetail {
-            get {
+        public CompletedEtdDetail CompletedEtdDetail
+        {
+            get
+            {
                 return this.completedEtdDetailField;
             }
-            set {
+            set
+            {
                 this.completedEtdDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipmentDocuments")]
-        public ShippingDocument[] ShipmentDocuments {
-            get {
+        public ShippingDocument[] ShipmentDocuments
+        {
+            get
+            {
                 return this.shipmentDocumentsField;
             }
-            set {
+            set
+            {
                 this.shipmentDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AssociatedShipments")]
-        public AssociatedShipmentDetail[] AssociatedShipments {
-            get {
+        public AssociatedShipmentDetail[] AssociatedShipments
+        {
+            get
+            {
                 return this.associatedShipmentsField;
             }
-            set {
+            set
+            {
                 this.associatedShipmentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedCodDetail CompletedCodDetail {
-            get {
+        public CompletedCodDetail CompletedCodDetail
+        {
+            get
+            {
                 return this.completedCodDetailField;
             }
-            set {
+            set
+            {
                 this.completedCodDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CompletedPackageDetails")]
-        public CompletedPackageDetail[] CompletedPackageDetails {
-            get {
+        public CompletedPackageDetail[] CompletedPackageDetails
+        {
+            get
+            {
                 return this.completedPackageDetailsField;
             }
-            set {
+            set
+            {
                 this.completedPackageDetailsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CarrierCodeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CarrierCodeType
+    {
+
         /// <remarks/>
         FDXC,
-        
+
         /// <remarks/>
         FDXE,
-        
+
         /// <remarks/>
         FDXG,
-        
+
         /// <remarks/>
         FXCC,
-        
+
         /// <remarks/>
         FXFR,
-        
+
         /// <remarks/>
         FXSP,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentOperationalDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentOperationalDetail
+    {
+
         private string ursaPrefixCodeField;
-        
+
         private string ursaSuffixCodeField;
-        
+
         private string originLocationIdField;
-        
+
         private int originLocationNumberField;
-        
+
         private bool originLocationNumberFieldSpecified;
-        
+
         private string originServiceAreaField;
-        
+
         private string destinationLocationIdField;
-        
+
         private int destinationLocationNumberField;
-        
+
         private bool destinationLocationNumberFieldSpecified;
-        
+
         private string destinationServiceAreaField;
-        
+
         private string destinationLocationStateOrProvinceCodeField;
-        
+
         private System.DateTime deliveryDateField;
-        
+
         private bool deliveryDateFieldSpecified;
-        
+
         private DayOfWeekType deliveryDayField;
-        
+
         private bool deliveryDayFieldSpecified;
-        
+
         private System.DateTime publishedDeliveryTimeField;
-        
+
         private bool publishedDeliveryTimeFieldSpecified;
-        
+
         private System.DateTime commitDateField;
-        
+
         private bool commitDateFieldSpecified;
-        
+
         private DayOfWeekType commitDayField;
-        
+
         private bool commitDayFieldSpecified;
-        
+
         private TransitTimeType transitTimeField;
-        
+
         private bool transitTimeFieldSpecified;
-        
+
         private TransitTimeType maximumTransitTimeField;
-        
+
         private bool maximumTransitTimeFieldSpecified;
-        
+
         private TransitTimeType customTransitTimeField;
-        
+
         private bool customTransitTimeFieldSpecified;
-        
+
         private bool ineligibleForMoneyBackGuaranteeField;
-        
+
         private bool ineligibleForMoneyBackGuaranteeFieldSpecified;
-        
+
         private GroundDeliveryEligibilityType[] deliveryEligibilitiesField;
-        
+
         private string astraPlannedServiceLevelField;
-        
+
         private string astraDescriptionField;
-        
+
         private string postalCodeField;
-        
+
         private string stateOrProvinceCodeField;
-        
+
         private string countryCodeField;
-        
+
         private string airportIdField;
-        
+
         private string serviceCodeField;
-        
+
         private string packagingCodeField;
-        
+
         private string scacField;
-        
+
         /// <remarks/>
-        public string UrsaPrefixCode {
-            get {
+        public string UrsaPrefixCode
+        {
+            get
+            {
                 return this.ursaPrefixCodeField;
             }
-            set {
+            set
+            {
                 this.ursaPrefixCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UrsaSuffixCode {
-            get {
+        public string UrsaSuffixCode
+        {
+            get
+            {
                 return this.ursaSuffixCodeField;
             }
-            set {
+            set
+            {
                 this.ursaSuffixCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OriginLocationId {
-            get {
+        public string OriginLocationId
+        {
+            get
+            {
                 return this.originLocationIdField;
             }
-            set {
+            set
+            {
                 this.originLocationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int OriginLocationNumber {
-            get {
+        public int OriginLocationNumber
+        {
+            get
+            {
                 return this.originLocationNumberField;
             }
-            set {
+            set
+            {
                 this.originLocationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool OriginLocationNumberSpecified {
-            get {
+        public bool OriginLocationNumberSpecified
+        {
+            get
+            {
                 return this.originLocationNumberFieldSpecified;
             }
-            set {
+            set
+            {
                 this.originLocationNumberFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string OriginServiceArea {
-            get {
+        public string OriginServiceArea
+        {
+            get
+            {
                 return this.originServiceAreaField;
             }
-            set {
+            set
+            {
                 this.originServiceAreaField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DestinationLocationId {
-            get {
+        public string DestinationLocationId
+        {
+            get
+            {
                 return this.destinationLocationIdField;
             }
-            set {
+            set
+            {
                 this.destinationLocationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public int DestinationLocationNumber {
-            get {
+        public int DestinationLocationNumber
+        {
+            get
+            {
                 return this.destinationLocationNumberField;
             }
-            set {
+            set
+            {
                 this.destinationLocationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DestinationLocationNumberSpecified {
-            get {
+        public bool DestinationLocationNumberSpecified
+        {
+            get
+            {
                 return this.destinationLocationNumberFieldSpecified;
             }
-            set {
+            set
+            {
                 this.destinationLocationNumberFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DestinationServiceArea {
-            get {
+        public string DestinationServiceArea
+        {
+            get
+            {
                 return this.destinationServiceAreaField;
             }
-            set {
+            set
+            {
                 this.destinationServiceAreaField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string DestinationLocationStateOrProvinceCode {
-            get {
+        public string DestinationLocationStateOrProvinceCode
+        {
+            get
+            {
                 return this.destinationLocationStateOrProvinceCodeField;
             }
-            set {
+            set
+            {
                 this.destinationLocationStateOrProvinceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime DeliveryDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime DeliveryDate
+        {
+            get
+            {
                 return this.deliveryDateField;
             }
-            set {
+            set
+            {
                 this.deliveryDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DeliveryDateSpecified {
-            get {
+        public bool DeliveryDateSpecified
+        {
+            get
+            {
                 return this.deliveryDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.deliveryDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DayOfWeekType DeliveryDay {
-            get {
+        public DayOfWeekType DeliveryDay
+        {
+            get
+            {
                 return this.deliveryDayField;
             }
-            set {
+            set
+            {
                 this.deliveryDayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DeliveryDaySpecified {
-            get {
+        public bool DeliveryDaySpecified
+        {
+            get
+            {
                 return this.deliveryDayFieldSpecified;
             }
-            set {
+            set
+            {
                 this.deliveryDayFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
-        public System.DateTime PublishedDeliveryTime {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "time")]
+        public System.DateTime PublishedDeliveryTime
+        {
+            get
+            {
                 return this.publishedDeliveryTimeField;
             }
-            set {
+            set
+            {
                 this.publishedDeliveryTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PublishedDeliveryTimeSpecified {
-            get {
+        public bool PublishedDeliveryTimeSpecified
+        {
+            get
+            {
                 return this.publishedDeliveryTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.publishedDeliveryTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime CommitDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime CommitDate
+        {
+            get
+            {
                 return this.commitDateField;
             }
-            set {
+            set
+            {
                 this.commitDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CommitDateSpecified {
-            get {
+        public bool CommitDateSpecified
+        {
+            get
+            {
                 return this.commitDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.commitDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public DayOfWeekType CommitDay {
-            get {
+        public DayOfWeekType CommitDay
+        {
+            get
+            {
                 return this.commitDayField;
             }
-            set {
+            set
+            {
                 this.commitDayField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CommitDaySpecified {
-            get {
+        public bool CommitDaySpecified
+        {
+            get
+            {
                 return this.commitDayFieldSpecified;
             }
-            set {
+            set
+            {
                 this.commitDayFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransitTimeType TransitTime {
-            get {
+        public TransitTimeType TransitTime
+        {
+            get
+            {
                 return this.transitTimeField;
             }
-            set {
+            set
+            {
                 this.transitTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TransitTimeSpecified {
-            get {
+        public bool TransitTimeSpecified
+        {
+            get
+            {
                 return this.transitTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.transitTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransitTimeType MaximumTransitTime {
-            get {
+        public TransitTimeType MaximumTransitTime
+        {
+            get
+            {
                 return this.maximumTransitTimeField;
             }
-            set {
+            set
+            {
                 this.maximumTransitTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MaximumTransitTimeSpecified {
-            get {
+        public bool MaximumTransitTimeSpecified
+        {
+            get
+            {
                 return this.maximumTransitTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.maximumTransitTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransitTimeType CustomTransitTime {
-            get {
+        public TransitTimeType CustomTransitTime
+        {
+            get
+            {
                 return this.customTransitTimeField;
             }
-            set {
+            set
+            {
                 this.customTransitTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CustomTransitTimeSpecified {
-            get {
+        public bool CustomTransitTimeSpecified
+        {
+            get
+            {
                 return this.customTransitTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.customTransitTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool IneligibleForMoneyBackGuarantee {
-            get {
+        public bool IneligibleForMoneyBackGuarantee
+        {
+            get
+            {
                 return this.ineligibleForMoneyBackGuaranteeField;
             }
-            set {
+            set
+            {
                 this.ineligibleForMoneyBackGuaranteeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IneligibleForMoneyBackGuaranteeSpecified {
-            get {
+        public bool IneligibleForMoneyBackGuaranteeSpecified
+        {
+            get
+            {
                 return this.ineligibleForMoneyBackGuaranteeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ineligibleForMoneyBackGuaranteeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DeliveryEligibilities")]
-        public GroundDeliveryEligibilityType[] DeliveryEligibilities {
-            get {
+        public GroundDeliveryEligibilityType[] DeliveryEligibilities
+        {
+            get
+            {
                 return this.deliveryEligibilitiesField;
             }
-            set {
+            set
+            {
                 this.deliveryEligibilitiesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AstraPlannedServiceLevel {
-            get {
+        public string AstraPlannedServiceLevel
+        {
+            get
+            {
                 return this.astraPlannedServiceLevelField;
             }
-            set {
+            set
+            {
                 this.astraPlannedServiceLevelField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AstraDescription {
-            get {
+        public string AstraDescription
+        {
+            get
+            {
                 return this.astraDescriptionField;
             }
-            set {
+            set
+            {
                 this.astraDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PostalCode {
-            get {
+        public string PostalCode
+        {
+            get
+            {
                 return this.postalCodeField;
             }
-            set {
+            set
+            {
                 this.postalCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string StateOrProvinceCode {
-            get {
+        public string StateOrProvinceCode
+        {
+            get
+            {
                 return this.stateOrProvinceCodeField;
             }
-            set {
+            set
+            {
                 this.stateOrProvinceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string CountryCode {
-            get {
+        public string CountryCode
+        {
+            get
+            {
                 return this.countryCodeField;
             }
-            set {
+            set
+            {
                 this.countryCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AirportId {
-            get {
+        public string AirportId
+        {
+            get
+            {
                 return this.airportIdField;
             }
-            set {
+            set
+            {
                 this.airportIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ServiceCode {
-            get {
+        public string ServiceCode
+        {
+            get
+            {
                 return this.serviceCodeField;
             }
-            set {
+            set
+            {
                 this.serviceCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackagingCode {
-            get {
+        public string PackagingCode
+        {
+            get
+            {
                 return this.packagingCodeField;
             }
-            set {
+            set
+            {
                 this.packagingCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Scac {
-            get {
+        public string Scac
+        {
+            get
+            {
                 return this.scacField;
             }
-            set {
+            set
+            {
                 this.scacField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum DayOfWeekType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum DayOfWeekType
+    {
+
         /// <remarks/>
         FRI,
-        
+
         /// <remarks/>
         MON,
-        
+
         /// <remarks/>
         SAT,
-        
+
         /// <remarks/>
         SUN,
-        
+
         /// <remarks/>
         THU,
-        
+
         /// <remarks/>
         TUE,
-        
+
         /// <remarks/>
         WED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum TransitTimeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum TransitTimeType
+    {
+
         /// <remarks/>
         EIGHTEEN_DAYS,
-        
+
         /// <remarks/>
         EIGHT_DAYS,
-        
+
         /// <remarks/>
         ELEVEN_DAYS,
-        
+
         /// <remarks/>
         FIFTEEN_DAYS,
-        
+
         /// <remarks/>
         FIVE_DAYS,
-        
+
         /// <remarks/>
         FOURTEEN_DAYS,
-        
+
         /// <remarks/>
         FOUR_DAYS,
-        
+
         /// <remarks/>
         NINETEEN_DAYS,
-        
+
         /// <remarks/>
         NINE_DAYS,
-        
+
         /// <remarks/>
         ONE_DAY,
-        
+
         /// <remarks/>
         SEVENTEEN_DAYS,
-        
+
         /// <remarks/>
         SEVEN_DAYS,
-        
+
         /// <remarks/>
         SIXTEEN_DAYS,
-        
+
         /// <remarks/>
         SIX_DAYS,
-        
+
         /// <remarks/>
         TEN_DAYS,
-        
+
         /// <remarks/>
         THIRTEEN_DAYS,
-        
+
         /// <remarks/>
         THREE_DAYS,
-        
+
         /// <remarks/>
         TWELVE_DAYS,
-        
+
         /// <remarks/>
         TWENTY_DAYS,
-        
+
         /// <remarks/>
         TWO_DAYS,
-        
+
         /// <remarks/>
         UNKNOWN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum GroundDeliveryEligibilityType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum GroundDeliveryEligibilityType
+    {
+
         /// <remarks/>
         ALTERNATE_DAY_SERVICE,
-        
+
         /// <remarks/>
         CARTAGE_AGENT_DELIVERY,
-        
+
         /// <remarks/>
         SATURDAY_DELIVERY,
-        
+
         /// <remarks/>
         USPS_DELIVERY,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PendingShipmentAccessorDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PendingShipmentAccessorDetail
+    {
+
         private AccessorRoleType roleField;
-        
+
         private bool roleFieldSpecified;
-        
+
         private string userIdField;
-        
+
         private string passwordField;
-        
+
         private string emailLabelUrlField;
-        
+
         /// <remarks/>
-        public AccessorRoleType Role {
-            get {
+        public AccessorRoleType Role
+        {
+            get
+            {
                 return this.roleField;
             }
-            set {
+            set
+            {
                 this.roleField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleSpecified {
-            get {
+        public bool RoleSpecified
+        {
+            get
+            {
                 return this.roleFieldSpecified;
             }
-            set {
+            set
+            {
                 this.roleFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string UserId {
-            get {
+        public string UserId
+        {
+            get
+            {
                 return this.userIdField;
             }
-            set {
+            set
+            {
                 this.userIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Password {
-            get {
+        public string Password
+        {
+            get
+            {
                 return this.passwordField;
             }
-            set {
+            set
+            {
                 this.passwordField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string EmailLabelUrl {
-            get {
+        public string EmailLabelUrl
+        {
+            get
+            {
                 return this.emailLabelUrlField;
             }
-            set {
+            set
+            {
                 this.emailLabelUrlField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedTagDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedTagDetail
+    {
+
         private string confirmationNumberField;
-        
+
         private string accessTimeField;
-        
+
         private System.DateTime cutoffTimeField;
-        
+
         private bool cutoffTimeFieldSpecified;
-        
+
         private string locationField;
-        
+
         private System.DateTime deliveryCommitmentField;
-        
+
         private bool deliveryCommitmentFieldSpecified;
-        
+
         private System.DateTime dispatchDateField;
-        
+
         private bool dispatchDateFieldSpecified;
-        
+
         /// <remarks/>
-        public string ConfirmationNumber {
-            get {
+        public string ConfirmationNumber
+        {
+            get
+            {
                 return this.confirmationNumberField;
             }
-            set {
+            set
+            {
                 this.confirmationNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="duration")]
-        public string AccessTime {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "duration")]
+        public string AccessTime
+        {
+            get
+            {
                 return this.accessTimeField;
             }
-            set {
+            set
+            {
                 this.accessTimeField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="time")]
-        public System.DateTime CutoffTime {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "time")]
+        public System.DateTime CutoffTime
+        {
+            get
+            {
                 return this.cutoffTimeField;
             }
-            set {
+            set
+            {
                 this.cutoffTimeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CutoffTimeSpecified {
-            get {
+        public bool CutoffTimeSpecified
+        {
+            get
+            {
                 return this.cutoffTimeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.cutoffTimeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Location {
-            get {
+        public string Location
+        {
+            get
+            {
                 return this.locationField;
             }
-            set {
+            set
+            {
                 this.locationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public System.DateTime DeliveryCommitment {
-            get {
+        public System.DateTime DeliveryCommitment
+        {
+            get
+            {
                 return this.deliveryCommitmentField;
             }
-            set {
+            set
+            {
                 this.deliveryCommitmentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DeliveryCommitmentSpecified {
-            get {
+        public bool DeliveryCommitmentSpecified
+        {
+            get
+            {
                 return this.deliveryCommitmentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.deliveryCommitmentFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime DispatchDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime DispatchDate
+        {
+            get
+            {
                 return this.dispatchDateField;
             }
-            set {
+            set
+            {
                 this.dispatchDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DispatchDateSpecified {
-            get {
+        public bool DispatchDateSpecified
+        {
+            get
+            {
                 return this.dispatchDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dispatchDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedSmartPostDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedSmartPostDetail
+    {
+
         private CarrierCodeType pickUpCarrierField;
-        
+
         private bool pickUpCarrierFieldSpecified;
-        
+
         private bool machinableField;
-        
+
         private bool machinableFieldSpecified;
-        
+
         /// <remarks/>
-        public CarrierCodeType PickUpCarrier {
-            get {
+        public CarrierCodeType PickUpCarrier
+        {
+            get
+            {
                 return this.pickUpCarrierField;
             }
-            set {
+            set
+            {
                 this.pickUpCarrierField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PickUpCarrierSpecified {
-            get {
+        public bool PickUpCarrierSpecified
+        {
+            get
+            {
                 return this.pickUpCarrierFieldSpecified;
             }
-            set {
+            set
+            {
                 this.pickUpCarrierFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Machinable {
-            get {
+        public bool Machinable
+        {
+            get
+            {
                 return this.machinableField;
             }
-            set {
+            set
+            {
                 this.machinableField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MachinableSpecified {
-            get {
+        public bool MachinableSpecified
+        {
+            get
+            {
                 return this.machinableFieldSpecified;
             }
-            set {
+            set
+            {
                 this.machinableFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedHazardousShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedHazardousShipmentDetail
+    {
+
         private CompletedHazardousSummaryDetail hazardousSummaryDetailField;
-        
+
         private ShipmentDryIceDetail dryIceDetailField;
-        
+
         private AdrLicenseDetail adrLicenseField;
-        
+
         /// <remarks/>
-        public CompletedHazardousSummaryDetail HazardousSummaryDetail {
-            get {
+        public CompletedHazardousSummaryDetail HazardousSummaryDetail
+        {
+            get
+            {
                 return this.hazardousSummaryDetailField;
             }
-            set {
+            set
+            {
                 this.hazardousSummaryDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentDryIceDetail DryIceDetail {
-            get {
+        public ShipmentDryIceDetail DryIceDetail
+        {
+            get
+            {
                 return this.dryIceDetailField;
             }
-            set {
+            set
+            {
                 this.dryIceDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public AdrLicenseDetail AdrLicense {
-            get {
+        public AdrLicenseDetail AdrLicense
+        {
+            get
+            {
                 return this.adrLicenseField;
             }
-            set {
+            set
+            {
                 this.adrLicenseField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedHazardousSummaryDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedHazardousSummaryDetail
+    {
+
         private string smallQuantityExceptionPackageCountField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string SmallQuantityExceptionPackageCount {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string SmallQuantityExceptionPackageCount
+        {
+            get
+            {
                 return this.smallQuantityExceptionPackageCountField;
             }
-            set {
+            set
+            {
                 this.smallQuantityExceptionPackageCountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class AdrLicenseDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class AdrLicenseDetail
+    {
+
         private LicenseOrPermitDetail licenseOrPermitDetailField;
-        
+
         /// <remarks/>
-        public LicenseOrPermitDetail LicenseOrPermitDetail {
-            get {
+        public LicenseOrPermitDetail LicenseOrPermitDetail
+        {
+            get
+            {
                 return this.licenseOrPermitDetailField;
             }
-            set {
+            set
+            {
                 this.licenseOrPermitDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class LicenseOrPermitDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class LicenseOrPermitDetail
+    {
+
         private string numberField;
-        
+
         private System.DateTime effectiveDateField;
-        
+
         private bool effectiveDateFieldSpecified;
-        
+
         private System.DateTime expirationDateField;
-        
+
         private bool expirationDateFieldSpecified;
-        
+
         /// <remarks/>
-        public string Number {
-            get {
+        public string Number
+        {
+            get
+            {
                 return this.numberField;
             }
-            set {
+            set
+            {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime EffectiveDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime EffectiveDate
+        {
+            get
+            {
                 return this.effectiveDateField;
             }
-            set {
+            set
+            {
                 this.effectiveDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EffectiveDateSpecified {
-            get {
+        public bool EffectiveDateSpecified
+        {
+            get
+            {
                 return this.effectiveDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.effectiveDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime ExpirationDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime ExpirationDate
+        {
+            get
+            {
                 return this.expirationDateField;
             }
-            set {
+            set
+            {
                 this.expirationDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExpirationDateSpecified {
-            get {
+        public bool ExpirationDateSpecified
+        {
+            get
+            {
                 return this.expirationDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.expirationDateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentRating {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentRating
+    {
+
         private ReturnedRateType actualRateTypeField;
-        
+
         private bool actualRateTypeFieldSpecified;
-        
+
         private Money effectiveNetDiscountField;
-        
+
         private ShipmentRateDetail[] shipmentRateDetailsField;
-        
+
         /// <remarks/>
-        public ReturnedRateType ActualRateType {
-            get {
+        public ReturnedRateType ActualRateType
+        {
+            get
+            {
                 return this.actualRateTypeField;
             }
-            set {
+            set
+            {
                 this.actualRateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualRateTypeSpecified {
-            get {
+        public bool ActualRateTypeSpecified
+        {
+            get
+            {
                 return this.actualRateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.actualRateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money EffectiveNetDiscount {
-            get {
+        public Money EffectiveNetDiscount
+        {
+            get
+            {
                 return this.effectiveNetDiscountField;
             }
-            set {
+            set
+            {
                 this.effectiveNetDiscountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipmentRateDetails")]
-        public ShipmentRateDetail[] ShipmentRateDetails {
-            get {
+        public ShipmentRateDetail[] ShipmentRateDetails
+        {
+            get
+            {
                 return this.shipmentRateDetailsField;
             }
-            set {
+            set
+            {
                 this.shipmentRateDetailsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ReturnedRateType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ReturnedRateType
+    {
+
         /// <remarks/>
         INCENTIVE,
-        
+
         /// <remarks/>
         NEGOTIATED,
-        
+
         /// <remarks/>
         PAYOR_ACCOUNT_PACKAGE,
-        
+
         /// <remarks/>
         PAYOR_ACCOUNT_SHIPMENT,
-        
+
         /// <remarks/>
         PAYOR_LIST_PACKAGE,
-        
+
         /// <remarks/>
         PAYOR_LIST_SHIPMENT,
-        
+
         /// <remarks/>
         PREFERRED_ACCOUNT_PACKAGE,
-        
+
         /// <remarks/>
         PREFERRED_ACCOUNT_SHIPMENT,
-        
+
         /// <remarks/>
         PREFERRED_LIST_PACKAGE,
-        
+
         /// <remarks/>
         PREFERRED_LIST_SHIPMENT,
-        
+
         /// <remarks/>
         PREFERRED_NEGOTIATED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentRateDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentRateDetail
+    {
+
         private ReturnedRateType rateTypeField;
-        
+
         private bool rateTypeFieldSpecified;
-        
+
         private string rateScaleField;
-        
+
         private string rateZoneField;
-        
+
         private PricingCodeType pricingCodeField;
-        
+
         private bool pricingCodeFieldSpecified;
-        
+
         private RatedWeightMethod ratedWeightMethodField;
-        
+
         private bool ratedWeightMethodFieldSpecified;
-        
+
         private MinimumChargeType minimumChargeTypeField;
-        
+
         private bool minimumChargeTypeFieldSpecified;
-        
+
         private CurrencyExchangeRate currencyExchangeRateField;
-        
+
         private SpecialRatingAppliedType[] specialRatingAppliedField;
-        
+
         private string dimDivisorField;
-        
+
         private RateDimensionalDivisorType dimDivisorTypeField;
-        
+
         private bool dimDivisorTypeFieldSpecified;
-        
+
         private decimal fuelSurchargePercentField;
-        
+
         private bool fuelSurchargePercentFieldSpecified;
-        
+
         private Weight totalBillingWeightField;
-        
+
         private Weight totalDimWeightField;
-        
+
         private Money totalBaseChargeField;
-        
+
         private Money totalFreightDiscountsField;
-        
+
         private Money totalNetFreightField;
-        
+
         private Money totalSurchargesField;
-        
+
         private Money totalNetFedExChargeField;
-        
+
         private Money totalTaxesField;
-        
+
         private Money totalNetChargeField;
-        
+
         private Money totalRebatesField;
-        
+
         private Money totalDutiesAndTaxesField;
-        
+
         private Money totalAncillaryFeesAndTaxesField;
-        
+
         private Money totalDutiesTaxesAndFeesField;
-        
+
         private Money totalNetChargeWithDutiesAndTaxesField;
-        
+
         private ShipmentLegRateDetail[] shipmentLegRateDetailsField;
-        
+
         private FreightRateDetail freightRateDetailField;
-        
+
         private RateDiscount[] freightDiscountsField;
-        
+
         private Rebate[] rebatesField;
-        
+
         private Surcharge[] surchargesField;
-        
+
         private Tax[] taxesField;
-        
+
         private EdtCommodityTax[] dutiesAndTaxesField;
-        
+
         private AncillaryFeeAndTax[] ancillaryFeesAndTaxesField;
-        
+
         private VariableHandlingCharges variableHandlingChargesField;
-        
+
         private VariableHandlingCharges totalVariableHandlingChargesField;
-        
+
         /// <remarks/>
-        public ReturnedRateType RateType {
-            get {
+        public ReturnedRateType RateType
+        {
+            get
+            {
                 return this.rateTypeField;
             }
-            set {
+            set
+            {
                 this.rateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateTypeSpecified {
-            get {
+        public bool RateTypeSpecified
+        {
+            get
+            {
                 return this.rateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RateScale {
-            get {
+        public string RateScale
+        {
+            get
+            {
                 return this.rateScaleField;
             }
-            set {
+            set
+            {
                 this.rateScaleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RateZone {
-            get {
+        public string RateZone
+        {
+            get
+            {
                 return this.rateZoneField;
             }
-            set {
+            set
+            {
                 this.rateZoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PricingCodeType PricingCode {
-            get {
+        public PricingCodeType PricingCode
+        {
+            get
+            {
                 return this.pricingCodeField;
             }
-            set {
+            set
+            {
                 this.pricingCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PricingCodeSpecified {
-            get {
+        public bool PricingCodeSpecified
+        {
+            get
+            {
                 return this.pricingCodeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.pricingCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RatedWeightMethod RatedWeightMethod {
-            get {
+        public RatedWeightMethod RatedWeightMethod
+        {
+            get
+            {
                 return this.ratedWeightMethodField;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RatedWeightMethodSpecified {
-            get {
+        public bool RatedWeightMethodSpecified
+        {
+            get
+            {
                 return this.ratedWeightMethodFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public MinimumChargeType MinimumChargeType {
-            get {
+        public MinimumChargeType MinimumChargeType
+        {
+            get
+            {
                 return this.minimumChargeTypeField;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MinimumChargeTypeSpecified {
-            get {
+        public bool MinimumChargeTypeSpecified
+        {
+            get
+            {
                 return this.minimumChargeTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CurrencyExchangeRate CurrencyExchangeRate {
-            get {
+        public CurrencyExchangeRate CurrencyExchangeRate
+        {
+            get
+            {
                 return this.currencyExchangeRateField;
             }
-            set {
+            set
+            {
                 this.currencyExchangeRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpecialRatingApplied")]
-        public SpecialRatingAppliedType[] SpecialRatingApplied {
-            get {
+        public SpecialRatingAppliedType[] SpecialRatingApplied
+        {
+            get
+            {
                 return this.specialRatingAppliedField;
             }
-            set {
+            set
+            {
                 this.specialRatingAppliedField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string DimDivisor {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string DimDivisor
+        {
+            get
+            {
                 return this.dimDivisorField;
             }
-            set {
+            set
+            {
                 this.dimDivisorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RateDimensionalDivisorType DimDivisorType {
-            get {
+        public RateDimensionalDivisorType DimDivisorType
+        {
+            get
+            {
                 return this.dimDivisorTypeField;
             }
-            set {
+            set
+            {
                 this.dimDivisorTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DimDivisorTypeSpecified {
-            get {
+        public bool DimDivisorTypeSpecified
+        {
+            get
+            {
                 return this.dimDivisorTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dimDivisorTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal FuelSurchargePercent {
-            get {
+        public decimal FuelSurchargePercent
+        {
+            get
+            {
                 return this.fuelSurchargePercentField;
             }
-            set {
+            set
+            {
                 this.fuelSurchargePercentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FuelSurchargePercentSpecified {
-            get {
+        public bool FuelSurchargePercentSpecified
+        {
+            get
+            {
                 return this.fuelSurchargePercentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.fuelSurchargePercentFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalBillingWeight {
-            get {
+        public Weight TotalBillingWeight
+        {
+            get
+            {
                 return this.totalBillingWeightField;
             }
-            set {
+            set
+            {
                 this.totalBillingWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalDimWeight {
-            get {
+        public Weight TotalDimWeight
+        {
+            get
+            {
                 return this.totalDimWeightField;
             }
-            set {
+            set
+            {
                 this.totalDimWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalBaseCharge {
-            get {
+        public Money TotalBaseCharge
+        {
+            get
+            {
                 return this.totalBaseChargeField;
             }
-            set {
+            set
+            {
                 this.totalBaseChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalFreightDiscounts {
-            get {
+        public Money TotalFreightDiscounts
+        {
+            get
+            {
                 return this.totalFreightDiscountsField;
             }
-            set {
+            set
+            {
                 this.totalFreightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetFreight {
-            get {
+        public Money TotalNetFreight
+        {
+            get
+            {
                 return this.totalNetFreightField;
             }
-            set {
+            set
+            {
                 this.totalNetFreightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalSurcharges {
-            get {
+        public Money TotalSurcharges
+        {
+            get
+            {
                 return this.totalSurchargesField;
             }
-            set {
+            set
+            {
                 this.totalSurchargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetFedExCharge {
-            get {
+        public Money TotalNetFedExCharge
+        {
+            get
+            {
                 return this.totalNetFedExChargeField;
             }
-            set {
+            set
+            {
                 this.totalNetFedExChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalTaxes {
-            get {
+        public Money TotalTaxes
+        {
+            get
+            {
                 return this.totalTaxesField;
             }
-            set {
+            set
+            {
                 this.totalTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetCharge {
-            get {
+        public Money TotalNetCharge
+        {
+            get
+            {
                 return this.totalNetChargeField;
             }
-            set {
+            set
+            {
                 this.totalNetChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalRebates {
-            get {
+        public Money TotalRebates
+        {
+            get
+            {
                 return this.totalRebatesField;
             }
-            set {
+            set
+            {
                 this.totalRebatesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalDutiesAndTaxes {
-            get {
+        public Money TotalDutiesAndTaxes
+        {
+            get
+            {
                 return this.totalDutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.totalDutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalAncillaryFeesAndTaxes {
-            get {
+        public Money TotalAncillaryFeesAndTaxes
+        {
+            get
+            {
                 return this.totalAncillaryFeesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.totalAncillaryFeesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalDutiesTaxesAndFees {
-            get {
+        public Money TotalDutiesTaxesAndFees
+        {
+            get
+            {
                 return this.totalDutiesTaxesAndFeesField;
             }
-            set {
+            set
+            {
                 this.totalDutiesTaxesAndFeesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetChargeWithDutiesAndTaxes {
-            get {
+        public Money TotalNetChargeWithDutiesAndTaxes
+        {
+            get
+            {
                 return this.totalNetChargeWithDutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.totalNetChargeWithDutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ShipmentLegRateDetails")]
-        public ShipmentLegRateDetail[] ShipmentLegRateDetails {
-            get {
+        public ShipmentLegRateDetail[] ShipmentLegRateDetails
+        {
+            get
+            {
                 return this.shipmentLegRateDetailsField;
             }
-            set {
+            set
+            {
                 this.shipmentLegRateDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightRateDetail FreightRateDetail {
-            get {
+        public FreightRateDetail FreightRateDetail
+        {
+            get
+            {
                 return this.freightRateDetailField;
             }
-            set {
+            set
+            {
                 this.freightRateDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("FreightDiscounts")]
-        public RateDiscount[] FreightDiscounts {
-            get {
+        public RateDiscount[] FreightDiscounts
+        {
+            get
+            {
                 return this.freightDiscountsField;
             }
-            set {
+            set
+            {
                 this.freightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Rebates")]
-        public Rebate[] Rebates {
-            get {
+        public Rebate[] Rebates
+        {
+            get
+            {
                 return this.rebatesField;
             }
-            set {
+            set
+            {
                 this.rebatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Surcharges")]
-        public Surcharge[] Surcharges {
-            get {
+        public Surcharge[] Surcharges
+        {
+            get
+            {
                 return this.surchargesField;
             }
-            set {
+            set
+            {
                 this.surchargesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Taxes")]
-        public Tax[] Taxes {
-            get {
+        public Tax[] Taxes
+        {
+            get
+            {
                 return this.taxesField;
             }
-            set {
+            set
+            {
                 this.taxesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DutiesAndTaxes")]
-        public EdtCommodityTax[] DutiesAndTaxes {
-            get {
+        public EdtCommodityTax[] DutiesAndTaxes
+        {
+            get
+            {
                 return this.dutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.dutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("AncillaryFeesAndTaxes")]
-        public AncillaryFeeAndTax[] AncillaryFeesAndTaxes {
-            get {
+        public AncillaryFeeAndTax[] AncillaryFeesAndTaxes
+        {
+            get
+            {
                 return this.ancillaryFeesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.ancillaryFeesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingCharges VariableHandlingCharges {
-            get {
+        public VariableHandlingCharges VariableHandlingCharges
+        {
+            get
+            {
                 return this.variableHandlingChargesField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingCharges TotalVariableHandlingCharges {
-            get {
+        public VariableHandlingCharges TotalVariableHandlingCharges
+        {
+            get
+            {
                 return this.totalVariableHandlingChargesField;
             }
-            set {
+            set
+            {
                 this.totalVariableHandlingChargesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum PricingCodeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum PricingCodeType
+    {
+
         /// <remarks/>
         ACTUAL,
-        
+
         /// <remarks/>
         ALTERNATE,
-        
+
         /// <remarks/>
         BASE,
-        
+
         /// <remarks/>
         HUNDREDWEIGHT,
-        
+
         /// <remarks/>
         HUNDREDWEIGHT_ALTERNATE,
-        
+
         /// <remarks/>
         INTERNATIONAL_DISTRIBUTION,
-        
+
         /// <remarks/>
         INTERNATIONAL_ECONOMY_SERVICE,
-        
+
         /// <remarks/>
         LTL_FREIGHT,
-        
+
         /// <remarks/>
         PACKAGE,
-        
+
         /// <remarks/>
         SHIPMENT,
-        
+
         /// <remarks/>
         SHIPMENT_FIVE_POUND_OPTIONAL,
-        
+
         /// <remarks/>
         SHIPMENT_OPTIONAL,
-        
+
         /// <remarks/>
         SPECIAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RatedWeightMethod {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RatedWeightMethod
+    {
+
         /// <remarks/>
         ACTUAL,
-        
+
         /// <remarks/>
         AVERAGE_PACKAGE_WEIGHT_MINIMUM,
-        
+
         /// <remarks/>
         BALLOON,
-        
+
         /// <remarks/>
         DEFAULT_WEIGHT_APPLIED,
-        
+
         /// <remarks/>
         DIM,
-        
+
         /// <remarks/>
         FREIGHT_MINIMUM,
-        
+
         /// <remarks/>
         MIXED,
-        
+
         /// <remarks/>
         OVERSIZE,
-        
+
         /// <remarks/>
         OVERSIZE_1,
-        
+
         /// <remarks/>
         OVERSIZE_2,
-        
+
         /// <remarks/>
         OVERSIZE_3,
-        
+
         /// <remarks/>
         PACKAGING_MINIMUM,
-        
+
         /// <remarks/>
         WEIGHT_BREAK,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum MinimumChargeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum MinimumChargeType
+    {
+
         /// <remarks/>
         CUSTOMER,
-        
+
         /// <remarks/>
         CUSTOMER_FREIGHT_WEIGHT,
-        
+
         /// <remarks/>
         EARNED_DISCOUNT,
-        
+
         /// <remarks/>
         MIXED,
-        
+
         /// <remarks/>
         RATE_SCALE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CurrencyExchangeRate {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CurrencyExchangeRate
+    {
+
         private string fromCurrencyField;
-        
+
         private string intoCurrencyField;
-        
+
         private decimal rateField;
-        
+
         private bool rateFieldSpecified;
-        
+
         /// <remarks/>
-        public string FromCurrency {
-            get {
+        public string FromCurrency
+        {
+            get
+            {
                 return this.fromCurrencyField;
             }
-            set {
+            set
+            {
                 this.fromCurrencyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string IntoCurrency {
-            get {
+        public string IntoCurrency
+        {
+            get
+            {
                 return this.intoCurrencyField;
             }
-            set {
+            set
+            {
                 this.intoCurrencyField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Rate {
-            get {
+        public decimal Rate
+        {
+            get
+            {
                 return this.rateField;
             }
-            set {
+            set
+            {
                 this.rateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateSpecified {
-            get {
+        public bool RateSpecified
+        {
+            get
+            {
                 return this.rateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SpecialRatingAppliedType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SpecialRatingAppliedType
+    {
+
         /// <remarks/>
         FEDEX_ONE_RATE,
-        
+
         /// <remarks/>
         FIXED_FUEL_SURCHARGE,
-        
+
         /// <remarks/>
         IMPORT_PRICING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RateDimensionalDivisorType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RateDimensionalDivisorType
+    {
+
         /// <remarks/>
         COUNTRY,
-        
+
         /// <remarks/>
         CUSTOMER,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         PRODUCT,
-        
+
         /// <remarks/>
         WAIVED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShipmentLegRateDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShipmentLegRateDetail
+    {
+
         private string legDescriptionField;
-        
+
         private Address legOriginField;
-        
+
         private string legOriginLocationIdField;
-        
+
         private Address legDestinationField;
-        
+
         private string legDestinationLocationIdField;
-        
+
         private ReturnedRateType rateTypeField;
-        
+
         private bool rateTypeFieldSpecified;
-        
+
         private string rateScaleField;
-        
+
         private string rateZoneField;
-        
+
         private PricingCodeType pricingCodeField;
-        
+
         private bool pricingCodeFieldSpecified;
-        
+
         private RatedWeightMethod ratedWeightMethodField;
-        
+
         private bool ratedWeightMethodFieldSpecified;
-        
+
         private MinimumChargeType minimumChargeTypeField;
-        
+
         private bool minimumChargeTypeFieldSpecified;
-        
+
         private CurrencyExchangeRate currencyExchangeRateField;
-        
+
         private SpecialRatingAppliedType[] specialRatingAppliedField;
-        
+
         private string dimDivisorField;
-        
+
         private RateDimensionalDivisorType dimDivisorTypeField;
-        
+
         private bool dimDivisorTypeFieldSpecified;
-        
+
         private decimal fuelSurchargePercentField;
-        
+
         private bool fuelSurchargePercentFieldSpecified;
-        
+
         private Weight totalBillingWeightField;
-        
+
         private Weight totalDimWeightField;
-        
+
         private Money totalBaseChargeField;
-        
+
         private Money totalFreightDiscountsField;
-        
+
         private Money totalNetFreightField;
-        
+
         private Money totalSurchargesField;
-        
+
         private Money totalNetFedExChargeField;
-        
+
         private Money totalTaxesField;
-        
+
         private Money totalNetChargeField;
-        
+
         private Money totalRebatesField;
-        
+
         private Money totalDutiesAndTaxesField;
-        
+
         private Money totalNetChargeWithDutiesAndTaxesField;
-        
+
         private FreightRateDetail freightRateDetailField;
-        
+
         private RateDiscount[] freightDiscountsField;
-        
+
         private Rebate[] rebatesField;
-        
+
         private Surcharge[] surchargesField;
-        
+
         private Tax[] taxesField;
-        
+
         private EdtCommodityTax[] dutiesAndTaxesField;
-        
+
         private VariableHandlingCharges variableHandlingChargesField;
-        
+
         private VariableHandlingCharges totalVariableHandlingChargesField;
-        
+
         /// <remarks/>
-        public string LegDescription {
-            get {
+        public string LegDescription
+        {
+            get
+            {
                 return this.legDescriptionField;
             }
-            set {
+            set
+            {
                 this.legDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Address LegOrigin {
-            get {
+        public Address LegOrigin
+        {
+            get
+            {
                 return this.legOriginField;
             }
-            set {
+            set
+            {
                 this.legOriginField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LegOriginLocationId {
-            get {
+        public string LegOriginLocationId
+        {
+            get
+            {
                 return this.legOriginLocationIdField;
             }
-            set {
+            set
+            {
                 this.legOriginLocationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Address LegDestination {
-            get {
+        public Address LegDestination
+        {
+            get
+            {
                 return this.legDestinationField;
             }
-            set {
+            set
+            {
                 this.legDestinationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LegDestinationLocationId {
-            get {
+        public string LegDestinationLocationId
+        {
+            get
+            {
                 return this.legDestinationLocationIdField;
             }
-            set {
+            set
+            {
                 this.legDestinationLocationIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ReturnedRateType RateType {
-            get {
+        public ReturnedRateType RateType
+        {
+            get
+            {
                 return this.rateTypeField;
             }
-            set {
+            set
+            {
                 this.rateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateTypeSpecified {
-            get {
+        public bool RateTypeSpecified
+        {
+            get
+            {
                 return this.rateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RateScale {
-            get {
+        public string RateScale
+        {
+            get
+            {
                 return this.rateScaleField;
             }
-            set {
+            set
+            {
                 this.rateScaleField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string RateZone {
-            get {
+        public string RateZone
+        {
+            get
+            {
                 return this.rateZoneField;
             }
-            set {
+            set
+            {
                 this.rateZoneField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PricingCodeType PricingCode {
-            get {
+        public PricingCodeType PricingCode
+        {
+            get
+            {
                 return this.pricingCodeField;
             }
-            set {
+            set
+            {
                 this.pricingCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PricingCodeSpecified {
-            get {
+        public bool PricingCodeSpecified
+        {
+            get
+            {
                 return this.pricingCodeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.pricingCodeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RatedWeightMethod RatedWeightMethod {
-            get {
+        public RatedWeightMethod RatedWeightMethod
+        {
+            get
+            {
                 return this.ratedWeightMethodField;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RatedWeightMethodSpecified {
-            get {
+        public bool RatedWeightMethodSpecified
+        {
+            get
+            {
                 return this.ratedWeightMethodFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public MinimumChargeType MinimumChargeType {
-            get {
+        public MinimumChargeType MinimumChargeType
+        {
+            get
+            {
                 return this.minimumChargeTypeField;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MinimumChargeTypeSpecified {
-            get {
+        public bool MinimumChargeTypeSpecified
+        {
+            get
+            {
                 return this.minimumChargeTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public CurrencyExchangeRate CurrencyExchangeRate {
-            get {
+        public CurrencyExchangeRate CurrencyExchangeRate
+        {
+            get
+            {
                 return this.currencyExchangeRateField;
             }
-            set {
+            set
+            {
                 this.currencyExchangeRateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SpecialRatingApplied")]
-        public SpecialRatingAppliedType[] SpecialRatingApplied {
-            get {
+        public SpecialRatingAppliedType[] SpecialRatingApplied
+        {
+            get
+            {
                 return this.specialRatingAppliedField;
             }
-            set {
+            set
+            {
                 this.specialRatingAppliedField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string DimDivisor {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string DimDivisor
+        {
+            get
+            {
                 return this.dimDivisorField;
             }
-            set {
+            set
+            {
                 this.dimDivisorField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RateDimensionalDivisorType DimDivisorType {
-            get {
+        public RateDimensionalDivisorType DimDivisorType
+        {
+            get
+            {
                 return this.dimDivisorTypeField;
             }
-            set {
+            set
+            {
                 this.dimDivisorTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DimDivisorTypeSpecified {
-            get {
+        public bool DimDivisorTypeSpecified
+        {
+            get
+            {
                 return this.dimDivisorTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.dimDivisorTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal FuelSurchargePercent {
-            get {
+        public decimal FuelSurchargePercent
+        {
+            get
+            {
                 return this.fuelSurchargePercentField;
             }
-            set {
+            set
+            {
                 this.fuelSurchargePercentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FuelSurchargePercentSpecified {
-            get {
+        public bool FuelSurchargePercentSpecified
+        {
+            get
+            {
                 return this.fuelSurchargePercentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.fuelSurchargePercentFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalBillingWeight {
-            get {
+        public Weight TotalBillingWeight
+        {
+            get
+            {
                 return this.totalBillingWeightField;
             }
-            set {
+            set
+            {
                 this.totalBillingWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight TotalDimWeight {
-            get {
+        public Weight TotalDimWeight
+        {
+            get
+            {
                 return this.totalDimWeightField;
             }
-            set {
+            set
+            {
                 this.totalDimWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalBaseCharge {
-            get {
+        public Money TotalBaseCharge
+        {
+            get
+            {
                 return this.totalBaseChargeField;
             }
-            set {
+            set
+            {
                 this.totalBaseChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalFreightDiscounts {
-            get {
+        public Money TotalFreightDiscounts
+        {
+            get
+            {
                 return this.totalFreightDiscountsField;
             }
-            set {
+            set
+            {
                 this.totalFreightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetFreight {
-            get {
+        public Money TotalNetFreight
+        {
+            get
+            {
                 return this.totalNetFreightField;
             }
-            set {
+            set
+            {
                 this.totalNetFreightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalSurcharges {
-            get {
+        public Money TotalSurcharges
+        {
+            get
+            {
                 return this.totalSurchargesField;
             }
-            set {
+            set
+            {
                 this.totalSurchargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetFedExCharge {
-            get {
+        public Money TotalNetFedExCharge
+        {
+            get
+            {
                 return this.totalNetFedExChargeField;
             }
-            set {
+            set
+            {
                 this.totalNetFedExChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalTaxes {
-            get {
+        public Money TotalTaxes
+        {
+            get
+            {
                 return this.totalTaxesField;
             }
-            set {
+            set
+            {
                 this.totalTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetCharge {
-            get {
+        public Money TotalNetCharge
+        {
+            get
+            {
                 return this.totalNetChargeField;
             }
-            set {
+            set
+            {
                 this.totalNetChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalRebates {
-            get {
+        public Money TotalRebates
+        {
+            get
+            {
                 return this.totalRebatesField;
             }
-            set {
+            set
+            {
                 this.totalRebatesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalDutiesAndTaxes {
-            get {
+        public Money TotalDutiesAndTaxes
+        {
+            get
+            {
                 return this.totalDutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.totalDutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalNetChargeWithDutiesAndTaxes {
-            get {
+        public Money TotalNetChargeWithDutiesAndTaxes
+        {
+            get
+            {
                 return this.totalNetChargeWithDutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.totalNetChargeWithDutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightRateDetail FreightRateDetail {
-            get {
+        public FreightRateDetail FreightRateDetail
+        {
+            get
+            {
                 return this.freightRateDetailField;
             }
-            set {
+            set
+            {
                 this.freightRateDetailField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("FreightDiscounts")]
-        public RateDiscount[] FreightDiscounts {
-            get {
+        public RateDiscount[] FreightDiscounts
+        {
+            get
+            {
                 return this.freightDiscountsField;
             }
-            set {
+            set
+            {
                 this.freightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Rebates")]
-        public Rebate[] Rebates {
-            get {
+        public Rebate[] Rebates
+        {
+            get
+            {
                 return this.rebatesField;
             }
-            set {
+            set
+            {
                 this.rebatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Surcharges")]
-        public Surcharge[] Surcharges {
-            get {
+        public Surcharge[] Surcharges
+        {
+            get
+            {
                 return this.surchargesField;
             }
-            set {
+            set
+            {
                 this.surchargesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Taxes")]
-        public Tax[] Taxes {
-            get {
+        public Tax[] Taxes
+        {
+            get
+            {
                 return this.taxesField;
             }
-            set {
+            set
+            {
                 this.taxesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("DutiesAndTaxes")]
-        public EdtCommodityTax[] DutiesAndTaxes {
-            get {
+        public EdtCommodityTax[] DutiesAndTaxes
+        {
+            get
+            {
                 return this.dutiesAndTaxesField;
             }
-            set {
+            set
+            {
                 this.dutiesAndTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingCharges VariableHandlingCharges {
-            get {
+        public VariableHandlingCharges VariableHandlingCharges
+        {
+            get
+            {
                 return this.variableHandlingChargesField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingCharges TotalVariableHandlingCharges {
-            get {
+        public VariableHandlingCharges TotalVariableHandlingCharges
+        {
+            get
+            {
                 return this.totalVariableHandlingChargesField;
             }
-            set {
+            set
+            {
                 this.totalVariableHandlingChargesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightRateDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightRateDetail
+    {
+
         private string quoteNumberField;
-        
+
         private FreightRateQuoteType quoteTypeField;
-        
+
         private bool quoteTypeFieldSpecified;
-        
+
         private FreightBaseChargeCalculationType baseChargeCalculationField;
-        
+
         private bool baseChargeCalculationFieldSpecified;
-        
+
         private FreightBaseCharge[] baseChargesField;
-        
+
         private FreightRateNotation[] notationsField;
-        
+
         /// <remarks/>
-        public string QuoteNumber {
-            get {
+        public string QuoteNumber
+        {
+            get
+            {
                 return this.quoteNumberField;
             }
-            set {
+            set
+            {
                 this.quoteNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightRateQuoteType QuoteType {
-            get {
+        public FreightRateQuoteType QuoteType
+        {
+            get
+            {
                 return this.quoteTypeField;
             }
-            set {
+            set
+            {
                 this.quoteTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool QuoteTypeSpecified {
-            get {
+        public bool QuoteTypeSpecified
+        {
+            get
+            {
                 return this.quoteTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.quoteTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightBaseChargeCalculationType BaseChargeCalculation {
-            get {
+        public FreightBaseChargeCalculationType BaseChargeCalculation
+        {
+            get
+            {
                 return this.baseChargeCalculationField;
             }
-            set {
+            set
+            {
                 this.baseChargeCalculationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool BaseChargeCalculationSpecified {
-            get {
+        public bool BaseChargeCalculationSpecified
+        {
+            get
+            {
                 return this.baseChargeCalculationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.baseChargeCalculationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BaseCharges")]
-        public FreightBaseCharge[] BaseCharges {
-            get {
+        public FreightBaseCharge[] BaseCharges
+        {
+            get
+            {
                 return this.baseChargesField;
             }
-            set {
+            set
+            {
                 this.baseChargesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Notations")]
-        public FreightRateNotation[] Notations {
-            get {
+        public FreightRateNotation[] Notations
+        {
+            get
+            {
                 return this.notationsField;
             }
-            set {
+            set
+            {
                 this.notationsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightRateQuoteType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightRateQuoteType
+    {
+
         /// <remarks/>
         AUTOMATED,
-        
+
         /// <remarks/>
         MANUAL,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightBaseChargeCalculationType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightBaseChargeCalculationType
+    {
+
         /// <remarks/>
         BEYOND,
-        
+
         /// <remarks/>
         LINE_ITEMS,
-        
+
         /// <remarks/>
         UNIT_PRICING,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightBaseCharge {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightBaseCharge
+    {
+
         private FreightClassType freightClassField;
-        
+
         private bool freightClassFieldSpecified;
-        
+
         private FreightClassType ratedAsClassField;
-        
+
         private bool ratedAsClassFieldSpecified;
-        
+
         private string nmfcCodeField;
-        
+
         private string descriptionField;
-        
+
         private Weight weightField;
-        
+
         private Money chargeRateField;
-        
+
         private FreightChargeBasisType chargeBasisField;
-        
+
         private bool chargeBasisFieldSpecified;
-        
+
         private Money extendedAmountField;
-        
+
         /// <remarks/>
-        public FreightClassType FreightClass {
-            get {
+        public FreightClassType FreightClass
+        {
+            get
+            {
                 return this.freightClassField;
             }
-            set {
+            set
+            {
                 this.freightClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FreightClassSpecified {
-            get {
+        public bool FreightClassSpecified
+        {
+            get
+            {
                 return this.freightClassFieldSpecified;
             }
-            set {
+            set
+            {
                 this.freightClassFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightClassType RatedAsClass {
-            get {
+        public FreightClassType RatedAsClass
+        {
+            get
+            {
                 return this.ratedAsClassField;
             }
-            set {
+            set
+            {
                 this.ratedAsClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RatedAsClassSpecified {
-            get {
+        public bool RatedAsClassSpecified
+        {
+            get
+            {
                 return this.ratedAsClassFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ratedAsClassFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string NmfcCode {
-            get {
+        public string NmfcCode
+        {
+            get
+            {
                 return this.nmfcCodeField;
             }
-            set {
+            set
+            {
                 this.nmfcCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight Weight {
-            get {
+        public Weight Weight
+        {
+            get
+            {
                 return this.weightField;
             }
-            set {
+            set
+            {
                 this.weightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money ChargeRate {
-            get {
+        public Money ChargeRate
+        {
+            get
+            {
                 return this.chargeRateField;
             }
-            set {
+            set
+            {
                 this.chargeRateField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FreightChargeBasisType ChargeBasis {
-            get {
+        public FreightChargeBasisType ChargeBasis
+        {
+            get
+            {
                 return this.chargeBasisField;
             }
-            set {
+            set
+            {
                 this.chargeBasisField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ChargeBasisSpecified {
-            get {
+        public bool ChargeBasisSpecified
+        {
+            get
+            {
                 return this.chargeBasisFieldSpecified;
             }
-            set {
+            set
+            {
                 this.chargeBasisFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money ExtendedAmount {
-            get {
+        public Money ExtendedAmount
+        {
+            get
+            {
                 return this.extendedAmountField;
             }
-            set {
+            set
+            {
                 this.extendedAmountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum FreightChargeBasisType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum FreightChargeBasisType
+    {
+
         /// <remarks/>
         CWT,
-        
+
         /// <remarks/>
         FLAT,
-        
+
         /// <remarks/>
         MINIMUM,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class FreightRateNotation {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class FreightRateNotation
+    {
+
         private string codeField;
-        
+
         private string descriptionField;
-        
+
         /// <remarks/>
-        public string Code {
-            get {
+        public string Code
+        {
+            get
+            {
                 return this.codeField;
             }
-            set {
+            set
+            {
                 this.codeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class RateDiscount {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class RateDiscount
+    {
+
         private RateDiscountType rateDiscountTypeField;
-        
+
         private bool rateDiscountTypeFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         private Money amountField;
-        
+
         private decimal percentField;
-        
+
         private bool percentFieldSpecified;
-        
+
         /// <remarks/>
-        public RateDiscountType RateDiscountType {
-            get {
+        public RateDiscountType RateDiscountType
+        {
+            get
+            {
                 return this.rateDiscountTypeField;
             }
-            set {
+            set
+            {
                 this.rateDiscountTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateDiscountTypeSpecified {
-            get {
+        public bool RateDiscountTypeSpecified
+        {
+            get
+            {
                 return this.rateDiscountTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateDiscountTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Percent {
-            get {
+        public decimal Percent
+        {
+            get
+            {
                 return this.percentField;
             }
-            set {
+            set
+            {
                 this.percentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PercentSpecified {
-            get {
+        public bool PercentSpecified
+        {
+            get
+            {
                 return this.percentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.percentFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RateDiscountType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RateDiscountType
+    {
+
         /// <remarks/>
         BONUS,
-        
+
         /// <remarks/>
         COUPON,
-        
+
         /// <remarks/>
         EARNED,
-        
+
         /// <remarks/>
         INCENTIVE,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         VOLUME,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Rebate {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Rebate
+    {
+
         private RebateType rebateTypeField;
-        
+
         private bool rebateTypeFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         private Money amountField;
-        
+
         private decimal percentField;
-        
+
         private bool percentFieldSpecified;
-        
+
         /// <remarks/>
-        public RebateType RebateType {
-            get {
+        public RebateType RebateType
+        {
+            get
+            {
                 return this.rebateTypeField;
             }
-            set {
+            set
+            {
                 this.rebateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RebateTypeSpecified {
-            get {
+        public bool RebateTypeSpecified
+        {
+            get
+            {
                 return this.rebateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rebateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal Percent {
-            get {
+        public decimal Percent
+        {
+            get
+            {
                 return this.percentField;
             }
-            set {
+            set
+            {
                 this.percentField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PercentSpecified {
-            get {
+        public bool PercentSpecified
+        {
+            get
+            {
                 return this.percentFieldSpecified;
             }
-            set {
+            set
+            {
                 this.percentFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RebateType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RebateType
+    {
+
         /// <remarks/>
         BONUS,
-        
+
         /// <remarks/>
         EARNED,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Surcharge {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Surcharge
+    {
+
         private SurchargeType surchargeTypeField;
-        
+
         private bool surchargeTypeFieldSpecified;
-        
+
         private SurchargeLevelType levelField;
-        
+
         private bool levelFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         private Money amountField;
-        
+
         /// <remarks/>
-        public SurchargeType SurchargeType {
-            get {
+        public SurchargeType SurchargeType
+        {
+            get
+            {
                 return this.surchargeTypeField;
             }
-            set {
+            set
+            {
                 this.surchargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SurchargeTypeSpecified {
-            get {
+        public bool SurchargeTypeSpecified
+        {
+            get
+            {
                 return this.surchargeTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.surchargeTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public SurchargeLevelType Level {
-            get {
+        public SurchargeLevelType Level
+        {
+            get
+            {
                 return this.levelField;
             }
-            set {
+            set
+            {
                 this.levelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LevelSpecified {
-            get {
+        public bool LevelSpecified
+        {
+            get
+            {
                 return this.levelFieldSpecified;
             }
-            set {
+            set
+            {
                 this.levelFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SurchargeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SurchargeType
+    {
+
         /// <remarks/>
         ACCOUNT_NUMBER_PROCESSING_FEE,
-        
+
         /// <remarks/>
         ADDITIONAL_HANDLING,
-        
+
         /// <remarks/>
         ADDRESS_CORRECTION,
-        
+
         /// <remarks/>
         ANCILLARY_FEE,
-        
+
         /// <remarks/>
         APPOINTMENT_DELIVERY,
-        
+
         /// <remarks/>
         BROKER_SELECT_OPTION,
-        
+
         /// <remarks/>
         CANADIAN_DESTINATION,
-        
+
         /// <remarks/>
         CLEARANCE_ENTRY_FEE,
-        
+
         /// <remarks/>
         COD,
-        
+
         /// <remarks/>
         CUT_FLOWERS,
-        
+
         /// <remarks/>
         DANGEROUS_GOODS,
-        
+
         /// <remarks/>
         DELIVERY_AREA,
-        
+
         /// <remarks/>
         DELIVERY_CONFIRMATION,
-        
+
         /// <remarks/>
         DELIVERY_ON_INVOICE_ACCEPTANCE,
-        
+
         /// <remarks/>
         DOCUMENTATION_FEE,
-        
+
         /// <remarks/>
         DRY_ICE,
-        
+
         /// <remarks/>
         EMAIL_LABEL,
-        
+
         /// <remarks/>
         EUROPE_FIRST,
-        
+
         /// <remarks/>
         EXCESS_VALUE,
-        
+
         /// <remarks/>
         EXHIBITION,
-        
+
         /// <remarks/>
         EXPORT,
-        
+
         /// <remarks/>
         EXTRA_SURFACE_HANDLING_CHARGE,
-        
+
         /// <remarks/>
         EXTREME_LENGTH,
-        
+
         /// <remarks/>
         FEDEX_INTRACOUNTRY_FEES,
-        
+
         /// <remarks/>
         FEDEX_TAG,
-        
+
         /// <remarks/>
         FICE,
-        
+
         /// <remarks/>
         FLATBED,
-        
+
         /// <remarks/>
         FREIGHT_GUARANTEE,
-        
+
         /// <remarks/>
         FREIGHT_ON_VALUE,
-        
+
         /// <remarks/>
         FREIGHT_TO_COLLECT,
-        
+
         /// <remarks/>
         FUEL,
-        
+
         /// <remarks/>
         HOLD_AT_LOCATION,
-        
+
         /// <remarks/>
         HOME_DELIVERY_APPOINTMENT,
-        
+
         /// <remarks/>
         HOME_DELIVERY_DATE_CERTAIN,
-        
+
         /// <remarks/>
         HOME_DELIVERY_EVENING,
-        
+
         /// <remarks/>
         INSIDE_DELIVERY,
-        
+
         /// <remarks/>
         INSIDE_PICKUP,
-        
+
         /// <remarks/>
         INSURED_VALUE,
-        
+
         /// <remarks/>
         INTERHAWAII,
-        
+
         /// <remarks/>
         LIFTGATE_DELIVERY,
-        
+
         /// <remarks/>
         LIFTGATE_PICKUP,
-        
+
         /// <remarks/>
         LIMITED_ACCESS_DELIVERY,
-        
+
         /// <remarks/>
         LIMITED_ACCESS_PICKUP,
-        
+
         /// <remarks/>
         METRO_DELIVERY,
-        
+
         /// <remarks/>
         METRO_PICKUP,
-        
+
         /// <remarks/>
         NON_MACHINABLE,
-        
+
         /// <remarks/>
         OFFSHORE,
-        
+
         /// <remarks/>
         ON_CALL_PICKUP,
-        
+
         /// <remarks/>
         ON_DEMAND_CARE,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         OUT_OF_DELIVERY_AREA,
-        
+
         /// <remarks/>
         OUT_OF_PICKUP_AREA,
-        
+
         /// <remarks/>
         OVERSIZE,
-        
+
         /// <remarks/>
         OVER_DIMENSION,
-        
+
         /// <remarks/>
         PIECE_COUNT_VERIFICATION,
-        
+
         /// <remarks/>
         PRE_DELIVERY_NOTIFICATION,
-        
+
         /// <remarks/>
         PRIORITY_ALERT,
-        
+
         /// <remarks/>
         PROTECTION_FROM_FREEZING,
-        
+
         /// <remarks/>
         REGIONAL_MALL_DELIVERY,
-        
+
         /// <remarks/>
         REGIONAL_MALL_PICKUP,
-        
+
         /// <remarks/>
         REROUTE,
-        
+
         /// <remarks/>
         RESCHEDULE,
-        
+
         /// <remarks/>
         RESIDENTIAL_DELIVERY,
-        
+
         /// <remarks/>
         RESIDENTIAL_PICKUP,
-        
+
         /// <remarks/>
         RETURN_LABEL,
-        
+
         /// <remarks/>
         SATURDAY_DELIVERY,
-        
+
         /// <remarks/>
         SATURDAY_PICKUP,
-        
+
         /// <remarks/>
         SIGNATURE_OPTION,
-        
+
         /// <remarks/>
         TARP,
-        
+
         /// <remarks/>
         THIRD_PARTY_CONSIGNEE,
-        
+
         /// <remarks/>
         TRANSMART_SERVICE_FEE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum SurchargeLevelType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum SurchargeLevelType
+    {
+
         /// <remarks/>
         PACKAGE,
-        
+
         /// <remarks/>
         SHIPMENT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class Tax {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class Tax
+    {
+
         private TaxType taxTypeField;
-        
+
         private bool taxTypeFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         private Money amountField;
-        
+
         /// <remarks/>
-        public TaxType TaxType {
-            get {
+        public TaxType TaxType
+        {
+            get
+            {
                 return this.taxTypeField;
             }
-            set {
+            set
+            {
                 this.taxTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaxTypeSpecified {
-            get {
+        public bool TaxTypeSpecified
+        {
+            get
+            {
                 return this.taxTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.taxTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum TaxType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum TaxType
+    {
+
         /// <remarks/>
         EXPORT,
-        
+
         /// <remarks/>
         GST,
-        
+
         /// <remarks/>
         HST,
-        
+
         /// <remarks/>
         INTRACOUNTRY,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         PST,
-        
+
         /// <remarks/>
         VAT,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EdtCommodityTax {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EdtCommodityTax
+    {
+
         private string harmonizedCodeField;
-        
+
         private EdtTaxDetail[] taxesField;
-        
+
         /// <remarks/>
-        public string HarmonizedCode {
-            get {
+        public string HarmonizedCode
+        {
+            get
+            {
                 return this.harmonizedCodeField;
             }
-            set {
+            set
+            {
                 this.harmonizedCodeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Taxes")]
-        public EdtTaxDetail[] Taxes {
-            get {
+        public EdtTaxDetail[] Taxes
+        {
+            get
+            {
                 return this.taxesField;
             }
-            set {
+            set
+            {
                 this.taxesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class EdtTaxDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class EdtTaxDetail
+    {
+
         private EdtTaxType taxTypeField;
-        
+
         private bool taxTypeFieldSpecified;
-        
+
         private System.DateTime effectiveDateField;
-        
+
         private bool effectiveDateFieldSpecified;
-        
+
         private string nameField;
-        
+
         private Money taxableValueField;
-        
+
         private string descriptionField;
-        
+
         private string formulaField;
-        
+
         private Money amountField;
-        
+
         /// <remarks/>
-        public EdtTaxType TaxType {
-            get {
+        public EdtTaxType TaxType
+        {
+            get
+            {
                 return this.taxTypeField;
             }
-            set {
+            set
+            {
                 this.taxTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TaxTypeSpecified {
-            get {
+        public bool TaxTypeSpecified
+        {
+            get
+            {
                 return this.taxTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.taxTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="date")]
-        public System.DateTime EffectiveDate {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "date")]
+        public System.DateTime EffectiveDate
+        {
+            get
+            {
                 return this.effectiveDateField;
             }
-            set {
+            set
+            {
                 this.effectiveDateField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool EffectiveDateSpecified {
-            get {
+        public bool EffectiveDateSpecified
+        {
+            get
+            {
                 return this.effectiveDateFieldSpecified;
             }
-            set {
+            set
+            {
                 this.effectiveDateFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Name {
-            get {
+        public string Name
+        {
+            get
+            {
                 return this.nameField;
             }
-            set {
+            set
+            {
                 this.nameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TaxableValue {
-            get {
+        public Money TaxableValue
+        {
+            get
+            {
                 return this.taxableValueField;
             }
-            set {
+            set
+            {
                 this.taxableValueField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Formula {
-            get {
+        public string Formula
+        {
+            get
+            {
                 return this.formulaField;
             }
-            set {
+            set
+            {
                 this.formulaField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EdtTaxType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EdtTaxType
+    {
+
         /// <remarks/>
         ADDITIONAL_TAXES,
-        
+
         /// <remarks/>
         CONSULAR_INVOICE_FEE,
-        
+
         /// <remarks/>
         CUSTOMS_SURCHARGES,
-        
+
         /// <remarks/>
         DUTY,
-        
+
         /// <remarks/>
         EXCISE_TAX,
-        
+
         /// <remarks/>
         FOREIGN_EXCHANGE_TAX,
-        
+
         /// <remarks/>
         GENERAL_SALES_TAX,
-        
+
         /// <remarks/>
         IMPORT_LICENSE_FEE,
-        
+
         /// <remarks/>
         INTERNAL_ADDITIONAL_TAXES,
-        
+
         /// <remarks/>
         INTERNAL_SENSITIVE_PRODUCTS_TAX,
-        
+
         /// <remarks/>
         OTHER,
-        
+
         /// <remarks/>
         SENSITIVE_PRODUCTS_TAX,
-        
+
         /// <remarks/>
         STAMP_TAX,
-        
+
         /// <remarks/>
         STATISTICAL_TAX,
-        
+
         /// <remarks/>
         TRANSPORT_FACILITIES_TAX,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class VariableHandlingCharges {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class VariableHandlingCharges
+    {
+
         private Money variableHandlingChargeField;
-        
+
         private Money fixedVariableHandlingChargeField;
-        
+
         private Money percentVariableHandlingChargeField;
-        
+
         private Money totalCustomerChargeField;
-        
+
         /// <remarks/>
-        public Money VariableHandlingCharge {
-            get {
+        public Money VariableHandlingCharge
+        {
+            get
+            {
                 return this.variableHandlingChargeField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money FixedVariableHandlingCharge {
-            get {
+        public Money FixedVariableHandlingCharge
+        {
+            get
+            {
                 return this.fixedVariableHandlingChargeField;
             }
-            set {
+            set
+            {
                 this.fixedVariableHandlingChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money PercentVariableHandlingCharge {
-            get {
+        public Money PercentVariableHandlingCharge
+        {
+            get
+            {
                 return this.percentVariableHandlingChargeField;
             }
-            set {
+            set
+            {
                 this.percentVariableHandlingChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalCustomerCharge {
-            get {
+        public Money TotalCustomerCharge
+        {
+            get
+            {
                 return this.totalCustomerChargeField;
             }
-            set {
+            set
+            {
                 this.totalCustomerChargeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class AncillaryFeeAndTax {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class AncillaryFeeAndTax
+    {
+
         private AncillaryFeeAndTaxType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string descriptionField;
-        
+
         private Money amountField;
-        
+
         /// <remarks/>
-        public AncillaryFeeAndTaxType Type {
-            get {
+        public AncillaryFeeAndTaxType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Description {
-            get {
+        public string Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money Amount {
-            get {
+        public Money Amount
+        {
+            get
+            {
                 return this.amountField;
             }
-            set {
+            set
+            {
                 this.amountField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum AncillaryFeeAndTaxType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum AncillaryFeeAndTaxType
+    {
+
         /// <remarks/>
         CLEARANCE_ENTRY_FEE,
-        
+
         /// <remarks/>
         GOODS_AND_SERVICES_TAX,
-        
+
         /// <remarks/>
         HARMONIZED_SALES_TAX,
-        
+
         /// <remarks/>
         OTHER,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedHoldAtLocationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedHoldAtLocationDetail
+    {
+
         private ContactAndAddress holdingLocationField;
-        
+
         private FedExLocationType holdingLocationTypeField;
-        
+
         private bool holdingLocationTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public ContactAndAddress HoldingLocation {
-            get {
+        public ContactAndAddress HoldingLocation
+        {
+            get
+            {
                 return this.holdingLocationField;
             }
-            set {
+            set
+            {
                 this.holdingLocationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public FedExLocationType HoldingLocationType {
-            get {
+        public FedExLocationType HoldingLocationType
+        {
+            get
+            {
                 return this.holdingLocationTypeField;
             }
-            set {
+            set
+            {
                 this.holdingLocationTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool HoldingLocationTypeSpecified {
-            get {
+        public bool HoldingLocationTypeSpecified
+        {
+            get
+            {
                 return this.holdingLocationTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.holdingLocationTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DocumentRequirementsDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DocumentRequirementsDetail
+    {
+
         private RequiredDocumentType[] requiredDocumentsField;
-        
+
         private DocumentGenerationDetail[] generationDetailsField;
-        
+
         private EnterpriseDocumentType[] prohibitedDocumentsField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("RequiredDocuments")]
-        public RequiredDocumentType[] RequiredDocuments {
-            get {
+        public RequiredDocumentType[] RequiredDocuments
+        {
+            get
+            {
                 return this.requiredDocumentsField;
             }
-            set {
+            set
+            {
                 this.requiredDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("GenerationDetails")]
-        public DocumentGenerationDetail[] GenerationDetails {
-            get {
+        public DocumentGenerationDetail[] GenerationDetails
+        {
+            get
+            {
                 return this.generationDetailsField;
             }
-            set {
+            set
+            {
                 this.generationDetailsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("ProhibitedDocuments")]
-        public EnterpriseDocumentType[] ProhibitedDocuments {
-            get {
+        public EnterpriseDocumentType[] ProhibitedDocuments
+        {
+            get
+            {
                 return this.prohibitedDocumentsField;
             }
-            set {
+            set
+            {
                 this.prohibitedDocumentsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RequiredDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RequiredDocumentType
+    {
+
         /// <remarks/>
         AIR_WAYBILL,
-        
+
         /// <remarks/>
         CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE,
-        
+
         /// <remarks/>
         COMMERCIAL_OR_PRO_FORMA_INVOICE,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         PRO_FORMA_INVOICE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class DocumentGenerationDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class DocumentGenerationDetail
+    {
+
         private EnterpriseDocumentType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string minimumCopiesRequiredField;
-        
+
         private RequirementType letterheadField;
-        
+
         private bool letterheadFieldSpecified;
-        
+
         private RequirementType electronicSignatureField;
-        
+
         private bool electronicSignatureFieldSpecified;
-        
+
         /// <remarks/>
-        public EnterpriseDocumentType Type {
-            get {
+        public EnterpriseDocumentType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string MinimumCopiesRequired {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string MinimumCopiesRequired
+        {
+            get
+            {
                 return this.minimumCopiesRequiredField;
             }
-            set {
+            set
+            {
                 this.minimumCopiesRequiredField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequirementType Letterhead {
-            get {
+        public RequirementType Letterhead
+        {
+            get
+            {
                 return this.letterheadField;
             }
-            set {
+            set
+            {
                 this.letterheadField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LetterheadSpecified {
-            get {
+        public bool LetterheadSpecified
+        {
+            get
+            {
                 return this.letterheadFieldSpecified;
             }
-            set {
+            set
+            {
                 this.letterheadFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequirementType ElectronicSignature {
-            get {
+        public RequirementType ElectronicSignature
+        {
+            get
+            {
                 return this.electronicSignatureField;
             }
-            set {
+            set
+            {
                 this.electronicSignatureField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ElectronicSignatureSpecified {
-            get {
+        public bool ElectronicSignatureSpecified
+        {
+            get
+            {
                 return this.electronicSignatureFieldSpecified;
             }
-            set {
+            set
+            {
                 this.electronicSignatureFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum EnterpriseDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum EnterpriseDocumentType
+    {
+
         /// <remarks/>
         AIR_WAYBILL,
-        
+
         /// <remarks/>
         CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         PRO_FORMA_INVOICE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RequirementType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RequirementType
+    {
+
         /// <remarks/>
         OPTIONAL,
-        
+
         /// <remarks/>
         PROHIBITED,
-        
+
         /// <remarks/>
         REQUIRED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedEtdDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedEtdDetail
+    {
+
         private string folderIdField;
-        
+
         private CompletedEtdType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private UploadDocumentReferenceDetail[] uploadDocumentReferenceDetailsField;
-        
+
         /// <remarks/>
-        public string FolderId {
-            get {
+        public string FolderId
+        {
+            get
+            {
                 return this.folderIdField;
             }
-            set {
+            set
+            {
                 this.folderIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedEtdType Type {
-            get {
+        public CompletedEtdType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("UploadDocumentReferenceDetails")]
-        public UploadDocumentReferenceDetail[] UploadDocumentReferenceDetails {
-            get {
+        public UploadDocumentReferenceDetail[] UploadDocumentReferenceDetails
+        {
+            get
+            {
                 return this.uploadDocumentReferenceDetailsField;
             }
-            set {
+            set
+            {
                 this.uploadDocumentReferenceDetailsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CompletedEtdType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CompletedEtdType
+    {
+
         /// <remarks/>
         ELECTRONIC_DOCUMENTS_ONLY,
-        
+
         /// <remarks/>
         ELECTRONIC_DOCUMENTS_WITH_ORIGINALS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocument {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocument
+    {
+
         private ReturnedShippingDocumentType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private Localization[] localizationsField;
-        
+
         private ShippingDocumentGroupingType groupingField;
-        
+
         private bool groupingFieldSpecified;
-        
+
         private ShippingDocumentDispositionType shippingDocumentDispositionField;
-        
+
         private bool shippingDocumentDispositionFieldSpecified;
-        
+
         private string accessReferenceField;
-        
+
         private ShippingDocumentImageType imageTypeField;
-        
+
         private bool imageTypeFieldSpecified;
-        
+
         private string resolutionField;
-        
+
         private string copiesToPrintField;
-        
+
         private ShippingDocumentPart[] partsField;
-        
+
         /// <remarks/>
-        public ReturnedShippingDocumentType Type {
-            get {
+        public ReturnedShippingDocumentType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Localizations")]
-        public Localization[] Localizations {
-            get {
+        public Localization[] Localizations
+        {
+            get
+            {
                 return this.localizationsField;
             }
-            set {
+            set
+            {
                 this.localizationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentGroupingType Grouping {
-            get {
+        public ShippingDocumentGroupingType Grouping
+        {
+            get
+            {
                 return this.groupingField;
             }
-            set {
+            set
+            {
                 this.groupingField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool GroupingSpecified {
-            get {
+        public bool GroupingSpecified
+        {
+            get
+            {
                 return this.groupingFieldSpecified;
             }
-            set {
+            set
+            {
                 this.groupingFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentDispositionType ShippingDocumentDisposition {
-            get {
+        public ShippingDocumentDispositionType ShippingDocumentDisposition
+        {
+            get
+            {
                 return this.shippingDocumentDispositionField;
             }
-            set {
+            set
+            {
                 this.shippingDocumentDispositionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ShippingDocumentDispositionSpecified {
-            get {
+        public bool ShippingDocumentDispositionSpecified
+        {
+            get
+            {
                 return this.shippingDocumentDispositionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.shippingDocumentDispositionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string AccessReference {
-            get {
+        public string AccessReference
+        {
+            get
+            {
                 return this.accessReferenceField;
             }
-            set {
+            set
+            {
                 this.accessReferenceField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocumentImageType ImageType {
-            get {
+        public ShippingDocumentImageType ImageType
+        {
+            get
+            {
                 return this.imageTypeField;
             }
-            set {
+            set
+            {
                 this.imageTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ImageTypeSpecified {
-            get {
+        public bool ImageTypeSpecified
+        {
+            get
+            {
                 return this.imageTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.imageTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string Resolution {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string Resolution
+        {
+            get
+            {
                 return this.resolutionField;
             }
-            set {
+            set
+            {
                 this.resolutionField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string CopiesToPrint {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string CopiesToPrint
+        {
+            get
+            {
                 return this.copiesToPrintField;
             }
-            set {
+            set
+            {
                 this.copiesToPrintField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Parts")]
-        public ShippingDocumentPart[] Parts {
-            get {
+        public ShippingDocumentPart[] Parts
+        {
+            get
+            {
                 return this.partsField;
             }
-            set {
+            set
+            {
                 this.partsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum ReturnedShippingDocumentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum ReturnedShippingDocumentType
+    {
+
         /// <remarks/>
         AUXILIARY_LABEL,
-        
+
         /// <remarks/>
         CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         COD_AND_DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN_2_D_BARCODE,
-        
+
         /// <remarks/>
         COD_AND_DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN_LABEL,
-        
+
         /// <remarks/>
         COD_RETURN_2_D_BARCODE,
-        
+
         /// <remarks/>
         COD_RETURN_LABEL,
-        
+
         /// <remarks/>
         COMMERCIAL_INVOICE,
-        
+
         /// <remarks/>
         CUSTOM_PACKAGE_DOCUMENT,
-        
+
         /// <remarks/>
         CUSTOM_SHIPMENT_DOCUMENT,
-        
+
         /// <remarks/>
         DANGEROUS_GOODS_SHIPPERS_DECLARATION,
-        
+
         /// <remarks/>
         DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN_2_D_BARCODE,
-        
+
         /// <remarks/>
         DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN_LABEL,
-        
+
         /// <remarks/>
         ETD_LABEL,
-        
+
         /// <remarks/>
         EXPORT_DECLARATION,
-        
+
         /// <remarks/>
         FREIGHT_ADDRESS_LABEL,
-        
+
         /// <remarks/>
         GENERAL_AGENCY_AGREEMENT,
-        
+
         /// <remarks/>
         GROUND_BARCODE,
-        
+
         /// <remarks/>
         NAFTA_CERTIFICATE_OF_ORIGIN,
-        
+
         /// <remarks/>
         OP_900,
-        
+
         /// <remarks/>
         OUTBOUND_2_D_BARCODE,
-        
+
         /// <remarks/>
         OUTBOUND_LABEL,
-        
+
         /// <remarks/>
         PRO_FORMA_INVOICE,
-        
+
         /// <remarks/>
         RECIPIENT_ADDRESS_BARCODE,
-        
+
         /// <remarks/>
         RECIPIENT_POSTAL_BARCODE,
-        
+
         /// <remarks/>
         RETURN_INSTRUCTIONS,
-        
+
         /// <remarks/>
         TERMS_AND_CONDITIONS,
-        
+
         /// <remarks/>
         USPS_BARCODE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ShippingDocumentPart {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ShippingDocumentPart
+    {
+
         private string documentPartSequenceNumberField;
-        
+
         private byte[] imageField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string DocumentPartSequenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string DocumentPartSequenceNumber
+        {
+            get
+            {
                 return this.documentPartSequenceNumberField;
             }
-            set {
+            set
+            {
                 this.documentPartSequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] Image {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary")]
+        public byte[] Image
+        {
+            get
+            {
                 return this.imageField;
             }
-            set {
+            set
+            {
                 this.imageField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class AssociatedShipmentDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class AssociatedShipmentDetail
+    {
+
         private AssociatedShipmentType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private Party senderField;
-        
+
         private Party recipientField;
-        
+
         private ServiceType serviceTypeField;
-        
+
         private bool serviceTypeFieldSpecified;
-        
+
         private PackagingType packagingTypeField;
-        
+
         private bool packagingTypeFieldSpecified;
-        
+
         private TrackingId trackingIdField;
-        
+
         private CustomerReference[] customerReferencesField;
-        
+
         private ShipmentOperationalDetail shipmentOperationalDetailField;
-        
+
         private PackageOperationalDetail packageOperationalDetailField;
-        
+
         private ShippingDocument labelField;
-        
+
         /// <remarks/>
-        public AssociatedShipmentType Type {
-            get {
+        public AssociatedShipmentType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Sender {
-            get {
+        public Party Sender
+        {
+            get
+            {
                 return this.senderField;
             }
-            set {
+            set
+            {
                 this.senderField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Party Recipient {
-            get {
+        public Party Recipient
+        {
+            get
+            {
                 return this.recipientField;
             }
-            set {
+            set
+            {
                 this.recipientField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ServiceType ServiceType {
-            get {
+        public ServiceType ServiceType
+        {
+            get
+            {
                 return this.serviceTypeField;
             }
-            set {
+            set
+            {
                 this.serviceTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ServiceTypeSpecified {
-            get {
+        public bool ServiceTypeSpecified
+        {
+            get
+            {
                 return this.serviceTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.serviceTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackagingType PackagingType {
-            get {
+        public PackagingType PackagingType
+        {
+            get
+            {
                 return this.packagingTypeField;
             }
-            set {
+            set
+            {
                 this.packagingTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackagingTypeSpecified {
-            get {
+        public bool PackagingTypeSpecified
+        {
+            get
+            {
                 return this.packagingTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packagingTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public TrackingId TrackingId {
-            get {
+        public TrackingId TrackingId
+        {
+            get
+            {
                 return this.trackingIdField;
             }
-            set {
+            set
+            {
                 this.trackingIdField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("CustomerReferences")]
-        public CustomerReference[] CustomerReferences {
-            get {
+        public CustomerReference[] CustomerReferences
+        {
+            get
+            {
                 return this.customerReferencesField;
             }
-            set {
+            set
+            {
                 this.customerReferencesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShipmentOperationalDetail ShipmentOperationalDetail {
-            get {
+        public ShipmentOperationalDetail ShipmentOperationalDetail
+        {
+            get
+            {
                 return this.shipmentOperationalDetailField;
             }
-            set {
+            set
+            {
                 this.shipmentOperationalDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageOperationalDetail PackageOperationalDetail {
-            get {
+        public PackageOperationalDetail PackageOperationalDetail
+        {
+            get
+            {
                 return this.packageOperationalDetailField;
             }
-            set {
+            set
+            {
                 this.packageOperationalDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocument Label {
-            get {
+        public ShippingDocument Label
+        {
+            get
+            {
                 return this.labelField;
             }
-            set {
+            set
+            {
                 this.labelField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum AssociatedShipmentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum AssociatedShipmentType
+    {
+
         /// <remarks/>
         COD_AND_DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN,
-        
+
         /// <remarks/>
         COD_RETURN,
-        
+
         /// <remarks/>
         DELIVERY_ON_INVOICE_ACCEPTANCE_RETURN,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PackageOperationalDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PackageOperationalDetail
+    {
+
         private string astraHandlingTextField;
-        
+
         private OperationalInstruction[] operationalInstructionsField;
-        
+
         private PackageBarcodes barcodesField;
-        
+
         private string groundServiceCodeField;
-        
+
         /// <remarks/>
-        public string AstraHandlingText {
-            get {
+        public string AstraHandlingText
+        {
+            get
+            {
                 return this.astraHandlingTextField;
             }
-            set {
+            set
+            {
                 this.astraHandlingTextField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("OperationalInstructions")]
-        public OperationalInstruction[] OperationalInstructions {
-            get {
+        public OperationalInstruction[] OperationalInstructions
+        {
+            get
+            {
                 return this.operationalInstructionsField;
             }
-            set {
+            set
+            {
                 this.operationalInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageBarcodes Barcodes {
-            get {
+        public PackageBarcodes Barcodes
+        {
+            get
+            {
                 return this.barcodesField;
             }
-            set {
+            set
+            {
                 this.barcodesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string GroundServiceCode {
-            get {
+        public string GroundServiceCode
+        {
+            get
+            {
                 return this.groundServiceCodeField;
             }
-            set {
+            set
+            {
                 this.groundServiceCodeField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class OperationalInstruction {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class OperationalInstruction
+    {
+
         private int numberField;
-        
+
         private bool numberFieldSpecified;
-        
+
         private string contentField;
-        
+
         /// <remarks/>
-        public int Number {
-            get {
+        public int Number
+        {
+            get
+            {
                 return this.numberField;
             }
-            set {
+            set
+            {
                 this.numberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool NumberSpecified {
-            get {
+        public bool NumberSpecified
+        {
+            get
+            {
                 return this.numberFieldSpecified;
             }
-            set {
+            set
+            {
                 this.numberFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Content {
-            get {
+        public string Content
+        {
+            get
+            {
                 return this.contentField;
             }
-            set {
+            set
+            {
                 this.contentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PackageBarcodes {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PackageBarcodes
+    {
+
         private BinaryBarcode[] binaryBarcodesField;
-        
+
         private StringBarcode[] stringBarcodesField;
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("BinaryBarcodes")]
-        public BinaryBarcode[] BinaryBarcodes {
-            get {
+        public BinaryBarcode[] BinaryBarcodes
+        {
+            get
+            {
                 return this.binaryBarcodesField;
             }
-            set {
+            set
+            {
                 this.binaryBarcodesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("StringBarcodes")]
-        public StringBarcode[] StringBarcodes {
-            get {
+        public StringBarcode[] StringBarcodes
+        {
+            get
+            {
                 return this.stringBarcodesField;
             }
-            set {
+            set
+            {
                 this.stringBarcodesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class BinaryBarcode {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class BinaryBarcode
+    {
+
         private BinaryBarcodeType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private byte[] valueField;
-        
+
         /// <remarks/>
-        public BinaryBarcodeType Type {
-            get {
+        public BinaryBarcodeType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
-        public byte[] Value {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary")]
+        public byte[] Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum BinaryBarcodeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum BinaryBarcodeType
+    {
+
         /// <remarks/>
         COMMON_2D,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class StringBarcode {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class StringBarcode
+    {
+
         private StringBarcodeType typeField;
-        
+
         private bool typeFieldSpecified;
-        
+
         private string valueField;
-        
+
         /// <remarks/>
-        public StringBarcodeType Type {
-            get {
+        public StringBarcodeType Type
+        {
+            get
+            {
                 return this.typeField;
             }
-            set {
+            set
+            {
                 this.typeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeSpecified {
-            get {
+        public bool TypeSpecified
+        {
+            get
+            {
                 return this.typeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.typeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Value {
-            get {
+        public string Value
+        {
+            get
+            {
                 return this.valueField;
             }
-            set {
+            set
+            {
                 this.valueField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum StringBarcodeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum StringBarcodeType
+    {
+
         /// <remarks/>
         ADDRESS,
-        
+
         /// <remarks/>
         ASTRA,
-        
+
         /// <remarks/>
         FEDEX_1D,
-        
+
         /// <remarks/>
         GROUND,
-        
+
         /// <remarks/>
         POSTAL,
-        
+
         /// <remarks/>
         USPS,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedCodDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedCodDetail
+    {
+
         private Money collectionAmountField;
-        
+
         private CodAdjustmentType adjustmentTypeField;
-        
+
         private bool adjustmentTypeFieldSpecified;
-        
+
         /// <remarks/>
-        public Money CollectionAmount {
-            get {
+        public Money CollectionAmount
+        {
+            get
+            {
                 return this.collectionAmountField;
             }
-            set {
+            set
+            {
                 this.collectionAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodAdjustmentType AdjustmentType {
-            get {
+        public CodAdjustmentType AdjustmentType
+        {
+            get
+            {
                 return this.adjustmentTypeField;
             }
-            set {
+            set
+            {
                 this.adjustmentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AdjustmentTypeSpecified {
-            get {
+        public bool AdjustmentTypeSpecified
+        {
+            get
+            {
                 return this.adjustmentTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.adjustmentTypeFieldSpecified = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum CodAdjustmentType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum CodAdjustmentType
+    {
+
         /// <remarks/>
         CHARGES_ADDED,
-        
+
         /// <remarks/>
         NONE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedPackageDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedPackageDetail
+    {
+
         private string sequenceNumberField;
-        
+
         private TrackingId[] trackingIdsField;
-        
+
         private string groupNumberField;
-        
+
         private OversizeClassType oversizeClassField;
-        
+
         private bool oversizeClassFieldSpecified;
-        
+
         private PackageRating packageRatingField;
-        
+
         private PackageOperationalDetail operationalDetailField;
-        
+
         private ShippingDocument labelField;
-        
+
         private ShippingDocument[] packageDocumentsField;
-        
+
         private CodReturnPackageDetail codReturnDetailField;
-        
+
         private SignatureOptionType signatureOptionField;
-        
+
         private bool signatureOptionFieldSpecified;
-        
+
         private Weight dryIceWeightField;
-        
+
         private CompletedHazardousPackageDetail hazardousPackageDetailField;
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="positiveInteger")]
-        public string SequenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "positiveInteger")]
+        public string SequenceNumber
+        {
+            get
+            {
                 return this.sequenceNumberField;
             }
-            set {
+            set
+            {
                 this.sequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("TrackingIds")]
-        public TrackingId[] TrackingIds {
-            get {
+        public TrackingId[] TrackingIds
+        {
+            get
+            {
                 return this.trackingIdsField;
             }
-            set {
+            set
+            {
                 this.trackingIdsField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string GroupNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string GroupNumber
+        {
+            get
+            {
                 return this.groupNumberField;
             }
-            set {
+            set
+            {
                 this.groupNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public OversizeClassType OversizeClass {
-            get {
+        public OversizeClassType OversizeClass
+        {
+            get
+            {
                 return this.oversizeClassField;
             }
-            set {
+            set
+            {
                 this.oversizeClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool OversizeClassSpecified {
-            get {
+        public bool OversizeClassSpecified
+        {
+            get
+            {
                 return this.oversizeClassFieldSpecified;
             }
-            set {
+            set
+            {
                 this.oversizeClassFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageRating PackageRating {
-            get {
+        public PackageRating PackageRating
+        {
+            get
+            {
                 return this.packageRatingField;
             }
-            set {
+            set
+            {
                 this.packageRatingField = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageOperationalDetail OperationalDetail {
-            get {
+        public PackageOperationalDetail OperationalDetail
+        {
+            get
+            {
                 return this.operationalDetailField;
             }
-            set {
+            set
+            {
                 this.operationalDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocument Label {
-            get {
+        public ShippingDocument Label
+        {
+            get
+            {
                 return this.labelField;
             }
-            set {
+            set
+            {
                 this.labelField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PackageDocuments")]
-        public ShippingDocument[] PackageDocuments {
-            get {
+        public ShippingDocument[] PackageDocuments
+        {
+            get
+            {
                 return this.packageDocumentsField;
             }
-            set {
+            set
+            {
                 this.packageDocumentsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodReturnPackageDetail CodReturnDetail {
-            get {
+        public CodReturnPackageDetail CodReturnDetail
+        {
+            get
+            {
                 return this.codReturnDetailField;
             }
-            set {
+            set
+            {
                 this.codReturnDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public SignatureOptionType SignatureOption {
-            get {
+        public SignatureOptionType SignatureOption
+        {
+            get
+            {
                 return this.signatureOptionField;
             }
-            set {
+            set
+            {
                 this.signatureOptionField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool SignatureOptionSpecified {
-            get {
+        public bool SignatureOptionSpecified
+        {
+            get
+            {
                 return this.signatureOptionFieldSpecified;
             }
-            set {
+            set
+            {
                 this.signatureOptionFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight DryIceWeight {
-            get {
+        public Weight DryIceWeight
+        {
+            get
+            {
                 return this.dryIceWeightField;
             }
-            set {
+            set
+            {
                 this.dryIceWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedHazardousPackageDetail HazardousPackageDetail {
-            get {
+        public CompletedHazardousPackageDetail HazardousPackageDetail
+        {
+            get
+            {
                 return this.hazardousPackageDetailField;
             }
-            set {
+            set
+            {
                 this.hazardousPackageDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum OversizeClassType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum OversizeClassType
+    {
+
         /// <remarks/>
         OVERSIZE_1,
-        
+
         /// <remarks/>
         OVERSIZE_2,
-        
+
         /// <remarks/>
         OVERSIZE_3,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PackageRating {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PackageRating
+    {
+
         private ReturnedRateType actualRateTypeField;
-        
+
         private bool actualRateTypeFieldSpecified;
-        
+
         private Money effectiveNetDiscountField;
-        
+
         private PackageRateDetail[] packageRateDetailsField;
-        
+
         /// <remarks/>
-        public ReturnedRateType ActualRateType {
-            get {
+        public ReturnedRateType ActualRateType
+        {
+            get
+            {
                 return this.actualRateTypeField;
             }
-            set {
+            set
+            {
                 this.actualRateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ActualRateTypeSpecified {
-            get {
+        public bool ActualRateTypeSpecified
+        {
+            get
+            {
                 return this.actualRateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.actualRateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money EffectiveNetDiscount {
-            get {
+        public Money EffectiveNetDiscount
+        {
+            get
+            {
                 return this.effectiveNetDiscountField;
             }
-            set {
+            set
+            {
                 this.effectiveNetDiscountField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("PackageRateDetails")]
-        public PackageRateDetail[] PackageRateDetails {
-            get {
+        public PackageRateDetail[] PackageRateDetails
+        {
+            get
+            {
                 return this.packageRateDetailsField;
             }
-            set {
+            set
+            {
                 this.packageRateDetailsField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class PackageRateDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class PackageRateDetail
+    {
+
         private ReturnedRateType rateTypeField;
-        
+
         private bool rateTypeFieldSpecified;
-        
+
         private RatedWeightMethod ratedWeightMethodField;
-        
+
         private bool ratedWeightMethodFieldSpecified;
-        
+
         private MinimumChargeType minimumChargeTypeField;
-        
+
         private bool minimumChargeTypeFieldSpecified;
-        
+
         private Weight billingWeightField;
-        
+
         private Weight dimWeightField;
-        
+
         private Weight oversizeWeightField;
-        
+
         private Money baseChargeField;
-        
+
         private Money totalFreightDiscountsField;
-        
+
         private Money netFreightField;
-        
+
         private Money totalSurchargesField;
-        
+
         private Money netFedExChargeField;
-        
+
         private Money totalTaxesField;
-        
+
         private Money netChargeField;
-        
+
         private Money totalRebatesField;
-        
+
         private RateDiscount[] freightDiscountsField;
-        
+
         private Rebate[] rebatesField;
-        
+
         private Surcharge[] surchargesField;
-        
+
         private Tax[] taxesField;
-        
+
         private VariableHandlingCharges variableHandlingChargesField;
-        
+
         /// <remarks/>
-        public ReturnedRateType RateType {
-            get {
+        public ReturnedRateType RateType
+        {
+            get
+            {
                 return this.rateTypeField;
             }
-            set {
+            set
+            {
                 this.rateTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RateTypeSpecified {
-            get {
+        public bool RateTypeSpecified
+        {
+            get
+            {
                 return this.rateTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.rateTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RatedWeightMethod RatedWeightMethod {
-            get {
+        public RatedWeightMethod RatedWeightMethod
+        {
+            get
+            {
                 return this.ratedWeightMethodField;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RatedWeightMethodSpecified {
-            get {
+        public bool RatedWeightMethodSpecified
+        {
+            get
+            {
                 return this.ratedWeightMethodFieldSpecified;
             }
-            set {
+            set
+            {
                 this.ratedWeightMethodFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public MinimumChargeType MinimumChargeType {
-            get {
+        public MinimumChargeType MinimumChargeType
+        {
+            get
+            {
                 return this.minimumChargeTypeField;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MinimumChargeTypeSpecified {
-            get {
+        public bool MinimumChargeTypeSpecified
+        {
+            get
+            {
                 return this.minimumChargeTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.minimumChargeTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight BillingWeight {
-            get {
+        public Weight BillingWeight
+        {
+            get
+            {
                 return this.billingWeightField;
             }
-            set {
+            set
+            {
                 this.billingWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight DimWeight {
-            get {
+        public Weight DimWeight
+        {
+            get
+            {
                 return this.dimWeightField;
             }
-            set {
+            set
+            {
                 this.dimWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Weight OversizeWeight {
-            get {
+        public Weight OversizeWeight
+        {
+            get
+            {
                 return this.oversizeWeightField;
             }
-            set {
+            set
+            {
                 this.oversizeWeightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money BaseCharge {
-            get {
+        public Money BaseCharge
+        {
+            get
+            {
                 return this.baseChargeField;
             }
-            set {
+            set
+            {
                 this.baseChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalFreightDiscounts {
-            get {
+        public Money TotalFreightDiscounts
+        {
+            get
+            {
                 return this.totalFreightDiscountsField;
             }
-            set {
+            set
+            {
                 this.totalFreightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money NetFreight {
-            get {
+        public Money NetFreight
+        {
+            get
+            {
                 return this.netFreightField;
             }
-            set {
+            set
+            {
                 this.netFreightField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalSurcharges {
-            get {
+        public Money TotalSurcharges
+        {
+            get
+            {
                 return this.totalSurchargesField;
             }
-            set {
+            set
+            {
                 this.totalSurchargesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money NetFedExCharge {
-            get {
+        public Money NetFedExCharge
+        {
+            get
+            {
                 return this.netFedExChargeField;
             }
-            set {
+            set
+            {
                 this.netFedExChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalTaxes {
-            get {
+        public Money TotalTaxes
+        {
+            get
+            {
                 return this.totalTaxesField;
             }
-            set {
+            set
+            {
                 this.totalTaxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money NetCharge {
-            get {
+        public Money NetCharge
+        {
+            get
+            {
                 return this.netChargeField;
             }
-            set {
+            set
+            {
                 this.netChargeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public Money TotalRebates {
-            get {
+        public Money TotalRebates
+        {
+            get
+            {
                 return this.totalRebatesField;
             }
-            set {
+            set
+            {
                 this.totalRebatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("FreightDiscounts")]
-        public RateDiscount[] FreightDiscounts {
-            get {
+        public RateDiscount[] FreightDiscounts
+        {
+            get
+            {
                 return this.freightDiscountsField;
             }
-            set {
+            set
+            {
                 this.freightDiscountsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Rebates")]
-        public Rebate[] Rebates {
-            get {
+        public Rebate[] Rebates
+        {
+            get
+            {
                 return this.rebatesField;
             }
-            set {
+            set
+            {
                 this.rebatesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Surcharges")]
-        public Surcharge[] Surcharges {
-            get {
+        public Surcharge[] Surcharges
+        {
+            get
+            {
                 return this.surchargesField;
             }
-            set {
+            set
+            {
                 this.surchargesField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Taxes")]
-        public Tax[] Taxes {
-            get {
+        public Tax[] Taxes
+        {
+            get
+            {
                 return this.taxesField;
             }
-            set {
+            set
+            {
                 this.taxesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VariableHandlingCharges VariableHandlingCharges {
-            get {
+        public VariableHandlingCharges VariableHandlingCharges
+        {
+            get
+            {
                 return this.variableHandlingChargesField;
             }
-            set {
+            set
+            {
                 this.variableHandlingChargesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CodReturnPackageDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CodReturnPackageDetail
+    {
+
         private Money collectionAmountField;
-        
+
         private CodAdjustmentType adjustmentTypeField;
-        
+
         private bool adjustmentTypeFieldSpecified;
-        
+
         private bool electronicField;
-        
+
         private bool electronicFieldSpecified;
-        
+
         private PackageBarcodes barcodesField;
-        
+
         private ShippingDocument labelField;
-        
+
         /// <remarks/>
-        public Money CollectionAmount {
-            get {
+        public Money CollectionAmount
+        {
+            get
+            {
                 return this.collectionAmountField;
             }
-            set {
+            set
+            {
                 this.collectionAmountField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CodAdjustmentType AdjustmentType {
-            get {
+        public CodAdjustmentType AdjustmentType
+        {
+            get
+            {
                 return this.adjustmentTypeField;
             }
-            set {
+            set
+            {
                 this.adjustmentTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AdjustmentTypeSpecified {
-            get {
+        public bool AdjustmentTypeSpecified
+        {
+            get
+            {
                 return this.adjustmentTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.adjustmentTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool Electronic {
-            get {
+        public bool Electronic
+        {
+            get
+            {
                 return this.electronicField;
             }
-            set {
+            set
+            {
                 this.electronicField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ElectronicSpecified {
-            get {
+        public bool ElectronicSpecified
+        {
+            get
+            {
                 return this.electronicFieldSpecified;
             }
-            set {
+            set
+            {
                 this.electronicFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public PackageBarcodes Barcodes {
-            get {
+        public PackageBarcodes Barcodes
+        {
+            get
+            {
                 return this.barcodesField;
             }
-            set {
+            set
+            {
                 this.barcodesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ShippingDocument Label {
-            get {
+        public ShippingDocument Label
+        {
+            get
+            {
                 return this.labelField;
             }
-            set {
+            set
+            {
                 this.labelField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class CompletedHazardousPackageDetail {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class CompletedHazardousPackageDetail
+    {
+
         private string referenceIdField;
-        
+
         private DangerousGoodsAccessibilityType accessibilityField;
-        
+
         private bool accessibilityFieldSpecified;
-        
+
         private bool cargoAircraftOnlyField;
-        
+
         private bool cargoAircraftOnlyFieldSpecified;
-        
+
         private HazardousCommodityRegulationType regulationField;
-        
+
         private bool regulationFieldSpecified;
-        
+
         private decimal radioactiveTransportIndexField;
-        
+
         private bool radioactiveTransportIndexFieldSpecified;
-        
+
         private RadioactiveLabelType labelTypeField;
-        
+
         private bool labelTypeFieldSpecified;
-        
+
         private ValidatedHazardousContainer[] containersField;
-        
+
         /// <remarks/>
-        public string ReferenceId {
-            get {
+        public string ReferenceId
+        {
+            get
+            {
                 return this.referenceIdField;
             }
-            set {
+            set
+            {
                 this.referenceIdField = value;
             }
         }
-        
+
         /// <remarks/>
-        public DangerousGoodsAccessibilityType Accessibility {
-            get {
+        public DangerousGoodsAccessibilityType Accessibility
+        {
+            get
+            {
                 return this.accessibilityField;
             }
-            set {
+            set
+            {
                 this.accessibilityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool AccessibilitySpecified {
-            get {
+        public bool AccessibilitySpecified
+        {
+            get
+            {
                 return this.accessibilityFieldSpecified;
             }
-            set {
+            set
+            {
                 this.accessibilityFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public bool CargoAircraftOnly {
-            get {
+        public bool CargoAircraftOnly
+        {
+            get
+            {
                 return this.cargoAircraftOnlyField;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool CargoAircraftOnlySpecified {
-            get {
+        public bool CargoAircraftOnlySpecified
+        {
+            get
+            {
                 return this.cargoAircraftOnlyFieldSpecified;
             }
-            set {
+            set
+            {
                 this.cargoAircraftOnlyFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityRegulationType Regulation {
-            get {
+        public HazardousCommodityRegulationType Regulation
+        {
+            get
+            {
                 return this.regulationField;
             }
-            set {
+            set
+            {
                 this.regulationField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RegulationSpecified {
-            get {
+        public bool RegulationSpecified
+        {
+            get
+            {
                 return this.regulationFieldSpecified;
             }
-            set {
+            set
+            {
                 this.regulationFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal RadioactiveTransportIndex {
-            get {
+        public decimal RadioactiveTransportIndex
+        {
+            get
+            {
                 return this.radioactiveTransportIndexField;
             }
-            set {
+            set
+            {
                 this.radioactiveTransportIndexField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RadioactiveTransportIndexSpecified {
-            get {
+        public bool RadioactiveTransportIndexSpecified
+        {
+            get
+            {
                 return this.radioactiveTransportIndexFieldSpecified;
             }
-            set {
+            set
+            {
                 this.radioactiveTransportIndexFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public RadioactiveLabelType LabelType {
-            get {
+        public RadioactiveLabelType LabelType
+        {
+            get
+            {
                 return this.labelTypeField;
             }
-            set {
+            set
+            {
                 this.labelTypeField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LabelTypeSpecified {
-            get {
+        public bool LabelTypeSpecified
+        {
+            get
+            {
                 return this.labelTypeFieldSpecified;
             }
-            set {
+            set
+            {
                 this.labelTypeFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Containers")]
-        public ValidatedHazardousContainer[] Containers {
-            get {
+        public ValidatedHazardousContainer[] Containers
+        {
+            get
+            {
                 return this.containersField;
             }
-            set {
+            set
+            {
                 this.containersField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum RadioactiveLabelType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum RadioactiveLabelType
+    {
+
         /// <remarks/>
         III_YELLOW,
-        
+
         /// <remarks/>
         II_YELLOW,
-        
+
         /// <remarks/>
         I_WHITE,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ValidatedHazardousContainer {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ValidatedHazardousContainer
+    {
+
         private decimal qValueField;
-        
+
         private bool qValueFieldSpecified;
-        
+
         private ValidatedHazardousCommodityContent[] hazardousCommoditiesField;
-        
+
         /// <remarks/>
-        public decimal QValue {
-            get {
+        public decimal QValue
+        {
+            get
+            {
                 return this.qValueField;
             }
-            set {
+            set
+            {
                 this.qValueField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool QValueSpecified {
-            get {
+        public bool QValueSpecified
+        {
+            get
+            {
                 return this.qValueFieldSpecified;
             }
-            set {
+            set
+            {
                 this.qValueFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("HazardousCommodities")]
-        public ValidatedHazardousCommodityContent[] HazardousCommodities {
-            get {
+        public ValidatedHazardousCommodityContent[] HazardousCommodities
+        {
+            get
+            {
                 return this.hazardousCommoditiesField;
             }
-            set {
+            set
+            {
                 this.hazardousCommoditiesField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ValidatedHazardousCommodityContent {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ValidatedHazardousCommodityContent
+    {
+
         private ValidatedHazardousCommodityDescription descriptionField;
-        
+
         private HazardousCommodityQuantityDetail quantityField;
-        
+
         private decimal massPointsField;
-        
+
         private bool massPointsFieldSpecified;
-        
+
         private HazardousCommodityOptionDetail optionsField;
-        
+
         private NetExplosiveDetail netExplosiveDetailField;
-        
+
         /// <remarks/>
-        public ValidatedHazardousCommodityDescription Description {
-            get {
+        public ValidatedHazardousCommodityDescription Description
+        {
+            get
+            {
                 return this.descriptionField;
             }
-            set {
+            set
+            {
                 this.descriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityQuantityDetail Quantity {
-            get {
+        public HazardousCommodityQuantityDetail Quantity
+        {
+            get
+            {
                 return this.quantityField;
             }
-            set {
+            set
+            {
                 this.quantityField = value;
             }
         }
-        
+
         /// <remarks/>
-        public decimal MassPoints {
-            get {
+        public decimal MassPoints
+        {
+            get
+            {
                 return this.massPointsField;
             }
-            set {
+            set
+            {
                 this.massPointsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool MassPointsSpecified {
-            get {
+        public bool MassPointsSpecified
+        {
+            get
+            {
                 return this.massPointsFieldSpecified;
             }
-            set {
+            set
+            {
                 this.massPointsFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityOptionDetail Options {
-            get {
+        public HazardousCommodityOptionDetail Options
+        {
+            get
+            {
                 return this.optionsField;
             }
-            set {
+            set
+            {
                 this.optionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public NetExplosiveDetail NetExplosiveDetail {
-            get {
+        public NetExplosiveDetail NetExplosiveDetail
+        {
+            get
+            {
                 return this.netExplosiveDetailField;
             }
-            set {
+            set
+            {
                 this.netExplosiveDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ValidatedHazardousCommodityDescription {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ValidatedHazardousCommodityDescription
+    {
+
         private string idField;
-        
+
         private string sequenceNumberField;
-        
+
         private HazardousCommodityPackingGroupType packingGroupField;
-        
+
         private bool packingGroupFieldSpecified;
-        
+
         private string packingInstructionsField;
-        
+
         private string properShippingNameField;
-        
+
         private string properShippingNameAndDescriptionField;
-        
+
         private string technicalNameField;
-        
+
         private string hazardClassField;
-        
+
         private string[] subsidiaryClassesField;
-        
+
         private string symbolsField;
-        
+
         private string tunnelRestrictionCodeField;
-        
+
         private string specialProvisionsField;
-        
+
         private HazardousCommodityAttributeType[] attributesField;
-        
+
         private string authorizationField;
-        
+
         private string labelTextField;
-        
+
         /// <remarks/>
-        public string Id {
-            get {
+        public string Id
+        {
+            get
+            {
                 return this.idField;
             }
-            set {
+            set
+            {
                 this.idField = value;
             }
         }
-        
+
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="nonNegativeInteger")]
-        public string SequenceNumber {
-            get {
+        [System.Xml.Serialization.XmlElementAttribute(DataType = "nonNegativeInteger")]
+        public string SequenceNumber
+        {
+            get
+            {
                 return this.sequenceNumberField;
             }
-            set {
+            set
+            {
                 this.sequenceNumberField = value;
             }
         }
-        
+
         /// <remarks/>
-        public HazardousCommodityPackingGroupType PackingGroup {
-            get {
+        public HazardousCommodityPackingGroupType PackingGroup
+        {
+            get
+            {
                 return this.packingGroupField;
             }
-            set {
+            set
+            {
                 this.packingGroupField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PackingGroupSpecified {
-            get {
+        public bool PackingGroupSpecified
+        {
+            get
+            {
                 return this.packingGroupFieldSpecified;
             }
-            set {
+            set
+            {
                 this.packingGroupFieldSpecified = value;
             }
         }
-        
+
         /// <remarks/>
-        public string PackingInstructions {
-            get {
+        public string PackingInstructions
+        {
+            get
+            {
                 return this.packingInstructionsField;
             }
-            set {
+            set
+            {
                 this.packingInstructionsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ProperShippingName {
-            get {
+        public string ProperShippingName
+        {
+            get
+            {
                 return this.properShippingNameField;
             }
-            set {
+            set
+            {
                 this.properShippingNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string ProperShippingNameAndDescription {
-            get {
+        public string ProperShippingNameAndDescription
+        {
+            get
+            {
                 return this.properShippingNameAndDescriptionField;
             }
-            set {
+            set
+            {
                 this.properShippingNameAndDescriptionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TechnicalName {
-            get {
+        public string TechnicalName
+        {
+            get
+            {
                 return this.technicalNameField;
             }
-            set {
+            set
+            {
                 this.technicalNameField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string HazardClass {
-            get {
+        public string HazardClass
+        {
+            get
+            {
                 return this.hazardClassField;
             }
-            set {
+            set
+            {
                 this.hazardClassField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("SubsidiaryClasses")]
-        public string[] SubsidiaryClasses {
-            get {
+        public string[] SubsidiaryClasses
+        {
+            get
+            {
                 return this.subsidiaryClassesField;
             }
-            set {
+            set
+            {
                 this.subsidiaryClassesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Symbols {
-            get {
+        public string Symbols
+        {
+            get
+            {
                 return this.symbolsField;
             }
-            set {
+            set
+            {
                 this.symbolsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string TunnelRestrictionCode {
-            get {
+        public string TunnelRestrictionCode
+        {
+            get
+            {
                 return this.tunnelRestrictionCodeField;
             }
-            set {
+            set
+            {
                 this.tunnelRestrictionCodeField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string SpecialProvisions {
-            get {
+        public string SpecialProvisions
+        {
+            get
+            {
                 return this.specialProvisionsField;
             }
-            set {
+            set
+            {
                 this.specialProvisionsField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Attributes")]
-        public HazardousCommodityAttributeType[] Attributes {
-            get {
+        public HazardousCommodityAttributeType[] Attributes
+        {
+            get
+            {
                 return this.attributesField;
             }
-            set {
+            set
+            {
                 this.attributesField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string Authorization {
-            get {
+        public string Authorization
+        {
+            get
+            {
                 return this.authorizationField;
             }
-            set {
+            set
+            {
                 this.authorizationField = value;
             }
         }
-        
+
         /// <remarks/>
-        public string LabelText {
-            get {
+        public string LabelText
+        {
+            get
+            {
                 return this.labelTextField;
             }
-            set {
+            set
+            {
                 this.labelTextField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public enum HazardousCommodityAttributeType {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public enum HazardousCommodityAttributeType
+    {
+
         /// <remarks/>
         NOT_SUBJECT_TO_REGULATIONS,
-        
+
         /// <remarks/>
         PLACARDED_VEHICLE_REQUIRED,
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ProcessShipmentRequest {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ProcessShipmentRequest
+    {
+
         private WebAuthenticationDetail webAuthenticationDetailField;
-        
+
         private ClientDetail clientDetailField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private RequestedShipment requestedShipmentField;
-        
+
         /// <remarks/>
-        public WebAuthenticationDetail WebAuthenticationDetail {
-            get {
+        public WebAuthenticationDetail WebAuthenticationDetail
+        {
+            get
+            {
                 return this.webAuthenticationDetailField;
             }
-            set {
+            set
+            {
                 this.webAuthenticationDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public ClientDetail ClientDetail {
-            get {
+        public ClientDetail ClientDetail
+        {
+            get
+            {
                 return this.clientDetailField;
             }
-            set {
+            set
+            {
                 this.clientDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public RequestedShipment RequestedShipment {
-            get {
+        public RequestedShipment RequestedShipment
+        {
+            get
+            {
                 return this.requestedShipmentField;
             }
-            set {
+            set
+            {
                 this.requestedShipmentField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2102.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/ship/v21")]
-    public partial class ProcessTagReply {
-        
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://fedex.com/ws/ship/v21")]
+    public partial class ProcessTagReply
+    {
+
         private NotificationSeverityType highestSeverityField;
-        
+
         private Notification[] notificationsField;
-        
+
         private TransactionDetail transactionDetailField;
-        
+
         private VersionId versionField;
-        
+
         private CompletedShipmentDetail completedShipmentDetailField;
-        
+
         /// <remarks/>
-        public NotificationSeverityType HighestSeverity {
-            get {
+        public NotificationSeverityType HighestSeverity
+        {
+            get
+            {
                 return this.highestSeverityField;
             }
-            set {
+            set
+            {
                 this.highestSeverityField = value;
             }
         }
-        
+
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute("Notifications")]
-        public Notification[] Notifications {
-            get {
+        public Notification[] Notifications
+        {
+            get
+            {
                 return this.notificationsField;
             }
-            set {
+            set
+            {
                 this.notificationsField = value;
             }
         }
-        
+
         /// <remarks/>
-        public TransactionDetail TransactionDetail {
-            get {
+        public TransactionDetail TransactionDetail
+        {
+            get
+            {
                 return this.transactionDetailField;
             }
-            set {
+            set
+            {
                 this.transactionDetailField = value;
             }
         }
-        
+
         /// <remarks/>
-        public VersionId Version {
-            get {
+        public VersionId Version
+        {
+            get
+            {
                 return this.versionField;
             }
-            set {
+            set
+            {
                 this.versionField = value;
             }
         }
-        
+
         /// <remarks/>
-        public CompletedShipmentDetail CompletedShipmentDetail {
-            get {
+        public CompletedShipmentDetail CompletedShipmentDetail
+        {
+            get
+            {
                 return this.completedShipmentDetailField;
             }
-            set {
+            set
+            {
                 this.completedShipmentDetailField = value;
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void processTagCompletedEventHandler(object sender, processTagCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class processTagCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class processTagCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal processTagCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal processTagCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ProcessTagReply Result {
-            get {
+        public ProcessTagReply Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ProcessTagReply)(this.results[0]));
+                return ((ProcessTagReply) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void processShipmentCompletedEventHandler(object sender, processShipmentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class processShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class processShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal processShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal processShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ProcessShipmentReply Result {
-            get {
+        public ProcessShipmentReply Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ProcessShipmentReply)(this.results[0]));
+                return ((ProcessShipmentReply) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void deleteTagCompletedEventHandler(object sender, deleteTagCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class deleteTagCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class deleteTagCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal deleteTagCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal deleteTagCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ShipmentReply Result {
-            get {
+        public ShipmentReply Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ShipmentReply)(this.results[0]));
+                return ((ShipmentReply) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void deleteShipmentCompletedEventHandler(object sender, deleteShipmentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class deleteShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class deleteShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal deleteShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal deleteShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ShipmentReply Result {
-            get {
+        public ShipmentReply Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ShipmentReply)(this.results[0]));
+                return ((ShipmentReply) (this.results[0]));
             }
         }
     }
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     public delegate void validateShipmentCompletedEventHandler(object sender, validateShipmentCompletedEventArgs e);
-    
+
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2053.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class validateShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
+    public partial class validateShipmentCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
         private object[] results;
-        
-        internal validateShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
+
+        internal validateShipmentCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+                base(exception, cancelled, userState)
+        {
             this.results = results;
         }
-        
+
         /// <remarks/>
-        public ShipmentReply Result {
-            get {
+        public ShipmentReply Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
-                return ((ShipmentReply)(this.results[0]));
+                return ((ShipmentReply) (this.results[0]));
             }
         }
     }
