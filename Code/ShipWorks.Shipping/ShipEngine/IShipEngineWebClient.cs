@@ -27,5 +27,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
         Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// Track a shipment using the label ID
+        /// </summary>
+        Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
     }
 }

@@ -22,6 +22,10 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Data;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System.Drawing.Imaging;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.ApplicationCore.Logging;
+using System.Threading.Tasks;
+using ShipEngine.ApiClient.Model;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -34,14 +38,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     public class DhlExpressShipmentType : ShipmentType
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
+        private readonly IShipEngineWebClient shipEngineWebClient;
+        private readonly IShipEngineTrackingResultFactory trackingResultFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="accountRepository"></param>
-        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository)
+        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository, IShipEngineWebClient shipEngineWebClient, IShipEngineTrackingResultFactory trackingResultFactory)
         {
             this.accountRepository = accountRepository;
+            this.shipEngineWebClient = shipEngineWebClient;
+            this.trackingResultFactory = trackingResultFactory;
         }
 
         /// <summary>
@@ -575,6 +583,26 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 "Labels",
                 new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
+        }
+
+        /// <summary>
+        /// Track the shipment
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            try
+            {
+                TrackingInformation trackingInfo = Task.Run(() =>
+                {
+                    return shipEngineWebClient.Track(shipment.DhlExpress.ShipEngineLabelID, ApiLogSource.DHLExpress);
+                }).Result;
+
+                return trackingResultFactory.Create(trackingInfo);
+            }
+            catch (Exception)
+            {
+                return new TrackingResult { Summary = $"<a href='http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL' style='color:blue; background-color:white'>Click here to see tracking information</a>" };
+            }
         }
 
         /// <summary>
