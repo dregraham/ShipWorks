@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         public DhlExpressLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipment = new ShipmentEntity();
+            shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
             request = new PurchaseLabelRequest();
             label = new Label();
 
@@ -100,6 +101,41 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             testObject.Create(shipment);
 
             labelDataFactory.Verify(f => f(shipment, label));
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient()
+        {
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .Returns(Task.FromResult(new VoidLabelResponse(true)));
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+
+            shipment.DhlExpress.ShipEngineLabelID = "blah";
+
+            testObject.Void(shipment);
+
+            webClient.Verify(c => c.VoidLabel("blah", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient_LogsException_WhenWebClientThrowsShipEngineException()
+        {
+            var iLog = mock.CreateMock<ILog>();
+            mock.MockFunc<Type, ILog>(iLog);
+
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            ShipEngineException exception = new ShipEngineException("sadf");
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .ThrowsAsync(exception);
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+            testObject.Void(shipment);
+
+            iLog.Verify(l => l.Error(exception), Times.Once);
         }
     }
 }

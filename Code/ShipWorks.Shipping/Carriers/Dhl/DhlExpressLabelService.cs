@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Utility;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly ICarrierShipmentRequestFactory shipmentRequestFactory;
         private readonly Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -28,12 +30,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IShipEngineWebClient shipEngineWebClient,
             IDhlExpressAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
-            Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData)
+            Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData,
+            Func<Type, ILog> logFactory)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.accountRepository = accountRepository;
             this.shipmentRequestFactory = shipmentRequestFactory[ShipmentTypeCode.DhlExpress];
             this.createDownloadedLabelData = createDownloadedLabelData;
+            log = logFactory(typeof(DhlExpressLabelService));
         }
 
         /// <summary>
@@ -83,7 +87,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            VoidLabelResponse response;
+            try
+            {
+                response = Task.Run(async () =>
+                {
+                    return await shipEngineWebClient.VoidLabel(shipment.DhlExpress.ShipEngineLabelID, ApiLogSource.DHLExpress).ConfigureAwait(false);
+                }).Result;
+            }
+            catch (Exception ex) when (ex.GetBaseException().GetType() == typeof(ShipEngineException))
+            {
+                log.Error(ex.GetBaseException());
+            }
         }
     }
 }
