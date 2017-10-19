@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
@@ -94,33 +95,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void Void_DelegatesToWebClient_ThrowsShippingException_WhenWebClientThrowsShipEngineException()
+        public void Void_DelegatesToWebClient_LogsException_WhenWebClientThrowsShipEngineException()
         {
+            var iLog = mock.CreateMock<ILog>();
+            mock.MockFunc<Type, ILog>(iLog);
+
             var webClient = mock.Mock<IShipEngineWebClient>();
+            ShipEngineException exception = new ShipEngineException("sadf");
             webClient
                 .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
-                .ThrowsAsync(new ShipEngineException("blah"));
+                .ThrowsAsync(exception);
 
             var testObject = mock.Create<DhlExpressLabelService>();
+            testObject.Void(shipment);
 
-            shipment.DhlExpress.ShipEngineLabelID = "blah";
-
-            Assert.Throws<ShippingException>(() => testObject.Void(shipment));            
-        }
-
-        [Fact]
-        public void Void_DelegatesToWebClient_ThrowsShippingException_WhenVoidLabelResponseApprovedIsFalse()
-        {
-            var webClient = mock.Mock<IShipEngineWebClient>();
-            webClient
-                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
-                .Returns(Task.FromResult(new VoidLabelResponse(false)));
-
-            var testObject = mock.Create<DhlExpressLabelService>();
-
-            shipment.DhlExpress.ShipEngineLabelID = "blah";
-
-            Assert.Throws<ShippingException>(() => testObject.Void(shipment));
+            iLog.Verify(l => l.Error(exception), Times.Once);
         }
     }
 }
