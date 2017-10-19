@@ -120,8 +120,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             shipment.DhlExpress.ShipEngineLabelID = "blah";
 
-            testObject.Void(shipment);
-
             Assert.Throws<ShippingException>(() => testObject.Void(shipment));
         }
     }
