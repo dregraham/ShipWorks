@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressLabelService(
-            IShipEngineWebClient shipEngineWebClient, 
-            IDhlExpressAccountRepository accountRepository, 
+            IShipEngineWebClient shipEngineWebClient,
+            IDhlExpressAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData)
         {
@@ -54,10 +54,28 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 return createDownloadedLabelData(shipment, label);
             }
-            catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
+            catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
             {
-                throw new ShippingException(ex.GetBaseException().Message);
+                string seAccountId = accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;
+                throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), seAccountId));
             }
+        }
+
+        /// <summary>
+        /// Get a user friendly message based on the exception
+        /// </summary>
+        private static string GetExceptionMessage(Exception ex, string seAccountId)
+        {
+            string message = ex.Message;
+
+            if (message.Equals($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}" +
+                $", Carrier: DHL Express. One or more errors occurred.", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "There was a problem creating the label while communicating with the DHL Express API";
+            }
+
+
+            return ex.Message;
         }
 
         /// <summary>
