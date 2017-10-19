@@ -39,7 +39,6 @@ namespace ShipWorks.Stores.Management
     /// <summary>
     /// Wizard for adding a new store to ShipWorks
     /// </summary>
-    [NDependIgnoreLongTypes]
     partial class AddStoreWizard : WizardForm, IStoreWizard
     {
         private readonly ILifetimeScope scope;

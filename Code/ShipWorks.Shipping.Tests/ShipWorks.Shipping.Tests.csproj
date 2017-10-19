@@ -104,6 +104,7 @@
       <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.15.1.0.41\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
@@ -165,7 +166,10 @@
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressPackageAdapterTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRateHashingServiceTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRateShipmentRequestFactoryTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRatingServiceTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
@@ -288,6 +292,7 @@
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

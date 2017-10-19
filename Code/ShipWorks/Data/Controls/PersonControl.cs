@@ -26,7 +26,6 @@ namespace ShipWorks.Data.Controls
     /// <summary>
     /// Control for editing the details of a person
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class PersonControl : UserControl
     {
         // Controls if it's always editable, or can go into edit-mode.

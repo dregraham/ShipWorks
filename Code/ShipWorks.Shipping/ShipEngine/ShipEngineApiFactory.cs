@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Factory for creating ShipEngine CarrierAccountsApi
     /// </summary>
     [Component]
-    public class ShipEngineCarrierAccountsApiFactory : IShipEngineCarrierAccountsApiFactory
+    public class ShipEngineApiFactory : IShipEngineApiFactory
     {
         /// <summary>
         /// Create the CarrierAccountsApi
@@ -17,7 +17,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the CarrierApi
         /// </summary>
-        /// <returns></returns>
         public ICarriersApi CreateCarrierApi() => new CarriersApi();
+
+        /// <summary>
+        /// Create the RatesApi
+        /// </summary>
+        public IRatesApi CreateRatesApi() => new RatesApi();
     }
 }

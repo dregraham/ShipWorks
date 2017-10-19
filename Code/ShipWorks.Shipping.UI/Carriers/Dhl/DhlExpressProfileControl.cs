@@ -13,6 +13,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Carriers.Dhl;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -56,6 +57,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             LoadDhlExpressAccounts();
 
             EnumHelper.BindComboBox<DhlExpressServiceType>(service);
+            EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
+            EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
 
             //From
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DhlExpressAccountID, accountState, dhlExpressAccount, labelAccount);
@@ -70,7 +73,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DeliveryDutyPaid, dutyDeliveryPaidState, dutyDeliveryPaid, labelDuty);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
-            
+
+            //Customs
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.Contents, contentsState, contents, labelContents);
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
+
             packagesState.Checked = DhlExpressProfile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? DhlExpressProfile.Packages.Count - 1 : -1;
             packagesCount.Enabled = packagesState.Checked;

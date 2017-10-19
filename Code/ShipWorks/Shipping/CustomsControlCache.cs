@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Editing;
+using Autofac;
 
 namespace ShipWorks.Shipping
 {
@@ -12,6 +13,15 @@ namespace ShipWorks.Shipping
     {
         private readonly Dictionary<int, CustomsControlBase> customsControlCache = new Dictionary<int, CustomsControlBase>();
         private const int DefaultCustomsControlBaseCacheKey = -1;
+        private readonly ILifetimeScope lifetimeScope;
+
+        /// <summary>
+        /// Constuctor
+        /// </summary>
+        public CustomsControlCache(ILifetimeScope lifetimeScope)
+        {
+            this.lifetimeScope = lifetimeScope;
+        }
 
         /// <summary>
         /// Get a customs control base by shipment type
@@ -24,7 +34,10 @@ namespace ShipWorks.Shipping
                 return customsControlCache[cacheKey];
             }
 
-            CustomsControlBase customsControl = cacheKey == DefaultCustomsControlBaseCacheKey ? new CustomsControlBase() : shipmentType.CreateCustomsControl();
+            CustomsControlBase customsControl =
+                cacheKey == DefaultCustomsControlBaseCacheKey ?
+                new CustomsControlBase() :
+                shipmentType.CreateCustomsControl(lifetimeScope);
             
             customsControl.Initialize();
             customsControl.Dock = DockStyle.Fill;
@@ -59,6 +72,8 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.FedEx:
                     return (int)ShipmentTypeCode.FedEx;
+                case ShipmentTypeCode.DhlExpress:
+                    return (int)ShipmentTypeCode.DhlExpress;
 
                 default:
                     return DefaultCustomsControlBaseCacheKey;

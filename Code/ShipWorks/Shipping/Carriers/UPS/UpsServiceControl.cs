@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// UserControl for editing the UPS OLT service settings
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class UpsServiceControl : ServiceControlBase
     {
         private readonly ShipmentDateCutoffConverter converter;

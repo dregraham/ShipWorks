@@ -10,7 +10,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// User control for editing the package properties of a fedex shipment
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class FedExProfilePackageControl : ShippingProfileControlCore
     {
         private FedExProfilePackageEntity package;

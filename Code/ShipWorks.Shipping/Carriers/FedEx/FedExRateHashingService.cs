@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Fields of a shipment used to calculate rates
         /// </summary>
-        public override RatingFields RatingFields
+        protected override RatingFields RatingFields
         {
             get
             {

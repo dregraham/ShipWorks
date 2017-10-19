@@ -313,13 +313,23 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Creates the UserControl that is used to edit customs options
+        /// </summary>
+        public virtual CustomsControlBase CreateCustomsControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<CustomsControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<CustomsControlBase>(ShipmentTypeCode) :
+                CreateCustomsControl();
+        }
+
+        /// <summary>
         /// Creates the UserControl that is used to edit return shipments
         /// </summary>
         public virtual ReturnsControlBase CreateReturnsControl()
         {
             return new ReturnsControlBase();
         }
-
+        
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>

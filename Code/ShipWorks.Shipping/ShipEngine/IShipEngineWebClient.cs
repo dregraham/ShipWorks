@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -13,5 +15,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         Task<GenericResult<string>> ConnectDhlAccount(string accountNumber);
+        
+        /// <summary>
+        /// Gets rates from ShipEngine using the given request
+        /// </summary>
+        /// <param name="request">The rate shipment request</param>
+        /// <returns>The rate shipment response</returns>
+        Task<RateShipmentResponse> RateShipment(RateShipmentRequest request, ApiLogSource apiLogSource);
     }
 }

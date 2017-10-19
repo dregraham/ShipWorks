@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// <summary>
     /// i-parcel Profile Control
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class iParcelProfileControl : ShippingProfileControlBase
     {
         /// <summary>

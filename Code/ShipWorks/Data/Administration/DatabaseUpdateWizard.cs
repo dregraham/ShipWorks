@@ -34,7 +34,6 @@ namespace ShipWorks.Data.Administration
     /// <summary>
     /// Wizard for walking a user throught upgrading the database
     /// </summary>
-    [NDependIgnoreLongTypes]
     partial class DatabaseUpdateWizard : WizardForm
     {
         // Logger

@@ -12,10 +12,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     {
         [Description("Express Worldwide")]
         [ApiValue("express_worldwide")]
-        ExpressWorldWide = 1,
+        ExpressWorldWide = 0,
 
         [Description("Express Envelope")]
         [ApiValue("express_envelope")]
-        ExpressEnvelope = 2
+        ExpressEnvelope = 1
     }
 }

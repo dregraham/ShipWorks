@@ -4557,6 +4557,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.SaturdayDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressProfileEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new DhlExpressProfileEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.NonDelivery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressProfilePackageEntity</summary>
@@ -4646,6 +4656,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.NonDelivery);}
 		}
 	}
 

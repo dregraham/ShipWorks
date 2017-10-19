@@ -393,6 +393,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("SaturdayDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Contents", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 		}
 		#endregion
 
@@ -556,6 +560,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)DhlExpressProfileFieldIndex.SaturdayDelivery, false); }
 			set	{ SetValue((int)DhlExpressProfileFieldIndex.SaturdayDelivery, value); }
+		}
+
+		/// <summary> The Contents property of the Entity DhlExpressProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressProfile"."Contents"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> Contents
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressProfileFieldIndex.Contents, false); }
+			set	{ SetValue((int)DhlExpressProfileFieldIndex.Contents, value); }
+		}
+
+		/// <summary> The NonDelivery property of the Entity DhlExpressProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressProfile"."NonDelivery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> NonDelivery
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressProfileFieldIndex.NonDelivery, false); }
+			set	{ SetValue((int)DhlExpressProfileFieldIndex.NonDelivery, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressProfilePackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

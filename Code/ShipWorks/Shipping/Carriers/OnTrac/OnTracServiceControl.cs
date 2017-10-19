@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// UserControl for editing the OnTrac service settings
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>

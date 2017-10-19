@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     /// <summary>
     /// Wizard for setting up shipping with Express1
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class Express1SetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private bool hideDetailedConfiguration;

@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private readonly DhlExpressPackageEntity package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPackageAdapter" /> class.
+        /// Initializes a new instance of the <see cref="DhlExpressPackageAdapter" /> class.
         /// </summary>
         /// <param name="shipment">The shipment entity.</param>
         /// <param name="package">The package entity.</param>

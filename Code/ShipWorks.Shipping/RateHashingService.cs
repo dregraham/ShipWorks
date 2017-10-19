@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Fields of a shipment used to calculate rates
         /// </summary>
-        public virtual RatingFields RatingFields
+        protected virtual RatingFields RatingFields
         {
             [NDependIgnoreLongMethod]
             get
