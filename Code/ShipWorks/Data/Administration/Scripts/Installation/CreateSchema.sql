@@ -83,7 +83,10 @@ CREATE TABLE [dbo].[FedExPackage]
 [ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfContainers] [int] NOT NULL,
 [PackingDetailsCargoAircraftOnly] [bit] NOT NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BatteryMaterial] [int] NOT NULL,
+[BatteryPacking] [int] NOT NULL,
+[BatteryRegulatorySubtype] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -2149,7 +2152,10 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NumberOfContainers] [int] NULL,
 [PackingDetailsCargoAircraftOnly] [bit] NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BatteryMaterial] [int] NULL,
+[BatteryPacking] [int] NULL,
+[BatteryRegulatorySubtype] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'

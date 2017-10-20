@@ -1143,6 +1143,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExPackageEntity", "NumberOfContainers", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.NumberOfContainers, 0, 0, 10);
 			this.AddElementFieldInfo("FedExPackageEntity", "PackingDetailsCargoAircraftOnly", typeof(System.Boolean), false, false, false, false,  (int)FedExPackageFieldIndex.PackingDetailsCargoAircraftOnly, 0, 0, 0);
 			this.AddElementFieldInfo("FedExPackageEntity", "PackingDetailsPackingInstructions", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.PackingDetailsPackingInstructions, 50, 0, 0);
+			this.AddElementFieldInfo("FedExPackageEntity", "BatteryMaterial", typeof(ShipWorks.Shipping.FedEx.FedExBatteryMaterialType), false, false, false, false,  (int)FedExPackageFieldIndex.BatteryMaterial, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "BatteryPacking", typeof(ShipWorks.Shipping.FedEx.FedExBatteryPackingType), false, false, false, false,  (int)FedExPackageFieldIndex.BatteryPacking, 0, 0, 10);
+			this.AddElementFieldInfo("FedExPackageEntity", "BatteryRegulatorySubtype", typeof(ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType), false, false, false, false,  (int)FedExPackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()
@@ -1224,6 +1227,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "NumberOfContainers", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.NumberOfContainers, 0, 0, 10);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackingDetailsCargoAircraftOnly", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PackingDetailsCargoAircraftOnly, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfilePackageEntity", "PackingDetailsPackingInstructions", typeof(System.String), false, false, false, true,  (int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, 50, 0, 0);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryMaterial", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryMaterial, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryPacking", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryPacking, 0, 0, 10);
+			this.AddElementFieldInfo("FedExProfilePackageEntity", "BatteryRegulatorySubtype", typeof(Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>), false, false, false, true,  (int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, 0, 0, 10);
 		}
 		/// <summary>Inits FedExShipmentEntity's FieldInfo objects</summary>
 		private void InitFedExShipmentEntityInfos()

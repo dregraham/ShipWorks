@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -14,6 +13,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -251,19 +251,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Create a new package entity that has default values
         /// </summary>
-        [NDependIgnoreLongMethod]
         public static FedExPackageEntity CreateDefaultPackage()
         {
             FedExPackageEntity package = new FedExPackageEntity();
 
-            package.Weight = 0;
-
-            package.DimsProfileID = 0;
-            package.DimsLength = 0;
-            package.DimsWidth = 0;
-            package.DimsHeight = 0;
-            package.DimsWeight = 0;
-            package.DimsAddWeight = true;
+            ApplyDimensionDefaults(package);
 
             package.SkidPieces = 1;
 
@@ -292,6 +284,43 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.PackingDetailsCargoAircraftOnly = false;
             package.PackingDetailsPackingInstructions = string.Empty;
 
+            ApplyDangerousGoodsDefaults(package);
+            ApplyHazardousMaterialsDefaults(package);
+            ApplyBatteryDetailsDefaults(package);
+
+            return package;
+        }
+
+        /// <summary>
+        /// Apply dimension defaults
+        /// </summary>
+        private static void ApplyDimensionDefaults(FedExPackageEntity package)
+        {
+            package.Weight = 0;
+
+            package.DimsProfileID = 0;
+            package.DimsLength = 0;
+            package.DimsWidth = 0;
+            package.DimsHeight = 0;
+            package.DimsWeight = 0;
+            package.DimsAddWeight = true;
+        }
+
+        /// <summary>
+        /// Apply battery defaults
+        /// </summary>
+        private static void ApplyBatteryDetailsDefaults(FedExPackageEntity package)
+        {
+            package.BatteryMaterial = FedExBatteryMaterialType.NotSpecified;
+            package.BatteryPacking = FedExBatteryPackingType.NotSpecified;
+            package.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified;
+        }
+
+        /// <summary>
+        /// Apply dangerous goods defaults
+        /// </summary>
+        private static void ApplyDangerousGoodsDefaults(FedExPackageEntity package)
+        {
             package.DangerousGoodsEnabled = false;
             package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
             package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
@@ -299,6 +328,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.DangerousGoodsEmergencyContactPhone = string.Empty;
             package.DangerousGoodsOfferor = string.Empty;
             package.DangerousGoodsPackagingCount = 0;
+        }
+
+        /// <summary>
+        /// Apply hazardous materials defaults
+        /// </summary>
+        private static void ApplyHazardousMaterialsDefaults(FedExPackageEntity package)
+        {
             package.HazardousMaterialNumber = string.Empty;
             package.HazardousMaterialClass = string.Empty;
             package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.Default;
@@ -306,8 +342,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.HazardousMaterialTechnicalName = string.Empty;
             package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
             package.HazardousMaterialQuantityValue = 0;
-
-            return package;
         }
 
         /// <summary>

@@ -414,6 +414,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PackingDetailsCargoAircraftOnly", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackingDetailsPackingInstructions", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryMaterial", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryPacking", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryRegulatorySubtype", fieldHashtable);
 		}
 		#endregion
 
@@ -850,6 +856,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, true); }
 			set	{ SetValue((int)FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions, value); }
+		}
+
+		/// <summary> The BatteryMaterial property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."BatteryMaterial"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType> BatteryMaterial
+		{
+			get { return (Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType>)GetValue((int)FedExProfilePackageFieldIndex.BatteryMaterial, false); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryMaterial, value); }
+		}
+
+		/// <summary> The BatteryPacking property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."BatteryPacking"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType> BatteryPacking
+		{
+			get { return (Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType>)GetValue((int)FedExProfilePackageFieldIndex.BatteryPacking, false); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryPacking, value); }
+		}
+
+		/// <summary> The BatteryRegulatorySubtype property of the Entity FedExProfilePackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfilePackage"."BatteryRegulatorySubtype"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype
+		{
+			get { return (Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType>)GetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, false); }
+			set	{ SetValue((int)FedExProfilePackageFieldIndex.BatteryRegulatorySubtype, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

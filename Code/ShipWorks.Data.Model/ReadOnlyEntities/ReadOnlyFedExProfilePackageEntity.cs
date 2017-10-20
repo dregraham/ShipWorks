@@ -70,6 +70,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             NumberOfContainers = source.NumberOfContainers;
             PackingDetailsCargoAircraftOnly = source.PackingDetailsCargoAircraftOnly;
             PackingDetailsPackingInstructions = source.PackingDetailsPackingInstructions;
+            BatteryMaterial = source.BatteryMaterial;
+            BatteryPacking = source.BatteryPacking;
+            BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
             
             
             FedExProfile = (IFedExProfileEntity) source.FedExProfile?.AsReadOnly(objectMap);
@@ -283,6 +286,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String PackingDetailsPackingInstructions { get; }
+        /// <summary> The BatteryMaterial property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."BatteryMaterial"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryMaterialType> BatteryMaterial { get; }
+        /// <summary> The BatteryPacking property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."BatteryPacking"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryPackingType> BatteryPacking { get; }
+        /// <summary> The BatteryRegulatorySubtype property of the Entity FedExProfilePackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfilePackage"."BatteryRegulatorySubtype"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType> BatteryRegulatorySubtype { get; }
         
         
         public IFedExProfileEntity FedExProfile { get; }

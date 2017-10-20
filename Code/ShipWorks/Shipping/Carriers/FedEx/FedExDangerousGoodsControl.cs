@@ -71,6 +71,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packingDetailsAircraftOnly.ApplyMultiCheck(package.PackingDetailsCargoAircraftOnly);
             packingInstructions.ApplyMultiText(package.PackingDetailsPackingInstructions);
 
+            batteryMaterial.ApplyMultiValue(package.BatteryMaterial);
+            batteryPacking.ApplyMultiValue(package.BatteryPacking);
+            batteryRegulatorySubtype.ApplyMultiValue(package.BatteryRegulatorySubtype);
+
             UpdateUI();
         }
 
@@ -104,8 +108,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             emergencyContactPhone.ReadMultiText(t => package.DangerousGoodsEmergencyContactPhone = t);
 
             SaveSignatoryToPackage(package);
-
             SaveHazardousMaterialToPackage(package);
+            SaveBatteryDetailsToPackage(package);
         }
 
         /// <summary>
@@ -131,6 +135,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
             packingDetailsAircraftOnly.ReadMultiCheck(t => package.PackingDetailsCargoAircraftOnly = t);
             packingInstructions.ReadMultiText(t => package.PackingDetailsPackingInstructions = t);
+        }
+
+        /// <summary>
+        /// Saves the battery details to package
+        /// </summary>
+        private void SaveBatteryDetailsToPackage(FedExPackageEntity package)
+        {
+            batteryMaterial.ReadMultiValue(x => package.BatteryMaterial = (FedExBatteryMaterialType) x);
+            batteryPacking.ReadMultiValue(x => package.BatteryPacking = (FedExBatteryPackingType) x);
+            batteryRegulatorySubtype.ReadMultiValue(x => package.BatteryRegulatorySubtype = (FedExBatteryRegulatorySubType) x);
         }
 
         /// <summary>

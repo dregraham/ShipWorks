@@ -3092,6 +3092,12 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3246,6 +3252,12 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
 		/// <summary></summary>
 		AmountOfFields
 	}

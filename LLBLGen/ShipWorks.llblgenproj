@@ -86,6 +86,9 @@
   <TypeShortcuts>
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
@@ -902,6 +905,9 @@
       <EntityDefinition Name="FedExPackage" ObjectID="8179c396-8aa8-4f34-8ba0-2cfd8eede45a">
         <Fields>
           <Field Name="AlcoholRecipientType" Type="int" Precision="10" FieldIndex="37" />
+          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" FieldIndex="42" />
+          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" FieldIndex="43" />
+          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" FieldIndex="44" />
           <Field Name="ContainerType" Type="string" MaxLength="100" FieldIndex="38" />
           <Field Name="ContainsAlcohol" Type="bool" FieldIndex="19" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" FieldIndex="22" />
@@ -988,6 +994,9 @@
       </EntityDefinition>
       <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885">
         <Fields>
+          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" IsOptional="true" FieldIndex="34" />
+          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" IsOptional="true" FieldIndex="35" />
+          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" IsOptional="true" FieldIndex="36" />
           <Field Name="ContainerType" Type="string" IsOptional="true" MaxLength="100" FieldIndex="30" />
           <Field Name="ContainsAlcohol" Type="bool" IsOptional="true" FieldIndex="13" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" IsOptional="true" FieldIndex="16" />
@@ -4055,7 +4064,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-19T11:51:55.1562031Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-20T15:45:08.1536941Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5091,6 +5100,9 @@
                     <Field Name="NumberOfContainers" Ordinal="40" DbType="8" Precision="10" />
                     <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="41" DbType="2" />
                     <Field Name="PackingDetailsPackingInstructions" Ordinal="42" DbType="12" Length="50" />
+                    <Field Name="BatteryMaterial" Ordinal="43" DbType="8" Precision="10" />
+                    <Field Name="BatteryPacking" Ordinal="44" DbType="8" Precision="10" />
+                    <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -5172,6 +5184,9 @@
                     <Field Name="NumberOfContainers" Ordinal="32" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="33" IsOptional="true" DbType="2" />
                     <Field Name="PackingDetailsPackingInstructions" Ordinal="34" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="BatteryMaterial" Ordinal="35" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryPacking" Ordinal="36" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryRegulatorySubtype" Ordinal="37" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExShipment">
@@ -10585,6 +10600,9 @@
         <EntityMapping EntityName=":FedExPackage" TargetName="ShipWorksLocal:dbo:FedExPackage">
           <FieldMappings>
             <FieldMapping FieldName="AlcoholRecipientType" TargetFieldName="AlcoholRecipientType" />
+            <FieldMapping FieldName="BatteryMaterial" TargetFieldName="BatteryMaterial" />
+            <FieldMapping FieldName="BatteryPacking" TargetFieldName="BatteryPacking" />
+            <FieldMapping FieldName="BatteryRegulatorySubtype" TargetFieldName="BatteryRegulatorySubtype" />
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
@@ -10671,6 +10689,9 @@
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfilePackage" TargetName="ShipWorksLocal:dbo:FedExProfilePackage">
           <FieldMappings>
+            <FieldMapping FieldName="BatteryMaterial" TargetFieldName="BatteryMaterial" />
+            <FieldMapping FieldName="BatteryPacking" TargetFieldName="BatteryPacking" />
+            <FieldMapping FieldName="BatteryRegulatorySubtype" TargetFieldName="BatteryRegulatorySubtype" />
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />

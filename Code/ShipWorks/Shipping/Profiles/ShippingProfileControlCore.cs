@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Templates.Tokens;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -416,14 +413,13 @@ namespace ShipWorks.Shipping.Profiles
             {
                 // if datatype is nullable, llblgen gets confused. This settles the confusion by defining the datatype.
                 Type dataType = entity.Fields[field.FieldIndex].DataType;
+                dataType = Nullable.GetUnderlyingType(dataType) ?? dataType;
 
-                if (dataType.Name.Contains("Nullable"))
-                {
-                    string dataTypeName = dataType.FullName.Substring(dataType.FullName.IndexOf("[[", StringComparison.OrdinalIgnoreCase) + "[[".Length, dataType.FullName.IndexOf(",", StringComparison.OrdinalIgnoreCase) - dataType.FullName.IndexOf("[[", StringComparison.OrdinalIgnoreCase) - "[[".Length);
-                    dataType = Type.GetType(dataTypeName);
-                }
+                var convertedValue = dataType.IsEnum ?
+                    Enum.ToObject(dataType, value) :
+                    Convert.ChangeType(value, dataType);
 
-                entity.SetNewFieldValue(field.FieldIndex, Convert.ChangeType(value, dataType));
+                entity.SetNewFieldValue(field.FieldIndex, convertedValue);
             }
             else
             {

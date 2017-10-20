@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             this.settingsRepository = settingsRepository;
 
-            // Fetch the shipping settings and save them so we don't have to make repeated reqeusts
+            // Fetch the shipping settings and save them so we don't have to make repeated requests
             shippingSettings = settingsRepository.GetShippingSettings();
         }
 
@@ -49,15 +49,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <value>
         /// The CSP credential key.
         /// </value>
-        public string CspCredentialKey => "olaPdFVk3aMvbfNA";
+        public string CspCredentialKey => "55sFa2ocvAw0Baxl";
 
         /// <summary>
         /// Gets the CSP credential password.
         /// </summary>
         /// <remarks>
-        /// Password - SAISQtME8lAOPurbWNQD2Ft96
+        /// Password - 9kJDF0zRYZ9kyBiavLBPyGTSO
         /// </remarks>
-        public string CspCredentialPassword => SecureText.Decrypt("5SbhB/whSJsVfHFUoLlKA4/B2c5p2/PUgmo8d1uGaZo=", "apptive");
+        public string CspCredentialPassword => SecureText.Decrypt("gTtN7wou2AkqYoTXnhoK/cBlWH4M72PAaJbR/28bRNo=", "apptive");
 
         /// <summary>
         /// Gets the user credentials key.
@@ -143,8 +143,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
                 return (CurrencyType) shipment.FedEx.Currency;
             }
 
-            FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
-            
+            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
+
             if (account == null)
             {
                 throw new CarrierException("Shipment not associated with a FedEx account.");

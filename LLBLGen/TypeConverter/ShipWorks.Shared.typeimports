@@ -1,0 +1,5 @@
+<typeImports>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryPackingType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubtype" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+</typeImports>

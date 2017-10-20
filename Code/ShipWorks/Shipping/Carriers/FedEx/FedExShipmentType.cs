@@ -646,7 +646,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainerType, package, FedExPackageFields.ContainerType);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
-                
+
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
@@ -659,6 +659,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryMaterial, package, FedExPackageFields.BatteryMaterial);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryPacking, package, FedExPackageFields.BatteryPacking);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryRegulatorySubtype, package, FedExPackageFields.BatteryRegulatorySubtype);
             }
 
             // Remove any packages that are too many for the profile

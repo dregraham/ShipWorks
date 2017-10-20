@@ -430,6 +430,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PackingDetailsCargoAircraftOnly", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("PackingDetailsPackingInstructions", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryMaterial", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryPacking", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("BatteryRegulatorySubtype", fieldHashtable);
 		}
 		#endregion
 
@@ -946,6 +952,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExPackageFieldIndex.PackingDetailsPackingInstructions, true); }
 			set	{ SetValue((int)FedExPackageFieldIndex.PackingDetailsPackingInstructions, value); }
+		}
+
+		/// <summary> The BatteryMaterial property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryMaterial"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExBatteryMaterialType BatteryMaterial
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExBatteryMaterialType)GetValue((int)FedExPackageFieldIndex.BatteryMaterial, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.BatteryMaterial, value); }
+		}
+
+		/// <summary> The BatteryPacking property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryPacking"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExBatteryPackingType BatteryPacking
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExBatteryPackingType)GetValue((int)FedExPackageFieldIndex.BatteryPacking, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.BatteryPacking, value); }
+		}
+
+		/// <summary> The BatteryRegulatorySubtype property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."BatteryRegulatorySubtype"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType BatteryRegulatorySubtype
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType)GetValue((int)FedExPackageFieldIndex.BatteryRegulatorySubtype, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.BatteryRegulatorySubtype, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

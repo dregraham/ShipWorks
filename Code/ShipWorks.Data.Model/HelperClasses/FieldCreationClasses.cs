@@ -7142,6 +7142,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.PackingDetailsPackingInstructions);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryMaterial field instance</summary>
+		public static EntityField2 BatteryMaterial
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryMaterial);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryPacking field instance</summary>
+		public static EntityField2 BatteryPacking
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryPacking);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryRegulatorySubtype field instance</summary>
+		public static EntityField2 BatteryRegulatorySubtype
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryRegulatorySubtype);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
@@ -7506,6 +7521,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PackingDetailsPackingInstructions
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryMaterial field instance</summary>
+		public static EntityField2 BatteryMaterial
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryMaterial);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryPacking field instance</summary>
+		public static EntityField2 BatteryPacking
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryPacking);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryRegulatorySubtype field instance</summary>
+		public static EntityField2 BatteryRegulatorySubtype
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryRegulatorySubtype);}
 		}
 	}
 
