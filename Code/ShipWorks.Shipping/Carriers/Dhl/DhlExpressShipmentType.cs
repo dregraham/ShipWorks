@@ -549,7 +549,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            throw new System.NotImplementedException();
+            return new DhlExpressBestRateBroker(this, new DhlExpressAccountRepository());
         }
 
         /// <summary>

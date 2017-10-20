@@ -158,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
