@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             cost.AdvertisePennyOne = false;
-            if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM")
+            if (shipment.Amazon.CarrierName == "STAMPS_DOT_COM" || shipment.Amazon.CarrierName == "USPS")
             {
                 rate = GetUspsRate(shipment);
             }
