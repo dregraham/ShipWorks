@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypePrefetchProvider), ShipmentTypeCode.DhlExpress)]
 
-    public class DhlExpressPrefetchProvider
+    public class DhlExpressPrefetchProvider : IShipmentTypePrefetchProvider
     {
         /// <summary>
         /// Get the path
