@@ -73,11 +73,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             string message = ex.Message;
 
             if (message.Equals($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}" +
-                $", Carrier: DHL Express. One or more errors occurred.", StringComparison.InvariantCultureIgnoreCase))
+                ", Carrier: DHL Express. One or more errors occurred.", StringComparison.InvariantCultureIgnoreCase))
             {
                 return "There was a problem creating the label while communicating with the DHL Express API";
             }
 
+            if (message.StartsWith($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}" +
+                ", Carrier: DHL Express.", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return message
+                    .Replace($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}, Carrier: DHL Express.", string.Empty)
+                    .Trim();
+            }
 
             return ex.Message;
         }
