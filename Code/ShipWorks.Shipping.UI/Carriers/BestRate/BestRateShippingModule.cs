@@ -43,10 +43,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.BestRate)
                 .ExternallyOwned();
 
-            builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.BestRate)
-                .SingleInstance();
-
             builder.RegisterType<BestRateRatingService>()
                 .As<IBestRateBrokerRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.BestRate);

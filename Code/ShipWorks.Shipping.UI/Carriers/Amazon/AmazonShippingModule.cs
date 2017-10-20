@@ -66,10 +66,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
                 .FindConstructorsWith(new NonDefaultConstructorFinder())
                 .SingleInstance();
 
-            builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Amazon)
-                .SingleInstance();
-
             builder.RegisterType<AmazonRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.Amazon)
                 .AsSelf();
