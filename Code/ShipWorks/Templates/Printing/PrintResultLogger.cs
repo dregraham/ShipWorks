@@ -232,7 +232,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Delete all print results related to the given entity
         /// </summary>
-        public static void DeleteForDeletedEntity(long entityID, SqlAdapter adapter)
+        public static void DeleteForDeletedEntity(long entityID, ISqlAdapter adapter)
         {
             // Delete all the notes directly related to this entity
             adapter.DeleteEntitiesDirectly(typeof(PrintResultEntity), new RelationPredicateBucket(PrintResultFields.RelatedObjectID == entityID));

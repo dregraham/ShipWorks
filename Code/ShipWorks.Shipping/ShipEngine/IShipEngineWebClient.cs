@@ -27,5 +27,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
         Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// Void a shipment label
+        /// </summary>
+        Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource);
     }
 }

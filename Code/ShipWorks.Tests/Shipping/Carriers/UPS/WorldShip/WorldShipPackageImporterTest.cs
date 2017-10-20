@@ -1,14 +1,13 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Linq;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Linq;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
@@ -84,24 +83,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
         }
 
         [Fact]
-        public void ImportPackageToShipment_VerifyEnsureShipmentLoadedIsCalled()
-        {
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                Ups = new UpsShipmentEntity()
-            };
-
-            WorldShipProcessedEntity worldShipProcessed = new WorldShipProcessedEntity();
-
-            Mock<IShippingManager> shippingManagerMock = mock.Mock<IShippingManager>();
-
-            var testObject = mock.Create<WorldShipPackageImporter>();
-            testObject.ImportPackageToShipment(shipment, worldShipProcessed);
-
-            shippingManagerMock.Verify(s=>s.EnsureShipmentLoaded(shipment), Times.Once);
-        }
-
-        [Fact]
         public void ImportPackageToShipment_PackageTypeMatchesImportPackageType()
         {
             var publishedCharge = 3.50d;
@@ -112,7 +93,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
 
             WorldShipProcessedEntity worldShipProcessed = new WorldShipProcessedEntity
             {
-                PublishedCharges = publishedCharge, PackageType = "PARCELS"
+                PublishedCharges = publishedCharge,
+                PackageType = "PARCELS"
             };
 
             var testObject = mock.Create<WorldShipPackageImporter>();
@@ -186,7 +168,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
 
             WorldShipProcessedEntity worldShipProcessed = new WorldShipProcessedEntity
             {
-                UspsTrackingNumber=uspsTrackingNumber
+                UspsTrackingNumber = uspsTrackingNumber
             };
 
             var testObject = mock.Create<WorldShipPackageImporter>();
@@ -208,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
             {
                 Ups = new UpsShipmentEntity()
                 {
-                    Service = (int)UpsServiceType.UpsSurePost1LbOrGreater
+                    Service = (int) UpsServiceType.UpsSurePost1LbOrGreater
                 }
             };
 
@@ -237,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
             {
                 Ups = new UpsShipmentEntity()
                 {
-                    Service = (int)UpsServiceType.UpsGround
+                    Service = (int) UpsServiceType.UpsGround
                 }
             };
 

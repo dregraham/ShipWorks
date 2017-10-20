@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
+using log4net;
 using Moq;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         public DhlExpressLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            shipment = new ShipmentEntity();
+            shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
             request = new PurchaseLabelRequest();
             label = new Label();
 
@@ -59,7 +60,33 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             mock.Mock<IShipEngineWebClient>().Verify(r => r.PurchaseLabel(request, ApiLogSource.DHLExpress));
         }
-        
+
+        [Fact]
+        public void Create_ThrowsShippingException_WhenPurchaseLabelFails()
+        {
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress))
+                .Throws(new Exception("Something broke"));
+
+            DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
+            
+            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            Assert.Equal("Something broke", ex.Message);
+        }
+
+        [Fact]
+        public void Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorIsCryptic()
+        {
+            mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
+
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress))
+                .Throws(new Exception("A shipping carrier reported an error when processing your request. Carrier ID: se-182974, Carrier: DHL Express. One or more errors occurred."));
+
+            DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
+
+            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            Assert.Equal("There was a problem creating the label while communicating with the DHL Express API", ex.Message);
+        }
+
         [Fact]
         public void Create_CreatesDownloadedLabelData_WithShipmentAndLabel()
         {
@@ -74,6 +101,41 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             testObject.Create(shipment);
 
             labelDataFactory.Verify(f => f(shipment, label));
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient()
+        {
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .Returns(Task.FromResult(new VoidLabelResponse(true)));
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+
+            shipment.DhlExpress.ShipEngineLabelID = "blah";
+
+            testObject.Void(shipment);
+
+            webClient.Verify(c => c.VoidLabel("blah", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void Void_DelegatesToWebClient_LogsException_WhenWebClientThrowsShipEngineException()
+        {
+            var iLog = mock.CreateMock<ILog>();
+            mock.MockFunc<Type, ILog>(iLog);
+
+            var webClient = mock.Mock<IShipEngineWebClient>();
+            ShipEngineException exception = new ShipEngineException("sadf");
+            webClient
+                .Setup(c => c.VoidLabel(AnyString, ApiLogSource.DHLExpress))
+                .ThrowsAsync(exception);
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+            testObject.Void(shipment);
+
+            iLog.Verify(l => l.Error(exception), Times.Once);
         }
     }
 }

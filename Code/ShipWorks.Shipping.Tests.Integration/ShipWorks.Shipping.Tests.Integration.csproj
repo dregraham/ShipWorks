@@ -153,6 +153,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\PrefetchPathRegistrationTest.cs" />
     <Compile Include="Carriers\ShipDateManipulatorRegistrationTest.cs" />
     <Compile Include="Carriers\LabelServiceRegistrationTest.cs" />
     <Compile Include="Carriers\Postal\Usps\ProcessUspsLabelTest.cs" />
