@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
     public class DhlExpressBestRateBrokerTest
     {
         [Fact]
-        public void GetInsuranceProvider_ReturnsInvalid()
+        public void GetInsuranceProvider_ReturnsShipWorks()
         {
             var mock = AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
 
