@@ -1,13 +1,16 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.FedEx
 {
+    /// <summary>
+    /// Battery packing type for FedEx hazardous materials
+    /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum FedExPackageType
+    public enum FedExBatteryPackingType
     {
-        [Description("None")]
-        None = 0,
+        [Description("Not specified")]
+        NotSpecified = 0,
 
         [Description("Contained in equipment")]
         ContainsInEquipement = 1,

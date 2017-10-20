@@ -1,11 +1,11 @@
-﻿using Interapptive.Shared;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -24,6 +24,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExDangerousGoodsAccessibilityType>(dangerousGoodsAccessibility);
             EnumHelper.BindComboBox<FedExHazardousMaterialsPackingGroup>(hazardousMaterialPackingGroup);
             EnumHelper.BindComboBox<FedExHazardousMaterialsQuantityUnits>(dangerousGoodsPackagingUnits);
+            EnumHelper.BindComboBox<FedExBatteryMaterialType>(batteryMaterial);
+            EnumHelper.BindComboBox<FedExBatteryPackingType>(batteryPacking);
+            EnumHelper.BindComboBox<FedExBatteryRegulatorySubType>(batteryRegulatorySubtype);
+
+            batteryDetailsGroup.Top = hazardousMaterialGroupBox.Top;
         }
 
         /// <summary>
@@ -174,15 +179,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             panelDangerousGoodsDetails.Visible = dangerousGoodsEnabled.Checked;
 
-            UpdateHazardousMaterialsUI();
+            UpdateExtraDetailsUI();
         }
 
         /// <summary>
-        /// Updates the hazardous materials UI.
+        /// Updates the extra details UI.
         /// </summary>
-        private void UpdateHazardousMaterialsUI()
+        private void UpdateExtraDetailsUI()
         {
             bool showHazardousMaterialGroupBox = false;
+            bool showBatteryGroupBox = false;
 
             // The hazardous materials group box (and all its controls) is only enabled if the dangerous goods option is checked
             // and the material type is Hazardous Materials
@@ -191,9 +197,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExDangerousGoodsMaterialType dangerousGoodsType = (FedExDangerousGoodsMaterialType) dangerousGoodsMaterialType.SelectedValue;
 
                 showHazardousMaterialGroupBox = dangerousGoodsEnabled.Checked && dangerousGoodsType == FedExDangerousGoodsMaterialType.HazardousMaterials;
+                showBatteryGroupBox = dangerousGoodsEnabled.Checked && dangerousGoodsType == FedExDangerousGoodsMaterialType.Batteries;
             }
 
             hazardousMaterialGroupBox.Visible = showHazardousMaterialGroupBox;
+            batteryDetailsGroup.Visible = showBatteryGroupBox;
         }
 
         /// <summary>
@@ -203,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnMaterialTypeChanged(object sender, EventArgs e)
         {
-            UpdateHazardousMaterialsUI();
+            UpdateExtraDetailsUI();
         }
 
         /// <summary>
