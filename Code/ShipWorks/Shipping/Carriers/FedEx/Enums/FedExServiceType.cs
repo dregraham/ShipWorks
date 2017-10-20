@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 {
@@ -119,6 +119,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         FedExFimsStandard = 36,
 
         [Description("FedEx FIMS Premium")]
-        FedExFimsPremium = 37
+        FedExFimsPremium = 37,
+
+        [Description("FedEx International Priority® Express")]
+        InternationalPriorityExpress = 38,
     }
 }

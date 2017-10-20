@@ -153,6 +153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     return ServiceType.FEDEX_EXPRESS_SAVER;
 
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
+                case FedExServiceType.InternationalPriorityExpress: return ServiceType.INTERNATIONAL_PRIORITY_EXPRESS;
                 case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
                 case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
                 case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
