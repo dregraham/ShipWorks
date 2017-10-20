@@ -34,10 +34,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Other
                 .Keyed<ICarrierShipmentAdapter>(ShipmentTypeCode.Other)
                 .ExternallyOwned();
 
-            builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.Other)
-                .SingleInstance();
-
             builder.RegisterType<OtherLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.Other);
 

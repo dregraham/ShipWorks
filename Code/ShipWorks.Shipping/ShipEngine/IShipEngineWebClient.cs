@@ -32,5 +32,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Void a shipment label
         /// </summary>
         Task<VoidLabelResponse> VoidLabel(string labelId, ApiLogSource apiLogSource);
+        
+		/// <summary>
+        /// Track a shipment using the label ID
+        /// </summary>
+        Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
     }
 }

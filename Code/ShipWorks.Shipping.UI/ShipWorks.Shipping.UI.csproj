@@ -200,7 +200,6 @@
     <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.Designer.cs">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressShippingModule.cs" />
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
