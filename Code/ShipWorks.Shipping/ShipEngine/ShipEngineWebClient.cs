@@ -145,6 +145,23 @@ namespace ShipWorks.Shipping.ShipEngine
                 throw new ShipEngineException(GetErrorMessage(ex));
             }
         }
+        
+        /// <summary>
+        /// Track a shipment using the label ID
+        /// </summary>
+        public async Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource)
+        {
+            ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+            ConfigureLogging(labelsApi, apiLogSource, "Track", LogActionType.GetRates);
+            try
+            {
+                return await labelsApi.LabelsTrackAsync(labelId, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
 
         /// <summary>
         /// Get the api key
