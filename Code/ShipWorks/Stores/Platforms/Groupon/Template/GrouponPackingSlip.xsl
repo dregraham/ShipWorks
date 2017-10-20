@@ -68,7 +68,7 @@
                         <b>Free</b> Shipping | <b>Free</b> Returns
                       </font>
                       <br />
-                      <font style="font-size:10">with $24.99 Purchase</font>
+                      <font style="font-size:10">with $34.99 Purchase</font>
                     </td>
                   </tr>
                 </table>
@@ -88,77 +88,77 @@
               <td width="33%" style="vertical-align:top; font-family:'Arial'; font-size:11">
                 <font style="font-family:'Arial';font-weight:bold">Order Date</font>
                 <font color="white">___</font>
-                <xsl:value-of select="sw:ToShortDate(//Order/Date)" />
+                <xsl:value-of select="sw:ToShortDate($order/Date)" />
               </td>
               <td width="33%" style="vertical-align:top; font-family:'Arial'; font-size:11">
                 <font style="font-family:'Arial';font-weight:bold">Bill To</font>
                 <br />
-                <xsl:variable name="address" select="//Order/Address[@type='bill']" />
-                <xsl:if test="$address/FirstName != '' or $address/LastName != ''">
-                  <xsl:value-of select="$address/FirstName" />
-                  <xsl:text/>
-                  <xsl:value-of select="$address/LastName" />
+                <xsl:variable name="billAddress" select="$order/Address[@type='bill']" />
+                <xsl:if test="$billAddress/FirstName != '' or $billAddress/LastName != ''">
+                  <xsl:value-of select="$billAddress/FirstName" />
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="$billAddress/LastName" />
                   <br />
                 </xsl:if>
 
-                <xsl:if test="$address/Company != ''">
-                  <xsl:value-of select="$address/Company" />
+                <xsl:if test="$billAddress/Company != ''">
+                  <xsl:value-of select="$billAddress/Company" />
                   <br />
                 </xsl:if>
 
-                <xsl:value-of select="$address/Line1" />
+                <xsl:value-of select="$billAddress/Line1" />
                 <br />
 
-                <xsl:if test="$address/Line2 != ''">
-                  <xsl:value-of select="$address/Line2" />
+                <xsl:if test="$billAddress/Line2 != ''">
+                  <xsl:value-of select="$billAddress/Line2" />
                   <br />
                 </xsl:if>
 
-                <xsl:if test="$address/Line3 != ''">
-                  <xsl:value-of select="$address/Line3" />
+                <xsl:if test="$billAddress/Line3 != ''">
+                  <xsl:value-of select="$billAddress/Line3" />
                   <br />
                 </xsl:if>
 
-                <xsl:value-of select="$address/City" />,
-                <xsl:value-of select="$address/StateCode" />
-                <xsl:text/>
-                <xsl:value-of select="$address/PostalCode" />
+                <xsl:value-of select="$billAddress/City" />,
+                <xsl:value-of select="$billAddress/StateCode" />
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$billAddress/PostalCode" />
 
 
               </td>
               <td width="33%" style="vertical-align:top; font-family:'Arial'; font-size:11">
                 <font style="font-family:'Arial';font-weight:bold">Ship To</font>
                 <br />
-                <xsl:variable name="address" select="//Order/Address[@type='ship']" />
-                <xsl:if test="$address/FirstName != '' or $address/LastName != ''">
-                  <xsl:value-of select="$address/FirstName" />
-                  <xsl:text/>
-                  <xsl:value-of select="$address/LastName" />
+                <xsl:variable name="shipAddress" select="$order/Address[@type='ship']" />
+                <xsl:if test="$shipAddress/FirstName != '' or $shipAddress/LastName != ''">
+                  <xsl:value-of select="$shipAddress/FirstName" />
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="$shipAddress/LastName" />
                   <br />
                 </xsl:if>
 
-                <xsl:if test="$address/Company != ''">
-                  <xsl:value-of select="$address/Company" />
+                <xsl:if test="$shipAddress/Company != ''">
+                  <xsl:value-of select="$shipAddress/Company" />
                   <br />
                 </xsl:if>
 
-                <xsl:value-of select="$address/Line1" />
+                <xsl:value-of select="$shipAddress/Line1" />
                 <br />
 
-                <xsl:if test="$address/Line2 != ''">
-                  <xsl:value-of select="$address/Line2" />
+                <xsl:if test="$shipAddress/Line2 != ''">
+                  <xsl:value-of select="$shipAddress/Line2" />
                   <br />
                 </xsl:if>
 
-                <xsl:if test="$address/Line3 != ''">
-                  <xsl:value-of select="$address/Line3" />
+                <xsl:if test="$shipAddress/Line3 != ''">
+                  <xsl:value-of select="$shipAddress/Line3" />
                   <br />
                 </xsl:if>
 
-                <xsl:value-of select="$address/City" />,
-                <xsl:value-of select="$address/StateCode" />
-                <xsl:text/>
-                <xsl:value-of select="$address/PostalCode" />
+                <xsl:value-of select="$shipAddress/City" />,
+                <xsl:value-of select="$shipAddress/StateCode" />
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$shipAddress/PostalCode" />
 
               </td>
             </tr>
@@ -166,12 +166,12 @@
               <td style="font-family:'Arial'; font-size:11">
                 <font style="font-family:'Arial';font-weight:bold">Order ID</font>
                 <font color="white">___</font>
-                <xsl:value-of select="//Order/Groupon/GrouponOrderID" />
+                <xsl:value-of select="$order/Groupon/GrouponOrderID" />
               </td>
               <td colspan="2" style="font-family:'Arial'; font-size:11">
                 <font style="font-family:'Arial';font-weight:bold">Shipped Via</font>
                 <font color="white">___</font>
-                <xsl:value-of select="//Order/RequestedShipping" />
+                <xsl:value-of select="$order/RequestedShipping" />
               </td>
             </tr>
           </table>
@@ -189,17 +189,20 @@
                 <b>Quantity</b>
               </td>
             </tr>
-            <tr>
-              <td style="font-size:14">
-                <xsl:value-of select="//Item/SKU" />
-              </td>
-              <td style="font-size:14">
-                <xsl:value-of select="//Item/Name" />
-              </td>
-              <td style="text-align:right; font-size:14">
-                <xsl:value-of select="//Item/Quantity" />
-              </td>
-            </tr>
+
+            <xsl:for-each select="$order/Item">
+              <tr>
+                <td style="font-size:14">
+                  <xsl:value-of select="Code" />
+                </td>
+                <td style="font-size:14">
+                  <xsl:value-of select="Name" />
+                </td>
+                <td style="text-align:right; font-size:14">
+                  <xsl:value-of select="Quantity" />
+                </td>
+              </tr>
+            </xsl:for-each>
           </table>
           <br />
           <!--Gift Message-->
