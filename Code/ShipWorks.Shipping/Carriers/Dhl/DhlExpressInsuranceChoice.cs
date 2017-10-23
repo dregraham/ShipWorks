@@ -15,8 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public DhlExpressInsuranceChoice(ShipmentEntity shipment)
         {
             Shipment = shipment;
-
-            InsurancePennyOne = false;
             InsuranceValue = 0;
             Insured = false;
         }
@@ -25,7 +23,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool? InsurancePennyOne { get; set; }
+        public bool? InsurancePennyOne
+        {
+            get { return true; }
+            set
+            {
+                // always use penny one
+            }
+        }
 
         /// <summary>
         /// The currently configured InsuranceProvider for this insurance choice
