@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -22,6 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
+            Justification = "This is specific only to DhlExpress.")]
         [Obfuscation(Exclude = true)]
         public bool? InsurancePennyOne
         {
