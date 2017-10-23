@@ -55,14 +55,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void CspCredentialKey()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("olaPdFVk3aMvbfNA", testObject.CspCredentialKey);
+            Assert.Equal("55sFa2ocvAw0Baxl", testObject.CspCredentialKey);
         }
 
         [Fact]
         public void CspCredentialPassword()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("SAISQtME8lAOPurbWNQD2Ft96", testObject.CspCredentialPassword);
+            Assert.Equal("9kJDF0zRYZ9kyBiavLBPyGTSO", testObject.CspCredentialPassword);
         }
 
         [Fact]
