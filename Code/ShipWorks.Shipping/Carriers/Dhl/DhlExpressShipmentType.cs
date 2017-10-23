@@ -344,7 +344,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 DhlExpressPackageEntity package = shipment.DhlExpress.Packages[parcelIndex];
 
                 return new ShipmentParcel(shipment, package.DhlExpressPackageID, package.TrackingNumber,
-                    new DhlExpressInsuranceChoice(shipment),
+                    new DhlExpressInsuranceChoice(shipment, package),
                     new DimensionsAdapter(package))
                 {
                     TotalWeight = package.Weight + package.DimsWeight

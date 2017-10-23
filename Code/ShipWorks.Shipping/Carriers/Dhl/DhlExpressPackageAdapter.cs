@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             this.shipment = shipment;
             this.package = package;
             Index = packageIndex;
-            InsuranceChoice = new DhlExpressInsuranceChoice(shipment);
+            InsuranceChoice = new DhlExpressInsuranceChoice(shipment, package);
         }
 
         /// <summary>

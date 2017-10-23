@@ -10,14 +10,15 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     public class DhlExpressInsuranceChoice : IInsuranceChoice
     {
+        private readonly DhlExpressPackageEntity package;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressInsuranceChoice(ShipmentEntity shipment)
+        public DhlExpressInsuranceChoice(ShipmentEntity shipment, DhlExpressPackageEntity package)
         {
             Shipment = shipment;
-            InsuranceValue = 0;
-            Insured = false;
+            this.package = package;
         }
 
         /// <summary>
@@ -45,13 +46,33 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// The insured value of the package, if insured
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public decimal InsuranceValue { get; set; }
+        public decimal InsuranceValue
+        {
+            get
+            {
+                return package.InsuranceValue;
+            }
+            set
+            {
+                package.InsuranceValue = value;
+            }
+        }
 
         /// <summary>
         /// Indicates if insurance is on or off
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool Insured { get; set; }
+        public bool Insured
+        {
+            get
+            {
+                return package.Insurance;
+            }
+            set
+            {
+                package.Insurance = value;
+            }
+        }
 
         /// <summary>
         /// The shipment this insurance applies to
