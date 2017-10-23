@@ -8,6 +8,9 @@ using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 {
+    /// <summary>
+    /// I-Parcel best rate broker
+    /// </summary>
     public class iParcelBestRateBroker : PackageBasedBestRateBroker<IParcelAccountEntity, IIParcelAccountEntity, IParcelPackageEntity>
     {
         /// <summary>
