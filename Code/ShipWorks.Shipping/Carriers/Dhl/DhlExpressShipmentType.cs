@@ -121,7 +121,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 DimsHeight = 0,
                 DimsWeight = 0,
                 DimsAddWeight = true,
-                DeclaredValue = 0,
                 TrackingNumber = string.Empty,
             };
         }

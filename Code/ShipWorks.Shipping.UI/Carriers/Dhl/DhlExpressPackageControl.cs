@@ -286,6 +286,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 }
             }
 
+            // Load the insurance
+            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+
             // Load the dimensions
             dimensionsControl.LoadDimensions(dimensionsToLoad);
 
@@ -312,6 +315,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     weight.ReadMultiWeight(w => package.Weight = w);
                 }
             }
+
+            // Save insurance
+            insuranceControl.SaveToInsuranceChoices();
 
             // Save dimensions
             dimensionsControl.SaveToEntities();
