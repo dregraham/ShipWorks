@@ -1,5 +1,6 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.FedEx;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -19,6 +21,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     public class FedExDangerousGoodsManipulator : FedExShippingRequestManipulatorBase
     {
         private int currentPackageIndex;
+        private readonly IDictionary<FedExBatteryMaterialType, BatteryMaterialType> batteryMaterialLookup =
+            new Dictionary<FedExBatteryMaterialType, BatteryMaterialType>
+            {
+                { FedExBatteryMaterialType.LithiumIon, BatteryMaterialType.LITHIUM_ION },
+                { FedExBatteryMaterialType.LithiumMetal, BatteryMaterialType.LITHIUM_METAL }
+            };
+
+        private readonly IDictionary<FedExBatteryPackingType, BatteryPackingType> batteryPackingLookup =
+            new Dictionary<FedExBatteryPackingType, BatteryPackingType>
+            {
+                { FedExBatteryPackingType.ContainsInEquipement, BatteryPackingType.CONTAINED_IN_EQUIPMENT },
+                { FedExBatteryPackingType.PackedWithEquipment, BatteryPackingType.PACKED_WITH_EQUIPMENT }
+            };
+
+        private readonly IDictionary<FedExBatteryRegulatorySubType, BatteryRegulatorySubType> batteryRegulatorySubtypeLookup =
+            new Dictionary<FedExBatteryRegulatorySubType, BatteryRegulatorySubType>
+            {
+                { FedExBatteryRegulatorySubType.IATASectionII, BatteryRegulatorySubType.IATA_SECTION_II }
+            };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExDangerousGoodsManipulator" /> class.
@@ -79,6 +100,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 {
                     ConfigureHazardousMaterials(dangerousGoods, package);
                 }
+
+                else if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
+                {
+                    nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails
+                        = ConfigureBatteryMaterials(package);
+                }
+
                 else
                 {
                     // Accessibility options do not apply to hazardous materials
@@ -230,6 +258,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 Units = EnumHelper.GetDescription((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits)
             };
         }
+
+        /// <summary>
+        /// Configure battery materials
+        /// </summary>
+        private BatteryClassificationDetail[] ConfigureBatteryMaterials(IFedExPackageEntity package)
+        {
+            var details = new BatteryClassificationDetail();
+
+            details.MaterialSpecified = SetBatteryDetail(package.BatteryMaterial, batteryMaterialLookup, x => details.Material = x);
+            details.PackingSpecified = SetBatteryDetail(package.BatteryPacking, batteryPackingLookup, x => details.Packing = x);
+            details.RegulatorySubTypeSpecified = SetBatteryDetail(package.BatteryRegulatorySubtype, batteryRegulatorySubtypeLookup, x => details.RegulatorySubType = x);
+
+            return new[] { details };
+        }
+
+        /// <summary>
+        /// Set a specific battery detail
+        /// </summary>
+        private bool SetBatteryDetail<T, K>(T value, IDictionary<T, K> lookup, Action<K> setProperty)
+        {
+            if (lookup.ContainsKey(value))
+            {
+                setProperty(lookup[value]);
+                return true;
+            }
+
+            return false;
+        }
+
 
         /// <summary>
         /// Adds the dangerous goods option to the request.
