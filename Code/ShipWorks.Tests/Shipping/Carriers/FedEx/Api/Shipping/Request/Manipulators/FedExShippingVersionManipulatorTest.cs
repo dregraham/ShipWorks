@@ -58,12 +58,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        public void Manipulate_SetsMajorTo19()
+        public void Manipulate_SetsMajorTo21()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(19, version.Major);
+            Assert.Equal(21, version.Major);
         }
 
         [Fact]
