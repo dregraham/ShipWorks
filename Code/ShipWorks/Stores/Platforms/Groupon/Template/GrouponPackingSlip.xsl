@@ -44,10 +44,10 @@
                       <font color="white">.</font>
                     </td>
                     <td width="45%" style="font-family:'Arial'; font-size:10">
-                      <b>Groupon Goods Returns</b>
+                      <b>Groupon Goods, Inc</b>
                       <br />
-                      3815 Logistics Way<br />
-                      Antioch, TN 37013
+                      1081 Aviation Blvd<br />
+                      Hebron, KY 41048
                     </td>
                     <td style="font-family:'Arial'; font-size:10">
                       groupon.com/goods<br />
@@ -63,10 +63,8 @@
                       <img src="data:image/png;base64,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"/>
                       <font color="white">_</font>
                     </td>
-                    <td style="font-family:'Arial'">
-                      <font>
-                        <b>Free</b> Shipping | <b>Free</b> Returns
-                      </font>
+                    <td style="font-family:'Arial'; font-size:14">
+                      <b>Free</b> Shipping | <b>Free</b> Returns
                       <br />
                       <font style="font-size:10">with $34.99 Purchase</font>
                     </td>
@@ -177,15 +175,15 @@
           </table>
 
           <!--Items-->
-          <table width="100%" style="border-collapse: collapse;font-family:'Arial';">
+          <table width="100%" style="border-collapse: collapse;font-family:'Arial';color:#595959">
             <tr>
-              <td style="background:black; color:white; font-size:14">
+              <td style="background:#595959; color:white; font-size:14">
                 <b>Item Number</b>
               </td>
-              <td style="background:black; color:white; font-size:14">
+              <td style="background:#595959; color:white; font-size:14">
                 <b>Item Description</b>
               </td>
-              <td style="text-align:right;background:black; color:white; font-size:14">
+              <td style="text-align:right;background:#595959; color:white; font-size:14">
                 <b>Quantity</b>
               </td>
             </tr>
@@ -220,7 +218,7 @@
               <td colspan="3" style="font-family:'Arial'; font-size:10">
                 If you have any questions about your new goods, please contact us at groupon.com/support.
                 <br />
-                And, if for any reason your new goods don't blow your socks right through your shoes, you can return your purchase-unless stated otherwise in the offer's Fine Print-by following these simple steps:
+                And, if for any reason your new goods don’t blow your socks right through your shoes, you can return your purchase within 14 days of receipt – unless stated otherwise in the offer’s Fine Print – by following these simple steps:
               </td>
             </tr>
             <tr>
@@ -285,7 +283,8 @@
             </tr>
             <tr>
               <td colspan="3" style="font-family:'Arial'; font-size:10">
-                *For Canadian Orders and Gift Returns: Contact us at groupon.com/support to request a Return Authorization form and a prepaid mailing lArial.
+                *Free Shipping applies to eligible orders in the U.S. only.<br/>
+                **For Canadian Orders: Contact us at groupon.com/support to request a Return Authorization form and prepaid mailing Label.
               </td>
             </tr>
           </table>
