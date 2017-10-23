@@ -118,6 +118,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
+        public void Create_ThrowesShippingException_WhenMultiPackageAndInsured()
+        {
+
+            ShipmentEntity insuredShipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity(),
+                Insurance = true
+            };
+
+            insuredShipment.DhlExpress.Packages.Add(new DhlExpressPackageEntity());
+            insuredShipment.DhlExpress.Packages.Add(new DhlExpressPackageEntity());
+
+            var testObject = mock.Create<DhlExpressLabelService>();
+            
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.Create(insuredShipment));
+            Assert.Equal("Multi-package shipments cannot be insured using DHL Express. " +
+                "To insure multiple packages, create a shipment for each package.", ex.Message);
+        }
+
+        [Fact]
         public void Void_DelegatesToWebClient()
         {
             var webClient = mock.Mock<IShipEngineWebClient>();

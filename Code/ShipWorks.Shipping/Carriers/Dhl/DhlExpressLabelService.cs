@@ -47,6 +47,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
+            if (shipment.Insurance && shipment.DhlExpress.Packages.Count > 1)
+            {
+                throw new ShippingException("Multi-package shipments cannot be insured using DHL Express. " +
+                    "To insure multiple packages, create a shipment for each package.");
+            }
+
             PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
 
             try
