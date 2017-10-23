@@ -2,6 +2,7 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 using System;
@@ -96,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-            // Not handling insurance yet
+            Shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
 
         /// <summary>
