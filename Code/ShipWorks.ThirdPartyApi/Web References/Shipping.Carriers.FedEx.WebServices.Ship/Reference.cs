@@ -2068,7 +2068,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         private string geographicCoordinatesField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("StreetLines")]
+        [System.Xml.Serialization.XmlElementAttribute("StreetLines", Order = 0)]
         public string[] StreetLines
         {
             get
@@ -2194,6 +2194,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         }
 
         /// <remarks/>
+        [XmlElementAttribute(Order = 8)]
         public string GeographicCoordinates
         {
             get

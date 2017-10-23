@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <value>
         /// The CSP credential key.
         /// </value>
-        public string CspCredentialKey => "olaPdFVk3aMvbfNA";
+        public string CspCredentialKey => "55sFa2ocvAw0Baxl";
 
         /// <summary>
         /// Gets the CSP credential password.
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <remarks>
         /// Password - SAISQtME8lAOPurbWNQD2Ft96
         /// </remarks>
-        public string CspCredentialPassword => SecureText.Decrypt("5SbhB/whSJsVfHFUoLlKA4/B2c5p2/PUgmo8d1uGaZo=", "apptive");
+        public string CspCredentialPassword => SecureText.Decrypt("gTtN7wou2AkqYoTXnhoK/cBlWH4M72PAaJbR/28bRNo=", "apptive");
 
         /// <summary>
         /// Gets the user credentials key.
@@ -124,12 +124,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "19";
+        public const string ShipVersionNumber = "21";
 
         /// <summary>
         /// Gets the open ship version number.
         /// </summary>
-        public const string OpenShipVersionNumber = "11";
+        public const string OpenShipVersionNumber = "13";
 
         /// <summary>
         /// Gets the type of the currency.
