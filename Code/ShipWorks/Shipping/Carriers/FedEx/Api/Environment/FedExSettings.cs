@@ -124,12 +124,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "19";
+        public const string ShipVersionNumber = "21";
 
         /// <summary>
         /// Gets the open ship version number.
         /// </summary>
-        public const string OpenShipVersionNumber = "11";
+        public const string OpenShipVersionNumber = "13";
 
         /// <summary>
         /// Gets the type of the currency.
