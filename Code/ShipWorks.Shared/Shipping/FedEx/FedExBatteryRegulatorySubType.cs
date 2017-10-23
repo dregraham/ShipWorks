@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.FedEx
     /// <summary>
     /// Battery regulatory sub type for FedEx hazardous materials
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum FedExBatteryRegulatorySubType
     {
         [Description("Not specified")]
