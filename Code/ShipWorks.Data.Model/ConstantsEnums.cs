@@ -1956,10 +1956,12 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>DimsWeight. </summary>
 		DimsWeight,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
 		///<summary>TrackingNumber. </summary>
 		TrackingNumber,
+		///<summary>Insurance. </summary>
+		Insurance,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
 		/// <summary></summary>
 		AmountOfFields
 	}

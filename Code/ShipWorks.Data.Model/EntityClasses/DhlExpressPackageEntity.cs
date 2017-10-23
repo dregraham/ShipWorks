@@ -365,9 +365,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DeclaredValue", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 		}
 		#endregion
 
@@ -556,16 +558,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)DhlExpressPackageFieldIndex.DimsWeight, value); }
 		}
 
-		/// <summary> The DeclaredValue property of the Entity DhlExpressPackage<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressPackage"."DeclaredValue"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal DeclaredValue
-		{
-			get { return (System.Decimal)GetValue((int)DhlExpressPackageFieldIndex.DeclaredValue, true); }
-			set	{ SetValue((int)DhlExpressPackageFieldIndex.DeclaredValue, value); }
-		}
-
 		/// <summary> The TrackingNumber property of the Entity DhlExpressPackage<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlExpressPackage"."TrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
@@ -574,6 +566,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlExpressPackageFieldIndex.TrackingNumber, true); }
 			set	{ SetValue((int)DhlExpressPackageFieldIndex.TrackingNumber, value); }
+		}
+
+		/// <summary> The Insurance property of the Entity DhlExpressPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressPackage"."Insurance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Insurance
+		{
+			get { return (System.Boolean)GetValue((int)DhlExpressPackageFieldIndex.Insurance, true); }
+			set	{ SetValue((int)DhlExpressPackageFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The InsuranceValue property of the Entity DhlExpressPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressPackage"."InsuranceValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Decimal InsuranceValue
+		{
+			get { return (System.Decimal)GetValue((int)DhlExpressPackageFieldIndex.InsuranceValue, true); }
+			set	{ SetValue((int)DhlExpressPackageFieldIndex.InsuranceValue, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'DhlExpressShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

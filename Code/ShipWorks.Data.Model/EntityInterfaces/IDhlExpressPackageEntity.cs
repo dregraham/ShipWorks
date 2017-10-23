@@ -75,18 +75,24 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double DimsWeight { get; }
-        /// <summary> The DeclaredValue property of the Entity DhlExpressPackage<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressPackage"."DeclaredValue"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Decimal DeclaredValue { get; }
         /// <summary> The TrackingNumber property of the Entity DhlExpressPackage<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressPackage"."TrackingNumber"<br/>
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String TrackingNumber { get; }
+        /// <summary> The Insurance property of the Entity DhlExpressPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressPackage"."Insurance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean Insurance { get; }
+        /// <summary> The InsuranceValue property of the Entity DhlExpressPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressPackage"."InsuranceValue"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Decimal InsuranceValue { get; }
         
         
         IDhlExpressShipmentEntity DhlExpressShipment { get; }

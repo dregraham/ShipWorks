@@ -2862,7 +2862,8 @@ CREATE TABLE [dbo].[DhlExpressPackage](
 	[DimsHeight] [float] NOT NULL,
 	[DimsAddWeight] [bit] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
-	[DeclaredValue] [money] NOT NULL,
+	[Insurance] [bit] NOT NULL,
+	[InsuranceValue] [money] NOT NULL,
 	[TrackingNumber] [varchar](50) NOT NULL
 )
 GO
