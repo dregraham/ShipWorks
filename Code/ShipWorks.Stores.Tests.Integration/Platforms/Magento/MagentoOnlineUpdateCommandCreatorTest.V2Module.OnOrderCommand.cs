@@ -24,17 +24,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 .Set(x => x.MagentoVersion, (int) MagentoVersion.MagentoTwo)
                 .Save();
 
-            MagentoUploadAction uploadAction = new MagentoUploadAction()
-            {
-                OrderNumber = AnyLong,
-                Action = AnyString,
-                Comments = AnyString,
-                Carrier = AnyString,
-                TrackingNumber = AnyString,
-                SendEmail = AnyBool
-            };
-
-            webClientModule.Setup(x => x.ExecuteAction(uploadAction))
+            webClientModule.Setup(x => x.ExecuteAction(It.IsAny<MagentoUploadAction>()))
                 .Returns("Bar");
         }
 
@@ -74,16 +64,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
-            {
-                OrderNumber = 20000,
-                Action = AnyString,
-                Comments = AnyString,
-                Carrier = AnyString,
-                TrackingNumber = AnyString,
-                SendEmail = AnyBool
-            };
-
             MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
             {
                 OrderNumber = 10000,
@@ -94,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 SendEmail = true
             };
 
-            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(It.IsAny<MagentoUploadAction>()));
             webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
 
@@ -144,16 +124,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
-            {
-                OrderNumber = 20000,
-                Action = AnyString,
-                Comments = AnyString,
-                Carrier = AnyString,
-                TrackingNumber = AnyString,
-                SendEmail = AnyBool
-            };
-
             MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
             {
                 OrderNumber = 30000,
@@ -164,7 +134,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 SendEmail = true
             };
 
-            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(It.IsAny<MagentoUploadAction>()));
             webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
 
