@@ -22,9 +22,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
-
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 200, 2000, (bool?) null, true, "track-123", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, "track-123", "Other"));
+            
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000), (bool?)null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?)null, true, "track-123", "Other"));
         }
 
         [Fact]
@@ -38,8 +38,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
 
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 400, 4000, (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 400 && t.TransactionID == 4000), (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?) null, true, "track-123", "Other"));
         }
 
         [Fact]
@@ -52,8 +52,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
 
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 200, 2000, (bool?) null, true, "track-123", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000), (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?) null, true, "track-123", "Other"));
         }
 
         [Fact]
@@ -66,8 +66,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
 
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 200, 2000, (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000), (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?) null, true, "track-123", "Other"));
         }
 
         [Fact]
@@ -81,10 +81,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
 
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 200, 2000, (bool?) null, true, "track-123", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, "track-123", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 500, 5000, (bool?) null, true, "track-456", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 600, 6000, (bool?) null, true, "track-456", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000), (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?) null, true, "track-123", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 500 && t.TransactionID == 5000), (bool?) null, true, "track-456", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.TransactionID == 6000), (bool?) null, true, "track-456", "Other"));
         }
 
         [Fact]
@@ -94,9 +94,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false, 8);
 
-            webClient.Setup(x => x.CompleteSale(It.IsAny<EbayToken>(), 200, 2000, (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()))
+            webClient.Setup(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000), (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new EbayException("Foo"));
-            webClient.Setup(x => x.CompleteSale(It.IsAny<EbayToken>(), 300, 3000, (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()))
+            webClient.Setup(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000), (bool?) null, true, It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new EbayException("Foo"));
 
             menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(EbayOnlineAction.Shipped)));
@@ -104,8 +104,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             await commandCreator.OnUpdateShipment(menuContext.Object);
 
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 600, 6000, (bool?) null, true, "track-456", "Other"));
-            webClient.Verify(x => x.CompleteSale(It.IsAny<EbayToken>(), 800, 8000, (bool?) null, true, "track-789", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.TransactionID == 6000), (bool?) null, true, "track-456", "Other"));
+            webClient.Verify(x => x.CompleteSale(It.Is<EbayTransactionDetails>(t => t.ItemID == 800 && t.TransactionID == 8000), (bool?) null, true, "track-789", "Other"));
         }
     }
 }

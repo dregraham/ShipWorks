@@ -89,8 +89,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             try
             {
+                EbayTransactionDetails transaction = new EbayTransactionDetails()
+                {
+                    Token = EbayToken.FromStore(store),
+                    ItemID = orderItem.EbayItemID,
+                    TransactionID = orderItem.EbayTransactionID,
+                    BuyerID = buyerID
+                };
+
                 // Fire off the message
-                await Task.Run(() => webClient.SendMessage(EbayToken.FromStore(store), orderItem.EbayItemID, buyerID, ebayMessageType, subject, message, copySender))
+                await Task.Run(() => webClient.SendMessage(transaction, ebayMessageType, subject, message, copySender))
                     .ConfigureAwait(false);
             }
             catch (EbayException ex)
@@ -156,7 +164,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
 
-                await Task.Run(() => webClient.LeaveFeedback(EbayToken.FromStore(store), orderItem.EbayItemID, orderItem.EbayTransactionID, buyerID, feedbackType, feedback))
+                EbayTransactionDetails transaction = new EbayTransactionDetails()
+                {
+                    Token = EbayToken.FromStore(store),
+                    ItemID = orderItem.EbayItemID,
+                    TransactionID = orderItem.EbayTransactionID,
+                    BuyerID = buyerID
+                };
+
+                await Task.Run(() => webClient.LeaveFeedback(transaction, feedbackType, feedback))
                         .ConfigureAwait(false);
 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
@@ -368,7 +384,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // log that we're about to make the request and send the request
                 log.InfoFormat("Preparing to update eBay order status for order id {0}.", orderID);
 
-                webClient.CompleteSale(token, ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, carrierCode);
+                EbayTransactionDetails transaction = new EbayTransactionDetails()
+                {
+                    Token = token,
+                    ItemID = ebayItem.EbayItemID,
+                    TransactionID = ebayItem.EbayTransactionID
+                };
+
+                webClient.CompleteSale(transaction, paid, shipped, trackingNumber, carrierCode);
 
                 // update the shipped flag
                 if (shipped.HasValue)

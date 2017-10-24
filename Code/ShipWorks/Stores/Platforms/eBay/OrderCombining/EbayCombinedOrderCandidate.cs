@@ -19,6 +19,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using ShipWorks.Stores.Platforms.Ebay.Requests;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
@@ -277,7 +278,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         var token = EbayToken.FromStore(ebayStore);
 
                         // Combine the orders through eBay and pull out the new eBay order ID
-                        ebayOrderID = webClient.CombineOrders(
+                        ebayOrderID = webClient.CombineOrders(new EbayAddOrderRequest(
                             token,
                             transactions,
                             GetCombinedPaymentTotal(toCombine),
@@ -287,7 +288,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             ShippingService,
                             TaxPercent,
                             TaxState,
-                            TaxShipping);
+                            TaxShipping));
                     }
                 }
 

@@ -4,6 +4,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using ShipWorks.Stores.Platforms.Ebay.Requests;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -40,14 +41,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Leave feedback for the given item and transaction
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        void LeaveFeedback(EbayToken token, long itemID, long transactionID, string buyerID, CommentTypeCodeType feedbackType, string feedback);
+        void LeaveFeedback(EbayTransactionDetails transaction, CommentTypeCodeType feedbackType, string feedback);
 
         /// <summary>
         /// Send a message for the given item to the buyer
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        void SendMessage(EbayToken token, long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender);
+        void SendMessage(EbayTransactionDetails transaction, QuestionTypeCodeType messageType, string subject, string message, bool copySender);
 
         /// <summary>
         /// Add a note into the buyer's my ebay for the given item
@@ -57,15 +56,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Marks a transaction as paid (or not) and shipped (or not) on my ebay
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        void CompleteSale(EbayToken token, long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier);
+        void CompleteSale(EbayTransactionDetails transaction, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier);
 
         /// <summary>
         /// Combine the given transactions, specifying the additional costs for the combined order
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        long CombineOrders(EbayToken token, IEnumerable<TransactionType> transactionsToCombine,
-            double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost,
-            string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed);
+        long CombineOrders(EbayAddOrderRequest request);
     }
 }

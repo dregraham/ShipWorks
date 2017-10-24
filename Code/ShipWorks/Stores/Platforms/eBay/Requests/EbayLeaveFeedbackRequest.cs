@@ -19,19 +19,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayLeaveFeedbackRequest"/> class.
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public EbayLeaveFeedbackRequest(EbayToken token, long itemID, long transactionID, string targetUserID, CommentTypeCodeType commentType, string comment)
-            : base(token, "LeaveFeedback")
+        public EbayLeaveFeedbackRequest(EbayTransactionDetails transaction, CommentTypeCodeType commentType, string comment)
+            : base(transaction.Token, "LeaveFeedback")
         {
             request = new LeaveFeedbackRequestType();
 
-            request.ItemID = itemID.ToString();
-            request.TransactionID = transactionID.ToString();
+            request.ItemID = transaction.ItemID.ToString();
+            request.TransactionID = transaction.TransactionID.ToString();
 
             request.CommentType = commentType;
             request.CommentTypeSpecified = true;
 
-            request.TargetUser = targetUserID;
+            request.TargetUser = transaction.BuyerID;
             request.CommentText = comment;
        }
 
