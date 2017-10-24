@@ -32,6 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator))]
         [InlineData(ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(WeekdaysOnlyShipmentDateManipulator))]
         public void EnsureShipmentDateManipulatorsAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             IShipmentDateManipulator retriever = container.ResolveKeyed<IShipmentDateManipulator>(shipmentType);

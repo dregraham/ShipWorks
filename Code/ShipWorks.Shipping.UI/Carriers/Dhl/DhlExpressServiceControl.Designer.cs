@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.panelTop = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -104,6 +105,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
+            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(389, 301);
             // 
@@ -112,6 +114,20 @@
             this.sectionLabelOptions.Collapsed = false;
             this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
             this.sectionLabelOptions.Size = new System.Drawing.Size(389, 62);
+            // 
+            // cutoffDateDisplay
+            // 
+            this.cutoffDateDisplay.AutoSize = true;
+            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
+            this.cutoffDateDisplay.Caption = "Shipments processed after 5:00 PM today will have a ship date of the next valid s" +
+    "hipping day.\r\nTo update this setting, go to Manage > Shipping Settings > DHL Exp" +
+    "ress > Settings.";
+            this.cutoffDateDisplay.Location = new System.Drawing.Point(257, 45);
+            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
+            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.DhlExpress;
+            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 15);
+            this.cutoffDateDisplay.TabIndex = 6;
+            this.cutoffDateDisplay.Title = "Shipment cutoff time";
             // 
             // sectionFrom
             // 
@@ -384,5 +400,6 @@
         private System.Windows.Forms.Label labelNonMachinable;
         private System.Windows.Forms.Label labelShipDate;
         private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
+        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }

@@ -30,12 +30,13 @@
         {
             this.carrierAccountManagerControl = new ShipWorks.Shipping.Carriers.CarrierAccountManagerControl();
             this.label1 = new System.Windows.Forms.Label();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.SuspendLayout();
             // 
             // carrierAccountManagerControl
             // 
             this.carrierAccountManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.carrierAccountManagerControl.Location = new System.Drawing.Point(25, 33);
+            this.carrierAccountManagerControl.Location = new System.Drawing.Point(25, 66);
             this.carrierAccountManagerControl.Name = "carrierAccountManagerControl";
             this.carrierAccountManagerControl.Size = new System.Drawing.Size(400, 168);
             this.carrierAccountManagerControl.TabIndex = 0;
@@ -44,20 +45,29 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Location = new System.Drawing.Point(9, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "DHL Express Accounts";
             // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(25, 6);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 16;
+            // 
             // DhlExpressSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.carrierAccountManagerControl);
             this.Name = "DhlExpressSettingsControl";
-            this.Size = new System.Drawing.Size(440, 220);
+            this.Size = new System.Drawing.Size(500, 393);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -67,5 +77,6 @@
 
         private CarrierAccountManagerControl carrierAccountManagerControl;
         private System.Windows.Forms.Label label1;
+        private Editing.ShippingDateCutoffControl shippingCutoff;
     }
 }
