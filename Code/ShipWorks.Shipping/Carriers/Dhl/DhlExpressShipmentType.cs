@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             RedistributeContentWeight(shipment);
             
             shipment.Insurance = shipment.DhlExpress.Packages.Any(p => p.Insurance);
-            shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.DhlExpress.RequestedLabelFormat;
         }
