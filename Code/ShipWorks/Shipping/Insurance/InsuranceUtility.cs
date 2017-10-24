@@ -172,7 +172,8 @@ namespace ShipWorks.Shipping.Insurance
                 // Restriction since tango isn't setup to handle it yet
                 if (insuranceChoices.Count(choice => choice.InsuranceValue > 0) > 1)
                 {
-                    throw new ShippingException("The current release of ShipWorks does not support insuring multi-package shipments with ShipWorks insurance.");
+                    throw new ShippingException("Multi-package shipments cannot be insured using ShipWorks. " +
+                   "To insure multiple packages, create a shipment for each package.");
                 }
 
                 if (insuranceChoices.Any(choice => choice.InsuranceValue > 5000))
