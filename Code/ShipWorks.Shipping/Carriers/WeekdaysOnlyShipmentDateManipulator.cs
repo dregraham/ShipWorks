@@ -15,6 +15,7 @@ namespace ShipWorks.Shipping.Carriers
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsWorldShip)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.FedEx)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.OnTrac)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.DhlExpress)]
     public class WeekdaysOnlyShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;
