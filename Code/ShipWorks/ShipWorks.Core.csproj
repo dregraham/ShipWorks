@@ -327,6 +327,9 @@
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -1015,6 +1018,7 @@
     <Compile Include="Data\JsonConverters\ShipmentEntityJsonConverter.cs" />
     <Compile Include="Data\JsonConverters\StoreEntityJsonConverter.cs" />
     <Compile Include="Data\ObjectReferenceManagerWrapper.cs" />
+    <Compile Include="Data\PrefetchPathExtensions.cs" />
     <Compile Include="Data\Utility\IResourceLockFactory.cs" />
     <Compile Include="Data\Utility\ResourceLockFactory.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -1214,12 +1218,16 @@
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
+    <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
+    <Compile Include="Shipping\Carriers\IShipmentDateManipulator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaApiTransforms.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1DiscountedRateFootnoteViewModel.cs" />
@@ -1249,6 +1257,8 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\PrefetchPathContainer.cs" />
+    <Compile Include="Shipping\Carriers\ShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\IUpsBestRateRatingService.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\UpsRegistrationStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsRateClient.cs" />
@@ -1300,6 +1310,15 @@
     </Compile>
     <Compile Include="Shipping\Editing\ReturnTabControl.Designer.cs">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffControl.Designer.cs">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\ShippingDateCutoffDisplayControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\ICachedRatesService.cs" />
     <Compile Include="Shipping\ICarrierSettingsTrackedDurationEvent.cs" />
@@ -6777,6 +6796,7 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ValueConverters\ShipmentDateCutoffConverter.cs" />
     <Compile Include="Users\Audit\AuditDisplayFormatAttribute.cs" />
     <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />
     <EmbeddedResource Include="Actions\Scheduling\ActionSchedules\Editors\DailyActionScheduleEditor.resx">
@@ -8089,6 +8109,9 @@
     <EmbeddedResource Include="Shipping\Editing\ReturnTabControl.resx">
       <DependentUpon>ReturnTabControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\ShippingDateCutoffControl.resx">
+      <DependentUpon>ShippingDateCutoffControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Insurance\InsuranceBenefitsDlg.resx">
       <DependentUpon>InsuranceBenefitsDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -8522,6 +8545,7 @@
     </Compile>
     <Compile Include="Users\Audit\AuditReasonType.cs" />
     <Compile Include="Users\Audit\IAuditUtility.cs" />
+    <Compile Include="Users\Audit\ImmutableStackContainer.cs" />
     <Compile Include="Users\ComputerManager.cs" />
     <Compile Include="Users\CurrentUserSettings.cs" />
     <Compile Include="Users\ICurrentUserSettings.cs" />

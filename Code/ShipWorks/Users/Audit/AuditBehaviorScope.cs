@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Transactions;
@@ -17,8 +16,8 @@ namespace ShipWorks.Users.Audit
     public class AuditBehaviorScope : IDisposable
     {
         static AsyncLocal<int> superUserCount = new AsyncLocal<int>();
-        static AsyncLocal<Stack<AuditReason>> reasonStack = new AsyncLocal<Stack<AuditReason>>();
-        static AsyncLocal<Stack<AuditState>> stateStack = new AsyncLocal<Stack<AuditState>>();
+        static AsyncLocal<ImmutableStackContainer<AuditReason>> reasonStack = new AsyncLocal<ImmutableStackContainer<AuditReason>>();
+        static AsyncLocal<ImmutableStackContainer<AuditState>> stateStack = new AsyncLocal<ImmutableStackContainer<AuditState>>();
 
         // The active user behavior
         AuditBehaviorUser userBehavior = AuditBehaviorUser.Default;
@@ -109,7 +108,7 @@ namespace ShipWorks.Users.Audit
 
             if (reasonStack.Value == null)
             {
-                reasonStack.Value = new Stack<AuditReason>();
+                reasonStack.Value = new ImmutableStackContainer<AuditReason>();
             }
 
             bool changingReason = (reasonStack.Value.None() ||
@@ -135,7 +134,7 @@ namespace ShipWorks.Users.Audit
 
             if (stateStack.Value == null)
             {
-                stateStack.Value = new Stack<AuditState>();
+                stateStack.Value = new ImmutableStackContainer<AuditState>();
             }
 
             bool changingState = (stateStack.Value.None() || stateStack.Value.Peek() != auditState);

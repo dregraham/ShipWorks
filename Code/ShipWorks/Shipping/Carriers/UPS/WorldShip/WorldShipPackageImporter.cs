@@ -1,11 +1,12 @@
-using log4net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -77,7 +78,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public void ImportPackageToShipment(ShipmentEntity shipment, IWorldShipProcessedEntity import)
         {
-            shippingManager.EnsureShipmentLoaded(shipment);
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Ups, nameof(shipment.Ups));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Ups.Packages, nameof(shipment.Ups.Packages));
 
             UpsShipmentEntity upsShipment = shipment.Ups;
 
@@ -93,7 +96,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             {
                 // In case after the upgrade, WS still had entries with no UpsPackageId, we need to support them
                 // See if we can find a package that does not yet have a tracking number
-
                 upsPackage =
                     upsShipment.Packages
                         .FirstOrDefault(p =>
@@ -224,13 +226,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             // If we are mail innovations, set the tracking number to what WS set UspsTrackingNumber to.
             // But if that is blank, we use ReferenceNumber (1)
             // WS does not provide a LeadTrackingNumber for MI, so we'll use the UspsTrackingNumber
-            if (UpsUtility.IsUpsMiService((UpsServiceType)upsShipment.Service))
+            if (UpsUtility.IsUpsMiService((UpsServiceType) upsShipment.Service))
             {
                 uspsTrackingNumber = !string.IsNullOrWhiteSpace(import.UspsTrackingNumber) ? import.UspsTrackingNumber : (upsShipment.ReferenceNumber ?? string.Empty);
                 trackingNumber = string.Empty;
                 leadTrackingNumber = uspsTrackingNumber;
             }
-            else if (UpsUtility.IsUpsSurePostService((UpsServiceType)upsShipment.Service))
+            else if (UpsUtility.IsUpsSurePostService((UpsServiceType) upsShipment.Service))
             {
                 // SurePost provides both UPS and USPS tracking numbers, so we'll use the UPS tracking numbers
                 // so that tracking info is available as soon as possible for customers

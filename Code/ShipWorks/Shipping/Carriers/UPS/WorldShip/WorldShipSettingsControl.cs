@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -49,6 +50,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             accountControl.Initialize(ShipmentTypeCode.UpsWorldShip);
 
             upsMailInnovationsOptions.LoadSettings(shipmentType);
+
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
 
             InitializeServicePicker();
             InitializePackagingTypePicker();
@@ -99,6 +103,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             upsMailInnovationsOptions.SaveSettings(settings);
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
 
             optionsControl.SaveSettings(settings);
         }

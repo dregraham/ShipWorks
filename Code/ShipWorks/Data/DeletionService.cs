@@ -151,7 +151,7 @@ namespace ShipWorks.Data
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteWithCascade for OrderID {0}", orderID));
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.OrderEntity, orderID, adapter));
+                sqlDeadlockRetry.ExecuteWithRetry(adapter => DeleteWithCascade(EntityType.OrderEntity, orderID, adapter));
             }
 
             DataProvider.RemoveEntity(orderID);
@@ -161,7 +161,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete the specified order within an existing adapter/transaction.
         /// </summary>
-        public static void DeleteOrder(long orderID, SqlAdapter adapter)
+        public static void DeleteOrder(long orderID, ISqlAdapter adapter)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
@@ -187,7 +187,7 @@ namespace ShipWorks.Data
             using (AuditBehaviorScope scope = new AuditBehaviorScope(ConfigurationData.Fetch().AuditDeletedOrders ? AuditState.Enabled : AuditState.NoDetails))
             {
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("DeletionService.DeleteCustomer for CustomerID {0}", customerID));
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter));
+                sqlDeadlockRetry.ExecuteWithRetry(adapter => DeleteWithCascade(EntityType.CustomerEntity, customerID, adapter));
             }
 
             DataProvider.RemoveEntity(customerID);
@@ -283,7 +283,7 @@ namespace ShipWorks.Data
         /// Delete the specified EntityType, as found using the given starting predicate (that must be PK based), while
         /// first deleting all child records.
         /// </summary>
-        private static void DeleteWithCascade(EntityType entityType, long id, SqlAdapter adapter)
+        private static void DeleteWithCascade(EntityType entityType, long id, ISqlAdapter adapter)
         {
             log.InfoFormat("Cascade delete {0} {1}", EntityTypeProvider.GetEntityTypeName(entityType), id);
 
@@ -306,7 +306,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Deletes all child relations recursively, bottom up, using the specified bucket as the base filter for deletion.
         /// </summary>
-        private static void DeleteChildRelations(RelationPredicateBucket baseFilter, EntityType parentType, SqlAdapter adapter)
+        private static void DeleteChildRelations(RelationPredicateBucket baseFilter, EntityType parentType, ISqlAdapter adapter)
         {
             IEntityCore parentEntity = GeneralEntityFactory.Create(parentType);
 
@@ -337,7 +337,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Delete all rows related to the given entity type via inheritance, using the specified bucket as the starting filter point.
         /// </summary>
-        private static void DeleteInheritanceSubTypes(RelationPredicateBucket baseFilter, EntityType entityType, SqlAdapter adapter)
+        private static void DeleteInheritanceSubTypes(RelationPredicateBucket baseFilter, EntityType entityType, ISqlAdapter adapter)
         {
             IEntityCore entity = GeneralEntityFactory.Create(entityType);
             IInheritanceInfo inheritanceInfo = entity.GetInheritanceInfo();

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
+using System.Windows.Forms;
 
 namespace ShipWorks.UI.Controls
 {
@@ -37,11 +32,11 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("InfoTip")]
         [DefaultValue("Title")]
-        public string Title
+        public virtual string Title
         {
-            get 
+            get
             {
-                return title; 
+                return title;
             }
             set
             {
@@ -57,7 +52,7 @@ namespace ShipWorks.UI.Controls
         [Category("InfoTip")]
         [DefaultValue("Caption")]
         [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
-        public string Caption
+        public virtual string Caption
         {
             get
             {

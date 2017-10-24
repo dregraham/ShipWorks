@@ -232,6 +232,12 @@ namespace Interapptive.Shared.Collections
             new ReadOnlyCollection<T>(source?.ToList() ?? new List<T>());
 
         /// <summary>
+        /// Create a ReadOnlyDictionary from the given IDictionary
+        /// </summary>
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(this IDictionary<TKey, TValue> source) => 
+            new ReadOnlyDictionary<TKey, TValue>(source.ToDictionary(k => k.Key, v => v.Value));
+
+        /// <summary>
         /// Is the count of the collection greater than the specified amount
         /// </summary>
         public static bool IsCountGreaterThan<T>(this IEnumerable<T> source, int count) =>

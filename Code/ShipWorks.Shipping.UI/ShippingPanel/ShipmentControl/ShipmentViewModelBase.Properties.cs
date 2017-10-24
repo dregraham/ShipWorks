@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
     public abstract partial class ShipmentViewModelBase
     {
         private DateTime shipDate;
+        private ShipmentTypeCode shipmentType;
         private int serviceType;
         private ObservableCollection<PackageAdapterWrapper> packageAdapters;
         private PackageAdapterWrapper selectedPackageAdapter;
@@ -78,6 +79,16 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             get { return shipDate; }
             set { handler.Set(nameof(ShipDate), ref shipDate, value); }
+        }
+
+        /// <summary>
+        /// Shipment type
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShipmentTypeCode ShipmentType
+        {
+            get { return shipmentType; }
+            set { handler.Set(nameof(ShipmentType), ref shipmentType, value); }
         }
 
         /// <summary>
