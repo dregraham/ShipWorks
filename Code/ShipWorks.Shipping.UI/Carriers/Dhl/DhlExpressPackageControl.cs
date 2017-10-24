@@ -147,7 +147,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 UpdateRowText(gridRow);
             }
-            
+
+            UpdateInsuranceDisplay();
+
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
@@ -159,7 +161,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             UpdateLayout();
-            UpdateInsuranceDisplay();
 
             suspendRateCriteriaEvent--;
             suspendShipSenseFieldChangedEvent--;
