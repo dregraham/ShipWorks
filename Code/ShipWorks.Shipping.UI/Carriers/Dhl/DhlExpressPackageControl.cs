@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 UpdateRowText(gridRow);
             }
-
+            
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
@@ -159,6 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             UpdateLayout();
+            UpdateInsuranceDisplay();
 
             suspendRateCriteriaEvent--;
             suspendShipSenseFieldChangedEvent--;
@@ -259,13 +260,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             selectedRows.Clear();
 
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
-            List<IInsuranceChoice> insuranceToLoad = new List<IInsuranceChoice>();
 
             // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;
-
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.DhlExpress);
-
+            
             using (MultiValueScope scope = new MultiValueScope())
             {
                 // Go through each selected row
@@ -278,16 +276,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     // Load the data from each selected package
                     foreach (DhlExpressPackageEntity package in packages)
                     {
-                        weight.ApplyMultiWeight(package.Weight);
-
-                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.DhlExpressShipment.Shipment, package.DhlExpressShipment.Packages.IndexOf(package)).Insurance);
+                        weight.ApplyMultiWeight(package.Weight);                        
                         dimensionsToLoad.Add(new DimensionsAdapter(package));
                     }
                 }
             }
 
-            // Load the insurance
-            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+            UpdateInsuranceDisplay();
 
             // Load the dimensions
             dimensionsControl.LoadDimensions(dimensionsToLoad);
@@ -328,7 +323,27 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public void UpdateInsuranceDisplay()
         {
-            OnChangeSelectedPackages(null, null);
+            List<IInsuranceChoice> insuranceToLoad = new List<IInsuranceChoice>();
+
+            using (MultiValueScope scope = new MultiValueScope())
+            {            
+                // Go through each selected row
+                foreach (GridRow gridRow in packagesGrid.SelectedElements)
+                {
+                    List<DhlExpressPackageEntity> packages = (List<DhlExpressPackageEntity>)gridRow.Tag;
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.DhlExpress);
+                
+                    // Load the data from each selected package
+                    foreach (DhlExpressPackageEntity package in packages)
+                    {
+                        insuranceToLoad.Add(shipmentType.GetParcelDetail(package.DhlExpressShipment.Shipment, package.DhlExpressShipment.Packages.IndexOf(package)).Insurance);
+                    }
+                }
+            }
+            
+            // Load the insurance
+            insuranceControl.LoadInsuranceChoices(insuranceToLoad);
+
         }
 
         /// <summary>
