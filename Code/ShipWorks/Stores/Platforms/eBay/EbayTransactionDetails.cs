@@ -12,9 +12,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public struct EbayTransactionDetails
     {
+        /// <summary>
+        /// Token for the store
+        /// </summary>
         public EbayToken Token { get; set; }
+
+        /// <summary>
+        /// The Item ID
+        /// </summary>
         public long ItemID { get; set; }
+
+        /// <summary>
+        /// The TransactionID
+        /// </summary>
         public long TransactionID { get; set; }
+
+        /// <summary>
+        /// The BuyerID
+        /// </summary>
         public string BuyerID { get; set; }
     }
 }
