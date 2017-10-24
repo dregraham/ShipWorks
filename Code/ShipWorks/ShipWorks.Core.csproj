@@ -1850,6 +1850,7 @@
     <Compile Include="Stores\Platforms\Magento\IMagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoModuleWebClientFactory.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoWebClient.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoUploadAction.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />

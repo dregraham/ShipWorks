@@ -24,7 +24,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 .Set(x => x.MagentoVersion, (int) MagentoVersion.MagentoTwo)
                 .Save();
 
-            webClientModule.Setup(x => x.ExecuteAction(AnyLong, AnyString, AnyString, AnyString, AnyString, AnyBool))
+            MagentoUploadAction uploadAction = new MagentoUploadAction()
+            {
+                OrderNumber = AnyLong,
+                Action = AnyString,
+                Comments = AnyString,
+                Carrier = AnyString,
+                TrackingNumber = AnyString,
+                SendEmail = AnyBool
+            };
+
+            webClientModule.Setup(x => x.ExecuteAction(uploadAction))
                 .Returns("Bar");
         }
 
@@ -39,7 +49,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(10000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
+            MagentoUploadAction uploadAction = new MagentoUploadAction()
+            {
+                OrderNumber = 10000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadAction));
         }
 
         [Fact]
@@ -54,8 +74,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(20000, AnyString, AnyString, AnyString, AnyString, AnyBool), Times.Never);
-            webClientModule.Verify(x => x.ExecuteAction(10000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
+            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
+            {
+                OrderNumber = 20000,
+                Action = AnyString,
+                Comments = AnyString,
+                Carrier = AnyString,
+                TrackingNumber = AnyString,
+                SendEmail = AnyBool
+            };
+
+            MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
+            {
+                OrderNumber = 10000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
 
         [Fact]
@@ -69,8 +109,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(20000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
-            webClientModule.Verify(x => x.ExecuteAction(30000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
+            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
+            {
+                OrderNumber = 20000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
+            {
+                OrderNumber = 30000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
 
         [Fact]
@@ -84,8 +144,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(20000, AnyString, AnyString, AnyString, AnyString, AnyBool), Times.Never);
-            webClientModule.Verify(x => x.ExecuteAction(30000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
+            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
+            {
+                OrderNumber = 20000,
+                Action = AnyString,
+                Comments = AnyString,
+                Carrier = AnyString,
+                TrackingNumber = AnyString,
+                SendEmail = AnyBool
+            };
+
+            MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
+            {
+                OrderNumber = 30000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
 
         [Fact]
@@ -100,9 +180,39 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(10000, "Complete", string.Empty, "other|Foo Bar", "track-123", true));
-            webClientModule.Verify(x => x.ExecuteAction(50000, "Complete", string.Empty, "other|Foo Bar", "track-456", true));
-            webClientModule.Verify(x => x.ExecuteAction(60000, "Complete", string.Empty, "other|Foo Bar", "track-456", true));
+            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
+            {
+                OrderNumber = 10000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-123",
+                SendEmail = true
+            };
+
+            MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
+            {
+                OrderNumber = 50000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-456",
+                SendEmail = true
+            };
+
+            MagentoUploadAction uploadActionThree = new MagentoUploadAction()
+            {
+                OrderNumber = 60000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-456",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionThree));
         }
 
         [Fact]
@@ -123,8 +233,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
             await commandCreator.OnOrderCommand(menuContext.Object, store);
 
-            webClientModule.Verify(x => x.ExecuteAction(60000, "Complete", string.Empty, "other|Foo Bar", "track-456", true));
-            webClientModule.Verify(x => x.ExecuteAction(70000, "Complete", string.Empty, "other|Foo Bar", "track-789", true));
+            MagentoUploadAction uploadActionOne = new MagentoUploadAction()
+            {
+                OrderNumber = 60000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-456",
+                SendEmail = true
+            };
+
+            MagentoUploadAction uploadActionTwo = new MagentoUploadAction()
+            {
+                OrderNumber = 70000,
+                Action = "Complete",
+                Comments = string.Empty,
+                Carrier = "other|Foo Bar",
+                TrackingNumber = "track-789",
+                SendEmail = true
+            };
+
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionOne));
+            webClientModule.Verify(x => x.ExecuteAction(uploadActionTwo));
         }
     }
 }
