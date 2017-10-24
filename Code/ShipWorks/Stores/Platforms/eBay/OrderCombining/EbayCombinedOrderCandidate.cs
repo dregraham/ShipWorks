@@ -278,7 +278,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                         var token = EbayToken.FromStore(ebayStore);
 
                         // Combine the orders through eBay and pull out the new eBay order ID
-                        ebayOrderID = webClient.CombineOrders(new EbayAddOrderRequest(
+                        ebayOrderID = webClient.CombineOrders(
                             token,
                             transactions,
                             GetCombinedPaymentTotal(toCombine),
@@ -288,7 +288,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             ShippingService,
                             TaxPercent,
                             TaxState,
-                            TaxShipping));
+                            TaxShipping);
                     }
                 }
 

@@ -61,6 +61,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Combine the given transactions, specifying the additional costs for the combined order
         /// </summary>
-        long CombineOrders(EbayAddOrderRequest request);
+        [NDependIgnoreTooManyParams]
+        long CombineOrders(EbayToken token, IEnumerable<TransactionType> transactionsToCombine,
+            double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost,
+            string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed);
     }
 }
