@@ -153,6 +153,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 .Resolve<Owned<iParcelTokenSuggestionFactory>>(TypedParameter.From(shipments))
                 .Value;
 
+            UpdateInsuranceDisplay();
+
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
@@ -164,8 +166,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             }
 
             UpdateLayout();
-            UpdateInsuranceDisplay();
-
+            
             suspendRateCriteriaEvent--;
             suspendShipSenseFieldChangedEvent--;
         }
