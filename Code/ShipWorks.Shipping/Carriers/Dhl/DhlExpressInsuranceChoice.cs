@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
             Justification = "This is specific only to DhlExpress.")]
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public bool? InsurancePennyOne
         {
             get { return true; }
@@ -39,13 +39,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// The currently configured InsuranceProvider for this insurance choice
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public InsuranceProvider InsuranceProvider => InsuranceProvider.ShipWorks;
 
         /// <summary>
         /// The insured value of the package, if insured
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public decimal InsuranceValue
         {
             get
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Indicates if insurance is on or off
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public bool Insured
         {
             get

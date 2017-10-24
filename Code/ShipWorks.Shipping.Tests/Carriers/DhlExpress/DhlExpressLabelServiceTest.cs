@@ -120,7 +120,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Create_ThrowesShippingException_WhenMultiPackageAndInsured()
         {
-
             ShipmentEntity insuredShipment = new ShipmentEntity()
             {
                 DhlExpress = new DhlExpressShipmentEntity(),
