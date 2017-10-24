@@ -105,6 +105,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.kryptonBorderEdge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.kryptonBorderEdge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
+            this.label1 = new System.Windows.Forms.Label();
             this.batteryMaterialState = new System.Windows.Forms.CheckBox();
             this.batteryMaterial = new System.Windows.Forms.ComboBox();
             this.batteryMaterialLabel = new System.Windows.Forms.Label();
@@ -119,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // groupBox
             // 
+            this.groupBox.Controls.Add(this.label1);
             this.groupBox.Controls.Add(this.batteryRegulatorySubtypeState);
             this.groupBox.Controls.Add(this.batteryRegulatorySubtype);
             this.groupBox.Controls.Add(this.label3);
@@ -203,10 +205,120 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox.Location = new System.Drawing.Point(0, 0);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(396, 926);
+            this.groupBox.Size = new System.Drawing.Size(396, 928);
             this.groupBox.TabIndex = 0;
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Package {0}";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.label1.Location = new System.Drawing.Point(102, 902);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 156;
+            this.label1.Text = "Subtype:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // batteryRegulatorySubtypeState
+            // 
+            this.batteryRegulatorySubtypeState.AutoSize = true;
+            this.batteryRegulatorySubtypeState.Checked = true;
+            this.batteryRegulatorySubtypeState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.batteryRegulatorySubtypeState.Location = new System.Drawing.Point(8, 887);
+            this.batteryRegulatorySubtypeState.Name = "batteryRegulatorySubtypeState";
+            this.batteryRegulatorySubtypeState.Size = new System.Drawing.Size(15, 14);
+            this.batteryRegulatorySubtypeState.TabIndex = 154;
+            this.batteryRegulatorySubtypeState.Tag = "";
+            this.batteryRegulatorySubtypeState.UseVisualStyleBackColor = true;
+            // 
+            // batteryRegulatorySubtype
+            // 
+            this.batteryRegulatorySubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryRegulatorySubtype.FormattingEnabled = true;
+            this.batteryRegulatorySubtype.Location = new System.Drawing.Point(159, 892);
+            this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
+            this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
+            this.batteryRegulatorySubtype.TabIndex = 153;
+            this.batteryRegulatorySubtype.Tag = "97";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.label3.Location = new System.Drawing.Point(52, 887);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(99, 13);
+            this.label3.TabIndex = 152;
+            this.label3.Text = "Battery Regulatory";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // batteryPackingState
+            // 
+            this.batteryPackingState.AutoSize = true;
+            this.batteryPackingState.Checked = true;
+            this.batteryPackingState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.batteryPackingState.Location = new System.Drawing.Point(8, 859);
+            this.batteryPackingState.Name = "batteryPackingState";
+            this.batteryPackingState.Size = new System.Drawing.Size(15, 14);
+            this.batteryPackingState.TabIndex = 151;
+            this.batteryPackingState.Tag = "";
+            this.batteryPackingState.UseVisualStyleBackColor = true;
+            // 
+            // batteryPacking
+            // 
+            this.batteryPacking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryPacking.FormattingEnabled = true;
+            this.batteryPacking.Location = new System.Drawing.Point(159, 856);
+            this.batteryPacking.Name = "batteryPacking";
+            this.batteryPacking.Size = new System.Drawing.Size(171, 21);
+            this.batteryPacking.TabIndex = 150;
+            this.batteryPacking.Tag = "97";
+            // 
+            // batteryPackingLabel
+            // 
+            this.batteryPackingLabel.AutoSize = true;
+            this.batteryPackingLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryPackingLabel.Location = new System.Drawing.Point(67, 859);
+            this.batteryPackingLabel.Name = "batteryPackingLabel";
+            this.batteryPackingLabel.Size = new System.Drawing.Size(86, 13);
+            this.batteryPackingLabel.TabIndex = 149;
+            this.batteryPackingLabel.Text = "Battery Packing:";
+            this.batteryPackingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // batteryMaterialState
+            // 
+            this.batteryMaterialState.AutoSize = true;
+            this.batteryMaterialState.Checked = true;
+            this.batteryMaterialState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.batteryMaterialState.Location = new System.Drawing.Point(8, 832);
+            this.batteryMaterialState.Name = "batteryMaterialState";
+            this.batteryMaterialState.Size = new System.Drawing.Size(15, 14);
+            this.batteryMaterialState.TabIndex = 148;
+            this.batteryMaterialState.Tag = "";
+            this.batteryMaterialState.UseVisualStyleBackColor = true;
+            // 
+            // batteryMaterial
+            // 
+            this.batteryMaterial.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryMaterial.FormattingEnabled = true;
+            this.batteryMaterial.Location = new System.Drawing.Point(159, 829);
+            this.batteryMaterial.Name = "batteryMaterial";
+            this.batteryMaterial.Size = new System.Drawing.Size(171, 21);
+            this.batteryMaterial.TabIndex = 147;
+            this.batteryMaterial.Tag = "97";
+            // 
+            // batteryMaterialLabel
+            // 
+            this.batteryMaterialLabel.AutoSize = true;
+            this.batteryMaterialLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryMaterialLabel.Location = new System.Drawing.Point(65, 832);
+            this.batteryMaterialLabel.Name = "batteryMaterialLabel";
+            this.batteryMaterialLabel.Size = new System.Drawing.Size(88, 13);
+            this.batteryMaterialLabel.TabIndex = 146;
+            this.batteryMaterialLabel.Text = "Battery Material:";
+            this.batteryMaterialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // packingInstructionsState
             // 
@@ -893,7 +1005,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(31, 20);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 889);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 891);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // dimensionsState
@@ -987,105 +1099,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 810);
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
             // 
-            // batteryMaterialState
-            // 
-            this.batteryMaterialState.AutoSize = true;
-            this.batteryMaterialState.Checked = true;
-            this.batteryMaterialState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.batteryMaterialState.Location = new System.Drawing.Point(8, 832);
-            this.batteryMaterialState.Name = "batteryMaterialState";
-            this.batteryMaterialState.Size = new System.Drawing.Size(15, 14);
-            this.batteryMaterialState.TabIndex = 148;
-            this.batteryMaterialState.Tag = "";
-            this.batteryMaterialState.UseVisualStyleBackColor = true;
-            // 
-            // batteryMaterial
-            // 
-            this.batteryMaterial.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.batteryMaterial.FormattingEnabled = true;
-            this.batteryMaterial.Location = new System.Drawing.Point(159, 829);
-            this.batteryMaterial.Name = "batteryMaterial";
-            this.batteryMaterial.Size = new System.Drawing.Size(171, 21);
-            this.batteryMaterial.TabIndex = 147;
-            this.batteryMaterial.Tag = "97";
-            // 
-            // batteryMaterialLabel
-            // 
-            this.batteryMaterialLabel.AutoSize = true;
-            this.batteryMaterialLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.batteryMaterialLabel.Location = new System.Drawing.Point(104, 832);
-            this.batteryMaterialLabel.Name = "batteryMaterialLabel";
-            this.batteryMaterialLabel.Size = new System.Drawing.Size(49, 13);
-            this.batteryMaterialLabel.TabIndex = 146;
-            this.batteryMaterialLabel.Text = "Material:";
-            this.batteryMaterialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // batteryPackingState
-            // 
-            this.batteryPackingState.AutoSize = true;
-            this.batteryPackingState.Checked = true;
-            this.batteryPackingState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.batteryPackingState.Location = new System.Drawing.Point(8, 859);
-            this.batteryPackingState.Name = "batteryPackingState";
-            this.batteryPackingState.Size = new System.Drawing.Size(15, 14);
-            this.batteryPackingState.TabIndex = 151;
-            this.batteryPackingState.Tag = "";
-            this.batteryPackingState.UseVisualStyleBackColor = true;
-            // 
-            // batteryPacking
-            // 
-            this.batteryPacking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.batteryPacking.FormattingEnabled = true;
-            this.batteryPacking.Location = new System.Drawing.Point(159, 856);
-            this.batteryPacking.Name = "batteryPacking";
-            this.batteryPacking.Size = new System.Drawing.Size(171, 21);
-            this.batteryPacking.TabIndex = 150;
-            this.batteryPacking.Tag = "97";
-            // 
-            // batteryPackingLabel
-            // 
-            this.batteryPackingLabel.AutoSize = true;
-            this.batteryPackingLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.batteryPackingLabel.Location = new System.Drawing.Point(106, 859);
-            this.batteryPackingLabel.Name = "batteryPackingLabel";
-            this.batteryPackingLabel.Size = new System.Drawing.Size(47, 13);
-            this.batteryPackingLabel.TabIndex = 149;
-            this.batteryPackingLabel.Text = "Packing:";
-            this.batteryPackingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // batteryRegulatorySubtypeState
-            // 
-            this.batteryRegulatorySubtypeState.AutoSize = true;
-            this.batteryRegulatorySubtypeState.Checked = true;
-            this.batteryRegulatorySubtypeState.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.batteryRegulatorySubtypeState.Location = new System.Drawing.Point(8, 886);
-            this.batteryRegulatorySubtypeState.Name = "batteryRegulatorySubtypeState";
-            this.batteryRegulatorySubtypeState.Size = new System.Drawing.Size(15, 14);
-            this.batteryRegulatorySubtypeState.TabIndex = 154;
-            this.batteryRegulatorySubtypeState.Tag = "";
-            this.batteryRegulatorySubtypeState.UseVisualStyleBackColor = true;
-            // 
-            // batteryRegulatorySubtype
-            // 
-            this.batteryRegulatorySubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.batteryRegulatorySubtype.FormattingEnabled = true;
-            this.batteryRegulatorySubtype.Location = new System.Drawing.Point(159, 883);
-            this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
-            this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
-            this.batteryRegulatorySubtype.TabIndex = 153;
-            this.batteryRegulatorySubtype.Tag = "97";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.label3.Location = new System.Drawing.Point(46, 886);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(107, 13);
-            this.label3.TabIndex = 152;
-            this.label3.Text = "Regulatory Subtype:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // FedExProfilePackageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1094,7 +1107,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.groupBox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExProfilePackageControl";
-            this.Size = new System.Drawing.Size(396, 926);
+            this.Size = new System.Drawing.Size(396, 928);
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -1187,5 +1200,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.CheckBox batteryMaterialState;
         private System.Windows.Forms.ComboBox batteryMaterial;
         private System.Windows.Forms.Label batteryMaterialLabel;
+        private System.Windows.Forms.Label label1;
     }
 }
