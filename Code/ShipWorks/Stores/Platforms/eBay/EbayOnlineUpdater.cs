@@ -59,7 +59,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 try
                 {
-                    await SendMessage(store, orderItem, messageType, subject, message, copySender).ConfigureAwait(false);
+                    // Need the buyer and to convert the ShipWorks ebay message type to the
+                    // type expected by eBay to send an eBay message
+                    string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
+                    await SendMessage(CreateTransactionDetails(store, orderItem, buyerID), messageType, subject, message, copySender).ConfigureAwait(false);
                 }
                 catch (EbayException ex)
                 {
@@ -76,27 +79,28 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
+        /// create the ebay transaction details
+        /// </summary>
+        private EbayTransactionDetails CreateTransactionDetails(IEbayStoreEntity store, IEbayOrderItemEntity orderItem, string buyerId)
+        {
+            return new EbayTransactionDetails()
+            {
+                Token = EbayToken.FromStore(store),
+                ItemID = orderItem.EbayItemID,
+                TransactionID = orderItem.EbayTransactionID,
+                BuyerID = buyerId
+            };
+        }
+
+        /// <summary>
         /// Send a message with the given properties to the buyer of the order item specified
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        private async Task SendMessage(IEbayStoreEntity store, EbayOrderItemEntity orderItem, EbaySendMessageType messageType, string subject, string message, bool copySender)
+        private async Task SendMessage(EbayTransactionDetails transaction, EbaySendMessageType messageType, string subject, string message, bool copySender)
         {
-            // Need the buyer and to convert the ShipWorks ebay message type to the
-            // type expected by eBay to send an eBay message
-            string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
-
             QuestionTypeCodeType ebayMessageType = EbayUtility.GetEbayQuestionTypeCode(messageType);
 
             try
             {
-                EbayTransactionDetails transaction = new EbayTransactionDetails()
-                {
-                    Token = EbayToken.FromStore(store),
-                    ItemID = orderItem.EbayItemID,
-                    TransactionID = orderItem.EbayTransactionID,
-                    BuyerID = buyerID
-                };
-
                 // Fire off the message
                 await Task.Run(() => webClient.SendMessage(transaction, ebayMessageType, subject, message, copySender))
                     .ConfigureAwait(false);
@@ -104,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             catch (EbayException ex)
             {
                 // Log the exception and re-throw it
-                log.ErrorFormat("Exception sending a message to {0} for order {1}, order item {2}: {3}.", buyerID, orderItem.Order.OrderNumber, orderItem.EbayItemID, ex.Message);
+                log.ErrorFormat("Exception sending a message to {0} for order {1}, order item {2}: {3}.", transaction.BuyerID, transaction.TransactionID, transaction.ItemID, ex.Message);
                 throw;
             }
         }
@@ -164,15 +168,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 string buyerID = await FetchEbayOrderItemBuyerId(orderItem.Order, orderItem.OriginalOrderID).ConfigureAwait(false);
 
-                EbayTransactionDetails transaction = new EbayTransactionDetails()
-                {
-                    Token = EbayToken.FromStore(store),
-                    ItemID = orderItem.EbayItemID,
-                    TransactionID = orderItem.EbayTransactionID,
-                    BuyerID = buyerID
-                };
-
-                await Task.Run(() => webClient.LeaveFeedback(transaction, feedbackType, feedback))
+                await Task.Run(() => webClient.LeaveFeedback(CreateTransactionDetails(store, orderItem, buyerID), feedbackType, feedback))
                         .ConfigureAwait(false);
 
                 log.InfoFormat("Successfully left feedback for order id {0}, eBay Order ID {1}, eBay Transaction ID {2}.",
