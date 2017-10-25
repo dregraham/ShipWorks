@@ -15,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 
         Exception = 0x0002,
 
-        Deliver = 0x0004
+        Deliver = 0x0004,
+
+        EstimatedDelivery = 0x0008
     }
 }
