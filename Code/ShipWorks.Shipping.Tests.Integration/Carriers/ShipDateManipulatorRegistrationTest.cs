@@ -14,47 +14,42 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     public class ShipDateManipulatorRegistrationTest : IDisposable
     {
         IContainer container;
+        Dictionary<ShipmentTypeCode, Type> expectedRegistrations;
 
         public ShipDateManipulatorRegistrationTest()
         {
             container = new ContainerBuilder().Build();
             ContainerInitializer.BuildRegistrations(container);
-        }
-
-        [Theory]
-        [InlineData(ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.Express1Endicia, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator))]
-        [InlineData(ShipmentTypeCode.DhlExpress, typeof(WeekdaysOnlyShipmentDateManipulator))]
-        public void EnsureShipmentDateManipulatorsAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
-        {
-            IShipmentDateManipulator retriever = container.ResolveKeyed<IShipmentDateManipulator>(shipmentType);
-            Assert.Equal(expectedServiceType, retriever.GetType());
+            expectedRegistrations = new Dictionary<ShipmentTypeCode, Type>
+            {
+                {ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.Express1Endicia, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator)},
+                {ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.DhlExpress, typeof(WeekdaysOnlyShipmentDateManipulator)}
+            };
         }
 
         [Fact]
-        public void EnsureAllShipmentTypesHaveShipmentDateManipulatorRegistered()
+        public void EnsureShipmentDateManipulatorsAreRegisteredCorrectly()
         {
-            IEnumerable<ShipmentTypeCode> excludedTypes = new[] {
-                ShipmentTypeCode.Usps,
-                ShipmentTypeCode.Endicia,
-                ShipmentTypeCode.Express1Usps,
-                ShipmentTypeCode.Express1Endicia,
-                ShipmentTypeCode.PostalWebTools,
-                ShipmentTypeCode.FedEx,
-                ShipmentTypeCode.Other,
-                ShipmentTypeCode.UpsWorldShip,
-                ShipmentTypeCode.UpsOnLineTools,
-                ShipmentTypeCode.OnTrac};
+            foreach (var expectedRegistration in expectedRegistrations)
+            {
+                IShipmentDateManipulator retriever = container.ResolveKeyed<IShipmentDateManipulator>(expectedRegistration.Key);
+                Assert.Equal(expectedRegistration.Value, retriever.GetType());
+            }            
+        }
 
-            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(excludedTypes))
+        [Fact]
+        public void EnsureAllShipmentTypesAreNotRegistered()
+        {
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Except(expectedRegistrations.Keys))
             {
                 bool isRegistered = container.IsRegisteredWithKey<IShipmentDateManipulator>(value);
                 Assert.False(isRegistered);
