@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Void
             settings.Setup(s => s.DistributorID).Returns("D00002");
             settings.Setup(s => s.Username).Returns("test2");
             settings.Setup(s => s.Password).Returns("password");
-            settings.Setup(s => s.ApiUrl).Returns(new Uri("https://int.insureship.com/api/"));
+            settings.Setup(s => s.ApiUrl).Returns(new Uri("https://osisstagingapi.insureship.com/api/"));
 
             log = new Mock<ILog>();
             log.Setup(l => l.Error(It.IsAny<object>()));
