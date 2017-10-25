@@ -106,6 +106,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                         {
                             SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                         }
+
+                        // Save off the Dangerous Goods Shipper Declaration document (AccessReference is null, so it's not captured in the section above)
+                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION))
+                        {
+                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
+                        }
                     }
                 }
             }
@@ -168,6 +174,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelDocument.Parts[0].Image))
                 {
+                    if (InterapptiveOnly.IsInterapptiveUser)
+                    {
+                        string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, name + "_" + ownerID, "PDF", false);
+                        File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
+                    }
+
                     dataResourceManager.CreateFromPdf(pdfBytes, ownerID, name);
                 }
             }
@@ -209,6 +221,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 
                 case ReturnedShippingDocumentType.COMMERCIAL_INVOICE:
                     return "CommercialInvoice";
+
+                case ReturnedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION:
+                    return "DangerousGoodsShippersDeclaration";
             }
 
             throw new InvalidOperationException("Unhandled label document type: " + documentType);
