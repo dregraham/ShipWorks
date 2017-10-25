@@ -1,4 +1,5 @@
-﻿using SQL.LocalDB.Test;
+﻿using ShipWorks.Data.Administration.SqlServerSetup;
+using SQL.LocalDB.Test;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -10,7 +11,8 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksLocalDb(string databaseName) : base(databaseName)
+        public ShipWorksLocalDb(string databaseName)
+            : base(databaseName, SqlInstanceUtility.LocalDbServerInstance)
         {
 
         }

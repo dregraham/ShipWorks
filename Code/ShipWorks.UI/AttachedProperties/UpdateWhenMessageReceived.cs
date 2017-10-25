@@ -23,6 +23,12 @@ namespace ShipWorks.UI.AttachedProperties
         public static readonly DependencyProperty MessageTypeProperty = DependencyProperty.RegisterAttached("MessageType", typeof(Type),
                 typeof(UpdateWhenMessageReceived), new PropertyMetadata(null, OnMessageTypeChanged));
 
+        /// <summary>
+        /// Target property dependency property
+        /// </summary>
+        public static readonly DependencyProperty PropertyProperty = DependencyProperty.RegisterAttached("Property", typeof(DependencyProperty),
+            typeof(UpdateWhenMessageReceived));
+
         private static readonly DependencyProperty SubscriptionProperty =
             DependencyProperty.RegisterAttached("Subscription", typeof(IDisposable), typeof(UpdateWhenMessageReceived));
 
@@ -31,7 +37,7 @@ namespace ShipWorks.UI.AttachedProperties
         /// </summary>
         private static void OnMessageTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ItemsControl control = d as ItemsControl;
+            FrameworkElement control = d as FrameworkElement;
             if (control == null)
             {
                 return;
@@ -45,12 +51,12 @@ namespace ShipWorks.UI.AttachedProperties
                 throw new InvalidOperationException("MessageType must be an implementation of IShipWorksMessage");
             }
 
-            IDisposable subscription = Messenger.Current.AsObservable<IShipWorksMessage>()
+            IDisposable subscription = Messenger.Current.AsObservable()
                 .Where(x => x.GetType() == messageType)
                 .ObserveOn(DispatcherScheduler.Current)
                 .Subscribe(x =>
                 {
-                    BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
+                    UpdateTarget(control);
                     ResetSelection(control as Selector);
                 });
 
@@ -58,6 +64,26 @@ namespace ShipWorks.UI.AttachedProperties
 
             control.Unloaded -= DisposeSubscription;
             control.Unloaded += DisposeSubscription;
+        }
+
+        /// <summary>
+        /// Update the binding target, if possible
+        /// </summary>
+        private static void UpdateTarget(FrameworkElement control)
+        {
+            var boundProperty = control.GetValue(PropertyProperty) as DependencyProperty;
+            if (boundProperty != null)
+            {
+                BindingOperations.GetBindingExpressionBase(control, boundProperty)?.UpdateTarget();
+            }
+            else if (control is ItemsControl)
+            {
+                BindingOperations.GetBindingExpressionBase(control, ItemsControl.ItemsSourceProperty)?.UpdateTarget();
+            }
+            else if (control is TextBlock)
+            {
+                BindingOperations.GetBindingExpressionBase(control, TextBlock.TextProperty)?.UpdateTarget();
+            }
         }
 
         /// <summary>
@@ -69,6 +95,16 @@ namespace ShipWorks.UI.AttachedProperties
         /// Set the current value of the property
         /// </summary>
         public static void SetMessageType(DependencyObject d, Type value) => d.SetValue(MessageTypeProperty, value);
+
+        /// <summary>
+        /// Get the current value of the property
+        /// </summary>
+        public static DependencyProperty GetProperty(DependencyObject d) => (DependencyProperty) d.GetValue(PropertyProperty);
+
+        /// <summary>
+        /// Set the current value of the property
+        /// </summary>
+        public static void SetProperty(DependencyObject d, DependencyProperty value) => d.SetValue(PropertyProperty, value);
 
         /// <summary>
         /// Get the current value of the property

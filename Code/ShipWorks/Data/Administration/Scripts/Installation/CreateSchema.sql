@@ -4958,7 +4958,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
 [FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT (''),
 [ShipmentEditLimit] [int] NOT NULL,
-[ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0))
+[ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0)),
+[ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -5822,12 +5823,12 @@ GO
 PRINT N'Creating table to [dbo].[EtsyOrderItem]'
 GO
 CREATE TABLE [dbo].[EtsyOrderItem](
-	[OrderItemID] [bigint] NOT NULL,
+    [OrderItemID] [bigint] NOT NULL,
 	[TransactionID] [nvarchar] (300) NOT NULL,
 	[ListingID] [nvarchar] (100) NOT NULL
  CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
 (
-	[OrderItemID] ASC
+    [OrderItemID] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

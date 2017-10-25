@@ -20642,6 +20642,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipmentDateCutoffJson field instance</summary>
+		public static EntityField2 ShipmentDateCutoffJson
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipmentDateCutoffJson);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

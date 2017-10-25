@@ -8888,6 +8888,8 @@ namespace ShipWorks.Data.Model
 		ShipmentEditLimit,
 		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
 		ShipmentsLoaderEnsureFiltersLoadedTimeout,
+		///<summary>ShipmentDateCutoffJson. </summary>
+		ShipmentDateCutoffJson,
 		/// <summary></summary>
 		AmountOfFields
 	}

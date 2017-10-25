@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 {
@@ -21,6 +11,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// </summary>
     public partial class EndiciaOptionsControl : PostalOptionsControlBase
     {
+        private bool showShippingCutoffDate = true;
+        private int originalCustomsTop;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EndiciaOptionsControl"/> class resulting
         /// in the EndiciaReseller value being None.
@@ -38,13 +31,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             InitializeComponent();
             Reseller = reseller;
 
-            EnumHelper.BindComboBox<ThermalDocTabType>(thermalDocTabType);
+            originalCustomsTop = customsPanel.Top;
         }
 
         /// <summary>
         /// Gets or sets the reseller.
         /// </summary>
         public EndiciaReseller Reseller { get; set; }
+
+        /// <summary>
+        /// Show the shipping cutoff date
+        /// </summary>
+        public bool ShowShippingCutoffDate
+        {
+            get
+            {
+                return showShippingCutoffDate;
+            }
+            set
+            {
+                showShippingCutoffDate = value;
+                UpdateUI();
+            }
+        }
+
+        /// <summary>
+        /// Update the UI
+        /// </summary>
+        private void UpdateUI()
+        {
+            shippingCutoff.Visible = ShowShippingCutoffDate;
+            customsPanel.Top = ShowShippingCutoffDate ?
+                originalCustomsTop :
+                shippingCutoff.Top;
+
+            Height = customsPanel.Bottom;
+        }
 
         /// <summary>
         /// Loads the settings.
@@ -62,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override void LoadSettings()
         {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             switch (Reseller)
             {
@@ -73,9 +95,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         customsCertify.Checked = settings.Express1EndiciaCustomsCertify;
                         customsSigner.Text = settings.Express1EndiciaCustomsSigner;
 
-                        thermalDocTab.Checked = settings.Express1EndiciaThermalDocTab;
-                        thermalDocTabType.SelectedValue = (ThermalDocTabType)settings.Express1EndiciaThermalDocTabType;
-
+                        if (ShowShippingCutoffDate)
+                        {
+                        	shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode.Express1Endicia);
+						}
                         break;
                     }
 
@@ -87,8 +110,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         customsCertify.Checked = settings.EndiciaCustomsCertify;
                         customsSigner.Text = settings.EndiciaCustomsSigner;
 
-                        thermalDocTab.Checked = settings.EndiciaThermalDocTab;
-                        thermalDocTabType.SelectedValue = (ThermalDocTabType)settings.EndiciaThermalDocTabType;
+                        if (ShowShippingCutoffDate)
+                        {
+                            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode.Endicia);
+                        }
 
                         break;
                     }
@@ -109,8 +134,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         settings.Express1EndiciaCustomsCertify = customsCertify.Checked;
                         settings.Express1EndiciaCustomsSigner = customsSigner.Text;
 
-                        settings.Express1EndiciaThermalDocTab = thermalDocTab.Checked;
-                        settings.Express1EndiciaThermalDocTabType = (int)thermalDocTabType.SelectedValue;
+                        if (ShowShippingCutoffDate)
+                        {
+                        	settings.SetShipmentDateCutoff(ShipmentTypeCode.Express1Endicia, shippingCutoff.Value);
+                        }
 
                         break;
                     }
@@ -120,8 +147,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         settings.EndiciaCustomsCertify = customsCertify.Checked;
                         settings.EndiciaCustomsSigner = customsSigner.Text;
 
-                        settings.EndiciaThermalDocTab = thermalDocTab.Checked;
-                        settings.EndiciaThermalDocTabType = (int)thermalDocTabType.SelectedValue;
+                        if (ShowShippingCutoffDate)
+                        {
+                            settings.SetShipmentDateCutoff(ShipmentTypeCode.Endicia, shippingCutoff.Value);
+                        }
 
                         break;
                     }

@@ -75,6 +75,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packageControl.Initialize();
 
             packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
+
+            cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
 
         /// <summary>
@@ -1085,10 +1087,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" +
-                "FedEx SmartPost® parcel select lightweight\n" +
+                "FedEx SmartPost parcel select lightweight\n" +
                 "FedEx SmartPost® Bound Printed Matter\n" +
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost® parcel select\n" +
+                "FedEx SmartPost parcel select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n" +
                 "FedEx International Ground® Distribution\n" +

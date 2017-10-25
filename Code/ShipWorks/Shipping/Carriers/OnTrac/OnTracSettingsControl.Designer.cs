@@ -40,13 +40,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.excludedServiceControl = new ShipWorks.Shipping.Carriers.OnTrac.OnTracServicePickerControl();
             this.excludedPackageControl = new ShipWorks.Shipping.Carriers.OnTrac.OnTracPackagePickerControl();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.SuspendLayout();
             // 
             // managerLabel
             // 
             this.managerLabel.AutoSize = true;
             this.managerLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.managerLabel.Location = new System.Drawing.Point(9, 60);
+            this.managerLabel.Location = new System.Drawing.Point(9, 84);
             this.managerLabel.Name = "managerLabel";
             this.managerLabel.Size = new System.Drawing.Size(102, 13);
             this.managerLabel.TabIndex = 2;
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // accountManager
             // 
             this.accountManager.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountManager.Location = new System.Drawing.Point(27, 80);
+            this.accountManager.Location = new System.Drawing.Point(27, 104);
             this.accountManager.Name = "accountManager";
             this.accountManager.Size = new System.Drawing.Size(407, 168);
             this.accountManager.TabIndex = 1;
@@ -65,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(6, 3);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.Size = new System.Drawing.Size(428, 54);
+            this.optionsControl.Size = new System.Drawing.Size(428, 47);
             this.optionsControl.TabIndex = 0;
             // 
             // pennyOneLink
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(323, 605);
+            this.pennyOneLink.Location = new System.Drawing.Point(323, 629);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 10;
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 604);
+            this.pennyOne.Location = new System.Drawing.Point(27, 628);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 9;
@@ -95,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // 
             this.labelShipmentProtection.AutoSize = true;
             this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipmentProtection.Location = new System.Drawing.Point(9, 553);
+            this.labelShipmentProtection.Location = new System.Drawing.Point(9, 577);
             this.labelShipmentProtection.Name = "labelShipmentProtection";
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
             this.labelShipmentProtection.TabIndex = 12;
@@ -106,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.insuranceProviderChooser.CarrierMessage = "(OnTrac Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "OnTrac Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 572);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 596);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 13;
@@ -114,24 +115,33 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // excludedServiceControl
             // 
             this.excludedServiceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.excludedServiceControl.Location = new System.Drawing.Point(9, 261);
+            this.excludedServiceControl.Location = new System.Drawing.Point(9, 285);
             this.excludedServiceControl.Name = "excludedServiceControl";
             this.excludedServiceControl.Size = new System.Drawing.Size(422, 148);
             this.excludedServiceControl.TabIndex = 14;
             // 
-            // onTracServicePickerControl1
+            // excludedPackageControl
             // 
             this.excludedPackageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.excludedPackageControl.Location = new System.Drawing.Point(9, 407);
-            this.excludedPackageControl.Name = "onTracPackagePickerControl";
+            this.excludedPackageControl.Location = new System.Drawing.Point(9, 431);
+            this.excludedPackageControl.Name = "excludedPackageControl";
             this.excludedPackageControl.Size = new System.Drawing.Size(422, 148);
             this.excludedPackageControl.TabIndex = 15;
+            // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(24, 52);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 62;
             // 
             // OnTracSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.excludedPackageControl);
             this.Controls.Add(this.excludedServiceControl);
             this.Controls.Add(this.insuranceProviderChooser);
@@ -142,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.optionsControl);
             this.Name = "OnTracSettingsControl";
-            this.Size = new System.Drawing.Size(456, 639);
+            this.Size = new System.Drawing.Size(499, 656);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -159,5 +169,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private OnTracServicePickerControl excludedServiceControl;
         private OnTracPackagePickerControl excludedPackageControl;
+        private Editing.ShippingDateCutoffControl shippingCutoff;
     }
 }
