@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.labelDimensions = new System.Windows.Forms.Label();
             this.labelPackages = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
@@ -38,6 +38,7 @@
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.dimensionsControl = new ShipWorks.Shipping.Editing.DimensionsControl();
             this.packageCountCombo = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.insuranceControl = new ShipWorks.Shipping.Insurance.InsuranceSelectionControl();
             this.panelPackage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,7 +79,7 @@
             this.gridColumn});
             this.packagesGrid.Location = new System.Drawing.Point(106, 27);
             this.packagesGrid.Name = "packagesGrid";
-            this.packagesGrid.Renderer = windowsXPRenderer1;
+            this.packagesGrid.Renderer = windowsXPRenderer2;
             this.packagesGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
                         new Divelements.SandGrid.GridCell("Package 1")}),
@@ -100,13 +101,14 @@
             this.panelPackage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPackage.BackColor = System.Drawing.Color.White;
+            this.panelPackage.Controls.Add(this.insuranceControl);
             this.panelPackage.Controls.Add(this.weight);
             this.panelPackage.Controls.Add(this.labelWeight);
             this.panelPackage.Controls.Add(this.labelDimensions);
             this.panelPackage.Controls.Add(this.dimensionsControl);
             this.panelPackage.Location = new System.Drawing.Point(0, 88);
             this.panelPackage.Name = "panelPackage";
-            this.panelPackage.Size = new System.Drawing.Size(412, 120);
+            this.panelPackage.Size = new System.Drawing.Size(412, 157);
             this.panelPackage.TabIndex = 3;
             // 
             // weight
@@ -158,6 +160,15 @@
             this.packageCountCombo.Size = new System.Drawing.Size(106, 21);
             this.packageCountCombo.TabIndex = 1;
             // 
+            // insuranceControl
+            // 
+            this.insuranceControl.BackColor = System.Drawing.Color.White;
+            this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceControl.Location = new System.Drawing.Point(37, 103);
+            this.insuranceControl.Name = "insuranceControl";
+            this.insuranceControl.Size = new System.Drawing.Size(416, 46);
+            this.insuranceControl.TabIndex = 9;
+            // 
             // DhlExpressPackageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -169,7 +180,7 @@
             this.Controls.Add(this.labelPackages);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "DhlExpressPackageControl";
-            this.Size = new System.Drawing.Size(412, 208);
+            this.Size = new System.Drawing.Size(412, 246);
             this.panelPackage.ResumeLayout(false);
             this.panelPackage.PerformLayout();
             this.ResumeLayout(false);
@@ -188,5 +199,6 @@
         private Divelements.SandGrid.SandGrid packagesGrid;
         private Divelements.SandGrid.GridColumn gridColumn;
         private System.Windows.Forms.Panel panelPackage;
+        private Insurance.InsuranceSelectionControl insuranceControl;
     }
 }

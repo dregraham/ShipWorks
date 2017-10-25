@@ -121,7 +121,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 DimsHeight = 0,
                 DimsWeight = 0,
                 DimsAddWeight = true,
-                DeclaredValue = 0,
+                Insurance = false,
+                InsuranceValue = 0,
                 TrackingNumber = string.Empty,
             };
         }
@@ -189,6 +190,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             base.UpdateDynamicShipmentData(shipment);
 
             RedistributeContentWeight(shipment);
+            
+            shipment.Insurance = shipment.DhlExpress.Packages.Any(p => p.Insurance);
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.DhlExpress.RequestedLabelFormat;
         }
@@ -340,7 +344,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 DhlExpressPackageEntity package = shipment.DhlExpress.Packages[parcelIndex];
 
                 return new ShipmentParcel(shipment, package.DhlExpressPackageID, package.TrackingNumber,
-                    new DhlExpressInsuranceChoice(shipment),
+                    new DhlExpressInsuranceChoice(shipment, package),
                     new DimensionsAdapter(package))
                 {
                     TotalWeight = package.Weight + package.DimsWeight

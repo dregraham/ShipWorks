@@ -28,8 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 ratingField.AddShipmentField(DhlExpressShipmentFields.DeliveredDutyPaid);
                 ratingField.AddShipmentField(DhlExpressShipmentFields.NonMachinable);
                 ratingField.AddShipmentField(DhlExpressShipmentFields.Service);
-
-                ratingField.PackageFields.Add(DhlExpressPackageFields.DeclaredValue);
+                
                 ratingField.PackageFields.Add(DhlExpressPackageFields.DimsAddWeight);
                 ratingField.PackageFields.Add(DhlExpressPackageFields.DimsWeight);
                 ratingField.PackageFields.Add(DhlExpressPackageFields.DimsLength);

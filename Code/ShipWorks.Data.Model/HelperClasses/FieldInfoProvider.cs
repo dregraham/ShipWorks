@@ -788,8 +788,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DimsHeight, 0, 0, 38);
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("DhlExpressPackageEntity", "DeclaredValue", typeof(System.Decimal), false, false, false, false,  (int)DhlExpressPackageFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("DhlExpressPackageEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)DhlExpressPackageFieldIndex.TrackingNumber, 50, 0, 0);
+			this.AddElementFieldInfo("DhlExpressPackageEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)DhlExpressPackageFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressPackageEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)DhlExpressPackageFieldIndex.InsuranceValue, 0, 4, 19);
 		}
 		/// <summary>Inits DhlExpressProfileEntity's FieldInfo objects</summary>
 		private void InitDhlExpressProfileEntityInfos()

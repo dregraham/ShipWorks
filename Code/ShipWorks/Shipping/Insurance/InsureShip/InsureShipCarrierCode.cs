@@ -63,6 +63,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     carrierCode = "OTHER";
                     break;
 
+                case ShipmentTypeCode.DhlExpress:
+                    carrierCode = "DHL-E-I-P1";
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipmentTypeCode)));
             }

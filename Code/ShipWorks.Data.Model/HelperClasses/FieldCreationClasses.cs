@@ -4512,15 +4512,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DimsWeight);}
 		}
-		/// <summary>Creates a new DhlExpressPackageEntity.DeclaredValue field instance</summary>
-		public static EntityField2 DeclaredValue
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.DeclaredValue);}
-		}
 		/// <summary>Creates a new DhlExpressPackageEntity.TrackingNumber field instance</summary>
 		public static EntityField2 TrackingNumber
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.TrackingNumber);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new DhlExpressPackageEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressPackageFieldIndex.InsuranceValue);}
 		}
 	}
 

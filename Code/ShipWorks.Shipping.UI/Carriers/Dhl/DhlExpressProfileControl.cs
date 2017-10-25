@@ -68,6 +68,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat, labelThermalNote);
+
+            // Insurance
+            AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
             
             //Options
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);

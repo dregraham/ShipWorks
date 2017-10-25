@@ -809,7 +809,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DhlExpressPackageEntity's mappings</summary>
 		private void InitDhlExpressPackageEntityMappings()
 		{
-			this.AddElementMapping("DhlExpressPackageEntity", @"ShipWorksLocal", @"dbo", "DhlExpressPackage", 11, 0);
+			this.AddElementMapping("DhlExpressPackageEntity", @"ShipWorksLocal", @"dbo", "DhlExpressPackage", 12, 0);
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "DhlExpressPackageID", "DhlExpressPackageID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "Weight", "Weight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 2);
@@ -819,8 +819,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "DimsHeight", "DimsHeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
 			this.AddElementFieldMapping("DhlExpressPackageEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
-			this.AddElementFieldMapping("DhlExpressPackageEntity", "DeclaredValue", "DeclaredValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 9);
-			this.AddElementFieldMapping("DhlExpressPackageEntity", "TrackingNumber", "TrackingNumber", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("DhlExpressPackageEntity", "TrackingNumber", "TrackingNumber", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("DhlExpressPackageEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
+			this.AddElementFieldMapping("DhlExpressPackageEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 11);
 		}
 
 		/// <summary>Inits DhlExpressProfileEntity's mappings</summary>

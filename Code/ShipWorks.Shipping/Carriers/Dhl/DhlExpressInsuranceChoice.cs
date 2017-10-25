@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -9,41 +10,69 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     public class DhlExpressInsuranceChoice : IInsuranceChoice
     {
+        private readonly DhlExpressPackageEntity package;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressInsuranceChoice(ShipmentEntity shipment)
+        public DhlExpressInsuranceChoice(ShipmentEntity shipment, DhlExpressPackageEntity package)
         {
             Shipment = shipment;
-
-            InsurancePennyOne = false;
-            InsuranceValue = 0;
-            Insured = false;
+            this.package = package;
         }
 
         /// <summary>
         /// If the package is being insured PennyOne - only applies to FedEx\UPS shipments
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool? InsurancePennyOne { get; set; }
+        [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used",
+            Justification = "This is specific only to DhlExpress.")]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public bool? InsurancePennyOne
+        {
+            get { return true; }
+            set
+            {
+                // always use penny one
+            }
+        }
 
         /// <summary>
         /// The currently configured InsuranceProvider for this insurance choice
         /// </summary>
-        [Obfuscation(Exclude = true)]
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
         public InsuranceProvider InsuranceProvider => InsuranceProvider.ShipWorks;
 
         /// <summary>
         /// The insured value of the package, if insured
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public decimal InsuranceValue { get; set; }
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public decimal InsuranceValue
+        {
+            get
+            {
+                return package.InsuranceValue;
+            }
+            set
+            {
+                package.InsuranceValue = value;
+            }
+        }
 
         /// <summary>
         /// Indicates if insurance is on or off
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Insured { get; set; }
+        [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
+        public bool Insured
+        {
+            get
+            {
+                return package.Insurance;
+            }
+            set
+            {
+                package.Insurance = value;
+            }
+        }
 
         /// <summary>
         /// The shipment this insurance applies to

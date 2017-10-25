@@ -601,7 +601,6 @@
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressPackage" ObjectID="9babcfbe-334c-4763-99fb-5a5bf36e78c3">
         <Fields>
-          <Field Name="DeclaredValue" Type="decimal" Precision="19" Scale="4" FieldIndex="9" />
           <Field Name="DhlExpressPackageID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="DimsAddWeight" Type="bool" FieldIndex="7" />
           <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="6" />
@@ -609,8 +608,10 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="3" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="8" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="5" />
+          <Field Name="Insurance" Type="bool" FieldIndex="10" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="11" />
           <Field Name="ShipmentID" Type="long" FieldIndex="1" />
-          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="10" />
+          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="9" />
           <Field Name="Weight" Type="double" Precision="38" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
@@ -4151,7 +4152,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-17T14:05:15.020878Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-23T19:32:09.8349108Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4756,8 +4757,9 @@
                     <Field Name="DimsHeight" Ordinal="7" DbType="6" Precision="38" />
                     <Field Name="DimsAddWeight" Ordinal="8" DbType="2" />
                     <Field Name="DimsWeight" Ordinal="9" DbType="6" Precision="38" />
-                    <Field Name="DeclaredValue" Ordinal="10" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="TrackingNumber" Ordinal="11" DbType="24" Length="50" />
+                    <Field Name="Insurance" Ordinal="10" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="11" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="TrackingNumber" Ordinal="12" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressProfile">
@@ -10495,7 +10497,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressPackage" TargetName="ShipWorksLocal:dbo:DhlExpressPackage">
           <FieldMappings>
-            <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
             <FieldMapping FieldName="DhlExpressPackageID" TargetFieldName="DhlExpressPackageID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
             <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
@@ -10503,6 +10504,8 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
             <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
