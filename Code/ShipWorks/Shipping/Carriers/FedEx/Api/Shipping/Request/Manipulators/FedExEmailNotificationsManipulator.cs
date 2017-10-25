@@ -163,6 +163,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 notificationEventTypes.Add(NotificationEventType.ON_DELIVERY);
             }
 
+            if ((notifcationTypes & (int)FedExEmailNotificationType.EstimatedDelivery) != 0)
+            {
+                notificationEventTypes.Add(NotificationEventType.ON_ESTIMATED_DELIVERY);
+            }
+
             recipient.Events = notificationEventTypes.ToArray();
         }
 
