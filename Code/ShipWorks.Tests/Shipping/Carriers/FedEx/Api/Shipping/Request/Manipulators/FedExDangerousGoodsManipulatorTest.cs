@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -24,8 +26,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private Mock<CarrierRequest> carrierRequest;
 
+        readonly AutoMock mock;
+
         public FedExDangerousGoodsManipulatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             shipmentEntity = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity()
@@ -292,6 +298,80 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
             Assert.True(dangerousGoods.AccessibilitySpecified);
+        }
+
+        [Theory]
+        [InlineData(FedExBatteryMaterialType.LithiumIon, BatteryMaterialType.LITHIUM_ION)]
+        [InlineData(FedExBatteryMaterialType.LithiumMetal, BatteryMaterialType.LITHIUM_METAL)]
+        public void Manipulate_SetsBatteryMaterial_WithCorrectValue(FedExBatteryMaterialType input, BatteryMaterialType expected)
+        {
+            var shipment = GetShipment(x => x.BatteryMaterial = input);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(expected, request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].Material);
+            Assert.True(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].MaterialSpecified);
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotSetBatteryMaterial_WhenMaterialIsNotSpecified()
+        {
+            var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.NotSpecified);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.False(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].MaterialSpecified);
+        }
+
+        [Theory]
+        [InlineData(FedExBatteryPackingType.ContainsInEquipement, BatteryPackingType.CONTAINED_IN_EQUIPMENT)]
+        [InlineData(FedExBatteryPackingType.PackedWithEquipment, BatteryPackingType.PACKED_WITH_EQUIPMENT)]
+        public void Manipulate_SetsBatteryPacking_WithCorrectValue(FedExBatteryPackingType input, BatteryPackingType expected)
+        {
+            var shipment = GetShipment(x => x.BatteryPacking = input);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(expected, request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].Packing);
+            Assert.True(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].PackingSpecified);
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotSetBatteryPacking_WhenPackingIsNotSpecified()
+        {
+            var shipment = GetShipment(x => x.BatteryPacking = FedExBatteryPackingType.NotSpecified);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.False(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].PackingSpecified);
+        }
+
+        [Theory]
+        [InlineData(FedExBatteryRegulatorySubType.IATASectionII, BatteryRegulatorySubType.IATA_SECTION_II)]
+        public void Manipulate_SetsBatteryRegulatorySubtype_WithCorrectValue(FedExBatteryRegulatorySubType input, BatteryRegulatorySubType expected)
+        {
+            var shipment = GetShipment(x => x.BatteryRegulatorySubtype = input);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(expected, request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].RegulatorySubType);
+            Assert.True(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].RegulatorySubTypeSpecified);
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotSetBatteryRegulatorySubtype_WhenRegulatorySubtypeIsNotSpecified()
+        {
+            var shipment = GetShipment(x => x.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var request = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.False(request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails[0].RegulatorySubTypeSpecified);
         }
 
         [Fact]
@@ -767,6 +847,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // property since the dangerous goods enabled flag is set to false for the second item in the package list
             DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
             Assert.Null(dangerousGoods);
+        }
+
+        private static ShipmentEntity GetShipment(Action<FedExPackageEntity> setBatteryValue)
+        {
+            return Create.Shipment()
+                .AsFedEx(f => f.WithPackage(p => p
+                        .Set(x => x.DangerousGoodsEnabled = true)
+                        .Set(x => x.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries)
+                        .Set(setBatteryValue))
+                    .Set(x => x.RequestedLabelFormat = (int) ThermalLanguage.None))
+                .Build();
         }
     }
 }

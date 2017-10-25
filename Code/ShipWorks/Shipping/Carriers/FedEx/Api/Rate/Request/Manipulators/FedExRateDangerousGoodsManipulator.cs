@@ -80,10 +80,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 {
                     ConfigureHazardousMaterials(dangerousGoods, package);
                 }
-                else if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
-                {
-                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails = ConfigureBatteryMaterials(package);
-                }
                 else
                 {
                     // Accessibility options do not apply to hazardous materials
@@ -92,6 +88,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                         dangerousGoods.Accessibility = GetApiDangerousGoodsAccessibilityType(package);
                         dangerousGoods.AccessibilitySpecified = true;
                     }
+                }
+
+                if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
+                {
+                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails = ConfigureBatteryMaterials(package);
                 }
 
                 request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = dangerousGoods;
