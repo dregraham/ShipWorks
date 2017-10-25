@@ -45,22 +45,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             dimensionsControl.Initialize();
 
+            FedExProfileBindComboBox();
+
+            FedExValueMapping(profilePackage);
+
+        }
+
+        /// <summary>
+        /// Initialize combobox binding for the profile
+        /// </summary>
+        public void FedExProfileBindComboBox()
+        {
             EnumHelper.BindComboBox<FedExDangerousGoodsMaterialType>(dangerousGoodsMaterialType);
             EnumHelper.BindComboBox<FedExDangerousGoodsAccessibilityType>(dangerousGoodsAccessibility);
             EnumHelper.BindComboBox<FedExHazardousMaterialsPackingGroup>(packingGroup);
             EnumHelper.BindComboBox<FedExBatteryMaterialType>(batteryMaterial);
             EnumHelper.BindComboBox<FedExBatteryPackingType>(batteryPacking);
             EnumHelper.BindComboBox<FedExBatteryRegulatorySubType>(batteryRegulatorySubtype);
+        }
 
+        /// <summary>
+        /// Initialize value mappings for the profile
+        /// </summary>
+        public void FedExValueMapping(FedExProfilePackageEntity profilePackage)
+        {
             AddValueMapping(profilePackage, FedExProfilePackageFields.Weight, weightState, weight, labelWeight);
             AddValueMapping(profilePackage, FedExProfilePackageFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.DryIceWeight, dryIceState, dryIceWeight, labelDryIceWeight);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.ContainsAlcohol, alcoholState, containsAlcohol, labelAlcohol);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.PriorityAlert, priorityAlertState, priorityAlertControl);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.DangerousGoodsEnabled, dangerousGoodsEnabledState, dangerousGoodsEnabled);
             AddValueMapping(profilePackage, FedExProfilePackageFields.DangerousGoodsType, dangerousGoodsMaterialTypeState, dangerousGoodsMaterialType);
             AddValueMapping(profilePackage, FedExProfilePackageFields.DangerousGoodsAccessibilityType, dangerousGoodsAccessibilityState, dangerousGoodsAccessibility);
@@ -69,22 +82,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(profilePackage, FedExProfilePackageFields.DangerousGoodsOfferor, offerorState, offeror);
             AddValueMapping(profilePackage, FedExProfilePackageFields.ContainerType, containerTypeState, containerType);
             AddValueMapping(profilePackage, FedExProfilePackageFields.NumberOfContainers, numberOfContainersState, numberOfContainers);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.SignatoryContactName, signatoryNameState, signatoryName);
             AddValueMapping(profilePackage, FedExProfilePackageFields.SignatoryTitle, signatoryTitleState, signatoryTitle);
             AddValueMapping(profilePackage, FedExProfilePackageFields.SignatoryPlace, signatoryPlaceState, signatoryPlace);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.HazardousMaterialNumber, hazardousMaterialIdState, hazardousMaterialId);
             AddValueMapping(profilePackage, FedExProfilePackageFields.HazardousMaterialClass, hazardClassState, hazardClass);
             AddValueMapping(profilePackage, FedExProfilePackageFields.HazardousMaterialProperName, properNameState, properName);
             AddValueMapping(profilePackage, FedExProfilePackageFields.HazardousMaterialPackingGroup, packingGroupState, packingGroup);
             AddValueMapping(profilePackage, FedExProfilePackageFields.PackingDetailsCargoAircraftOnly, packingCargoAircraftOnlyState, packingCargoAircraftOnly);
             AddValueMapping(profilePackage, FedExProfilePackageFields.PackingDetailsPackingInstructions, packingInstructionsState, packingInstructions);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.DangerousGoodsPackagingCount, packagingCountState, packagingCount);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.HazardousMaterialQuantityValue, quantityState, quantity);
-
             AddValueMapping(profilePackage, FedExProfilePackageFields.BatteryMaterial, batteryMaterialState, batteryMaterial);
             AddValueMapping(profilePackage, FedExProfilePackageFields.BatteryPacking, batteryPackingState, batteryPacking);
             AddValueMapping(profilePackage, FedExProfilePackageFields.BatteryRegulatorySubtype, batteryRegulatorySubtypeState, batteryRegulatorySubtype);
