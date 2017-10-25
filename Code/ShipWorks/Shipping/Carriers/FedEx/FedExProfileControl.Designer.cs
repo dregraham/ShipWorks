@@ -234,7 +234,7 @@
             this.groupBoxFrom.Controls.Add(this.senderState);
             this.groupBoxFrom.Location = new System.Drawing.Point(6, 6);
             this.groupBoxFrom.Name = "groupBoxFrom";
-            this.groupBoxFrom.Size = new System.Drawing.Size(593, 99);
+            this.groupBoxFrom.Size = new System.Drawing.Size(354, 99);
             this.groupBoxFrom.TabIndex = 0;
             this.groupBoxFrom.TabStop = false;
             this.groupBoxFrom.Text = "From";
@@ -369,7 +369,7 @@
             this.groupShipment.Controls.Add(this.serviceState);
             this.groupShipment.Location = new System.Drawing.Point(6, 167);
             this.groupShipment.Name = "groupShipment";
-            this.groupShipment.Size = new System.Drawing.Size(593, 177);
+            this.groupShipment.Size = new System.Drawing.Size(354, 177);
             this.groupShipment.TabIndex = 2;
             this.groupShipment.TabStop = false;
             this.groupShipment.Text = "Shipment";
@@ -661,7 +661,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(698, 1455);
+            this.tabControl.Size = new System.Drawing.Size(425, 1455);
             this.tabControl.TabIndex = 0;
             // 
             // tabPageSettings
@@ -681,7 +681,7 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(690, 1429);
+            this.tabPageSettings.Size = new System.Drawing.Size(417, 1429);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -696,7 +696,7 @@
             this.groupFIMS.Controls.Add(this.kryptonBorderEdge12);
             this.groupFIMS.Location = new System.Drawing.Point(6, 1400);
             this.groupFIMS.Name = "groupFIMS";
-            this.groupFIMS.Size = new System.Drawing.Size(593, 58);
+            this.groupFIMS.Size = new System.Drawing.Size(354, 58);
             this.groupFIMS.TabIndex = 14;
             this.groupFIMS.TabStop = false;
             this.groupFIMS.Text = "Fims Options";
@@ -752,7 +752,7 @@
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
             this.groupLabels.Location = new System.Drawing.Point(6, 347);
             this.groupLabels.Name = "groupLabels";
-            this.groupLabels.Size = new System.Drawing.Size(593, 58);
+            this.groupLabels.Size = new System.Drawing.Size(354, 58);
             this.groupLabels.TabIndex = 13;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
@@ -806,7 +806,7 @@
             this.groupReturns.Controls.Add(this.returnShipmentState);
             this.groupReturns.Location = new System.Drawing.Point(6, 1243);
             this.groupReturns.Name = "groupReturns";
-            this.groupReturns.Size = new System.Drawing.Size(593, 152);
+            this.groupReturns.Size = new System.Drawing.Size(354, 152);
             this.groupReturns.TabIndex = 10;
             this.groupReturns.TabStop = false;
             this.groupReturns.Text = "Returns";
@@ -967,7 +967,7 @@
             this.groupInsurance.Controls.Add(this.kryptonBorderEdge10);
             this.groupInsurance.Location = new System.Drawing.Point(6, 410);
             this.groupInsurance.Name = "groupInsurance";
-            this.groupInsurance.Size = new System.Drawing.Size(593, 82);
+            this.groupInsurance.Size = new System.Drawing.Size(354, 82);
             this.groupInsurance.TabIndex = 3;
             this.groupInsurance.TabStop = false;
             this.groupInsurance.Text = "Insurance";
@@ -1024,7 +1024,7 @@
             this.groupSmartPost.Controls.Add(this.smartIndiciaState);
             this.groupSmartPost.Location = new System.Drawing.Point(6, 669);
             this.groupSmartPost.Name = "groupSmartPost";
-            this.groupSmartPost.Size = new System.Drawing.Size(593, 164);
+            this.groupSmartPost.Size = new System.Drawing.Size(354, 164);
             this.groupSmartPost.TabIndex = 7;
             this.groupSmartPost.TabStop = false;
             this.groupSmartPost.Text = "SmartPost";
@@ -1210,7 +1210,7 @@
             this.groupTo.Controls.Add(this.residentialState);
             this.groupTo.Location = new System.Drawing.Point(6, 110);
             this.groupTo.Name = "groupTo";
-            this.groupTo.Size = new System.Drawing.Size(593, 52);
+            this.groupTo.Size = new System.Drawing.Size(354, 52);
             this.groupTo.TabIndex = 1;
             this.groupTo.TabStop = false;
             this.groupTo.Text = "To";
@@ -1300,7 +1300,7 @@
             this.groupEmail.Controls.Add(this.picturEmailInfo);
             this.groupEmail.Location = new System.Drawing.Point(6, 974);
             this.groupEmail.Name = "groupEmail";
-            this.groupEmail.Size = new System.Drawing.Size(593, 264);
+            this.groupEmail.Size = new System.Drawing.Size(354, 264);
             this.groupEmail.TabIndex = 6;
             this.groupEmail.TabStop = false;
             this.groupEmail.Text = "Email Notifications";
@@ -1495,7 +1495,7 @@
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail2.Location = new System.Drawing.Point(51, 170);
             this.kryptonBorderEdgeEmail2.Name = "kryptonBorderEdgeEmail2";
-            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(538, 1);
+            this.kryptonBorderEdgeEmail2.Size = new System.Drawing.Size(299, 1);
             this.kryptonBorderEdgeEmail2.Text = "kryptonBorderEdge1";
             // 
             // emailNotifyOtherShip
@@ -1574,7 +1574,7 @@
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdgeEmail.Location = new System.Drawing.Point(50, 73);
             this.kryptonBorderEdgeEmail.Name = "kryptonBorderEdgeEmail";
-            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(538, 1);
+            this.kryptonBorderEdgeEmail.Size = new System.Drawing.Size(299, 1);
             this.kryptonBorderEdgeEmail.Text = "kryptonBorderEdge1";
             // 
             // labelEmailOther
@@ -1720,7 +1720,7 @@
             this.groupOptions.Controls.Add(this.labelReference);
             this.groupOptions.Location = new System.Drawing.Point(6, 497);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(593, 167);
+            this.groupOptions.Size = new System.Drawing.Size(354, 167);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -1851,7 +1851,7 @@
             this.groupBilling.Controls.Add(this.labelPayorTransport);
             this.groupBilling.Location = new System.Drawing.Point(6, 838);
             this.groupBilling.Name = "groupBilling";
-            this.groupBilling.Size = new System.Drawing.Size(593, 132);
+            this.groupBilling.Size = new System.Drawing.Size(354, 132);
             this.groupBilling.TabIndex = 5;
             this.groupBilling.TabStop = false;
             this.groupBilling.Text = "Billing";
@@ -1999,7 +1999,7 @@
             this.tabPagePackages.Location = new System.Drawing.Point(4, 22);
             this.tabPagePackages.Name = "tabPagePackages";
             this.tabPagePackages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePackages.Size = new System.Drawing.Size(690, 1429);
+            this.tabPagePackages.Size = new System.Drawing.Size(417, 1429);
             this.tabPagePackages.TabIndex = 1;
             this.tabPagePackages.Text = "Packages";
             this.tabPagePackages.UseVisualStyleBackColor = true;
@@ -2117,7 +2117,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl);
             this.Name = "FedExProfileControl";
-            this.Size = new System.Drawing.Size(698, 1455);
+            this.Size = new System.Drawing.Size(425, 1455);
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
             this.groupShipment.ResumeLayout(false);
