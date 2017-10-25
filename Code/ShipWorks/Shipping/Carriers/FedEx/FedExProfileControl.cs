@@ -121,20 +121,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderDelivery);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderEstimatedDelivery);
+
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientShip, labelEmailRecipient);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientException, labelEmailRecipient);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientDelivery, labelEmailRecipient);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyRecipient, emailNotifyRecipientState, emailNotifyRecipientEstimatedDelivery, labelEmailRecipient);
+
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherShip);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherException);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherDelivery);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyOther, emailNotifyOtherState, emailNotifyOtherEstimatedDelivery);
+
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerShip, labelEmailBroker);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerException, labelEmailBroker);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerDelivery, labelEmailBroker);
+            AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifyBroker, emailNotifyBrokerState, emailNotifyBrokerEstimatedDelivery, labelEmailBroker);
 
-            ApplyEmailNotificationValues(fedex.EmailNotifySender, emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyRecipient, emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyOther, emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery);
-            ApplyEmailNotificationValues(fedex.EmailNotifyBroker, emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifySender, emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery, emailNotifySenderEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyRecipient, emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery, emailNotifyRecipientEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyOther, emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery, emailNotifyOtherEstimatedDelivery);
+            ApplyEmailNotificationValues(fedex.EmailNotifyBroker, emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery, emailNotifyBrokerEstimatedDelivery);
 
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyOtherAddress, emailNotifyOtherState, emailNotifyOtherAddress, labelEmailOther);
             AddValueMapping(fedex, FedExProfileFields.EmailNotifyMessage, emailNotifyMessageState, emailNotifyMessage, labelPersonalMessage);
@@ -158,20 +165,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Apply the value (if present) to the given checkboxes
         /// </summary>
-        private void ApplyEmailNotificationValues(int? value, CheckBox ship, CheckBox except, CheckBox delivery)
+        private void ApplyEmailNotificationValues(int? value, CheckBox ship, CheckBox except, CheckBox delivery, CheckBox estimatedDelivery)
         {
             if (value != null)
             {
                 ship.Checked = (value.Value & (int) FedExEmailNotificationType.Ship) != 0;
                 except.Checked = (value.Value & (int) FedExEmailNotificationType.Exception) != 0;
                 delivery.Checked = (value.Value & (int) FedExEmailNotificationType.Deliver) != 0;
+                estimatedDelivery.Checked = (value.Value & (int) FedExEmailNotificationType.EstimatedDelivery) != 0;
             }
         }
 
         /// <summary>
         /// Read the effective state of the email notification values
         /// </summary>
-        private int? ReadEmailNotificationValues(CheckBox ship, CheckBox except, CheckBox deliver)
+        private int? ReadEmailNotificationValues(CheckBox ship, CheckBox except, CheckBox deliver, CheckBox estimatedDelivery)
         {
             if (!ship.Enabled)
             {
@@ -195,6 +203,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 value |= (int) FedExEmailNotificationType.Deliver;
             }
 
+            if (estimatedDelivery.Checked)
+            {
+                value |= (int) FedExEmailNotificationType.EstimatedDelivery;
+            }
+
             return value;
         }
 
@@ -205,10 +218,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             base.SaveToEntity();
 
-            Profile.FedEx.EmailNotifySender = ReadEmailNotificationValues(emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery);
-            Profile.FedEx.EmailNotifyRecipient = ReadEmailNotificationValues(emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery);
-            Profile.FedEx.EmailNotifyOther = ReadEmailNotificationValues(emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery);
-            Profile.FedEx.EmailNotifyBroker = ReadEmailNotificationValues(emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery);
+            Profile.FedEx.EmailNotifySender = ReadEmailNotificationValues(emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery, emailNotifySenderEstimatedDelivery);
+            Profile.FedEx.EmailNotifyRecipient = ReadEmailNotificationValues(emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery, emailNotifyRecipientEstimatedDelivery);
+            Profile.FedEx.EmailNotifyOther = ReadEmailNotificationValues(emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery, emailNotifyOtherEstimatedDelivery);
+            Profile.FedEx.EmailNotifyBroker = ReadEmailNotificationValues(emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery, emailNotifyBrokerEstimatedDelivery);
 
             foreach (FedExProfilePackageControl control in panelPackageControls.Controls)
             {
