@@ -298,6 +298,53 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.NotNull(items.Single(c => c.CountryOfOrigin == "US"));
         }
 
+        [Fact]
+        public void CreatePurchaseLabelRequest_PopulatesShipDate()
+        {
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                ShipUnparsedName = "John Snow",
+                ShipPhone = "123-456-7890",
+                ShipCompany = "The Nights Watch",
+                ShipStreet1 = "The Wall",
+                ShipStreet2 = "street 2",
+                ShipStreet3 = "street 3",
+                ShipCity = "North of The Gift",
+                ShipStateProvCode = "ND",
+                ShipPostalCode = "90210",
+                ShipCountryCode = "Westeros",
+                RequestedLabelFormat = (int)ThermalLanguage.ZPL,
+                ShipDate = new DateTime(2017, 2, 3)
+            };
+
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+
+            Assert.Equal(shipment.ShipDate, request.Shipment.ShipDate);
+        }
+
+        [Fact]
+        public void CreateRateRequest_PopulatesShipDate()
+        {
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                ShipUnparsedName = "John Snow",
+                ShipPhone = "123-456-7890",
+                ShipCompany = "The Nights Watch",
+                ShipStreet1 = "The Wall",
+                ShipStreet2 = "street 2",
+                ShipStreet3 = "street 3",
+                ShipCity = "North of The Gift",
+                ShipStateProvCode = "ND",
+                ShipPostalCode = "90210",
+                ShipCountryCode = "Westeros",
+                ShipDate = new DateTime(2017, 2, 3)
+            };
+
+            var request = testObject.CreateRateRequest(shipment);
+
+            Assert.Equal(shipment.ShipDate, request.Shipment.ShipDate);
+        }
+
         public void Dispose()
         {
             mock.Dispose();
