@@ -26,6 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateAddress(shipment.ShipPerson),
                     ShipFrom = CreateAddress(shipment.OriginPerson),
+                    ShipDate = shipment.ShipDate,
                     TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     ShipTo = CreateAddress(shipment.ShipPerson),
                     ShipFrom = CreateAddress(shipment.OriginPerson),
+                    ShipDate = shipment.ShipDate,
                     TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
                     Packages = CreatePackages(packages),
                     ServiceCode = serviceCode
