@@ -194,9 +194,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             }
 
             requestedShippingDocumentTypes.Add(RequestedShippingDocumentType.OP_900);
-
-            nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
-            
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
             {
                 Format = new ShippingDocumentFormat
@@ -207,6 +204,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     StockTypeSpecified = true
                 }
             };
+
+            requestedShippingDocumentTypes.Add(RequestedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION);
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.DangerousGoodsShippersDeclarationDetail = new DangerousGoodsShippersDeclarationDetail
+            {
+                Format = new ShippingDocumentFormat
+                {
+                    ImageType = ShippingDocumentImageType.PDF,
+                    ImageTypeSpecified = true,
+                    StockType = ShippingDocumentStockType.PAPER_4X6,
+                    StockTypeSpecified = true
+                }
+            };
+
+            nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = requestedShippingDocumentTypes.ToArray();
         }
 
         /// <summary>
