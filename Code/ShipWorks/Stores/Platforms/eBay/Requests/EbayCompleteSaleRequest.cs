@@ -18,14 +18,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
         /// <summary>
         /// Initializes a new instance of the <see cref="EbayCompleteSaleRequest"/> class.
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public EbayCompleteSaleRequest(EbayToken token, long itemID, long transactionID, bool? isPaid, bool? isShipped, string trackingNumber, string shippingCarrier)
-            : base(token, "CompleteSale")
+        public EbayCompleteSaleRequest(EbayTransactionDetails transaction, bool? isPaid, bool? isShipped, string trackingNumber, string shippingCarrier)
+            : base(transaction.Token, "CompleteSale")
         {
             request = new CompleteSaleRequestType();
 
-            request.ItemID = itemID.ToString();
-            request.TransactionID = transactionID.ToString();
+            request.ItemID = transaction.ItemID.ToString();
+            request.TransactionID = transaction.TransactionID.ToString();
 
             // Only set the Shipped property if we have a value; otherwise we want it to remain unchanged in eBay
             if (isShipped.HasValue)

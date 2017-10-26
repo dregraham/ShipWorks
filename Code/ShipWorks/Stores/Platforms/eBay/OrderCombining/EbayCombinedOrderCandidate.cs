@@ -19,6 +19,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
+using ShipWorks.Stores.Platforms.Ebay.Requests;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {
