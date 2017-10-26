@@ -26,9 +26,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 200, "100000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "100000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 300, "100000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "100000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         [Fact]
@@ -43,10 +43,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 400, "200000", QuestionTypeCodeType.General, "Foo", "Bar", true),
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 400 && t.BuyerID == "200000"), QuestionTypeCodeType.General, "Foo", "Bar", true),
                 Times.Never);
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 300, "100000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "100000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         [Fact]
@@ -60,9 +60,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 200, "200000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.BuyerID == "200000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 300, "300000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "300000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         [Fact]
@@ -76,10 +76,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 200, "200000", QuestionTypeCodeType.General, "Foo", "Bar", true),
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.BuyerID == "200000"), QuestionTypeCodeType.General, "Foo", "Bar", true),
                 Times.Never);
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 300, "300000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "300000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         [Fact]
@@ -94,13 +94,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 200, "100000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.BuyerID == "100000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 300, "100000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.BuyerID == "100000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 500, "500000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 500 && t.BuyerID == "500000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 600, "600000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.BuyerID == "600000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         [Fact]
@@ -111,10 +111,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false, 8);
 
             webClient.Setup(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 200, It.IsAny<string>(), It.IsAny<QuestionTypeCodeType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 200), It.IsAny<QuestionTypeCodeType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new EbayException("Foo"));
             webClient.Setup(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 500, It.IsAny<string>(), It.IsAny<QuestionTypeCodeType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 500), It.IsAny<QuestionTypeCodeType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new EbayException("Foo"));
 
             SetupMessagingDetails();
@@ -123,9 +123,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnSendMessage(menuContext.Object);
 
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 600, "600000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.BuyerID == "600000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
             webClient.Verify(x =>
-                x.SendMessage(It.IsAny<EbayToken>(), 800, "700000", QuestionTypeCodeType.General, "Foo", "Bar", true));
+                x.SendMessage(It.Is<EbayTransactionDetails>(t => t.ItemID == 800 && t.BuyerID == "700000"), QuestionTypeCodeType.General, "Foo", "Bar", true));
         }
 
         private void SetupMessagingDetails()
