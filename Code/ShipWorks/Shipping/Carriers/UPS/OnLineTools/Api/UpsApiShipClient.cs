@@ -856,25 +856,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static string GetTermsOfShipmentApiCode(UpsTermsOfSale termsOfShipment)
         {
-            switch (termsOfShipment)
-            {
-                case UpsTermsOfSale.NotSpecified: return "";
-                case UpsTermsOfSale.CostFreight: return "CFR";
-                case UpsTermsOfSale.CostInsuranceFreight: return "CIF";
-                case UpsTermsOfSale.CarriageInsurancePaid: return "CIP";
-                case UpsTermsOfSale.CarriagePaidTo: return "CPT";
-                case UpsTermsOfSale.DeliveredAtFrontier: return "DAF";
-                case UpsTermsOfSale.DeliveryDutyPaid: return "DDP";
-                case UpsTermsOfSale.DeliveryDutyUnpaid: return "DDU";
-                case UpsTermsOfSale.DeliveredExQuay: return "DEQ";
-                case UpsTermsOfSale.DeliveredExShip: return "DES";
-                case UpsTermsOfSale.ExWorks: return "EXW";
-                case UpsTermsOfSale.FreeAlongsideShip: return "FAS";
-                case UpsTermsOfSale.FreeCarrier: return "FCA";
-                case UpsTermsOfSale.FreeOnBoard: return "FOB";
-            }
-
-            throw new InvalidOperationException("Invalid UPS terms of shipment: " + termsOfShipment);
+            return EnumHelper.GetApiValue(termsOfShipment);
         }
 
         /// <summary>
