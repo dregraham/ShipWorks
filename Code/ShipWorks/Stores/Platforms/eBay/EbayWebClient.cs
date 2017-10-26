@@ -68,10 +68,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Leave feedback for the given item and transaction
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public void LeaveFeedback(EbayToken token, long itemID, long transactionID, string buyerID, CommentTypeCodeType feedbackType, string feedback)
+        public void LeaveFeedback(EbayTransactionDetails transaction, CommentTypeCodeType feedbackType, string feedback)
         {
-            EbayLeaveFeedbackRequest request = new EbayLeaveFeedbackRequest(token, itemID, transactionID, buyerID, feedbackType, feedback);
+            EbayLeaveFeedbackRequest request = new EbayLeaveFeedbackRequest(transaction, feedbackType, feedback);
 
             request.Execute();
         }
@@ -79,10 +78,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Send a message for the given item to the buyer
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public void SendMessage(EbayToken token, long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
+        public void SendMessage(EbayTransactionDetails transaction, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
         {
-            EbaySendMessageRequest request = new EbaySendMessageRequest(token, itemID, buyerID, messageType, subject, message, copySender);
+            EbaySendMessageRequest request = new EbaySendMessageRequest(transaction, messageType, subject, message, copySender);
 
             request.Execute();
         }
@@ -100,10 +98,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Marks a transaction as paid (or not) and shipped (or not) on my ebay
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public void CompleteSale(EbayToken token, long itemID, long transactionID, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
+        public void CompleteSale(EbayTransactionDetails transaction, bool? paid, bool? shipped, string trackingNumber, string shippingCarrier)
         {
-            EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(token, itemID, transactionID, paid, shipped, trackingNumber, shippingCarrier);
+            EbayCompleteSaleRequest request = new EbayCompleteSaleRequest(transaction, paid, shipped, trackingNumber, shippingCarrier);
 
             request.Execute();
         }
@@ -112,7 +109,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Combine the given transactions, specifying the additional costs for the combined order
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public long CombineOrders(EbayToken token, IEnumerable<TransactionType> transactionsToCombine,
+        public long CombineOrders(EbayToken token, IEnumerable<TransactionType> transactionsToCombine, 
             double orderTotal, IEnumerable<BuyerPaymentMethodCodeType> paymentMethods, decimal shippingCost,
             string shippingCountryCode, string shippingService, decimal salesTaxPercent, string taxState, bool isShippingTaxed)
         {

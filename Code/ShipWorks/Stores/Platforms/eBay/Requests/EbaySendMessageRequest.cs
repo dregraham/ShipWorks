@@ -14,18 +14,17 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
     public class EbaySendMessageRequest : EbayRequest<AddMemberMessageAAQToPartnerResponseType, AddMemberMessageAAQToPartnerRequestType, AddMemberMessageAAQToPartnerResponseType>
     {
         AddMemberMessageAAQToPartnerRequestType request;
-
-        [NDependIgnoreTooManyParams]
-        public EbaySendMessageRequest(EbayToken token, long itemID, string buyerID, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
-            : base(token, "AddMemberMessageAAQToPartner")
+        
+        public EbaySendMessageRequest(EbayTransactionDetails transaction, QuestionTypeCodeType messageType, string subject, string message, bool copySender)
+            : base(transaction.Token, "AddMemberMessageAAQToPartner")
         {
             request = new AddMemberMessageAAQToPartnerRequestType()
                 {
                     MemberMessage = new MemberMessageType()
                 };
 
-            request.ItemID = itemID.ToString();
-            request.MemberMessage.RecipientID = new string[] { buyerID };
+            request.ItemID = transaction.ItemID.ToString();
+            request.MemberMessage.RecipientID = new string[] { transaction.BuyerID };
 
             request.MemberMessage.EmailCopyToSender = copySender;
             request.MemberMessage.EmailCopyToSenderSpecified = true;
