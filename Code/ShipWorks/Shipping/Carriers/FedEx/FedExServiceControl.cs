@@ -31,10 +31,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public partial class FedExServiceControl : ServiceControlBase
     {
         bool updatingPayorChoices = false;
-        private ImmutableList<NotificationControl> senderNotificationControls;
-        private ImmutableList<NotificationControl> recipientNotificationControls;
-        private ImmutableList<NotificationControl> otherNotificationControls;
-        private ImmutableList<NotificationControl> brokerNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> senderNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> recipientNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> otherNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> brokerNotificationControls;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExServiceControl"/> class.
@@ -96,12 +96,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Build a list of notification controls with their corresponding notification type
         /// </summary>
-        private ImmutableList<NotificationControl> BuildNotificationControlsList(CheckBox ship, CheckBox exception, CheckBox delivery, CheckBox estimated) =>
+        private ImmutableList<FedExEmailNotificationControlContainer> BuildNotificationControlsList(CheckBox ship, CheckBox exception, CheckBox delivery, CheckBox estimated) =>
             ImmutableList.Create(
-                new NotificationControl(ship, FedExEmailNotificationType.Ship),
-                new NotificationControl(exception, FedExEmailNotificationType.Exception),
-                new NotificationControl(delivery, FedExEmailNotificationType.Deliver),
-                new NotificationControl(estimated, FedExEmailNotificationType.EstimatedDelivery));
+                new FedExEmailNotificationControlContainer(ship, FedExEmailNotificationType.Ship),
+                new FedExEmailNotificationControlContainer(exception, FedExEmailNotificationType.Exception),
+                new FedExEmailNotificationControlContainer(delivery, FedExEmailNotificationType.Deliver),
+                new FedExEmailNotificationControlContainer(estimated, FedExEmailNotificationType.EstimatedDelivery));
 
         /// <summary>
         /// Loads the list of FedEx accounts into the account drop down list.
@@ -360,7 +360,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Load email notification settings for a group of controls
         /// </summary>
-        private void LoadEmailNotificationSettings(int notificationValue, IEnumerable<NotificationControl> map)
+        private void LoadEmailNotificationSettings(int notificationValue, IEnumerable<FedExEmailNotificationControlContainer> map)
         {
             var notification = (FedExEmailNotificationType) notificationValue;
 
@@ -387,13 +387,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Save email notification settings for the given control map
         /// </summary>
-        private int SaveEmailNotificationSettings(int currentNotificationValue, IEnumerable<NotificationControl> map) =>
+        private int SaveEmailNotificationSettings(int currentNotificationValue, IEnumerable<FedExEmailNotificationControlContainer> map) =>
             map.Aggregate(currentNotificationValue, ReadNotificationValueFromControl);
 
         /// <summary>
         /// Read the notification value from the control
         /// </summary>
-        private int ReadNotificationValueFromControl(int currentNotificationValue, NotificationControl item)
+        private int ReadNotificationValueFromControl(int currentNotificationValue, FedExEmailNotificationControlContainer item)
         {
             item.Control.ReadMultiCheck(c => currentNotificationValue = ApplyEmailNotificationType(c, currentNotificationValue, item.NotificationType));
             return currentNotificationValue;
@@ -1182,31 +1182,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .Where(x => x != null)
                     .Select(x => x.PackagingType))
                 .Cast<FedExPackagingType>();
-        }
-
-        /// <summary>
-        /// Notification control type map
-        /// </summary>
-        private struct NotificationControl
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            public NotificationControl(CheckBox control, FedExEmailNotificationType notificationType)
-            {
-                Control = control;
-                NotificationType = notificationType;
-            }
-
-            /// <summary>
-            /// Check box
-            /// </summary>
-            public CheckBox Control { get; }
-
-            /// <summary>
-            /// Notification type
-            /// </summary>
-            public FedExEmailNotificationType NotificationType { get; }
         }
     }
 }
