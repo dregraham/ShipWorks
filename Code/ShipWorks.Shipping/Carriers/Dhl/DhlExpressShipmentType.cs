@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Tracking;
 using ShipWorks.ApplicationCore.Logging;
 using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -607,6 +608,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 return new TrackingResult { Summary = $"<a href='http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL' style='color:blue; background-color:white'>Click here to see tracking information</a>" };
             }
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not been excluded).
+        /// </summary>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {           
+            return EnumHelper.GetEnumList<DhlExpressServiceType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>

@@ -174,6 +174,7 @@
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressRateShipmentRequestFactoryTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressRatingServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentServiceBuilderTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />

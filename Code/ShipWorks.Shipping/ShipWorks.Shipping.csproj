@@ -184,6 +184,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
