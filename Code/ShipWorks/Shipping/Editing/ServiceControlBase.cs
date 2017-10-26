@@ -507,14 +507,14 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendRateEvent--;
         }
-        
+
         /// <summary>
         /// One of the values that affects rates has changed
         /// </summary>
-        protected void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-            RaiseRateCriteriaChanged();
-        }
+        /// <remarks>
+        /// This is private and not shared because Visual Studio's designer deletes event wiring that
+        /// uses handlers defined in a base class. Subclasses will need to copy and paste this method.</remarks>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
 
         /// <summary>
         /// Raise the event to notify listeners that data that affects rates has changed

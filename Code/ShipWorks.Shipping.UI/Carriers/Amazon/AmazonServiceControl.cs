@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 {
                     if (x.Success)
                     {
-                        UpdateServiceTypes(new List<ShipmentEntity> {x.ShipmentAdapter.Shipment});
+                        UpdateServiceTypes(new List<ShipmentEntity> { x.ShipmentAdapter.Shipment });
                     }
                 });
         }
@@ -314,5 +313,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             service.ValueMember = "ApiValue";
             service.DataSource = allServices;
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

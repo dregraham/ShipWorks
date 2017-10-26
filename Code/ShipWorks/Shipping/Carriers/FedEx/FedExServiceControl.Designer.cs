@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.emailNotifyBrokerShip = new System.Windows.Forms.CheckBox();
             this.emailNotifyBrokerDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifyBrokerEstimatedDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifyBrokerException = new System.Windows.Forms.CheckBox();
             this.labelEmailBroker = new System.Windows.Forms.Label();
             this.emailNotifyMessage = new ShipWorks.UI.Controls.MultiValueTextBox();
@@ -109,9 +110,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.kryptonBorderEdgeEmail2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.emailNotifyOtherShip = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifyOtherEstimatedDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherException = new System.Windows.Forms.CheckBox();
             this.emailNotifyRecipientShip = new System.Windows.Forms.CheckBox();
             this.emailNotifyRecipientDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifyRecipientEstimatedDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifyRecipientException = new System.Windows.Forms.CheckBox();
             this.emailNotifyOtherAddress = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.kryptonBorderEdgeEmail = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
@@ -120,8 +123,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelEmailSender = new System.Windows.Forms.Label();
             this.emailNotifySenderShip = new System.Windows.Forms.CheckBox();
             this.emailNotifySenderDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifySenderEstimatedDelivery = new System.Windows.Forms.CheckBox();
             this.emailNotifySenderException = new System.Windows.Forms.CheckBox();
             this.labelEmailDelivery = new System.Windows.Forms.Label();
+            this.labelEmailEstimatedDelivery = new System.Windows.Forms.Label();
             this.labelEmailException = new System.Windows.Forms.Label();
             this.labelEmailShip = new System.Windows.Forms.Label();
             this.labelEmailAddress = new System.Windows.Forms.Label();
@@ -189,60 +194,60 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFimsOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fimsOptionsControl = new ShipWorks.Shipping.Carriers.FedEx.FimsOptionsControl();
             this.labelReturnsClearance = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHoldAtLocation)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHoldAtLocation.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHoldAtLocation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHoldAtLocation.ContentPanel)).BeginInit();
             this.sectionHoldAtLocation.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBilling)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBilling.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBilling)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBilling.ContentPanel)).BeginInit();
             this.sectionBilling.ContentPanel.SuspendLayout();
             this.panelPayorDuties.SuspendLayout();
             this.panelTransportAccount.SuspendLayout();
             this.panelPayorTransport.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.panelTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHomeDelivery)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHomeDelivery.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHomeDelivery)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHomeDelivery.ContentPanel)).BeginInit();
             this.sectionHomeDelivery.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFreight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFreight.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFreight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFreight.ContentPanel)).BeginInit();
             this.sectionFreight.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionOptions.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionOptions.ContentPanel)).BeginInit();
             this.sectionOptions.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEmail)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEmail.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEmail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEmail.ContentPanel)).BeginInit();
             this.sectionEmail.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picturEmailInfo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCOD)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCOD.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.picturEmailInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCOD)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCOD.ContentPanel)).BeginInit();
             this.sectionCOD.ContentPanel.SuspendLayout();
             this.panelTrademarkInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionSmartPost)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionSmartPost.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionSmartPost)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionSmartPost.ContentPanel)).BeginInit();
             this.sectionSmartPost.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionPackageDetails)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionPackageDetails.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionPackageDetails)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionPackageDetails.ContentPanel)).BeginInit();
             this.sectionPackageDetails.ContentPanel.SuspendLayout();
             this.otherPackageHolder.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionServiceOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionServiceOptions.ContentPanel)).BeginInit();
             this.sectionServiceOptions.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFimsOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFimsOptions.ContentPanel)).BeginInit();
             this.sectionFimsOptions.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             //
@@ -257,13 +262,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // personControl
             //
-            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Size = new System.Drawing.Size(477, 330);
             //
             // residentialDetermination
             //
-            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.residentialDetermination.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.residentialDetermination.Size = new System.Drawing.Size(388, 21);
             this.residentialDetermination.SelectedIndexChanged += new System.EventHandler(this.OnResidentialDeterminationChanged);
@@ -299,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionHoldAtLocation
             //
-            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionHoldAtLocation.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionHoldAtLocation.Collapsed = true;
             //
@@ -325,7 +330,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionBilling
             //
-            this.sectionBilling.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionBilling.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionBilling.Collapsed = true;
             //
@@ -476,7 +481,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionFrom
             //
-            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionFrom.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFrom.Collapsed = true;
             //
@@ -498,10 +503,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // originControl
             //
-            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.originControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.originControl.BackColor = System.Drawing.Color.Transparent;
-            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.originControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.originControl.Location = new System.Drawing.Point(0, 52);
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
@@ -511,7 +516,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // panelTop
             //
-            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.BackColor = System.Drawing.Color.Transparent;
             this.panelTop.Controls.Add(this.label2);
@@ -535,7 +540,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
@@ -544,7 +549,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // fedexAccount
             //
-            this.fedexAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.fedexAccount.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fedexAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fedexAccount.FormattingEnabled = true;
@@ -559,7 +564,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             this.labelFromResidentialCommercial.AutoSize = true;
             this.labelFromResidentialCommercial.BackColor = System.Drawing.Color.Transparent;
-            this.labelFromResidentialCommercial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelFromResidentialCommercial.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelFromResidentialCommercial.Location = new System.Drawing.Point(6, 483);
             this.labelFromResidentialCommercial.Name = "labelFromResidentialCommercial";
             this.labelFromResidentialCommercial.Size = new System.Drawing.Size(149, 13);
@@ -579,7 +584,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // fromAddressType
             //
-            this.fromAddressType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.fromAddressType.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.fromAddressType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.fromAddressType.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -618,10 +623,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // packageControl
             //
-            this.packageControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.packageControl.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.packageControl.BackColor = System.Drawing.Color.White;
-            this.packageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packageControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.packageControl.Location = new System.Drawing.Point(-26, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
@@ -705,7 +710,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionHomeDelivery
             //
-            this.sectionHomeDelivery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionHomeDelivery.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionHomeDelivery.Collapsed = true;
             //
@@ -796,7 +801,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionFreight
             //
-            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionFreight.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionFreight.Collapsed = true;
             //
@@ -876,7 +881,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionOptions
             //
-            this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionOptions.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionOptions.Collapsed = true;
             //
@@ -1004,7 +1009,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionEmail
             //
-            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionEmail.Collapsed = true;
             //
@@ -1012,6 +1017,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerShip);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerEstimatedDelivery);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyBrokerException);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailBroker);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyMessage);
@@ -1019,9 +1025,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail2);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherShip);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherEstimatedDelivery);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherException);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientShip);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientEstimatedDelivery);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyRecipientException);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifyOtherAddress);
             this.sectionEmail.ContentPanel.Controls.Add(this.kryptonBorderEdgeEmail);
@@ -1030,8 +1038,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailSender);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderShip);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderEstimatedDelivery);
             this.sectionEmail.ContentPanel.Controls.Add(this.emailNotifySenderException);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailDelivery);
+            this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailEstimatedDelivery);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailException);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailShip);
             this.sectionEmail.ContentPanel.Controls.Add(this.labelEmailAddress);
@@ -1088,7 +1098,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyBrokerDelivery.TabIndex = 25;
             this.emailNotifyBrokerDelivery.UseVisualStyleBackColor = false;
-            //
+            // 
+            // emailNotifyBrokerEstimatedDelivery
+            // 
+            this.emailNotifyBrokerEstimatedDelivery.AutoSize = true;
+            this.emailNotifyBrokerEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(395, 108);
+            this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
+            this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 25;
+            this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
             // emailNotifyBrokerException
             //
             this.emailNotifyBrokerException.AutoSize = true;
@@ -1132,7 +1152,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // kryptonBorderEdgeEmail2
             //
-            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.kryptonBorderEdgeEmail2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdgeEmail2.AutoSize = false;
             this.kryptonBorderEdgeEmail2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1160,7 +1180,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyOtherDelivery.TabIndex = 9;
             this.emailNotifyOtherDelivery.UseVisualStyleBackColor = false;
-            //
+            // 
+            // emailNotifyOtherEstimatedDelivery
+            // 
+            this.emailNotifyOtherEstimatedDelivery.AutoSize = true;
+            this.emailNotifyOtherEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(395, 131);
+            this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
+            this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherEstimatedDelivery.TabIndex = 9;
+            this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
             // emailNotifyOtherException
             //
             this.emailNotifyOtherException.AutoSize = true;
@@ -1190,7 +1220,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyRecipientDelivery.TabIndex = 5;
             this.emailNotifyRecipientDelivery.UseVisualStyleBackColor = false;
-            //
+            // 
+            // emailNotifyRecipientEstimatedDelivery
+            // 
+            this.emailNotifyRecipientEstimatedDelivery.AutoSize = true;
+            this.emailNotifyRecipientEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientEstimatedDelivery.Location = new System.Drawing.Point(395, 87);
+            this.emailNotifyRecipientEstimatedDelivery.Name = "emailNotifyRecipientEstimatedDelivery";
+            this.emailNotifyRecipientEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 5;
+            this.emailNotifyRecipientEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
             // emailNotifyRecipientException
             //
             this.emailNotifyRecipientException.AutoSize = true;
@@ -1211,7 +1251,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // kryptonBorderEdgeEmail
             //
-            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.kryptonBorderEdgeEmail.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdgeEmail.AutoSize = false;
             this.kryptonBorderEdgeEmail.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1269,7 +1309,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.emailNotifySenderDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifySenderDelivery.TabIndex = 2;
             this.emailNotifySenderDelivery.UseVisualStyleBackColor = false;
-            //
+            // 
+            // emailNotifySenderEstimatedDelivery
+            // 
+            this.emailNotifySenderEstimatedDelivery.AutoSize = true;
+            this.emailNotifySenderEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderEstimatedDelivery.Location = new System.Drawing.Point(395, 66);
+            this.emailNotifySenderEstimatedDelivery.Name = "emailNotifySenderEstimatedDelivery";
+            this.emailNotifySenderEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderEstimatedDelivery.TabIndex = 2;
+            this.emailNotifySenderEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
             // emailNotifySenderException
             //
             this.emailNotifySenderException.AutoSize = true;
@@ -1289,7 +1339,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelEmailDelivery.Size = new System.Drawing.Size(46, 13);
             this.labelEmailDelivery.TabIndex = 5;
             this.labelEmailDelivery.Text = "Delivery";
-            //
+            // 
+            // labelEmailEstimatedDelivery
+            // 
+            this.labelEmailEstimatedDelivery.AutoSize = true;
+            this.labelEmailEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.labelEmailEstimatedDelivery.Location = new System.Drawing.Point(356, 42);
+            this.labelEmailEstimatedDelivery.Name = "labelEmailEstimatedDelivery";
+            this.labelEmailEstimatedDelivery.Size = new System.Drawing.Size(96, 13);
+            this.labelEmailEstimatedDelivery.TabIndex = 5;
+            this.labelEmailEstimatedDelivery.Text = "Estimated Delivery";
+            // 
             // labelEmailException
             //
             this.labelEmailException.AutoSize = true;
@@ -1364,7 +1424,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // kryptonBorderEdge1
             //
-            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.kryptonBorderEdge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge1.AutoSize = false;
             this.kryptonBorderEdge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1443,7 +1503,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // kryptonBorderEdge2
             //
-            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.kryptonBorderEdge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge2.AutoSize = false;
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -1575,7 +1635,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionCOD
             //
-            this.sectionCOD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionCOD.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionCOD.Collapsed = true;
             //
@@ -1613,7 +1673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // codTaxId
             //
-            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.codTaxId.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.codTaxId.Location = new System.Drawing.Point(109, 436);
             this.codTaxId.Name = "codTaxId";
@@ -1632,9 +1692,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // codOrigin
             //
-            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.codOrigin.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            this.codOrigin.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
             | ShipWorks.Data.Controls.PersonFields.Street)
             | ShipWorks.Data.Controls.PersonFields.City)
             | ShipWorks.Data.Controls.PersonFields.State)
@@ -1642,7 +1702,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             | ShipWorks.Data.Controls.PersonFields.Residential)
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.codOrigin.BackColor = System.Drawing.Color.Transparent;
-            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.codOrigin.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.codOrigin.Location = new System.Drawing.Point(28, 86);
             this.codOrigin.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.codOrigin.Name = "codOrigin";
@@ -1731,7 +1791,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             this.linkTrademarkInfo.AutoSize = true;
             this.linkTrademarkInfo.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.linkTrademarkInfo.ForeColor = System.Drawing.Color.RoyalBlue;
             this.linkTrademarkInfo.Location = new System.Drawing.Point(1, 4);
             this.linkTrademarkInfo.Name = "linkTrademarkInfo";
@@ -1753,7 +1813,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionSmartPost
             //
-            this.sectionSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionSmartPost.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionSmartPost.Collapsed = true;
             //
@@ -1886,7 +1946,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionPackageDetails
             //
-            this.sectionPackageDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionPackageDetails.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionPackageDetails.Collapsed = true;
             //
@@ -1904,7 +1964,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // otherPackageHolder
             //
-            this.otherPackageHolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.otherPackageHolder.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.otherPackageHolder.BackColor = System.Drawing.Color.Transparent;
             this.otherPackageHolder.Controls.Add(this.packageDetailsControl);
@@ -1928,7 +1988,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionServiceOptions
             //
-            this.sectionServiceOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionServiceOptions.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionServiceOptions.Collapsed = true;
             //
@@ -2013,7 +2073,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             //
             // sectionFimsOptions
             //
-            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             //
             // sectionFimsOptions.ContentPanel
@@ -2083,78 +2143,78 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
             this.Controls.SetChildIndex(this.panelTrademarkInfo, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHoldAtLocation.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHoldAtLocation.ContentPanel)).EndInit();
             this.sectionHoldAtLocation.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHoldAtLocation)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBilling.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHoldAtLocation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBilling.ContentPanel)).EndInit();
             this.sectionBilling.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBilling)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBilling)).EndInit();
             this.panelPayorDuties.ResumeLayout(false);
             this.panelPayorDuties.PerformLayout();
             this.panelTransportAccount.ResumeLayout(false);
             this.panelTransportAccount.PerformLayout();
             this.panelPayorTransport.ResumeLayout(false);
             this.panelPayorTransport.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
             this.sectionFrom.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFrom)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHomeDelivery.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHomeDelivery.ContentPanel)).EndInit();
             this.sectionHomeDelivery.ContentPanel.ResumeLayout(false);
             this.sectionHomeDelivery.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionHomeDelivery)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFreight.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionHomeDelivery)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFreight.ContentPanel)).EndInit();
             this.sectionFreight.ContentPanel.ResumeLayout(false);
             this.sectionFreight.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFreight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFreight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionOptions.ContentPanel)).EndInit();
             this.sectionOptions.ContentPanel.ResumeLayout(false);
             this.sectionOptions.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEmail.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEmail.ContentPanel)).EndInit();
             this.sectionEmail.ContentPanel.ResumeLayout(false);
             this.sectionEmail.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionEmail)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picturEmailInfo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCOD.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionEmail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.picturEmailInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCOD.ContentPanel)).EndInit();
             this.sectionCOD.ContentPanel.ResumeLayout(false);
             this.sectionCOD.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCOD)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCOD)).EndInit();
             this.panelTrademarkInfo.ResumeLayout(false);
             this.panelTrademarkInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionSmartPost.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionSmartPost.ContentPanel)).EndInit();
             this.sectionSmartPost.ContentPanel.ResumeLayout(false);
             this.sectionSmartPost.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionSmartPost)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionPackageDetails.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionSmartPost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionPackageDetails.ContentPanel)).EndInit();
             this.sectionPackageDetails.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionPackageDetails)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionPackageDetails)).EndInit();
             this.otherPackageHolder.ResumeLayout(false);
             this.otherPackageHolder.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionServiceOptions.ContentPanel)).EndInit();
             this.sectionServiceOptions.ContentPanel.ResumeLayout(false);
             this.sectionServiceOptions.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionServiceOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFimsOptions.ContentPanel)).EndInit();
             this.sectionFimsOptions.ContentPanel.ResumeLayout(false);
             this.sectionFimsOptions.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionFimsOptions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2217,8 +2277,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.PictureBox picturEmailInfo;
         private System.Windows.Forms.CheckBox emailNotifySenderShip;
         private System.Windows.Forms.CheckBox emailNotifySenderDelivery;
+        private System.Windows.Forms.CheckBox emailNotifySenderEstimatedDelivery;
         private System.Windows.Forms.CheckBox emailNotifySenderException;
         private System.Windows.Forms.Label labelEmailDelivery;
+        private System.Windows.Forms.Label labelEmailEstimatedDelivery;
         private System.Windows.Forms.Label labelEmailException;
         private System.Windows.Forms.Label labelEmailShip;
         private System.Windows.Forms.Label labelEmailAddress;
@@ -2228,9 +2290,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdgeEmail;
         private System.Windows.Forms.CheckBox emailNotifyOtherShip;
         private System.Windows.Forms.CheckBox emailNotifyOtherDelivery;
+        private System.Windows.Forms.CheckBox emailNotifyOtherEstimatedDelivery;
         private System.Windows.Forms.CheckBox emailNotifyOtherException;
         private System.Windows.Forms.CheckBox emailNotifyRecipientShip;
         private System.Windows.Forms.CheckBox emailNotifyRecipientDelivery;
+        private System.Windows.Forms.CheckBox emailNotifyRecipientEstimatedDelivery;
         private System.Windows.Forms.CheckBox emailNotifyRecipientException;
         private ShipWorks.UI.Controls.MultiValueTextBox emailNotifyOtherAddress;
         private ShipWorks.UI.Controls.MultiValueTextBox emailNotifyMessage;
@@ -2286,6 +2350,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.CheckBox emailNotifyBrokerShip;
         private System.Windows.Forms.CheckBox emailNotifyBrokerDelivery;
+        private System.Windows.Forms.CheckBox emailNotifyBrokerEstimatedDelivery;
         private System.Windows.Forms.CheckBox emailNotifyBrokerException;
         private System.Windows.Forms.Label labelEmailBroker;
         private System.Windows.Forms.Label labelFromResidentialCommercial;

@@ -125,6 +125,11 @@
             this.residentialDetermination = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.residentialState = new System.Windows.Forms.CheckBox();
             this.groupEmail = new System.Windows.Forms.GroupBox();
+            this.emailNotifyBrokerEstimatedDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifyOtherEstimatedDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifyRecipientEstimatedDelivery = new System.Windows.Forms.CheckBox();
+            this.emailNotifySenderEstimatedDelivery = new System.Windows.Forms.CheckBox();
+            this.labelEstimatedDelivery = new System.Windows.Forms.Label();
             this.emailNotifyBrokerState = new System.Windows.Forms.CheckBox();
             this.emailNotifyBrokerShip = new System.Windows.Forms.CheckBox();
             this.emailNotifyBrokerDelivery = new System.Windows.Forms.CheckBox();
@@ -1255,6 +1260,11 @@
             // 
             this.groupEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupEmail.Controls.Add(this.emailNotifyBrokerEstimatedDelivery);
+            this.groupEmail.Controls.Add(this.emailNotifyOtherEstimatedDelivery);
+            this.groupEmail.Controls.Add(this.emailNotifyRecipientEstimatedDelivery);
+            this.groupEmail.Controls.Add(this.emailNotifySenderEstimatedDelivery);
+            this.groupEmail.Controls.Add(this.labelEstimatedDelivery);
             this.groupEmail.Controls.Add(this.emailNotifyBrokerState);
             this.groupEmail.Controls.Add(this.emailNotifyBrokerShip);
             this.groupEmail.Controls.Add(this.emailNotifyBrokerDelivery);
@@ -1295,6 +1305,56 @@
             this.groupEmail.TabStop = false;
             this.groupEmail.Text = "Email Notifications";
             // 
+            // emailNotifyBrokerEstimatedDelivery
+            // 
+            this.emailNotifyBrokerEstimatedDelivery.AutoSize = true;
+            this.emailNotifyBrokerEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyBrokerEstimatedDelivery.Location = new System.Drawing.Point(415, 121);
+            this.emailNotifyBrokerEstimatedDelivery.Name = "emailNotifyBrokerEstimatedDelivery";
+            this.emailNotifyBrokerEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyBrokerEstimatedDelivery.TabIndex = 62;
+            this.emailNotifyBrokerEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyOtherEstimatedDelivery
+            // 
+            this.emailNotifyOtherEstimatedDelivery.AutoSize = true;
+            this.emailNotifyOtherEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyOtherEstimatedDelivery.Location = new System.Drawing.Point(415, 143);
+            this.emailNotifyOtherEstimatedDelivery.Name = "emailNotifyOtherEstimatedDelivery";
+            this.emailNotifyOtherEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyOtherEstimatedDelivery.TabIndex = 60;
+            this.emailNotifyOtherEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifyRecipientEstimatedDelivery
+            // 
+            this.emailNotifyRecipientEstimatedDelivery.AutoSize = true;
+            this.emailNotifyRecipientEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifyRecipientEstimatedDelivery.Location = new System.Drawing.Point(415, 101);
+            this.emailNotifyRecipientEstimatedDelivery.Name = "emailNotifyRecipientEstimatedDelivery";
+            this.emailNotifyRecipientEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifyRecipientEstimatedDelivery.TabIndex = 59;
+            this.emailNotifyRecipientEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // emailNotifySenderEstimatedDelivery
+            // 
+            this.emailNotifySenderEstimatedDelivery.AutoSize = true;
+            this.emailNotifySenderEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.emailNotifySenderEstimatedDelivery.Location = new System.Drawing.Point(415, 80);
+            this.emailNotifySenderEstimatedDelivery.Name = "emailNotifySenderEstimatedDelivery";
+            this.emailNotifySenderEstimatedDelivery.Size = new System.Drawing.Size(15, 14);
+            this.emailNotifySenderEstimatedDelivery.TabIndex = 58;
+            this.emailNotifySenderEstimatedDelivery.UseVisualStyleBackColor = false;
+            // 
+            // labelEstimatedDelivery
+            // 
+            this.labelEstimatedDelivery.AutoSize = true;
+            this.labelEstimatedDelivery.BackColor = System.Drawing.Color.White;
+            this.labelEstimatedDelivery.Location = new System.Drawing.Point(388, 56);
+            this.labelEstimatedDelivery.Name = "labelEstimatedDelivery";
+            this.labelEstimatedDelivery.Size = new System.Drawing.Size(68, 13);
+            this.labelEstimatedDelivery.TabIndex = 61;
+            this.labelEstimatedDelivery.Text = "Est. Delivery";
+            // 
             // emailNotifyBrokerState
             // 
             this.emailNotifyBrokerState.AutoSize = true;
@@ -1321,7 +1381,7 @@
             // 
             this.emailNotifyBrokerDelivery.AutoSize = true;
             this.emailNotifyBrokerDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(363, 121);
+            this.emailNotifyBrokerDelivery.Location = new System.Drawing.Point(360, 121);
             this.emailNotifyBrokerDelivery.Name = "emailNotifyBrokerDelivery";
             this.emailNotifyBrokerDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyBrokerDelivery.TabIndex = 53;
@@ -1452,7 +1512,7 @@
             // 
             this.emailNotifyOtherDelivery.AutoSize = true;
             this.emailNotifyOtherDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(363, 143);
+            this.emailNotifyOtherDelivery.Location = new System.Drawing.Point(360, 143);
             this.emailNotifyOtherDelivery.Name = "emailNotifyOtherDelivery";
             this.emailNotifyOtherDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyOtherDelivery.TabIndex = 12;
@@ -1482,7 +1542,7 @@
             // 
             this.emailNotifyRecipientDelivery.AutoSize = true;
             this.emailNotifyRecipientDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(363, 101);
+            this.emailNotifyRecipientDelivery.Location = new System.Drawing.Point(360, 101);
             this.emailNotifyRecipientDelivery.Name = "emailNotifyRecipientDelivery";
             this.emailNotifyRecipientDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifyRecipientDelivery.TabIndex = 7;
@@ -1561,7 +1621,7 @@
             // 
             this.emailNotifySenderDelivery.AutoSize = true;
             this.emailNotifySenderDelivery.BackColor = System.Drawing.Color.White;
-            this.emailNotifySenderDelivery.Location = new System.Drawing.Point(363, 80);
+            this.emailNotifySenderDelivery.Location = new System.Drawing.Point(360, 80);
             this.emailNotifySenderDelivery.Name = "emailNotifySenderDelivery";
             this.emailNotifySenderDelivery.Size = new System.Drawing.Size(15, 14);
             this.emailNotifySenderDelivery.TabIndex = 3;
@@ -1581,7 +1641,7 @@
             // 
             this.labelEmailDelivery.AutoSize = true;
             this.labelEmailDelivery.BackColor = System.Drawing.Color.White;
-            this.labelEmailDelivery.Location = new System.Drawing.Point(344, 56);
+            this.labelEmailDelivery.Location = new System.Drawing.Point(341, 56);
             this.labelEmailDelivery.Name = "labelEmailDelivery";
             this.labelEmailDelivery.Size = new System.Drawing.Size(46, 13);
             this.labelEmailDelivery.TabIndex = 29;
@@ -1622,7 +1682,7 @@
             this.labelEmailInfo.BackColor = System.Drawing.Color.White;
             this.labelEmailInfo.Location = new System.Drawing.Point(65, 21);
             this.labelEmailInfo.Name = "labelEmailInfo";
-            this.labelEmailInfo.Size = new System.Drawing.Size(332, 29);
+            this.labelEmailInfo.Size = new System.Drawing.Size(372, 29);
             this.labelEmailInfo.TabIndex = 25;
             this.labelEmailInfo.Text = "These settings are for email sent from FedEx.  This is separate from and in addit" +
     "ion to any email configured to be sent by ShipWorks.";
@@ -1939,7 +1999,7 @@
             this.tabPagePackages.Location = new System.Drawing.Point(4, 22);
             this.tabPagePackages.Name = "tabPagePackages";
             this.tabPagePackages.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPagePackages.Size = new System.Drawing.Size(417, 1380);
+            this.tabPagePackages.Size = new System.Drawing.Size(417, 1429);
             this.tabPagePackages.TabIndex = 1;
             this.tabPagePackages.Text = "Packages";
             this.tabPagePackages.UseVisualStyleBackColor = true;
@@ -2253,5 +2313,10 @@
         private System.Windows.Forms.Label labelConsignee;
         private System.Windows.Forms.CheckBox thirdPartyConsignee;
         private System.Windows.Forms.CheckBox consigneeState;
+        private System.Windows.Forms.CheckBox emailNotifyBrokerEstimatedDelivery;
+        private System.Windows.Forms.CheckBox emailNotifyOtherEstimatedDelivery;
+        private System.Windows.Forms.CheckBox emailNotifyRecipientEstimatedDelivery;
+        private System.Windows.Forms.CheckBox emailNotifySenderEstimatedDelivery;
+        private System.Windows.Forms.Label labelEstimatedDelivery;
     }
 }
