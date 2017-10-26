@@ -11,8 +11,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on an order and returns the new order status
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        string ExecuteAction(long orderNumber, string action, string comments, string carrier,
-            string trackingNumber, bool magentoEmails);
+        string ExecuteAction(MagentoUploadAction action);
     }
 }
