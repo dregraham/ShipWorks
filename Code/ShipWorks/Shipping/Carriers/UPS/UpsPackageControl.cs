@@ -181,6 +181,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpdateRowText(gridRow);
             }
 
+            UpdateInsuranceDisplay();
+
             // Start listening again
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
             packagesGrid.SelectionChanged += this.OnChangeSelectedPackages;
