@@ -1183,5 +1183,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .Select(x => x.PackagingType))
                 .Cast<FedExPackagingType>();
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }
