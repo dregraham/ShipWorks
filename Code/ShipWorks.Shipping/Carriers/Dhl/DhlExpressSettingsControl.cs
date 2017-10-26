@@ -22,10 +22,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override void LoadSettings()
         {
-            carrierAccountManagerControl.Initialize(ShipmentTypeCode.DhlExpress);
+            carrierAccountManagerControl.Initialize(ShipmentTypeCode);
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
+
+            requestedLabelFormatOptionControl.LoadDefaultProfile(ShipmentTypeManager.GetType(ShipmentTypeCode));
         }
 
         /// <summary>
@@ -34,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         protected override void SaveSettings(ShippingSettingsEntity settings)
         {
             settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
+
+            requestedLabelFormatOptionControl.SaveDefaultProfile();
         }
     }
 }
