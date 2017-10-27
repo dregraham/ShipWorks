@@ -751,7 +751,6 @@ namespace ShipWorks.Data.Connection
         /// Advanced functionality: be aware that the datareader returned is open, and the
         /// dataaccessadapter's connection is also open
         /// </remarks>
-        [NDependIgnoreTooManyParams]
         IDataReader FetchDataReader(IEntityFields2 fields, IRelationPredicateBucket filter, CommandBehavior readerBehavior, int maxNumberOfItemsToReturn, bool allowDuplicates);
 
         /// <summary>
