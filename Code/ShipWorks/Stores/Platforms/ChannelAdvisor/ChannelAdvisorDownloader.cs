@@ -317,7 +317,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Import order charges from CA shopping cart
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void LoadCharges(ChannelAdvisorOrderEntity order, OrderResponseDetailComplete caOrder)
         {
             foreach (OrderLineItemInvoice invoice in caOrder.ShoppingCart.LineItemInvoiceList)

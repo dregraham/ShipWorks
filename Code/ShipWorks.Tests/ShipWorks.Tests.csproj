@@ -539,6 +539,7 @@
     <Compile Include="Shipping\Carriers\ShipmentTypePrefetchPathTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiShipClientTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTermsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActiviationTest.cs" />
