@@ -3,6 +3,12 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 {
+    public class ProductsResponse
+    {
+        [JsonProperty("items")]
+        public IEnumerable<Product> Products { get; set; }
+    }
+
     public class Product
     {
         [JsonProperty("id")]
@@ -10,5 +16,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("options")]
         public IEnumerable<ProductOptionDetail> Options { get; set; }
+
+        [JsonProperty("sku")]
+        public string Sku { get; set; }
     }
 }

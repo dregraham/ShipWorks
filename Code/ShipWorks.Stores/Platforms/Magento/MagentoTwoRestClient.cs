@@ -12,6 +12,8 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -28,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string TokenEndpoint = "rest/V1/integration/admin/token";
         private const string OrdersEndpoint = "rest/V1/orders";
         private const string ItemsEndpoint = "rest/V1/orders/items";
-        private const string ProductEndpoint = "rest/V1/products/{0}";
+        private const string ProductEndpoint = "rest/V1/products";
         private const string ShipmentEndpoint = "rest/V1/order/{0}/ship";
         private const string HoldEndpoint = "rest/V1/orders/{0}/hold";
         private const string UnholdEndpoint = "rest/V1/orders/{0}/unhold";
@@ -252,9 +254,9 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the product for the speified sku
         /// </summary>
-        public Product GetProduct(string sku)
+        public Product GetProductBySku(string sku)
         {
-            LruCache<string, Product> productCache = magentoProductCache.GetStoreProductCache(store.StoreID);
+            LruCache<string, Product> productCache = magentoProductCache.GetStoreProductBySkuCache(store.StoreID);
 
             Product product = productCache[sku];
             if (product != null)
@@ -263,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             }
 
             HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
-                new Uri($"{storeUri.AbsoluteUri}/{string.Format(ProductEndpoint, sku)}"));
+                new Uri($"{storeUri.AbsoluteUri}/{ProductEndpoint}/{sku}"));
 
             string response = ProcessRequest("GetProduct", request);
 
@@ -273,6 +275,39 @@ namespace ShipWorks.Stores.Platforms.Magento
             return product;
         }
 
+        /// <summary>
+        /// Gets the product for the speified sku
+        /// </summary>
+        public Product GetProductById(int productId)
+        {
+            LruCache<int, Product> productCache = magentoProductCache.GetStoreProductByIdCache(store.StoreID);
+
+            Product product = productCache[productId];
+            if (product != null)
+            {
+                return productCache[productId];
+            }
+
+            HttpJsonVariableRequestSubmitter request = 
+                GetRequestSubmitter(HttpVerb.Get, new Uri($"{storeUri.AbsoluteUri}/{ProductEndpoint}"));
+
+            AddProductSearchCriteria(request, productId);
+
+            string response = ProcessRequest("GetProduct", request);
+
+            return DeserializeResponse<ProductsResponse>(response).Products.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Add product id search criteria to the request
+        /// </summary>
+        private static void AddProductSearchCriteria(HttpVariableRequestSubmitter request, int productId)
+        {
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][field]", "entity_id", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "eq", false));
+            request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]", productId.ToString(), false));
+        }
+        
         /// <summary>
         /// Create a request submitter with the given parameters
         /// </summary>
