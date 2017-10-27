@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
-using Interapptive.Shared.Enums;
-using Interapptive.Shared.UI;
+﻿using Autofac;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using Moq;
-using ShipWorks.ApplicationCore.Interaction;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using System;
+using System.Data.Common;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
 using Xunit;
 using Xunit.Abstractions;
-using Autofac.Extras.Moq;
-using Interapptive.Shared.Threading;
-using System.Data.Common;
-using ShipWorks.Stores.Communication;
-using Interapptive.Shared.Utility;
-using System.Xml;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.FactoryClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
 {
@@ -43,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         private readonly DbConnection dbConnection;
         private readonly AmazonMwsDownloader testObject;
         private readonly long downloadLogID;
-        Mock<IAmazonMwsClient> client;
+        private readonly Mock<IAmazonMwsClient> client;
         private readonly DateTime utcNow;
 
         public AmazonMwsDownloaderTest(DatabaseFixture db, ITestOutputHelper output)
@@ -54,8 +47,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                     mock.Override<IAmazonMwsClient>();
                     mock.Override<IDownloadStartingPoint>();
                 });
-
-            //context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            
             utcNow = DateTime.UtcNow;
 
             mock = context.Mock;
@@ -133,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 var query = new QueryFactory().Customer;
 
                 var customers = await sqlAdapter.FetchQueryAsync(query);
-                int brendas = customers.Cast<ICustomerEntity>().Where(c => c.BillFirstName.ToLower() == "brenda").Count();
+                int brendas = customers.Cast<ICustomerEntity>().Count(c => c.BillFirstName.Equals("brenda", StringComparison.OrdinalIgnoreCase));
                 Assert.Equal(2, brendas);
             }
         }
