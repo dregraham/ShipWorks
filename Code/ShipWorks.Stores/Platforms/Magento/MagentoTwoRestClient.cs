@@ -295,7 +295,10 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             string response = ProcessRequest("GetProduct", request);
 
-            return DeserializeResponse<ProductsResponse>(response).Products.FirstOrDefault();
+            product = DeserializeResponse<ProductsResponse>(response).Products.FirstOrDefault();
+            productCache[productId] = product;
+
+            return product;
         }
 
         /// <summary>
