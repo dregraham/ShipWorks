@@ -98,7 +98,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx2Day,
                 FedExServiceType.FedEx1DayFreight,
-                FedExServiceType.FedEx2DayAM
+                FedExServiceType.FedEx2DayAM,
+                FedExServiceType.FexExFreightEconomy,
+                FedExServiceType.FedExFreightPriority
             };
 
             // Since all shipments are going to the same country, just pick out the first one
@@ -224,6 +226,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                         break;
                     }
+            }
+
+            switch (service)
+            {
+                case FedExServiceType.FexExFreightEconomy:
+                case FedExServiceType.FedExFreightPriority:
+                {
+                    types.Add(FedExPackagingType.Custom);
+
+                    break;
+                }
             }
 
             if (OneRateServiceTypes.Any(s => s == service))
