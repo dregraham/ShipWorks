@@ -9,6 +9,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.ComponentRegistration;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -40,8 +42,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         protected override void Initialize()
         {
             base.Initialize();
-
-            EnumHelper.BindComboBox<DhlExpressServiceType>(service);
 
             originControl.Initialize(ShipmentTypeCode.DhlExpress);
 
@@ -127,6 +127,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         private void LoadShipmentDetails()
         {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                Dictionary<int, string> availableServices = lifetimeScope.ResolveKeyed<IShipmentServicesBuilder>(ShipmentTypeCode.DhlExpress)
+                        .BuildServiceTypeDictionary(LoadedShipments);
+
+                service.BindToEnumAndPreserveSelection<DhlExpressServiceType>(x => availableServices.ContainsKey((int) x));
+            }
+
             // Determine if all shipments will have the same destination service types
             using (new MultiValueScope())
             {
