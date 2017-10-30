@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -19,23 +20,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// <summary>
     /// A FedEx FIMS implementation of the IShippingClerk interface.
     /// </summary>
-    public class FimsShippingClerk : IFedExShippingClerk
+    [Component(RegistrationType.SpecificService, Service = typeof(IFimsShippingClerk))]
+    public class FimsShippingClerk : IFimsShippingClerk
     {
         private readonly IFimsLabelRepository labelRepository;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly ILog log;
         private readonly IFimsWebClient webClient;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FimsShippingClerk" /> class with default
-        /// values for the "live" FedEx settings repository and FedEx request factory.
-        /// </summary>
-        /// <param name="webClient">The FIMS web client to use.</param>
-        /// <param name="labelRepository">The FIMS label repo to use.</param>
-        public FimsShippingClerk(IFimsWebClient webClient, IFimsLabelRepository labelRepository)
-            : this(webClient, labelRepository, new FedExSettingsRepository(), LogManager.GetLogger(typeof(FimsShippingClerk)))
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FimsShippingClerk" /> class.
@@ -44,11 +35,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <param name="labelRepository">The FIMS label repo to use.</param>
         /// <param name="settingsRepository">The settings repository.</param>
         /// <param name="log">The log.</param>
-        public FimsShippingClerk(IFimsWebClient webClient, IFimsLabelRepository labelRepository, ICarrierSettingsRepository settingsRepository, ILog log)
+        public FimsShippingClerk(
+            IFimsWebClient webClient,
+            IFimsLabelRepository labelRepository,
+            ICarrierSettingsRepository settingsRepository,
+            Func<Type, ILog> getLog)
         {
             this.webClient = webClient;
             this.settingsRepository = settingsRepository;
-            this.log = log;
+            this.log = getLog(GetType());
             this.labelRepository = labelRepository;
         }
 
@@ -189,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Does not get rates as FIMS does not support getting rates.
         /// </summary>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)
         {
             return new RateGroup(Enumerable.Empty<RateResult>());
         }

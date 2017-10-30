@@ -162,6 +162,7 @@
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Carriers\FedEx\FedExServiceGatewayFactoryTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />

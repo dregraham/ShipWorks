@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -17,14 +16,14 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
     public class FedExRequestFactoryTest
     {
         private Mock<IFedExServiceGateway> fedExService;
-        private Mock<IFedExServiceGateway> fedExOpenShipService;
+        private Mock<IFedExOpenShipServiceGateway> fedExOpenShipService;
         private Mock<IFedExResponseFactory> responseFactory;
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private FedExRequestFactory testObject;
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public FedExRequestFactoryTest()
         {
             fedExService = new Mock<IFedExServiceGateway>();
-            fedExOpenShipService = new Mock<IFedExServiceGateway>();
+            fedExOpenShipService = new Mock<IFedExOpenShipServiceGateway>();
             responseFactory = new Mock<IFedExResponseFactory>();
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
@@ -42,8 +41,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             tokenProcessor = new Mock<IFedExShipmentTokenProcessor>();
 
-            // Use the "testing version" of the constructor
-            testObject = new FedExRequestFactory(fedExService.Object, fedExOpenShipService.Object, settingsRepository.Object, tokenProcessor.Object, responseFactory.Object);
+            testObject = new FedExRequestFactory(
+                new Mock<IFedExServiceGatewayFactory>().Object,
+                settingsRepository.Object,
+                tokenProcessor.Object,
+                responseFactory.Object);
 
             fedExShipment = new ShipmentEntity() { FedEx = new FedExShipmentEntity() };
         }
@@ -777,42 +779,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsAssignableFrom<CertificateRequest>(request);
         }
         #endregion
-
-        #region ChooseFedExServiceGateway Tests
-
-        [Fact]
-        public void ChooseFedExServiceGateway_ReturnsShipGateway_PrintReturn()
-        {
-            fedExShipment.ReturnShipment = true;
-            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.PrintReturnLabel;
-
-            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
-
-            Assert.Equal(fedExService.Object, chosenGateway);
-        }
-
-        [Fact]
-        public void ChooseFedExServiceGateway_ReturnsShipGateway_NotReturnButEmailReturnLabelReturnType()
-        {
-            fedExShipment.ReturnShipment = false;
-            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.EmailReturnLabel;
-
-            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
-
-            Assert.Equal(fedExService.Object, chosenGateway);
-        }
-
-        [Fact]
-        public void ChooseFedExServiceGateway_ReturnsOpenShipGateway_EmailReturn()
-        {
-            fedExShipment.ReturnShipment = true;
-            fedExShipment.FedEx.ReturnType = (int)FedExReturnType.EmailReturnLabel;
-
-            IFedExServiceGateway chosenGateway = testObject.ChooseFedExServiceGateway(fedExShipment);
-
-            Assert.Equal(fedExOpenShipService.Object, chosenGateway);
-        }
-
-        #endregion ChooseFedExServiceGateway Tests
     }
 }

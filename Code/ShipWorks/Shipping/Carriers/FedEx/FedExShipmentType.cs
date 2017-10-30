@@ -9,6 +9,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -19,7 +20,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -1028,8 +1028,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
-                return shippingClerk.Track(shipment);
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    return lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment).Track(shipment);
+                }
             }
             catch (FedExException ex)
             {

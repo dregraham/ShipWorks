@@ -1,18 +1,18 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.Xml.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         private AutoMock mock;
         private string label = "myLabelData";
         private byte[] labelBytes;
-        
+
         Mock<IHttpRequestSubmitterFactory> submitterFactory;
 
         // fields used in response:
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
         public FimsWebClientTest()
         {
-            mock = AutoMock.GetLoose();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             labelBytes = Encoding.UTF8.GetBytes(label);
             base64Label = Convert.ToBase64String(labelBytes);
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
             request.SetupGet(r => r.Shipment).Returns(shipment);
-            
+
             var testObject = mock.Create<FimsWebClient>();
             testObject.Ship(request.Object);
 
@@ -118,8 +118,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         public void Ship_RequestResponseFormat(ThermalLanguage language, string expectedResponseFormat)
         {
             var shipment = Create.Shipment()
-                .AsFedEx(x => x.WithPackage().Set(f=>f.Service, (int) FedExServiceType.FedExFimsMailView))
-                .Set(s=>s.RequestedLabelFormat, (int)language)
+                .AsFedEx(x => x.WithPackage().Set(f => f.Service, (int) FedExServiceType.FedExFimsMailView))
+                .Set(s => s.RequestedLabelFormat, (int) language)
                 .Build();
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             var shipment = Create.Shipment()
                 .AsFedEx(x => x.WithPackage()
                     .Set(f => f.Service, (int) FedExServiceType.FedExFimsMailView)
-                    .Set(f=>f.ReferenceFIMS, referenceFims))
+                    .Set(f => f.ReferenceFIMS, referenceFims))
                 .Build();
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
@@ -184,8 +184,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         {
             var shipment = Create.Shipment()
                .AsFedEx(x => x.WithPackage().Set(f => f.Service, (int) serviceType))
-               .Set(s=>s.TotalWeight, totalWeight)
-               .Set(s=>s.CustomsValue, customsValue)
+               .Set(s => s.TotalWeight, totalWeight)
+               .Set(s => s.CustomsValue, customsValue)
                .Build();
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
@@ -228,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             var shipment = Create.Shipment()
                .AsFedEx(x => x.WithPackage().Set(f => f.Service, (int) FedExServiceType.FedExFimsPremium))
-               .Set(s=>s.TotalWeight, expectedValue)
+               .Set(s => s.TotalWeight, expectedValue)
                .Build();
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
@@ -246,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             var expectedValue = 5;
 
             var shipment = Create.Shipment()
-               .AsFedEx(x => x.WithPackage(p=>p.Set(s=>s.DimsLength, expectedValue))
+               .AsFedEx(x => x.WithPackage(p => p.Set(s => s.DimsLength, expectedValue))
                .Set(f => f.Service, (int) FedExServiceType.FedExFimsPremium))
                .Build();
 
@@ -511,7 +511,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
             ValidateRequest("//labelRequest/shipper/email", expectedValue);
         }
-#endregion "Origin Tests"
+        #endregion "Origin Tests"
 
         #region "ShipTo Tests"
         [Fact]
@@ -720,7 +720,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             var shipment = Create.Shipment()
                 .AsFedEx(x => x.WithPackage()
                     .Set(f => f.Service, (int) FedExServiceType.FedExFimsMailView))
-                .WithCustomsItem(c=>c.Set(ci=>ci.Description = expectedValue))
+                .WithCustomsItem(c => c.Set(ci => ci.Description = expectedValue))
                 .Build();
 
             var request = mock.MockRepository.Create<IFimsShipRequest>();
@@ -957,7 +957,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 
         public string GetResponse()
         {
-            return 
+            return
                 "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
                 "  <SOAP-ENV:Header />" +
                 "  <SOAP-ENV:Body>" +
@@ -987,7 +987,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             "      <parcelId />" +
             "      <trackingNo />" +
             "      <responseCode>0</responseCode>" +
-           $"      {xmlErrorMessages}"+
+           $"      {xmlErrorMessages}" +
             "    </labelResponse>" +
             "  </SOAP-ENV:Body>" +
             "</SOAP-ENV:Envelope>";
@@ -1032,5 +1032,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         {
             mock.Dispose();
         }
-    } 
+    }
 }

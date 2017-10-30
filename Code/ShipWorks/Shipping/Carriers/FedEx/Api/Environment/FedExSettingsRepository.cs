@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,6 +12,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
     /// A FedEx implementation of the ICarrierSettingsRepository interface. This communicates with external
     /// dependencies/data stores such as the ShipWorks database and the Windows registry.
     /// </summary>
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ICarrierSettingsRepository), ShipmentTypeCode.FedEx)]
     public class FedExSettingsRepository : ICarrierSettingsRepository
     {
         /// <summary>
@@ -24,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
             get { return InterapptiveOnly.Registry.GetValue("FedExTestServer", false); }
             set { InterapptiveOnly.Registry.SetValue("FedExTestServer", value); }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to [use list rates] based on a registry setting. Indicates if LIST rates are in
         /// effect, instead of the standard ACCOUNT rates

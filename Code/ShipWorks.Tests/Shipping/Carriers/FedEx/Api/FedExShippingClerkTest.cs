@@ -35,7 +35,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private FedExShippingClerk testObject;
 
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        private Mock<ICertificateInspector> certificateInspector;
         private Mock<ICertificateRequest> certificateRequest;
 
         private Mock<IFedExRequestFactory> requestFactory;
@@ -91,9 +90,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Return a FedEx account that has been migrated
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { MeterNumber = "123" });
 
-            certificateInspector = new Mock<ICertificateInspector>();
-            certificateInspector.Setup(i => i.Inspect(It.IsAny<ICertificateRequest>())).Returns(CertificateSecurityLevel.Trusted);
-
             certificateRequest = new Mock<ICertificateRequest>();
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
 
@@ -115,13 +111,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shippingRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             shippingRequest.Setup(r => r.Submit()).Returns(shipResponse.Object);
 
-
             groundCloseResponse = new Mock<ICarrierResponse>();
             groundCloseResponse.Setup(r => r.Process());
 
             groundCloseRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             groundCloseRequest.Setup(r => r.Submit()).Returns(groundCloseResponse.Object);
-
 
             smartPostCloseResponse = new Mock<ICarrierResponse>();
             smartPostCloseResponse.Setup(r => r.Process());
@@ -129,14 +123,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             smartPostCloseRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             smartPostCloseRequest.Setup(r => r.Submit()).Returns(smartPostCloseResponse.Object);
 
-
             // Registration request/response
             registrationResponse = new Mock<ICarrierResponse>();
             registrationResponse.Setup(r => r.Process());
 
             registrationRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             registrationRequest.Setup(r => r.Submit()).Returns(registrationResponse.Object);
-
 
             // Subscription request/response
             subscriptionResponse = new Mock<ICarrierResponse>();
@@ -207,8 +199,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             rateRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             rateRequest.Setup(r => r.Submit()).Returns(rateResponse.Object);
 
-
-
             requestFactory = new Mock<IFedExRequestFactory>();
             requestFactory.Setup(f => f.CreatePackageMovementRequest(It.IsAny<ShipmentEntity>(), It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
             requestFactory.Setup(f => f.CreateShipRequest(It.IsAny<ShipmentEntity>())).Returns(shippingRequest.Object);
@@ -232,24 +222,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
                 .Returns(new List<ExcludedServiceTypeEntity> { new ExcludedServiceTypeEntity((int) ShipmentTypeCode.FedEx, (int) FedExServiceType.FedExGround) });
 
-            FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
-            {
-                Inspector = certificateInspector.Object,
-                SettingsRepository = settingsRepository.Object,
-                RequestFactory = requestFactory.Object,
-                Log = log.Object,
-                ForceVersionCapture = true,
-                LabelRepository = labelRepository.Object,
-                ExcludedServiceTypeRepository = excludedServiceTypeRepository.Object
-            };
-
             // Force our test object to perform version capture when called.
-            testObject = new FedExShippingClerk(parameters);
+            testObject = new FedExShippingClerk(labelRepository.Object, requestFactory.Object, settingsRepository.Object, excludedServiceTypeRepository.Object, x => log.Object);
         }
 
         [Fact]
         public void PerformVersionCapture_WritesToLog()
         {
+            testObject.ForceVersionCapture = true;
+
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // The string should indicate the capture was forced since our test object was configured as such
@@ -259,6 +240,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_DelegatesToFactory_ToCreatePackageMovementRequest_ForEachFedExAccountTest()
         {
+            testObject.ForceVersionCapture = true;
+
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
@@ -268,6 +251,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_DelegatesToPackageMovementRequest_ForEachFedExAccount()
         {
+            testObject.ForceVersionCapture = true;
+
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
@@ -277,6 +262,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_ThrowsFedExException_WhenMovementResponseIsNull()
         {
+            testObject.ForceVersionCapture = true;
+
             // Setup the request to return a null value
             packageMovementRequest.Setup(r => r.Submit()).Returns((ICarrierResponse) null);
 
@@ -286,6 +273,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_ThrowsFedExException_WhenUnexpectedResponseTypeIsReturned()
         {
+            testObject.ForceVersionCapture = true;
+
             // Setup the request to return a null value
             packageMovementRequest.Setup(r => r.Submit()).Returns(new FedExShipResponse(null, null, null, null, null));
 
@@ -295,6 +284,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_DelegatesToFactory_ToCreateVersionCaptureRequest_ForEachFedExAccount()
         {
+            testObject.ForceVersionCapture = true;
+
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
@@ -304,6 +295,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_DelegatesToVersionCaptureRequest_ForEachFedExAccount()
         {
+            testObject.ForceVersionCapture = true;
+
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
@@ -322,7 +315,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void PerformVersionCapture_SetsVersionCaptureFlagToTrue_WithoutActiveFedExAccounts()
         {
-            // Setup the repositor to return accounts that are not active
+            // Setup the repository to return accounts that are not active
             settingsRepository.Setup(r => r.GetAccounts())
                 .Returns
                 (
@@ -997,7 +990,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             try
             {
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (FedExException)
             { }
@@ -1009,7 +1002,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsNone()
         {
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.None);
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1019,7 +1012,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             try
             {
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (FedExException)
             { }
@@ -1031,7 +1024,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void GetRates_ThrowsFedExException_WhenCertificateRequestReturnsSpoofed()
         {
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Spoofed);
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1039,7 +1032,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
 
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.True(testObject.HasDoneVersionCapture);
         }
@@ -1048,7 +1041,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_PerformsVersionCapture()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // Kind of a weak test due to the fact that the version capture is static, but we're
             // really just interested in the fact that the version capture has been performed
@@ -1060,7 +1053,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             shipmentEntity.OriginStreet3 = "desk";
 
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1068,13 +1061,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             shipmentEntity.ShipStreet3 = "desk";
 
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
         public void GetRates_DelegatesToRequestFactory()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // Check that the rate request was created with a null value
             //for the specialized manipulators - this is for obtaining the "basic rates"
@@ -1084,7 +1077,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_DelegatesToRequest_ToSubmitRateRequest()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             rateRequest.Verify(r => r.Submit(), Times.Exactly(3));
         }
@@ -1092,7 +1085,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_ProcessesResponse()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             rateResponse.Verify(r => r.Process(), Times.Exactly(3));
         }
@@ -1108,7 +1101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             nativeRateReply.RateReplyDetails[0].DeliveryTimestampSpecified = true;
             nativeRateReply.RateReplyDetails[0].DeliveryTimestamp = shipDate.AddDays(4);
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.Equal($"4 ({shipDate.AddDays(4).ToString("dddd h:mm tt")})", rates.Rates.First().Days);
         }
@@ -1123,7 +1116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             nativeRateReply.RateReplyDetails[0].TransitTime = TransitTimeType.ELEVEN_DAYS;
             nativeRateReply.RateReplyDetails[0].TransitTimeSpecified = true;
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.StartsWith("11", rates.Rates.First().Days);
         }
@@ -1136,7 +1129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             nativeRateReply.RateReplyDetails[0].TransitTime = TransitTimeType.ELEVEN_DAYS;
             nativeRateReply.RateReplyDetails[0].TransitTimeSpecified = false;
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.Equal(string.Empty, rates.Rates.First().Days);
         }
@@ -1193,7 +1186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Setup the requests to return the native rate reply
             rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
             Assert.Equal(42.42M, rates.Rates.First().AmountOrDefault);
@@ -1202,7 +1195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_RemovesPriorityFreightRates()
         {
-            // Setup the native request to have a prioity freight rate
+            // Setup the native request to have a priority freight rate
             nativeRateReply = new RateReply
             {
                 RateReplyDetails = new RateReplyDetail[]
@@ -1261,8 +1254,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Setup the requests to return the native rate reply
             rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
 
-
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
             Assert.Equal(3, rates.Rates.Count);
@@ -1326,7 +1318,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
 
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
             Assert.Equal(3, rates.Rates.Count);
@@ -1339,7 +1331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             nativeRateReply.RateReplyDetails[0].RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount = 43.85M;
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.Equal(43.85M, rates.Rates.First().AmountOrDefault);
         }
@@ -1349,7 +1341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             nativeRateReply.RateReplyDetails[0].RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount = 43.85M;
 
-            RateGroup rates = testObject.GetRates(shipmentEntity);
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // Multiply by two to account for the basic rate, smart post rates, and One Rate rates
             Assert.Equal(nativeRateReply.RateReplyDetails.Length * 3, rates.Rates.Count);
@@ -1359,7 +1351,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_CreatesSmartPostRequest_WithRequestFactory()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // Check that a rate request was created that supplied a list of specialized manipulators
             // containing one manipulator that was the smart post manipulator
@@ -1370,7 +1362,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_CreatesOneRateRequest_WithRequestFactory()
         {
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // Check that a rate request was created that supplied a list of specialized manipulators
             // containing one manipulator that was the One Rate manipulator
@@ -1384,7 +1376,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Just throw a soap exception
             rateRequest.Setup(r => r.Submit()).Throws(new SoapException());
 
-            Assert.Throws<FedExSoapCarrierException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExSoapCarrierException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1395,7 +1387,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 // Just throw a soap exception
                 rateRequest.Setup(r => r.Submit()).Throws(new SoapException());
 
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (FedExSoapCarrierException)
             { }
@@ -1412,7 +1404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Just throw a carrier exception
             rateRequest.Setup(r => r.Submit()).Throws(new CarrierException());
 
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1423,7 +1415,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 // Just throw a soap exception
                 rateRequest.Setup(r => r.Submit()).Throws(new CarrierException());
 
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (FedExException)
             { }
@@ -1440,7 +1432,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Just throw a web-related exception
             rateRequest.Setup(r => r.Submit()).Throws(new TimeoutException("this is really slow"));
 
-            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
         [Fact]
@@ -1451,7 +1443,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 // Just throw a soap exception
                 rateRequest.Setup(r => r.Submit()).Throws(new TimeoutException("this is slow"));
 
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (FedExException)
             { }
@@ -1468,7 +1460,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Just throw a non-web exception
             rateRequest.Setup(r => r.Submit()).Throws(new ArgumentNullException());
 
-            Assert.Throws<ArgumentNullException>(() => testObject.GetRates(shipmentEntity));
+            Assert.Throws<ArgumentNullException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
 
 
@@ -1480,7 +1472,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 // Just throw a soap exception
                 rateRequest.Setup(r => r.Submit()).Throws(new ArgumentNullException());
 
-                testObject.GetRates(shipmentEntity);
+                testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
             catch (ArgumentNullException)
             { }
@@ -1500,7 +1492,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
         }
 
         [Fact]
@@ -1512,7 +1504,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             log.Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
         }
@@ -1528,7 +1520,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
         }
 
         [Fact]
@@ -1542,7 +1534,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
             requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
 
-            testObject.GetRates(shipmentEntity);
+            testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             log.Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
         }

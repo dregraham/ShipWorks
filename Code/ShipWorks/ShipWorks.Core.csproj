@@ -1219,9 +1219,13 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExOpenShipServiceGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGatewayFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShippingClerkFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExEmailNotificationControlContainer.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
@@ -1435,7 +1439,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateHoldAtLocationManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDangerousGoodsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkParameters.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerk.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipRequest.cs" />

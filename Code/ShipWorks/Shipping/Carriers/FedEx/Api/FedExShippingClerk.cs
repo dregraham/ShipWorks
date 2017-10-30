@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -34,30 +35,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// <summary>
     /// A FedEx implementation of the IShippingClerk interface.
     /// </summary>
+    [Component]
     public class FedExShippingClerk : IFedExShippingClerk
     {
         private static bool hasDoneVersionCapture;
-        private readonly bool forceVersionCapture;
         private readonly ILabelRepository labelRepository;
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly ICertificateInspector certificateInspector;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
-        public FedExShippingClerk(FedExShippingClerkParameters parameters)
+        public FedExShippingClerk(
+            ILabelRepository labelRepository,
+            IFedExRequestFactory requestFactory,
+            ICarrierSettingsRepository settingsRepository,
+            IExcludedServiceTypeRepository excludedServiceTypeRepository,
+            Func<Type, ILog> createLog)
         {
-            settingsRepository = parameters.SettingsRepository;
-            certificateInspector = parameters.Inspector;
-            forceVersionCapture = parameters.ForceVersionCapture;
-            requestFactory = parameters.RequestFactory;
-            log = parameters.Log;
-            labelRepository = parameters.LabelRepository;
-            excludedServiceTypeRepository = parameters.ExcludedServiceTypeRepository;
+            this.settingsRepository = settingsRepository;
+            this.requestFactory = requestFactory;
+            this.labelRepository = labelRepository;
+            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            log = createLog(GetType());
         }
+
+        /// <summary>
+        /// Should version capture be forced
+        /// </summary>
+        public bool ForceVersionCapture { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether version capture has been performed.
@@ -65,13 +73,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <value>
         /// <c>true</c> if version capture has been performed; otherwise, <c>false</c>.
         /// </value>
-        public bool HasDoneVersionCapture
-        {
-            get
-            {
-                return hasDoneVersionCapture;
-            }
-        }
+        public bool HasDoneVersionCapture => hasDoneVersionCapture;
 
         /// <summary>
         /// Sends the shipment entity to the carrier so a shipment is created  in the carrier's system,
@@ -480,10 +482,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// type: FedExPackageMovementResponse.</exception>
         public void PerformVersionCapture(ShipmentEntity shipmentEntity)
         {
-            if (!hasDoneVersionCapture || forceVersionCapture)
+            if (!hasDoneVersionCapture || ForceVersionCapture)
             {
                 // Log the version capture and whether it was forced or not
-                log.Info(string.Format("Performing FedEx version capture{0}", forceVersionCapture ? " (forced)" : string.Empty));
+                log.Info(string.Format("Performing FedEx version capture{0}", ForceVersionCapture ? " (forced)" : string.Empty));
 
                 // This is made up of two requests: perform the package movement and the next to perform the version capture
                 // based on the location ID received in the package movement request
@@ -516,8 +518,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
-            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
+            //FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
+            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) requestFactory.CreateSearchLocationsRequest(shipment, account);
 
             FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
 
@@ -564,7 +566,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A RateGroup containing the rates received from FedEx.</returns>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector)
         {
             try
             {

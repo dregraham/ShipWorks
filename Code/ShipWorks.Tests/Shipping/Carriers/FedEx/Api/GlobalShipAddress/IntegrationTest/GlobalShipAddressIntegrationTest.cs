@@ -1,5 +1,7 @@
 using System.Linq;
+using Interapptive.Shared.Pdf;
 using Moq;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -36,11 +38,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
             MockSettingsRepository.Setup(x => x.GetAccount(It.IsAny<ShipmentEntity>()))
                                   .Returns(account);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(new FedExServiceGateway(MockSettingsRepository.Object),
-                new FedExOpenShipGateway(MockSettingsRepository.Object),
+            //TODO: See if we can use Autofac for this
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(
+                new FedExServiceGatewayFactory(
+                    _ => new FedExServiceGateway(MockSettingsRepository.Object),
+                    _ => new FedExOpenShipGateway(MockSettingsRepository.Object)),
                 MockSettingsRepository.Object,
                 new FedExShipmentTokenProcessor(),
-                new FedExResponseFactory(new FedExLabelRepository()));
+                new FedExResponseFactory(new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()))));
             CarrierRequest searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
 
             ICarrierResponse carrierResponse = searchLocationsRequest.Submit();

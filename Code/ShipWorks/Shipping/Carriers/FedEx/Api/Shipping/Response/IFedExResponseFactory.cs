@@ -3,6 +3,9 @@ using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 {
+    /// <summary>
+    /// An implementation of the ICarrierResponseFactory for FedEx.
+    /// </summary>
     public interface IFedExResponseFactory : ICarrierResponseFactory
     {
         /// <summary>

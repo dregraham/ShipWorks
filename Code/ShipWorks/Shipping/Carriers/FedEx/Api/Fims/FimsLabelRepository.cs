@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
-using Autofac;
-using Autofac.Features.OwnedInstances;
-using ShipWorks.ApplicationCore;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,17 +10,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     /// <summary>
     /// Responsible for saving retrieved FedEx FIMS Labels to Database
     /// </summary>
+    [Component]
     public class FimsLabelRepository : IFimsLabelRepository
     {
         private readonly IDataResourceManager dataResourceManager;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FimsLabelRepository()
-        {
-            dataResourceManager = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IDataResourceManager>>().Value;
-        }
 
         /// <summary>
         /// Constructor

@@ -76,7 +76,6 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -3673,29 +3672,31 @@ namespace ShipWorks
         {
             try
             {
-                Cursor.Current = Cursors.WaitCursor;
-
-                bool anyClosed = false;
-
-                IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
-
-                // Process all accounts with configured hub ids
-                foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    if (shippingClerk.CloseSmartPost(account) != null)
+                    var clerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(null);
+                    Cursor.Current = Cursors.WaitCursor;
+
+                    bool anyClosed = false;
+
+                    // Process all accounts with configured hub ids
+                    foreach (FedExAccountEntity account in FedExAccountManager.Accounts.Where(a => XElement.Parse(a.SmartPostHubList).Descendants("HubID").Any()))
                     {
-                        // A non-null closed entity was returned, so there were shipments that were closed for this account.
-                        anyClosed = true;
+                        if (clerk.CloseSmartPost(account) != null)
+                        {
+                            // A non-null closed entity was returned, so there were shipments that were closed for this account.
+                            anyClosed = true;
+                        }
                     }
-                }
 
-                if (anyClosed)
-                {
-                    MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nSmartPost Close does not generate any reports to be printed.  No further action is required.");
-                }
-                else
-                {
-                    MessageHelper.ShowInformation(this, "There were no shipments to be closed.");
+                    if (anyClosed)
+                    {
+                        MessageHelper.ShowInformation(this, "The close has been successfully processed.\n\nSmartPost Close does not generate any reports to be printed.  No further action is required.");
+                    }
+                    else
+                    {
+                        MessageHelper.ShowInformation(this, "There were no shipments to be closed.");
+                    }
                 }
             }
             catch (FedExException ex)

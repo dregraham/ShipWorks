@@ -5,10 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -20,6 +22,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Integration.Shared;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
@@ -206,23 +209,29 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 InterapptiveOnlyUtilities.UseListRates = RateRequestTypes == "LIST";
 
-
                 ShipmentEntity shipment = CreateShipment(order);
 
                 // If you want to create the shipments, but NOT process them, press the magic keys
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
-                    {
-                        Inspector = new FedExShipmentType().CertificateInspector,
-                        SettingsRepository = new FedExSettingsRepository(),
-                        RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
-                        LabelRepository = new FedExLabelRepository(),
-                        Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
-                        ForceVersionCapture = false
-                    };
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk(parameters);
+                    var settingsRepository = new FedExSettingsRepository();
+                    var labelRepository = new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()));
+
+                    //TODO: See if we can use Autofac for this
+                    FedExShippingClerk shippingClerk = new FedExShippingClerk(
+                        labelRepository,
+                        new FedExRequestFactory(
+                            new FedExServiceGatewayFactory(
+                                _ => new FedExServiceGateway(settingsRepository),
+                                _ => new FedExOpenShipGateway(settingsRepository)),
+                            settingsRepository,
+                            new FedExShipmentTokenProcessor(),
+                            new FedExResponseFactory(labelRepository)),
+                        settingsRepository,
+                        new ExcludedServiceTypeRepository(),
+                        LogManager.GetLogger
+                    );
 
                     var responses = shippingClerk.Ship(shipment);
 

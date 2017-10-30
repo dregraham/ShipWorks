@@ -2,17 +2,18 @@
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -151,8 +152,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                IShippingClerk clerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
-                clerk.RegisterAccount(account);
+
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IFedExShippingClerk clerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
+                    clerk.RegisterAccount(account);
+                }
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);
 

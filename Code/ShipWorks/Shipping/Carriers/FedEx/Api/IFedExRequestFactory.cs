@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -104,5 +105,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>An instance of an ICertificateRequest that can be used to check the security level
         /// of a host's certificate.</returns>
         ICertificateRequest CreateCertificateRequest(ICertificateInspector certificateInspector);
+
+        /// <summary>
+        /// Creates the Search Location request.
+        /// </summary>
+        /// <param name="shipmentEntity">The shipment entity.</param>
+        /// <param name="accountEntity">The account entity.</param>
+        /// <returns>A CarrierRequest object that can be used for submitting a request to
+        /// FedEx searching dropoff location.</returns>
+        FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipment, FedExAccountEntity account);
     }
 }

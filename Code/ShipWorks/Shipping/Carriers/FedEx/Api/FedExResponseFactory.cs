@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
@@ -12,11 +13,11 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
@@ -24,14 +25,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// <summary>
     /// An implementation of the ICarrierResponseFactory for FedEx.
     /// </summary>
+    [Component]
     public class FedExResponseFactory : IFedExResponseFactory
     {
-        private readonly ILabelRepository labelRepository;
+        private readonly IFedExLabelRepository labelRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExResponseFactory(ILabelRepository labelRepository)
+        public FedExResponseFactory(IFedExLabelRepository labelRepository)
         {
             this.labelRepository = labelRepository;
         }

@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.Core.ApplicationCode;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
 
@@ -44,14 +41,8 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
             builder.RegisterType<FedExRatingService>()
                 .Keyed<IRatingService>(ShipmentTypeCode.FedEx);
 
-            builder.RegisterType<FedExSettingsRepository>()
-                .Keyed<ICarrierSettingsRepository>(ShipmentTypeCode.FedEx)
-                .AsSelf();
-
             builder.RegisterType<FedExRateHashingService>()
                 .Keyed<IRateHashingService>(ShipmentTypeCode.FedEx);
-
-            builder.RegisterType<FedExShippingClerkFactory>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A RateGroup containing the rates received from the carrier.</returns>
-        RateGroup GetRates(ShipmentEntity shipment);
+        RateGroup GetRates(ShipmentEntity shipment, ICertificateInspector certificateInspector);
 
         /// <summary>
         /// Track a shipment

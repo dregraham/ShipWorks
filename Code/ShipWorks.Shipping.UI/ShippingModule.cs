@@ -58,10 +58,6 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<ExcludedServiceTypeRepository>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<InformationFootnoteViewModel>()
                 .AsImplementedInterfaces()
                 .ExternallyOwned();
@@ -192,8 +188,6 @@ namespace ShipWorks.Shipping.UI
             builder.Register((container, parameters) => container.ResolveKeyed<IRateHashingService>(parameters.TypedAs<ShipmentTypeCode>()));
 
             builder.Register((container, parameters) => container.ResolveKeyed<ShipmentType>(parameters.TypedAs<ShipmentTypeCode>()));
-
-            builder.RegisterType<ExcludedServiceTypeRepository>().AsImplementedInterfaces();
         }
     }
 }

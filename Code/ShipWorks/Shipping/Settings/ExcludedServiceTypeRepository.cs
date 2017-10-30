@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -11,6 +12,7 @@ namespace ShipWorks.Shipping.Settings
     /// <summary>
     /// Repository for excluded services
     /// </summary>
+    [Component]
     public class ExcludedServiceTypeRepository : IExcludedServiceTypeRepository
     {
         /// <summary>

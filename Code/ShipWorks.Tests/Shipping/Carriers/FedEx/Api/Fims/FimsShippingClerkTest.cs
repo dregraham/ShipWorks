@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+using Interapptive.Shared.Net;
+using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
-using log4net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -139,15 +139,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS shipments allow only 1 package".ToUpperInvariant()));
         }
 
-
         #region GetRates Tests
 
         [Fact]
         public void GetRates_ReturnsEmptyRateGroup()
         {
-            RateGroup rateGroup = testObject.GetRates(shipmentEntity);
+            RateGroup rateGroup = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            Assert.True(!rateGroup.Rates.Any());
+            Assert.Empty(rateGroup.Rates);
         }
         #endregion
 
