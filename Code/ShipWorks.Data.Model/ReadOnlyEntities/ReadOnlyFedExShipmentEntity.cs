@@ -192,6 +192,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ThirdPartyConsignee = source.ThirdPartyConsignee;
             Currency = source.Currency;
             InternationalTrafficInArmsService = source.InternationalTrafficInArmsService;
+            FreightRole = source.FreightRole;
+            FreightCollectTerms = source.FreightCollectTerms;
+            FreightTotalHandlinUnits = source.FreightTotalHandlinUnits;
+            FreightClass = source.FreightClass;
+            FreightSpecialServices = source.FreightSpecialServices;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -1139,6 +1144,36 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> InternationalTrafficInArmsService { get; }
+        /// <summary> The FreightRole property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightRole"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType FreightRole { get; }
+        /// <summary> The FreightCollectTerms property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightCollectTerms"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType FreightCollectTerms { get; }
+        /// <summary> The FreightTotalHandlinUnits property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightTotalHandlinUnits"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 FreightTotalHandlinUnits { get; }
+        /// <summary> The FreightClass property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightClass"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightClassType FreightClass { get; }
+        /// <summary> The FreightSpecialServices property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightSpecialServices"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType FreightSpecialServices { get; }
         
         public IShipmentEntity Shipment { get; }
         

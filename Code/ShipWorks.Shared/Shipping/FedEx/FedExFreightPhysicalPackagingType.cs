@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.FedEx
     {
         [Description("None")]
         [ApiValue("")]
-        None = 1,
+        None = 0,
 
         [Description("Bag")]
         [ApiValue("BAG")]

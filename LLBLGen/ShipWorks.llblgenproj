@@ -89,6 +89,11 @@
     <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightClassType" Type="ShipWorks.Shipping.FedEx.FedExFreightClassType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightCollectTermsType" Type="ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightPhysicalPackagingType" Type="ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightShipmentRoleType" Type="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightSpecialServicesType" Type="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
@@ -926,6 +931,8 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="5" />
           <Field Name="DryIceWeight" Type="double" FieldIndex="18" />
           <Field Name="FedExPackageID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="FreightPackaging" Type="FedExFreightPhysicalPackagingType" FieldIndex="45" />
+          <Field Name="FreightPieces" Type="int" Precision="10" FieldIndex="46" />
           <Field Name="HazardousMaterialClass" Type="string" MaxLength="8" FieldIndex="28" />
           <Field Name="HazardousMaterialNumber" Type="string" MaxLength="16" FieldIndex="27" />
           <Field Name="HazardousMaterialPackingGroup" Type="int" FieldIndex="30" />
@@ -1107,9 +1114,14 @@
           <Field Name="FedExHoldAtLocationEnabled" Type="bool" FieldIndex="110" />
           <Field Name="FimsAirWaybill" Type="string" IsOptional="true" MaxLength="50" FieldIndex="149" />
           <Field Name="FreightBookingNumber" Type="string" MaxLength="12" FieldIndex="25" />
+          <Field Name="FreightClass" Type="FedExFreightClassType" FieldIndex="159" />
+          <Field Name="FreightCollectTerms" Type="FedExFreightCollectTermsType" FieldIndex="157" />
           <Field Name="FreightInsideDelivery" Type="bool" FieldIndex="24" />
           <Field Name="FreightInsidePickup" Type="bool" FieldIndex="23" />
           <Field Name="FreightLoadAndCount" Type="int" FieldIndex="26" />
+          <Field Name="FreightRole" Type="FedExFreightShipmentRoleType" FieldIndex="156" />
+          <Field Name="FreightSpecialServices" Type="FedExFreightSpecialServicesType" FieldIndex="160" />
+          <Field Name="FreightTotalHandlinUnits" Type="int" Precision="10" FieldIndex="158" />
           <Field Name="HoldCity" Type="string" IsOptional="true" MaxLength="100" FieldIndex="125" />
           <Field Name="HoldCompanyName" Type="string" IsOptional="true" MaxLength="50" FieldIndex="116" />
           <Field Name="HoldContactId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="113" />
@@ -4065,7 +4077,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-19T11:51:55.1562031Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-30T17:40:58.4515358Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5104,6 +5116,8 @@
                     <Field Name="BatteryMaterial" Ordinal="43" DbType="8" Precision="10" />
                     <Field Name="BatteryPacking" Ordinal="44" DbType="8" Precision="10" />
                     <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
+                    <Field Name="FreightPackaging" Ordinal="46" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightPieces" Ordinal="47" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -5902,6 +5916,11 @@
                     <Field Name="ThirdPartyConsignee" Ordinal="154" DbType="2" />
                     <Field Name="Currency" Ordinal="155" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InternationalTrafficInArmsService" Ordinal="156" IsOptional="true" DbType="2" />
+                    <Field Name="FreightRole" Ordinal="157" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightCollectTerms" Ordinal="158" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightTotalHandlinUnits" Ordinal="159" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10" />
+                    <Field Name="FreightClass" Ordinal="160" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightSpecialServices" Ordinal="161" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -10623,6 +10642,8 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="DryIceWeight" TargetFieldName="DryIceWeight" />
             <FieldMapping FieldName="FedExPackageID" TargetFieldName="FedExPackageID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="FreightPackaging" TargetFieldName="FreightPackaging" />
+            <FieldMapping FieldName="FreightPieces" TargetFieldName="FreightPieces" />
             <FieldMapping FieldName="HazardousMaterialClass" TargetFieldName="HazardousMaterialClass" />
             <FieldMapping FieldName="HazardousMaterialNumber" TargetFieldName="HazardousMaterialNumber" />
             <FieldMapping FieldName="HazardousMaterialPackingGroup" TargetFieldName="HazardousMaterialPackingGroup" />
@@ -10804,9 +10825,14 @@
             <FieldMapping FieldName="FedExHoldAtLocationEnabled" TargetFieldName="FedExHoldAtLocationEnabled" />
             <FieldMapping FieldName="FimsAirWaybill" TargetFieldName="FimsAirWaybill" />
             <FieldMapping FieldName="FreightBookingNumber" TargetFieldName="FreightBookingNumber" />
+            <FieldMapping FieldName="FreightClass" TargetFieldName="FreightClass" />
+            <FieldMapping FieldName="FreightCollectTerms" TargetFieldName="FreightCollectTerms" />
             <FieldMapping FieldName="FreightInsideDelivery" TargetFieldName="FreightInsideDelivery" />
             <FieldMapping FieldName="FreightInsidePickup" TargetFieldName="FreightInsidePickup" />
             <FieldMapping FieldName="FreightLoadAndCount" TargetFieldName="FreightLoadAndCount" />
+            <FieldMapping FieldName="FreightRole" TargetFieldName="FreightRole" />
+            <FieldMapping FieldName="FreightSpecialServices" TargetFieldName="FreightSpecialServices" />
+            <FieldMapping FieldName="FreightTotalHandlinUnits" TargetFieldName="FreightTotalHandlinUnits" />
             <FieldMapping FieldName="HoldCity" TargetFieldName="HoldCity" />
             <FieldMapping FieldName="HoldCompanyName" TargetFieldName="HoldCompanyName" />
             <FieldMapping FieldName="HoldContactId" TargetFieldName="HoldContactId" />

@@ -291,6 +291,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType BatteryRegulatorySubtype { get; }
+        /// <summary> The FreightPackaging property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."FreightPackaging"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType FreightPackaging { get; }
+        /// <summary> The FreightPieces property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."FreightPieces"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Int32 FreightPieces { get; }
         
         
         IFedExShipmentEntity FedExShipment { get; }

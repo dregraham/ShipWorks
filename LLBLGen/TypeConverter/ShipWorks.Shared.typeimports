@@ -2,4 +2,9 @@
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryPackingType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
     <typeImport typeName="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubtype" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightClassType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
+    <typeImport typeName="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType" assemblyFile="..\..\Artifacts\Application\ShipWorks.Shared.dll"/>
 </typeImports>

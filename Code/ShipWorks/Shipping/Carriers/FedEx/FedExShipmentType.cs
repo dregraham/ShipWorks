@@ -28,6 +28,7 @@ using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -423,6 +424,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
 
             shipment.FedEx.ThirdPartyConsignee = false;
+
+            shipment.FedEx.FreightClass = FedExFreightClassType.None;
+            shipment.FedEx.FreightCollectTerms = FedExFreightCollectTermsType.None;
+            shipment.FedEx.FreightRole = FedExFreightShipmentRoleType.None;
+            shipment.FedEx.FreightSpecialServices = FedExFreightSpecialServicesType.None;
+            shipment.FedEx.FreightTotalHandlinUnits = 0;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);

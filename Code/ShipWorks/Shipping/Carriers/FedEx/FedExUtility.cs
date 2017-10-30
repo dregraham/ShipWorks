@@ -293,6 +293,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.NumberOfContainers = 0;
             package.PackingDetailsCargoAircraftOnly = false;
             package.PackingDetailsPackingInstructions = string.Empty;
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.None;
+            package.FreightPieces = 0;
 
             ApplyDangerousGoodsDefaults(package);
             ApplyHazardousMaterialsDefaults(package);
