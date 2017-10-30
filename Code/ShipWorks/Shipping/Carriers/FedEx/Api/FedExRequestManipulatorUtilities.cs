@@ -216,6 +216,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     return ServiceType.FEDEX_DISTANCE_DEFERRED;
                 case FedExServiceType.FedExNextDayFreight:
                     return ServiceType.FEDEX_NEXT_DAY_FREIGHT;
+                case FedExServiceType.FexExFreightEconomy:
+                    return ServiceType.FEDEX_FREIGHT_ECONOMY;
+                case FedExServiceType.FedExFreightPriority:
+                    return ServiceType.FEDEX_FREIGHT_PRIORITY;
             }
 
             throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);
