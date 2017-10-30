@@ -1225,6 +1225,8 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExOpenShipServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShippingClerkFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateRequestOptions.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\IFedExRateRequestManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExEmailNotificationControlContainer.cs" />
