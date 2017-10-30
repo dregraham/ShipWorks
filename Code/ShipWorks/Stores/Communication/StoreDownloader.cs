@@ -639,8 +639,6 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save a new order
         /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
         private async Task SaveNewOrder(OrderEntity order, ISqlAdapter adapter)
         {
             if (!order.IsNew)

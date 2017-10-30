@@ -4272,6 +4272,7 @@ warnif count > 64
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreTooManyParams*") 
+        && m.ParentType.Name != "ISqlAdapter"
 )
 orderby m.FullName
 select new { m }

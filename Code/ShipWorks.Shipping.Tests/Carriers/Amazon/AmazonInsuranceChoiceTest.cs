@@ -24,10 +24,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Throws<ArgumentNullException>(() => new AmazonInsuranceChoice(new ShipmentEntity()));
         }
 
-        [Fact]
-        public void InsurancePennyOne_ReturnsTrue_WhenCarrierIsUsps()
+        [Theory]
+        [InlineData("STAMPS_DOT_COM")]
+        [InlineData("USPS")]
+        public void InsurancePennyOne_ReturnsTrue_WhenCarrierIsUsps(string carrierName)
         {
-            AmazonInsuranceChoice testObject = new AmazonInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { CarrierName = "STAMPS_DOT_COM" } });
+            AmazonInsuranceChoice testObject = new AmazonInsuranceChoice(new ShipmentEntity { Amazon = new AmazonShipmentEntity { CarrierName = carrierName } });
             Assert.True(testObject.InsurancePennyOne);
         }
 
