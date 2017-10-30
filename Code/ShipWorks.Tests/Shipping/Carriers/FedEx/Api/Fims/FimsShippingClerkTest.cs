@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Common.Logging.Factory;
 using Interapptive.Shared.Net;
 using log4net;
 using Moq;
@@ -32,6 +33,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             log = new Mock<ILog>();
             log.Setup(l => l.Info(It.IsAny<string>()));
             log.Setup(l => l.Error(It.IsAny<string>()));
+
+            Mock<Func<Type, ILog>> logFunc = new Mock<Func<Type, ILog>>();
+            logFunc.Setup(x => x(It.IsAny<Type>()))
+                .Returns(log.Object);
 
             shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExFimsUsername = "Success";
@@ -70,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
             webClient.Setup(w => w.Ship(It.IsAny<IFimsShipRequest>())).Returns(shipResponse.Object);
 
             // Force our test object to perform version capture when called.
-            testObject = new FimsShippingClerk(webClient.Object, labelRepository.Object, settingsRepository.Object, log.Object);
+            testObject = new FimsShippingClerk(webClient.Object, labelRepository.Object, settingsRepository.Object, logFunc.Object);
         }
 
         [Fact]
