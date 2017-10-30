@@ -241,8 +241,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 types.Add(FedExPackagingType.Custom);
             }
 
-            if ((service == FedExServiceType.FedExFreightEconomy) || 
-                (service == FedExServiceType.FedExFreightPriority))
+            if (service == FedExServiceType.FedExFreightEconomy || 
+                service == FedExServiceType.FedExFreightPriority)
             {
                 types.Add(FedExPackagingType.Custom);
             }
