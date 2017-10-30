@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FedEx2Day,
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FedEx2DayAM,
-                FedExServiceType.FexExFreightEconomy,
+                FedExServiceType.FedExFreightEconomy,
                 FedExServiceType.FedExFreightPriority
             };
 
@@ -241,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 types.Add(FedExPackagingType.Custom);
             }
 
-            if ((service == FedExServiceType.FexExFreightEconomy) || 
+            if ((service == FedExServiceType.FedExFreightEconomy) || 
                 (service == FedExServiceType.FedExFreightPriority))
             {
                 types.Add(FedExPackagingType.Custom);

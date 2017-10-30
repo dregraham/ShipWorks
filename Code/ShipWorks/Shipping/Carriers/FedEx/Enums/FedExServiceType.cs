@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         InternationalPriorityExpress = 38,
 
         [Description("FedEx Freight® Economy")]
-        FexExFreightEconomy = 39,
+        FedExFreightEconomy = 39,
 
         [Description("FedEx Freight® Priority")]
         FedExFreightPriority = 40,
