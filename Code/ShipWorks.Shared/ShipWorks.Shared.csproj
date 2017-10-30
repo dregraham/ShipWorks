@@ -132,6 +132,7 @@
     <Compile Include="Shipping\FedEx\FedExBatteryPackingType.cs" />
     <Compile Include="Shipping\FedEx\FedExBatteryRegulatorySubType.cs" />
     <Compile Include="Settings\ShipmentDateCutoff.cs" />
+    <Compile Include="Shipping\FedEx\FedExFreightShipmentRoleType.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightSpecialServicesType.cs" />
     <Compile Include="Shipping\ShipmentStatus.cs" />
     <Compile Include="Shipping\ShipmentTypeCode.cs" />
