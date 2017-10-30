@@ -228,17 +228,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     }
             }
 
-            switch (service)
-            {
-                case FedExServiceType.FexExFreightEconomy:
-                case FedExServiceType.FedExFreightPriority:
-                {
-                    types.Add(FedExPackagingType.Custom);
-
-                    break;
-                }
-            }
-
             if (OneRateServiceTypes.Any(s => s == service))
             {
                 types.Add(FedExPackagingType.Envelope);
@@ -252,11 +241,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 types.Add(FedExPackagingType.Custom);
             }
 
-            // These are available for all service types
-            types.Add(FedExPackagingType.SmallBox);
-            types.Add(FedExPackagingType.MediumBox);
-            types.Add(FedExPackagingType.LargeBox);
-            types.Add(FedExPackagingType.ExtraLargeBox);
+            if ((service == FedExServiceType.FexExFreightEconomy) || 
+                (service == FedExServiceType.FedExFreightPriority))
+            {
+                types.Add(FedExPackagingType.Custom);
+            }
+            else
+            {
+                // These are available for all service types
+                types.Add(FedExPackagingType.SmallBox);
+                types.Add(FedExPackagingType.MediumBox);
+                types.Add(FedExPackagingType.LargeBox);
+                types.Add(FedExPackagingType.ExtraLargeBox);
+            }
 
             return types;
         }
