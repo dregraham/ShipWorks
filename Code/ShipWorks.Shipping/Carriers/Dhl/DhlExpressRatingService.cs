@@ -47,22 +47,24 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
+            // We don't have any DHL Express accounts, so let the user know they need an account.
+            if (!accountRepository.Accounts.Any())
+            {
+                throw new ShippingException("An account is required to view DHL Express rates.");
+            }
+
             try
             {
-                // We don't have any DHL Express accounts, so let the user know they need an account.
-                if (!accountRepository.Accounts.Any())
-                {
-                    throw new DhlExpressException($"An account is required to view DHL Express rates.");
-                }
-
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
-                RateShipmentResponse rateResponse = Task.Run(async () => await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false)).Result;
+                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
+                        await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false)).Result;
 
-                return rateGroupFactory.Create(rateResponse, ShipmentTypeCode.DhlExpress,
-                     shipmentType.GetAvailableServiceTypes()
-                        .Cast<DhlExpressServiceType>()
-                        .Select(t => EnumHelper.GetApiValue(t))
-                        .Union(new List<string> { EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service) }));
+                IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
+                    .Cast<DhlExpressServiceType>()
+                    .Select(t => EnumHelper.GetApiValue(t))
+                    .Union(new List<string> { EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service) });
+
+                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress, availableServiceTypeApiCodes);
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {

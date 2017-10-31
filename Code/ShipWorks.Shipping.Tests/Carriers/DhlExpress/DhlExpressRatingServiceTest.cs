@@ -106,13 +106,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 }
             };
 
-            RateShipmentResponse rateResponse = new RateShipmentResponse();
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
+            RateShipmentResponse rateShipmentResponse = new RateShipmentResponse { RateResponse = new RateResponse() };
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateShipmentResponse));
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);
 
-            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress, It.IsAny<IEnumerable<string>>()));
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress, It.IsAny<IEnumerable<string>>()));
         }
 
         [Fact]
@@ -133,13 +133,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 }
             };
 
-            RateShipmentResponse rateResponse = new RateShipmentResponse();
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
+            RateShipmentResponse rateShipmentResponse = new RateShipmentResponse { RateResponse = new RateResponse() };
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateShipmentResponse));
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);
 
-            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress,
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress,
                 It.Is<IEnumerable<string>>(apiValues =>
                     apiValues.Contains("express_envelope") &&
                     apiValues.Contains("express_worldwide"))));
@@ -163,13 +163,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 }
             };
 
-            RateShipmentResponse rateResponse = new RateShipmentResponse();
-            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
+            RateShipmentResponse rateShipmentResponse = new RateShipmentResponse { RateResponse = new RateResponse() };
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateShipmentResponse));
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);
 
-            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress,
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress,
                 It.Is<IEnumerable<string>>(apiValues => apiValues.SingleOrDefault() == "express_envelope")));
         }
 

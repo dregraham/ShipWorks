@@ -42,12 +42,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         protected override void Initialize()
         {
             base.Initialize();
-
             originControl.Initialize(ShipmentTypeCode.DhlExpress);
+            packageControl.Initialize();
 
             LoadAccounts();
-
-            packageControl.Initialize();
         }
 
         /// <summary>

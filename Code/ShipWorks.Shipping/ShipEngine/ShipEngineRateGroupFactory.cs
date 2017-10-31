@@ -20,13 +20,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a RateGroup from the given RateShipmentResponse
         /// </summary>
-        public RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes)
+        public RateGroup Create(RateResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes)
         {
             List<RateResult> results = new List<RateResult>();
 
-            foreach (Rate apiRate in rateResponse.RateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
+            foreach (Rate apiRate in rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
             {
-                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) apiRate.ShippingAmount.Amount, apiRate.ServiceCode)
+                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (apiRate.ShippingAmount?.Amount ?? 0), apiRate.ServiceCode)
                 {
                     CarrierDescription = apiRate.CarrierNickname,
                     ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
@@ -46,21 +46,21 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Add any invalid rate errors
         /// </summary>
-        private static void AddInvalidRateErrors(RateGroup rateGroup, RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType)
+        private static void AddInvalidRateErrors(RateGroup rateGroup, RateResponse rateResponse, ShipmentTypeCode shipmentType)
         {
             StringBuilder errorBuilder = new StringBuilder();
 
-            if (rateResponse.RateResponse.InvalidRates.Any())
+            if (rateResponse.InvalidRates.Any())
             {
-                foreach (Rate invalidRate in rateResponse.RateResponse.InvalidRates)
+                foreach (Rate invalidRate in rateResponse.InvalidRates)
                 {
                     invalidRate.ErrorMessages.ForEach(m => errorBuilder.AppendLine(m));
                 }
             }
 
-            if (rateResponse.RateResponse.Errors.Any())
+            if (rateResponse.Errors.Any())
             {
-                foreach (ProviderError error in rateResponse.RateResponse.Errors)
+                foreach (ProviderError error in rateResponse.Errors)
                 {
                     errorBuilder.AppendLine(error.Message);
                 }

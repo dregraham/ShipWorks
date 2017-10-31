@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="rateResponse">The rate response from ShipEngine</param>
         /// <param name="shipmentType">Shipment type for the RateGroup</param>
-        RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes);
+        RateGroup Create(RateResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes);
     }
 }
