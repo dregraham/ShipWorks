@@ -45,6 +45,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 OriginalOrderID { get; }
+        /// <summary> The CustomerOrderID property of the Entity WalmartOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartOrderSearch"."CustomerOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.String CustomerOrderID { get; }
         
         
         IWalmartOrderEntity WalmartOrder { get; }

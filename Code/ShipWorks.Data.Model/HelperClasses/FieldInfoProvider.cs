@@ -3440,6 +3440,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)WalmartOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "PurchaseOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.PurchaseOrderID, 32, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("WalmartOrderSearchEntity", "CustomerOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.CustomerOrderID, 50, 0, 0);
 		}
 		/// <summary>Inits WalmartStoreEntity's FieldInfo objects</summary>
 		private void InitWalmartStoreEntityInfos()

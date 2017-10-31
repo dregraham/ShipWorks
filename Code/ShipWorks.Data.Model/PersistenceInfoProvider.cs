@@ -3631,11 +3631,12 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits WalmartOrderSearchEntity's mappings</summary>
 		private void InitWalmartOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 4, 0);
+			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 5, 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "WalmartOrderSearchID", "WalmartOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "PurchaseOrderID", "PurchaseOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("WalmartOrderSearchEntity", "CustomerOrderID", "CustomerOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits WalmartStoreEntity's mappings</summary>

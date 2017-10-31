@@ -25282,6 +25282,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.CustomerOrderID field instance</summary>
+		public static EntityField2 CustomerOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.CustomerOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity WalmartStoreEntity</summary>

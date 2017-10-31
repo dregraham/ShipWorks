@@ -40,6 +40,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderID = source.OrderID;
             PurchaseOrderID = source.PurchaseOrderID;
             OriginalOrderID = source.OriginalOrderID;
+            CustomerOrderID = source.CustomerOrderID;
             
             
             WalmartOrder = (IWalmartOrderEntity) source.WalmartOrder?.AsReadOnly(objectMap);
@@ -73,6 +74,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The CustomerOrderID property of the Entity WalmartOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "WalmartOrderSearch"."CustomerOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String CustomerOrderID { get; }
         
         
         public IWalmartOrderEntity WalmartOrder { get; }

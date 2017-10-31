@@ -3053,6 +3053,7 @@
       </EntityDefinition>
       <EntityDefinition Name="WalmartOrderSearch" ObjectID="0f104b64-2c28-414b-b3df-9de63987f694">
         <Fields>
+          <Field Name="CustomerOrderID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="3" />
           <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="2" />
@@ -4055,7 +4056,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-09-19T11:51:55.1562031Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-31T12:17:58.8497736Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8523,6 +8524,7 @@
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="PurchaseOrderID" Ordinal="3" DbType="24" Length="32" />
                     <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="CustomerOrderID" Ordinal="5" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="WalmartStore">
@@ -12775,6 +12777,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":WalmartOrderSearch" TargetName="ShipWorksLocal:dbo:WalmartOrderSearch">
           <FieldMappings>
+            <FieldMapping FieldName="CustomerOrderID" TargetFieldName="CustomerOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />
