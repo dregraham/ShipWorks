@@ -1228,6 +1228,12 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExEmailNotificationControlContainer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExLtlFreightControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExLtlFreightControl.Designer.cs">
+      <DependentUpon>FedExLtlFreightControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExFreightContainerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7869,6 +7875,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExDangerousGoodsControl.resx">
       <DependentUpon>FedExDangerousGoodsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExLtlFreightControl.resx">
+      <DependentUpon>FedExLtlFreightControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExFreightContainerControl.resx">
       <DependentUpon>FedExFreightContainerControl.cs</DependentUpon>

@@ -1173,7 +1173,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <remarks>Mapped on table field: "FedExShipment"."FreightSpecialServices"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType FreightSpecialServices { get; }
+        public System.Int32 FreightSpecialServices { get; }
         
         public IShipmentEntity Shipment { get; }
         

@@ -1397,7 +1397,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightCollectTerms", typeof(ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightCollectTerms, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightTotalHandlinUnits", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightTotalHandlinUnits, 0, 0, 10);
 			this.AddElementFieldInfo("FedExShipmentEntity", "FreightClass", typeof(ShipWorks.Shipping.FedEx.FedExFreightClassType), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightClass, 0, 0, 10);
-			this.AddElementFieldInfo("FedExShipmentEntity", "FreightSpecialServices", typeof(ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightSpecialServices, 0, 0, 10);
+			this.AddElementFieldInfo("FedExShipmentEntity", "FreightSpecialServices", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.FreightSpecialServices, 0, 0, 10);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

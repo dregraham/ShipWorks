@@ -66,11 +66,11 @@ namespace ShipWorks.Shipping.FedEx
 
         [Description("Inside delivery")]
         [ApiValue("INSIDE_DELIVERY")]
-        INSIDE_DELIVERY = 0x20000,
+        InsideDelivery = 0x20000,
 
         [Description("Inside pickup")]
         [ApiValue("INSIDE_PICKUP")]
-        INSIDE_PICKUP = 0x40000,
+        InsidePickup = 0x40000,
 
         [Description("Freight Guarantee")]
         [ApiValue("FREIGHT_GUARANTEE")]

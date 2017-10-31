@@ -986,7 +986,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "FedExShipment"."FreightSpecialServices"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType FreightSpecialServices { get; }
+        System.Int32 FreightSpecialServices { get; }
         
         IShipmentEntity Shipment { get; }
         

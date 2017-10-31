@@ -224,7 +224,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             selectedRows.Clear();
 
-
             using (MultiValueScope scope = new MultiValueScope())
             {
                 // Go through each selected row

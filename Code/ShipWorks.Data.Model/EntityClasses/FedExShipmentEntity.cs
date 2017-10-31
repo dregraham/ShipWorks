@@ -2412,9 +2412,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExShipment"."FreightSpecialServices"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType FreightSpecialServices
+		public virtual System.Int32 FreightSpecialServices
 		{
-			get { return (ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType)GetValue((int)FedExShipmentFieldIndex.FreightSpecialServices, true); }
+			get { return (System.Int32)GetValue((int)FedExShipmentFieldIndex.FreightSpecialServices, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.FreightSpecialServices, value); }
 		}
 

@@ -428,7 +428,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.FreightClass = FedExFreightClassType.None;
             shipment.FedEx.FreightCollectTerms = FedExFreightCollectTermsType.None;
             shipment.FedEx.FreightRole = FedExFreightShipmentRoleType.None;
-            shipment.FedEx.FreightSpecialServices = FedExFreightSpecialServicesType.None;
+            shipment.FedEx.FreightSpecialServices = (int) FedExFreightSpecialServicesType.None;
             shipment.FedEx.FreightTotalHandlinUnits = 0;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();

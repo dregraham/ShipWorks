@@ -1120,7 +1120,7 @@
           <Field Name="FreightInsidePickup" Type="bool" FieldIndex="23" />
           <Field Name="FreightLoadAndCount" Type="int" FieldIndex="26" />
           <Field Name="FreightRole" Type="FedExFreightShipmentRoleType" FieldIndex="156" />
-          <Field Name="FreightSpecialServices" Type="FedExFreightSpecialServicesType" FieldIndex="160" />
+          <Field Name="FreightSpecialServices" Type="int" FieldIndex="160" />
           <Field Name="FreightTotalHandlinUnits" Type="int" Precision="10" FieldIndex="158" />
           <Field Name="HoldCity" Type="string" IsOptional="true" MaxLength="100" FieldIndex="125" />
           <Field Name="HoldCompanyName" Type="string" IsOptional="true" MaxLength="50" FieldIndex="116" />

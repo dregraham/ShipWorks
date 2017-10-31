@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public FedExFreightContainerControl()
         {
             InitializeComponent();
+            this.AutoSize = false;
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             if (shipments.All(s => FedExUtility.IsFreightExpressService((FedExServiceType) s.FedEx.Service)))
             {
-                fedExPackageFreightDetailControl.Visible = false;
+                panelLtlFreight.Visible = false;
 
                 fedExExpressFreightControl.LoadShipmentDetails(shipments);
                 fedExExpressFreightControl.Location = new Point(2, 2);
@@ -40,18 +41,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 fedExExpressFreightControl.Visible = false;
 
-                fedExPackageFreightDetailControl.Location = new Point(2, 2);
+                panelLtlFreight.Location = new Point(2, 2);
                 fedExPackageFreightDetailControl.LoadShipments(shipments, true);
-                fedExPackageFreightDetailControl.Visible = true;
+                fedExLtlFreightControl.LoadShipmentDetails(shipments);
 
-                Height = fedExPackageFreightDetailControl.Bottom;
+                UpdateLayout();
+
+                panelLtlFreight.Visible = true;
             }
         }
 
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
-        public void SaveToShipments(IEnumerable<IShipmentEntity> shipments)
+        public void SaveToShipments(IEnumerable<ShipmentEntity> shipments)
         {
             if (shipments.All(s => FedExUtility.IsFreightExpressService((FedExServiceType) s.FedEx.Service)))
             {
@@ -61,6 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (shipments.All(s => FedExUtility.IsFreightLtlService((FedExServiceType) s.FedEx.Service)))
             {
                 fedExPackageFreightDetailControl.SaveToEntities();
+                fedExLtlFreightControl.SaveToShipments(shipments);
             }
         }
 
@@ -72,8 +76,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (fedExPackageFreightDetailControl.Visible)
             {
                 fedExPackageFreightDetailControl.PackageCountChanged(packageCount);
-                Height = fedExPackageFreightDetailControl.Bottom;
+
+                UpdateLayout();
             }
+        }
+
+        /// <summary>
+        /// Update the UI layout (for sizing)
+        /// </summary>
+        private void UpdateLayout()
+        {
+            groupFreightPackages.Height = fedExPackageFreightDetailControl.Bottom + 5;
+            panelLtlFreight.Height = groupFreightPackages.Bottom + 5;
+            Height = panelLtlFreight.Bottom;
         }
     }
 }

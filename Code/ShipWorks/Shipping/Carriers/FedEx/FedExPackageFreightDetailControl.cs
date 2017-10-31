@@ -12,6 +12,9 @@ using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Control for managing LTL freight package level properties
+    /// </summary>
     public partial class FedExPackageFreightDetailControl : UserControl
     {
         List<ShipmentEntity> loadedShipments;
