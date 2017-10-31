@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public string GetDefaultAccountDescription(ICarrierAccount account)
         {
-            DhlExpressAccountEntity dhlAccount = account as DhlExpressAccountEntity;
+            ShipEngineAccountEntity dhlAccount = account as ShipEngineAccountEntity;
             MethodConditions.EnsureArgumentIsNotNull(dhlAccount, "DHL Account");
 
             string[] descriptionComponents = { dhlAccount.AccountNumber.ToString(), dhlAccount.Street1, dhlAccount.PostalCode };

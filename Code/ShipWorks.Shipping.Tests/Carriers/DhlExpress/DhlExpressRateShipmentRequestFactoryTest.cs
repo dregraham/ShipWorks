@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             accountRepo = mock.Mock<IDhlExpressAccountRepository>();
 
             accountRepo.Setup(r => r.GetAccount(AnyShipment))
-                .Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-1234" });
+                .Returns(new ShipEngineAccountEntity() { ShipEngineCarrierId = "se-1234" });
 
             shipmentElementFactory = mock.Mock<IShipEngineRequestFactory>();
             shipmentElementFactory

@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [Component]
     public class DhlExpressAccountManager : IInitializeForCurrentSession
     {
-        static TableSynchronizer<DhlExpressAccountEntity> synchronizer;
-        static IEnumerable<IDhlExpressAccountEntity> readOnlyAccounts;
+        static TableSynchronizer<ShipEngineAccountEntity> synchronizer;
+        static IEnumerable<IShipEngineAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -40,14 +40,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public static void Initialize()
         {
-            synchronizer = new TableSynchronizer<DhlExpressAccountEntity>();
+            synchronizer = new TableSynchronizer<ShipEngineAccountEntity>();
             InternalCheckForChanges();
         }
 
         /// <summary>
         /// Return the active list of DhlExpress accounts
         /// </summary>
-        public static List<DhlExpressAccountEntity> Accounts
+        public static List<ShipEngineAccountEntity> Accounts
         {
             get
             {
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Return the active list of DhlExpress accounts
         /// </summary>
-        public static IEnumerable<IDhlExpressAccountEntity> AccountsReadOnly
+        public static IEnumerable<IShipEngineAccountEntity> AccountsReadOnly
         {
             get
             {
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Save the given DhlExpress account
         /// </summary>
-        public static void SaveAccount(DhlExpressAccountEntity account)
+        public static void SaveAccount(ShipEngineAccountEntity account)
         {
             bool wasDirty = account.IsDirty;
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int) DhlExpressAccountFieldIndex.DhlExpressAccountID, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) ShipEngineAccountFieldIndex.ShipEngineAccountID, ListSortDirection.Ascending);
                 }
 
                 readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -134,23 +134,23 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
-        public static DhlExpressAccountEntity GetAccount(long accountID)
+        public static ShipEngineAccountEntity GetAccount(long accountID)
         {
-            return Accounts.FirstOrDefault(a => a.DhlExpressAccountID == accountID);
+            return Accounts.FirstOrDefault(a => a.ShipEngineAccountID == accountID);
         }
 
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
-        public static IDhlExpressAccountEntity GetAccountReadOnly(long accountID)
+        public static IShipEngineAccountEntity GetAccountReadOnly(long accountID)
         {
-            return AccountsReadOnly.FirstOrDefault(a => a.DhlExpressAccountID == accountID);
+            return AccountsReadOnly.FirstOrDefault(a => a.ShipEngineAccountID == accountID);
         }
 
         /// <summary>
         /// Delete the given DhlExpress account
         /// </summary>
-        public static void DeleteAccount(DhlExpressAccountEntity account)
+        public static void DeleteAccount(ShipEngineAccountEntity account)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {

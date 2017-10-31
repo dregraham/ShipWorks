@@ -82,7 +82,6 @@ namespace ShipWorks.Data.Model
 			InitComputerEntityMappings();
 			InitConfigurationEntityMappings();
 			InitCustomerEntityMappings();
-			InitDhlExpressAccountEntityMappings();
 			InitDhlExpressPackageEntityMappings();
 			InitDhlExpressProfileEntityMappings();
 			InitDhlExpressProfilePackageEntityMappings();
@@ -199,6 +198,7 @@ namespace ShipWorks.Data.Model
 			InitServerMessageEntityMappings();
 			InitServerMessageSignoffEntityMappings();
 			InitServiceStatusEntityMappings();
+			InitShipEngineAccountEntityMappings();
 			InitShipmentEntityMappings();
 			InitShipmentCustomsItemEntityMappings();
 			InitShipmentReturnItemEntityMappings();
@@ -784,28 +784,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("CustomerEntity", "RollupNoteCount", "RollupNoteCount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 34);
 		}
 
-		/// <summary>Inits DhlExpressAccountEntity's mappings</summary>
-		private void InitDhlExpressAccountEntityMappings()
-		{
-			this.AddElementMapping("DhlExpressAccountEntity", @"ShipWorksLocal", @"dbo", "DhlExpressAccount", 16, 0);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "DhlExpressAccountID", "DhlExpressAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "AccountNumber", "AccountNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "Company", "Company", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "Street1", "Street1", false, "NVarChar", 43, 0, 0, false, "", null, typeof(System.String), 9);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "City", "City", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 10);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 11);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "PostalCode", "PostalCode", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 12);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
-		}
-
 		/// <summary>Inits DhlExpressPackageEntity's mappings</summary>
 		private void InitDhlExpressPackageEntityMappings()
 		{
@@ -829,7 +807,7 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("DhlExpressProfileEntity", @"ShipWorksLocal", @"dbo", "DhlExpressProfile", 8, 0);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("DhlExpressProfileEntity", "DhlExpressAccountID", "DhlExpressAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("DhlExpressProfileEntity", "ShipEngineAccountID", "ShipEngineAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "DeliveryDutyPaid", "DeliveryDutyPaid", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
@@ -858,7 +836,7 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("DhlExpressShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlExpressShipment", 10, 0);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("DhlExpressShipmentEntity", "DhlExpressAccountID", "DhlExpressAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipEngineAccountID", "ShipEngineAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "DeliveredDutyPaid", "DeliveredDutyPaid", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
@@ -2749,6 +2727,29 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ServiceStatusEntity", "LastCheckInDateTime", "LastCheckInDateTime", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 6);
 			this.AddElementFieldMapping("ServiceStatusEntity", "ServiceFullName", "ServiceFullName", false, "NVarChar", 256, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("ServiceStatusEntity", "ServiceDisplayName", "ServiceDisplayName", false, "NVarChar", 256, 0, 0, false, "", null, typeof(System.String), 8);
+		}
+
+		/// <summary>Inits ShipEngineAccountEntity's mappings</summary>
+		private void InitShipEngineAccountEntityMappings()
+		{
+			this.AddElementMapping("ShipEngineAccountEntity", @"ShipWorksLocal", @"dbo", "ShipEngineAccount", 17, 0);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "ShipEngineAccountID", "ShipEngineAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "ShipmentTypeCode", "ShipmentTypeCode", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "AccountNumber", "AccountNumber", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 4);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "FirstName", "FirstName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "MiddleName", "MiddleName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "LastName", "LastName", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "Company", "Company", false, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "Street1", "Street1", false, "NVarChar", 43, 0, 0, false, "", null, typeof(System.String), 10);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "City", "City", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "StateProvCode", "StateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "PostalCode", "PostalCode", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("ShipEngineAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 16);
 		}
 
 		/// <summary>Inits ShipmentEntity's mappings</summary>

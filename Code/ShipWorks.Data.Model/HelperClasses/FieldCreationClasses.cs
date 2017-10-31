@@ -4379,91 +4379,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
-	/// <summary>Field Creation Class for entity DhlExpressAccountEntity</summary>
-	public partial class DhlExpressAccountFields
-	{
-		/// <summary>Creates a new DhlExpressAccountEntity.DhlExpressAccountID field instance</summary>
-		public static EntityField2 DhlExpressAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.DhlExpressAccountID);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.RowVersion);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.AccountNumber field instance</summary>
-		public static EntityField2 AccountNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.AccountNumber);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.ShipEngineCarrierId field instance</summary>
-		public static EntityField2 ShipEngineCarrierId
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.ShipEngineCarrierId);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.Description field instance</summary>
-		public static EntityField2 Description
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Description);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.FirstName field instance</summary>
-		public static EntityField2 FirstName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.FirstName);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.MiddleName field instance</summary>
-		public static EntityField2 MiddleName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.MiddleName);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.LastName field instance</summary>
-		public static EntityField2 LastName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.LastName);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.Company field instance</summary>
-		public static EntityField2 Company
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Company);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.Street1 field instance</summary>
-		public static EntityField2 Street1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Street1);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.City field instance</summary>
-		public static EntityField2 City
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.City);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.StateProvCode field instance</summary>
-		public static EntityField2 StateProvCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.StateProvCode);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.PostalCode field instance</summary>
-		public static EntityField2 PostalCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.PostalCode);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.CountryCode field instance</summary>
-		public static EntityField2 CountryCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.CountryCode);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.Email field instance</summary>
-		public static EntityField2 Email
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Email);}
-		}
-		/// <summary>Creates a new DhlExpressAccountEntity.Phone field instance</summary>
-		public static EntityField2 Phone
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Phone);}
-		}
-	}
-
 	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>
 	public partial class DhlExpressPackageFields
 	{
@@ -4537,10 +4452,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.ShippingProfileID);}
 		}
-		/// <summary>Creates a new DhlExpressProfileEntity.DhlExpressAccountID field instance</summary>
-		public static EntityField2 DhlExpressAccountID
+		/// <summary>Creates a new DhlExpressProfileEntity.ShipEngineAccountID field instance</summary>
+		public static EntityField2 ShipEngineAccountID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.DhlExpressAccountID);}
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.ShipEngineAccountID);}
 		}
 		/// <summary>Creates a new DhlExpressProfileEntity.Service field instance</summary>
 		public static EntityField2 Service
@@ -4632,10 +4547,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipmentID);}
 		}
-		/// <summary>Creates a new DhlExpressShipmentEntity.DhlExpressAccountID field instance</summary>
-		public static EntityField2 DhlExpressAccountID
+		/// <summary>Creates a new DhlExpressShipmentEntity.ShipEngineAccountID field instance</summary>
+		public static EntityField2 ShipEngineAccountID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.DhlExpressAccountID);}
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipEngineAccountID);}
 		}
 		/// <summary>Creates a new DhlExpressShipmentEntity.Service field instance</summary>
 		public static EntityField2 Service
@@ -19896,6 +19811,96 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ServiceDisplayName
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ServiceStatusFieldIndex.ServiceDisplayName);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ShipEngineAccountEntity</summary>
+	public partial class ShipEngineAccountFields
+	{
+		/// <summary>Creates a new ShipEngineAccountEntity.ShipEngineAccountID field instance</summary>
+		public static EntityField2 ShipEngineAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.ShipEngineAccountID);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.ShipmentTypeCode field instance</summary>
+		public static EntityField2 ShipmentTypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.ShipmentTypeCode);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.AccountNumber field instance</summary>
+		public static EntityField2 AccountNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.AccountNumber);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.Description);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new ShipEngineAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipEngineAccountFieldIndex.Phone);}
 		}
 	}
 

@@ -7,19 +7,19 @@ using System;
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
     /// <summary>
-    /// Extra implementation of the DhlExpressAccountEntity
+    /// Extra implementation of the ShipEngineAccountEntity
     /// </summary>
-    public partial class ReadOnlyDhlExpressAccountEntity
+    public partial class ReadOnlyShipEngineAccountEntity
     {
         /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
-        public long AccountId => DhlExpressAccountID;
+        public long AccountId => ShipEngineAccountID;
 
         /// <summary>
         /// Get the shipment type to which this account applies
         /// </summary>
-        public ShipmentTypeCode ShipmentType => ShipmentTypeCode.DhlExpress;
+        public ShipmentTypeCode ShipmentType => (ShipmentTypeCode) ShipmentTypeCode;
 
         /// <summary>
         /// Get the address of the account
@@ -36,13 +36,13 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            shipment.DhlExpress.DhlExpressAccountID = AccountId;
+            shipment.DhlExpress.ShipEngineAccountID = AccountId;
         }
 
         /// <summary>
         /// Copy custom data
         /// </summary>
-        partial void CopyCustomDhlExpressAccountData(IDhlExpressAccountEntity source)
+        partial void CopyCustomShipEngineAccountData(IShipEngineAccountEntity source)
         {
             Address = source.Address.CopyToNew();
         }

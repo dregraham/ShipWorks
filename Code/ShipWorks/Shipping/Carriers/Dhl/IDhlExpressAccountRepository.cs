@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Repository for DHL Express accounts
     /// </summary>
-    public interface IDhlExpressAccountRepository : ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>
+    public interface IDhlExpressAccountRepository : ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity>
     {
     }
 }

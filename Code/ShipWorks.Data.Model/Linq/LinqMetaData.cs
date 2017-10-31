@@ -167,9 +167,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					toReturn = this.Customer;
 					break;
-				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
-					toReturn = this.DhlExpressAccount;
-					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity:
 					toReturn = this.DhlExpressPackage;
 					break;
@@ -517,6 +514,9 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
 					toReturn = this.ServiceStatus;
+					break;
+				case ShipWorks.Data.Model.EntityType.ShipEngineAccountEntity:
+					toReturn = this.ShipEngineAccount;
 					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					toReturn = this.Shipment;
@@ -937,12 +937,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<CustomerEntity> Customer
 		{
 			get { return new DataSource2<CustomerEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressAccountEntity instances in the database.</summary>
-		public DataSource2<DhlExpressAccountEntity> DhlExpressAccount
-		{
-			get { return new DataSource2<DhlExpressAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressPackageEntity instances in the database.</summary>
@@ -1639,6 +1633,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<ServiceStatusEntity> ServiceStatus
 		{
 			get { return new DataSource2<ServiceStatusEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ShipEngineAccountEntity instances in the database.</summary>
+		public DataSource2<ShipEngineAccountEntity> ShipEngineAccount
+		{
+			get { return new DataSource2<ShipEngineAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ShipmentEntity instances in the database.</summary>

@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
 
             //From
-            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DhlExpressAccountID, accountState, dhlExpressAccount, labelAccount);
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.ShipEngineAccountID, accountState, dhlExpressAccount, labelAccount);
 
             //Service
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.Service, serviceState, service, labelService);
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             if (DhlExpressAccountManager.Accounts.Count > 0)
             {
-                dhlExpressAccount.DataSource = DhlExpressAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.DhlExpressAccountID)).ToList();
+                dhlExpressAccount.DataSource = DhlExpressAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.ShipEngineAccountID)).ToList();
                 dhlExpressAccount.Enabled = true;
             }
             else

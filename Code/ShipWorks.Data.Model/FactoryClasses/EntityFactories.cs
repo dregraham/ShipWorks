@@ -799,26 +799,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty DhlExpressAccountEntity objects.</summary>
-	[Serializable]
-	public partial class DhlExpressAccountEntityFactory : EntityFactoryBase2<DhlExpressAccountEntity> {
-		/// <summary>CTor</summary>
-		public DhlExpressAccountEntityFactory() : base("DhlExpressAccountEntity", ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity, false) { }
-		
-		/// <summary>Creates a new DhlExpressAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new DhlExpressAccountEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty DhlExpressPackageEntity objects.</summary>
 	[Serializable]
 	public partial class DhlExpressPackageEntityFactory : EntityFactoryBase2<DhlExpressPackageEntity> {
@@ -3139,6 +3119,26 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty ShipEngineAccountEntity objects.</summary>
+	[Serializable]
+	public partial class ShipEngineAccountEntityFactory : EntityFactoryBase2<ShipEngineAccountEntity> {
+		/// <summary>CTor</summary>
+		public ShipEngineAccountEntityFactory() : base("ShipEngineAccountEntity", ShipWorks.Data.Model.EntityType.ShipEngineAccountEntity, false) { }
+		
+		/// <summary>Creates a new ShipEngineAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new ShipEngineAccountEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewShipEngineAccountUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ShipmentEntity objects.</summary>
 	[Serializable]
 	public partial class ShipmentEntityFactory : EntityFactoryBase2<ShipmentEntity> {
@@ -4556,9 +4556,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					factoryToUse = new CustomerEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
-					factoryToUse = new DhlExpressAccountEntityFactory();
-					break;
 				case ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity:
 					factoryToUse = new DhlExpressPackageEntityFactory();
 					break;
@@ -4906,6 +4903,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ServiceStatusEntity:
 					factoryToUse = new ServiceStatusEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.ShipEngineAccountEntity:
+					factoryToUse = new ShipEngineAccountEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ShipmentEntity:
 					factoryToUse = new ShipmentEntityFactory();

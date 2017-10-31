@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // description
             // 
             this.description.Location = new System.Drawing.Point(91, 56);
-            this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.DhlExpressDescription);
+            this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.ShipEngineDescription);
             this.description.Name = "description";
             this.description.PromptColor = System.Drawing.SystemColors.GrayText;
             this.description.PromptText = null;

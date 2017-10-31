@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
     [KeyedComponent(typeof(ICarrierAccountEditorDlg),ShipmentTypeCode.DhlExpress)]
     public partial class DhlExpressAccountEditorDlg : Form, ICarrierAccountEditorDlg
     {
-        private readonly DhlExpressAccountEntity account;
+        private readonly ShipEngineAccountEntity account;
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
         private readonly IMessageHelper messageHelper;
         private readonly ICarrierAccountDescription accountDescription;
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         {
             InitializeComponent();
 
-            DhlExpressAccountEntity dhlAccount = account as DhlExpressAccountEntity;
+            ShipEngineAccountEntity dhlAccount = account as ShipEngineAccountEntity;
             MethodConditions.EnsureArgumentIsNotNull(dhlAccount, "Dhl Account");
 
             this.account = dhlAccount;
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// <summary>
         /// Get the account description
         /// </summary>
-        private string GetDescription(DhlExpressAccountEntity dhlAccount)
+        private string GetDescription(ShipEngineAccountEntity dhlAccount)
         {
             return accountDescription.GetDefaultAccountDescription(account);
         }

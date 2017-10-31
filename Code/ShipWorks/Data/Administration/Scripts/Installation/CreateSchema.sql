@@ -2807,7 +2807,7 @@ PRINT N'Creating [dbo].[DhlExpressShipment]'
 GO
 CREATE TABLE [dbo].[DhlExpressShipment](
 	[ShipmentID] [bigint] NOT NULL,
-	[DhlExpressAccountID] [bigint] NOT NULL,
+	[ShipEngineAccountID] [bigint] NOT NULL,
 	[Service] [int] NOT NULL,
 	[DeliveredDutyPaid] [bit] NOT NULL,
 	[NonMachinable] [bit] NOT NULL,
@@ -2827,7 +2827,7 @@ GO
 ALTER TABLE [dbo].[DhlExpressShipment] ADD CONSTRAINT [FK_DhlExpressShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'DhlExpressAccountID'
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'ShipEngineAccountID'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'130' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'Service'
@@ -2879,7 +2879,7 @@ PRINT N'Creating [dbo].[DhlExpressProfile]'
 GO
 CREATE TABLE [dbo].[DhlExpressProfile](
 	[ShippingProfileID] [bigint] NOT NULL,
-	[DhlExpressAccountID] [bigint] NULL,
+	[ShipEngineAccountID] [bigint] NULL,
 	[Service] [int] NULL,
 	[DeliveryDutyPaid] [bit] NULL,
 	[NonMachinable] [bit] NULL,
@@ -5154,7 +5154,7 @@ PRINT N'Creating [dbo].[DhlExpressAccount]'
 GO
 CREATE TABLE [dbo].[DhlExpressAccount]
 (
-[DhlExpressAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
+[ShipEngineAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [AccountNumber] [bigint] NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5174,7 +5174,7 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 GO
 PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'
 GO
-ALTER TABLE [dbo].[DhlExpressAccount] ADD CONSTRAINT [PK_DhlExpressAccount] PRIMARY KEY CLUSTERED  ([DhlExpressAccountID])
+ALTER TABLE [dbo].[DhlExpressAccount] ADD CONSTRAINT [PK_DhlExpressAccount] PRIMARY KEY CLUSTERED  ([ShipEngineAccountID])
 GO
 ALTER TABLE [dbo].[DhlExpressAccount] ENABLE CHANGE_TRACKING
 GO

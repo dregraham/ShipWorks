@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private readonly IMessageHelper messageHelper;
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
-        private readonly DhlExpressAccountEntity account;
+        private readonly ShipEngineAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             this.messageHelper = messageHelper;
             this.shipEngineClient = shipEngineClient;
 
-            account = new DhlExpressAccountEntity();
+            account = new ShipEngineAccountEntity();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Get the default description to use for the given account
         /// </summary>
-        public static string GetDefaultDescription(DhlExpressAccountEntity account)
+        public static string GetDefaultDescription(ShipEngineAccountEntity account)
         {
             return new DhlExpressAccountDescription().GetDefaultAccountDescription(account);
         }

@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
                 DhlExpress = new DhlExpressShipmentEntity()
                 {
-                    DhlExpressAccountID = 1,
+                    ShipEngineAccountID = 1,
                     SaturdayDelivery = false,
                     DeliveredDutyPaid = false,
                     NonMachinable = false,
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Theory]
-        [InlineData("DhlExpressAccountID", 4)]
+        [InlineData("ShipEngineAccountID", 4)]
         [InlineData("SaturdayDelivery", true)]
         [InlineData("DeliveredDutyPaid", true)]
         [InlineData("NonMachinable", true)]

@@ -384,7 +384,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DhlExpressAccountID", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipEngineAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Service", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -512,14 +512,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)DhlExpressProfileFieldIndex.ShippingProfileID, value); }
 		}
 
-		/// <summary> The DhlExpressAccountID property of the Entity DhlExpressProfile<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressProfile"."DhlExpressAccountID"<br/>
+		/// <summary> The ShipEngineAccountID property of the Entity DhlExpressProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressProfile"."ShipEngineAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> DhlExpressAccountID
+		public virtual Nullable<System.Int64> ShipEngineAccountID
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressProfileFieldIndex.DhlExpressAccountID, false); }
-			set	{ SetValue((int)DhlExpressProfileFieldIndex.DhlExpressAccountID, value); }
+			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressProfileFieldIndex.ShipEngineAccountID, false); }
+			set	{ SetValue((int)DhlExpressProfileFieldIndex.ShipEngineAccountID, value); }
 		}
 
 		/// <summary> The Service property of the Entity DhlExpressProfile<br/><br/></summary>

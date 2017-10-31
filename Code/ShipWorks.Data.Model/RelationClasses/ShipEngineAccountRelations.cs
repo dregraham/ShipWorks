@@ -17,11 +17,11 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: DhlExpressAccount. </summary>
-	public partial class DhlExpressAccountRelations
+	/// <summary>Implements the relations factory for the entity: ShipEngineAccount. </summary>
+	public partial class ShipEngineAccountRelations
 	{
 		/// <summary>CTor</summary>
-		public DhlExpressAccountRelations()
+		public ShipEngineAccountRelations()
 		{
 		}
 
@@ -49,11 +49,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticDhlExpressAccountRelations
+	internal static class StaticShipEngineAccountRelations
 	{
 
 		/// <summary>CTor</summary>
-		static StaticDhlExpressAccountRelations()
+		static StaticShipEngineAccountRelations()
 		{
 		}
 	}

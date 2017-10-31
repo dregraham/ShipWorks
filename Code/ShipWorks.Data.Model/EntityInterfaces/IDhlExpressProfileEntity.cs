@@ -27,12 +27,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         System.Int64 ShippingProfileID { get; }
-        /// <summary> The DhlExpressAccountID property of the Entity DhlExpressProfile<br/><br/>
+        /// <summary> The ShipEngineAccountID property of the Entity DhlExpressProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfile"."DhlExpressAccountID"<br/>
+        /// <remarks>Mapped on table field: "DhlExpressProfile"."ShipEngineAccountID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> DhlExpressAccountID { get; }
+        Nullable<System.Int64> ShipEngineAccountID { get; }
         /// <summary> The Service property of the Entity DhlExpressProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressProfile"."Service"<br/>

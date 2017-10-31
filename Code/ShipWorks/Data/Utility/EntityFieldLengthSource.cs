@@ -173,6 +173,6 @@ namespace ShipWorks.Data.Utility
         ReturnItemQuantity,
         ReturnItemNote,
 
-        DhlExpressDescription
+        ShipEngineDescription
     }
 }

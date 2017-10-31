@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 }
 
                 ratingField = base.RatingFields;
-                ratingField.AddShipmentField(DhlExpressShipmentFields.DhlExpressAccountID, genericAccountIdFieldName);
+                ratingField.AddShipmentField(DhlExpressShipmentFields.ShipEngineAccountID, genericAccountIdFieldName);
                 ratingField.AddShipmentField(DhlExpressShipmentFields.SaturdayDelivery);
                 ratingField.AddShipmentField(DhlExpressShipmentFields.DeliveredDutyPaid);
                 ratingField.AddShipmentField(DhlExpressShipmentFields.NonMachinable);

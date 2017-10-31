@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace ShipWorks.Data.Model.EntityInterfaces
 {
     /// <summary>
-    /// Extra implementation of IDhlExpressAccountEntity
+    /// Extra implementation of IShipEngineAccountEntity
     /// </summary>
-    public partial interface IDhlExpressAccountEntity : ICarrierAccount
+    public partial interface IShipEngineAccountEntity : ICarrierAccount
     {
     }
 }

@@ -18,12 +18,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// DHL Express best rate broker
     /// </summary>
-    public class DhlExpressBestRateBroker : PackageBasedBestRateBroker<DhlExpressAccountEntity, IDhlExpressAccountEntity, DhlExpressPackageEntity>
+    public class DhlExpressBestRateBroker : PackageBasedBestRateBroker<ShipEngineAccountEntity, IShipEngineAccountEntity, DhlExpressPackageEntity>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository) :
+        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "DHL Express")
         {
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Applies DhlExpress specific data to the specified shipment
         /// </summary>
-        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, DhlExpressAccountEntity account)
+        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, ShipEngineAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
 
@@ -122,13 +122,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             ShipmentType.UpdateTotalWeight(currentShipment);
 
             currentShipment.DhlExpress.Service = (int) DhlExpressServiceType.ExpressWorldWide;
-            currentShipment.DhlExpress.DhlExpressAccountID = account.DhlExpressAccountID;
+            currentShipment.DhlExpress.ShipEngineAccountID = account.ShipEngineAccountID;
         }
 
         /// <summary>
         /// Gets a description from the specified account
         /// </summary>
-        protected override string AccountDescription(DhlExpressAccountEntity account)
+        protected override string AccountDescription(ShipEngineAccountEntity account)
         {
             return account.Description;
         }

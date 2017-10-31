@@ -38,8 +38,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override long? AccountId
         {
-            get { return Shipment.DhlExpress.DhlExpressAccountID; }
-            set { Shipment.DhlExpress.DhlExpressAccountID = value.GetValueOrDefault(); }
+            get { return Shipment.DhlExpress.ShipEngineAccountID; }
+            set { Shipment.DhlExpress.ShipEngineAccountID = value.GetValueOrDefault(); }
         }
 
         /// <summary>
