@@ -7552,7 +7552,7 @@
                   </UniqueConstraints>
                 </Table>
                 <Table Name="ShipEngineAccount">
-                  <PkConstraintName Name="PK_DhlExpressAccount" />
+                  <PkConstraintName Name="PK_ShipEngineAccount" />
                   <Fields>
                     <Field Name="ShipEngineAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />

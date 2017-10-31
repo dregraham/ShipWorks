@@ -5150,12 +5150,13 @@ ALTER TABLE [dbo].[UspsAccount] ADD CONSTRAINT [PK_PostalUspsAccount] PRIMARY KE
 GO
 ALTER TABLE [dbo].[UspsAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[DhlExpressAccount]'
+PRINT N'Creating [dbo].[ShipEngineAccount]'
 GO
-CREATE TABLE [dbo].[DhlExpressAccount]
+CREATE TABLE [dbo].[ShipEngineAccount]
 (
 [ShipEngineAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
 [RowVersion] [timestamp] NOT NULL,
+[ShipmentTypeCode] int NOT NULL,
 [AccountNumber] [bigint] NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5172,11 +5173,11 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'
+PRINT N'Creating primary key [PK_ShipEngineAccount] on [dbo].[ShipEngineAccount]'
 GO
-ALTER TABLE [dbo].[DhlExpressAccount] ADD CONSTRAINT [PK_DhlExpressAccount] PRIMARY KEY CLUSTERED  ([ShipEngineAccountID])
+ALTER TABLE [dbo].[ShipEngineAccount] ADD CONSTRAINT [PK_ShipEngineAccount] PRIMARY KEY CLUSTERED  ([ShipEngineAccountID])
 GO
-ALTER TABLE [dbo].[DhlExpressAccount] ENABLE CHANGE_TRACKING
+ALTER TABLE [dbo].[ShipEngineAccount] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[SystemData]'
 GO
