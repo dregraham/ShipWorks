@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
         public FedExUtilityTest()
         {
-            var standard = new List<FedExPackagingType>()
+            var standardPackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Envelope,
                 FedExPackagingType.Pak,
@@ -22,9 +22,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 FedExPackagingType.MediumBox,
                 FedExPackagingType.LargeBox,
                 FedExPackagingType.ExtraLargeBox
-        };
+            };
 
-            var international = new List<FedExPackagingType>()
+            var internationalPackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Envelope,
                 FedExPackagingType.Pak,
@@ -39,12 +39,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 FedExPackagingType.ExtraLargeBox
             };
 
-            var freight = new List<FedExPackagingType>()
+            var freightPackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Custom
             };
 
-            var oneRate = new List<FedExPackagingType>()
+            var oneRatePackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Envelope,
                 FedExPackagingType.Pak,
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 FedExPackagingType.ExtraLargeBox
             };
 
-            var otherPackageTypes = new List<FedExPackagingType>()
+            var otherPackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Custom,
                 FedExPackagingType.SmallBox,
@@ -66,51 +66,50 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             expectedPackagingTypes = new Dictionary<FedExServiceType, List<FedExPackagingType>>();
 
-            expectedPackagingTypes.Add(FedExServiceType.FirstOvernight, standard);
-            expectedPackagingTypes.Add(FedExServiceType.StandardOvernight, standard);
-            expectedPackagingTypes.Add(FedExServiceType.PriorityOvernight, standard);
-            expectedPackagingTypes.Add(FedExServiceType.FedEx2Day, standard);
-            expectedPackagingTypes.Add(FedExServiceType.FedEx2DayAM, standard);
-            expectedPackagingTypes.Add(FedExServiceType.FedExEconomyCanada, standard);
-            expectedPackagingTypes.Add(FedExServiceType.InternationalFirst, standard);
-            expectedPackagingTypes.Add(FedExServiceType.InternationalEconomy, standard);
-            expectedPackagingTypes.Add(FedExServiceType.FedExExpressSaver, standard);
+            expectedPackagingTypes.Add(FedExServiceType.FirstOvernight, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.StandardOvernight, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.PriorityOvernight, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedEx2Day, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedEx2DayAM, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExEconomyCanada, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalFirst, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalEconomy, standardPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExExpressSaver, standardPackagingTypes);
 
-            expectedPackagingTypes.Add(FedExServiceType.FedExGround, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedEx1DayFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedEx2DayFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedEx3DayFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FirstFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.SmartPost, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.GroundHomeDelivery, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.InternationalPriorityFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.InternationalEconomyFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExInternationalGround, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayAfternoon, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayEarlyMorning, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayMidMorning, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayEndOfDay, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExDistanceDeferred, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayFreight, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExFimsMailView, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExFimsMailViewLite, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExFimsPremium, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExFimsStandard, otherPackageTypes);
-            expectedPackagingTypes.Add(FedExServiceType.FedExEuropeFirstInternationalPriority, otherPackageTypes);
-            
+            expectedPackagingTypes.Add(FedExServiceType.FedExGround, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedEx1DayFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedEx2DayFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedEx3DayFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FirstFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.SmartPost, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.GroundHomeDelivery, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalPriorityFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalEconomyFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExInternationalGround, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayAfternoon, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayEarlyMorning, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayMidMorning, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayEndOfDay, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExDistanceDeferred, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExNextDayFreight, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFimsMailView, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFimsMailViewLite, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFimsPremium, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFimsStandard, otherPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExEuropeFirstInternationalPriority, otherPackagingTypes);
 
-            expectedPackagingTypes.Add(FedExServiceType.OneRate2Day, oneRate);
-            expectedPackagingTypes.Add(FedExServiceType.OneRate2DayAM, oneRate);
-            expectedPackagingTypes.Add(FedExServiceType.OneRateExpressSaver, oneRate);
-            expectedPackagingTypes.Add(FedExServiceType.OneRateFirstOvernight, oneRate);
-            expectedPackagingTypes.Add(FedExServiceType.OneRatePriorityOvernight, oneRate);
-            expectedPackagingTypes.Add(FedExServiceType.OneRateStandardOvernight, oneRate);
+            expectedPackagingTypes.Add(FedExServiceType.OneRate2Day, oneRatePackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.OneRate2DayAM, oneRatePackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.OneRateExpressSaver, oneRatePackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.OneRateFirstOvernight, oneRatePackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.OneRatePriorityOvernight, oneRatePackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.OneRateStandardOvernight, oneRatePackagingTypes);
 
-            expectedPackagingTypes.Add(FedExServiceType.InternationalPriority, international);
-            expectedPackagingTypes.Add(FedExServiceType.InternationalPriorityExpress, international);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalPriority, internationalPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.InternationalPriorityExpress, internationalPackagingTypes);
 
-            expectedPackagingTypes.Add(FedExServiceType.FedExFreightEconomy, freight);
-            expectedPackagingTypes.Add(FedExServiceType.FedExFreightPriority, freight);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFreightEconomy, freightPackagingTypes);
+            expectedPackagingTypes.Add(FedExServiceType.FedExFreightPriority, freightPackagingTypes);
         }
 
         [Theory]
