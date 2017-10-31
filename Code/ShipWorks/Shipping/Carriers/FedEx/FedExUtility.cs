@@ -194,6 +194,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<FedExPackagingType> types = new List<FedExPackagingType>();
 
+            if (service == FedExServiceType.FedExFreightEconomy ||
+                service == FedExServiceType.FedExFreightPriority)
+            {
+                types.Add(FedExPackagingType.Custom);
+                return types;
+            }
+
             switch (service)
             {
                 case FedExServiceType.PriorityOvernight:
@@ -242,20 +249,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 types.Add(FedExPackagingType.Custom);
             }
 
-            if (service == FedExServiceType.FedExFreightEconomy || 
-                service == FedExServiceType.FedExFreightPriority)
-            {
-                types.Add(FedExPackagingType.Custom);
-            }
-            else
-            {
-                // These are available for all service types
-                types.Add(FedExPackagingType.SmallBox);
-                types.Add(FedExPackagingType.MediumBox);
-                types.Add(FedExPackagingType.LargeBox);
-                types.Add(FedExPackagingType.ExtraLargeBox);
-            }
-
+            // These are available for all service types
+            types.Add(FedExPackagingType.SmallBox);
+            types.Add(FedExPackagingType.MediumBox);
+            types.Add(FedExPackagingType.LargeBox);
+            types.Add(FedExPackagingType.ExtraLargeBox);
+            
             return types;
         }
 
