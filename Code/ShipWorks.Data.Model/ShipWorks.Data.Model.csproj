@@ -160,8 +160,11 @@
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\BigCommerceOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\GrouponOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
