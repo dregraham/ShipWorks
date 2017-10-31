@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Configuration
         /// <summary>
         /// Gets the wizard without any wrapping wizards
         /// </summary>
-        public IShipmentTypeSetupWizard GetUnwrappedWizard() => inner;
+        public IShipmentTypeSetupWizard GetUnwrappedWizard() => inner.GetUnwrappedWizard();
 
         /// <summary>
         /// Dispose the control

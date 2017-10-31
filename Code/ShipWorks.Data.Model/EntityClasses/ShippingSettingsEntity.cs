@@ -402,6 +402,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentEditLimit", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipmentsLoaderEnsureFiltersLoadedTimeout", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
 		}
 		#endregion
 
@@ -988,6 +990,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentsLoaderEnsureFiltersLoadedTimeout, value); }
+		}
+
+		/// <summary> The ShipmentDateCutoffJson property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipmentDateCutoffJson"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1000<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipmentDateCutoffJson
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -46,16 +46,6 @@ namespace ShipWorks.Shipping.Carriers.Other
             ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
 
         /// <summary>
-        /// ShipWorks typically auto-updates the ShipDate on unprocessed shipments to be Today at
-        /// the earliest.  But the use-case for Other shipments is a bit different, where people
-        /// manually enter shipment details, often occurring in the past.
-        /// </summary>
-        protected override void UpdateShipmentShipDate(ShipmentEntity shipment, DateTime now)
-        {
-            // nothing
-        }
-
-        /// <summary>
         /// For 'Other' we just use return as a marker
         /// </summary>
         public override bool SupportsReturns => true;

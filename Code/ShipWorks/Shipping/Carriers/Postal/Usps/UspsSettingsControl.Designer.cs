@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UspsSettingsControl));
             this.labelAccountType = new System.Windows.Forms.Label();
             this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsAccountManagerControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsOptionsControl();
@@ -42,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelShipmentProtection = new System.Windows.Forms.Label();
             this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServicePickerControl();
             this.packagePicker = new ShipWorks.Shipping.Carriers.Postal.PostalPackagePickerControl();
+            this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.panelBottom.SuspendLayout();
             this.panelInsurance.SuspendLayout();
             this.SuspendLayout();
@@ -49,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // labelAccountType
             // 
             this.labelAccountType.AutoSize = true;
-            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelAccountType.Location = new System.Drawing.Point(3, 5);
             this.labelAccountType.Name = "labelAccountType";
             this.labelAccountType.Size = new System.Drawing.Size(91, 13);
@@ -58,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // accountControl
             // 
-            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.accountControl.Location = new System.Drawing.Point(19, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
@@ -67,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // optionsControl
             // 
-            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.ShipmentTypeCode = ShipWorks.Shipping.ShipmentTypeCode.Usps;
@@ -76,8 +78,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // express1Options
             // 
-            this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1Options.Location = new System.Drawing.Point(4, 59);
+            this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.express1Options.Location = new System.Drawing.Point(4, 91);
             this.express1Options.Name = "express1Options";
             this.express1Options.Size = new System.Drawing.Size(421, 41);
             this.express1Options.TabIndex = 5;
@@ -86,15 +88,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             this.panelBottom.Controls.Add(this.labelAccountType);
             this.panelBottom.Controls.Add(this.accountControl);
-            this.panelBottom.Location = new System.Drawing.Point(5, 278);
+            this.panelBottom.Location = new System.Drawing.Point(5, 310);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(486, 131);
             this.panelBottom.TabIndex = 6;
             // 
             // express1SettingsControl
             // 
-            this.express1SettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1SettingsControl.Location = new System.Drawing.Point(5, 112);
+            this.express1SettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.express1SettingsControl.Location = new System.Drawing.Point(5, 144);
             this.express1SettingsControl.Name = "express1SettingsControl";
             this.express1SettingsControl.Size = new System.Drawing.Size(468, 160);
             this.express1SettingsControl.TabIndex = 7;
@@ -103,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             this.panelInsurance.Controls.Add(this.insuranceProviderChooser);
             this.panelInsurance.Controls.Add(this.labelShipmentProtection);
-            this.panelInsurance.Location = new System.Drawing.Point(5, 828);
+            this.panelInsurance.Location = new System.Drawing.Point(5, 860);
             this.panelInsurance.Name = "panelInsurance";
             this.panelInsurance.Size = new System.Drawing.Size(386, 50);
             this.panelInsurance.TabIndex = 8;
@@ -112,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             this.insuranceProviderChooser.CarrierMessage = "(UPS Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "Stamps.com Insurance";
-            this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.insuranceProviderChooser.Location = new System.Drawing.Point(20, 23);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(193, 30);
@@ -121,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // labelShipmentProtection
             // 
             this.labelShipmentProtection.AutoSize = true;
-            this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelShipmentProtection.Location = new System.Drawing.Point(3, 4);
             this.labelShipmentProtection.Name = "labelShipmentProtection";
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
@@ -130,25 +132,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // servicePicker
             // 
-            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 412);
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 444);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(486, 200);
             this.servicePicker.TabIndex = 9;
             // 
-            // postalServiceTypeServicePickerControl1
+            // packagePicker
             // 
-            this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packagePicker.Location = new System.Drawing.Point(9, 622);
-            this.packagePicker.Name = "postalServiceTypeServicePickerControl1";
+            this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.packagePicker.Location = new System.Drawing.Point(9, 654);
+            this.packagePicker.Name = "packagePicker";
             this.packagePicker.Size = new System.Drawing.Size(486, 200);
             this.packagePicker.TabIndex = 10;
+            // 
+            // shippingCutoff
+            // 
+            this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.shippingCutoff.Location = new System.Drawing.Point(24, 57);
+            this.shippingCutoff.Name = "shippingCutoff";
+            this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
+            this.shippingCutoff.TabIndex = 11;
             // 
             // UspsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.packagePicker);
             this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.panelInsurance);
@@ -157,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
             this.Name = "UspsSettingsControl";
-            this.Size = new System.Drawing.Size(499, 893);
+            this.Size = new System.Drawing.Size(499, 922);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelInsurance.ResumeLayout(false);
@@ -179,5 +190,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.Label labelShipmentProtection;
         private PostalServicePickerControl servicePicker;
         private PostalPackagePickerControl packagePicker;
+        private Editing.ShippingDateCutoffControl shippingCutoff;
     }
 }
