@@ -1,86 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using Moq;
+﻿using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 {
     public class FedExRateClientDetailManipulatorTest
     {
+        private readonly ShipmentEntity shipment;
         private FedExRateClientDetailManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-
-        private RateRequest nativeRequest;
-        private FedExAccountEntity account;
+        private readonly AutoMock mock;
 
         public FedExRateClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            nativeRequest = new RateRequest { ClientDetail = new ClientDetail() };
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
-            carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
+            shipment = Create.Shipment().AsFedEx().Build();
 
-            testObject = new FedExRateClientDetailManipulator();
+            testObject = mock.Create<FedExRateClientDetailManipulator>();
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void ShouldApply_ReturnsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            Assert.True(testObject.ShouldApply(shipment, FedExRateRequestOptions.None));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
+        public void Manipulate_DelegatesToSettings_ForFedExAccount()
         {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
+            testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
-        {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RateReply());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_DelegatesToRequestForFedExAccount()
-        {
-            testObject.Manipulate(carrierRequest.Object);
-
-            carrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
+            mock.Mock<IFedExSettingsRepository>().Verify(x => x.GetAccountReadOnly(shipment));
         }
 
         [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNull()
         {
-            // Only setup is  to set the detail to null value
-            nativeRequest.ClientDetail = null;
+            mock.Mock<IFedExSettingsRepository>()
+                .Setup(x => x.GetAccountReadOnly(AnyIShipment))
+                .Returns(new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" });
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            ClientDetail detail = ((RateRequest) carrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.NotNull(detail);
+            Assert.Equal("12345", result.ClientDetail.AccountNumber);
+            Assert.Equal("67890", result.ClientDetail.MeterNumber);
         }
 
         [Fact]
-        public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNotNull()
+        public void Manipulate_OverwritesClientDetail_WhenWebAuthenticationDetailsIsNotNull()
         {
-            // No additional setup since everything is in the Initialize method
-            testObject.Manipulate(carrierRequest.Object);
+            mock.Mock<IFedExSettingsRepository>()
+                .Setup(x => x.GetAccountReadOnly(AnyIShipment))
+                .Returns(new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" });
 
-            ClientDetail detail = ((RateRequest) carrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.NotNull(detail);
+            var result = testObject.Manipulate(shipment, new RateRequest { ClientDetail = new ClientDetail { AccountNumber = "111" } });
+
+            Assert.Equal("12345", result.ClientDetail.AccountNumber);
         }
     }
 }

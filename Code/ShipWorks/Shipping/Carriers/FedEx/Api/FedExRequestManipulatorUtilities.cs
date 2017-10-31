@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -390,7 +391,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a close API request.</returns>
-        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account)
+        public static WebServices.Close.ClientDetail CreateCloseClientDetail(IFedExAccountEntity account)
         {
             return new WebServices.Close.ClientDetail
             {
@@ -404,7 +405,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a rate API request.</returns>
-        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account)
+        public static WebServices.Rate.ClientDetail CreateRateClientDetail(IFedExAccountEntity account)
         {
             if (account == null)
             {

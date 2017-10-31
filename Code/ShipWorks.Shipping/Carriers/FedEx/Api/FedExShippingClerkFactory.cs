@@ -1,7 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
@@ -15,17 +14,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     [Component]
     public class FedExShippingClerkFactory : IFedExShippingClerkFactory
     {
-        private readonly Func<ICarrierSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk;
+        private readonly Func<IFedExSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk;
         private readonly Func<IFimsShippingClerk> createFimsShippingClerk;
-        readonly Func<ICarrierSettingsRepository, IFedExRequestFactory> createRequestFactory;
+        readonly Func<IFedExSettingsRepository, IFedExRequestFactory> createRequestFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExShippingClerkFactory(
             Func<IFimsShippingClerk> createFimsShippingClerk,
-            Func<ICarrierSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk,
-            Func<ICarrierSettingsRepository, IFedExRequestFactory> createRequestFactory)
+            Func<IFedExSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk,
+            Func<IFedExSettingsRepository, IFedExRequestFactory> createRequestFactory)
         {
             this.createRequestFactory = createRequestFactory;
             this.createFimsShippingClerk = createFimsShippingClerk;
@@ -54,8 +53,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
         /// </summary>
         /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
-        /// <param name="settingsRepository">The ICarrierSettingsRepository.</param>
-        private IFedExShippingClerk CreateShippingClerk(IShipmentEntity shipment, ICarrierSettingsRepository settingsRepository)
+        /// <param name="settingsRepository">The IFedExSettingsRepository.</param>
+        private IFedExShippingClerk CreateShippingClerk(IShipmentEntity shipment, IFedExSettingsRepository settingsRepository)
         {
             return IsFimsShipment(shipment) ?
                 createFimsShippingClerk() :

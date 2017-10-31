@@ -11,9 +11,9 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private static bool hasDoneVersionCapture;
         private readonly ILabelRepository labelRepository;
         private readonly IFedExRequestFactory requestFactory;
-        private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly IFedExSettingsRepository settingsRepository;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly ILog log;
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         public FedExShippingClerk(
             ILabelRepository labelRepository,
             IFedExRequestFactory requestFactory,
-            ICarrierSettingsRepository settingsRepository,
+            IFedExSettingsRepository settingsRepository,
             IExcludedServiceTypeRepository excludedServiceTypeRepository,
             Func<Type, ILog> createLog)
         {

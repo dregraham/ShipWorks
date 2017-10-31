@@ -3,9 +3,9 @@ using Interapptive.Shared.Pdf;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
             ShipmentEntity shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             shipment.FedEx.Service = (int) FedExServiceType.FedExGround;
 
-            Mock<ICarrierSettingsRepository> MockSettingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> MockSettingsRepository = new Mock<IFedExSettingsRepository>();
             MockSettingsRepository.Setup(x => x.GetShippingSettings())
                                   .Returns(new ShippingSettingsEntity()
                                   {

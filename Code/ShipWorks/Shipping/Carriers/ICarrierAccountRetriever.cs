@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers
     /// Generic carrier account retriever
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICarrierAccountRetriever<T, TInterface>
+    public interface ICarrierAccountRetriever<T, TInterface> : IReadOnlyCarrierAccountRetriever<TInterface>
         where T : TInterface
         where TInterface : ICarrierAccount
     {
@@ -47,7 +47,15 @@ namespace ShipWorks.Shipping.Carriers
         /// Get a collection of accounts
         /// </summary>
         IEnumerable<T> Accounts { get; }
+    }
 
+    /// <summary>
+    /// Generic carrier account retriever
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IReadOnlyCarrierAccountRetriever<TInterface>
+        where TInterface : ICarrierAccount
+    {
         /// <summary>
         /// Get a read only version of the specified account
         /// </summary>

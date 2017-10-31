@@ -7,7 +7,6 @@ using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -24,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
     public class FimsShippingClerk : IFimsShippingClerk
     {
         private readonly IFimsLabelRepository labelRepository;
-        private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly IFedExSettingsRepository settingsRepository;
         private readonly ILog log;
         private readonly IFimsWebClient webClient;
 
@@ -34,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         public FimsShippingClerk(
             IFimsWebClient webClient,
             IFimsLabelRepository labelRepository,
-            ICarrierSettingsRepository settingsRepository,
+            IFedExSettingsRepository settingsRepository,
             Func<Type, ILog> getLog)
         {
             this.webClient = webClient;

@@ -4,7 +4,6 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExRequestFactory : IFedExRequestFactory
     {
         private readonly IFedExResponseFactory responseFactory;
-        private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly IFedExSettingsRepository settingsRepository;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
         private readonly IFedExServiceGatewayFactory serviceGatewayFactory;
         readonly ILifetimeScope lifetimeScope;
@@ -49,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </remarks>
         public FedExRequestFactory(
             IFedExServiceGatewayFactory serviceGatewayFactory,
-            ICarrierSettingsRepository settingsRepository,
+            IFedExSettingsRepository settingsRepository,
             IFedExShipmentTokenProcessor tokenProcessor,
             IFedExResponseFactory responseFactory,
             ILifetimeScope lifetimeScope)

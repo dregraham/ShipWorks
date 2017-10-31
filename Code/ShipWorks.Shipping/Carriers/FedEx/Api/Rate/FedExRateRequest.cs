@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
@@ -15,8 +15,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
     public class FedExRateRequest : IFedExRateRequest
     {
         private readonly IFedExServiceGatewayFactory serviceGatewayFactory;
-        private readonly ICarrierSettingsRepository settingsRepository;
-        private readonly IEnumerable<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> manipulatorFactory;
+        private readonly IFedExSettingsRepository settingsRepository;
+        private readonly IEnumerable<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>> manipulatorFactory;
         private readonly Func<RateReply, IFedExRateResponse> createRateRespose;
 
         /// <summary>
@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// </summary>
         public FedExRateRequest(
             IFedExServiceGatewayFactory serviceGatewayFactory,
-            ICarrierSettingsRepository settingsRepository,
-            IEnumerable<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> manipulatorFactory,
+            IFedExSettingsRepository settingsRepository,
+            IEnumerable<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>> manipulatorFactory,
             Func<RateReply, IFedExRateResponse> createRateRespose)
         {
             this.createRateRespose = createRateRespose;
