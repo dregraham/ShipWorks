@@ -1,11 +1,11 @@
-﻿using ShipWorks.Tests.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
+using ShipWorks.Tests.Shared;
 using Xunit;
 using Xunit.Abstractions;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 
 namespace ShipWorks.Tests.Core
 {

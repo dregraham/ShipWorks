@@ -2,7 +2,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
