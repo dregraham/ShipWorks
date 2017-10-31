@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Sears
                     return "SMRT";
                 }
 
-                if (FedExUtility.IsFreightService(fedExService))
+                if (FedExUtility.IsFreightExpressService(fedExService))
                 {
                     return "FXFT";
                 }

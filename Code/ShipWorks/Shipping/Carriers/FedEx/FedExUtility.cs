@@ -359,6 +359,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines if the shipment is a FIMS shipment.
         /// </summary>
+        public static bool IsFimsService(int service)
+        {
+            return IsFimsService((FedExServiceType) service);
+        }
+
+        /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
             List<FedExServiceType> fimsServices = new List<FedExServiceType>
@@ -373,9 +381,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Indicates if the given service is a freight service
+        /// Is the service any freight service?  Express or LTL
         /// </summary>
-        public static bool IsFreightService(FedExServiceType serviceType)
+        public static bool IsFreightAnyService(FedExServiceType serviceType)
+        {
+            return IsFreightExpressService(serviceType) || IsFreightLtlService(serviceType);
+        }
+
+        /// <summary>
+        /// Is the service any freight service?  Express or LTL
+        /// </summary>
+        public static bool IsFreightAnyService(int serviceType)
+        {
+            return IsFreightExpressService(serviceType) || IsFreightLtlService(serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight express service
+        /// </summary>
+        public static bool IsFreightExpressService(int serviceType)
+        {
+            return IsFreightExpressService((FedExServiceType) serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight express service
+        /// </summary>
+        public static bool IsFreightExpressService(FedExServiceType serviceType)
         {
             switch (serviceType)
             {
@@ -385,6 +417,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.InternationalPriorityFreight:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight LTL service
+        /// </summary>
+        public static bool IsFreightLtlService(int serviceType)
+        {
+            return IsFreightLtlService((FedExServiceType) serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight LTL service
+        /// </summary>
+        public static bool IsFreightLtlService(FedExServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case FedExServiceType.FedExFreightEconomy:
+                case FedExServiceType.FedExFreightPriority:
                     return true;
             }
 

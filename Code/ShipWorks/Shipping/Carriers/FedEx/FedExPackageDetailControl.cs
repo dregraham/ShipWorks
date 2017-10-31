@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             foreach (ShipmentEntity shipment in loadedShipments)
             {
-                if (!FedExUtility.IsFreightService((FedExServiceType)shipment.FedEx.Service))
+                if (!FedExUtility.IsFreightExpressService((FedExServiceType)shipment.FedEx.Service))
                 {
                     allFreight = false;
                     break;
@@ -283,6 +283,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
+        /// <summary>
+        /// The package count changed so reload.
+        /// </summary>
         public void PackageCountChanged(int packageCount)
         {
             SaveToEntities();

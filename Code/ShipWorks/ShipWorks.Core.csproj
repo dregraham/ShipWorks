@@ -120,20 +120,16 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Shared.Net20, Version=1.0.94.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <HintPath>..\..\Components\ActiproSoftware.Shared.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.271.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
       <HintPath>..\..\Components\ActiproSoftware.SyntaxEditor.Addons.Web.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.271.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
       <HintPath>..\..\Components\ActiproSoftware.SyntaxEditor.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.WinUICore.Net20, Version=1.0.94.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5, processorArchitecture=MSIL">
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>
     <Reference Include="Apitron.PDF.Rasterizer, Version=3.0.93.0, Culture=neutral, PublicKeyToken=6e759dbb0039406e, processorArchitecture=MSIL">
@@ -1232,6 +1228,24 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExEmailNotificationControlContainer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExFreightContainerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExFreightContainerControl.Designer.cs">
+      <DependentUpon>FedExFreightContainerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExExpressFreightControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExExpressFreightControl.Designer.cs">
+      <DependentUpon>FedExExpressFreightControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackageFreightDetailControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackageFreightDetailControl.Designer.cs">
+      <DependentUpon>FedExPackageFreightDetailControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
@@ -7856,11 +7870,20 @@
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExDangerousGoodsControl.resx">
       <DependentUpon>FedExDangerousGoodsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExFreightContainerControl.resx">
+      <DependentUpon>FedExFreightContainerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExExpressFreightControl.resx">
+      <DependentUpon>FedExExpressFreightControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExHoldAtLocationControl.resx">
       <DependentUpon>FedExHoldAtLocationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExHoldAtLocationSearchDlg.resx">
       <DependentUpon>FedExHoldAtLocationSearchDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExPackageFreightDetailControl.resx">
+      <DependentUpon>FedExPackageFreightDetailControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExPackageDetailControl.resx">
       <DependentUpon>FedExPackageDetailControl.cs</DependentUpon>

@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
             // If we aren't freight, just return
-            if (!FedExUtility.IsFreightService((FedExServiceType)fedex.Service))
+            if (!FedExUtility.IsFreightExpressService((FedExServiceType)fedex.Service))
             {
                 return;
             }

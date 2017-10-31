@@ -99,19 +99,19 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiproSoftware.Shared.Net20, Version=1.0.94.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+    <Reference Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.Shared.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.271.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
+    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.SyntaxEditor.Addons.Web.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.271.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
+    <Reference Include="ActiproSoftware.SyntaxEditor.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.SyntaxEditor.Net20.dll</HintPath>
     </Reference>
-    <Reference Include="ActiproSoftware.WinUICore.Net20, Version=1.0.94.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5, processorArchitecture=MSIL">
+    <Reference Include="ActiproSoftware.WinUICore.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=1eba893a2bc55de5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\ActiproSoftware.WinUICore.Net20.dll</HintPath>
     </Reference>

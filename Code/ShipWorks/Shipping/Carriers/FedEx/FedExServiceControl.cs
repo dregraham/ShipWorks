@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -89,6 +90,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             packageControl.Initialize();
 
             packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
+            packageControl.PackageCountChanged = fedExFreightContainerControl.PackageCountChanged;
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
@@ -260,12 +262,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
 
-            // Show freight if there are all freight
-            freightInsidePickup.Visible = anyDomestic;
-            freightInsideDelivery.Visible = anyDomestic;
-            labelLoadAndCount.Visible = !anyDomestic;
-            freightLoadAndCount.Visible = !anyDomestic;
-
             // Enable the COD editing ui if any shipments have COD enabled
             EnableCodUI(anyCodEnabled);
 
@@ -275,6 +271,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Only show non-standard for a ground (home or not)
             nonStandardPackaging.Visible = anyGround;
+
+            // Show freight if they are all freight
+            UpdateFreightSection(allServicesSame);
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -310,11 +309,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     homePremiumDate.ApplyMultiDate(shipment.FedEx.HomeDeliveryDate);
                     homePremiumPhone.ApplyMultiText(shipment.FedEx.HomeDeliveryPhone);
 
-                    freightBookingNumber.ApplyMultiText(shipment.FedEx.FreightBookingNumber);
-                    freightInsidePickup.ApplyMultiCheck(shipment.FedEx.FreightInsidePickup);
-                    freightInsideDelivery.ApplyMultiCheck(shipment.FedEx.FreightInsideDelivery);
-                    freightLoadAndCount.ApplyMultiText(shipment.FedEx.FreightLoadAndCount.ToString());
-
                     codEnabled.ApplyMultiCheck(shipment.FedEx.CodEnabled);
                     codAmount.ApplyMultiAmount(shipment.FedEx.CodAmount);
                     codAddFreight.ApplyMultiCheck(shipment.FedEx.CodAddFreight);
@@ -341,6 +335,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateBillingSectionDisplay();
             UpdateSectionDescription();
+        }
+
+        /// <summary>
+        /// Hide/Show the freight section
+        /// </summary>
+        /// <param name="allSameServices"></param>
+        private void UpdateFreightSection(bool? allSameServices)
+        {
+            bool allDistinct = allSameServices.HasValue ? 
+                                    allSameServices.Value : 
+                                    LoadedShipments.Select(s => s.FedEx.Service).Distinct().IsCountEqualTo(1);
+
+            sectionFreight.Visible = allDistinct && 
+                                     LoadedShipments.All(s => !FedExUtility.IsFimsService(s.FedEx.Service) &&
+                                                               FedExUtility.IsFreightAnyService(s.FedEx.Service));
+
+            if (sectionFreight.Visible)
+            {
+                fedExFreightContainerControl.LoadShipmentDetails(LoadedShipments);
+                sectionFreight.Height = fedExFreightContainerControl.Bottom + 30;
+            }
         }
 
         /// <summary>
@@ -485,6 +500,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Save cod address crap
             codOrigin.SaveToEntities();
 
+            this.fedExFreightContainerControl.SaveToShipments(LoadedShipments);
+
             // Save the whales
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
@@ -519,12 +536,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
                 homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
                 homePremiumPhone.ReadMultiText(t => shipment.FedEx.HomeDeliveryPhone = t);
-
-                freightBookingNumber.ReadMultiText(t => shipment.FedEx.FreightBookingNumber = t);
-                freightInsideDelivery.ReadMultiCheck(c => shipment.FedEx.FreightInsideDelivery = c);
-                freightInsidePickup.ReadMultiCheck(c => shipment.FedEx.FreightInsidePickup = c);
-                freightLoadAndCount.ReadMultiText(t => { int count; if (int.TryParse(t, out count)) shipment.FedEx.FreightLoadAndCount = count; });
-
+                
                 codEnabled.ReadMultiCheck(c => shipment.FedEx.CodEnabled = c);
                 codAmount.ReadMultiAmount(a => shipment.FedEx.CodAmount = a);
                 codAddFreight.ReadMultiCheck(c => shipment.FedEx.CodAddFreight = c);
@@ -602,6 +614,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             SetStandardControlVisibility(true);
 
+            UpdateFreightSection(null);
+
             // Don't show any selection when multiple services are selected
             RateControl.ClearSelection();
         }
@@ -633,9 +647,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Hide Hold At Location if we are SmartPost
             sectionHoldAtLocation.Visible = !isSmartPost && !isFims;
 
-            // Only show freight if its a freight service
-            sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
-
             // Update the packages\skids ui
             packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
 
@@ -651,6 +662,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             RaiseRateCriteriaChanged();
             SyncSelectedRate();
+
+            // Only show freight if its a freight service
+            UpdateFreightSection(null);
 
             Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
         }
@@ -1124,12 +1138,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Called when freight container resizes.
+        /// </summary>
+        private void OnFreightContainerControlResize(object sender, EventArgs e)
+        {
+            ResizePackageDetails();
+        }
+
+        /// <summary>
         /// Resizes the package details.
         /// </summary>
         private void ResizePackageDetails()
         {
             otherPackageHolder.Height = packageDetailsControl.Bottom;
             sectionPackageDetails.Height = packageDetailsControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
+
+            sectionFreight.Height = fedExFreightContainerControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
         }
 
         /// <summary>
