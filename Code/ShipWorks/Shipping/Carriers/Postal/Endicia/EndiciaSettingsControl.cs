@@ -6,6 +6,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Insurance;
@@ -58,8 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             express1PostageDiscountSettingsControl.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
 
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            LoadExpress1Settings(settings);
+            IShippingSettingsEntity settings = ShippingSettings.FetchReadOnly();
 
             if (endiciaReseller == EndiciaReseller.None)
             {
@@ -73,12 +73,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     panelInsurance.Visible = restrictionLevel == EditionRestrictionLevel.None;
                 }
+
+                optionsControl.ShowShippingCutoffDate = true;
             }
             else
             {
                 // Doesn't make sense to show Endicia insurance choosing to Express1
                 panelInsurance.Visible = false;
             }
+
+            express1Options.Top = optionsControl.Bottom;
+
+            LoadExpress1Settings(settings);
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
@@ -92,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Loads the Express1 settings.
         /// </summary>
-        private void LoadExpress1Settings(ShippingSettingsEntity settings)
+        private void LoadExpress1Settings(IShippingSettingsEntity settings)
         {
             this.settings = new Express1EndiciaSettingsFacade(settings);
 
@@ -103,7 +109,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
             else
             {
-                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted || ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia).IsShipmentTypeRestricted ||
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia).IsRateDiscountMessagingRestricted)
                 {
                     // Hide the express1 settings if Express1 is restricted or discounted rate messaging is turned off
                     express1PostageDiscountSettingsControl.Hide();
@@ -114,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     express1PostageDiscountSettingsControl.LoadSettings(this.settings);
-                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom + 5;
+                    express1PostageDiscountSettingsControl.Top = optionsControl.Bottom;
 
                     panelBottom.Top = express1PostageDiscountSettingsControl.Bottom + 5;
                 }

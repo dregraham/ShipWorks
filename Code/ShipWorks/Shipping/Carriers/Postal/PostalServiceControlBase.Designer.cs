@@ -46,6 +46,7 @@
             this.sectionExpress = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.expressSignatureWaiver = new System.Windows.Forms.CheckBox();
             this.labelExpressSignatureWaiver = new System.Windows.Forms.Label();
+            this.cutoffDateDisplay = new ShipWorks.Shipping.Editing.ShippingDateCutoffDisplayControl();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -87,6 +88,7 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelConfirmation);
             this.sectionShipment.ContentPanel.Controls.Add(this.nonRectangular);
             this.sectionShipment.ContentPanel.Controls.Add(this.shipDate);
+            this.sectionShipment.ContentPanel.Controls.Add(this.cutoffDateDisplay);
             this.sectionShipment.ContentPanel.Controls.Add(this.label3);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelShipDate);
             this.sectionShipment.ContentPanel.Controls.Add(this.packagingType);
@@ -303,6 +305,18 @@
             this.labelExpressSignatureWaiver.Size = new System.Drawing.Size(97, 13);
             this.labelExpressSignatureWaiver.TabIndex = 0;
             this.labelExpressSignatureWaiver.Text = "Signature Waiver: ";
+            // 
+            // cutoffDateDisplay
+            // 
+            this.cutoffDateDisplay.AutoSize = true;
+            this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
+            this.cutoffDateDisplay.Caption = "";
+            this.cutoffDateDisplay.Location = new System.Drawing.Point(220, 68);
+            this.cutoffDateDisplay.Name = "cutoffDateDisplay";
+            this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.Usps;
+            this.cutoffDateDisplay.Size = new System.Drawing.Size(113, 15);
+            this.cutoffDateDisplay.TabIndex = 6;
+            this.cutoffDateDisplay.Title = "Shipment cutoff time";
             //
             // PostalServiceControlBase
             //
@@ -355,5 +369,6 @@
         private System.Windows.Forms.Label labelExpressSignatureWaiver;
         protected UI.Controls.CollapsibleGroupControl sectionExpress;
         protected UI.Controls.MultiValueComboBox service;
+        private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
     }
 }

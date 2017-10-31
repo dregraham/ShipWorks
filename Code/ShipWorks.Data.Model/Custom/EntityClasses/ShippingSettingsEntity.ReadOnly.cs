@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Settings;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
@@ -38,6 +40,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public ShipmentTypeCode DefaultShipmentTypeCode { get; private set; }
 
         /// <summary>
+        /// Current list of shipment date cutoffs
+        /// </summary>
+        public ReadOnlyDictionary<ShipmentTypeCode, ShipmentDateCutoff> ShipmentDateCutoffList { get; private set; }
+
+        /// <summary>
+        /// Get the shipment cutoff info for a given shipment type code
+        /// </summary>
+        public ShipmentDateCutoff GetShipmentDateCutoff(ShipmentTypeCode shipmentTypeCode)
+        {
+            if (ShipmentDateCutoffList.ContainsKey(shipmentTypeCode))
+            {
+                return ShipmentDateCutoffList[shipmentTypeCode];
+            }
+
+            return ShipmentDateCutoff.Default;
+        }
+
+        /// <summary>
         /// Copy custom data
         /// </summary>
         partial void CopyCustomShippingSettingsData(IShippingSettingsEntity source)
@@ -47,6 +67,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ExcludedTypes = source.ExcludedTypes.ToReadOnly();
             BestRateExcludedTypes = source.BestRateExcludedTypes.ToReadOnly();
             DefaultShipmentTypeCode = source.DefaultShipmentTypeCode;
+            ShipmentDateCutoffList = source.ShipmentDateCutoffList.ToReadOnlyDictionary();
         }
     }
 }

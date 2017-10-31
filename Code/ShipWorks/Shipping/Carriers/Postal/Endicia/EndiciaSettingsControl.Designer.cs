@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.panelBottom.Controls.Add(this.labelAccountType);
             this.panelBottom.Controls.Add(this.accountControl);
-            this.panelBottom.Location = new System.Drawing.Point(0, 357);
+            this.panelBottom.Location = new System.Drawing.Point(0, 382);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(479, 140);
             this.panelBottom.TabIndex = 5;
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // 
             this.panelInsurance.Controls.Add(this.insuranceProviderChooser);
             this.panelInsurance.Controls.Add(this.labelShipmentProtection);
-            this.panelInsurance.Location = new System.Drawing.Point(6, 917);
+            this.panelInsurance.Location = new System.Drawing.Point(6, 942);
             this.panelInsurance.Name = "panelInsurance";
             this.panelInsurance.Size = new System.Drawing.Size(374, 56);
             this.panelInsurance.TabIndex = 6;
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // express1PostageDiscountSettingsControl
             // 
             this.express1PostageDiscountSettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1PostageDiscountSettingsControl.Location = new System.Drawing.Point(5, 196);
+            this.express1PostageDiscountSettingsControl.Location = new System.Drawing.Point(5, 221);
             this.express1PostageDiscountSettingsControl.Name = "express1PostageDiscountSettingsControl";
             this.express1PostageDiscountSettingsControl.Size = new System.Drawing.Size(454, 163);
             this.express1PostageDiscountSettingsControl.TabIndex = 6;
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // express1Options
             // 
             this.express1Options.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.express1Options.Location = new System.Drawing.Point(4, 149);
+            this.express1Options.Location = new System.Drawing.Point(4, 174);
             this.express1Options.Name = "express1Options";
             this.express1Options.Size = new System.Drawing.Size(421, 41);
             this.express1Options.TabIndex = 4;
@@ -123,22 +123,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Reseller = ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller.None;
-            this.optionsControl.Size = new System.Drawing.Size(454, 144);
+            this.optionsControl.ShowShippingCutoffDate = true;
+            this.optionsControl.Size = new System.Drawing.Size(513, 174);
             this.optionsControl.TabIndex = 0;
             // 
             // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 503);
+            this.servicePicker.Location = new System.Drawing.Point(9, 528);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(474, 200);
             this.servicePicker.TabIndex = 10;
             // 
-            // postalServicePickerControl1
+            // packagePicker
             // 
             this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packagePicker.Location = new System.Drawing.Point(9, 713);
-            this.packagePicker.Name = "postalServicePickerControl1";
+            this.packagePicker.Location = new System.Drawing.Point(9, 738);
+            this.packagePicker.Name = "packagePicker";
             this.packagePicker.Size = new System.Drawing.Size(474, 200);
             this.packagePicker.TabIndex = 11;
             // 
@@ -155,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.Controls.Add(this.express1Options);
             this.Controls.Add(this.optionsControl);
             this.Name = "EndiciaSettingsControl";
-            this.Size = new System.Drawing.Size(516, 989);
+            this.Size = new System.Drawing.Size(516, 1019);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelInsurance.ResumeLayout(false);

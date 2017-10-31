@@ -202,6 +202,7 @@
     <Compile Include="Carriers\Other\OtherPrefetchProvider.cs" />
     <Compile Include="Carriers\Other\OtherShipmentAdapter.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
+    <Compile Include="Carriers\Other\OtherShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilder.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\TelemetricUpsLocalRateValidator.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
+    <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
     <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
@@ -513,7 +516,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

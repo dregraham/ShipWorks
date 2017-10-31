@@ -53,6 +53,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             fimsUsername.Text = settings.FedExFimsUsername;
             fimsPassword.Text = settings.FedExFimsPassword;
 
+            shippingCutoff.Value = settings.GetShipmentDateCutoff(ShipmentTypeCode);
+
             SetFimsFieldsState();
         }
 
@@ -93,6 +95,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             settings.FedExFimsEnabled = enableFims.Checked;
             settings.FedExFimsUsername = fimsUsername.Text.Trim();
             settings.FedExFimsPassword = fimsPassword.Text.Trim();
+
+            settings.SetShipmentDateCutoff(ShipmentTypeCode, shippingCutoff.Value);
         }
 
         /// <summary>

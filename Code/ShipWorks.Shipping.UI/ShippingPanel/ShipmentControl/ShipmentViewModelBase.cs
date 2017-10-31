@@ -197,6 +197,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         {
             shipmentAdapter = newShipmentAdapter;
 
+            ShipmentType = newShipmentAdapter.ShipmentTypeCode;
             ShipDate = shipmentAdapter.ShipDate;
             ContentWeight = shipmentAdapter.ContentWeight;
             SupportsPackageTypes = shipmentAdapter.SupportsPackageTypes;

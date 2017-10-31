@@ -1,14 +1,9 @@
-﻿PRINT N'Altering [dbo].[WalmartOrderSearch]'
+﻿PRINT N'Altering [dbo].[ShippingSettings]'
 GO
-ALTER TABLE [WalmartOrderSearch]
-ADD CustomerOrderID varchar(50) NOT NULL
-CONSTRAINT DF_CustomerOrderID DEFAULT ''
+ALTER TABLE dbo.ShippingSettings ADD
+	[ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT ('')
 GO
-PRINT N'Dropping Constraint on [dbo].[WalmartOrderSearch]'
-ALTER TABLE [WalmartOrderSearch]
-DROP CONSTRAINT DF_CustomerOrderID
+PRINT N'Dropping constraints from [dbo].[ShippingSettings]'
 GO
-PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
-GO
-CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
+ALTER TABLE dbo.ShippingSettings DROP CONSTRAINT DF_ShippingSettings_ShipmentDateCutoffJson
 GO
