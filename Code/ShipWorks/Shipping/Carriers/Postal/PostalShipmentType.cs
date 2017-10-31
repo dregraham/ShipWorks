@@ -450,7 +450,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Is the given shipment domestic?
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
             return base.IsDomestic(shipmentEntity) || IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
         }

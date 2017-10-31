@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
 using System.Xml;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using log4net;
 using Moq;
@@ -15,16 +16,18 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 
@@ -37,8 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private Mock<ICertificateRequest> certificateRequest;
 
-        private Mock<IFedExRequestFactory> requestFactory;
-        private Mock<ILog> log;
+        private readonly AutoMock mock;
 
         private Mock<CarrierRequest> packageMovementRequest;
         private Mock<CarrierRequest> versionCaptureRequest;
@@ -58,25 +60,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<CarrierRequest> subscriptionRequest;
         private Mock<ICarrierResponse> subscriptionResponse;
 
-        private Mock<CarrierRequest> rateRequest;
-        private Mock<ICarrierResponse> rateResponse;
+        private Mock<IFedExRateRequest> rateRequest;
+        private Mock<IFedExRateResponse> rateResponse;
         private RateReply nativeRateReply;
 
         private PostalCodeInquiryReply reply;
 
-        private Mock<ILabelRepository> labelRepository;
-
         private ShipmentEntity shipmentEntity;
-
-        private Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository;
 
         public FedExShippingClerkTest()
         {
-            log = new Mock<ILog>();
-            log.Setup(l => l.Info(It.IsAny<string>()));
-            log.Setup(l => l.Error(It.IsAny<string>()));
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
+            settingsRepository = mock.Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccounts()).Returns
                 (
                     new List<FedExAccountEntity>()
@@ -88,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 );
 
             // Return a FedEx account that has been migrated
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() { MeterNumber = "123" });
+            settingsRepository.Setup(r => r.GetAccount(AnyShipment)).Returns(new FedExAccountEntity() { MeterNumber = "123" });
 
             certificateRequest = new Mock<ICertificateRequest>();
             certificateRequest.Setup(r => r.Submit()).Returns(CertificateSecurityLevel.Trusted);
@@ -192,38 +188,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 }
             };
 
-            rateResponse = new Mock<ICarrierResponse>();
-            rateResponse.Setup(r => r.Process());
-            rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
-
-            rateRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
-            rateRequest.Setup(r => r.Submit()).Returns(rateResponse.Object);
-
-            requestFactory = new Mock<IFedExRequestFactory>();
-            requestFactory.Setup(f => f.CreatePackageMovementRequest(It.IsAny<ShipmentEntity>(), It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
-            requestFactory.Setup(f => f.CreateShipRequest(It.IsAny<ShipmentEntity>())).Returns(shippingRequest.Object);
-            requestFactory.Setup(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>())).Returns(versionCaptureRequest.Object);
+            var requestFactory = mock.Mock<IFedExRequestFactory>();
+            requestFactory.Setup(f => f.CreatePackageMovementRequest(AnyShipment, It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
+            requestFactory.Setup(f => f.CreateShipRequest(AnyShipment)).Returns(shippingRequest.Object);
+            requestFactory.Setup(f => f.CreateVersionCaptureRequest(AnyShipment, It.IsAny<string>(), It.IsAny<FedExAccountEntity>())).Returns(versionCaptureRequest.Object);
             requestFactory.Setup(f => f.CreateGroundCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(groundCloseRequest.Object);
             requestFactory.Setup(f => f.CreateSmartPostCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(smartPostCloseRequest.Object);
             requestFactory.Setup(f => f.CreateRegisterCspUserRequest(It.IsAny<FedExAccountEntity>())).Returns(registrationRequest.Object);
             requestFactory.Setup(f => f.CreateSubscriptionRequest(It.IsAny<FedExAccountEntity>())).Returns(subscriptionRequest.Object);
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Returns(rateRequest.Object);
             requestFactory.Setup(f => f.CreateCertificateRequest(It.IsAny<ICertificateInspector>())).Returns(certificateRequest.Object);
 
-            labelRepository = new Mock<ILabelRepository>();
-            labelRepository.Setup(f => f.ClearReferences(It.IsAny<ShipmentEntity>()));
+            rateResponse = mock.CreateMock<IFedExRateResponse>(x => x.Setup(r => r.Process()).Returns(nativeRateReply));
+            rateRequest = mock.CreateMock<IFedExRateRequest>(x =>
+            {
+                x.Setup(r => r.Submit(AnyIShipment)).Returns(rateResponse);
+                x.Setup(r => r.Submit(AnyIShipment, It.IsAny<FedExRateRequestOptions>())).Returns(rateResponse);
+            });
+
+            requestFactory.Setup(x => x.CreateRateRequest())
+                .Returns(rateRequest);
 
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.FedEx.SmartPostHubID = "5571";
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
-            excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
-            excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
-                .Returns(new List<ExcludedServiceTypeEntity> { new ExcludedServiceTypeEntity((int) ShipmentTypeCode.FedEx, (int) FedExServiceType.FedExGround) });
-
-            // Force our test object to perform version capture when called.
-            testObject = new FedExShippingClerk(labelRepository.Object, requestFactory.Object, settingsRepository.Object, excludedServiceTypeRepository.Object, x => log.Object);
+            testObject = mock.Create<FedExShippingClerk>();
         }
 
         [Fact]
@@ -234,7 +223,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // The string should indicate the capture was forced since our test object was configured as such
-            log.Verify(l => l.Info("Performing FedEx version capture (forced)"), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Info("Performing FedEx version capture (forced)"), Times.Once());
         }
 
         [Fact]
@@ -245,7 +234,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
-            requestFactory.Verify(f => f.CreatePackageMovementRequest(It.IsAny<ShipmentEntity>(), It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreatePackageMovementRequest(AnyShipment, It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
         }
 
         [Fact]
@@ -289,7 +279,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.PerformVersionCapture(new ShipmentEntity());
 
             // Our repository is setup to return 3 accounts
-            requestFactory.Verify(f => f.CreateVersionCaptureRequest(It.IsAny<ShipmentEntity>(), It.IsAny<string>(), It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateVersionCaptureRequest(AnyShipment, It.IsAny<string>(), It.IsAny<FedExAccountEntity>()), Times.Exactly(3));
         }
 
         [Fact]
@@ -334,7 +325,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_ThrowsFedExException_WhenFedExAccountIsNull()
         {
             // Create the shipment and setup the repository to return a null account for this test
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns<FedExAccountEntity>(null);
+            settingsRepository.Setup(r => r.GetAccount(AnyShipment)).Returns<FedExAccountEntity>(null);
 
             Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
         }
@@ -346,7 +337,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             {
                 // Create the shipment and setup the repository to return a null account for this test
                 shipmentEntity.ShipmentID = 1001;
-                settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns<FedExAccountEntity>(null);
+                settingsRepository.Setup(r => r.GetAccount(AnyShipment)).Returns<FedExAccountEntity>(null);
 
                 testObject.Ship(shipmentEntity);
             }
@@ -357,7 +348,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             {
                 // Hard code the shipment IDn the expected error message since it was setup in the shipment above
                 const string expectedErrorMessage = "Shipment ID 1001 does not have a FedEx account selected. Select a valid FedEx account that is available in ShipWorks.";
-                log.Verify(l => l.Error(expectedErrorMessage), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(expectedErrorMessage), Times.Once());
             }
         }
 
@@ -366,7 +357,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.Ship(shipmentEntity);
 
-            requestFactory.Verify(f => f.CreateShipRequest(shipmentEntity), Times.Exactly(2));
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateShipRequest(shipmentEntity), Times.Exactly(2));
         }
 
         [Fact]
@@ -452,7 +444,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             finally
             {
                 // Hard-code the string and shipment ID since we're setting up the shipment entity above
-                log.Verify(l => l.Error("Shipment ID 12345 cannot have three lines in the From Street Address."), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error("Shipment ID 12345 cannot have three lines in the From Street Address."), Times.Once());
             }
         }
 
@@ -485,7 +477,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             finally
             {
                 // Hard-code the string and shipment ID since we're setting up the shipment entity above
-                log.Verify(l => l.Error("Shipment ID 12345 cannot have three lines in the To Street Address."), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error("Shipment ID 12345 cannot have three lines in the To Street Address."), Times.Once());
             }
         }
 
@@ -499,7 +491,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.CloseGround(account);
 
             // Make sure the account provided to the method is the one used to create the request
-            requestFactory.Verify(f => f.CreateGroundCloseRequest(account), Times.Once());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateGroundCloseRequest(account), Times.Once());
         }
 
         [Fact]
@@ -531,7 +524,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.CloseGround(account);
 
-            log.Verify(l => l.Info(It.IsAny<string>()), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Info(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -609,7 +602,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #endregion CloseGround Tests
 
-
         #region CloseSmartPost Tests
 
         [Fact]
@@ -620,7 +612,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.CloseSmartPost(account);
 
             // Make sure the account provided to the method is the one used to create the request
-            requestFactory.Verify(f => f.CreateSmartPostCloseRequest(account), Times.Once());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateSmartPostCloseRequest(account), Times.Once());
         }
 
         [Fact]
@@ -652,7 +645,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.CloseSmartPost(account);
 
-            log.Verify(l => l.Info(It.IsAny<string>()), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Info(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -732,7 +725,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #endregion CloseSmartPost Tests
 
-
         #region RegisterAccount Tests
 
         [Fact]
@@ -759,7 +751,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.RegisterAccount(account);
 
-            requestFactory.Verify(f => f.CreateRegisterCspUserRequest(account), Times.Once());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateRegisterCspUserRequest(account), Times.Once());
         }
 
         [Fact]
@@ -801,7 +794,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.RegisterAccount(account);
 
-            requestFactory.Verify(f => f.CreateRegisterCspUserRequest(account), Times.Never());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateRegisterCspUserRequest(account), Times.Never());
         }
 
         [Fact]
@@ -844,7 +838,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.RegisterAccount(account);
 
             // make sure the factory is called with the account provided to the register method
-            requestFactory.Verify(f => f.CreateSubscriptionRequest(account), Times.Once());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateSubscriptionRequest(account), Times.Once());
         }
 
         [Fact]
@@ -891,7 +886,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             settingsRepository.Setup(r => r.GetShippingSettings()).Throws(new SoapException());
 
             Assert.Throws<FedExSoapCarrierException>(() => testObject.RegisterAccount(new FedExAccountEntity()));
-            log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -918,7 +913,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -946,7 +941,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -975,7 +970,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -995,7 +990,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             catch (FedExException)
             { }
 
-            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
+            mock.Mock<ILog>().Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
         }
 
         [Fact]
@@ -1017,7 +1012,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             catch (FedExException)
             { }
 
-            log.Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
+            mock.Mock<ILog>().Verify(l => l.Warn("The FedEx certificate did not pass inspection and could not be trusted."));
         }
 
         [Fact]
@@ -1069,9 +1064,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            // Check that the rate request was created with a null value
-            //for the specialized manipulators - this is for obtaining the "basic rates"
-            requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, null), Times.Once());
+            mock.Mock<IFedExRequestFactory>()
+                .Verify(f => f.CreateRateRequest(), Times.Exactly(3));
         }
 
         [Fact]
@@ -1079,7 +1073,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            rateRequest.Verify(r => r.Submit(), Times.Exactly(3));
+            rateRequest.Verify(r => r.Submit(shipmentEntity));
+            rateRequest.Verify(r => r.Submit(shipmentEntity, FedExRateRequestOptions.OneRate));
+            rateRequest.Verify(r => r.Submit(shipmentEntity, FedExRateRequestOptions.SmartPost));
         }
 
         [Fact]
@@ -1116,6 +1112,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             nativeRateReply.RateReplyDetails[0].TransitTime = TransitTimeType.ELEVEN_DAYS;
             nativeRateReply.RateReplyDetails[0].TransitTimeSpecified = true;
 
+            mock.Mock<IFedExRateResponse>()
+                .Setup(x => x.Process())
+                .Returns(nativeRateReply);
+
             RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             Assert.StartsWith("11", rates.Rates.First().Days);
@@ -1137,7 +1137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_GrabsSecondRateWhenItIsActualRateType()
         {
-            // Setup the native request to have a prioity freight rate
+            // Setup the native request to have a priority freight rate
             nativeRateReply = new RateReply
             {
                 RateReplyDetails = new[]
@@ -1184,7 +1184,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             };
 
             // Setup the requests to return the native rate reply
-            rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
+            rateResponse.Setup(r => r.Process()).Returns(nativeRateReply);
 
             RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
@@ -1252,7 +1252,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             };
 
             // Setup the requests to return the native rate reply
-            rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
+            rateResponse.Setup(r => r.Process()).Returns(nativeRateReply);
 
             RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
@@ -1315,16 +1315,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             };
 
             // Setup the requests to return the native rate reply
-            rateResponse.Setup(r => r.NativeResponse).Returns(nativeRateReply);
-
+            rateResponse.Setup(r => r.Process()).Returns(nativeRateReply);
 
             RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
             // We should get rates back (priority overnight for basic, smart post, and One Rate)
             Assert.Equal(3, rates.Rates.Count);
         }
-
-
 
         [Fact]
         public void GetRates_SetsAmountToTotalNetCharge()
@@ -1347,16 +1344,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.Equal(nativeRateReply.RateReplyDetails.Length * 3, rates.Rates.Count);
         }
 
-
         [Fact]
         public void GetRates_CreatesSmartPostRequest_WithRequestFactory()
         {
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            // Check that a rate request was created that supplied a list of specialized manipulators
-            // containing one manipulator that was the smart post manipulator
-            requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
-                (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateSmartPostManipulator))), Times.Once());
+            rateRequest.Verify(x => x.Submit(shipmentEntity, FedExRateRequestOptions.SmartPost));
         }
 
         [Fact]
@@ -1364,17 +1357,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            // Check that a rate request was created that supplied a list of specialized manipulators
-            // containing one manipulator that was the One Rate manipulator
-            requestFactory.Verify(f => f.CreateRateRequest(shipmentEntity, It.Is<List<ICarrierRequestManipulator>>
-                (l => l != null && l.Count == 1 && l[0].GetType() == typeof(FedExRateOneRateManipulator))), Times.Once());
+            rateRequest.Verify(x => x.Submit(shipmentEntity, FedExRateRequestOptions.OneRate));
         }
 
         [Fact]
         public void GetRates_CatchesSoapException_AndThrowsFedExSoapException()
         {
             // Just throw a soap exception
-            rateRequest.Setup(r => r.Submit()).Throws(new SoapException());
+            rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new SoapException());
 
             Assert.Throws<FedExSoapCarrierException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
@@ -1385,7 +1375,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             try
             {
                 // Just throw a soap exception
-                rateRequest.Setup(r => r.Submit()).Throws(new SoapException());
+                rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new SoapException());
 
                 testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
@@ -1394,7 +1384,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -1402,7 +1392,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void GetRates_CatchesCarrierException_AndThrowsFedExException()
         {
             // Just throw a carrier exception
-            rateRequest.Setup(r => r.Submit()).Throws(new CarrierException());
+            rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new CarrierException());
 
             Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
@@ -1413,7 +1403,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             try
             {
                 // Just throw a soap exception
-                rateRequest.Setup(r => r.Submit()).Throws(new CarrierException());
+                rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new CarrierException());
 
                 testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
@@ -1422,7 +1412,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -1430,7 +1420,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void GetRates_CatchesWebException_AndThrowsFedExException()
         {
             // Just throw a web-related exception
-            rateRequest.Setup(r => r.Submit()).Throws(new TimeoutException("this is really slow"));
+            rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new TimeoutException("this is really slow"));
 
             Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
@@ -1441,7 +1431,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             try
             {
                 // Just throw a soap exception
-                rateRequest.Setup(r => r.Submit()).Throws(new TimeoutException("this is slow"));
+                rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new TimeoutException("this is slow"));
 
                 testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
@@ -1450,7 +1440,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
@@ -1458,11 +1448,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void GetRates_CatchesNonWebException_AndThrowsExceptionOfSameType()
         {
             // Just throw a non-web exception
-            rateRequest.Setup(r => r.Submit()).Throws(new ArgumentNullException());
+            rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new ArgumentNullException());
 
             Assert.Throws<ArgumentNullException>(() => testObject.GetRates(shipmentEntity, new TrustingCertificateInspector()));
         }
-
 
         [Fact]
         public void GetRates_WritesToLog_WhenNonWebExceptionIsCaught()
@@ -1470,7 +1459,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             try
             {
                 // Just throw a soap exception
-                rateRequest.Setup(r => r.Submit()).Throws(new ArgumentNullException());
+                rateRequest.Setup(r => r.Submit(AnyIShipment)).Throws(new ArgumentNullException());
 
                 testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
             }
@@ -1479,18 +1468,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             finally
             {
-                log.Verify(l => l.Error(It.IsAny<string>()), Times.Once());
+                mock.Mock<ILog>().Verify(l => l.Error(It.IsAny<string>()), Times.Once());
             }
         }
 
         [Fact]
         public void GetRates_DoesNotThrowException_WhenSmartPostRatesCatchesFedExException()
         {
-            // Just throw an error when the request is created using the specialized
-            // manipulators (i.e. the smart post rate request). Setup the call to create
-            // the "basic" rates as well, so the exception is not thrown when a null value is supplied
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
+            rateRequest
+                .Setup(x => x.Submit(AnyShipment, FedExRateRequestOptions.SmartPost))
+                .Throws<FedExException>();
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
         }
@@ -1498,27 +1485,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_WritesWarningToLog_WhenSmartPostRatesCatchesFedExException()
         {
-            // Just throw an error when the request is created using the specialized
-            // manipulators (i.e. the smart post rate request). Setup the call to create
-            // the "basic" rates as well, so the exception is not thrown when a null value is supplied
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExException());
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
+            rateRequest
+                .Setup(x => x.Submit(AnyShipment, FedExRateRequestOptions.SmartPost))
+                .Throws<FedExException>();
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            log.Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
         }
 
         [Fact]
         public void GetRates_DoesNotThrowException_WhenSmartPostRatesCatchesFedExApiException()
         {
-            // Just throw an error when the request is created using the specialized
-            // manipulators (i.e. the smart post rate request). Setup the call to create
-            // the "basic" rates as well, so the exception is not thrown when a null value is supplied
-            Notification[] notifications = new Notification[1] { new Notification { Message = "message" } };
-
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
+            rateRequest
+                .Setup(x => x.Submit(AnyShipment, FedExRateRequestOptions.SmartPost))
+                .Throws(new FedExApiCarrierException(new Notification[0]));
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
         }
@@ -1526,17 +1507,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_WritesWarningToLog_WhenSmartPostRatesCatchesFedExApiException()
         {
-            // Just throw an error when the request is created using the specialized
-            // manipulators (i.e. the smart post rate request). Setup the call to create
-            // the "basic" rates as well, so the exception is not thrown when a null value is supplied
-            Notification[] notifications = new Notification[1] { new Notification { Message = "message" } };
-
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), It.IsAny<List<ICarrierRequestManipulator>>())).Throws(new FedExApiCarrierException(notifications));
-            requestFactory.Setup(f => f.CreateRateRequest(It.IsAny<ShipmentEntity>(), null)).Returns(rateRequest.Object);
+            rateRequest
+                .Setup(x => x.Submit(AnyShipment, FedExRateRequestOptions.SmartPost))
+                .Throws(new FedExApiCarrierException(new Notification[0]));
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            log.Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
+            mock.Mock<ILog>().Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
         }
 
         #endregion GetRates Tests

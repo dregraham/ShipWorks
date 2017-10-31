@@ -1,111 +1,94 @@
+using System;
 using System.Collections.Generic;
-using Xunit;
+using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
 {
     public class FedExRateRequestTest
     {
-        private FedExRateRequest testObject;
+        private Mock<IFedExRateRequestManipulator> firstManipulator;
+        private Mock<IFedExRateRequestManipulator> secondManipulator;
+        private Mock<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> firstManipulatorFactory;
+        private Mock<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> secondManipulatorFactory;
 
-        private Mock<IFedExServiceGateway> fedExService;
-        private Mock<IFedExResponseFactory> responseFactory;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
-
-        private Mock<ICarrierRequestManipulator> firstManipulator;
-        private Mock<ICarrierRequestManipulator> secondManipulator;
-
-        private ShipmentEntity shipmentEntity;
-        private FedExAccountEntity account;
+        private readonly AutoMock mock;
+        private IShipmentEntity shipmentEntity;
 
         public FedExRateRequestTest()
         {
-            shipmentEntity = new ShipmentEntity();
-            shipmentEntity.FedEx = new FedExShipmentEntity() { ReferencePO = "testPO" };
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
+            shipmentEntity = Create.Shipment().AsFedEx(f => f.Set(x => x.ReferencePO, "testPO")).Build();
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
+            firstManipulator = mock.CreateMock<IFedExRateRequestManipulator>();
+            firstManipulator.Setup(x => x.ShouldApply(AnyShipment, It.IsAny<FedExRateRequestOptions>())).Returns(true);
+            secondManipulator = mock.CreateMock<IFedExRateRequestManipulator>();
+            secondManipulator.Setup(x => x.ShouldApply(AnyShipment, It.IsAny<FedExRateRequestOptions>())).Returns(true);
 
-            fedExService = new Mock<IFedExServiceGateway>();
-            fedExService.Setup(s => s.GetRates(It.IsAny<RateRequest>(), shipmentEntity)).Returns(new RateReply());
+            firstManipulatorFactory = mock.MockFunc<ICarrierSettingsRepository, IFedExRateRequestManipulator>(firstManipulator);
+            secondManipulatorFactory = mock.MockFunc<ICarrierSettingsRepository, IFedExRateRequestManipulator>(secondManipulator);
 
-            responseFactory = new Mock<IFedExResponseFactory>();
-
-            firstManipulator = new Mock<ICarrierRequestManipulator>();
-            firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
-
-            secondManipulator = new Mock<ICarrierRequestManipulator>();
-            secondManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));
-
-            // Create some mocked manipulators for testing purposes
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>()
-            {
-                firstManipulator.Object,
-                secondManipulator.Object
-            };
-
-            testObject = new FedExRateRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRepository.Object);
-        }
-
-        [Fact]
-        public void CarrierAccountEntity_DelegatesToRepositoryForAccount()
-        {
-            object obj = testObject.CarrierAccountEntity;
-
-            // The constructor has already been called in the initialize method, so just make sure the
-            // repository was used to fetch the account
-            settingsRepository.Verify(r => r.GetAccount(testObject.ShipmentEntity), Times.Once());
-        }
-
-        [Fact]
-        public void CarrierAccountEntity_IsNotNull()
-        {
-            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
-        }
-
-        public void CarrierAccountEntity_IsAccountRetrievedFromRepository()
-        {
-            Assert.Equal(account, testObject.CarrierAccountEntity);
+            mock.Provide<IEnumerable<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>>>(
+                new List<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>>
+                {
+                    firstManipulatorFactory.Object,
+                    secondManipulatorFactory.Object,
+                });
         }
 
         [Fact]
         public void Submit_DelegatesToManipulators()
         {
-            // No additional setup needed since it was performed in Initialize()
-            ICarrierResponse response = testObject.Submit();
+            var testObject = mock.Create<FedExRateRequest>();
+            testObject.Submit(shipmentEntity);
 
             // Verify all of the manipulators were called and our test object was passed to them
-            firstManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
-            secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
+            firstManipulator.Verify(m => m.Manipulate(shipmentEntity, It.IsAny<RateRequest>()), Times.Once());
+            secondManipulator.Verify(m => m.Manipulate(shipmentEntity, It.IsAny<RateRequest>()), Times.Once());
         }
 
         [Fact]
         public void Submit_DelegatesToFedExService()
         {
-            // No additional setup needed since it was performed in Initialize()
-            ICarrierResponse response = testObject.Submit();
+            var service = mock.FromFactory<IFedExServiceGatewayFactory>()
+                .Mock(x => x.Create(It.IsAny<ICarrierSettingsRepository>()));
 
-            // Verify that the close method was called using the test object's native request
-            fedExService.Verify(s => s.GetRates(testObject.NativeRequest as RateRequest, shipmentEntity), Times.Once());
+            var testObject = mock.Create<FedExRateRequest>();
+            testObject.Submit(shipmentEntity);
+
+            service.Verify(s => s.GetRates(It.IsAny<RateRequest>(), shipmentEntity), Times.Once());
         }
 
         [Fact]
-        public void Submit_DelegatesToResponseFactory_WhenCreatingRateResponse()
+        public void Submit_ReturnsResponseFromRateResult()
         {
-            // No additional setup needed since it was performed in Initialize()
-            ICarrierResponse response = testObject.Submit();
+            var rateReply = new RateReply();
+            var response = mock.CreateMock<IFedExRateResponse>();
 
-            // Verify the rate response is created via the response factory using the test object
-            responseFactory.Verify(f => f.CreateRateResponse(It.IsAny<RateReply>(), testObject), Times.Once());
+            mock.FromFactory<IFedExServiceGatewayFactory>()
+                .Mock(x => x.Create(It.IsAny<ICarrierSettingsRepository>()))
+                .Setup(x => x.GetRates(It.IsAny<RateRequest>(), AnyIShipment))
+                .Returns(rateReply);
+
+            mock.MockFunc<RateReply, IFedExRateResponse>()
+                .Setup(f => f(rateReply)).Returns(() => response.Object);
+
+            var testObject = mock.Create<FedExRateRequest>();
+            var result = testObject.Submit(shipmentEntity);
+
+            Assert.Equal(response.Object, result);
         }
     }
 }

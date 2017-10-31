@@ -56,15 +56,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
-        /// carrier API request for shipping rates.
-        /// </summary>
-        /// <param name="nativeResponse">The native response.</param>
-        /// <param name="request">The request object that submitted the API request.</param>
-        /// <returns>An ICarrierResponse representing the response of a void request.</returns>
-        ICarrierResponse CreateRateResponse(object nativeResponse, CarrierRequest request);
-
-        /// <summary>
-        /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request when performing the void.
         /// </summary>
         /// <param name="nativeResponse">The native response.</param>

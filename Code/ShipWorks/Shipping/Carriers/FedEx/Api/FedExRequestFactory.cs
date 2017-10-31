@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,8 +14,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulato
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
@@ -40,17 +38,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
         private readonly IFedExServiceGatewayFactory serviceGatewayFactory;
+        readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
-        /// constructor is primarily for testing purposes.
+        /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class
         /// </summary>
+        /// <remarks>
+        /// We're taking a dependency on ILifetimeScope for the Create methods that are now
+        /// just passed through to Autofac.
+        /// </remarks>
         public FedExRequestFactory(
             IFedExServiceGatewayFactory serviceGatewayFactory,
             ICarrierSettingsRepository settingsRepository,
             IFedExShipmentTokenProcessor tokenProcessor,
-            IFedExResponseFactory responseFactory)
+            IFedExResponseFactory responseFactory,
+            ILifetimeScope lifetimeScope)
         {
+            this.lifetimeScope = lifetimeScope;
             this.serviceGatewayFactory = serviceGatewayFactory;
             this.responseFactory = responseFactory;
             this.settingsRepository = settingsRepository;
@@ -171,7 +175,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx searching dropoff location.</returns>
+        /// FedEx searching drop-off location.</returns>
         public FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipmentEntity, FedExAccountEntity accountEntity)
         {
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
@@ -282,51 +286,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new FedExSubscriptionRequest(manipulators, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
 
-
         /// <summary>
-        /// Creates the rate request.
+        /// Creates the rate request
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="specializedManipulators">Any specialized manipulators that should be added to the request in addition
-        /// to the standard/basic manipulators of the rate request.</param>
-        /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx for obtaining shipping rates.</returns>
-        public CarrierRequest CreateRateRequest(ShipmentEntity shipmentEntity, IEnumerable<ICarrierRequestManipulator> specializedManipulators)
-        {
-            FedExSettings settings = new FedExSettings(settingsRepository);
-
-            // Create the "standard" manipulators for a FedEx rate request
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
-            {
-                new FedExRateClientDetailManipulator(),
-                new FedExRateWebAuthenticationManipulator(settings),
-                new FedExRateVersionManipulator(),
-                new FedExRateReturnTransitManipulator(),
-                new FedExRateShipperManipulator(),
-                new FedExRateRecipientManipulator(),
-                new FedExRateShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTotalInsuredValueManipulator(settings),
-                new FedExRateTotalWeightManipulator(),
-                new FedExRateRateTypeManipulator(settingsRepository),
-                new FedExRatePickupManipulator(),
-                new FedExRatePackageDetailsManipulator(settings),
-                new FedExRatePackageSpecialServicesManipulator(),
-                new FedExRatePackagingTypeManipulator(),
-                new FedExRateCodOptionsManipulator(settingsRepository),
-                new FedExRateDryIceManipulator(settings),
-                new FedExRateBrokerManipulator(settings),
-                new FedExRateDangerousGoodsManipulator(),
-                new FedExRateHoldAtLocationManipulator()
-            };
-
-            if (specializedManipulators != null && specializedManipulators.Any())
-            {
-                // Add any special manipulators on top of the basic manipulators
-                manipulators.AddRange(specializedManipulators);
-            }
-
-            return new FedExRateRequest(manipulators, shipmentEntity, serviceGatewayFactory.Create(settingsRepository), responseFactory, settingsRepository);
-        }
+        public IFedExRateRequest CreateRateRequest() =>
+            lifetimeScope.Resolve<IFedExRateRequest>(TypedParameter.From(settingsRepository));
 
         /// <summary>
         /// Creates the track request.

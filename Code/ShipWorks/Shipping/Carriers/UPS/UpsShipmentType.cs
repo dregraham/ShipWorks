@@ -679,7 +679,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else if (UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service))
                 {
-                    // If Surepost, don't send any declared value.
+                    // If SurePost, don't send any declared value.
                     package.DeclaredValue = 0;
                 }
                 else
@@ -875,12 +875,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Determines if a shipment will be domestic or international
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity == null)
-            {
-                throw new ArgumentNullException("shipmentEntity");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity, nameof(shipmentEntity));
 
             string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
             string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();

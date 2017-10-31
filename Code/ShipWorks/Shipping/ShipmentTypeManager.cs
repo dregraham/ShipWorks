@@ -6,13 +6,11 @@ using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping
 {
@@ -48,7 +46,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
         /// </summary>
-        public static ShipmentType GetType(ShipmentEntity shipment)
+        public static ShipmentType GetType(IShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 

@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
@@ -592,7 +593,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
-        public static bool IsSmartPostEnabled(ShipmentEntity shipment)
+        public static bool IsSmartPostEnabled(IShipmentEntity shipment)
         {
             bool isEnabled = false;
 

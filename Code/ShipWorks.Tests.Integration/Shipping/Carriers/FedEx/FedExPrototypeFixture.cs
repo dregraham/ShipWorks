@@ -227,7 +227,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                                 _ => new FedExOpenShipGateway(settingsRepository)),
                             settingsRepository,
                             new FedExShipmentTokenProcessor(),
-                            new FedExResponseFactory(labelRepository)),
+                            new FedExResponseFactory(labelRepository),
+                            null),
                         settingsRepository,
                         new ExcludedServiceTypeRepository(),
                         LogManager.GetLogger

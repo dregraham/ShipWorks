@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 
 namespace ShipWorks.Tests.Core
 {
@@ -23,6 +24,7 @@ namespace ShipWorks.Tests.Core
             IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
             IEnumerable<Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
+                .Except(ignoreTypes)
                 .Where(t => t.Namespace != null &&
                             t.IsEnum &&
                             t.Namespace.ToUpperInvariant().Contains("ShipWorks".ToUpperInvariant()) &&
@@ -81,6 +83,11 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant(),
                 "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
             };
+
+        private HashSet<Type> ignoreTypes = new HashSet<Type>
+        {
+            typeof(FedExRateRequestOptions),
+        };
 
         /// <summary>
         /// Actual namespace of the enum

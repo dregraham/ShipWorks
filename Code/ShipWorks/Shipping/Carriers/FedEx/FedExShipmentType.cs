@@ -1066,7 +1066,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines if a shipment will be domestic or international
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
             if (shipmentEntity == null)
             {

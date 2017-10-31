@@ -4,7 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for performing an end of day ground close.
         /// </summary>
         /// <param name="groundCloseRequest">The ground close request.</param>
-        /// <returns>The GroundCloseReply recevied from FedEx.</returns>
+        /// <returns>The GroundCloseReply received from FedEx.</returns>
         /// <exception cref="FedExSoapCarrierException"></exception>
         public GroundCloseReply Close(GroundCloseRequest groundCloseRequest)
         {
@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for performing an end of day SmartPost close.
         /// </summary>
         /// <param name="smartPostCloseRequest">The smart post close request.</param>
-        /// <returns>The SmartPostCloseRequest recevied from FedEx.</returns>
+        /// <returns>The SmartPostCloseRequest received from FedEx.</returns>
         public SmartPostCloseReply Close(SmartPostCloseRequest smartPostCloseRequest)
         {
             try
@@ -272,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for performing a shipment void.
         /// </summary>
         /// <param name="deleteShipmentRequest">The delete shipment request.</param>
-        /// <returns>The ShipmentReply recevied from FedEx.</returns>
+        /// <returns>The ShipmentReply received from FedEx.</returns>
         public virtual ShipmentReply Void(DeleteShipmentRequest deleteShipmentRequest)
         {
             using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Void")))
@@ -318,7 +318,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for registering a CSP user.
         /// </summary>
         /// <param name="registerRequest">The register request.</param>
-        /// <returns>The RegisterWebCspUserReply recevied from FedEx.</returns>
+        /// <returns>The RegisterWebCspUserReply received from FedEx.</returns>
         public RegisterWebUserReply RegisterCspUser(RegisterWebUserRequest registerRequest)
         {
             try
@@ -390,7 +390,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="rateRequest">The rate request.</param>
         /// <param name="shipmentEntity"></param>
         /// <returns>The RateReply received from FedEx.</returns>
-        public RateReply GetRates(RateRequest rateRequest, ShipmentEntity shipmentEntity)
+        public RateReply GetRates(RateRequest rateRequest, IShipmentEntity shipmentEntity)
         {
             try
             {
@@ -439,7 +439,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API for retrieving tracking data.
         /// </summary>
         /// <param name="trackRequest">The tracking request.</param>
-        /// <returns>The TrackReply recevied from FedEx.</returns>
+        /// <returns>The TrackReply received from FedEx.</returns>
         public TrackReply Track(TrackRequest trackRequest)
         {
             try

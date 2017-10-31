@@ -1,10 +1,10 @@
-using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
 {
@@ -29,19 +29,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
 
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
-            testObject = new FedExRateResponse(nativeResponse, carrierRequest.Object);
+            testObject = new FedExRateResponse(nativeResponse);
         }
 
         [Fact]
-        public void Request_ReturnsRequestProvidedToConstructor()
+        public void Process_ReturnsRateReplyProvidedToConstructor()
         {
-            Assert.Equal(carrierRequest.Object, testObject.Request);
-        }
-
-        [Fact]
-        public void NativeResponse_ReturnsRateReplyProvidedToConstructor()
-        {
-            Assert.Equal(nativeResponse, testObject.NativeResponse);
+            var response = testObject.Process();
+            Assert.Equal(nativeResponse, response);
         }
 
         [Fact]

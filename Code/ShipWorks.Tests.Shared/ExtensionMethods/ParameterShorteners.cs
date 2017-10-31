@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Tests.Shared.ExtensionMethods
 {
@@ -42,9 +43,14 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         public static object AnyObject => It.IsAny<object>();
 
         /// <summary>
-        /// Checks a parameter for a shipment with given tracking number
+        /// Any shipment
         /// </summary>
         public static ShipmentEntity AnyShipment => It.IsAny<ShipmentEntity>();
+
+        /// <summary>
+        /// Any shipment
+        /// </summary>
+        public static IShipmentEntity AnyIShipment => It.IsAny<IShipmentEntity>();
 
         /// <summary>
         /// Checks a parameter for a shipment with given tracking number

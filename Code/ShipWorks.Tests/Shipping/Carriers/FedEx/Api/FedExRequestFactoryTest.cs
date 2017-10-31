@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,43 +9,30 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
     public class FedExRequestFactoryTest
     {
-        private Mock<IFedExServiceGateway> fedExService;
-        private Mock<IFedExOpenShipServiceGateway> fedExOpenShipService;
-        private Mock<IFedExResponseFactory> responseFactory;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private readonly AutoMock mock;
         private FedExRequestFactory testObject;
-        private Mock<IFedExShipmentTokenProcessor> tokenProcessor;
         private ShipmentEntity fedExShipment;
 
         public FedExRequestFactoryTest()
         {
-            fedExService = new Mock<IFedExServiceGateway>();
-            fedExOpenShipService = new Mock<IFedExOpenShipServiceGateway>();
-            responseFactory = new Mock<IFedExResponseFactory>();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity());
+            mock.Mock<ICarrierSettingsRepository>()
+                .Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>()))
+                .Returns(new FedExAccountEntity());
 
-            tokenProcessor = new Mock<IFedExShipmentTokenProcessor>();
-
-            testObject = new FedExRequestFactory(
-                new Mock<IFedExServiceGatewayFactory>().Object,
-                settingsRepository.Object,
-                tokenProcessor.Object,
-                responseFactory.Object);
+            testObject = mock.Create<FedExRequestFactory>();
 
             fedExShipment = new ShipmentEntity() { FedEx = new FedExShipmentEntity() };
         }
@@ -609,163 +596,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         #endregion CreateSubscriptionRequest Tests
-
-        #region CreateRateRequest Tests
-
-        [Fact]
-        public void CreateRateRequest_PopulatesManipulators()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.Equal(19, request.Manipulators.Count());
-        }
-
-        [Fact]
-        public void CreateRateRequest_PopulatesManipulators_WithSpecializedManipulators()
-        {
-            var specializedManipulator1 = new Mock<ICarrierRequestManipulator>();
-            var specializedManipulator2 = new Mock<ICarrierRequestManipulator>();
-
-            var specializedList = new List<ICarrierRequestManipulator>
-            {
-                specializedManipulator1.Object,
-                specializedManipulator2.Object
-            };
-
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), specializedList);
-
-            Assert.Equal(21, request.Manipulators.Count());
-        }
-
-        [Fact]
-        public void CreateRateRequest_PopulatesManipulators_WhenSpecializedManipulatorsIsEmpty()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), new List<ICarrierRequestManipulator>());
-
-            Assert.Equal(19, request.Manipulators.Count());
-        }
-
-        [Fact]
-        public void CreateRateRequest_ReturnsFedExRateRequest()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.IsAssignableFrom<FedExRateRequest>(request);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExReturnTransitManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateReturnTransitManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExShipperManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateShipperManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExRecipientManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateRecipientManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExShipmentSpecialServiceTypeManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateShipmentSpecialServiceTypeManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExTotalInsuredValueManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateTotalInsuredValueManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExTotalWeightManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateTotalWeightManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExRateTypeManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateRateTypeManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExPickupManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePickupManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExPackageDetailsManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackageDetailsManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExPackageSpecialServicesManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackageSpecialServicesManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExPackagingTypeManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackagingTypeManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExRateClientDetailManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateClientDetailManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExRateWebAuthenticationManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateWebAuthenticationManipulator)) == 1);
-        }
-
-        [Fact]
-        public void CreateRateRequest_FedExRateVersionManipulator()
-        {
-            CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
-
-            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateVersionManipulator)) == 1);
-        }
-
-        #endregion CreateRateRequest Tests
 
         #region CreateCertificateRequest Tests
 

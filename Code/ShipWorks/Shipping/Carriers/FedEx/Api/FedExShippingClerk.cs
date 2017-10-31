@@ -10,13 +10,16 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -518,7 +521,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
 
-            //FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(settingsRepository);
             FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) requestFactory.CreateSearchLocationsRequest(shipment, account);
 
             FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
@@ -652,28 +654,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private IEnumerable<RateResult> GetBasicRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetBasicRates(IShipmentEntity shipment)
         {
-            List<RateResult> rates = new List<RateResult>();
+            IFedExRateRequest request = requestFactory.CreateRateRequest();
+            IFedExRateResponse response = request.Submit(shipment);
+            RateReply nativeResponse = response.Process();
 
-            // Submit the rate request to FedEx and perform any additional processing on it
-            CarrierRequest request = requestFactory.CreateRateRequest(shipment, null);
-            ICarrierResponse response = request.Submit();
-            response.Process();
-
-            RateReply nativeResponse = response.NativeResponse as RateReply;
-            if (nativeResponse == null)
-            {
-                // We don't have the correct response type to continue processing
-                log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", response.GetType().FullName));
-            }
-            else
-            {
-                // We have the appropriate response type, so we can build the list of rate results
-                rates = BuildRateResults(shipment, new List<RateReplyDetail>(nativeResponse.RateReplyDetails));
-            }
-
-            return rates;
+            return BuildRateResults(shipment, new List<RateReplyDetail>(nativeResponse.RateReplyDetails));
         }
 
         /// <summary>
@@ -681,30 +668,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private IEnumerable<RateResult> GetSmartPostRates(ShipmentEntity shipment)
+        private IEnumerable<RateResult> GetSmartPostRates(IShipmentEntity shipment)
         {
-            List<RateResult> rates = new List<RateResult>();
-
             try
             {
                 if (FedExUtility.IsSmartPostEnabled(shipment))
                 {
-                    // Create a request that will retrieve smart post rates by supplying a smart post manipulator
-                    CarrierRequest smartPostRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> { new FedExRateSmartPostManipulator() });
-                    ICarrierResponse smartPostResponse = smartPostRequest.Submit();
-                    smartPostResponse.Process();
+                    IFedExRateRequest smartPostRequest = requestFactory.CreateRateRequest();
+                    IFedExRateResponse smartPostResponse = smartPostRequest.Submit(shipment, FedExRateRequestOptions.SmartPost);
+                    RateReply smartPostNativeResponse = smartPostResponse.Process();
 
-                    RateReply smartPostNativeResponse = smartPostResponse.NativeResponse as RateReply;
-                    if (smartPostNativeResponse == null)
-                    {
-                        // We don't have the correct response type to continue processing
-                        log.Info(string.Format("An unexpected response type was received when trying to process the end of day close: {0} type was received.", smartPostResponse.GetType().FullName));
-                    }
-                    else
-                    {
-                        // We have the appropriate response type, so we can build the list of rate results
-                        rates = BuildRateResults(shipment, new List<RateReplyDetail>(smartPostNativeResponse.RateReplyDetails));
-                    }
+                    return BuildRateResults(shipment, new List<RateReplyDetail>(smartPostNativeResponse.RateReplyDetails));
                 }
             }
             catch (FedExException ex)
@@ -718,7 +692,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 log.Warn("Error getting SmartPost rates: " + ex.Message);
             }
 
-            return rates;
+            return Enumerable.Empty<RateResult>();
         }
 
         /// <summary>
@@ -728,26 +702,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>A List of RateResult objects.</returns>
         private IEnumerable<RateResult> GetOneRateRates(ShipmentEntity shipment)
         {
-            List<RateResult> rates = new List<RateResult>();
-
             try
             {
-                // Create a request that will retrieve one rate rates by supplying a one rate manipulator
-                CarrierRequest oneRateRequest = requestFactory.CreateRateRequest(shipment, new List<ICarrierRequestManipulator> { new FedExRateOneRateManipulator() });
-                ICarrierResponse oneRateResponse = oneRateRequest.Submit();
-                oneRateResponse.Process();
+                IFedExRateRequest oneRateRequest = requestFactory.CreateRateRequest();
+                IFedExRateResponse oneRateResponse = oneRateRequest.Submit(shipment, FedExRateRequestOptions.OneRate);
+                RateReply oneRateNativeResponse = oneRateResponse.Process();
 
-                RateReply oneRateNativeResponse = oneRateResponse.NativeResponse as RateReply;
-                if (oneRateNativeResponse == null)
-                {
-                    // We don't have the correct response type to continue processing
-                    log.Info(string.Format("An unexpected response type was received when trying to get results for One Rate: {0} type was received.", oneRateResponse.GetType().FullName));
-                }
-                else
-                {
-                    // We have the appropriate response type, so we can build the list of rate results
-                    rates = BuildRateResults(shipment, new List<RateReplyDetail>(oneRateNativeResponse.RateReplyDetails));
-                }
+                return BuildRateResults(shipment, new List<RateReplyDetail>(oneRateNativeResponse.RateReplyDetails));
             }
             catch (FedExException ex)
             {
@@ -760,7 +721,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 log.Warn("Error getting One Rate rates: " + ex.Message);
             }
 
-            return rates;
+            return Enumerable.Empty<RateResult>();
         }
 
         /// <summary>
@@ -769,7 +730,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipment">The shipment.</param>
         /// <param name="rateDetails">The rate details.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private List<RateResult> BuildRateResults(ShipmentEntity shipment, List<RateReplyDetail> rateDetails)
+        private List<RateResult> BuildRateResults(IShipmentEntity shipment, List<RateReplyDetail> rateDetails)
         {
             List<RateResult> results = new List<RateResult>();
 
@@ -1005,7 +966,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
-        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, IShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
             {

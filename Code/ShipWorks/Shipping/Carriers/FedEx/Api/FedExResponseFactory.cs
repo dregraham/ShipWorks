@@ -6,7 +6,6 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
@@ -15,7 +14,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
@@ -203,25 +201,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
 
             return new FedExSubscriptionResponse(subscriptionReply, request);
-        }
-
-        /// <summary>
-        /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
-        /// carrier API request for shipping rates.
-        /// </summary>
-        /// <param name="nativeResponse">The native response.</param>
-        /// <param name="request">The request object that submitted the API request.</param>
-        /// <returns>An ICarrierResponse representing the response of a void request.</returns>
-        public ICarrierResponse CreateRateResponse(object nativeResponse, CarrierRequest request)
-        {
-            RateReply rateReply = nativeResponse as RateReply;
-            if (rateReply == null)
-            {
-                // We can't create a FedExRateResponse without a RateReply type
-                throw new CarrierException("An unexpected response type was provided to create a FedExRateResponse.");
-            }
-
-            return new FedExRateResponse(rateReply, request);
         }
 
         /// <summary>
