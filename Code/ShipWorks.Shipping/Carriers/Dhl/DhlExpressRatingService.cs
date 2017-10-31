@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
         private readonly IDhlExpressAccountRepository accountRepository;
+        private readonly ShipmentType shipmentType;
 
         /// <summary>
         /// Constructor
@@ -30,12 +32,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory, 
             IShipEngineWebClient shipEngineWebClient, 
             IShipEngineRateGroupFactory rateGroupFactory,
-            IDhlExpressAccountRepository accountRepository)
+            IDhlExpressAccountRepository accountRepository, 
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.DhlExpress];
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
             this.accountRepository = accountRepository;
+            shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress);
         }
 
         /// <summary>
@@ -52,11 +56,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 }
 
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
-                RateShipmentResponse rateResponse = Task.Run(async () => {
-                    return await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
-                }).Result;
+                RateShipmentResponse rateResponse = Task.Run(async () => await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false)).Result;
 
-                return rateGroupFactory.Create(rateResponse, ShipmentTypeCode.DhlExpress);
+                return rateGroupFactory.Create(rateResponse, ShipmentTypeCode.DhlExpress,
+                     shipmentType.GetAvailableServiceTypes()
+                        .Cast<DhlExpressServiceType>()
+                        .Select(t => EnumHelper.GetApiValue(t))
+                        .Union(new List<string> { EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service) }));
             }
             catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
             {

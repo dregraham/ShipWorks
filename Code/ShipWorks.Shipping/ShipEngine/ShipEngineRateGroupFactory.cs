@@ -20,11 +20,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates a RateGroup from the given RateShipmentResponse
         /// </summary>
-        public RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType)
+        public RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes)
         {
             List<RateResult> results = new List<RateResult>();
 
-            foreach (Rate apiRate in rateResponse.RateResponse.Rates)
+            foreach (Rate apiRate in rateResponse.RateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
             {
                 RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) apiRate.ShippingAmount.Amount, apiRate.ServiceCode)
                 {
@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.ShipEngine
                 };
                 results.Add(rate);
             }
-
 
             RateGroup rateGroup = new RateGroup(results);
 

@@ -1,5 +1,6 @@
 ﻿using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.ShipEngine
 {   
@@ -13,6 +14,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="rateResponse">The rate response from ShipEngine</param>
         /// <param name="shipmentType">Shipment type for the RateGroup</param>
-        RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType);
+        RateGroup Create(RateShipmentResponse rateResponse, ShipmentTypeCode shipmentType, IEnumerable<string> availableServiceTypeApiCodes);
     }
 }

@@ -41,9 +41,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void GetRates_DelegatesToRequestFactoryForRequest()
         {
-            DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
+            var shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(s => s.GetAvailableServiceTypes())
+                .Returns(new[] { (int) DhlExpressServiceType.ExpressWorldWide });
 
-            ShipmentEntity shipment = new ShipmentEntity();
+            mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    Service = 0
+                }
+            };
+
+            DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);
 
@@ -53,7 +66,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void GetRates_DelegatesToShipEngineWebClientForRateShipmentResponse()
         {
-            ShipmentEntity shipment = new ShipmentEntity();
+            var shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(s => s.GetAvailableServiceTypes())
+                .Returns(new[] { (int) DhlExpressServiceType.ExpressWorldWide });
+
+            mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    Service = 0
+                }
+            };
 
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
             
@@ -65,15 +91,86 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void GetRates_DelegatesToRateGroupFactoryForRateGroup()
         {
-            
-            ShipmentEntity shipment = new ShipmentEntity();
+            var shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(s => s.GetAvailableServiceTypes())
+                .Returns(new[] { (int) DhlExpressServiceType.ExpressWorldWide });
+
+            mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    Service = 0
+                }
+            };
+
             RateShipmentResponse rateResponse = new RateShipmentResponse();
             mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
             DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
 
             testObject.GetRates(shipment);
 
-            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress));
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress, It.IsAny<IEnumerable<string>>()));
+        }
+
+        [Fact]
+        public void GetRates_SendsApiValueForServiceNotAvailableRate_ThatIsShipmentService()
+        {
+            var shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(s => s.GetAvailableServiceTypes())
+                .Returns(new[] { (int) DhlExpressServiceType.ExpressEnvelope });
+
+            mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    Service = (int) DhlExpressServiceType.ExpressWorldWide
+                }
+            };
+
+            RateShipmentResponse rateResponse = new RateShipmentResponse();
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
+            DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
+
+            testObject.GetRates(shipment);
+
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress,
+                It.Is<IEnumerable<string>>(apiValues =>
+                    apiValues.Contains("express_envelope") &&
+                    apiValues.Contains("express_worldwide"))));
+        }
+
+        [Fact]
+        public void GetRates_DoesNotSendApiValueForRateNotAvailableRateAndNotShipmentRate()
+        {
+            var shipmentType = mock.CreateMock<ShipmentType>();
+            shipmentType.Setup(s => s.GetAvailableServiceTypes())
+                .Returns(new[] { (int) DhlExpressServiceType.ExpressEnvelope });
+
+            mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(shipmentType.Object);
+
+            ShipmentEntity shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity()
+                {
+                    Service = (int) DhlExpressServiceType.ExpressEnvelope
+                }
+            };
+
+            RateShipmentResponse rateResponse = new RateShipmentResponse();
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateResponse));
+            DhlExpressRatingService testObject = mock.Create<DhlExpressRatingService>();
+
+            testObject.GetRates(shipment);
+
+            mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateResponse, ShipmentTypeCode.DhlExpress,
+                It.Is<IEnumerable<string>>(apiValues => apiValues.SingleOrDefault() == "express_envelope")));
         }
 
         public void Dispose()
