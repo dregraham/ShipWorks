@@ -45,6 +45,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipmentType.Setup(s => s.GetAvailableServiceTypes())
                 .Returns(new[] { (int) DhlExpressServiceType.ExpressWorldWide });
 
+            RateShipmentResponse rateShipmentResponse = new RateShipmentResponse { RateResponse = new RateResponse() };
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateShipmentResponse));
+
             mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
                 .Returns(shipmentType.Object);
 
@@ -69,6 +72,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             var shipmentType = mock.CreateMock<ShipmentType>();
             shipmentType.Setup(s => s.GetAvailableServiceTypes())
                 .Returns(new[] { (int) DhlExpressServiceType.ExpressWorldWide });
+
+            RateShipmentResponse rateShipmentResponse = new RateShipmentResponse { RateResponse = new RateResponse() };
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.RateShipment(It.IsAny<RateShipmentRequest>(), ApiLogSource.DHLExpress)).Returns(Task.FromResult(rateShipmentResponse));
 
             mock.Mock<IShipmentTypeManager>().Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
                 .Returns(shipmentType.Object);
