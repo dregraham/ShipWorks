@@ -1849,6 +1849,8 @@
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\Product.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ProductOption.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ProductOptionDetails.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ProductOptionValue.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ProductsResponse.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\Shipping.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ShippingAddress.cs" />
     <Compile Include="Stores\Platforms\Magento\DTO\MagnetoTwoRestOrder\ShippingAssignment.cs" />
