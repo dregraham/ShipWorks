@@ -218,6 +218,66 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             Assert.Equal($"An error occured while attempting to download reasource.", ex.Message);
         }
 
+        [Fact]
+        public void ConnectAsendia_DelegatesToIShipEngineApiKey()
+        {
+            apiKey.SetupGet(k => k.Value).Returns("");
+
+            testObject.ConnectAsendiaAccount("abcd", "username", "password");
+
+            apiKey.Verify(i => i.Configure());
+        }
+
+        [Fact]
+        public void ConnectAsendia_DelegatesToIShipEngineApiFactory()
+        {
+            testObject.ConnectAsendiaAccount("abcd", "username", "password");
+
+            shipEngineApiFactory.Verify(i => i.CreateCarrierAccountsApi());
+        }
+
+        [Fact]
+        public async Task ConnectAsendia_ReturnsFailureWhenConnectAccountThrowsException()
+        {
+            string error =
+                "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"\'account_number\' must be 9 characters in length. You entered 3 characters.\"\r\n    }\r\n  ]\r\n}";
+
+            accountsApi.Setup(a =>
+                a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
+                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+
+            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
+
+            Assert.False(result.Success);
+            Assert.Equal("'account_number' must be 9 characters in length. You entered 3 characters.", result.Message);
+        }
+
+        [Fact]
+        public void ConnectAsendia_DelegatesToICarrierAccountsApiWithAccountNumber()
+        {
+            testObject.ConnectAsendiaAccount("AccountNumber", "username", "password");
+
+            accountsApi.Verify(i =>
+                i.AsendiaAccountCarrierConnectAccountAsync(
+                    It.Is<AsendiaAccountInformationDTO>(d => d.AccountNumber == "AccountNumber"), "abcd"));
+        }
+
+        [Fact]
+        public void ConnectAsendia_SetsLoggingActionsOnCarrierAccountsApi()
+        {
+            var apiEntry = mock.CreateMock<IApiLogEntry>();
+            mock.MockFunc(apiEntry);
+            testObject.ConnectAsendiaAccount("AccountNumber", "username", "password");
+
+            // This does not work due to a bug in moq
+            // https://github.com/moq/moq4/issues/430
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.RequestLogger = apiEntry.Object.LogRequest);
+            //accountsApi.VerifySet(i => i.Configuration.ApiClient.ResponseLogger = apiEntry.Object.LogResponse);
+
+            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.ResponseLogger);
+            Assert.NotNull(accountsApi.Object.Configuration.ApiClient.RequestLogger);
+        }
+
         public void Dispose()
         {
             mock?.Dispose();

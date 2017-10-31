@@ -41,12 +41,74 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         public async Task<GenericResult<string>> ConnectDhlAccount(string accountNumber)
+        {            
+            // Check to see if the account already exists in ShipEngine 
+            GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
+
+            if (existingAccount.Success)
+            {
+                return existingAccount;
+            }
+
+            DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO { AccountNumber = accountNumber, Nickname = accountNumber };
+
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
+
+            try
+            {
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount",
+                    apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, await GetApiKey()));
+            }
+            catch (ApiException ex)
+            {
+                return GenericResult.FromError<string>(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Connect an Asendia account
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
+        {
+            // Check to see if the account already exists in ShipEngine 
+            GenericResult<string> existingAccount = await GetCarrierId(accountNumber);
+
+            if (existingAccount.Success)
+            {
+                return existingAccount;
+            }
+
+            AsendiaAccountInformationDTO ascendiaAccountInfo = new AsendiaAccountInformationDTO
+            {
+                AccountNumber = accountNumber,
+                Nickname = accountNumber,
+                FtpUsername = username,
+                FtpPassword = password
+            };
+
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
+
+            try
+            {
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Asendia, "ConnectAsendiaAccount",
+                apiInstance.AsendiaAccountCarrierConnectAccountAsync(ascendiaAccountInfo, await GetApiKey()));
+            }
+            catch (ApiException ex)
+            {
+                return GenericResult.FromError<string>(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get the CarrierId for the given account number
+        /// </summary>
+        private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
         {
             string key = await GetApiKey();
             // If for some reason the key is blank show an error because we have to have the key to make the request
             if (string.IsNullOrWhiteSpace(key))
             {
-                return GenericResult.FromError<string>("Unable to add your DHL Express account at this time. Please try again later.");
+                return GenericResult.FromError<string>("Unable to add your account at this time. Please try again later.");
             }
 
             // First check and see if we already have the account connected
@@ -55,23 +117,24 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 return GenericResult.FromSuccess(accountId);
             }
-            
-            DHLExpressAccountInformationDTO dhlAccountInfo = new DHLExpressAccountInformationDTO { AccountNumber = accountNumber, Nickname = accountNumber };
 
-            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
-
-            ConfigureLogging(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount", LogActionType.Other);
-            
-            try
-            {
-                ConnectAccountResponseDTO result = await apiInstance
-                    .DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, key).ConfigureAwait(false);
-                return GenericResult.FromSuccess(result.CarrierId);
-            }
-            catch (ApiException ex)
-            {
-                return GenericResult.FromError<string>(GetErrorMessage(ex));
-            }
+            return GenericResult.FromError<string>("Unable to find account");
+        }
+        
+        /// <summary>
+        /// Connect to a ShipEngine Carrier Account
+        /// </summary>
+        /// <param name="apiInstance">Api instance to use for logging</param>
+        /// <param name="logSource">Log Source to use(folder where its logged)</param>
+        /// <param name="action">The name of the log file</param>
+        /// <param name="connect">The task to run to connect</param>
+        /// <returns>The carrier Id from ShipEngine</returns>
+        public async Task<GenericResult<string>> ConnectCarrierAccount(ICarrierAccountsApi apiInstance, ApiLogSource logSource, string action, Task<ConnectAccountResponseDTO> connect)
+        {
+            ConfigureLogging(apiInstance, logSource, action, LogActionType.Other);
+            ConnectAccountResponseDTO result = await connect.ConfigureAwait(false);
+                
+            return GenericResult.FromSuccess(result.CarrierId);
         }
 
         /// <summary>
@@ -224,11 +287,6 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
             }
-        }
-
-        public Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
-        {
-            throw new NotImplementedException();
         }
     }
 }

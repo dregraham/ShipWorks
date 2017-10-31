@@ -136,5 +136,7 @@ namespace ShipWorks.ApplicationCore.Logging
         ShipEngine,
         [ApiPrivateLogSource]
         DHLExpress,
+        [ApiPrivateLogSource]
+        Asendia,
     }
 }
