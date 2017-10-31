@@ -15,7 +15,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <returns>The CarrierId</returns>
         Task<GenericResult<string>> ConnectDhlAccount(string accountNumber);
-        
+
+        /// <summary>
+        /// Connects the given Asendia account to the users ShipEngine account
+        /// </summary>
+        /// <returns>The CarrierId</returns>
+        Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password);
+
         /// <summary>
         /// Gets rates from ShipEngine using the given request
         /// </summary>

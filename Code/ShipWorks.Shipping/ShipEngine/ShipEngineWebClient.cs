@@ -225,5 +225,10 @@ namespace ShipWorks.Shipping.ShipEngine
                 throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
             }
         }
+
+        public Task<GenericResult<string>> ConnectAsendiaAccount(string accountNumber, string username, string password)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
