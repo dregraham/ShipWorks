@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using Moq;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
@@ -14,28 +14,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
     public class FedExRateShipmentSpecialServiceTypeManipulatorTest
     {
         private FedExRateShipmentSpecialServiceTypeManipulator testObject;
-        private Mock<CarrierRequest> carrierRequest;
-        private RateRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
+        private readonly AutoMock mock;
+        private ShipmentEntity shipment;
+        private readonly DateTime today = new DateTime(2017, 11, 1);
 
         public FedExRateShipmentSpecialServiceTypeManipulatorTest()
         {
-            // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
-            nativeRequest = new RateRequest()
-            {
-                RequestedShipment = new RequestedShipment()
-                {
-                    SpecialServicesRequested = new ShipmentSpecialServicesRequested()
-                    {
-                        SpecialServiceTypes = new ShipmentSpecialServiceType[0]
-                    }
-                }
-            };
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock.Mock<IDateTimeProvider>()
+                .SetupGet(x => x.Today)
+                .Returns(today);
 
-            // Create our default shipment entity and initialize the properties our test object will be accessing
-            shipmentEntity = new ShipmentEntity()
+            shipment = new ShipmentEntity()
             {
-                ShipDate = DateTime.Today.AddDays(1),
+                ShipDate = today.AddDays(1),
                 FedEx = new FedExShipmentEntity()
                 {
                     SaturdayDelivery = false,
@@ -43,261 +35,156 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
                 }
             };
 
-
-            // Setup the carrier request's NativeRequest property to return the ProcessShipmentRequest object
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
-            testObject = new FedExRateShipmentSpecialServiceTypeManipulator();
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
-        {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
-        {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment()
-        {
-            // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
-            // the carrier request with the updated native request
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            // The requested shipment property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment);
-        }
-
-        [Fact]
-        public void Manipulate_AccountsForNullSpecialServicesRequested()
-        {
-            // Setup the test by configuring the native request to have a null special services requested 
-            // property and re-initialize the carrier request with the updated native request
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            // The special services requested property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
-
-        }
-
-        [Fact]
-        public void Manipulate_AccountsForNullSpecialServiceTypesArray()
-        {
-            // Setup the test by configuring the native request to have a null special service types requested 
-            // property and re-initialize the carrier request with the updated native request
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            // The special service types requested property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
+            testObject = mock.Create<FedExRateShipmentSpecialServiceTypeManipulator>();
         }
 
         [Fact]
         public void Manipulate_AddsFutureDayShipment_WhenShipmentIsNotToday()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
+            Assert.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_DoesNotAddFutureDayShipment_WhenShipmentIsToday()
         {
-            // Setup the test by adjusting the ship date to be today
-            shipmentEntity.ShipDate = DateTime.Today;
+            shipment.ShipDate = today;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
+            Assert.DoesNotContain(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_AddsSaturdayPickup_WhenShipmentIsSaturday()
         {
-            // Setup the test by adjusting the ship date to be a Saturday
-            shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
-            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
+            shipment.ShipDate = GetNext(today, DayOfWeek.Saturday);
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsSaturdayAndDropoffTypeIsNotRegularPickup()
         {
-            // Setup the test by adjusting the ship date to be a Saturday
-            shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
-            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.Station;
+            shipment.ShipDate = GetNext(today, DayOfWeek.Saturday);
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.Station;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsNotSaturday()
         {
             // Setup the test by making sure the ship date isn't Saturday
-            if (shipmentEntity.ShipDate.DayOfWeek == DayOfWeek.Saturday)
+            if (shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday)
             {
-                shipmentEntity.ShipDate = shipmentEntity.ShipDate.AddDays(1);
+                shipment.ShipDate = shipment.ShipDate.AddDays(1);
             }
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
-
 
         [Fact]
         public void Manipulate_AddsSaturdayDelivery_WhenSaturdayDeliveryIsAvailable()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
-            // is eligible for Saturday delivery; since this determination is in a class ouside of the
+            // is eligible for Saturday delivery; since this determination is in a class outside of the
             // test object, we won't be testing each of those every combinations
 
-            // A priority overnight must be shipped on friday to be eligible for Saturday delivery
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
-            shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
-            shipmentEntity.FedEx.SaturdayDelivery = true;
+            // A priority overnight must be shipped on Friday to be eligible for Saturday delivery
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
+            shipment.ShipDate = GetNext(today, DayOfWeek.Friday);
+            shipment.FedEx.SaturdayDelivery = true;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            // The Saturday delivery service type should have been added
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_DoesNotAddSaturdayDelivery_WhenSaturdayDeliveryIsNotAvailable()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
-            // is NOT eligible for Saturday delivery; since this determination is in a class ouside of the
+            // is NOT eligible for Saturday delivery; since this determination is in a class outside of the
             // test object, we won't be testing each of those every combinations
 
-            // A priority overnight must be shipped on friday to be eligible for Saturday delivery, so 
+            // A priority overnight must be shipped on Friday to be eligible for Saturday delivery, so 
             // set the ship date to a Monday (i.e. not eligible for Saturday delivery)
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
-            shipmentEntity.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
-            shipmentEntity.FedEx.SaturdayDelivery = true;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
+            shipment.ShipDate = GetNext(today, DayOfWeek.Monday);
+            shipment.FedEx.SaturdayDelivery = true;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            // The Saturday delivery service type should NOT have been added
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_AddsFutureShipmentAndSaturdayPickup_WhenShipDateIsSaturdayInFuture()
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
-            shipmentEntity.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
-            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
+            shipment.ShipDate = GetNext(today.AddDays(7), DayOfWeek.Saturday);
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipDateIsSaturdayAndDropoffTypeIsNotRegularPickup()
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
-            shipmentEntity.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
-            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.Station;
+            shipment.ShipDate = GetNext(today.AddDays(7), DayOfWeek.Saturday);
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.Station;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.False(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
+            Assert.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            Assert.DoesNotContain(ShipmentSpecialServiceType.SATURDAY_PICKUP,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_AddsFutureShipmentAndSaturdayDelivery_WhenFutureSaturdayDeliveryRequested()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
-            // is eligible for Saturday delivery; since this determination is in a class ouside of the
+            // is eligible for Saturday delivery; since this determination is in a class outside of the
             // test object, we won't be testing each of those every combinations
 
             // A priority overnight must be shipped on Friday to be eligible for Saturday delivery
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
-            shipmentEntity.FedEx.SaturdayDelivery = true;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
+            shipment.FedEx.SaturdayDelivery = true;
 
             // Setup the test by adjusting the ship date to be a Friday that is at least a week away so the
             // test still passes if it's executed on a Friday (i.e. ensuring it would still be a future shipment)
-            shipmentEntity.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Friday);
+            shipment.ShipDate = GetNext(today.AddDays(7), DayOfWeek.Friday);
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            // Grab the shipment special service type array and make sure the future shipment type is present
-            List<ShipmentSpecialServiceType> serviceTypes = new List<ShipmentSpecialServiceType>();
-            serviceTypes.AddRange(((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
-            Assert.True(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
+            Assert.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            Assert.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY,
+                result.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         /// <summary>
