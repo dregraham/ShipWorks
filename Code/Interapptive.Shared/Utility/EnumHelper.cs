@@ -192,6 +192,14 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Returns the API enum value based on another enum's ApiValue
+        /// </summary>
+        public static TApiValue GetApiValue<TApiValue>(Enum shipmentRoleType)
+        {
+            return (TApiValue) Enum.Parse(typeof(TApiValue), GetApiValue(shipmentRoleType));
+        }
+
+        /// <summary>
         /// Given a string value, try to parse the enum.
         /// </summary>
         public static T? TryParseEnum<T>(string value) where T : struct

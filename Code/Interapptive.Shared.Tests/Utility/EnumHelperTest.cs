@@ -48,15 +48,32 @@ namespace Interapptive.Shared.Tests.Utility
             var result = EnumHelper.TryParseEnum<CurrencyType>("USD");
             Assert.Equal(CurrencyType.USD, result);
         }
+
+        [Fact]
+        public void GetApiValue_ForEnum_ReturnsApiEnumValue()
+        {
+            OtherTestEnum testResult = EnumHelper.GetApiValue<OtherTestEnum>(TestEnum.HasDetails);
+
+            Assert.Equal(OtherTestEnum.BlahOnOtherEnum, testResult);
+        }
     }
 
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum TestEnum
     {
         NoDetails = 0,
 
         [Description("some desc")]
+        [ApiValue("BlahOnOtherEnum")]
         [Details("Blah")]
         HasDetails = 1,
+    }
+
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
+    public enum OtherTestEnum
+    {
+        [Description("BlahOnOtherEnum desc")]
+        [Details("BlahOnOtherEnum")]
+        BlahOnOtherEnum = 1,
     }
 }
