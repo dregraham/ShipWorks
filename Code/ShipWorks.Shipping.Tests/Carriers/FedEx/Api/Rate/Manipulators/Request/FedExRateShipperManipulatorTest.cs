@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Interapptive.Shared.Business;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -14,68 +12,60 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
     public class FedExRateShipperManipulatorTest
     {
         private FedExRateShipperManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private RateRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
+        private ShipmentEntity shipment;
 
         public FedExRateShipperManipulatorTest()
         {
-            shipmentEntity = Create.Shipment().AsFedEx().Build();
-
-            nativeRequest = new RateRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            shipment = Create.Shipment().AsFedEx().Build();
 
             testObject = new FedExRateShipperManipulator();
         }
 
         [Fact]
-        public void Manipulate_FedExShipperManipulator_ReturnsRequestedShipment()
+        public void ShouldApply_ReturnsTrue()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.ShouldApply(null, FedExRateRequestOptions.None);
 
-            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
+            Assert.True(result);
         }
 
         [Fact]
         public void Manipulate_WithOneStreetLine_ReturnsValidStreetLines()
         {
-            shipmentEntity.OriginStreet1 = "Foo";
+            shipment.OriginStreet1 = "Foo";
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.Equal(new[] { "Foo" }, nativeRequest.RequestedShipment.Shipper.Address.StreetLines);
+            Assert.Equal(new[] { "Foo" }, result.RequestedShipment.Shipper.Address.StreetLines);
         }
 
         [Fact]
         public void Manipulate_WithTwoStreetLines_ReturnsValidStreetLines()
         {
-            shipmentEntity.OriginStreet1 = "Foo";
-            shipmentEntity.OriginStreet2 = "Bar";
+            shipment.OriginStreet1 = "Foo";
+            shipment.OriginStreet2 = "Bar";
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.Equal(new[] { "Foo", "Bar" }, nativeRequest.RequestedShipment.Shipper.Address.StreetLines);
+            Assert.Equal(new[] { "Foo", "Bar" }, result.RequestedShipment.Shipper.Address.StreetLines);
         }
 
         [Fact]
         public void Manipulate_WithThreeStreetLines_ReturnsValidStreetLines()
         {
-            shipmentEntity.OriginStreet1 = "Foo";
-            shipmentEntity.OriginStreet2 = "Bar";
-            shipmentEntity.OriginStreet3 = "Baz";
+            shipment.OriginStreet1 = "Foo";
+            shipment.OriginStreet2 = "Bar";
+            shipment.OriginStreet3 = "Baz";
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.Equal(new[] { "Foo", "Bar", "Baz" }, nativeRequest.RequestedShipment.Shipper.Address.StreetLines);
+            Assert.Equal(new[] { "Foo", "Bar", "Baz" }, result.RequestedShipment.Shipper.Address.StreetLines);
         }
-
-
 
         [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsValidRequestedShipmentShipper()
         {
-            shipmentEntity.OriginPerson = new PersonAdapter
+            shipment.OriginPerson = new PersonAdapter
             {
                 City = "Foo",
                 CountryCode = "US",
@@ -83,36 +73,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
                 StateProvCode = "MO"
             };
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
             // Make sure we got a Shipper back
-            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Shipper);
+            Assert.IsAssignableFrom<Party>(result.RequestedShipment.Shipper);
 
             // Make sure Address fields match
-            Assert.Equal("Foo", nativeRequest.RequestedShipment.Shipper.Address.City);
-            Assert.Equal("US", nativeRequest.RequestedShipment.Shipper.Address.CountryCode);
-            Assert.Equal("63102", nativeRequest.RequestedShipment.Shipper.Address.PostalCode);
-            Assert.Equal("MO", nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode);
+            Assert.Equal("Foo", result.RequestedShipment.Shipper.Address.City);
+            Assert.Equal("US", result.RequestedShipment.Shipper.Address.CountryCode);
+            Assert.Equal("63102", result.RequestedShipment.Shipper.Address.PostalCode);
+            Assert.Equal("MO", result.RequestedShipment.Shipper.Address.StateOrProvinceCode);
         }
 
         [Fact]
         public void Manipulate_ResidentialSpecifiedIsTrue()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
+            Assert.True(result.RequestedShipment.Shipper.Address.ResidentialSpecified);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(result.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Theory]
@@ -120,31 +110,31 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         [InlineData(null)]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty(string value)
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
-            shipmentEntity.OriginCompany = value;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
+            shipment.OriginCompany = value;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(result.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
-            shipmentEntity.OriginCompany = "Penetrode";
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
+            shipment.OriginCompany = "Penetrode";
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new RateRequest());
 
-            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(result.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, new RateRequest()));
         }
     }
 }
