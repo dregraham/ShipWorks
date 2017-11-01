@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Interapptive.Shared.Enums;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -14,178 +15,147 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// An ICarrierRequestManipulator implementation that modifies the attributes of each package of the
     /// FedEx API's RateRequest object.
     /// </summary>
-    public class FedExRatePackageDetailsManipulator : FedExShippingRequestManipulatorBase
+    public class FedExRatePackageDetailsManipulator : IFedExRateRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRatePackageDetailsManipulator" /> class.
-        /// </summary>
-        public FedExRatePackageDetailsManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        { }
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRatePackageDetailsManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExRatePackageDetailsManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        { }
+        public FedExRatePackageDetailsManipulator(IFedExSettingsRepository settings)
+        {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Should the manipulator be applied
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) => true;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
-            // We can safely cast this since we've passed initialization 
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
+            var packageCount = shipment.FedEx.Packages.Count();
+            request.RequestedShipment.PackageCount = packageCount.ToString();
 
-            FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
-            nativeRequest.RequestedShipment.PackageCount = fedex.Packages.Count.ToString();
+            request.RequestedShipment.RequestedPackageLineItems = shipment.FedEx
+                .Packages
+                .Zip(RequestPackageList(request, packageCount), Tuple.Create)
+                .Select((x, i) => BuildPackageDetails(shipment, x.Item1, x.Item2 ?? CreateLineItem(i)))
+                .ToArray();
 
-            // All of the package details are sent to to FedEx in a single call instead of doing multiple
-            // calls like the processing a shipment does
-            for (int packageIndex = 0; packageIndex < fedex.Packages.Count; packageIndex++)
-            {
-                FedExPackageEntity fedExPackage = fedex.Packages[packageIndex];
-
-                // We can't guarantee that all the line items have been added, so we initialize the line item
-                // to make sure there is a valid object reference at the current index of the line item array
-                // before attempting to access the item in the array
-                InitializeLineItem(nativeRequest, packageIndex);
-                RequestedPackageLineItem packageRequest = nativeRequest.RequestedShipment.RequestedPackageLineItems[packageIndex];
-
-                packageRequest.SequenceNumber = (packageIndex + 1).ToString();
-                packageRequest.GroupPackageCount = "1";
-
-                // Package weight and value (default the weight to .1 if none is given, so we can still get rates)
-                decimal packageTotalWeight = FedExUtility.GetPackageTotalWeight(fedExPackage);
-                packageTotalWeight = packageTotalWeight > 0 ? packageTotalWeight : .1m;
-
-                packageRequest.Weight = new Weight
-                {
-                    Units = GetApiWeightUnit(request.ShipmentEntity),
-                    UnitsSpecified = true,
-                    Value = packageTotalWeight,
-                    ValueSpecified = true
-                };
-
-                packageRequest.InsuredValue = new Money
-                {
-                    Amount = fedExPackage.DeclaredValue, 
-                    AmountSpecified = true,
-                    Currency = GetShipmentCurrencyType(request.ShipmentEntity)
-                };
-
-                // If custom, add dimensions
-                if (fedex.PackagingType == (int)FedExPackagingType.Custom)
-                {
-                    packageRequest.Dimensions = new Dimensions
-                    {
-                        Units = GetApiLinearUnit(request.ShipmentEntity),
-                        UnitsSpecified = true,
-                        Length = Math.Round(fedExPackage.DimsLength, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
-                        Height = Math.Round(fedExPackage.DimsHeight, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
-                        Width = Math.Round(fedExPackage.DimsWidth, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture)
-                    };
-                }
-            }
+            return request;
         }
 
         /// <summary>
-        /// Initializes the line item.
+        /// Get a list of request packages, padding any needed packages with nulls
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <param name="lineItemIndex">Index of the line item.</param>
-        private static void InitializeLineItem(RateRequest nativeRequest, int lineItemIndex)
+        private static IEnumerable<RequestedPackageLineItem> RequestPackageList(RateRequest request, int packageCount) =>
+            request.RequestedShipment.RequestedPackageLineItems.Concat(Enumerable.Repeat<RequestedPackageLineItem>(null, packageCount));
+
+        /// <summary>
+        /// Create a new line item
+        /// </summary>
+        private RequestedPackageLineItem CreateLineItem(int i) =>
+            new RequestedPackageLineItem { SequenceNumber = (i + 1).ToString() };
+
+        /// <summary>
+        /// Build package details
+        /// </summary>
+        private RequestedPackageLineItem BuildPackageDetails(
+            IShipmentEntity shipment,
+            IFedExPackageEntity fedExPackage,
+            RequestedPackageLineItem packageRequest)
         {
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length <= lineItemIndex)
-            {
-                // We need to resize the line item array to accommodate the index
-                RequestedPackageLineItem[] packageArray = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-                Array.Resize(ref packageArray, lineItemIndex + 1);
+            packageRequest.GroupPackageCount = "1";
 
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = packageArray;
+            // Package weight and value (default the weight to .1 if none is given, so we can still get rates)
+            decimal packageTotalWeight = FedExUtility.GetPackageTotalWeight(fedExPackage);
+            packageTotalWeight = packageTotalWeight > 0 ? packageTotalWeight : .1m;
+
+            packageRequest.Weight = BuildWeight(shipment, packageTotalWeight);
+            packageRequest.InsuredValue = BuildMoney(shipment, fedExPackage);
+
+            // If custom, add dimensions
+            if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
+            {
+                packageRequest.Dimensions = BuildDimensions(shipment, fedExPackage);
             }
 
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] == null)
+            return packageRequest;
+        }
+
+        /// <summary>
+        /// Build Money element
+        /// </summary>
+        private Money BuildMoney(IShipmentEntity shipment, IFedExPackageEntity fedExPackage)
+        {
+            return new Money
             {
-                // We need to create a new package line item
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] = new RequestedPackageLineItem();
-            }
+                Amount = fedExPackage.DeclaredValue,
+                AmountSpecified = true,
+                Currency = FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment))
+            };
+        }
+
+        /// <summary>
+        /// Build weight element
+        /// </summary>
+        private Weight BuildWeight(IShipmentEntity shipment, decimal packageTotalWeight)
+        {
+            return new Weight
+            {
+                Units = GetApiWeightUnit(shipment),
+                UnitsSpecified = true,
+                Value = packageTotalWeight,
+                ValueSpecified = true
+            };
+        }
+
+        /// <summary>
+        /// Build Dimensions element
+        /// </summary>
+        public Dimensions BuildDimensions(IShipmentEntity shipment, IFedExPackageEntity package)
+        {
+            return new Dimensions
+            {
+                Units = GetApiLinearUnit(shipment),
+                UnitsSpecified = true,
+                Length = Math.Round(package.DimsLength, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                Height = Math.Round(package.DimsHeight, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                Width = Math.Round(package.DimsWidth, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture)
+            };
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a RateRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            //Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            //Make sure all packages are there
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null)
-            {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
+            request.Ensure(x => x.RequestedShipment)
+                .EnsureAtLeastOne(x => x.RequestedPackageLineItems);
         }
 
         /// <summary>
         /// Gets the FedEx API weight unit.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>The FedEx WeightUnits value.</returns>
-        private WeightUnits GetApiWeightUnit(ShipmentEntity shipment)
-        {
-            WeightUnits weightUnits = WeightUnits.LB;
-
-            if (shipment.FedEx.WeightUnitType == (int)WeightUnitOfMeasure.Kilograms)
-            {
-                weightUnits = WeightUnits.KG;
-            }
-
-            return weightUnits;
-        }
+        private WeightUnits GetApiWeightUnit(IShipmentEntity shipment) =>
+            shipment.FedEx.WeightUnitType == (int) WeightUnitOfMeasure.Kilograms ?
+                WeightUnits.KG :
+                WeightUnits.LB;
 
         /// <summary>
         /// Gets the FedEx API linear unit.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>The FedEx LinearUnits value.</returns>
-        private LinearUnits GetApiLinearUnit(ShipmentEntity shipment)
-        {
-            LinearUnits linearUnits = LinearUnits.IN;
-
-            if (shipment.FedEx.LinearUnitType == (int)FedExLinearUnitOfMeasure.CM)
-            {
-                linearUnits = LinearUnits.CM;
-            }
-
-            return linearUnits;
-        }
+        private LinearUnits GetApiLinearUnit(IShipmentEntity shipment) =>
+            shipment.FedEx.LinearUnitType == (int) FedExLinearUnitOfMeasure.CM ?
+                LinearUnits.CM :
+                LinearUnits.IN;
     }
 }

@@ -1,6 +1,9 @@
+using System;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 
@@ -134,16 +137,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the type of the currency.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns></returns>
-        public CurrencyType GetCurrencyType(ShipmentEntity shipment)
+        public static string GetCurrencyTypeApiValue(IShipmentEntity shipment, Func<IFedExAccountEntity> getAccount) =>
+            EnumHelper.GetApiValue(FedExSettings.GetCurrencyType(shipment, getAccount));
+
+        /// <summary>
+        /// Gets the type of the currency.
+        /// </summary>
+        public CurrencyType GetCurrencyType(ShipmentEntity shipment) =>
+            GetCurrencyType(shipment, () => (FedExAccountEntity) settingsRepository.GetAccount(shipment));
+
+        /// <summary>
+        /// Gets the type of the currency.
+        /// </summary>
+        public static CurrencyType GetCurrencyType(IShipmentEntity shipment, Func<IFedExAccountEntity> getAccount)
         {
             if (shipment.FedEx.Currency.HasValue)
             {
                 return (CurrencyType) shipment.FedEx.Currency;
             }
 
-            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
+            IFedExAccountEntity account = getAccount();
 
             if (account == null)
             {

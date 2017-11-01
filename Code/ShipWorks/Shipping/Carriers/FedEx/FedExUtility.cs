@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             types.Add(FedExPackagingType.MediumBox);
             types.Add(FedExPackagingType.LargeBox);
             types.Add(FedExPackagingType.ExtraLargeBox);
-            
+
             return types;
         }
 
@@ -506,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the total weight of the package including the dimensional weight
         /// </summary>
-        public static decimal GetPackageTotalWeight(FedExPackageEntity package)
+        public static decimal GetPackageTotalWeight(IFedExPackageEntity package)
         {
             double weight = package.Weight;
 
