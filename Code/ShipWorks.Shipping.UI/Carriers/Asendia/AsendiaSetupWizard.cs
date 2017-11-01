@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -10,35 +7,35 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Asendia;
 
-namespace ShipWorks.Shipping.UI.Carriers.Dhl
+namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
     /// <summary>
     /// Setup wizard for Amazon shipment type
     /// </summary>
-    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.DhlExpress)]
-    public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Asendia)]
+    public partial class AsendiaSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
-        private readonly DhlExpressShipmentType shipmentType;
-        private readonly IDhlExpressAccountRepository accountRepository;
+        private readonly AsendiaShipmentType shipmentType;
+        private readonly IAsendiaAccountRepository accountRepository;
         private readonly IShippingSettings shippingSettings;
         private readonly IMessageHelper messageHelper;
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly ShipEngineAccountEntity account;
-        private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
+        private const string AsendiaAccountUrl = "http://www.asendia.com/contact";
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
         /// </summary>
-        protected DhlExpressSetupWizard()
+        protected AsendiaSetupWizard()
         {
             InitializeComponent();
         }
@@ -46,7 +43,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressSetupWizard(DhlExpressShipmentType shipmentType, IDhlExpressAccountRepository accountRepository, IShipEngineWebClient shipEngineClient, IShippingSettings shippingSettings,
+        public AsendiaSetupWizard(
+            AsendiaShipmentType shipmentType,
+            IAsendiaAccountRepository accountRepository,
+            IShipEngineWebClient shipEngineClient, 
+            IShippingSettings shippingSettings,
             IMessageHelper messageHelper) : this()
         {
             this.shipmentType = shipmentType;
@@ -99,22 +100,29 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         private async Task OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            long dhlAccountNumber;
+            RequiredFieldChecker fieldChecker = new RequiredFieldChecker();
+            fieldChecker.Check("Account Number", accountNumber.Text);
+            fieldChecker.Check("Username", username.Text);
+            fieldChecker.Check("Password", password.Text);
 
-            if (string.IsNullOrWhiteSpace(accountNumber.Text))
+            GenericResult<string> validationResult = fieldChecker.Validate();
+            
+            if(validationResult.Failure)
             {
-                ShowWizardError("Please enter your DHL Express account number.", e);
+                ShowWizardError(validationResult.Message, e);
+                return;
             }
 
-            if (long.TryParse(accountNumber.Text, out dhlAccountNumber))
+            long asendiaAccountNumber;
+            if (long.TryParse(accountNumber.Text.Trim(), out asendiaAccountNumber))
             {
                 this.Enabled = false;
                 this.Cursor = Cursors.WaitCursor;
 
-                GenericResult<string> connectAccountResult = await shipEngineClient.ConnectDhlAccount(dhlAccountNumber.ToString());
+                GenericResult<string> connectAccountResult = await shipEngineClient.ConnectAsendiaAccount(asendiaAccountNumber.ToString(), username.Text.Trim(), password.Text.Trim());
                 if (connectAccountResult.Success)
                 {
-                    account.AccountNumber = dhlAccountNumber;
+                    account.AccountNumber = asendiaAccountNumber;
                     account.ShipEngineCarrierId = connectAccountResult.Value;
                 }
                 else
@@ -127,7 +135,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             }
             else
             {
-                ShowWizardError("DHL Express account number must contain only numbers.", e);
+                ShowWizardError("Asendia account number must contain only numbers.", e);
             }
         }
 
@@ -166,9 +174,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private void SaveAccount()
         {
             account.Description = GetDefaultDescription(account);
-            account.ShipmentTypeCode = (int) ShipmentTypeCode.DhlExpress;
+
             accountRepository.Save(account);
-            shippingSettings.MarkAsConfigured(ShipmentTypeCode.DhlExpress);
+            shippingSettings.MarkAsConfigured(ShipmentTypeCode.Asendia);
         }
 
         /// <summary>
@@ -186,9 +194,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// <summary>
         /// Called when [open account link clicked].
         /// </summary>
-        private void OnOpenAccountLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        private void OnOpenAccountLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            WebHelper.OpenUrl(DhlExpressAccountUrl, this);
+            WebHelper.OpenUrl(AsendiaAccountUrl, this);
         }
 
         /// <summary>

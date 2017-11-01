@@ -158,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.Designer.cs">
+      <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -443,6 +449,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaSetupWizard.resx">
+      <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSetupWizard.resx">
       <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>

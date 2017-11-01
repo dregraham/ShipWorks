@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     /// <summary>
     /// Asendia implementation of shipment type
     /// </summary>
+    [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.Asendia, SingleInstance = true)]
     public class AsendiaShipmentType : ShipmentType
     {
