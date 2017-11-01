@@ -13,11 +13,21 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     [KeyedComponent(typeof(ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity>), ShipmentTypeCode.Asendia)]
     public class AsendiaAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>, IAsendiaAccountRepository
     {
+        private IShipEngineAccountRepository shipEngineAccountRepository;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AsendiaAccountRepository(IShipEngineAccountRepository shipEngineAccountRepository)
+        {
+            this.shipEngineAccountRepository = shipEngineAccountRepository;
+        }
+
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<ShipEngineAccountEntity> Accounts =>
-            ShipEngineAccountManager.Accounts.Where(a => a.ShipmentTypeCode == (int) ShipmentTypeCode.Asendia);
+            shipEngineAccountRepository.Accounts.Where(a => a.ShipmentTypeCode == (int) ShipmentTypeCode.Asendia);
 
         /// <summary>
         /// Gets the default profile account.
@@ -28,37 +38,37 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<IShipEngineAccountEntity> AccountsReadOnly =>
-            ShipEngineAccountManager.AccountsReadOnly.Where(a => a.ShipmentTypeCode == (int)ShipmentTypeCode.Asendia);
+            shipEngineAccountRepository.AccountsReadOnly.Where(a => a.ShipmentTypeCode == (int)ShipmentTypeCode.Asendia);
 
         /// <summary>
         /// Force a check for changes
         /// </summary>
         public override void CheckForChangesNeeded() =>
-            ShipEngineAccountManager.CheckForChangesNeeded();
+            shipEngineAccountRepository.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         public override ShipEngineAccountEntity GetAccount(long accountID) =>
-            ShipEngineAccountManager.GetAccount(accountID);
+            shipEngineAccountRepository.GetAccount(accountID);
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         public override IShipEngineAccountEntity GetAccountReadOnly(long accountID) =>
-            ShipEngineAccountManager.GetAccountReadOnly(accountID);
+            shipEngineAccountRepository.GetAccountReadOnly(accountID);
 
         /// <summary>
         /// Saves the specified account.
         /// </summary>
-        public override void Save(ShipEngineAccountEntity account) => ShipEngineAccountManager.SaveAccount(account);
+        public override void Save(ShipEngineAccountEntity account) => shipEngineAccountRepository.Save(account);
 
         /// <summary>
         /// Deletes the account.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override void DeleteAccount(ShipEngineAccountEntity account) => ShipEngineAccountManager.DeleteAccount(account);
+        public override void DeleteAccount(ShipEngineAccountEntity account) => shipEngineAccountRepository.DeleteAccount(account);
 
         /// <summary>
         /// Saves the specified account.
