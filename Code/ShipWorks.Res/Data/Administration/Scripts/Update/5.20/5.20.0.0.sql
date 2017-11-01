@@ -37,7 +37,9 @@ CREATE TABLE [dbo].[RG_Recovery_1_ShipEngineAccount]
 GO
 SET IDENTITY_INSERT [dbo].[RG_Recovery_1_ShipEngineAccount] ON
 GO
-INSERT INTO [dbo].[RG_Recovery_1_ShipEngineAccount]([ShipEngineAccountID], [AccountNumber], [ShipEngineCarrierId], [Description], [FirstName], [MiddleName], [LastName], [Company], [Street1], [City], [StateProvCode], [PostalCode], [CountryCode], [Email], [Phone]) SELECT [DhlExpressAccountID], [AccountNumber], [ShipEngineCarrierId], [Description], [FirstName], [MiddleName], [LastName], [Company], [Street1], [City], [StateProvCode], [PostalCode], [CountryCode], [Email], [Phone] FROM [dbo].[ShipEngineAccount]
+INSERT INTO [dbo].[RG_Recovery_1_ShipEngineAccount]
+	([ShipEngineAccountID], [ShipmentTypeCode], [AccountNumber], [ShipEngineCarrierId], [Description], [FirstName], [MiddleName], [LastName], [Company], [Street1], [City], [StateProvCode], [PostalCode], [CountryCode], [Email], [Phone]) 
+SELECT [DhlExpressAccountID], 17, [AccountNumber], [ShipEngineCarrierId], [Description], [FirstName], [MiddleName], [LastName], [Company], [Street1], [City], [StateProvCode], [PostalCode], [CountryCode], [Email], [Phone] FROM [dbo].[ShipEngineAccount]
 GO
 SET IDENTITY_INSERT [dbo].[RG_Recovery_1_ShipEngineAccount] OFF
 GO
