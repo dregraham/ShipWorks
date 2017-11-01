@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -13,107 +14,102 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// An ICarrierRequestManipulator implementation that modifies the package special services values of the
     /// FedEx API's RateRequest object.
     /// </summary>
-    public class FedExRatePackageSpecialServicesManipulator : ICarrierRequestManipulator
+    public class FedExRatePackageSpecialServicesManipulator : IFedExRateRequestManipulator
     {
+        private readonly IFedExSettingsRepository settings;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExRatePackageSpecialServicesManipulator(IFedExSettingsRepository settings)
+        {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Should the manipulator be applied
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) => true;
+
         /// <summary>
         /// Adds SpecialServices to the FedEx request object's packages
         /// </summary>
-        /// <param name="request"></param>
-        public void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
-            // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
-            // We can safely cast this since we've passed initialization
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
+            request.RequestedShipment.RequestedPackageLineItems = shipment.FedEx
+                .Packages
+                .Zip(RequestPackageList(request, shipment.FedEx.Packages.Count()), Tuple.Create)
+                .Select(x => BuildPackageSpecialServices(shipment, x.Item1, x.Item2 ?? CreateLineItem()))
+                .ToArray();
 
-            FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
-
-            // All of the package details are sent to to FedEx in a single call instead of doing smultiple
-            // calls like the processing a shipment does
-            for (int packageIndex = 0; packageIndex < fedex.Packages.Count; packageIndex++)
-            {
-                InitializeLineItem(nativeRequest, packageIndex);
-                PackageSpecialServicesRequested specialServicesRequested = InitializePackageRequest(nativeRequest.RequestedShipment.RequestedPackageLineItems[packageIndex]);
-
-                // Start a new special services list for this package
-                List<PackageSpecialServiceType> specialServices = new List<PackageSpecialServiceType>();
-
-                // Signature
-                FedExSignatureType fedExSignatureType = (FedExSignatureType) fedex.Signature;
-                if (fedExSignatureType == FedExSignatureType.NoSignature && fedex.Packages.Any(p => p.DeclaredValue > 500m))
-                {
-                    // The FedEx API allows for this to go through, but per page 170 of the FedExDeveloperGuide2012.pdf document,
-                    // a signature is required for shipments with a declared value > $500
-                    throw new FedExException("A signature is required for shipments containing packages with a declared value over $500.");
-                }
-
-                if (fedExSignatureType != FedExSignatureType.ServiceDefault)
-                {
-                    FedExAccountEntity fedExAccount = request.CarrierAccountEntity as FedExAccountEntity;
-                    specialServicesRequested.SignatureOptionDetail = new SignatureOptionDetail
-                    {
-                        OptionType = GetApiSignatureType(fedExSignatureType),
-                        OptionTypeSpecified = true,
-                        SignatureReleaseNumber = fedExAccount.SignatureRelease
-                    };
-
-                    specialServices.Add(PackageSpecialServiceType.SIGNATURE_OPTION);
-                }
-
-                ServiceType apiServiceType = GetApiServiceType((FedExServiceType) fedex.Service);
-
-                // Non-standard container (only applies to Ground services)
-                if (fedex.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
-                {
-                    specialServices.Add(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
-                }
-
-
-                if (fedex.Packages[packageIndex].ContainsAlcohol)
-                {
-                    specialServices.Add(PackageSpecialServiceType.ALCOHOL);
-                }
-
-                // Set the special service type flags
-                specialServicesRequested.SpecialServiceTypes = specialServices.ToArray();
-            }
+            return request;
         }
 
         /// <summary>
-        /// Initializes the line item.
+        /// Get a list of request packages, padding any needed packages with nulls
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <param name="lineItemIndex">Index of the line item.</param>
-        private static void InitializeLineItem(RateRequest nativeRequest, int lineItemIndex)
-        {
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length <= lineItemIndex)
-            {
-                // We need to resize the line item array to accommodate the index
-                RequestedPackageLineItem[] packageArray = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-                Array.Resize(ref packageArray, lineItemIndex + 1);
-
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = packageArray;
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] == null)
-            {
-                // We need to create a new package line item
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] = new RequestedPackageLineItem();
-            }
-        }
+        private static IEnumerable<RequestedPackageLineItem> RequestPackageList(RateRequest request, int packageCount) =>
+            request.RequestedShipment.RequestedPackageLineItems.Concat(Enumerable.Repeat<RequestedPackageLineItem>(null, packageCount));
 
         /// <summary>
-        /// Initializes package returning the SpecialServicesRequested for Package
+        /// Create a new line item
         /// </summary>
-        private static PackageSpecialServicesRequested InitializePackageRequest(RequestedPackageLineItem requestedPackageLineItem)
+        private RequestedPackageLineItem CreateLineItem() => new RequestedPackageLineItem();
+
+        /// <summary>
+        /// Build package special services element
+        /// </summary>
+        private RequestedPackageLineItem BuildPackageSpecialServices(
+            IShipmentEntity shipment,
+            IFedExPackageEntity fedExPackage,
+            RequestedPackageLineItem packageRequest)
         {
-            if (requestedPackageLineItem.SpecialServicesRequested == null)
+            var specialServicesRequested = packageRequest.Ensure(x => x.SpecialServicesRequested);
+
+            // Signature
+            FedExSignatureType fedExSignatureType = (FedExSignatureType) shipment.FedEx.Signature;
+            if (fedExSignatureType == FedExSignatureType.NoSignature && shipment.FedEx.Packages.Any(p => p.DeclaredValue > 500m))
             {
-                requestedPackageLineItem.SpecialServicesRequested = new PackageSpecialServicesRequested();
+                // The FedEx API allows for this to go through, but per page 170 of the FedExDeveloperGuide2012.pdf document,
+                // a signature is required for shipments with a declared value > $500
+                throw new FedExException("A signature is required for shipments containing packages with a declared value over $500.");
             }
 
-            return requestedPackageLineItem.SpecialServicesRequested;
+            // Start a new special services list for this package
+            List<PackageSpecialServiceType> specialServices = new List<PackageSpecialServiceType>();
+
+            if (fedExSignatureType != FedExSignatureType.ServiceDefault)
+            {
+                var account = settings.GetAccountReadOnly(shipment);
+                specialServicesRequested.SignatureOptionDetail = new SignatureOptionDetail
+                {
+                    OptionType = GetApiSignatureType(fedExSignatureType),
+                    OptionTypeSpecified = true,
+                    SignatureReleaseNumber = account.SignatureRelease
+                };
+
+                specialServices.Add(PackageSpecialServiceType.SIGNATURE_OPTION);
+            }
+
+            ServiceType apiServiceType = GetApiServiceType((FedExServiceType) shipment.FedEx.Service);
+
+            // Non-standard container (only applies to Ground services)
+            if (shipment.FedEx.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
+            {
+                specialServices.Add(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
+            }
+
+            if (fedExPackage.ContainsAlcohol)
+            {
+                specialServices.Add(PackageSpecialServiceType.ALCOHOL);
+            }
+
+            // Set the special service type flags
+            specialServicesRequested.SpecialServiceTypes = specialServices.ToArray();
+
+            return packageRequest;
         }
 
         /// <summary>
@@ -200,37 +196,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private static void InitializeRequest(CarrierRequest request)
+        private static void InitializeRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a ProcessShipmentRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            //Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null)
-            {
-                //Make sure the line item object is are there
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
+            request.Ensure(x => x.RequestedShipment)
+                .Ensure(x => x.RequestedPackageLineItems);
         }
     }
 }

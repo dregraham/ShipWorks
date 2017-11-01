@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             request.RequestedShipment.RequestedPackageLineItems = shipment.FedEx
                 .Packages
                 .Zip(RequestPackageList(request, packageCount), Tuple.Create)
-                .Select((x, i) => BuildPackageDetails(shipment, x.Item1, x.Item2 ?? CreateLineItem(i)))
+                .Select((x, i) => BuildPackageDetails(shipment, x.Item1, x.Item2 ?? CreateLineItem(), i))
                 .ToArray();
 
             return request;
@@ -62,8 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Create a new line item
         /// </summary>
-        private RequestedPackageLineItem CreateLineItem(int i) =>
-            new RequestedPackageLineItem { SequenceNumber = (i + 1).ToString() };
+        private RequestedPackageLineItem CreateLineItem() => new RequestedPackageLineItem();
 
         /// <summary>
         /// Build package details
@@ -71,8 +70,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         private RequestedPackageLineItem BuildPackageDetails(
             IShipmentEntity shipment,
             IFedExPackageEntity fedExPackage,
-            RequestedPackageLineItem packageRequest)
+            RequestedPackageLineItem packageRequest,
+            int packageIndex)
         {
+            packageRequest.SequenceNumber = (packageIndex + 1).ToString();
             packageRequest.GroupPackageCount = "1";
 
             // Package weight and value (default the weight to .1 if none is given, so we can still get rates)
