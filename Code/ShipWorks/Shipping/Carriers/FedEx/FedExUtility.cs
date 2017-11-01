@@ -194,8 +194,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<FedExPackagingType> types = new List<FedExPackagingType>();
 
-            if (service == FedExServiceType.FedExFreightEconomy ||
-                service == FedExServiceType.FedExFreightPriority)
+            if (IsFreightLtlService(service))
             {
                 types.Add(FedExPackagingType.Custom);
                 return types;
