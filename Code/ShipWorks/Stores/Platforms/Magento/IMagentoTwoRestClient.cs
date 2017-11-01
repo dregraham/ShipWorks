@@ -62,6 +62,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// Product is similar to item except it contains product details
         /// and is not order specific details like option names and image urls
         /// </returns>
-        Product GetProduct(string sku);
+        Product GetProductBySku(string sku);
+        
+        /// <summary>
+        /// Gets the product for the given Id
+        /// </summary>
+        /// <returns>
+        /// Product is similar to item except it contains product details
+        /// and is not order specific details like option names and image urls
+        /// </returns>
+        Product GetProductById(int productId);
     }
 }

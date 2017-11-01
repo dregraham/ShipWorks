@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 {
@@ -12,5 +13,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("title")]
         public string Title { get; set; }
+
+        [JsonProperty("values")]
+        public IEnumerable<ProductOptionValue> Values {get;set;}
     }
 }
