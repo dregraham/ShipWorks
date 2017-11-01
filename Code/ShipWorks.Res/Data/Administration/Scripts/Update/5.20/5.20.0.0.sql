@@ -53,5 +53,8 @@ ALTER TABLE [dbo].[ShipEngineAccount] ADD CONSTRAINT [PK_ShipEngineAccount] PRIM
 GO
 ALTER TABLE [dbo].[ShipEngineAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Altering [dbo].[ShipEngineAccount]'
+GO
+EXECUTE sp_rename N'dbo.DhlExpressProfile.DhlExpressAccountID', N'ShipEngineAccountID', 'COLUMN' 
+GO
+EXECUTE sp_rename N'dbo.DhlExpressShipment.DhlExpressAccountID', N'ShipEngineAccountID', 'COLUMN' 
 GO
