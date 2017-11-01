@@ -1,89 +1,65 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
 {
-    public class FedExRatePackagingTypeManipulator : ICarrierRequestManipulator
+    /// <summary>
+    /// Add packaging type details for FedEx rate request
+    /// </summary>
+    public class FedExRatePackagingTypeManipulator : IFedExRateRequestManipulator
     {
+        private static Lazy<Dictionary<FedExPackagingType, PackagingType>> packageTypeLookup =
+            new Lazy<Dictionary<FedExPackagingType, PackagingType>>(() =>
+                new Dictionary<FedExPackagingType, PackagingType> {
+                    { FedExPackagingType.Box, PackagingType.FEDEX_BOX },
+                    { FedExPackagingType.Box10Kg, PackagingType.FEDEX_10KG_BOX },
+                    { FedExPackagingType.Box25Kg, PackagingType.FEDEX_25KG_BOX },
+                    { FedExPackagingType.Custom, PackagingType.YOUR_PACKAGING },
+                    { FedExPackagingType.Envelope, PackagingType.FEDEX_ENVELOPE },
+                    { FedExPackagingType.Pak, PackagingType.FEDEX_PAK },
+                    { FedExPackagingType.Tube, PackagingType.FEDEX_TUBE },
+                    { FedExPackagingType.SmallBox, PackagingType.FEDEX_SMALL_BOX },
+                    { FedExPackagingType.MediumBox, PackagingType.FEDEX_MEDIUM_BOX },
+                    { FedExPackagingType.LargeBox, PackagingType.FEDEX_LARGE_BOX },
+                    { FedExPackagingType.ExtraLargeBox, PackagingType.FEDEX_EXTRA_LARGE_BOX },
+                });
+
+        /// <summary>
+        /// Should the manipulator be applied
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) => true;
+
         /// <summary>
         /// Add the Packaging Type to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
-            // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
-            // We can safely cast this since we've passed initialization
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
+            request.RequestedShipment.PackagingType = GetApiPackagingType((FedExPackagingType) shipment.FedEx.PackagingType);
+            request.RequestedShipment.PackagingTypeSpecified = true;
 
-            // Get the FedEx shipment
-            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
-
-            // Set the packaging type for the shipment
-            nativeRequest.RequestedShipment.PackagingType = GetApiPackagingType((FedExPackagingType) fedExShipment.PackagingType);
-            nativeRequest.RequestedShipment.PackagingTypeSpecified = true;
+            return request;
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        public void InitializeRequest(CarrierRequest request)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a RateRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
-            {
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-        }
+        public void InitializeRequest(RateRequest request) =>
+            request.Ensure(x => x.RequestedShipment);
 
         /// <summary>
         /// Determine the ship service packaging type
         /// </summary>
         private PackagingType GetApiPackagingType(FedExPackagingType packagingType)
         {
-            switch (packagingType)
+            if (packageTypeLookup.Value.ContainsKey(packagingType))
             {
-                case FedExPackagingType.Box:
-                    return PackagingType.FEDEX_BOX;
-                case FedExPackagingType.Box10Kg:
-                    return PackagingType.FEDEX_10KG_BOX;
-                case FedExPackagingType.Box25Kg:
-                    return PackagingType.FEDEX_25KG_BOX;
-                case FedExPackagingType.Custom:
-                    return PackagingType.YOUR_PACKAGING;
-                case FedExPackagingType.Envelope:
-                    return PackagingType.FEDEX_ENVELOPE;
-                case FedExPackagingType.Pak:
-                    return PackagingType.FEDEX_PAK;
-                case FedExPackagingType.Tube:
-                    return PackagingType.FEDEX_TUBE;
-                case FedExPackagingType.SmallBox:
-                    return PackagingType.FEDEX_SMALL_BOX;
-                case FedExPackagingType.MediumBox:
-                    return PackagingType.FEDEX_MEDIUM_BOX;
-                case FedExPackagingType.LargeBox:
-                    return PackagingType.FEDEX_LARGE_BOX;
-                case FedExPackagingType.ExtraLargeBox:
-                    return PackagingType.FEDEX_EXTRA_LARGE_BOX;
+                return packageTypeLookup.Value[packagingType];
             }
 
             throw new InvalidOperationException("Invalid FedEx Packaging Type");
