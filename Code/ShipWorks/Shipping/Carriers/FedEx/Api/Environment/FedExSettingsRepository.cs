@@ -20,26 +20,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets or sets a value indicating whether [use test server] based on a registry setting.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use test server]; otherwise, <c>false</c>.
-        /// </value>
         public bool UseTestServer
         {
-            get { return InterapptiveOnly.Registry.GetValue("FedExTestServer", false); }
-            set { InterapptiveOnly.Registry.SetValue("FedExTestServer", value); }
+            get { return FedExRegistryOptions.UseTestServer; }
+            set { FedExRegistryOptions.UseTestServer = value; }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether to [use list rates] based on a registry setting. Indicates if LIST rates are in
         /// effect, instead of the standard ACCOUNT rates
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use list rates]; otherwise, <c>false</c>.
-        /// </value>
         public bool UseListRates
         {
-            get { return InterapptiveOnly.Registry.GetValue("FedExListRates", false); }
-            set { InterapptiveOnly.Registry.SetValue("FedExListRates", value); }
+            get { return FedExRegistryOptions.UseListRates; }
+            set { FedExRegistryOptions.UseListRates = value; }
         }
 
         /// <summary>

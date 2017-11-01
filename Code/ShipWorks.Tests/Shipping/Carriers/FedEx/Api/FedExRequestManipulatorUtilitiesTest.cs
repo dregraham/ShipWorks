@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,6 +9,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public FedExRequestManipulatorUtilitiesTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.RegularPickup;
+            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
 
             nativeRequest = new ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void FedExGetShipmentDropoffType_ReturnsCreateValidateShipmentRequest()
         {
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DropoffType dropOffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType)shipmentEntity.FedEx.DropoffType);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DropoffType dropOffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType) shipmentEntity.FedEx.DropoffType);
 
             Assert.Equal(ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.DropoffType.REGULAR_PICKUP, dropOffType);
         }
@@ -191,7 +190,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #endregion Shipping Web Authentication Tests
 
-
         #region Registration Web Authentication Tests
 
         [Fact]
@@ -247,7 +245,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         #endregion Registration Web Authentication Tests
-
 
         #region Package Movement Web Authentication Tests
 
@@ -305,16 +302,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #endregion Package Movement Web Authentication Tests
 
-
         #region Shipping Client Detail Tests
 
         [Fact]
         public void CreateShippingClientDetail_UsesAccountNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { AccountNumber = "123-456-789" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
@@ -326,9 +319,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
             Assert.Equal(account.MeterNumber, detail.MeterNumber);
@@ -336,16 +326,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #endregion Shipping Client Detail Tests
 
-
         #region Registration Client Detail Tests
 
         [Fact]
         public void CreateRegistrationClientDetail_UsesAccountNumberFromAccount()
         {
             FedExAccountEntity account = new FedExAccountEntity { AccountNumber = "123-456-789" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
@@ -357,16 +343,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
 
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.Equal(account.MeterNumber, detail.MeterNumber);
         }
 
         #endregion Registration Client Detail Tests
-
 
         #region Package Movement Client Detail Tests
 

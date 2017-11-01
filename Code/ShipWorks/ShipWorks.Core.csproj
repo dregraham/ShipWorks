@@ -1215,6 +1215,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
     <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Environment\FedExRegistryOptions.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Environment\IFedExSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShippingClerk.cs" />

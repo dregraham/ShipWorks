@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.FedEx;
@@ -15,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment 
     /// has dangerous goods enabled.
     /// </summary>
-    public class FedExRateDangerousGoodsManipulator : ICarrierRequestManipulator
+    public class FedExRateDangerousGoodsManipulator : IFedExRateRequestManipulator
     {
         private readonly IDictionary<FedExBatteryMaterialType, BatteryMaterialType> batteryMaterialLookup =
             new Dictionary<FedExBatteryMaterialType, BatteryMaterialType>
@@ -38,92 +40,90 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             };
 
         /// <summary>
-        /// Manipulates the specified request.
+        /// Should the manipulator be applied
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public void Manipulate(CarrierRequest request) =>
-            Manipulate(request.ShipmentEntity, request.NativeRequest as RateRequest, request.SequenceNumber);
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
+            shipment.FedEx.Packages.ElementAt(0).DangerousGoodsEnabled;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
         /// <remarks>This method helps make testing easier</remarks>
-        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request, int sequenceNumber)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
-            // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
-            if (shipment.FedEx.Packages.ElementAt(sequenceNumber).DangerousGoodsEnabled)
-            {
-                InitializeLineItem(request);
-                IFedExPackageEntity package = shipment.FedEx.Packages.ElementAt(sequenceNumber);
+            var lineItem = request.RequestedShipment.RequestedPackageLineItems[0];
+            var specialServices = lineItem.SpecialServicesRequested;
 
-                // Add the service option to the request
-                ConfigureDangerousGoodsOption(request);
+            specialServices.SpecialServiceTypes =
+                specialServices.SpecialServiceTypes.Append(PackageSpecialServiceType.DANGEROUS_GOODS).ToArray();
 
-                DangerousGoodsDetail dangerousGoods = new DangerousGoodsDetail();
-
-                dangerousGoods.CargoAircraftOnly = package.DangerousGoodsCargoAircraftOnly;
-                dangerousGoods.CargoAircraftOnlySpecified = true;
-
-                dangerousGoods.EmergencyContactNumber = package.DangerousGoodsEmergencyContactPhone;
-                dangerousGoods.Offeror = package.DangerousGoodsOfferor;
-
-                SetupSignatory(package, dangerousGoods);
-
-                if (package.DangerousGoodsType != (int) FedExDangerousGoodsMaterialType.NotApplicable)
-                {
-                    dangerousGoods.Options = new[] { GetApiHazardousCommodityType(package) };
-                }
-
-                if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
-                {
-                    ConfigureHazardousMaterials(dangerousGoods, package);
-                }
-                else
-                {
-                    // Accessibility options do not apply to hazardous materials
-                    if (package.DangerousGoodsAccessibilityType != (int) FedExDangerousGoodsAccessibilityType.NotApplicable)
-                    {
-                        dangerousGoods.Accessibility = GetApiDangerousGoodsAccessibilityType(package);
-                        dangerousGoods.AccessibilitySpecified = true;
-                    }
-                }
-
-                if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
-                {
-                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.BatteryDetails = ConfigureBatteryMaterials(package);
-                }
-
-                request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = dangerousGoods;
-            }
+            specialServices.DangerousGoodsDetail = BuildDangerousGoods(shipment, specialServices);
 
             return request;
         }
 
         /// <summary>
+        /// Build the dangerous goods element
+        /// </summary>
+        private DangerousGoodsDetail BuildDangerousGoods(IShipmentEntity shipment, PackageSpecialServicesRequested specialServices)
+        {
+            IFedExPackageEntity package = shipment.FedEx.Packages.ElementAt(0);
+            DangerousGoodsDetail dangerousGoods = new DangerousGoodsDetail
+            {
+                CargoAircraftOnly = package.DangerousGoodsCargoAircraftOnly,
+                CargoAircraftOnlySpecified = true,
+                EmergencyContactNumber = package.DangerousGoodsEmergencyContactPhone,
+                Offeror = package.DangerousGoodsOfferor,
+                Signatory = BuildSignatory(package),
+            };
+
+            if (package.DangerousGoodsType != (int) FedExDangerousGoodsMaterialType.NotApplicable)
+            {
+                dangerousGoods.Options = new[] { GetApiHazardousCommodityType(package) };
+            }
+
+            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
+            {
+                ConfigureHazardousMaterials(dangerousGoods, package);
+            }
+            else
+            {
+                // Accessibility options do not apply to hazardous materials
+                if (package.DangerousGoodsAccessibilityType != (int) FedExDangerousGoodsAccessibilityType.NotApplicable)
+                {
+                    dangerousGoods.Accessibility = GetApiDangerousGoodsAccessibilityType(package);
+                    dangerousGoods.AccessibilitySpecified = true;
+                }
+            }
+
+            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
+            {
+                specialServices.BatteryDetails = ConfigureBatteryMaterials(package);
+            }
+
+            return dangerousGoods;
+        }
+
+        /// <summary>
         /// Setups the signatory.
         /// </summary>
-        private static void SetupSignatory(IFedExPackageEntity package, DangerousGoodsDetail dangerousGoods)
+        private static DangerousGoodsSignatory BuildSignatory(IFedExPackageEntity package)
         {
-            if (!string.IsNullOrEmpty(package.SignatoryContactName) ||
-                !string.IsNullOrEmpty(package.SignatoryPlace) ||
-                !string.IsNullOrEmpty(package.SignatoryTitle))
+            if (string.IsNullOrEmpty(package.SignatoryContactName) &&
+                string.IsNullOrEmpty(package.SignatoryPlace) &&
+                string.IsNullOrEmpty(package.SignatoryTitle))
             {
-                dangerousGoods.Signatory = new DangerousGoodsSignatory();
+                return null;
             }
-            if (!string.IsNullOrEmpty(package.SignatoryContactName))
+
+            return new DangerousGoodsSignatory
             {
-                dangerousGoods.Signatory.ContactName = package.SignatoryContactName;
-            }
-            if (!string.IsNullOrEmpty(package.SignatoryTitle))
-            {
-                dangerousGoods.Signatory.Title = package.SignatoryTitle;
-            }
-            if (!string.IsNullOrEmpty(package.SignatoryPlace))
-            {
-                dangerousGoods.Signatory.Place = package.SignatoryPlace;
-            }
+                ContactName = package.SignatoryContactName.NullIfEmpty(),
+                Title = package.SignatoryTitle.NullIfEmpty(),
+                Place = package.SignatoryPlace.NullIfEmpty(),
+            };
         }
 
         /// <summary>
@@ -210,33 +210,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         /// <summary>
-        /// Adds the dangerous goods option to the request.
-        /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        private static void ConfigureDangerousGoodsOption(RateRequest nativeRequest)
-        {
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested == null)
-            {
-                // Initialize the requested special services 
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = new PackageSpecialServicesRequested();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                // Initialize the special service type array if needed
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
-            }
-
-            // Resize the special service type array so we can add the dangerous goods service type
-            PackageSpecialServiceType[] services = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref services, services.Length + 1);
-
-            // Add the dangerous goods option and update the native request
-            services[services.Length - 1] = PackageSpecialServiceType.DANGEROUS_GOODS;
-            nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = services;
-        }
-
-        /// <summary>
         /// Gets the type of the API packing group for the given package.
         /// </summary>
         /// <param name="package">The package.</param>
@@ -297,29 +270,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         /// <summary>
-        /// Initializes the line item.
-        /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <param name="lineItemIndex">Index of the line item.</param>
-        private static void InitializeLineItem(RateRequest nativeRequest)
-        {
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length == 0)
-            {
-                // We need to resize the line item array to accommodate the index
-                RequestedPackageLineItem[] packageArray = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-                Array.Resize(ref packageArray, 1);
-
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = packageArray;
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0] == null)
-            {
-                // We need to create a new package line item
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
-        }
-
-        /// <summary>
         /// Initializes the request.
         /// </summary>
         /// <param name="request">The request.</param>
@@ -327,24 +277,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private void InitializeRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (request.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                request.RequestedShipment = new RequestedShipment();
-            }
-
-            // Package initialization - make sure at least one package is on the request
-            if (request.RequestedShipment.RequestedPackageLineItems == null || request.RequestedShipment.RequestedPackageLineItems.Length == 0)
-            {
-                request.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[0];
-            }
+            request.Ensure(x => x.RequestedShipment)
+                .EnsureAtLeastOne(x => x.RequestedPackageLineItems)
+                .Ensure(x => x.SpecialServicesRequested)
+                .Ensure(x => x.SpecialServiceTypes);
         }
     }
 }
