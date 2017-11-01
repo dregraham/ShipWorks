@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Repository of ShipEngine accounts
     /// </summary>
     [Component]
-    public abstract class ShipEngineAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>, IShipEngineAccountRepository
+    public abstract class ShipEngineAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>
 
     {
         protected abstract ShipmentTypeCode shipmentType { get; }

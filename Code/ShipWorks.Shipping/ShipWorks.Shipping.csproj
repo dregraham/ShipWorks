@@ -271,7 +271,6 @@
     <Compile Include="Carriers\Postal\WebTools\WebToolsPrefetchProvider.cs" />
     <Compile Include="Carriers\Ups\UpsPrefetchProvider.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineAccountRepository.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
