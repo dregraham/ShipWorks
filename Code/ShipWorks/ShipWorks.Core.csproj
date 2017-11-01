@@ -1207,6 +1207,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
       <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Asendia\IAsendiaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
