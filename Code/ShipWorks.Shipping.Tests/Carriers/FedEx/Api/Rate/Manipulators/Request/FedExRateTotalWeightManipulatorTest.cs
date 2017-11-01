@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using Xunit;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 {
@@ -14,14 +15,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
     {
         FedExRateTotalWeightManipulator testObject;
 
-        private Mock<CarrierRequest> carrierRequest;
-        private RateRequest nativeRequest;
+        private RateRequest rateRequest;
         private ShipmentEntity shipmentEntity;
 
         public FedExRateTotalWeightManipulatorTest()
         {
             // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
-            nativeRequest = new RateRequest()
+            rateRequest = new RateRequest()
             {
                 RequestedShipment = new RequestedShipment()
             };
@@ -33,34 +33,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
                 FedEx = new FedExShipmentEntity { WeightUnitType = (int) WeightUnitOfMeasure.Pounds }
             };
 
-            // Setup the carrier request's NativeRequest property to return the ProcessShipmentRequest object
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
             testObject = new FedExRateTotalWeightManipulator();
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void Shouldapply_ReturnsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            Assert.True(testObject.ShouldApply(null, FedExRateRequestOptions.None));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenRateRequestIsNull()
         {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest()
-        {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null));
         }
 
         [Fact]
@@ -68,22 +53,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            rateRequest.RequestedShipment = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipmentEntity, rateRequest);
 
             // The requested shipment property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(rateRequest.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_SetsUnitsToPounds()
         {
             shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipmentEntity, rateRequest);
 
-            Weight weight = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
+            Weight weight = rateRequest.RequestedShipment.TotalWeight;
             Assert.Equal(WeightUnits.LB, weight.Units);
         }
 
@@ -91,18 +75,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         public void Manipulate_SetsUnitsToKilograms()
         {
             shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipmentEntity, rateRequest);
 
-            Weight weight = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
+            Weight weight = rateRequest.RequestedShipment.TotalWeight;
             Assert.Equal(WeightUnits.KG, weight.Units);
         }
 
         [Fact]
         public void Manipulate_SetsWeightValue()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipmentEntity, rateRequest);
 
-            Weight weight = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
+            Weight weight = rateRequest.RequestedShipment.TotalWeight;
             Assert.Equal((decimal) shipmentEntity.TotalWeight, weight.Value);
         }
 
@@ -111,9 +95,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         {
             shipmentEntity.TotalWeight = 0f;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipmentEntity, rateRequest);
 
-            Weight weight = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
+            Weight weight = rateRequest.RequestedShipment.TotalWeight;
             Assert.Equal(0.1m, weight.Value);
         }
     }
