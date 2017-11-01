@@ -12,22 +12,23 @@ namespace ShipWorks.Shipping.ShipEngine
     /// </summary>
     [Component]
     public abstract class ShipEngineAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>
-
     {
-        protected abstract ShipmentTypeCode shipmentType { get; }
-
-
+        /// <summary>
+        /// The ShipmentType
+        /// </summary>
+        protected abstract ShipmentTypeCode ShipmentType { get; }
+        
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<ShipEngineAccountEntity> Accounts =>
-            ShipEngineAccountManager.Accounts.Where(a=>a.ShipmentTypeCode == (int) shipmentType);
+            ShipEngineAccountManager.Accounts.Where(a=>a.ShipmentTypeCode == (int)ShipmentType);
 
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<IShipEngineAccountEntity> AccountsReadOnly =>
-            ShipEngineAccountManager.AccountsReadOnly.Where(a => a.ShipmentTypeCode == (int) shipmentType);
+            ShipEngineAccountManager.AccountsReadOnly.Where(a => a.ShipmentTypeCode == (int)ShipmentType);
 
         /// <summary>
         /// Force a check for changes

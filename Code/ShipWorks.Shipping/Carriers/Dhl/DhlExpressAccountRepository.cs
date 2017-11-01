@@ -14,6 +14,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     public class DhlExpressAccountRepository : ShipEngineAccountRepository, IDhlExpressAccountRepository
     {
         /// <summary>
+        /// Get carrier specific shipment type code
+        /// </summary>
+        protected override ShipmentTypeCode ShipmentType => ShipmentTypeCode.DhlExpress;
+
+        /// <summary>
         /// Gets the account associated withe the default profile. A null value is returned
         /// if there is not an account associated with the default profile.
         /// </summary>
@@ -33,10 +38,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             return shipment.DhlExpress.ShipEngineAccountID;
         }
-
-        /// <summary>
-        /// Get carrier specific shipment type code
-        /// </summary>
-        protected override ShipmentTypeCode shipmentType => ShipmentTypeCode.DhlExpress;
     }
 }

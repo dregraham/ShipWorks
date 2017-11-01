@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Get carrier specific shipment type code
         /// </summary>
-        protected override ShipmentTypeCode shipmentType => ShipmentTypeCode.Asendia;
+        protected override ShipmentTypeCode ShipmentType => ShipmentTypeCode.Asendia;
 
         /// <summary>
         /// Gets the account associated withe the default profile. A null value is returned
