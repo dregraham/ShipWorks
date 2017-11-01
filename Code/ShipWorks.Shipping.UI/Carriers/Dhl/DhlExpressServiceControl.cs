@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -59,9 +58,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             DhlExpressAccount.DisplayMember = "Key";
             DhlExpressAccount.ValueMember = "Value";
 
-            if (ShipEngineAccountManager.Accounts.Count > 0)
+            if (DhlExpressAccountManager.Accounts.Count > 0)
             {
-                DhlExpressAccount.DataSource = ShipEngineAccountManager.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.ShipEngineAccountID)).ToList();
+                DhlExpressAccount.DataSource = DhlExpressAccountManager.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.DhlExpressAccountID)).ToList();
                 DhlExpressAccount.Enabled = true;
             }
             else
@@ -133,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    DhlExpressAccount.ApplyMultiValue(shipment.DhlExpress.ShipEngineAccountID);
+                    DhlExpressAccount.ApplyMultiValue(shipment.DhlExpress.DhlExpressAccountID);
                     service.ApplyMultiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
 
                     dutyPaid.ApplyMultiCheck(shipment.DhlExpress.DeliveredDutyPaid);
@@ -154,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 long accountID = (long) DhlExpressAccount.SelectedValue;
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    shipment.DhlExpress.ShipEngineAccountID = accountID;
+                    shipment.DhlExpress.DhlExpressAccountID = accountID;
                 }
 
                 originControl.NotifySelectedAccountChanged();
@@ -178,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 shipment.ContentWeight = shipment.DhlExpress.Packages.Sum(p => p.Weight);
-                DhlExpressAccount.ReadMultiValue(v => shipment.DhlExpress.ShipEngineAccountID = (long) v);
+                DhlExpressAccount.ReadMultiValue(v => shipment.DhlExpress.DhlExpressAccountID = (long) v);
 
                 service.ReadMultiValue(v =>
                 {
@@ -249,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             else
             {
-                ShipEngineAccountEntity account = DhlExpressAccount.SelectedIndex >= 0 ? ShipEngineAccountManager.GetAccount((long) DhlExpressAccount.SelectedValue) : null;
+                DhlExpressAccountEntity account = DhlExpressAccount.SelectedIndex >= 0 ? DhlExpressAccountManager.GetAccount((long) DhlExpressAccount.SelectedValue) : null;
                 if (account != null)
                 {
                     text += account.Description;

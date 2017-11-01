@@ -14,6 +14,7 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Asendia;
+using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         private readonly IMessageHelper messageHelper;
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
-        private readonly ShipEngineAccountEntity account;
+        private readonly AsendiaAccountEntity account;
         private const string AsendiaAccountUrl = "http://www.asendia.com/contact";
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             this.messageHelper = messageHelper;
             this.shipEngineClient = shipEngineClient;
 
-            account = new ShipEngineAccountEntity();
+            account = new AsendiaAccountEntity();
         }
 
         /// <summary>
@@ -67,9 +68,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         /// <summary>
         /// Get the default description to use for the given account
         /// </summary>
-        public static string GetDefaultDescription(ShipEngineAccountEntity account)
+        public static string GetDefaultDescription(AsendiaAccountEntity account)
         {
-            return new ShipEngineAccountDescription().GetDefaultAccountDescription(account);
+            return new AsendiaAccountDescription().GetDefaultAccountDescription(account);
         }
 
         /// <summary>

@@ -10,19 +10,19 @@ using ShipWorks.Shipping;
 namespace ShipWorks.Data.Model.EntityClasses
 {
     /// <summary>
-    /// Extra implementation of the DhlExpressAccountEntity
+    /// Extra implementation of the AsendiaAccountEntity
     /// </summary>
-    public partial class DhlExpressAccountEntity : ICarrierAccount
+    public partial class AsendiaAccountEntity : ICarrierAccount
     {
         /// <summary>
         /// Gets the account id in a generic way
         /// </summary>
-        public long AccountId => this.DhlExpressAccountID;
+        public long AccountId => this.AsendiaAccountID;
 
         /// <summary>
         /// Get the shipment type to which this account applies
         /// </summary>
-        public ShipmentTypeCode ShipmentType => ShipmentTypeCode.DhlExpress;
+        public ShipmentTypeCode ShipmentType => ShipmentTypeCode.Asendia;
 
         /// <summary>
         /// Get the address of the account
@@ -39,7 +39,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            shipment.DhlExpress.DhlExpressAccountID = AccountId;
+            //shipment.Asendia.AsendiaAccountID = AccountId;
+            throw new NotImplementedException();
         }
     }
 }

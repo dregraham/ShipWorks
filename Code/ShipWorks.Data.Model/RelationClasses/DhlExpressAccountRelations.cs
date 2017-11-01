@@ -25,7 +25,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 		}
 
-		/// <summary>Gets all relations of the ShipEngineAccountEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the DhlExpressAccountEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{

@@ -17,15 +17,15 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.RelationClasses
 {
-	/// <summary>Implements the relations factory for the entity: ShipEngineAccount. </summary>
-	public partial class ShipEngineAccountRelations
+	/// <summary>Implements the relations factory for the entity: AsendiaAccount. </summary>
+	public partial class AsendiaAccountRelations
 	{
 		/// <summary>CTor</summary>
-		public ShipEngineAccountRelations()
+		public AsendiaAccountRelations()
 		{
 		}
 
-		/// <summary>Gets all relations of the ShipEngineAccountEntity as a list of IEntityRelation objects.</summary>
+		/// <summary>Gets all relations of the AsendiaAccountEntity as a list of IEntityRelation objects.</summary>
 		/// <returns>a list of IEntityRelation objects</returns>
 		public virtual List<IEntityRelation> GetAllRelations()
 		{
@@ -49,11 +49,11 @@ namespace ShipWorks.Data.Model.RelationClasses
 	}
 	
 	/// <summary>Static class which is used for providing relationship instances which are re-used internally for syncing</summary>
-	internal static class StaticShipEngineAccountRelations
+	internal static class StaticAsendiaAccountRelations
 	{
 
 		/// <summary>CTor</summary>
-		static StaticShipEngineAccountRelations()
+		static StaticAsendiaAccountRelations()
 		{
 		}
 	}

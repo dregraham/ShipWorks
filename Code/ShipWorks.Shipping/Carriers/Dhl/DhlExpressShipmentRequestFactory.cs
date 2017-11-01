@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
 
-            ShipEngineAccountEntity account = accountRepository.GetAccount(shipment);
+            DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
             if (account == null)
             {
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
 
-            ShipEngineAccountEntity account = accountRepository.GetAccount(shipment);
+            DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
             if (account == null)
             {

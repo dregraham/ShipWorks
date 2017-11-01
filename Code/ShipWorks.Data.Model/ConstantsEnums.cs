@@ -683,6 +683,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaAccount.</summary>
+	public enum AsendiaAccountFieldIndex
+	{
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Audit.</summary>
 	public enum AuditFieldIndex
 	{
@@ -1897,6 +1935,44 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressAccount.</summary>
+	public enum DhlExpressAccountFieldIndex
+	{
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressPackage.</summary>
 	public enum DhlExpressPackageFieldIndex
 	{
@@ -1932,8 +2008,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShippingProfileID. </summary>
 		ShippingProfileID,
-		///<summary>ShipEngineAccountID. </summary>
-		ShipEngineAccountID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
 		///<summary>Service. </summary>
 		Service,
 		///<summary>DeliveryDutyPaid. </summary>
@@ -1978,8 +2054,8 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
-		///<summary>ShipEngineAccountID. </summary>
-		ShipEngineAccountID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
 		///<summary>Service. </summary>
 		Service,
 		///<summary>DeliveredDutyPaid. </summary>
@@ -8535,46 +8611,6 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ShipEngineAccount.</summary>
-	public enum ShipEngineAccountFieldIndex
-	{
-		///<summary>ShipEngineAccountID. </summary>
-		ShipEngineAccountID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>ShipmentTypeCode. </summary>
-		ShipmentTypeCode,
-		///<summary>AccountNumber. </summary>
-		AccountNumber,
-		///<summary>ShipEngineCarrierId. </summary>
-		ShipEngineCarrierId,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>FirstName. </summary>
-		FirstName,
-		///<summary>MiddleName. </summary>
-		MiddleName,
-		///<summary>LastName. </summary>
-		LastName,
-		///<summary>Company. </summary>
-		Company,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>Email. </summary>
-		Email,
-		///<summary>Phone. </summary>
-		Phone,
-		/// <summary></summary>
-		AmountOfFields
-	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Shipment.</summary>
 	public enum ShipmentFieldIndex
 	{
@@ -11799,6 +11835,8 @@ namespace ShipWorks.Data.Model
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>
 		AmeriCommerceStoreEntity,
+		///<summary>AsendiaAccount</summary>
+		AsendiaAccountEntity,
 		///<summary>Audit</summary>
 		AuditEntity,
 		///<summary>AuditChange</summary>
@@ -11839,6 +11877,8 @@ namespace ShipWorks.Data.Model
 		ConfigurationEntity,
 		///<summary>Customer</summary>
 		CustomerEntity,
+		///<summary>DhlExpressAccount</summary>
+		DhlExpressAccountEntity,
 		///<summary>DhlExpressPackage</summary>
 		DhlExpressPackageEntity,
 		///<summary>DhlExpressProfile</summary>
@@ -12071,8 +12111,6 @@ namespace ShipWorks.Data.Model
 		ServerMessageSignoffEntity,
 		///<summary>ServiceStatus</summary>
 		ServiceStatusEntity,
-		///<summary>ShipEngineAccount</summary>
-		ShipEngineAccountEntity,
 		///<summary>Shipment</summary>
 		ShipmentEntity,
 		///<summary>ShipmentCustomsItem</summary>

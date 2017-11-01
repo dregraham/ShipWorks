@@ -25,15 +25,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'DhlExpressShipment'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'DhlExpressAccount'.<br/><br/></summary>
 	[Serializable]
-	public partial class DhlExpressShipmentEntity : CommonEntityBase
+	public partial class DhlExpressAccountEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<DhlExpressPackageEntity> _packages;
-		private ShipmentEntity _shipment;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -46,21 +44,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-			/// <summary>Member name Packages</summary>
-			public static readonly string Packages = "Packages";
-			/// <summary>Member name Shipment</summary>
-			public static readonly string Shipment = "Shipment";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static DhlExpressShipmentEntity()
+		static DhlExpressAccountEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public DhlExpressShipmentEntity():base("DhlExpressShipmentEntity")
+		public DhlExpressAccountEntity():base("DhlExpressAccountEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -68,72 +62,51 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public DhlExpressShipmentEntity(IEntityFields2 fields):base("DhlExpressShipmentEntity")
+		public DhlExpressAccountEntity(IEntityFields2 fields):base("DhlExpressAccountEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this DhlExpressShipmentEntity</param>
-		public DhlExpressShipmentEntity(IValidator validator):base("DhlExpressShipmentEntity")
+		/// <param name="validator">The custom validator object for this DhlExpressAccountEntity</param>
+		public DhlExpressAccountEntity(IValidator validator):base("DhlExpressAccountEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="shipmentID">PK value for DhlExpressShipment which data should be fetched into this DhlExpressShipment object</param>
+		/// <param name="dhlExpressAccountID">PK value for DhlExpressAccount which data should be fetched into this DhlExpressAccount object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlExpressShipmentEntity(System.Int64 shipmentID):base("DhlExpressShipmentEntity")
+		public DhlExpressAccountEntity(System.Int64 dhlExpressAccountID):base("DhlExpressAccountEntity")
 		{
 			InitClassEmpty(null, null);
-			this.ShipmentID = shipmentID;
+			this.DhlExpressAccountID = dhlExpressAccountID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="shipmentID">PK value for DhlExpressShipment which data should be fetched into this DhlExpressShipment object</param>
-		/// <param name="validator">The custom validator object for this DhlExpressShipmentEntity</param>
+		/// <param name="dhlExpressAccountID">PK value for DhlExpressAccount which data should be fetched into this DhlExpressAccount object</param>
+		/// <param name="validator">The custom validator object for this DhlExpressAccountEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public DhlExpressShipmentEntity(System.Int64 shipmentID, IValidator validator):base("DhlExpressShipmentEntity")
+		public DhlExpressAccountEntity(System.Int64 dhlExpressAccountID, IValidator validator):base("DhlExpressAccountEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.ShipmentID = shipmentID;
+			this.DhlExpressAccountID = dhlExpressAccountID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected DhlExpressShipmentEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected DhlExpressAccountEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_packages = (EntityCollection<DhlExpressPackageEntity>)info.GetValue("_packages", typeof(EntityCollection<DhlExpressPackageEntity>));
-				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
-				if(_shipment!=null)
-				{
-					_shipment.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
-		
-		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
-		/// <param name="fieldIndex">The fieldindex.</param>
-		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
-		{
-			switch((DhlExpressShipmentFieldIndex)fieldIndex)
-			{
-				case DhlExpressShipmentFieldIndex.ShipmentID:
-					DesetupSyncShipment(true, false);
-					break;
-				default:
-					base.PerformDesyncSetupFKFieldChange(fieldIndex);
-					break;
-			}
-		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -143,12 +116,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "Packages":
-					this.Packages.Add((DhlExpressPackageEntity)entity);
-					break;
-				case "Shipment":
-					this.Shipment = (ShipmentEntity)entity;
-					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -171,12 +138,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "Packages":
-					toReturn.Add(Relations.DhlExpressPackageEntityUsingShipmentID);
-					break;
-				case "Shipment":
-					toReturn.Add(Relations.ShipmentEntityUsingShipmentID);
-					break;
 				default:
 					break;				
 			}
@@ -205,12 +166,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Packages":
-					this.Packages.Add((DhlExpressPackageEntity)relatedEntity);
-					break;
-				case "Shipment":
-					SetupSyncShipment(relatedEntity);
-					break;
 				default:
 					break;
 			}
@@ -224,12 +179,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "Packages":
-					this.PerformRelatedEntityRemoval(this.Packages, relatedEntity, signalRelatedEntityManyToOne);
-					break;
-				case "Shipment":
-					DesetupSyncShipment(false, true);
-					break;
 				default:
 					break;
 			}
@@ -240,8 +189,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
-
 			return toReturn;
 		}
 		
@@ -251,11 +198,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_shipment!=null)
-			{
-				toReturn.Add(_shipment);
-			}
-
 			return toReturn;
 		}
 		
@@ -264,7 +206,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.Packages);
 			return toReturn;
 		}
 
@@ -276,8 +217,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_packages", ((_packages!=null) && (_packages.Count>0) && !this.MarkedForDeletion)?_packages:null);
-				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -290,32 +229,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new DhlExpressShipmentRelations().GetAllRelations();
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'DhlExpressPackage' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoPackages()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(DhlExpressPackageFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
-			return bucket;
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Shipment' to this entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoShipment()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
-			return bucket;
+			return new DhlExpressAccountRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressShipmentEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressAccountEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -323,7 +244,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._packages);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -331,7 +251,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._packages = (EntityCollection<DhlExpressPackageEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -340,7 +259,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._packages != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -350,7 +268,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<DhlExpressPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressPackageEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
@@ -358,8 +275,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-			toReturn.Add("Packages", _packages);
-			toReturn.Add("Shipment", _shipment);
 			return toReturn;
 		}
 
@@ -382,63 +297,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DhlExpressAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Service", fieldHashtable);
+			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DeliveredDutyPaid", fieldHashtable);
+			_fieldsCustomProperties.Add("AccountNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("SaturdayDelivery", fieldHashtable);
+			_fieldsCustomProperties.Add("Description", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			_fieldsCustomProperties.Add("FirstName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Contents", fieldHashtable);
+			_fieldsCustomProperties.Add("MiddleName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
+			_fieldsCustomProperties.Add("LastName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
+			_fieldsCustomProperties.Add("Company", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Street1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("City", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("StateProvCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("PostalCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CountryCode", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Email", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Phone", fieldHashtable);
 		}
 		#endregion
 
-		/// <summary> Removes the sync logic for member _shipment</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
-		{
-			this.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "DhlExpress", false, new int[] { (int)DhlExpressShipmentFieldIndex.ShipmentID } );
-			_shipment = null;
-		}
-		
-		/// <summary> setups the sync logic for member _shipment</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncShipment(IEntityCore relatedEntity)
-		{
-			if(_shipment!=relatedEntity)
-			{
-				DesetupSyncShipment(true, true);
-				_shipment = (ShipmentEntity)relatedEntity;
-				this.PerformSetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticDhlExpressShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this DhlExpressShipmentEntity</param>
+		/// <param name="validator">The validator object for this DhlExpressAccountEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -456,9 +350,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static DhlExpressShipmentRelations Relations
+		public  static DhlExpressAccountRelations Relations
 		{
-			get	{ return new DhlExpressShipmentRelations(); }
+			get	{ return new DhlExpressAccountRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -466,20 +360,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'DhlExpressPackage' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathPackages
-		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<DhlExpressPackageEntity>(EntityFactoryCache2.GetEntityFactory(typeof(DhlExpressPackageEntityFactory))), (IEntityRelation)GetRelationsForField("Packages")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity, (int)ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity, 0, null, null, null, null, "Packages", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathShipment
-		{
-			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("Shipment")[0], (int)ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, 0, null, null, null, null, "Shipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 
@@ -506,147 +386,164 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShipmentID property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipmentID"<br/>
+		/// <summary> The DhlExpressAccountID property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."DhlExpressAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ShipmentID
-		{
-			get { return (System.Int64)GetValue((int)DhlExpressShipmentFieldIndex.ShipmentID, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ShipmentID, value); }
-		}
-
-		/// <summary> The DhlExpressAccountID property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."DhlExpressAccountID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
 		public virtual System.Int64 DhlExpressAccountID
 		{
-			get { return (System.Int64)GetValue((int)DhlExpressShipmentFieldIndex.DhlExpressAccountID, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.DhlExpressAccountID, value); }
+			get { return (System.Int64)GetValue((int)DhlExpressAccountFieldIndex.DhlExpressAccountID, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.DhlExpressAccountID, value); }
 		}
 
-		/// <summary> The Service property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."Service"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// <summary> The RowVersion property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."RowVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Service
+		public virtual System.Byte[] RowVersion
 		{
-			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.Service, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.Service, value); }
+			get { return (System.Byte[])GetValue((int)DhlExpressAccountFieldIndex.RowVersion, true); }
+
 		}
 
-		/// <summary> The DeliveredDutyPaid property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."DeliveredDutyPaid"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <summary> The AccountNumber property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."AccountNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean DeliveredDutyPaid
+		public virtual System.Int64 AccountNumber
 		{
-			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.DeliveredDutyPaid, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.DeliveredDutyPaid, value); }
+			get { return (System.Int64)GetValue((int)DhlExpressAccountFieldIndex.AccountNumber, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.AccountNumber, value); }
 		}
 
-		/// <summary> The NonMachinable property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."NonMachinable"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean NonMachinable
-		{
-			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.NonMachinable, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.NonMachinable, value); }
-		}
-
-		/// <summary> The SaturdayDelivery property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."SaturdayDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean SaturdayDelivery
-		{
-			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.SaturdayDelivery, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.SaturdayDelivery, value); }
-		}
-
-		/// <summary> The RequestedLabelFormat property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."RequestedLabelFormat"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 RequestedLabelFormat
-		{
-			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, value); }
-		}
-
-		/// <summary> The Contents property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."Contents"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 Contents
-		{
-			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.Contents, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.Contents, value); }
-		}
-
-		/// <summary> The NonDelivery property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."NonDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 NonDelivery
-		{
-			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.NonDelivery, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.NonDelivery, value); }
-		}
-
-		/// <summary> The ShipEngineLabelID property of the Entity DhlExpressShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
+		/// <summary> The ShipEngineCarrierId property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."ShipEngineCarrierId"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShipEngineLabelID
+		public virtual System.String ShipEngineCarrierId
 		{
-			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, true); }
-			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, value); }
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(DhlExpressPackageEntity))]
-		public virtual EntityCollection<DhlExpressPackageEntity> Packages
+		/// <summary> The Description property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Description"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Description
 		{
-			get { return GetOrCreateEntityCollection<DhlExpressPackageEntity, DhlExpressPackageEntityFactory>("DhlExpressShipment", true, false, ref _packages);	}
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Description, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.Description, value); }
 		}
 
-		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
-		/// </summary>
-		[Browsable(true)]
-		public virtual ShipmentEntity Shipment
+		/// <summary> The FirstName property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."FirstName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String FirstName
 		{
-			get { return _shipment; }
-			set
-			{
-				if(this.IsDeserializing)
-				{
-					SetupSyncShipment(value);
-					CallSetRelatedEntityDuringDeserialization(value, "DhlExpress");
-				}
-				else
-				{
-					if(value==null)
-					{
-						bool raisePropertyChanged = (_shipment !=null);
-						DesetupSyncShipment(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("Shipment");
-						}
-					}
-					else
-					{
-						if(_shipment!=value)
-						{
-							((IEntity2)value).SetRelatedEntity(this, "DhlExpress");
-							SetupSyncShipment(value);
-						}
-					}
-				}
-			}
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.FirstName, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.FirstName, value); }
+		}
+
+		/// <summary> The MiddleName property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."MiddleName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String MiddleName
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.MiddleName, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.MiddleName, value); }
+		}
+
+		/// <summary> The LastName property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."LastName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String LastName
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.LastName, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.LastName, value); }
+		}
+
+		/// <summary> The Company property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Company"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Company
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Company, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.Company, value); }
+		}
+
+		/// <summary> The Street1 property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Street1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 43<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Street1
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Street1, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.Street1, value); }
+		}
+
+		/// <summary> The City property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."City"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String City
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.City, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.City, value); }
+		}
+
+		/// <summary> The StateProvCode property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."StateProvCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String StateProvCode
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.StateProvCode, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.StateProvCode, value); }
+		}
+
+		/// <summary> The PostalCode property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."PostalCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String PostalCode
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.PostalCode, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.PostalCode, value); }
+		}
+
+		/// <summary> The CountryCode property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."CountryCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String CountryCode
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.CountryCode, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.CountryCode, value); }
+		}
+
+		/// <summary> The Email property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Email"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Email
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Email, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.Email, value); }
+		}
+
+		/// <summary> The Phone property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."Phone"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Phone
+		{
+			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Phone, true); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.Phone, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -665,7 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity; }
 		}
 
 		#endregion

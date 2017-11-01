@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             ShippingProfileID = source.ShippingProfileID;
-            ShipEngineAccountID = source.ShipEngineAccountID;
+            DhlExpressAccountID = source.DhlExpressAccountID;
             Service = source.Service;
             DeliveryDutyPaid = source.DeliveryDutyPaid;
             NonMachinable = source.NonMachinable;
@@ -61,12 +61,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
         public System.Int64 ShippingProfileID { get; }
-        /// <summary> The ShipEngineAccountID property of the Entity DhlExpressProfile<br/><br/>
+        /// <summary> The DhlExpressAccountID property of the Entity DhlExpressProfile<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "DhlExpressProfile"."ShipEngineAccountID"<br/>
+        /// <remarks>Mapped on table field: "DhlExpressProfile"."DhlExpressAccountID"<br/>
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public Nullable<System.Int64> ShipEngineAccountID { get; }
+        public Nullable<System.Int64> DhlExpressAccountID { get; }
         /// <summary> The Service property of the Entity DhlExpressProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressProfile"."Service"<br/>

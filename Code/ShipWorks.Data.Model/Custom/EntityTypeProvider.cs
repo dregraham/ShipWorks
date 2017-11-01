@@ -35,6 +35,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				case "AmazonStoreEntity": return EntityType.AmazonStoreEntity;
 				case "AmeriCommerceStoreEntity": return EntityType.AmeriCommerceStoreEntity;
+				case "AsendiaAccountEntity": return EntityType.AsendiaAccountEntity;
 				case "AuditEntity": return EntityType.AuditEntity;
 				case "AuditChangeEntity": return EntityType.AuditChangeEntity;
 				case "AuditChangeDetailEntity": return EntityType.AuditChangeDetailEntity;
@@ -55,6 +56,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ComputerEntity": return EntityType.ComputerEntity;
 				case "ConfigurationEntity": return EntityType.ConfigurationEntity;
 				case "CustomerEntity": return EntityType.CustomerEntity;
+				case "DhlExpressAccountEntity": return EntityType.DhlExpressAccountEntity;
 				case "DhlExpressPackageEntity": return EntityType.DhlExpressPackageEntity;
 				case "DhlExpressProfileEntity": return EntityType.DhlExpressProfileEntity;
 				case "DhlExpressProfilePackageEntity": return EntityType.DhlExpressProfilePackageEntity;
@@ -171,7 +173,6 @@ namespace ShipWorks.Data.Model.Custom
 				case "ServerMessageEntity": return EntityType.ServerMessageEntity;
 				case "ServerMessageSignoffEntity": return EntityType.ServerMessageSignoffEntity;
 				case "ServiceStatusEntity": return EntityType.ServiceStatusEntity;
-				case "ShipEngineAccountEntity": return EntityType.ShipEngineAccountEntity;
 				case "ShipmentEntity": return EntityType.ShipmentEntity;
 				case "ShipmentCustomsItemEntity": return EntityType.ShipmentCustomsItemEntity;
 				case "ShipmentReturnItemEntity": return EntityType.ShipmentReturnItemEntity;

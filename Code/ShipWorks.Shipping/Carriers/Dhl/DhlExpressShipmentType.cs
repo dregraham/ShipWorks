@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(ShipmentType), ShipmentTypeCode.DhlExpress, SingleInstance = true)]
     public class DhlExpressShipmentType : ShipmentType
     {
-        private readonly ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineTrackingResultFactory trackingResultFactory;
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         /// <param name="accountRepository"></param>
-        public DhlExpressShipmentType(ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity> accountRepository, IShipEngineWebClient shipEngineWebClient, IShipEngineTrackingResultFactory trackingResultFactory)
+        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository, IShipEngineWebClient shipEngineWebClient, IShipEngineTrackingResultFactory trackingResultFactory)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
             dhlExpressShipmentEntity.Contents = (int)ShipEngineContentsType.Merchandise;
             dhlExpressShipmentEntity.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
-            dhlExpressShipmentEntity.ShipEngineAccountID = 0;
+            dhlExpressShipmentEntity.DhlExpressAccountID = 0;
             dhlExpressShipmentEntity.ShipEngineLabelID = string.Empty;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             ShipmentCommonDetail commonDetail = new ShipmentCommonDetail();
 
             DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
-            ShipEngineAccountEntity account = accountRepository.GetAccount(dhlExpressShipmentEntity.ShipEngineAccountID);
+            DhlExpressAccountEntity account = accountRepository.GetAccount(dhlExpressShipmentEntity.DhlExpressAccountID);
             
             commonDetail.OriginAccount = (account == null) ? "" : account.Description;
             commonDetail.ServiceType = dhlExpressShipmentEntity.Service;
@@ -422,17 +422,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             base.ConfigurePrimaryProfile(profile);
 
-            long shipperID = accountRepository.AccountsReadOnly.Select(x => x.ShipEngineAccountID).FirstOrDefault();
+            long shipperID = accountRepository.AccountsReadOnly.Select(x => x.DhlExpressAccountID).FirstOrDefault();
 
-            profile.DhlExpress.ShipEngineAccountID = shipperID;
-            profile.OriginID = (int)ShipmentOriginSource.Account;
+            profile.DhlExpress.DhlExpressAccountID = shipperID;
+            profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.DhlExpress.Service = (int)DhlExpressServiceType.ExpressWorldWide;
+            profile.DhlExpress.Service = (int) DhlExpressServiceType.ExpressWorldWide;
             profile.DhlExpress.DeliveryDutyPaid = false;
             profile.DhlExpress.NonMachinable = false;
             profile.DhlExpress.SaturdayDelivery = false;
-            profile.DhlExpress.Contents = (int)ShipEngineContentsType.Merchandise;
-            profile.DhlExpress.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
+            profile.DhlExpress.Contents = (int) ShipEngineContentsType.Merchandise;
+            profile.DhlExpress.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
         }
 
         /// <summary>
@@ -535,11 +535,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             IDhlExpressProfileEntity source = profile.DhlExpress;
             
-            long? accountID = (source.ShipEngineAccountID == 0 && accountRepository.Accounts.Any())
-                                  ? (long?)accountRepository.Accounts.First().ShipEngineAccountID
-                                  : source.ShipEngineAccountID;
+            long? accountID = (source.DhlExpressAccountID == 0 && accountRepository.Accounts.Any())
+                                  ? accountRepository.Accounts.First().DhlExpressAccountID
+                                  : source.DhlExpressAccountID;
 
-            ShippingProfileUtility.ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.ShipEngineAccountID);
+            ShippingProfileUtility.ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.DhlExpressAccountID);
             ShippingProfileUtility.ApplyProfileValue(source.Service, dhlShipment, DhlExpressShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(source.DeliveryDutyPaid, dhlShipment, DhlExpressShipmentFields.DeliveredDutyPaid);
             ShippingProfileUtility.ApplyProfileValue(source.NonMachinable, dhlShipment, DhlExpressShipmentFields.NonMachinable);

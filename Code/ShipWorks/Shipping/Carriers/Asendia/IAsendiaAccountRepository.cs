@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     /// <summary>
     /// Repository for Asendia accounts
     /// </summary>
-    public interface IAsendiaAccountRepository : ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity>
+    public interface IAsendiaAccountRepository : ICarrierAccountRepository<AsendiaAccountEntity, IAsendiaAccountEntity>
     {
     }
 }

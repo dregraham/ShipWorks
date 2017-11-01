@@ -1,42 +1,83 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
-    /// <summary>
-    /// DhlExpress Account Repository
-    /// </summary>
     [Component]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.DhlExpress)]
-    [KeyedComponent(typeof(ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity>), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressAccountRepository : ShipEngineAccountRepository, IDhlExpressAccountRepository
+    [KeyedComponent(typeof(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>), ShipmentTypeCode.DhlExpress)]
+    public class DhlExpressAccountRepository : CarrierAccountRepositoryBase<DhlExpressAccountEntity, IDhlExpressAccountEntity>, IDhlExpressAccountRepository
     {
         /// <summary>
-        /// Get carrier specific shipment type code
+        /// Gets the accounts for the carrier.
         /// </summary>
-        protected override ShipmentTypeCode ShipmentType => ShipmentTypeCode.DhlExpress;
+        public override IEnumerable<DhlExpressAccountEntity> Accounts =>
+            DhlExpressAccountManager.Accounts;
 
         /// <summary>
-        /// Gets the account associated withe the default profile. A null value is returned
-        /// if there is not an account associated with the default profile.
+        /// Gets the default profile account.
         /// </summary>
-        public override ShipEngineAccountEntity DefaultProfileAccount
-        {
-            get
-            {
-                long? accountID = GetPrimaryProfile(ShipmentTypeCode.DhlExpress).DhlExpress.ShipEngineAccountID;
-                return GetProfileAccount(ShipmentTypeCode.DhlExpress, accountID);
-            }
-        }
+        public override DhlExpressAccountEntity DefaultProfileAccount => null;
 
         /// <summary>
-        /// Gets the account id from the shipment
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        public override IEnumerable<IDhlExpressAccountEntity> AccountsReadOnly =>
+            DhlExpressAccountManager.AccountsReadOnly;
+
+        /// <summary>
+        /// Force a check for changes
+        /// </summary>
+        public override void CheckForChangesNeeded() =>
+            DhlExpressAccountManager.CheckForChangesNeeded();
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        public override DhlExpressAccountEntity GetAccount(long accountID) =>
+            DhlExpressAccountManager.GetAccount(accountID);
+
+        /// <summary>
+        /// Returns a carrier account for the provided accountID.
+        /// </summary>
+        public override IDhlExpressAccountEntity GetAccountReadOnly(long accountID) =>
+            DhlExpressAccountManager.GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        public override void Save(DhlExpressAccountEntity account) => DhlExpressAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override void DeleteAccount(DhlExpressAccountEntity account) => DhlExpressAccountManager.DeleteAccount(account);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as DhlExpressAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => DeleteAccount(account as DhlExpressAccountEntity);
+
+        /// <summary>
+        /// Get the account id from a given shipment
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment)
         {
-            return shipment.DhlExpress.ShipEngineAccountID;
+            return shipment.DhlExpress.DhlExpressAccountID;
         }
     }
 }

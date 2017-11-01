@@ -14,17 +14,17 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
-    /// Manage ShipEngine Accounts
+    /// Manage Dhl Express Accounts
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     [Component]
-    public class ShipEngineAccountManager : IInitializeForCurrentSession
+    public class AsendiaAccountManager : IInitializeForCurrentSession
     {
-        static TableSynchronizer<ShipEngineAccountEntity> synchronizer;
-        static IEnumerable<IShipEngineAccountEntity> readOnlyAccounts;
+        static TableSynchronizer<AsendiaAccountEntity> synchronizer;
+        static IEnumerable<IAsendiaAccountEntity> readOnlyAccounts;
         static bool needCheckForChanges;
 
         /// <summary>
@@ -36,18 +36,18 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Initialize ShipEngineAccountManager
+        /// Initialize AsendiaAccountManager
         /// </summary>
         public static void Initialize()
         {
-            synchronizer = new TableSynchronizer<ShipEngineAccountEntity>();
+            synchronizer = new TableSynchronizer<AsendiaAccountEntity>();
             InternalCheckForChanges();
         }
 
         /// <summary>
-        /// Return the active list of ShipEngine accounts
+        /// Return the active list of Asendia accounts
         /// </summary>
-        public static List<ShipEngineAccountEntity> Accounts
+        public static List<AsendiaAccountEntity> Accounts
         {
             get
             {
@@ -64,9 +64,9 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Return the active list of ShipEngine accounts
+        /// Return the active list of Asendia accounts
         /// </summary>
-        public static IEnumerable<IShipEngineAccountEntity> AccountsReadOnly
+        public static IEnumerable<IAsendiaAccountEntity> AccountsReadOnly
         {
             get
             {
@@ -83,9 +83,9 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Save the given ShipEngine account
+        /// Save the given Asendia account
         /// </summary>
-        public static void SaveAccount(ShipEngineAccountEntity account)
+        public static void SaveAccount(AsendiaAccountEntity account)
         {
             bool wasDirty = account.IsDirty;
 
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int) ShipEngineAccountFieldIndex.ShipEngineAccountID, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) AsendiaAccountFieldIndex.AsendiaAccountID, ListSortDirection.Ascending);
                 }
 
                 readOnlyAccounts = synchronizer.EntityCollection.Select(x => x.AsReadOnly()).ToReadOnly();
@@ -134,23 +134,23 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
-        public static ShipEngineAccountEntity GetAccount(long accountID)
+        public static AsendiaAccountEntity GetAccount(long accountID)
         {
-            return Accounts.FirstOrDefault(a => a.ShipEngineAccountID == accountID);
+            return Accounts.FirstOrDefault(a => a.AsendiaAccountID == accountID);
         }
 
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
-        public static IShipEngineAccountEntity GetAccountReadOnly(long accountID)
+        public static IAsendiaAccountEntity GetAccountReadOnly(long accountID)
         {
-            return AccountsReadOnly.FirstOrDefault(a => a.ShipEngineAccountID == accountID);
+            return AccountsReadOnly.FirstOrDefault(a => a.AsendiaAccountID == accountID);
         }
 
         /// <summary>
-        /// Delete the given ShipEngine account
+        /// Delete the given Asendia account
         /// </summary>
-        public static void DeleteAccount(ShipEngineAccountEntity account)
+        public static void DeleteAccount(AsendiaAccountEntity account)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             CheckForChangesNeeded();
 
-            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.Asendia));
         }
     }
 }

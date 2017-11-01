@@ -196,6 +196,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmeriCommerceStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AsendiaAccount entity</summary>
+		public EntityQuery<AsendiaAccountEntity> AsendiaAccount
+		{
+			get { return Create<AsendiaAccountEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the Audit entity</summary>
 		public EntityQuery<AuditEntity> Audit
 		{
@@ -314,6 +320,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<CustomerEntity> Customer
 		{
 			get { return Create<CustomerEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressAccount entity</summary>
+		public EntityQuery<DhlExpressAccountEntity> DhlExpressAccount
+		{
+			get { return Create<DhlExpressAccountEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the DhlExpressPackage entity</summary>
@@ -1010,12 +1022,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<ServiceStatusEntity> ServiceStatus
 		{
 			get { return Create<ServiceStatusEntity>(); }
-		}
-
-		/// <summary>Creates and returns a new EntityQuery for the ShipEngineAccount entity</summary>
-		public EntityQuery<ShipEngineAccountEntity> ShipEngineAccount
-		{
-			get { return Create<ShipEngineAccountEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the Shipment entity</summary>

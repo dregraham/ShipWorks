@@ -378,7 +378,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.ReturnItemQuantity: return ShipmentReturnItemFields.Quantity;
                 case EntityFieldLengthSource.ReturnItemNote: return ShipmentReturnItemFields.Notes;
 
-                case EntityFieldLengthSource.ShipEngineDescription: return ShipEngineAccountFields.Description;
+                case EntityFieldLengthSource.DhlExpressDescription: return DhlExpressAccountFields.Description;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);
