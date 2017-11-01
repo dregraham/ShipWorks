@@ -8,11 +8,19 @@ using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
+    /// <summary>
+    /// Account Repository for Asendia
+    /// </summary>
     [Component]
     [KeyedComponent(typeof(ICarrierAccountRetriever), ShipmentTypeCode.Asendia)]
     [KeyedComponent(typeof(ICarrierAccountRepository<ShipEngineAccountEntity, IShipEngineAccountEntity>), ShipmentTypeCode.Asendia)]
     public class AsendiaAccountRepository : ShipEngineAccountRepository, IAsendiaAccountRepository
     {
+        /// <summary>
+        /// Get carrier specific shipment type code
+        /// </summary>
+        protected override ShipmentTypeCode shipmentType => ShipmentTypeCode.Asendia;
+
         /// <summary>
         /// Gets the account associated withe the default profile. A null value is returned
         /// if there is not an account associated with the default profile.
@@ -33,11 +41,5 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Get carrier specific shipment type code
-        /// </summary>
-        protected override ShipmentTypeCode shipmentType => ShipmentTypeCode.DhlExpress;
-
     }
 }
