@@ -173,7 +173,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 AccountDescription = AccountDescription(accountLookup[rate])
             };
 
-            rate.Description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
+            string description = rate.Description.Contains(carrierDescription) ? rate.Description : carrierDescription + " " + rate.Description;
+            description = description.Trim();
+            rate.Description = description;
+
             rate.CarrierDescription = carrierDescription;
 
             // Child rates (like USPS Priority with signature or delivery confirmation) won't have a provider logo set
