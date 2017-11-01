@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+﻿using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -11,185 +10,71 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// <summary>
     /// Add Dry Ice information to shipment
     /// </summary>
-    public class FedExRateDryIceManipulator : FedExShippingRequestManipulatorBase
+    public class FedExRateDryIceManipulator : IFedExRateRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRateDryIceManipulator" /> class.
-        /// </summary>
-        public FedExRateDryIceManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        // This isn't used and is always zero. Ideally, we should remove this and actually handle
+        // the situation where the second package has dry ice when the first doesn't.
+        const int currentPackage = 0;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRateDryIceManipulator" /> class.
+        /// Should the manipulator be applied
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExRateDryIceManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
+            shipment.FedEx.Packages.ElementAt(currentPackage).DryIceWeight > 0;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
-            Validate(request);
+            Validate(shipment.FedEx);
 
-            int currentPackageIndex = request.SequenceNumber;
+            InitializeShipmentRequest(request);
 
-            RateRequest nativeRequest = InitializeShipmentRequest(request);
+            ConfigurePackage(shipment.FedEx,
+                request.RequestedShipment.RequestedPackageLineItems[currentPackage].SpecialServicesRequested);
 
-
-            if (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
-            {
-                // Dry ice must be configured at the package level for all services (see comment below)
-                ConfigurePackage(request, nativeRequest, currentPackageIndex);
-            }
-
-            // Lines below are commented out due to error responses coming back from FedEx
-            // when trying to configure dry ice at the shipment level and was only working 
-            // when configured at the package level. These were successful at one point 
-            // when passing the certification tests???
-
-            //if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
-            //{
-            //    // Dry ice must be configured at the package level for any service other than ground 
-            //    ConfigurePackage(request, nativeRequest, currentPackageIndex);
-            //}
-
-            //if (request.ShipmentEntity.FedEx.Service == (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
-            //{
-            //    // Dry ice must be configured at the shipment level for ground service 
-            //    ConfigureShipment(request, nativeRequest);
-            //}
+            return request;
         }
-
 
         /// <summary>
         /// Validates the specified request.
         /// </summary>
-        private static void Validate(CarrierRequest request)
+        private static void Validate(IFedExShipmentEntity shipment)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            if (request.ShipmentEntity.FedEx.PackagingType != (int) FedExPackagingType.Custom && request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
+            if (shipment.PackagingType != (int) FedExPackagingType.Custom &&
+                shipment.Packages.Any(p => p.DryIceWeight > 0))
             {
                 throw new FedExException("Standard FedEx packaging cannot be used to ship packages containing dry ice. You must use your own packaging for shipments containing dry ice.");
             }
         }
 
-        ///// <summary>
-        ///// Configures dry ice properties at the shipment level.
-        ///// </summary>
-        ///// <param name="request">The request.</param>
-        ///// <param name="nativeRequest">The native request.</param>
-        //private void ConfigureShipment(CarrierRequest request, RateRequest nativeRequest)
-        //{
-        //    ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-        //    Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
-        //    nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes;
-
-        //    shipmentSpecialServiceTypes[shipmentSpecialServiceTypes.Length - 1] = ShipmentSpecialServiceType.DRY_ICE;
-
-        //    nativeRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail = new ShipmentDryIceDetail
-        //    {
-        //        PackageCount = request.ShipmentEntity.FedEx.Packages.Count(p => p.DryIceWeight > 0).ToString(),
-        //        TotalWeight = new Weight
-        //        {
-        //            Value = (decimal)(request.ShipmentEntity.FedEx.Packages.Sum(p => p.DryIceWeight) / 2.2046),
-        //            ValueSpecified = true,
-        //            Units = WeightUnits.KG,
-        //            UnitsSpecified = true
-        //        }
-        //    };
-        //}
-
         /// <summary>
         /// Configures dry ice properties at the package level.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <param name="currentPackageIndex">Index of the current package.</param>
-        private void ConfigurePackage(CarrierRequest request, RateRequest nativeRequest, int currentPackageIndex)
+        private void ConfigurePackage(IFedExShipmentEntity shipment, PackageSpecialServicesRequested specialServices)
         {
-            PackageSpecialServiceType[] packageSpecialServiceTypes = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref packageSpecialServiceTypes, packageSpecialServiceTypes.Length + 1);
+            specialServices.SpecialServiceTypes =
+                specialServices.SpecialServiceTypes.Append(PackageSpecialServiceType.DRY_ICE).ToArray();
 
-            nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = packageSpecialServiceTypes;
-            packageSpecialServiceTypes[packageSpecialServiceTypes.Length - 1] = PackageSpecialServiceType.DRY_ICE;
-
-            nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight = new Weight
+            specialServices.DryIceWeight = new Weight
             {
-                Value = (decimal) (request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight/2.2046),
+                Value = (decimal) (shipment.Packages.ElementAt(currentPackage).DryIceWeight / 2.2046),
                 ValueSpecified = true,
                 Units = WeightUnits.KG,
                 UnitsSpecified = true
             };
         }
 
-        private RateRequest InitializeShipmentRequest(CarrierRequest request)
+        /// <summary>
+        /// Initialize the request
+        /// </summary>
+        private void InitializeShipmentRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a RateRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            // Make sure package is there           
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null)
-            {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new[]
-                {
-                    new RequestedPackageLineItem()
-                };
-            }
-
-            RequestedPackageLineItem packageLineItem = nativeRequest.RequestedShipment.RequestedPackageLineItems[0];
-
-            if (packageLineItem.SpecialServicesRequested == null)
-            {
-                packageLineItem.SpecialServicesRequested = new PackageSpecialServicesRequested();
-            }
-
-            // Add PackageSpecialServiceType
-            if (packageLineItem.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                packageLineItem.SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
-            }
-
-            // Add ShipmentSpecialServicesRequested
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
-            {
-                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
-            }
-
-            // Add ShipemtnSpecialServiceType
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            }
-
-            return nativeRequest;
+            request.Ensure(x => x.RequestedShipment)
+                .EnsureAtLeastOne(x => x.RequestedPackageLineItems)
+                .Ensure(x => x.SpecialServicesRequested)
+                .Ensure(x => x.SpecialServiceTypes);
         }
     }
 }
