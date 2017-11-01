@@ -563,7 +563,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// If a valid HubID is given it is returned.  If the special HubID of zero is given, then
         /// if the account has a configured default HubID it is returned.  Otherwise empty is returned.
         /// </summary>
-        public static string GetSmartPostHub(string hubID, FedExAccountEntity account)
+        public static string GetSmartPostHub(string hubID, IFedExAccountEntity account)
         {
             if (string.IsNullOrEmpty(hubID))
             {

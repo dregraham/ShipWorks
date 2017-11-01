@@ -1,6 +1,9 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -11,84 +14,88 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// attributes of the shipment and each package within the FedEx API's RateRequest object if
     /// the shipment has a FedEx SmartPost HubID.
     /// </summary>
-    public class FedExRateSmartPostManipulator : ICarrierRequestManipulator
+    public class FedExRateSmartPostManipulator : IFedExRateRequestManipulator
     {
+        readonly IFedExSettingsRepository settings;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public FedExRateSmartPostManipulator(IFedExSettingsRepository settings)
+        {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Should the manipulator be applied
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
+            options.HasFlag(FedExRateRequestOptions.SmartPost) && FedExUtility.IsSmartPostEnabled(shipment);
+
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
-        public void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
-            // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
-            
-            if (FedExUtility.IsSmartPostEnabled(request.ShipmentEntity))
+
+            var fedExShipment = shipment.FedEx;
+
+            SmartPostShipmentDetail smartPostDetail = new SmartPostShipmentDetail();
+            smartPostDetail.HubId = FedExUtility.GetSmartPostHub(fedExShipment.SmartPostHubID, settings.GetAccountReadOnly(shipment));
+
+            smartPostDetail.Indicia = GetSmartPostIndiciaType((FedExSmartPostIndicia) fedExShipment.SmartPostIndicia);
+            smartPostDetail.IndiciaSpecified = true;
+
+            SmartPostAncillaryEndorsementType? endorsement = GetSmartPostEndorsementType((FedExSmartPostEndorsement) fedExShipment.SmartPostEndorsement);
+            if (endorsement != null)
             {
-                // We can safely cast this since we've passed initialization
-                RateRequest nativeRequest = request.NativeRequest as RateRequest;
-                FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
-
-                SmartPostShipmentDetail smartPostDetail = new SmartPostShipmentDetail();
-                smartPostDetail.HubId = FedExUtility.GetSmartPostHub(fedExShipment.SmartPostHubID, request.CarrierAccountEntity as FedExAccountEntity);
-
-                smartPostDetail.Indicia = GetSmartPostIndiciaType((FedExSmartPostIndicia) fedExShipment.SmartPostIndicia);
-                smartPostDetail.IndiciaSpecified = true;
-
-                SmartPostAncillaryEndorsementType? endorsement = GetSmartPostEndorsementType((FedExSmartPostEndorsement) fedExShipment.SmartPostEndorsement);
-                if (endorsement != null)
-                {
-                    smartPostDetail.AncillaryEndorsement = endorsement.Value;
-                    smartPostDetail.AncillaryEndorsementSpecified = true;
-                }
-                
-                // Smart Post rates are only retreived by explicitly setting the service type
-                nativeRequest.RequestedShipment.ServiceType = ServiceType.SMART_POST;
-                nativeRequest.RequestedShipment.ServiceTypeSpecified = true;
-
-                // Smart post won't return rates if insured value is greater than 0
-                nativeRequest.RequestedShipment.TotalInsuredValue.Amount = 0;
-
-                // Rate requests differ from ship requests in that all packages are sent in one request, so 
-                // iterate over each package in the shipment to set the insured value to 0
-                for (int i = 0; i < fedExShipment.Packages.Count; i++)
-                {
-                    // We can't guarantee that all the line items have been added, so we initialize the line item
-                    // to make sure there is a valid object reference at the current index of the line item array
-                    // before attempting to access the item in the array
-                    InitializeLineItem(nativeRequest, i);
-                    if (nativeRequest.RequestedShipment.RequestedPackageLineItems[i].InsuredValue == null)
-                    {
-                        nativeRequest.RequestedShipment.RequestedPackageLineItems[i].InsuredValue = new Money();
-                    }
-
-                    nativeRequest.RequestedShipment.RequestedPackageLineItems[i].InsuredValue.Amount = 0;
-                }
-
-                nativeRequest.RequestedShipment.SmartPostDetail = smartPostDetail;
+                smartPostDetail.AncillaryEndorsement = endorsement.Value;
+                smartPostDetail.AncillaryEndorsementSpecified = true;
             }
+
+            // Smart Post rates are only retrieved by explicitly setting the service type
+            request.RequestedShipment.ServiceType = ServiceType.SMART_POST;
+            request.RequestedShipment.ServiceTypeSpecified = true;
+
+            // Smart post won't return rates if insured value is greater than 0
+            request.RequestedShipment.TotalInsuredValue.Amount = 0;
+
+            request.RequestedShipment.RequestedPackageLineItems = shipment.FedEx
+                .Packages
+                .Zip(RequestPackageList(request, shipment.FedEx.Packages.Count()), Tuple.Create)
+                .Select(x => BuildInsuredValue(x.Item2 ?? CreateLineItem()))
+                .ToArray();
+
+            request.RequestedShipment.SmartPostDetail = smartPostDetail;
+
+            return request;
         }
+        /// <summary>
+        /// Get a list of request packages, padding any needed packages with nulls
+        /// </summary>
+        private static IEnumerable<RequestedPackageLineItem> RequestPackageList(RateRequest request, int packageCount) =>
+            request.RequestedShipment.RequestedPackageLineItems.Concat(Enumerable.Repeat<RequestedPackageLineItem>(null, packageCount));
 
         /// <summary>
-        /// Initializes the line item.
+        /// Create a new line item
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <param name="lineItemIndex">Index of the line item.</param>
-        private static void InitializeLineItem(RateRequest nativeRequest, int lineItemIndex)
+        private RequestedPackageLineItem CreateLineItem() => new RequestedPackageLineItem();
+
+        /// <summary>
+        /// Build package special services element
+        /// </summary>
+        private RequestedPackageLineItem BuildInsuredValue(RequestedPackageLineItem packageRequest)
         {
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems.Length <= lineItemIndex)
+            if (packageRequest.InsuredValue == null)
             {
-                // We need to resize the line item array to accommodate the index
-                RequestedPackageLineItem[] packageArray = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-                Array.Resize(ref packageArray, lineItemIndex + 1);
-
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = packageArray;
+                packageRequest.InsuredValue = new Money();
             }
 
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] == null)
-            {
-                // We need to create a new package line item
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[lineItemIndex] = new RequestedPackageLineItem();
-            }
+            packageRequest.InsuredValue.Amount = 0;
+
+            return packageRequest;
         }
 
         /// <summary>
@@ -97,36 +104,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private static void InitializeRequest(CarrierRequest request)
+        private static void InitializeRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a ProcessShipmentRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null)
-            {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[0];
-            }
-
-            if (nativeRequest.RequestedShipment.TotalInsuredValue == null)
-            {
-                nativeRequest.RequestedShipment.TotalInsuredValue = new Money();
-            }
+            request.Ensure(x => x.RequestedShipment)
+                .Ensure(x => x.RequestedPackageLineItems);
+            request.RequestedShipment.Ensure(x => x.TotalInsuredValue);
         }
 
         /// <summary>
