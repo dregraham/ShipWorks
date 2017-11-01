@@ -99,9 +99,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             dhlExpressAccount.DisplayMember = "Key";
             dhlExpressAccount.ValueMember = "Value";
 
-            if (DhlExpressAccountManager.Accounts.Count > 0)
+            if (ShipEngineAccountManager.Accounts.Count > 0)
             {
-                dhlExpressAccount.DataSource = DhlExpressAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.ShipEngineAccountID)).ToList();
+                dhlExpressAccount.DataSource = ShipEngineAccountManager.Accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.ShipEngineAccountID)).ToList();
                 dhlExpressAccount.Enabled = true;
             }
             else

@@ -174,6 +174,7 @@
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
     <Compile Include="Carriers\BestRate\BestRatePrefetchProvider.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
@@ -273,6 +275,7 @@
     <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineAccountManager.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />

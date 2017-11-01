@@ -14,14 +14,14 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
-    /// Manage Dhl Express Accounts
+    /// Manage ShipEngine Accounts
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     [Component]
-    public class DhlExpressAccountManager : IInitializeForCurrentSession
+    public class ShipEngineAccountManager : IInitializeForCurrentSession
     {
         static TableSynchronizer<ShipEngineAccountEntity> synchronizer;
         static IEnumerable<IShipEngineAccountEntity> readOnlyAccounts;
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Initialize DhlExpressAccountManager
+        /// Initialize ShipEngineAccountManager
         /// </summary>
         public static void Initialize()
         {
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Return the active list of DhlExpress accounts
+        /// Return the active list of ShipEngine accounts
         /// </summary>
         public static List<ShipEngineAccountEntity> Accounts
         {
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Return the active list of DhlExpress accounts
+        /// Return the active list of ShipEngine accounts
         /// </summary>
         public static IEnumerable<IShipEngineAccountEntity> AccountsReadOnly
         {
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Save the given DhlExpress account
+        /// Save the given ShipEngine account
         /// </summary>
         public static void SaveAccount(ShipEngineAccountEntity account)
         {
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Delete the given DhlExpress account
+        /// Delete the given ShipEngine account
         /// </summary>
         public static void DeleteAccount(ShipEngineAccountEntity account)
         {
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             CheckForChangesNeeded();
 
-            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, ShipmentTypeCode.DhlExpress));
+            Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
         }
     }
 }

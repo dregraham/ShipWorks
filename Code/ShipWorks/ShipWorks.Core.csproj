@@ -1207,7 +1207,6 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
       <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Asendia\AsendiaShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
@@ -1226,8 +1225,6 @@
       <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
-    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountManager.cs" />
-    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Dhl\DhlExpressServiceType.cs" />
     <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />

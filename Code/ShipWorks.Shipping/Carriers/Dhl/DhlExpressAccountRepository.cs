@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<ShipEngineAccountEntity> Accounts =>
-            DhlExpressAccountManager.Accounts;
+            ShipEngineAccountManager.Accounts;
 
         /// <summary>
         /// Gets the default profile account.
@@ -26,37 +26,37 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<IShipEngineAccountEntity> AccountsReadOnly =>
-            DhlExpressAccountManager.AccountsReadOnly;
+            ShipEngineAccountManager.AccountsReadOnly;
 
         /// <summary>
         /// Force a check for changes
         /// </summary>
         public override void CheckForChangesNeeded() =>
-            DhlExpressAccountManager.CheckForChangesNeeded();
+            ShipEngineAccountManager.CheckForChangesNeeded();
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         public override ShipEngineAccountEntity GetAccount(long accountID) =>
-            DhlExpressAccountManager.GetAccount(accountID);
+            ShipEngineAccountManager.GetAccount(accountID);
 
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         public override IShipEngineAccountEntity GetAccountReadOnly(long accountID) =>
-            DhlExpressAccountManager.GetAccountReadOnly(accountID);
+            ShipEngineAccountManager.GetAccountReadOnly(accountID);
 
         /// <summary>
         /// Saves the specified account.
         /// </summary>
-        public override void Save(ShipEngineAccountEntity account) => DhlExpressAccountManager.SaveAccount(account);
+        public override void Save(ShipEngineAccountEntity account) => ShipEngineAccountManager.SaveAccount(account);
 
         /// <summary>
         /// Deletes the account.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override void DeleteAccount(ShipEngineAccountEntity account) => DhlExpressAccountManager.DeleteAccount(account);
+        public override void DeleteAccount(ShipEngineAccountEntity account) => ShipEngineAccountManager.DeleteAccount(account);
 
         /// <summary>
         /// Saves the specified account.
