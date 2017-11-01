@@ -19,12 +19,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public PersonAdapter CodPerson { get; private set; }
 
         /// <summary>
+        /// Get the Hold At Location address
+        /// </summary>
+        public PersonAdapter HoldPerson { get; private set; }
+
+        /// <summary>
         /// Copy custom data
         /// </summary>
         partial void CopyCustomFedExShipmentData(IFedExShipmentEntity source)
         {
             BrokerPerson = source.BrokerPerson.CopyToNew();
             CodPerson = source.CodPerson.CopyToNew();
+            HoldPerson = source.HoldPerson.CopyToNew();
         }
     }
 }

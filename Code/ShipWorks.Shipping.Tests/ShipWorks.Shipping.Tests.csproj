@@ -170,6 +170,7 @@
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateCodOptionsRequestManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDangerousGoodsManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDryIceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateHoldAtLocationManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateOneRateManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageDetailsManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageSpecialServicesManipulatorTest.cs" />

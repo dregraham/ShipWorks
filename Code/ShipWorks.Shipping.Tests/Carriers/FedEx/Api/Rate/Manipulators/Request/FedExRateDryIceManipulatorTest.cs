@@ -70,25 +70,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         [Fact]
         public void Manipulate_AddsDryIceToSpecialServices_WhenSpecialServicesContainsOtherItems()
         {
-            var rateRequest = new RateRequest
-            {
-                RequestedShipment = new RequestedShipment
-                {
-                    RequestedPackageLineItems = new[]
-                    {
-                        new RequestedPackageLineItem
-                        {
-                            SpecialServicesRequested = new PackageSpecialServicesRequested
-                            {
-                                SpecialServiceTypes = new []
-                                {
-                                    PackageSpecialServiceType.COD
-                                }
-                            }
-                        }
-                    }
-                }
-            };
+            var rateRequest = new RateRequest();
+            var services = rateRequest.Ensure(x => x.RequestedShipment)
+                .EnsureAtLeastOne(x => x.RequestedPackageLineItems)
+                .Ensure(x => x.SpecialServicesRequested);
+            services.SpecialServiceTypes = new[] { PackageSpecialServiceType.COD };
+
             var shipment = Create.Shipment()
                 .AsFedEx(f => f
                     .WithPackage(p => p.Set(x => x.DryIceWeight, 1.2))

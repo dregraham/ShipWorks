@@ -16,5 +16,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Get the COD address
         /// </summary>
         PersonAdapter CodPerson { get; }
+
+        /// <summary>
+        /// Get the Hold At Location address
+        /// </summary>
+        PersonAdapter HoldPerson { get; }
     }
 }
