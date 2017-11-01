@@ -187,6 +187,7 @@
     <Compile Include="Carriers\FedEx\Api\Fims\FimsWebClient.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\FedExRateRequest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\FedExRateResponse.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateExpressFreightManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateClientDetailManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateCodOptionsManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDangerousGoodsManipulator.cs" />
