@@ -441,10 +441,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// OnTrac always uses the residential indicator
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return true;
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If

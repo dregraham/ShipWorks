@@ -925,10 +925,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates if the residential status indicator is required for the given shipment
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return IsDomestic(shipment); // shipment.ShipCountryCode == "US";
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) =>
+        	IsDomestic(shipment);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used

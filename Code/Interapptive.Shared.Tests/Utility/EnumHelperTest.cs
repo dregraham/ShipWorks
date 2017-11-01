@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using Xunit;
-using Interapptive.Shared.Enums;
 
 namespace Interapptive.Shared.Tests.Utility
 {
@@ -52,9 +52,9 @@ namespace Interapptive.Shared.Tests.Utility
         [Fact]
         public void GetApiValue_ForEnum_ReturnsApiEnumValue()
         {
-            OtherTestEnum testResult = EnumHelper.GetApiValue<OtherTestEnum>(TestEnum.HasDetails);
+            OtherTestEnum? testResult = EnumHelper.GetApiValue<OtherTestEnum>(TestEnum.HasDetails);
 
-            Assert.Equal(OtherTestEnum.BlahOnOtherEnum, testResult);
+            Assert.Equal(OtherTestEnum.BlahOnOtherEnum, testResult.Value);
         }
     }
 

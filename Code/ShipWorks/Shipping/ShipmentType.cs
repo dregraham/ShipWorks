@@ -139,10 +139,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the ShipmentType needs the ResidentialResult field determined for the given shipment.
         /// </summary>
-        public virtual bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return false;
-        }
+        public virtual bool IsResidentialStatusRequired(IShipmentEntity shipment) => false;
 
         /// <summary>
         /// Gets or sets the certificate inspector that should be used when wanting to add additional security

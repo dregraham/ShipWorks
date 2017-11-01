@@ -93,10 +93,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// UPS always uses the residential indicator
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return true;
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Create the user control used to edit UPS shipments
