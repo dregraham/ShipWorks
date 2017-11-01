@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -10,25 +11,23 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Repository of ShipEngine accounts
     /// </summary>
     [Component]
-    public class ShipEngineAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>, IShipEngineAccountRepository
+    public abstract class ShipEngineAccountRepository : CarrierAccountRepositoryBase<ShipEngineAccountEntity, IShipEngineAccountEntity>, IShipEngineAccountRepository
 
     {
+        protected abstract ShipmentTypeCode shipmentType { get; }
+
+
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<ShipEngineAccountEntity> Accounts =>
-            ShipEngineAccountManager.Accounts;
-
-        /// <summary>
-        /// Gets the default profile account.
-        /// </summary>
-        public override ShipEngineAccountEntity DefaultProfileAccount => null;
+            ShipEngineAccountManager.Accounts.Where(a=>a.ShipmentTypeCode == (int) shipmentType);
 
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public override IEnumerable<IShipEngineAccountEntity> AccountsReadOnly =>
-            ShipEngineAccountManager.AccountsReadOnly;
+            ShipEngineAccountManager.AccountsReadOnly.Where(a => a.ShipmentTypeCode == (int) shipmentType);
 
         /// <summary>
         /// Force a check for changes
@@ -73,13 +72,5 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <typeparam name="T"></typeparam>
         /// <param name="account">The account.</param>
         public override void DeleteAccount<T>(T account) => DeleteAccount(account as ShipEngineAccountEntity);
-
-        /// <summary>
-        /// Get the account id from a given shipment
-        /// </summary>
-        protected override long? GetAccountIDFromShipment(IShipmentEntity shipment)
-        {
-            return shipment.DhlExpress.ShipEngineAccountID;
-        }
     }
 }

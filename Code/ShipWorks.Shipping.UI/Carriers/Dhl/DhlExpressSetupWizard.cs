@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private void SaveAccount()
         {
             account.Description = GetDefaultDescription(account);
-
+            account.ShipmentTypeCode = (int) ShipmentTypeCode.DhlExpress;
             accountRepository.Save(account);
             shippingSettings.MarkAsConfigured(ShipmentTypeCode.DhlExpress);
         }
