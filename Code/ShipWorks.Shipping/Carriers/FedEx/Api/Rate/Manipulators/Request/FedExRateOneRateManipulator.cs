@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+﻿using System.Linq;
+using Interapptive.Shared.Collections;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
@@ -12,29 +10,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     /// An implementation of the ICarrierRequestManipulator interface that will add the appropriate special
     /// shipment type attributes to the RateRequest object for obtaining FedEx One Rate rate results.
     /// </summary>
-    public class FedExRateOneRateManipulator : FedExShippingRequestManipulatorBase
+    public class FedExRateOneRateManipulator : IFedExRateRequestManipulator
     {
+        /// <summary>
+        /// Should the manipulator be applied
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
+            options.HasFlag(FedExRateRequestOptions.OneRate);
+
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
         /// <param name="request">The request.</param>
-        public override void Manipulate(CarrierRequest request)
+        public RateRequest Manipulate(IShipmentEntity shipment, RateRequest request)
         {
             InitializeRequest(request);
 
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
+            var specialServices = request.RequestedShipment.SpecialServicesRequested;
+            specialServices.SpecialServiceTypes = specialServices.SpecialServiceTypes
+                .Append(ShipmentSpecialServiceType.FEDEX_ONE_RATE)
+                .ToArray();
 
-            // Since we'll be assigning this list back to the native request, create a list of the existing 
-            // special service types that are on the request already so we don't overwrite anything
-            List<ShipmentSpecialServiceType> specialServiceTypes = new List<ShipmentSpecialServiceType>();
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes != null)
-            {
-                specialServiceTypes.AddRange(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-            }
-
-            specialServiceTypes.Add(ShipmentSpecialServiceType.FEDEX_ONE_RATE);
-
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
+            return request;
         }
 
         /// <summary>
@@ -43,38 +40,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(RateRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a RateRequest
-            RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
-            {
-                // We'll be accessing/manipulating the special services, so make sure it's been created
-                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
-            }
-
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                // We'll be accessing/manipulating the special service types, so make sure it's been created
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            }
+            request.Ensure(x => x.RequestedShipment)
+                .Ensure(x => x.SpecialServicesRequested)
+                .Ensure(x => x.SpecialServiceTypes);
         }
     }
 }
