@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
+﻿using Autofac.Extras.Moq;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
@@ -13,102 +11,44 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
     public class FedExRateRateTypeManipulatorTest
     {
         private FedExRateRateTypeManipulator testObject;
-
-        private Mock<ICarrierSettingsRepository> settingsRepository;
-        private Mock<CarrierRequest> carrierRequest;
-        private RateRequest nativeRequest;
+        private readonly AutoMock mock;
 
         public FedExRateRateTypeManipulatorTest()
         {
-            // Default the repository to indicate we should use list rates
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.UseListRates).Returns(true);
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            // Setup the native request to have the appropriate properties instantiated
-            nativeRequest = new RateRequest()
-            {
-                RequestedShipment = new RequestedShipment()
-            };
-
-            // Use the native request to create the carrier request based
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
-
-            testObject = new FedExRateRateTypeManipulator(settingsRepository.Object);
+            testObject = mock.Create<FedExRateRateTypeManipulator>();
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void ShouldApply_ReturnsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
-        }
+            var result = testObject.ShouldApply(null, FedExRateRequestOptions.None);
 
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
-        {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
-        {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RateReply());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.True(result);
         }
 
         [Fact]
         public void Manipulate_AccountsForNullRequestedShipment()
         {
-            // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
-            // the carrier request with the updated native request
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
+            var result = testObject.Manipulate(null, new RateRequest());
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            // The requested shipment property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(result.RequestedShipment);
         }
 
-        [Fact]
-        public void Manipulate_DelegatesToSettingsRepository()
+        [Theory]
+        [InlineData(true, RateRequestType.LIST)]
+        [InlineData(false, RateRequestType.NONE)]
+        public void Manipulate_SetsRateRequestType_BasedOnSettings(bool useListRates, RateRequestType expected)
         {
-            testObject.Manipulate(carrierRequest.Object);
+            mock.Mock<IFedExSettingsRepository>()
+                .SetupGet(x => x.UseListRates)
+                .Returns(useListRates);
 
-            settingsRepository.Verify(r => r.UseListRates, Times.Once());
-        }
+            var result = testObject.Manipulate(null, new RateRequest());
 
-        [Fact]
-        public void Manipulate_AddsListRate_WhenUseListRatesIsTrue()
-        {
-            // The mocked repository was setup to use list rates in the Initialize() method, so no additional
-            // setup is required for this test
-            testObject.Manipulate(carrierRequest.Object);
-
-            // extract the rates from the manipulated request and test for the rate type
-            RateRequestType[] rateTypes = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
-
-            Assert.Equal(1, rateTypes.Length);
-            Assert.Equal(RateRequestType.LIST, rateTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsAccountRate_WhenUseListRatesIsFalse()
-        {
-            // Setup gthe the repository to return false
-            settingsRepository.Setup(r => r.UseListRates).Returns(false);
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            // extract the rates from the manipulated request and test for the rate type
-            RateRequestType[] rateTypes = ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
-
-            Assert.Equal(1, rateTypes.Length);
-            Assert.Equal(RateRequestType.NONE, rateTypes[0]);
+            Assert.Equal(1, result.RequestedShipment.RateRequestTypes.Length);
+            Assert.Contains(expected, result.RequestedShipment.RateRequestTypes);
         }
     }
 }
