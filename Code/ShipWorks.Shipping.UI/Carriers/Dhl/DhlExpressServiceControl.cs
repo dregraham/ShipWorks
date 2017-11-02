@@ -18,12 +18,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(ServiceControlBase), ShipmentTypeCode.DhlExpress)]
     public partial class DhlExpressServiceControl : ServiceControlBase
     {
+        private readonly IDhlExpressAccountRepository accountRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DhlExpressServiceControl" /> class.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public DhlExpressServiceControl(RateControl rateControl)
+        public DhlExpressServiceControl(RateControl rateControl, IDhlExpressAccountRepository accountRepository)
             : base(ShipmentTypeCode.DhlExpress, rateControl)
         {
             InitializeComponent();
@@ -32,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             this.dutyPaid.CheckStateChanged += this.OnRateCriteriaChanged;
             this.packageControl.RateCriteriaChanged += this.OnRateCriteriaChanged;
             this.nonMachinable.CheckStateChanged += this.OnRateCriteriaChanged;
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -58,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             DhlExpressAccount.DisplayMember = "Key";
             DhlExpressAccount.ValueMember = "Value";
 
-            if (DhlExpressAccountManager.Accounts.Count > 0)
+            if (accountRepository.AccountsReadOnly.Any())
             {
-                DhlExpressAccount.DataSource = DhlExpressAccountManager.Accounts.Select(s => new KeyValuePair<string, long>(s.Description, s.DhlExpressAccountID)).ToList();
+                DhlExpressAccount.DataSource = accountRepository.AccountsReadOnly.Select(s => new KeyValuePair<string, long>(s.Description, s.DhlExpressAccountID)).ToList();
                 DhlExpressAccount.Enabled = true;
             }
             else
