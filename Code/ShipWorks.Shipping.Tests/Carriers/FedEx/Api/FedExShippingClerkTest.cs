@@ -1519,6 +1519,94 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 .Verify(l => l.WarnFormat("Error getting {0} rates: {1}", FedExRateRequestOptions.SmartPost.ToString(), AnyString));
         }
 
+        [Theory]
+        [InlineData(ServiceType.FEDEX_FREIGHT_PRIORITY, FedExServiceType.FedExFreightPriority, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_PRIORITY, FedExServiceType.InternationalPriority, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_PRIORITY_EXPRESS, FedExServiceType.InternationalPriorityExpress, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_ECONOMY, FedExServiceType.InternationalEconomy, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_FIRST, FedExServiceType.InternationalFirst, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_1_DAY_FREIGHT, FedExServiceType.FedEx1DayFreight, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_2_DAY_FREIGHT, FedExServiceType.FedEx2DayFreight, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_3_DAY_FREIGHT, FedExServiceType.FedEx3DayFreight, "US", "US", false)]
+        [InlineData(ServiceType.GROUND_HOME_DELIVERY, FedExServiceType.GroundHomeDelivery, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_PRIORITY_FREIGHT, FedExServiceType.InternationalPriorityFreight, "US", "US", false)]
+        [InlineData(ServiceType.INTERNATIONAL_ECONOMY_FREIGHT, FedExServiceType.InternationalEconomyFreight, "US", "US", false)]
+        [InlineData(ServiceType.SMART_POST, FedExServiceType.SmartPost, "US", "US", false)]
+        [InlineData(ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY, FedExServiceType.FedExEuropeFirstInternationalPriority, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING, FedExServiceType.FedExNextDayEarlyMorning, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_NEXT_DAY_MID_MORNING, FedExServiceType.FedExNextDayMidMorning, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_NEXT_DAY_AFTERNOON, FedExServiceType.FedExNextDayAfternoon, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_NEXT_DAY_END_OF_DAY, FedExServiceType.FedExNextDayEndOfDay, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_DISTANCE_DEFERRED, FedExServiceType.FedExDistanceDeferred, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_NEXT_DAY_FREIGHT, FedExServiceType.FedExNextDayFreight, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_FREIGHT_ECONOMY, FedExServiceType.FedExFreightEconomy, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_FREIGHT_PRIORITY, FedExServiceType.FedExFreightPriority, "US", "US", false)]
+        [InlineData(ServiceType.PRIORITY_OVERNIGHT, FedExServiceType.OneRatePriorityOvernight, "US", "US", true)]
+        [InlineData(ServiceType.PRIORITY_OVERNIGHT, FedExServiceType.PriorityOvernight, "US", "US", false)]
+        [InlineData(ServiceType.STANDARD_OVERNIGHT, FedExServiceType.OneRateStandardOvernight, "US", "US", true)]
+        [InlineData(ServiceType.STANDARD_OVERNIGHT, FedExServiceType.StandardOvernight, "US", "US", false)]
+        [InlineData(ServiceType.FIRST_OVERNIGHT, FedExServiceType.OneRateFirstOvernight, "US", "US", true)]
+        [InlineData(ServiceType.FIRST_OVERNIGHT, FedExServiceType.FirstOvernight, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_2_DAY, FedExServiceType.OneRate2Day, "US", "US", true)]
+        [InlineData(ServiceType.FEDEX_2_DAY, FedExServiceType.FedEx2Day, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_2_DAY_AM, FedExServiceType.OneRate2DayAM, "US", "US", true)]
+        [InlineData(ServiceType.FEDEX_2_DAY_AM, FedExServiceType.FedEx2DayAM, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_EXPRESS_SAVER, FedExServiceType.OneRateExpressSaver, "US", "US", true)]
+        [InlineData(ServiceType.FEDEX_EXPRESS_SAVER, FedExServiceType.FedExExpressSaver, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_EXPRESS_SAVER, FedExServiceType.FedExEconomyCanada, "CA", "US", false)]
+        [InlineData(ServiceType.FEDEX_GROUND, FedExServiceType.FedExGround, "US", "US", false)]
+        [InlineData(ServiceType.FEDEX_GROUND, FedExServiceType.FedExInternationalGround, "US", "CA", false)]
+        public void RateResults_HaveCorrectFedExServiceType(ServiceType serviceType, FedExServiceType fedExServiceType, string originCountryCode, string shipCountryCode, bool isOneRate)
+        {
+            // Setup the native request to have a priority freight rate
+            nativeRateReply = new RateReply
+            {
+                RateReplyDetails = new[]
+                {
+                    new RateReplyDetail()
+                    {
+                        ActualRateTypeSpecified = true,
+                        ActualRateType = ReturnedRateType.PAYOR_ACCOUNT_PACKAGE,
+
+                        RatedShipmentDetails = new RatedShipmentDetail[]
+                        {
+                            new RatedShipmentDetail
+                            {
+                                ShipmentRateDetail = new ShipmentRateDetail
+                                {
+                                    RateTypeSpecified = true,
+                                    RateType = ReturnedRateType.PAYOR_ACCOUNT_PACKAGE,
+
+                                    TotalNetCharge = new Money { Amount = 40.12M },
+                                    RatedWeightMethod = RatedWeightMethod.ACTUAL,
+                                    RatedWeightMethodSpecified = true,
+                                    TotalBillingWeight = new Weight { Value = 0.1M },
+                                    TotalDimWeight = new Weight { Value = 0.1M },
+                                    TotalNetFedExCharge = new Money{Amount = 3, AmountSpecified = true}
+                                }
+                            }
+                        },
+                        ServiceType = serviceType
+                    }
+                }
+            };
+            
+            if (isOneRate)
+            {
+                nativeRateReply.RateReplyDetails.First().RatedShipmentDetails.First().ShipmentRateDetail.SpecialRatingApplied = new []{ SpecialRatingAppliedType.FEDEX_ONE_RATE };
+            }
+
+            // Setup the requests to return the native rate reply
+            rateResponse.Setup(r => r.Process()).Returns(nativeRateReply);
+
+            shipmentEntity.OriginCountryCode = originCountryCode;
+            shipmentEntity.ShipCountryCode = shipCountryCode;
+            shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.FedEx;
+            RateGroup rates = testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
+
+            Assert.Equal(fedExServiceType, ((FedExRateSelection) rates.Rates.First().Tag).ServiceType);
+        }
+
         #endregion GetRates Tests
     }
 }

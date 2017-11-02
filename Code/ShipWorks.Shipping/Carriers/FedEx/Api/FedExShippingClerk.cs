@@ -970,7 +970,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
         private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, IShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
@@ -1010,37 +1009,69 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                         return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
                     }
+            }
 
-                case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
-                case ServiceType.INTERNATIONAL_PRIORITY_EXPRESS: return FedExServiceType.InternationalPriorityExpress;
-                case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
-                case ServiceType.INTERNATIONAL_FIRST: return FedExServiceType.InternationalFirst;
-                case ServiceType.FEDEX_1_DAY_FREIGHT: return FedExServiceType.FedEx1DayFreight;
-                case ServiceType.FEDEX_2_DAY_FREIGHT: return FedExServiceType.FedEx2DayFreight;
-                case ServiceType.FEDEX_3_DAY_FREIGHT: return FedExServiceType.FedEx3DayFreight;
+            FedExServiceType? fedExServiceType = GetFedExFreightServiceType(rateDetail);
+            if (fedExServiceType.HasValue)
+            {
+                return fedExServiceType.Value;
+            }
 
+            fedExServiceType = GetFedExNormalServiceType(rateDetail, shipment);
+            if (fedExServiceType.HasValue)
+            {
+                return fedExServiceType.Value;
+            }
+
+            throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);
+        }
+
+        /// <summary>
+        /// Determine Normal service type 
+        /// </summary>
+        private static FedExServiceType? GetFedExNormalServiceType(RateReplyDetail rateDetail, IShipmentEntity shipment)
+        {
+            switch (rateDetail.ServiceType)
+            {
                 case ServiceType.FEDEX_GROUND:
                     return ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) ? FedExServiceType.FedExGround : FedExServiceType.FedExInternationalGround;
 
                 case ServiceType.GROUND_HOME_DELIVERY: return FedExServiceType.GroundHomeDelivery;
-                case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
-                case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
                 case ServiceType.SMART_POST: return FedExServiceType.SmartPost;
-
+                case ServiceType.INTERNATIONAL_PRIORITY: return FedExServiceType.InternationalPriority;
+                case ServiceType.INTERNATIONAL_PRIORITY_EXPRESS: return FedExServiceType.InternationalPriorityExpress;
+                case ServiceType.INTERNATIONAL_ECONOMY: return FedExServiceType.InternationalEconomy;
+                case ServiceType.INTERNATIONAL_FIRST: return FedExServiceType.InternationalFirst;
                 case ServiceType.EUROPE_FIRST_INTERNATIONAL_PRIORITY: return FedExServiceType.FedExEuropeFirstInternationalPriority;
-                case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
-
                 case ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING: return FedExServiceType.FedExNextDayEarlyMorning;
                 case ServiceType.FEDEX_NEXT_DAY_MID_MORNING: return FedExServiceType.FedExNextDayMidMorning;
                 case ServiceType.FEDEX_NEXT_DAY_AFTERNOON: return FedExServiceType.FedExNextDayAfternoon;
                 case ServiceType.FEDEX_NEXT_DAY_END_OF_DAY: return FedExServiceType.FedExNextDayEndOfDay;
                 case ServiceType.FEDEX_DISTANCE_DEFERRED: return FedExServiceType.FedExDistanceDeferred;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Determine Freight service type 
+        /// </summary>
+        private static FedExServiceType? GetFedExFreightServiceType(RateReplyDetail rateDetail)
+        {
+            switch (rateDetail.ServiceType)
+            {
+                case ServiceType.FEDEX_1_DAY_FREIGHT: return FedExServiceType.FedEx1DayFreight;
+                case ServiceType.FEDEX_2_DAY_FREIGHT: return FedExServiceType.FedEx2DayFreight;
+                case ServiceType.FEDEX_3_DAY_FREIGHT: return FedExServiceType.FedEx3DayFreight;
+                case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
+                case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
+                case ServiceType.FEDEX_FIRST_FREIGHT: return FedExServiceType.FirstFreight;
                 case ServiceType.FEDEX_NEXT_DAY_FREIGHT: return FedExServiceType.FedExNextDayFreight;
                 case ServiceType.FEDEX_FREIGHT_ECONOMY: return FedExServiceType.FedExFreightEconomy;
                 case ServiceType.FEDEX_FREIGHT_PRIORITY: return FedExServiceType.FedExFreightPriority;
             }
 
-            throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);
+            return null;
         }
 
         /// <summary>

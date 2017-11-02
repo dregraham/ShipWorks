@@ -40,19 +40,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ratingField.AddShipmentField(FedExShipmentFields.FreightCollectTerms);
                 ratingField.AddShipmentField(FedExShipmentFields.FreightRole);
 
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
-                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
-                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.FreightPieces);
-                ratingField.PackageFields.Add(FedExPackageFields.FreightPackaging);
+                AddPackageValues();
 
                 return ratingField;
             }
+        }
+
+        /// <summary>
+        /// Add package values
+        /// </summary>
+        private void AddPackageValues()
+        {
+            ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
+            ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
+            ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.FreightPieces);
+            ratingField.PackageFields.Add(FedExPackageFields.FreightPackaging);
         }
 
         /// <summary>
