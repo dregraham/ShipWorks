@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,12 +15,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public partial class FedExFreightContainerControl : UserControl
     {
         /// <summary>
+        /// Some part of the packaging has changed the rate criteria
+        /// </summary>
+        public event EventHandler RateCriteriaChanged;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public FedExFreightContainerControl()
         {
             InitializeComponent();
-            this.AutoSize = false;
+            AutoSize = false;
+
+            fedExPackageFreightDetailControl.RateCriteriaChanged += OnRateCriteriaChanged;
+            fedExLtlFreightControl.RateCriteriaChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -89,6 +98,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             groupFreightPackages.Height = fedExPackageFreightDetailControl.Bottom + 5;
             panelLtlFreight.Height = groupFreightPackages.Bottom + 5;
             Height = panelLtlFreight.Bottom;
+        }
+
+        /// <summary>
+        /// Something affecting rate criteria has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Raises the RateCriteriaChanged event
+        /// </summary>
+        private void RaiseRateCriteriaChanged()
+        {
+            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
+        }
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();
+
+                fedExPackageFreightDetailControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                fedExLtlFreightControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

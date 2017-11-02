@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Windows.Forms;
@@ -16,6 +17,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public partial class FedExLtlFreightControl : UserControl
     {
         private readonly ImmutableList<FedExLtlSpecialServicesControlContainer> specialServicesControls;
+
+        /// <summary>
+        /// Some part of the packaging has changed the rate criteria
+        /// </summary>
+        public event EventHandler RateCriteriaChanged;
 
         /// <summary>
         /// Constructor
@@ -44,6 +50,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 new FedExLtlSpecialServicesControlContainer(insideDelivery, FedExFreightSpecialServicesType.InsideDelivery),
                 new FedExLtlSpecialServicesControlContainer(insidePickup, FedExFreightSpecialServicesType.InsidePickup),
                 new FedExLtlSpecialServicesControlContainer(freightGuarantee, FedExFreightSpecialServicesType.FreightGuarantee));
+
+            freightClass.SelectedValueChanged += OnRateCriteriaChanged;
+            role.SelectedValueChanged += OnRateCriteriaChanged;
+            collectTerms.SelectedValueChanged += OnRateCriteriaChanged;
+
+            foreach (var ctrl in specialServicesControls.Select(ssc => ssc.Control))
+            {
+                ctrl.CheckedChanged += OnRateCriteriaChanged;
+            }
         }
 
         /// <summary>
@@ -112,6 +127,46 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             enabled ?
                 previous | (int)specialServicesTypes :
                 previous & ~(int)specialServicesTypes;
+
+        /// <summary>
+        /// Rate criteria changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+            // Raise the rate criteria changed event
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Raises the RateCriteriaChanged event
+        /// </summary>
+        private void RaiseRateCriteriaChanged()
+        {
+            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
+        }
+        
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();
+
+                freightClass.SelectedValueChanged -= OnRateCriteriaChanged;
+                role.SelectedValueChanged -= OnRateCriteriaChanged;
+                collectTerms.SelectedValueChanged -= OnRateCriteriaChanged;
+
+                foreach (var ctrl in specialServicesControls.Select(ssc => ssc.Control))
+                {
+                    ctrl.CheckedChanged -= OnRateCriteriaChanged;
+                }
+            }
+
+            base.Dispose(disposing);
+        }
     }
 
     /// <summary>

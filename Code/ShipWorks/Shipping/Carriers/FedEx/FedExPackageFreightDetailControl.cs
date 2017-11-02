@@ -25,11 +25,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         // Keeps track of the selected rows, so when the selection changes, we know what to save
         List<GridRow> selectedRows = new List<GridRow>();
 
+        /// <summary>
+        /// Some part of the packaging has changed the rate criteria
+        /// </summary>
+        public event EventHandler RateCriteriaChanged;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public FedExPackageFreightDetailControl()
         {
             InitializeComponent();
 
             EnumHelper.BindComboBox<FedExFreightPhysicalPackagingType>(freightPackaging);
+
+            freightPackaging.SelectedValueChanged += OnRateCriteriaChanged;
+            freightPieces.TextChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -208,6 +219,40 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // package count wouldn't change if control weren't editable.
             LoadShipments(loadedShipments,true);
+        }
+
+        /// <summary>
+        /// Rate criteria changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+            // Raise the rate criteria changed event
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Raises the RateCriteriaChanged event
+        /// </summary>
+        private void RaiseRateCriteriaChanged()
+        {
+            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                components?.Dispose();
+
+                freightPackaging.SelectedValueChanged -= OnRateCriteriaChanged;
+                freightPieces.TextChanged -= OnRateCriteriaChanged;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

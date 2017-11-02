@@ -34,6 +34,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ratingField.AddShipmentField(FedExShipmentFields.SmartPostEndorsement);
                 ratingField.AddShipmentField(FedExShipmentFields.CodEnabled);
                 ratingField.AddShipmentField(FedExShipmentFields.NonStandardContainer);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightSpecialServices);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightTotalHandlinUnits);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightClass);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightCollectTerms);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightRole);
 
                 ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
                 ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
@@ -43,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
                 ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
                 ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+                ratingField.PackageFields.Add(FedExPackageFields.FreightPieces);
+                ratingField.PackageFields.Add(FedExPackageFields.FreightPackaging);
 
                 return ratingField;
             }

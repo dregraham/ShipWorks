@@ -190,6 +190,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedExNextDayFreight:
+                case FedExServiceType.FedExFreightEconomy:
+                case FedExServiceType.FedExFreightPriority:
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
                 case FedExServiceType.SmartPost:
@@ -732,7 +734,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<RateResult> results = new List<RateResult>();
 
             // We're not supporting priority freight and economy freight
-            rateDetails.RemoveAll(r => r.ServiceType == ServiceType.FEDEX_FREIGHT_PRIORITY || r.ServiceType == ServiceType.FEDEX_FREIGHT_ECONOMY || r.ServiceType == ServiceType.FEDEX_FIRST_FREIGHT);
+            rateDetails.RemoveAll(r => r.ServiceType == ServiceType.FEDEX_FIRST_FREIGHT);
 
             // Translate them to rate results
             foreach (RateReplyDetail rateDetail in rateDetails)
@@ -1028,6 +1030,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.FEDEX_NEXT_DAY_END_OF_DAY: return FedExServiceType.FedExNextDayEndOfDay;
                 case ServiceType.FEDEX_DISTANCE_DEFERRED: return FedExServiceType.FedExDistanceDeferred;
                 case ServiceType.FEDEX_NEXT_DAY_FREIGHT: return FedExServiceType.FedExNextDayFreight;
+                case ServiceType.FEDEX_FREIGHT_ECONOMY: return FedExServiceType.FedExFreightEconomy;
+                case ServiceType.FEDEX_FREIGHT_PRIORITY: return FedExServiceType.FedExFreightPriority;
             }
 
             throw new CarrierException("Invalid FedEx Service Type " + rateDetail.ServiceType);

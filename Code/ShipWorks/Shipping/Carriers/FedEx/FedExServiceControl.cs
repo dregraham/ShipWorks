@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             : base(ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
+            fedExFreightContainerControl.RateCriteriaChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -1212,5 +1213,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// One of the values that affects rates has changed
         /// </summary>
         private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+
+                fedExFreightContainerControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

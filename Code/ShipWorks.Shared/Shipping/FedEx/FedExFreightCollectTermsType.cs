@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.FedEx
         /// </summary>
         [Description("Standard")]
         [ApiValue("STANDARD")]
-        Standard = 2,
+        Standard = 1,
 
         /// <summary>
         /// Non-recourse shipper signed
