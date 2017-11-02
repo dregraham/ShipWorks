@@ -1,11 +1,12 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Settings;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(SettingsControlBase), ShipmentTypeCode.DhlExpress)]
