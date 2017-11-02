@@ -15,14 +15,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExShippingClerkFactory : IFedExShippingClerkFactory
     {
         private readonly Func<IFedExSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk;
-        private readonly Func<IFimsShippingClerk> createFimsShippingClerk;
+        private readonly Func<IFedExSettingsRepository, IFimsShippingClerk> createFimsShippingClerk;
         readonly Func<IFedExSettingsRepository, IFedExRequestFactory> createRequestFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExShippingClerkFactory(
-            Func<IFimsShippingClerk> createFimsShippingClerk,
+            Func<IFedExSettingsRepository, IFimsShippingClerk> createFimsShippingClerk,
             Func<IFedExSettingsRepository, IFedExRequestFactory, IFedExShippingClerk> createFedExShippingClerk,
             Func<IFedExSettingsRepository, IFedExRequestFactory> createRequestFactory)
         {
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private IFedExShippingClerk CreateShippingClerk(IShipmentEntity shipment, IFedExSettingsRepository settingsRepository)
         {
             return IsFimsShipment(shipment) ?
-                createFimsShippingClerk() :
+                createFimsShippingClerk(settingsRepository) :
                 createFedExShippingClerk(settingsRepository, createRequestFactory(settingsRepository));
         }
 
