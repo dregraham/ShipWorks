@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
@@ -28,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            mock.Mock<ICarrierSettingsRepository>()
+            mock.Mock<IFedExSettingsRepository>()
                 .Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>()))
                 .Returns(new FedExAccountEntity());
 
