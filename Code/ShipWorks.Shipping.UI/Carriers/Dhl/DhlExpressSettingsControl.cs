@@ -2,7 +2,7 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     [Component(RegistrationType.Self)]
     [KeyedComponent(typeof(SettingsControlBase), ShipmentTypeCode.DhlExpress)]

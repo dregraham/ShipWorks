@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Dhl
+﻿using ShipWorks.Shipping.Carriers;
+
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     partial class DhlExpressSettingsControl
     {
@@ -38,7 +40,7 @@
             // carrierAccountManagerControl
             // 
             this.carrierAccountManagerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.carrierAccountManagerControl.Location = new System.Drawing.Point(30, 111);
+            this.carrierAccountManagerControl.Location = new System.Drawing.Point(25, 111);
             this.carrierAccountManagerControl.Name = "carrierAccountManagerControl";
             this.carrierAccountManagerControl.Size = new System.Drawing.Size(462, 168);
             this.carrierAccountManagerControl.TabIndex = 0;
@@ -56,7 +58,7 @@
             // shippingCutoff
             // 
             this.shippingCutoff.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.shippingCutoff.Location = new System.Drawing.Point(27, 62);
+            this.shippingCutoff.Location = new System.Drawing.Point(22, 62);
             this.shippingCutoff.Name = "shippingCutoff";
             this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
             this.shippingCutoff.TabIndex = 16;
@@ -74,7 +76,7 @@
             // requestedLabelFormatOptionControl
             // 
             this.requestedLabelFormatOptionControl.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.requestedLabelFormatOptionControl.Location = new System.Drawing.Point(27, 31);
+            this.requestedLabelFormatOptionControl.Location = new System.Drawing.Point(22, 31);
             this.requestedLabelFormatOptionControl.Name = "requestedLabelFormatOptionControl";
             this.requestedLabelFormatOptionControl.Size = new System.Drawing.Size(344, 23);
             this.requestedLabelFormatOptionControl.TabIndex = 18;
