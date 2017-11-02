@@ -267,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             nonStandardPackaging.Visible = anyGround;
 
             // Show freight if they are all freight
-            UpdateFreightSection(allServicesSame);
+            UpdateFreightSection();
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -334,16 +334,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Hide/Show the freight section
         /// </summary>
-        /// <param name="allSameServices"></param>
-        private void UpdateFreightSection(bool? allSameServices)
+        private void UpdateFreightSection()
         {
-            bool allDistinct = allSameServices.HasValue ? 
-                                    allSameServices.Value : 
-                                    LoadedShipments.Select(s => s.FedEx.Service).Distinct().IsCountEqualTo(1);
+            List<int> allDistinct = LoadedShipments.Select(s => s.FedEx.Service).Distinct().ToList();
 
-            sectionFreight.Visible = allDistinct && 
-                                     LoadedShipments.All(s => !FedExUtility.IsFimsService(s.FedEx.Service) &&
-                                                               FedExUtility.IsFreightAnyService(s.FedEx.Service));
+            sectionFreight.Visible = allDistinct.All(FedExUtility.IsFreightLtlService) ||
+                                     allDistinct.All(FedExUtility.IsFreightExpressService);
 
             if (sectionFreight.Visible)
             {
@@ -608,7 +604,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             SetStandardControlVisibility(true);
 
-            UpdateFreightSection(null);
+            UpdateFreightSection();
 
             // Don't show any selection when multiple services are selected
             RateControl.ClearSelection();
@@ -658,7 +654,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             SyncSelectedRate();
 
             // Only show freight if its a freight service
-            UpdateFreightSection(null);
+            UpdateFreightSection();
 
             Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
         }
