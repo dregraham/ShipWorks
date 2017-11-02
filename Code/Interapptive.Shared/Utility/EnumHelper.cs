@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,8 +16,8 @@ namespace Interapptive.Shared.Utility
     public static class EnumHelper
     {
         // Cache for reflection performance reasons
-        static Dictionary<Type, Dictionary<int, EnumMetadata>> enumMetadataCache = new Dictionary<Type, Dictionary<int, EnumMetadata>>();
-        static Dictionary<Type, List<object>> enumEntryCache = new Dictionary<Type, List<object>>();
+        static ConcurrentDictionary<Type, Dictionary<int, EnumMetadata>> enumMetadataCache = new ConcurrentDictionary<Type, Dictionary<int, EnumMetadata>>();
+        static ConcurrentDictionary<Type, List<object>> enumEntryCache = new ConcurrentDictionary<Type, List<object>>();
 
         class EnumMetadata
         {
@@ -27,6 +28,7 @@ namespace Interapptive.Shared.Utility
             public int? SortOrder { get; set; }
             public string ApiValue { get; set; }
             public bool Hidden { get; internal set; }
+            public int RawValue { get; internal set; }
         }
 
         /// <summary>
@@ -211,67 +213,11 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Get the metadata for the given enum value
         /// </summary>
-        [NDependIgnoreLongMethod]
         private static EnumMetadata GetEnumMetadata(Enum value)
         {
             Type enumType = value.GetType();
 
-            // See if its cached
-            Dictionary<int, EnumMetadata> typeCache;
-            if (!enumMetadataCache.TryGetValue(enumType, out typeCache))
-            {
-                ObfuscationAttribute obfuscate = (ObfuscationAttribute) Attribute.GetCustomAttribute(enumType, typeof(ObfuscationAttribute));
-                if (obfuscate == null)
-                {
-                    throw new InvalidOperationException("Cannot use EnumHelper on Enum not marked with ObfuscationAttribute.");
-                }
-
-                if (obfuscate.StripAfterObfuscation)
-                {
-                    throw new InvalidOperationException("Enums using EnumHelper must set StripAfterObfuscation=false on ObfuscationAttribute");
-                }
-
-                // If its not, we go ahead and read every value now
-                typeCache = new Dictionary<int, EnumMetadata>();
-
-                foreach (FieldInfo fieldInfo in enumType.GetFields(BindingFlags.Public | BindingFlags.Static))
-                {
-                    EnumMetadata metadata = new EnumMetadata();
-
-                    metadata.DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute));
-                    metadata.DetailsAttribute = (DetailsAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute));
-                    metadata.Hidden = Attribute.GetCustomAttribute(fieldInfo, typeof(HiddenAttribute)) != null;
-
-                    ImageResourceAttribute imageAttribute = (ImageResourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ImageResourceAttribute));
-                    if (imageAttribute != null)
-                    {
-                        metadata.Image = imageAttribute.ResourceImage;
-                    }
-
-                    SortOrderAttribute sortAttribute = (SortOrderAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(SortOrderAttribute));
-                    if (sortAttribute != null)
-                    {
-                        metadata.SortOrder = sortAttribute.Position;
-                    }
-
-                    DeprecatedAttribute obsoleteAttribute = (DeprecatedAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DeprecatedAttribute));
-                    if (obsoleteAttribute != null)
-                    {
-                        metadata.Deprecated = true;
-                    }
-
-                    ApiValueAttribute apiInfoAttribute = (ApiValueAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(ApiValueAttribute));
-                    if (apiInfoAttribute != null)
-                    {
-                        metadata.ApiValue = apiInfoAttribute.ApiValue;
-                    }
-
-                    typeCache[Convert.ToInt32(fieldInfo.GetRawConstantValue())] = metadata;
-                }
-
-                // Cache it
-                enumMetadataCache[enumType] = typeCache;
-            }
+            var typeCache = enumMetadataCache.GetOrAdd(enumType, BuildEnumMetadata);
 
             EnumMetadata result;
             if (!typeCache.TryGetValue(Convert.ToInt32(value), out result))
@@ -280,6 +226,55 @@ namespace Interapptive.Shared.Utility
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Build the enum metadata
+        /// </summary>
+        private static Dictionary<int, EnumMetadata> BuildEnumMetadata(Type enumType)
+        {
+            ValidateObfuscation(enumType);
+
+            return enumType.GetFields(BindingFlags.Public | BindingFlags.Static)
+                .Select(BuildFieldMetadata)
+                .GroupBy(x => x.RawValue)
+                .ToDictionary(x => x.Key, x => x.Last());
+        }
+
+        /// <summary>
+        /// Build metadata for an entry of an enum
+        /// </summary>
+        private static EnumMetadata BuildFieldMetadata(FieldInfo fieldInfo)
+        {
+            return new EnumMetadata
+            {
+                RawValue = Convert.ToInt32(fieldInfo.GetRawConstantValue()),
+                DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute)),
+                DetailsAttribute = (DetailsAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute)),
+                Hidden = Attribute.GetCustomAttribute(fieldInfo, typeof(HiddenAttribute)) != null,
+                Image = fieldInfo.GetCustomAttribute<ImageResourceAttribute>()?.ResourceImage,
+                SortOrder = fieldInfo.GetCustomAttribute<SortOrderAttribute>()?.Position,
+                Deprecated = fieldInfo.GetCustomAttribute<DeprecatedAttribute>() != null,
+                ApiValue = fieldInfo.GetCustomAttribute<ApiValueAttribute>()?.ApiValue,
+            };
+        }
+
+        /// <summary>
+        /// Validate that obfuscation attributes are correct
+        /// </summary>
+        private static void ValidateObfuscation(Type enumType)
+        {
+            ObfuscationAttribute obfuscate = (ObfuscationAttribute) Attribute.GetCustomAttribute(enumType, typeof(ObfuscationAttribute));
+
+            if (obfuscate == null)
+            {
+                throw new InvalidOperationException("Cannot use EnumHelper on Enum not marked with ObfuscationAttribute.");
+            }
+
+            if (obfuscate.StripAfterObfuscation)
+            {
+                throw new InvalidOperationException("Enums using EnumHelper must set StripAfterObfuscation=false on ObfuscationAttribute");
+            }
         }
     }
 }

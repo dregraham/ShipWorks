@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
@@ -575,10 +576,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                // Make sure package dimensions are valid.
                 ValidatePackageDimensions(shipment);
-
-                //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
                 // Make sure we have a trusted connection with FedEx before making any requests that would
@@ -593,44 +591,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Ensure that the version capture has been performed
                 PerformVersionCapture(shipment);
 
-                List<RateResult> overallResults = new List<RateResult>();
-
-                IEnumerable<RateResult> smartPostRates = null;
-
-                try
-                {
-                    // Retrieve the rates from FedEx
-                    overallResults.AddRange(GetBasicRates(shipment, FedExRateRequestOptions.None));
-                    overallResults.AddRange(GetBasicRates(shipment, FedExRateRequestOptions.LtlFreight));
-                    overallResults.AddRange(GetOneRateRates(shipment));
-                }
-                catch (FedExException ex)
-                {
-                    // Exception seems to occur when rates are retrieved for valid APO/FPO postal codes.
-                    // But since FedEx only uses SmartPost for military addresses, and the basic rate call
-                    // does not include the SmartPost information, this error is returned.
-                    // A different error is returned for fake postal codes.
-                    // Just log the exception so we can proceed to GetSmartPostRates
-                    log.Warn(ex.Message);
-
-                    smartPostRates = GetSmartPostRates(shipment);
-
-                    // If we didn't get any smart post rates, we probably got a legitimate exception.
-                    if (smartPostRates == null || !smartPostRates.Any())
-                    {
-                        throw;
-                    }
-                }
-
-                if (smartPostRates == null)
-                {
-                    smartPostRates = GetSmartPostRates(shipment);
-                }
-
-                overallResults.AddRange(smartPostRates);
+                IEnumerable<RateResult> overallResults = GetOverallRates(shipment);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
-                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
+                IEnumerable<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
@@ -643,14 +607,74 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Gets the filtered rates based on any excluded services configured for this fedex shipment type.
+        /// Get overall rates
         /// </summary>
-        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        private IEnumerable<RateResult> GetOverallRates(IShipmentEntity shipment)
         {
-            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
-                .Select(s => (FedExServiceType) s).Union(new List<FedExServiceType> { (FedExServiceType) shipment.FedEx.Service }).ToList();
+            var basicRequest = new Task<IEnumerable<RateResult>>(() => GetBasicRates(shipment, FedExRateRequestOptions.None));
+            var freightRequest = new Task<IEnumerable<RateResult>>(() => GetExtraRates(shipment, FedExRateRequestOptions.LtlFreight));
+            var oneRateRequest = new Task<IEnumerable<RateResult>>(() => GetExtraRates(shipment, FedExRateRequestOptions.OneRate));
+            var smartPostRequest = new Task<IEnumerable<RateResult>>(() => GetSmartPostRates(shipment));
 
-            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection) r.Tag).ServiceType)).ToList();
+            try
+            {
+                basicRequest.Start();
+                freightRequest.Start();
+                oneRateRequest.Start();
+                smartPostRequest.Start();
+
+                Task.WaitAll(new[] { basicRequest, freightRequest, oneRateRequest, smartPostRequest }, TimeSpan.FromMinutes(1));
+
+                return basicRequest.Result
+                    .Concat(freightRequest.Result)
+                    .Concat(oneRateRequest.Result)
+                    .Concat(smartPostRequest.Result);
+            }
+            catch (AggregateException ex)
+            {
+                // Exception seems to occur when rates are retrieved for valid APO/FPO postal codes.
+                // But since FedEx only uses SmartPost for military addresses, and the basic rate call
+                // does not include the SmartPost information, this error is returned.
+                // A different error is returned for fake postal codes.
+                // Just log the exception so we can proceed to GetSmartPostRates
+                if (basicRequest.IsFaulted &&
+                    basicRequest.Exception is FedExException &&
+                    !smartPostRequest.IsFaulted &&
+                    smartPostRequest.Result.Any())
+                {
+                    log.Warn(ex.Message);
+                    return smartPostRequest.Result;
+                }
+
+                foreach (var loggedException in ex.InnerExceptions)
+                {
+                    log.Error("AggregateException while getting rates", loggedException);
+                }
+
+                var exception = ex.InnerExceptions.OfType<FedExException>().FirstOrDefault() ??
+                    ex.InnerExceptions.OfType<CarrierException>().FirstOrDefault() ??
+                    ex.InnerExceptions.FirstOrDefault();
+                if (exception != null)
+                {
+                    throw exception;
+                }
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this FedEx shipment type.
+        /// </summary>
+        private IEnumerable<RateResult> FilterRatesByExcludedServices(IShipmentEntity shipment, IEnumerable<RateResult> rates)
+        {
+            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx)
+                .GetAvailableServiceTypes(excludedServiceTypeRepository)
+                .Select(s => (FedExServiceType) s)
+                .Union(new List<FedExServiceType> { (FedExServiceType) shipment.FedEx.Service })
+                .ToList();
+
+            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection) r.Tag).ServiceType));
         }
 
         /// <summary>
@@ -670,57 +694,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private IEnumerable<RateResult> GetSmartPostRates(IShipmentEntity shipment)
-        {
-            try
-            {
-                if (FedExUtility.IsSmartPostEnabled(shipment))
-                {
-                    IFedExRateRequest smartPostRequest = requestFactory.CreateRateRequest();
-                    IFedExRateResponse smartPostResponse = smartPostRequest.Submit(shipment, FedExRateRequestOptions.SmartPost);
-                    RateReply smartPostNativeResponse = smartPostResponse.Process();
-
-                    return BuildRateResults(shipment, new List<RateReplyDetail>(smartPostNativeResponse.RateReplyDetails));
-                }
-            }
-            catch (FedExException ex)
-            {
-                // Just eat any FedEx exception, so we can still display the basic rates
-                log.Warn("Error getting SmartPost rates: " + ex.Message);
-            }
-            catch (FedExApiCarrierException ex)
-            {
-                // Just eat the FedEx API exception, so we can still display the basic rates
-                log.Warn("Error getting SmartPost rates: " + ex.Message);
-            }
-
-            return Enumerable.Empty<RateResult>();
-        }
+        private IEnumerable<RateResult> GetSmartPostRates(IShipmentEntity shipment) =>
+            FedExUtility.IsSmartPostEnabled(shipment) ?
+                GetExtraRates(shipment, FedExRateRequestOptions.SmartPost) :
+                Enumerable.Empty<RateResult>();
 
         /// <summary>
-        /// Gets the one rate rates for the given shipment.
+        /// Get extra, non-basic rates
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>A List of RateResult objects.</returns>
-        private IEnumerable<RateResult> GetOneRateRates(ShipmentEntity shipment)
+        /// <remarks>
+        /// Any FedEx exceptions in this method are translated into warnings
+        /// </remarks>
+        private IEnumerable<RateResult> GetExtraRates(IShipmentEntity shipment, FedExRateRequestOptions options)
         {
             try
             {
-                IFedExRateRequest oneRateRequest = requestFactory.CreateRateRequest();
-                IFedExRateResponse oneRateResponse = oneRateRequest.Submit(shipment, FedExRateRequestOptions.OneRate);
-                RateReply oneRateNativeResponse = oneRateResponse.Process();
+                IFedExRateRequest request = requestFactory.CreateRateRequest();
+                IFedExRateResponse response = request.Submit(shipment, options);
+                RateReply reply = response.Process();
 
-                return BuildRateResults(shipment, new List<RateReplyDetail>(oneRateNativeResponse.RateReplyDetails));
+                return BuildRateResults(shipment, new List<RateReplyDetail>(reply.RateReplyDetails));
             }
             catch (FedExException ex)
             {
                 // Just eat any FedEx exception, so we can still display the basic rates
-                log.Warn("Error getting One Rate rates: " + ex.Message);
+                log.WarnFormat("Error getting {0} rates: {1}", options.ToString(), ex.Message);
             }
             catch (FedExApiCarrierException ex)
             {
                 // Just eat the FedEx API exception, so we can still display the basic rates
-                log.Warn("Error getting One Rate rates: " + ex.Message);
+                log.WarnFormat("Error getting {0} rates: {1}", options.ToString(), ex.Message);
             }
 
             return Enumerable.Empty<RateResult>();
@@ -780,7 +783,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     currency = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Currency;
                 }
 
-                // Add the shipworks rate object
+                // Add the ShipWorks rate object
                 results.Add(new RateResult(
                     EnumHelper.GetDescription(serviceType),
                     GetTransitDaysDescription(transitDays, deliveryDate),
@@ -932,7 +935,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Get the integer number of days for the given fedex transit time value
+        /// Get the integer number of days for the given FedEx transit time value
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
         private static int GetTransitDays(TransitTimeType transitTime)
@@ -999,7 +1002,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_EXPRESS_SAVER:
                     {
-                        // In Canada fedex express saver is called FedEx Economy
+                        // In Canada FedEx express saver is called FedEx Economy
                         if (shipment.OriginCountryCode == "CA")
                         {
                             return FedExServiceType.FedExEconomyCanada;

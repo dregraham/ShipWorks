@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -16,6 +17,37 @@ namespace ShipWorks.Tests.Core
         public EnumTest(ITestOutputHelper output)
         {
             this.output = output;
+        }
+
+        [Fact]
+        public void Verify_AllObfuscatedEnums_CanGetMetadata()
+        {
+            var metadataErrors = AssemblyProvider.GetAssemblies()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => x.IsEnum)
+                .Where(HasObfuscationAttribute)
+                .Select(x => new { Type = x, Value = Enum.GetValues(x).OfType<Enum>().First() })
+                .Select(x =>
+                {
+                    try
+                    {
+                        EnumHelper.GetDetails(x.Value);
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        return new { x.Type, Exception = ex };
+                    }
+                })
+                .Where(x => x != null)
+                .ToList();
+
+            foreach (var error in metadataErrors)
+            {
+                output.WriteLine($"{error.Type}; {error.Exception.Message}");
+            }
+
+            Assert.Empty(metadataErrors);
         }
 
         [Fact]
@@ -61,6 +93,12 @@ namespace ShipWorks.Tests.Core
             output.WriteLine(missingObfuscationAttribute);
             Assert.Equal(0, missingObfuscationAttribute.Length);
         }
+
+        /// <summary>
+        /// Does the type have an obfuscation attribute
+        /// </summary>
+        private bool HasObfuscationAttribute(Type type) =>
+            type.GetCustomAttribute<ObfuscationAttribute>(false) != null;
 
         /// <summary>
         /// If namespace begins with these values, they are ignored.

@@ -8,7 +8,6 @@ using Interapptive.Shared.Net;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -18,7 +17,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
@@ -1494,7 +1492,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            mock.Mock<ILog>().Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
+            mock.Mock<ILog>()
+                .Verify(l => l.WarnFormat("Error getting {0} rates: {1}", FedExRateRequestOptions.SmartPost.ToString(), AnyString));
         }
 
         [Fact]
@@ -1516,7 +1515,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             testObject.GetRates(shipmentEntity, new TrustingCertificateInspector());
 
-            mock.Mock<ILog>().Verify(l => l.Warn(It.Is<string>(s => s.Contains("Error getting SmartPost rates"))), Times.Once());
+            mock.Mock<ILog>()
+                .Verify(l => l.WarnFormat("Error getting {0} rates: {1}", FedExRateRequestOptions.SmartPost.ToString(), AnyString));
         }
 
         #endregion GetRates Tests
