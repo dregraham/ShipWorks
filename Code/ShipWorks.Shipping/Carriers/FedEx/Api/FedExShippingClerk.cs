@@ -638,7 +638,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // A different error is returned for fake postal codes.
                 // Just log the exception so we can proceed to GetSmartPostRates
                 if (basicRequest.IsFaulted &&
-                    basicRequest.Exception is FedExException &&
+                    basicRequest.Exception.InnerException is FedExException &&
                     !smartPostRequest.IsFaulted &&
                     smartPostRequest.Result.Any())
                 {
