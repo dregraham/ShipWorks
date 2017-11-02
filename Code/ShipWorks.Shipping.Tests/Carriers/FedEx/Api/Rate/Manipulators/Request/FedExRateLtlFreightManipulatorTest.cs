@@ -111,26 +111,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_FedExLtlFreightManipulator_ReturnsNoLtlFreight_WhenServiceIsNotFreight()
+        public void Manipulate_FedExLtlFreightManipulator_ReturnsLtlFreight_WhenServiceIsNotFreight()
         {
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
             testObject.Manipulate(shipmentEntity, nativeRequest);
 
-            Assert.Null(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Theory]
-        [InlineData(FedExServiceType.FedExFreightEconomy, true)]
-        [InlineData(FedExServiceType.FedExFreightPriority, true)]
-        [InlineData(FedExServiceType.FedEx1DayFreight, false)]
-        [InlineData(FedExServiceType.FedEx2DayFreight, false)]
-        [InlineData(FedExServiceType.FedEx3DayFreight, false)]
-        [InlineData(FedExServiceType.FedExNextDayFreight, false)]
-        [InlineData(FedExServiceType.FedExGround, false)]
-        public void ShouldApply_ReturnsCorrectValue_ForService(FedExServiceType service, bool expectedValue)
+        [InlineData(FedExRateRequestOptions.LtlFreight, true)]
+        [InlineData(FedExRateRequestOptions.None, false)]
+        [InlineData(FedExRateRequestOptions.OneRate, false)]
+        [InlineData(FedExRateRequestOptions.SmartPost, false)]
+        public void ShouldApply_ReturnsCorrectValue_ForFedExRateRequestOption(FedExRateRequestOptions option, bool expectedValue)
         {
-            shipmentEntity.FedEx.Service = (int) service;
-            bool result = testObject.ShouldApply(shipmentEntity, FedExRateRequestOptions.None);
+            bool result = testObject.ShouldApply(shipmentEntity, option);
 
             Assert.Equal(expectedValue, result);
         }
