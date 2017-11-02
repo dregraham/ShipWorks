@@ -143,8 +143,18 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
                         {
                             try
                             {
+                                MagentoUploadAction uploadAction = new MagentoUploadAction()
+                                {
+                                    OrderNumber = orderSearchEntity.MagentoOrderID,
+                                    Action = EnumHelper.GetDescription(command),
+                                    Comments = processedComments,
+                                    Carrier = carrier,
+                                    TrackingNumber = tracking,
+                                    SendEmail = emailCustomer
+                                };
+
                                 // execute the action
-                                newStatus = webclient.ExecuteAction(orderSearchEntity.MagentoOrderID, EnumHelper.GetDescription(command), processedComments, carrier, tracking, emailCustomer);
+                                newStatus = webclient.ExecuteAction(uploadAction);
                             }
                             catch (Exception ex) when (ex is MagentoException || ex is GenericStoreException)
                             {

@@ -1820,6 +1820,7 @@
     <Compile Include="Stores\Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayFeedbackDetails.cs" />
     <Compile Include="Stores\Platforms\Ebay\EbayMessagingDetails.cs" />
+    <Compile Include="Stores\Platforms\Ebay\EbayTransactionDetails.cs" />
     <Compile Include="Stores\Platforms\Ebay\IEbayOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Ebay\IEbayWebClient.cs" />
     <Compile Include="Stores\Platforms\Etsy\OnlineUpdating\IEtsyOnlineUpdater.cs" />
@@ -1873,6 +1874,7 @@
     <Compile Include="Stores\Platforms\Magento\IMagentoTwoWebClient.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoModuleWebClientFactory.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoWebClient.cs" />
+    <Compile Include="Stores\Platforms\Magento\DTO\MagentoUploadAction.cs" />
     <Compile Include="Stores\Platforms\Magento\OnlineUpdating\IMagentoOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Magento\IMagentoProbe.cs" />
     <Compile Include="Stores\Platforms\GenericModule\IGenericModuleStoreType.cs" />

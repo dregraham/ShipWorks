@@ -158,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
+      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,6 +205,9 @@
     </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.Designer.cs">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressServicePickerControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">
@@ -443,6 +452,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
+      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSetupWizard.resx">
       <DependentUpon>DhlExpressSetupWizard.cs</DependentUpon>

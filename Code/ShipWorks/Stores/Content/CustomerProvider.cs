@@ -264,6 +264,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private static IPredicate GetCompareOrderAddressPredicate(PersonAdapter billPerson)
         {
+            if (billPerson.Street1.Length == 0 && billPerson.Street2.Length == 0)
+            {
+                return null;
+            }
+
             return
                 OrderFields.BillFirstName == billPerson.FirstName &
                 OrderFields.BillLastName == billPerson.LastName &
@@ -291,6 +296,11 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private static IPredicate GetCompareCustomerAddressPredicate(PersonAdapter billPerson)
         {
+            if (billPerson.Street1.Length == 0 && billPerson.Street2.Length == 0)
+            {
+                return null;
+            }
+
             return
                 CustomerFields.BillFirstName == billPerson.FirstName &
                 CustomerFields.BillLastName == billPerson.LastName &

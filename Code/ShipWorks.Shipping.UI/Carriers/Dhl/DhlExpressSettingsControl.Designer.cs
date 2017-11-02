@@ -33,6 +33,7 @@
             this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
             this.labelsLabel = new System.Windows.Forms.Label();
             this.requestedLabelFormatOptionControl = new ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl();
+            this.excludedServiceControl = new ShipWorks.Shipping.UI.Carriers.Dhl.DhlExpressServicePickerControl();
             this.SuspendLayout();
             // 
             // carrierAccountManagerControl
@@ -79,17 +80,26 @@
             this.requestedLabelFormatOptionControl.Size = new System.Drawing.Size(344, 23);
             this.requestedLabelFormatOptionControl.TabIndex = 18;
             // 
+            // excludedServiceControl
+            // 
+            this.excludedServiceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.excludedServiceControl.Location = new System.Drawing.Point(7, 305);
+            this.excludedServiceControl.Name = "excludedServiceControl";
+            this.excludedServiceControl.Size = new System.Drawing.Size(379, 130);
+            this.excludedServiceControl.TabIndex = 19;
+            // 
             // DhlExpressSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.excludedServiceControl);
             this.Controls.Add(this.requestedLabelFormatOptionControl);
             this.Controls.Add(this.labelsLabel);
             this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.carrierAccountManagerControl);
             this.Name = "DhlExpressSettingsControl";
-            this.Size = new System.Drawing.Size(500, 393);
+            this.Size = new System.Drawing.Size(500, 641);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,5 +112,6 @@
         private Editing.ShippingDateCutoffControl shippingCutoff;
         private System.Windows.Forms.Label labelsLabel;
         private Editing.RequestedLabelFormatOptionControl requestedLabelFormatOptionControl;
+        private UI.Carriers.Dhl.DhlExpressServicePickerControl excludedServiceControl;
     }
 }

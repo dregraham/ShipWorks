@@ -23,20 +23,18 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Executes an action on an order and returns the new order status
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public string ExecuteAction(long orderNumber, string action, string comments, string carrier,
-            string trackingNumber, bool magentoEmails)
+        public string ExecuteAction(MagentoUploadAction action)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
-
-            request.Variables.Add("order", orderNumber.ToString());
-            request.Variables.Add("command", action);
-            request.Variables.Add("comments", comments);
-            request.Variables.Add("carrier", carrier);
-            request.Variables.Add("tracking", trackingNumber);
+            
+            request.Variables.Add("order", action.OrderNumber.ToString());
+            request.Variables.Add("command", action.Action);
+            request.Variables.Add("comments", action.Comments);
+            request.Variables.Add("carrier", action.Carrier);
+            request.Variables.Add("tracking", action.TrackingNumber);
 
             // if we're supposed to send emails, send the flag
-            if (magentoEmails)
+            if (action.SendEmail)
             {
                 request.Variables.Add("sendemail", "1");
             }
@@ -46,5 +44,6 @@ namespace ShipWorks.Stores.Platforms.Magento
             // look for the resulting status
             return XPathUtility.Evaluate(response.XPath, "//OrderStatus", "fail_after_action");
         }
+
     }
 }

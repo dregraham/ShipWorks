@@ -194,12 +194,6 @@
     <Compile Include="Carriers\Dhl\DhlExpressShipmentAdapter.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
-      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressRatingService.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
@@ -557,11 +551,6 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
-      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
