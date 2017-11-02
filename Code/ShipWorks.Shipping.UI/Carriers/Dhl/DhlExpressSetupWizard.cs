@@ -21,7 +21,7 @@ using System.Windows.Forms;
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     /// <summary>
-    /// Setup wizard for Amazon shipment type
+    /// Setup wizard for Dhl Express shipment type
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.DhlExpress)]
     public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard

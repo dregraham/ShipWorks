@@ -18,7 +18,7 @@ using ShipWorks.Shipping.Carriers.Asendia;
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
     /// <summary>
-    /// Setup wizard for Amazon shipment type
+    /// Setup wizard for Asendia shipment type
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Asendia)]
     public partial class AsendiaSetupWizard : WizardForm, IShipmentTypeSetupWizard
