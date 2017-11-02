@@ -157,9 +157,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 CarrierListResponse result = await carrierApi.CarriersListAsync(key);
                 return result?.Carriers?.FirstOrDefault(c => c.AccountNumber == accountNumber)?.CarrierId ?? string.Empty;
             }
-            catch (ApiException ex)
+            catch (ApiException)
             {
-                return GetErrorMessage(ex);
+                return null;
             }
         }
         
