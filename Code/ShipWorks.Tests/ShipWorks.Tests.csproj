@@ -373,7 +373,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExRequestFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExRequestManipulatorUtilitiesTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExResponseFactoryTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IntegrationTest\GlobalShipAddressIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\FedExGlobalShipAddressRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulatorTest.cs" />

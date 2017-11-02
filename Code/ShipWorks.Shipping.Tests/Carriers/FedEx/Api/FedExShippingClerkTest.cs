@@ -18,12 +18,13 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
@@ -207,9 +208,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             requestFactory.Setup(x => x.CreateRateRequest())
                 .Returns(rateRequest);
 
-            shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
-            shipmentEntity.FedEx.SmartPostHubID = "5571";
-            shipmentEntity.ShipmentType = (int) ShipmentTypeCode.FedEx;
+            shipmentEntity = Create.Shipment()
+                .AsFedEx(f => f
+                    .WithPackage()
+                    .WithPackage()
+                    .Set(x => x.SmartPostHubID, "5571")
+                ).Build();
 
             testObject = mock.Create<FedExShippingClerk>();
         }

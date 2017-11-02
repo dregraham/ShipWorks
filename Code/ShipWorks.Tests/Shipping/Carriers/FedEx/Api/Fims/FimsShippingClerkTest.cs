@@ -4,6 +4,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -37,30 +38,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         [Fact]
         public void Ship_ThrowsFedExException_WhenFimsUsernameIsBlank()
         {
-            ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity();
-            shippingSettings.FedExFimsUsername = string.Empty;
-            shippingSettings.FedExFimsPassword = "asdf";
-
-            // Create the shipment and setup the repository to return a null account for this test
-            mock.Mock<ICarrierSettingsRepository>().Setup(r => r.GetShippingSettings()).Returns(shippingSettings);
-
             Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
-            Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS Username is missing".ToUpperInvariant()));
+            Assert.Contains("FedEX FIMS Username is missing", ex.Message);
         }
 
         [Fact]
         public void Ship_ThrowsFedExException_WhenFimsPasswordIsBlank()
         {
-            ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity();
-            shippingSettings.FedExFimsUsername = "asdf";
-            shippingSettings.FedExFimsPassword = string.Empty;
-
-            // Create the shipment and setup the repository to return a null account for this test
-            mock.Mock<ICarrierSettingsRepository>().Setup(r => r.GetShippingSettings()).Returns(shippingSettings);
+            mock.Mock<IFedExSettingsRepository>()
+                .Setup(r => r.GetShippingSettings())
+                .Returns(new ShippingSettingsEntity { FedExFimsUsername = "foo" });
 
             Exception ex = Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
 
-            Assert.True(ex.Message.ToUpperInvariant().Contains("FedEX FIMS Password is missing".ToUpperInvariant()));
+            Assert.Contains("FedEX FIMS Password is missing", ex.Message);
         }
 
         [Fact]
