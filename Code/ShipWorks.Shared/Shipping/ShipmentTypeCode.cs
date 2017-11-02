@@ -66,6 +66,10 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIcon("dhl")]
         DhlExpress = 17,
 
+        [Description("Asendia")]
+        [ShipmentTypeIcon("asendia")]
+        Asendia = 18,
+
         [Description("None")]
         None = 99
     }

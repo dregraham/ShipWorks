@@ -1207,6 +1207,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
       <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Asendia\IAsendiaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
@@ -1225,8 +1226,6 @@
       <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
-    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountManager.cs" />
-    <Compile Include="Shipping\Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Dhl\DhlExpressServiceType.cs" />
     <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
@@ -10661,6 +10660,7 @@
     <Resource Include="Resources\document_gear_32_32.png" />
     <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
+    <None Include="Resources\asendia.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />

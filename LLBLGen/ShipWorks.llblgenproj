@@ -331,6 +331,26 @@
           <Field Name="Username" Type="string" MaxLength="70" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="AsendiaAccount" ObjectID="c52eca27-f251-4cc6-a3e0-96315ddd468a">
+        <Fields>
+          <Field Name="AccountNumber" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="AsendiaAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
+          <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="13" />
+          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
+          <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
+          <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
+          <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
         <Fields>
           <Field Name="Action" Type="int" FieldIndex="8" />
@@ -4152,7 +4172,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-23T19:32:09.8349108Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-01T20:46:17.3410855Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4395,6 +4415,27 @@
                     <Field Name="StoreUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="StoreCode" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="StatusCodes" Ordinal="6" DbType="26" Length="2147483647" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaAccount">
+                  <PkConstraintName Name="PK_AsendiaAccount" />
+                  <Fields>
+                    <Field Name="AsendiaAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
+                    <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
+                    <Field Name="LastName" Ordinal="8" DbType="12" Length="30" />
+                    <Field Name="Company" Ordinal="9" DbType="12" Length="30" />
+                    <Field Name="Street1" Ordinal="10" DbType="12" Length="43" />
+                    <Field Name="City" Ordinal="11" DbType="12" Length="25" />
+                    <Field Name="StateProvCode" Ordinal="12" DbType="12" Length="50" />
+                    <Field Name="PostalCode" Ordinal="13" DbType="12" Length="10" />
+                    <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
+                    <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
+                    <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -10221,6 +10262,26 @@
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="StoreUrl" TargetFieldName="StoreUrl" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AsendiaAccount" TargetName="ShipWorksLocal:dbo:AsendiaAccount">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="City" TargetFieldName="City" />
+            <FieldMapping FieldName="Company" TargetFieldName="Company" />
+            <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="Email" TargetFieldName="Email" />
+            <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
+            <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
+            <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
+            <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
+            <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Audit" TargetName="ShipWorksLocal:dbo:Audit">

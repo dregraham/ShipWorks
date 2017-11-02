@@ -164,6 +164,12 @@
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </Compile>
+      <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.Designer.cs">
+      <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -453,7 +459,10 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaSetupWizard.resx">
+      <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
+    </EmbeddedResource>
+        <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSetupWizard.resx">

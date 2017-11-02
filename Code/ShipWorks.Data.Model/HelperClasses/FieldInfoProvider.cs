@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (217 + 0));
+			this.InitClass( (218 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -65,6 +65,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonShipmentEntityInfos();
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
+			InitAsendiaAccountEntityInfos();
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
 			InitAuditChangeDetailEntityInfos();
@@ -481,6 +482,27 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StoreUrl, 350, 0, 0);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StoreCode", typeof(System.Int32), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StoreCode, 0, 0, 10);
 			this.AddElementFieldInfo("AmeriCommerceStoreEntity", "StatusCodes", typeof(System.String), false, false, false, false,  (int)AmeriCommerceStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
+		}
+		/// <summary>Inits AsendiaAccountEntity's FieldInfo objects</summary>
+		private void InitAsendiaAccountEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AsendiaAccountFieldIndex), "AsendiaAccountEntity");
+			this.AddElementFieldInfo("AsendiaAccountEntity", "AsendiaAccountID", typeof(System.Int64), true, false, true, false,  (int)AsendiaAccountFieldIndex.AsendiaAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AsendiaAccountFieldIndex.RowVersion, 2147483647, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)AsendiaAccountFieldIndex.AccountNumber, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Description, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.FirstName, 30, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.MiddleName, 30, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.LastName, 30, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Company, 30, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Street1, 43, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.City, 25, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.StateProvCode, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.PostalCode, 10, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.CountryCode, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Email, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Phone, 15, 0, 0);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
 		private void InitAuditEntityInfos()

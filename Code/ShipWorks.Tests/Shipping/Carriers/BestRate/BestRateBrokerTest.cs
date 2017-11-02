@@ -73,61 +73,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.Equal(1, brokerExceptions.Count);
             Assert.Equal("blah", brokerExceptions.Single().Message);
         }
-
-        [Theory]
-        [InlineData("Carrier Name", "Service Name", "Carrier Name Service Name")]
-        [InlineData("Carrier", "Carrier Service", "Carrier Service")]
-        [InlineData("", "Service", "Service")]
-        public void GetBestRates_RateDescriptionIsExpectedDescription(string carrier, string service, string expectedDescription)
-        {
-            UspsAccountEntity account = new UspsAccountEntity() { CountryCode = "US" };
-
-            var genericRepositoryMock = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
-            genericRepositoryMock.Setup(x => x.Accounts)
-                                 .Returns(new List<UspsAccountEntity> { account });
-            genericRepositoryMock.Setup(x => x.DefaultProfileAccount)
-                                 .Returns(account);
-
-            var genericShipmentTypeMock = mock.CreateMock<UspsShipmentType>();
-            genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
-            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
-                .Callback<ShipmentEntity>(x =>
-                {
-                    x.Postal = new PostalShipmentEntity()
-                    {
-                        Usps = new UspsShipmentEntity()
-                    };
-                });
-            mock.Provide(genericShipmentTypeMock);
-
-            var testShipment = new ShipmentEntity
-            {
-                ShipmentType = (int) ShipmentTypeCode.BestRate,
-                ContentWeight = 12.1,
-                BestRate = new BestRateShipmentEntity(),
-                OriginCountryCode = "US"
-            };
-
-            List<BrokerException> brokerExceptions = new List<BrokerException>();
-
-            RateGroup rateGroup = new RateGroup(new List<RateResult>() { new RateResult(service, "days", 1, "tag"){Selectable = true} });
-
-            var testObject = new FakeBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, carrier)
-            {
-                GetRatesAction = (shipment, type) => rateGroup
-            };
-
-            var result = testObject.GetBestRates(testShipment, brokerExceptions);
-
-            Assert.Equal(1, result.Rates.Count);
-            Assert.Equal(expectedDescription, result.Rates.Single().Description);
-        }
-
-
+        
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }

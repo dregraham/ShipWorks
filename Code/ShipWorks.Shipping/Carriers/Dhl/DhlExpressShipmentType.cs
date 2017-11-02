@@ -425,14 +425,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             long shipperID = accountRepository.AccountsReadOnly.Select(x => x.DhlExpressAccountID).FirstOrDefault();
 
             profile.DhlExpress.DhlExpressAccountID = shipperID;
-            profile.OriginID = (int)ShipmentOriginSource.Account;
+            profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.DhlExpress.Service = (int)DhlExpressServiceType.ExpressWorldWide;
+            profile.DhlExpress.Service = (int) DhlExpressServiceType.ExpressWorldWide;
             profile.DhlExpress.DeliveryDutyPaid = false;
             profile.DhlExpress.NonMachinable = false;
             profile.DhlExpress.SaturdayDelivery = false;
-            profile.DhlExpress.Contents = (int)ShipEngineContentsType.Merchandise;
-            profile.DhlExpress.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
+            profile.DhlExpress.Contents = (int) ShipEngineContentsType.Merchandise;
+            profile.DhlExpress.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
         }
 
         /// <summary>
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IDhlExpressProfileEntity source = profile.DhlExpress;
             
             long? accountID = (source.DhlExpressAccountID == 0 && accountRepository.Accounts.Any())
-                                  ? (long?)accountRepository.Accounts.First().DhlExpressAccountID
+                                  ? accountRepository.Accounts.First().DhlExpressAccountID
                                   : source.DhlExpressAccountID;
 
             ShippingProfileUtility.ApplyProfileValue(accountID, dhlShipment, DhlExpressShipmentFields.DhlExpressAccountID);

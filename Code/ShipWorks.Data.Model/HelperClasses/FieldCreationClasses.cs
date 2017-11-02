@@ -1544,6 +1544,91 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AsendiaAccountEntity</summary>
+	public partial class AsendiaAccountFields
+	{
+		/// <summary>Creates a new AsendiaAccountEntity.AsendiaAccountID field instance</summary>
+		public static EntityField2 AsendiaAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.AsendiaAccountID);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.AccountNumber field instance</summary>
+		public static EntityField2 AccountNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.AccountNumber);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.Description);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new AsendiaAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaAccountFieldIndex.Phone);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AuditEntity</summary>
 	public partial class AuditFields
 	{

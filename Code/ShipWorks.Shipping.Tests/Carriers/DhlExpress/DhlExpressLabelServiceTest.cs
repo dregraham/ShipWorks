@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorHasTooMuchText()
+        public void Create_ThrowsShippingExceptionWithPrettyError_WhenDhlExpressErrorHasTooMuchText()
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
