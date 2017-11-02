@@ -1,4 +1,5 @@
-﻿using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// <summary>
         /// Performs any processing required based on the response from the carrier.
         /// </summary>
-        RateReply Process();
+        GenericResult<RateReply> Process();
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Tests.Shared;
@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate
     {
         private Mock<IFedExRateRequestManipulator> firstManipulator;
         private Mock<IFedExRateRequestManipulator> secondManipulator;
-        private Mock<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> firstManipulatorFactory;
-        private Mock<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>> secondManipulatorFactory;
+        private Mock<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>> firstManipulatorFactory;
+        private Mock<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>> secondManipulatorFactory;
 
         private readonly AutoMock mock;
         private IShipmentEntity shipmentEntity;
@@ -35,11 +35,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate
             secondManipulator = mock.CreateMock<IFedExRateRequestManipulator>();
             secondManipulator.Setup(x => x.ShouldApply(AnyShipment, It.IsAny<FedExRateRequestOptions>())).Returns(true);
 
-            firstManipulatorFactory = mock.MockFunc<ICarrierSettingsRepository, IFedExRateRequestManipulator>(firstManipulator);
-            secondManipulatorFactory = mock.MockFunc<ICarrierSettingsRepository, IFedExRateRequestManipulator>(secondManipulator);
+            firstManipulatorFactory = mock.MockFunc<IFedExSettingsRepository, IFedExRateRequestManipulator>(firstManipulator);
+            secondManipulatorFactory = mock.MockFunc<IFedExSettingsRepository, IFedExRateRequestManipulator>(secondManipulator);
 
-            mock.Provide<IEnumerable<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>>>(
-                new List<Func<ICarrierSettingsRepository, IFedExRateRequestManipulator>>
+            mock.Provide<IEnumerable<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>>>(
+                new List<Func<IFedExSettingsRepository, IFedExRateRequestManipulator>>
                 {
                     firstManipulatorFactory.Object,
                     secondManipulatorFactory.Object,
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate
         public void Submit_DelegatesToFedExService()
         {
             var service = mock.FromFactory<IFedExServiceGatewayFactory>()
-                .Mock(x => x.Create(It.IsAny<ICarrierSettingsRepository>()));
+                .Mock(x => x.Create(It.IsAny<IFedExSettingsRepository>()));
 
             var testObject = mock.Create<FedExRateRequest>();
             testObject.Submit(shipmentEntity);
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate
             var response = mock.CreateMock<IFedExRateResponse>();
 
             mock.FromFactory<IFedExServiceGatewayFactory>()
-                .Mock(x => x.Create(It.IsAny<ICarrierSettingsRepository>()))
+                .Mock(x => x.Create(It.IsAny<IFedExSettingsRepository>()))
                 .Setup(x => x.GetRates(It.IsAny<RateRequest>(), AnyIShipment))
                 .Returns(rateReply);
 
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate
             var testObject = mock.Create<FedExRateRequest>();
             var result = testObject.Submit(shipmentEntity);
 
-            Assert.Equal(response.Object, result);
+            Assert.Equal(response.Object, result.Value);
         }
     }
 }

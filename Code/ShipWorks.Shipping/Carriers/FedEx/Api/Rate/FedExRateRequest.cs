@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
@@ -37,22 +38,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// <summary>
         /// Submits the request to the carrier API.
         /// </summary>
-        public IFedExRateResponse Submit(IShipmentEntity shipment) =>
+        public GenericResult<IFedExRateResponse> Submit(IShipmentEntity shipment) =>
             Submit(shipment, FedExRateRequestOptions.None);
 
         /// <summary>
         /// Submits the request to the carrier API.
         /// </summary>
-        public IFedExRateResponse Submit(IShipmentEntity shipment, FedExRateRequestOptions options)
+        public GenericResult<IFedExRateResponse> Submit(IShipmentEntity shipment, FedExRateRequestOptions options)
         {
-            var request = manipulatorFactory
+            try
+            {
+                var request = manipulatorFactory
                 .Select(x => x(settingsRepository))
                 .Where(x => x.ShouldApply(shipment, options))
                 .Aggregate(new RateRequest(), (req, manipulator) => manipulator.Manipulate(shipment, req));
 
-            RateReply nativeResponse = serviceGatewayFactory.Create(settingsRepository).GetRates(request, shipment);
+                RateReply nativeResponse = serviceGatewayFactory.Create(settingsRepository).GetRates(request, shipment);
 
-            return createRateRespose(nativeResponse);
+                return GenericResult.FromSuccess(createRateRespose(nativeResponse));
+            }
+            catch (FedExException ex)
+            {
+                return GenericResult.FromError<IFedExRateResponse>(ex);
+            }
         }
     }
 }

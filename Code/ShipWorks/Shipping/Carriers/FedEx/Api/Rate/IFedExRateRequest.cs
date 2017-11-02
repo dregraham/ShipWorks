@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityInterfaces;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
 {
@@ -10,11 +11,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// <summary>
         /// Submits the request to the carrier API
         /// </summary>
-        IFedExRateResponse Submit(IShipmentEntity shipment);
+        GenericResult<IFedExRateResponse> Submit(IShipmentEntity shipment);
 
         /// <summary>
         /// Submits the request to the carrier API
         /// </summary>
-        IFedExRateResponse Submit(IShipmentEntity shipment, FedExRateRequestOptions options);
+        GenericResult<IFedExRateResponse> Submit(IShipmentEntity shipment, FedExRateRequestOptions options);
     }
 }

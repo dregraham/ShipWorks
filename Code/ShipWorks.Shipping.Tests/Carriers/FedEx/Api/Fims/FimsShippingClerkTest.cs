@@ -2,6 +2,7 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using Xunit;
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
             using (var mock = AutoMock.GetLoose())
             {
                 var settings = new ShippingSettingsEntity() {FedExFimsUsername = "U", FedExFimsPassword = "P"};
-                var settingsRepository = mock.Mock<ICarrierSettingsRepository>();
+                var settingsRepository = mock.Mock<IFedExSettingsRepository>();
                 settingsRepository.Setup(s => s.GetShippingSettings()).Returns(settings);
 
                 var shipment = new ShipmentEntity();
@@ -42,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Fims
             using (var mock = AutoMock.GetLoose())
             {
                 var settings = new ShippingSettingsEntity() { FedExFimsUsername = "U", FedExFimsPassword = "P" };
-                var settingsRepository = mock.Mock<ICarrierSettingsRepository>();
+                var settingsRepository = mock.Mock<IFedExSettingsRepository>();
                 settingsRepository.Setup(s => s.GetShippingSettings()).Returns(settings);
 
                 var shipment = new ShipmentEntity();

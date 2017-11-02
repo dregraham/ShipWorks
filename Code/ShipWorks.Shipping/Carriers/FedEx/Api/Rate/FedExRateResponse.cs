@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
@@ -23,30 +25,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// <summary>
         /// Performs any processing required based on the response from the carrier.
         /// </summary>
-        public RateReply Process()
+        public GenericResult<RateReply> Process()
         {
             // Nothing really to process within the response other than checking for any errors
             if (response.HighestSeverity == NotificationSeverityType.ERROR || response.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                if (response.Notifications.Any(n => n.Code == "521"))
-                {
-                    throw new FedExException("No services returned due to invalid postal code.");
-                }
+                var error = response.Notifications.Any(n => n.Code == "521") ?
+                    (Exception) new FedExException("No services returned due to invalid postal code.") :
+                    new FedExApiCarrierException(response.Notifications);
 
-                throw new FedExApiCarrierException(response.Notifications);
+                return GenericResult.FromError<RateReply>(error);
             }
 
             if (response.RateReplyDetails == null)
             {
-                if (response.Notifications.Any(n => n.Code == "556" || n.Code == "557" || n.Code == "558"))
-                {
-                    throw new FedExException("There are no FedEx services available for the selected shipment options.");
-                }
+                var error = response.Notifications.Any(n => n.Code == "556" || n.Code == "557" || n.Code == "558") ?
+                    new FedExException("There are no FedEx services available for the selected shipment options.") :
+                    new FedExException("FedEx did not return any rates for the shipment.");
 
-                throw new FedExException("FedEx did not return any rates for the shipment.");
+                return GenericResult.FromError<RateReply>(error);
             }
 
-            return response;
+            return GenericResult.FromSuccess(response);
         }
     }
 }
