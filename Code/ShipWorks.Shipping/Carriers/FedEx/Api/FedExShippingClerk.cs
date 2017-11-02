@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Web.Services.Protocols;
@@ -484,6 +485,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <exception cref="FedExException">An unexpected response type was received from the package movement request; expected
         /// type: FedExPackageMovementResponse.</exception>
+        [SuppressMessage("SonarLint", "S2696")]
         public void PerformVersionCapture(ShipmentEntity shipmentEntity)
         {
             if (!hasDoneVersionCapture || ForceVersionCapture)
@@ -493,7 +495,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is made up of two requests: perform the package movement and the next to perform the version capture
                 // based on the location ID received in the package movement request
-                foreach (FedExAccountEntity account in settingsRepository.GetAccounts())
+                foreach (FedExAccountEntity account in settingsRepository.AccountsReadOnly.OfType<FedExAccountEntity>())
                 {
                     CarrierRequest packageMovementRequest = requestFactory.CreatePackageMovementRequest(shipmentEntity, account);
                     FedExPackageMovementResponse packageMovementResponse = packageMovementRequest.Submit() as FedExPackageMovementResponse;
