@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         {
             this.shipment = shipment;
 
-            if (!ShouldApply(shipment, FedExRateRequestOptions.None))
+            if (!ShouldApply(shipment, FedExRateRequestOptions.LtlFreight))
             {
                 return request;
             }
@@ -47,8 +47,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
 
+            IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
+
             // Add the LTL freight detail
-            CreateFedExLtlFreightDetailManipulations(request.RequestedShipment, shipment.FedEx);
+            CreateFedExLtlFreightDetailManipulations(request.RequestedShipment, shipment.FedEx, account);
+
+            // Use the FedEx account and shipment to create the shipping charges payment
+            ConfigureShippingCharges(request.RequestedShipment.ShippingChargesPayment, shipment.FedEx, account);
 
             return request;
         }
@@ -58,19 +63,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// </summary>
         public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options)
         {
-            return FedExUtility.IsFreightLtlService(shipment.FedEx.Service);
+            return options.HasFlag(FedExRateRequestOptions.LtlFreight);
         }
 
         /// <summary>
         /// Add options for LTL freight
         /// </summary>
-        private void CreateFedExLtlFreightDetailManipulations(RequestedShipment requestedShipment, IFedExShipmentEntity fedex)
+        private void CreateFedExLtlFreightDetailManipulations(RequestedShipment requestedShipment, IFedExShipmentEntity fedex, IFedExAccountEntity account)
         {
             FreightShipmentRoleType? role = EnumHelper.GetApiValue<FreightShipmentRoleType>(fedex.FreightRole);
             FreightClassType? freightClass = EnumHelper.GetApiValue<FreightClassType>(fedex.FreightClass);
             FreightCollectTermsType? collectTerms = EnumHelper.GetApiValue<FreightCollectTermsType>(fedex.FreightCollectTerms);
             FreightShipmentDetail freightDetail = requestedShipment.FreightShipmentDetail;
-            IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
 
             freightDetail.FedExFreightAccountNumber = account.AccountNumber;
             freightDetail.FedExFreightBillingContactAndAddress = new ContactAndAddress
@@ -97,9 +101,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             freightDetail.TotalHandlingUnits = fedex.FreightTotalHandlinUnits.ToString();
 
             AddLineItems(fedex, freightClass, freightDetail);
-
-            // Add shipping document types 
-            AddShippingDocumentTypes(requestedShipment);
 
             // Set the special service types on the requested shipment
             List<ShipmentSpecialServiceType> specialServiceTypes = GetFreightSpecialServices(fedex.FreightSpecialServices);
@@ -178,6 +179,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             }
 
             return specialServices;
+        }
+
+        /// <summary>
+        /// Configures the shipping charges based on the FedEx shipment/account settings.
+        /// </summary>
+        private void ConfigureShippingCharges(Payment shippingCharges, IFedExShipmentEntity fedExShipment, IFedExAccountEntity account)
+        {
+            shippingCharges.PaymentType = PaymentType.SENDER;
+
+            InitializePayor(shippingCharges);
+            
+            shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
+            shippingCharges.Payor.ResponsibleParty.Contact.PersonName = account.FirstName + " " + account.LastName;
+
+            shippingCharges.Payor.ResponsibleParty.AccountNumber = account.AccountNumber;
+            shippingCharges.Payor.ResponsibleParty.Address = new Address
+                {
+                    StreetLines = new string[] {account.Street1, account.Street2},
+                    City = account.City,
+                    StateOrProvinceCode = account.StateProvCode,
+                    PostalCode = account.PostalCode,
+                    CountryCode = account.CountryCode
+                };
         }
 
         /// <summary>
@@ -290,19 +314,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         }
 
         /// <summary>
-        /// Adds the label shipping document type if it's not already present.
+        /// Initializes the payor.
         /// </summary>
-        private static void AddShippingDocumentTypes(RequestedShipment requestedShipment)
+        /// <param name="shippingCharges"></param>
+        private void InitializePayor(Payment shippingCharges)
         {
-            List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>();
-            shippingDocumentTypes.AddRange(requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes);
-
-            if (!shippingDocumentTypes.Contains(RequestedShippingDocumentType.LABEL))
+            if (shippingCharges.Payor == null)
             {
-                shippingDocumentTypes.Add(RequestedShippingDocumentType.LABEL);
+                // We'll be manipulating properties of the payor, so make sure it's been created
+                shippingCharges.Payor = new Payor();
             }
-            
-            requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
+
+            if (shippingCharges.Payor.ResponsibleParty == null)
+            {
+                // We'll be manipulating properties of the responsible party, so make sure it's been created
+                shippingCharges.Payor.ResponsibleParty = new Party();
+            }
+
+            if (shippingCharges.Payor.ResponsibleParty.Address == null)
+            {
+                // We'll be manipulating properties of the address, so make sure it's been created
+                shippingCharges.Payor.ResponsibleParty.Address = new Address();
+            }
         }
     }
 }

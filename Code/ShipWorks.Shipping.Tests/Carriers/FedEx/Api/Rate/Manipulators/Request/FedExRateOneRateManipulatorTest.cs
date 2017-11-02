@@ -22,10 +22,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 
         [Theory]
         [InlineData(FedExRateRequestOptions.None, false)]
-        [InlineData(FedExRateRequestOptions.ExpressFreight, false)]
+        [InlineData(FedExRateRequestOptions.LtlFreight, false)]
         [InlineData(FedExRateRequestOptions.SmartPost, false)]
         [InlineData(FedExRateRequestOptions.OneRate, true)]
-        [InlineData(FedExRateRequestOptions.OneRate | FedExRateRequestOptions.ExpressFreight, true)]
+        [InlineData(FedExRateRequestOptions.OneRate | FedExRateRequestOptions.LtlFreight, true)]
         public void ShouldApply_ReturnsAppropriateValue_ForInput(FedExRateRequestOptions options, bool expected)
         {
             var result = testObject.ShouldApply(null, options);

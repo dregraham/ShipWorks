@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <returns></returns>
         public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options)
         {
-            return FedExUtility.IsFreightExpressService(shipment.FedEx.Service);
+            return !options.HasFlag(FedExRateRequestOptions.LtlFreight) && FedExUtility.IsFreightExpressService(shipment.FedEx.Service);
         }
 
         /// <summary>

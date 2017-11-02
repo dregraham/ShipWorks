@@ -595,7 +595,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 try
                 {
                     // Retrieve the rates from FedEx
-                    overallResults.AddRange(GetBasicRates(shipment));
+                    overallResults.AddRange(GetBasicRates(shipment, FedExRateRequestOptions.None));
+                    overallResults.AddRange(GetBasicRates(shipment, FedExRateRequestOptions.LtlFreight));
                     overallResults.AddRange(GetOneRateRates(shipment));
                 }
                 catch (FedExException ex)
@@ -650,12 +651,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Gets the basic rates (non-smart post) for the given shipment.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>A List of RateResult objects.</returns>
-        private IEnumerable<RateResult> GetBasicRates(IShipmentEntity shipment)
+        private IEnumerable<RateResult> GetBasicRates(IShipmentEntity shipment, FedExRateRequestOptions options)
         {
             IFedExRateRequest request = requestFactory.CreateRateRequest();
-            IFedExRateResponse response = request.Submit(shipment);
+            IFedExRateResponse response = request.Submit(shipment, options);
             RateReply nativeResponse = response.Process();
 
             return BuildRateResults(shipment, new List<RateReplyDetail>(nativeResponse.RateReplyDetails));

@@ -30,8 +30,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
-            shipment.FedEx.CodEnabled;
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options)
+        {
+            return !options.HasFlag(FedExRateRequestOptions.LtlFreight) && shipment.FedEx.CodEnabled;
+        }
 
         /// <summary>
         /// Manipulates the specified request.

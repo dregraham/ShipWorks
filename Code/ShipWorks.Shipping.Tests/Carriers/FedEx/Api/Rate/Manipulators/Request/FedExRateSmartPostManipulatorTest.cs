@@ -35,9 +35,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
 
         [Theory]
         [InlineData("Foo", FedExRateRequestOptions.SmartPost, true)]
-        [InlineData("Foo", FedExRateRequestOptions.ExpressFreight | FedExRateRequestOptions.SmartPost, true)]
+        [InlineData("Foo", FedExRateRequestOptions.LtlFreight | FedExRateRequestOptions.SmartPost, true)]
         [InlineData("", FedExRateRequestOptions.SmartPost, false)]
-        [InlineData("Foo", FedExRateRequestOptions.ExpressFreight, false)]
+        [InlineData("Foo", FedExRateRequestOptions.LtlFreight, false)]
         [InlineData("Foo", FedExRateRequestOptions.None, false)]
         [InlineData("Foo", FedExRateRequestOptions.OneRate, false)]
         public void ShouldApply_ReturnsAppropriateValue_ForInputs(string hubID, FedExRateRequestOptions option, bool expected)

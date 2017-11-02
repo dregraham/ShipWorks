@@ -26,6 +26,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
         /// <summary>
         /// Express Freight should be included
         /// </summary>
-        ExpressFreight = 4,
+        LtlFreight = 4,
     }
 }

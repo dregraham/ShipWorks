@@ -19,8 +19,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options) =>
-            shipment.FedEx.Packages.ElementAt(currentPackage).DryIceWeight > 0;
+        public bool ShouldApply(IShipmentEntity shipment, FedExRateRequestOptions options)
+        {
+            return !options.HasFlag(FedExRateRequestOptions.LtlFreight) && shipment.FedEx.Packages.ElementAt(currentPackage).DryIceWeight > 0;
+        }
 
         /// <summary>
         /// Manipulates the specified request.
