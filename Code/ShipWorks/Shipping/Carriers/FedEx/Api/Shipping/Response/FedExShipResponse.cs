@@ -99,6 +99,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         {
             if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
             {
+                if (nativeResponse.Notifications?.Length == 0)
+                {
+                    throw new CarrierException("An error occurred while attempting to process the shipment.");
+                }
+
                 throw new FedExApiCarrierException(nativeResponse.Notifications);
             }
 
