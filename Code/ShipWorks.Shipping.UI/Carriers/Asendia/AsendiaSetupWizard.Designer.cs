@@ -117,7 +117,7 @@
             this.username.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(230, 21);
-            this.username.TabIndex = 21;
+            this.username.TabIndex = 2;
             // 
             // password
             // 
@@ -125,7 +125,7 @@
             this.password.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(230, 21);
-            this.password.TabIndex = 20;
+            this.password.TabIndex = 3;
             this.password.UseSystemPasswordChar = true;
             // 
             // labelPassword
@@ -135,7 +135,7 @@
             this.labelPassword.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(57, 13);
-            this.labelPassword.TabIndex = 19;
+            this.labelPassword.TabIndex = 20;
             this.labelPassword.Text = "Password:";
             // 
             // labelUsername
@@ -145,7 +145,7 @@
             this.labelUsername.Margin = new System.Windows.Forms.Padding(3, 0, 10, 0);
             this.labelUsername.Name = "labelUsername";
             this.labelUsername.Size = new System.Drawing.Size(59, 13);
-            this.labelUsername.TabIndex = 18;
+            this.labelUsername.TabIndex = 19;
             this.labelUsername.Text = "Username:";
             // 
             // labelAccountNumber
@@ -185,7 +185,7 @@
             this.accountNumber.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.accountNumber.Name = "accountNumber";
             this.accountNumber.Size = new System.Drawing.Size(230, 21);
-            this.accountNumber.TabIndex = 13;
+            this.accountNumber.TabIndex = 1;
             // 
             // labelAccountInfo
             // 
