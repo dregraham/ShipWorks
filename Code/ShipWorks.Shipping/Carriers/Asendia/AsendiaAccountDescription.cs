@@ -4,7 +4,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
     /// ShipEngine Account description factory

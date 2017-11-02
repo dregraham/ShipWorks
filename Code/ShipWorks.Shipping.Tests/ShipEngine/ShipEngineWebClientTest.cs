@@ -253,6 +253,22 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
+        public async Task ConnectAsendia_ReturnsFriendlyErrorWhenConnectAccountThrows530Error()
+        {
+            string error =
+                "{\r\n  \"request_id\": \"c3d0f656-1ec8-4f1f-935c-25599e1e8d2a\",\r\n  \"errors\": [\r\n    {\r\n      \"error_code\": \"\",\r\n      \"message\": \"(530) Not logged in\"\r\n    }\r\n  ]\r\n}";
+
+            accountsApi.Setup(a =>
+                a.AsendiaAccountCarrierConnectAccountAsync(It.IsAny<AsendiaAccountInformationDTO>(),
+                    It.IsAny<string>())).Throws(new ApiException(500, "", error));
+
+            GenericResult<string> result = await testObject.ConnectAsendiaAccount("abcd", "username", "password");
+
+            Assert.False(result.Success);
+            Assert.Equal("Unable to connect to Asendia. Please check your account information and try again.", result.Message);
+        }
+
+        [Fact]
         public void ConnectAsendia_DelegatesToICarrierAccountsApiWithAccountNumber()
         {
             testObject.ConnectAsendiaAccount("AccountNumber", "username", "password");

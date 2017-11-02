@@ -95,7 +95,15 @@ namespace ShipWorks.Shipping.ShipEngine
             }
             catch (ApiException ex)
             {
-                return GenericResult.FromError<string>(GetErrorMessage(ex));
+                string error = GetErrorMessage(ex);
+
+                // Asendia returns a cryptic error when the username or password are wrong, clean it up
+                if (error.Contains("(530) Not logged in"))
+                {
+                    return GenericResult.FromError<string>("Unable to connect to Asendia. Please check your account information and try again.");
+                }
+
+                return GenericResult.FromError<string>(error);
             }
         }
 

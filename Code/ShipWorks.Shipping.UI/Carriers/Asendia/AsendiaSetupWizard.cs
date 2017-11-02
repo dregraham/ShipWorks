@@ -14,7 +14,6 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Asendia;
-using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
@@ -128,7 +127,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 }
                 else
                 {
-                    ShowWizardError(GetErrorMessage(connectAccountResult.Message), e);
+                    ShowWizardError(connectAccountResult.Message, e);
                 }
 
                 this.Enabled = true;
@@ -138,19 +137,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             {
                 ShowWizardError("Asendia account number must contain only numbers.", e);
             }
-        }
-
-        /// <summary>
-        /// Overwrite the error with a more descriptive error
-        /// </summary>
-        private string GetErrorMessage(string error)
-        {
-            if (error.Contains("(530) Not logged in"))
-            {
-                return "Unable to connect to Asendia. Please check your account information and try again.";
-            }
-
-            return error;
         }
 
         /// <summary>
