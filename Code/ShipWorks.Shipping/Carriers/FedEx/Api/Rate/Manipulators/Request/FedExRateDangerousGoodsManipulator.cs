@@ -200,11 +200,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Set a specific battery detail
         /// </summary>
-        private bool SetBatteryDetail<T, K>(T value, IDictionary<T, K> lookup, Action<K> setProperty)
+        private bool SetBatteryDetail<TKey, TValue>(TKey key, IDictionary<TKey, TValue> lookup, Action<TValue> setProperty)
         {
-            if (lookup.ContainsKey(value))
+            if (lookup.ContainsKey(key))
             {
-                setProperty(lookup[value]);
+                setProperty(lookup[key]);
                 return true;
             }
 

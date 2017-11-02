@@ -235,7 +235,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void RaiseRateCriteriaChanged()
         {
-            RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
+            if (!loading)
+            {
+                RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

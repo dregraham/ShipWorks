@@ -258,13 +258,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a RateRequest
-            if (request == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
             // Make sure the RequestedShipment is there
             if (request.RequestedShipment == null)
             {

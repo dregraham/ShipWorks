@@ -189,7 +189,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
-            bool anyDomestic = false;
             bool anyInternational = false;
 
             FedExServiceType? serviceType = null;
@@ -206,14 +205,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Need to check with the store  to see if anything about the shipment was overridden in case
                 // it may have affected the shipping services available (i.e. the eBay GSP program)
                 ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
-                if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment))
-                {
-                    anyDomestic = true;
-                }
-                else
-                {
-                    anyInternational = true;
-                }
+
+                anyInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment);
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
                 if (FedExUtility.IsGroundService(thisService))

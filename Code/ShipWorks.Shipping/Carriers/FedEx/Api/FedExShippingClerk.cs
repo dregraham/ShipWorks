@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
@@ -1152,7 +1153,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private void ValidatePackageDimensions(ShipmentEntity shipment)
         {
-            string exceptionMessage = string.Empty;
+            StringBuilder exceptionMessage = new StringBuilder();
             int packageIndex = 1;
 
             if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
@@ -1161,8 +1162,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 {
                     if (!DimensionsAreValid(fedexPackage))
                     {
-                        exceptionMessage +=
-                            $"Package {packageIndex} has invalid dimensions.{System.Environment.NewLine}";
+                        exceptionMessage.AppendLine($"Package {packageIndex} has invalid dimensions.");
                     }
 
                     packageIndex++;
@@ -1170,8 +1170,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (exceptionMessage.Length > 0)
                 {
-                    exceptionMessage += "Package dimensions must be 1 or greater and not 1x1x1.  ";
-                    throw new InvalidPackageDimensionsException(exceptionMessage);
+                    exceptionMessage.AppendLine("Package dimensions must be 1 or greater and not 1x1x1.  ");
+                    throw new InvalidPackageDimensionsException(exceptionMessage.ToString());
                 }
             }
         }
