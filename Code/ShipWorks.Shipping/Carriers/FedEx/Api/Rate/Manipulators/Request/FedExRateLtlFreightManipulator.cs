@@ -1,15 +1,10 @@
 using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
-using System.Collections.Generic;
-using System.Linq;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.FedEx;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
@@ -81,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             {
                 Address = new Address
                 {
-                    StreetLines = new string[] {account.Street1, account.Street2},
+                    StreetLines = new string[] { account.Street1, account.Street2 },
                     City = account.City,
                     StateOrProvinceCode = account.StateProvCode,
                     PostalCode = account.PostalCode,
@@ -189,19 +184,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             shippingCharges.PaymentType = PaymentType.SENDER;
 
             InitializePayor(shippingCharges);
-            
+
             shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
             shippingCharges.Payor.ResponsibleParty.Contact.PersonName = account.FirstName + " " + account.LastName;
 
             shippingCharges.Payor.ResponsibleParty.AccountNumber = account.AccountNumber;
             shippingCharges.Payor.ResponsibleParty.Address = new Address
-                {
-                    StreetLines = new string[] {account.Street1, account.Street2},
-                    City = account.City,
-                    StateOrProvinceCode = account.StateProvCode,
-                    PostalCode = account.PostalCode,
-                    CountryCode = account.CountryCode
-                };
+            {
+                StreetLines = new string[] { account.Street1, account.Street2 },
+                City = account.City,
+                StateOrProvinceCode = account.StateProvCode,
+                PostalCode = account.PostalCode,
+                CountryCode = account.CountryCode
+            };
         }
 
         /// <summary>
@@ -216,12 +211,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             if (shipment == null)
             {
-                throw new CarrierException("request.ShipmentEntity is null");
+                throw new FedExException("request.ShipmentEntity is null");
             }
 
             if (shipment.FedEx == null)
             {
-                throw new CarrierException("request.ShipmentEntity.FedEx is null");
+                throw new FedExException("request.ShipmentEntity.FedEx is null");
             }
 
             IFedExShipmentEntity fedex = shipment.FedEx;
@@ -229,13 +224,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             FreightShipmentRoleType? role = EnumHelper.GetApiValue<FreightShipmentRoleType>(fedex.FreightRole);
             if (role == null)
             {
-                throw new CarrierException($"FedEx Freight Role is required.");
+                throw new FedExException($"FedEx Freight Role is required.");
             }
 
             FreightClassType? freightClass = EnumHelper.GetApiValue<FreightClassType>(fedex.FreightClass);
             if (freightClass == null)
             {
-                throw new CarrierException($"FedEx Freight Class is required.");
+                throw new FedExException($"FedEx Freight Class is required.");
             }
 
             foreach (IFedExPackageEntity package in fedex.Packages)
@@ -243,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                 PhysicalPackagingType? packagingType = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging);
                 if (packagingType == null)
                 {
-                    throw new CarrierException($"FedEx Freight Packaging Type is required.");
+                    throw new FedExException($"FedEx Freight Packaging Type is required.");
                 }
             }
         }
