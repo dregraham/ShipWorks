@@ -1525,14 +1525,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                     }
                 }
             };
-            
+
             if (isOneRate)
             {
-                nativeRateReply.RateReplyDetails.First().RatedShipmentDetails.First().ShipmentRateDetail.SpecialRatingApplied = new []{ SpecialRatingAppliedType.FEDEX_ONE_RATE };
+                nativeRateReply.RateReplyDetails.First().RatedShipmentDetails.First().ShipmentRateDetail.SpecialRatingApplied = new[] { SpecialRatingAppliedType.FEDEX_ONE_RATE };
             }
 
             // Setup the requests to return the native rate reply
-            rateResponse.Setup(r => r.Process()).Returns(nativeRateReply);
+            rateResponse.Setup(r => r.Process()).Returns(GenericResult.FromSuccess(nativeRateReply));
 
             shipmentEntity.OriginCountryCode = originCountryCode;
             shipmentEntity.ShipCountryCode = shipCountryCode;
@@ -1541,7 +1541,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             Assert.Equal(fedExServiceType, ((FedExRateSelection) rates.Rates.First().Tag).ServiceType);
         }
-		
+
         [Theory]
         [InlineData(FedExRateRequestOptions.None)]
         [InlineData(FedExRateRequestOptions.SmartPost)]
