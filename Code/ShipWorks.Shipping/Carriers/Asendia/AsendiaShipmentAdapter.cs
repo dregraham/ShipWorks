@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         private AsendiaShipmentAdapter(AsendiaShipmentAdapter adapterToCopy) : base(adapterToCopy)
         {
-
         }
 
         /// <summary>
@@ -45,13 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Does this shipment type support accounts?
         /// </summary>
-        public override bool SupportsAccounts
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool SupportsAccounts => true;
 
         /// <summary>
         /// Does this shipment type support package Types?

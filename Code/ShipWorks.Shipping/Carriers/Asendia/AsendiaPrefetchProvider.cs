@@ -8,7 +8,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     /// Provide a prefetch path for a DhlExpress shipment
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypePrefetchProvider), ShipmentTypeCode.DhlExpress)]
-
     public class AsendiaPrefetchProvider : IShipmentTypePrefetchProvider
     {
         /// <summary>
