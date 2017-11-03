@@ -158,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaServiceControl.Designer.cs">
+      <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -467,6 +473,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaServiceControl.resx">
+      <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaSetupWizard.resx">
       <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>

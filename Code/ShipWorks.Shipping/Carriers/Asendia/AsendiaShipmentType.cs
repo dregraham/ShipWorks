@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new[] { new AsendiaPackageAdapter(shipment) };
         }
 
         /// <summary>

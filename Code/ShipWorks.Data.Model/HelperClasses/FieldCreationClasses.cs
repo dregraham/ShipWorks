@@ -1647,21 +1647,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Service);}
 		}
-		/// <summary>Creates a new AsendiaShipmentEntity.DeliveredDutyPaid field instance</summary>
-		public static EntityField2 DeliveredDutyPaid
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DeliveredDutyPaid);}
-		}
-		/// <summary>Creates a new AsendiaShipmentEntity.NonMachinable field instance</summary>
-		public static EntityField2 NonMachinable
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.NonMachinable);}
-		}
-		/// <summary>Creates a new AsendiaShipmentEntity.SaturdayDelivery field instance</summary>
-		public static EntityField2 SaturdayDelivery
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.SaturdayDelivery);}
-		}
 		/// <summary>Creates a new AsendiaShipmentEntity.RequestedLabelFormat field instance</summary>
 		public static EntityField2 RequestedLabelFormat
 		{

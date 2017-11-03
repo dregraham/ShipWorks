@@ -355,24 +355,21 @@
       <EntityDefinition Name="AsendiaShipment" ObjectID="fbbc5278-1284-409b-ba77-c07c9b69fbb9">
         <Fields>
           <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
-          <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
-          <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
-          <Field Name="DimsAddWeight" Type="bool" FieldIndex="14" />
-          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="13" />
-          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="11" />
-          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="10" />
-          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="15" />
-          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="12" />
-          <Field Name="Insurance" Type="bool" FieldIndex="16" />
-          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="17" />
-          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
-          <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
-          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
-          <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="11" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="10" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="8" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="7" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="12" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="9" />
+          <Field Name="Insurance" Type="bool" FieldIndex="13" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="9" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="18" />
+          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="15" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
@@ -4201,7 +4198,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-03T15:06:25.215289Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-03T18:46:05.0390528Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4481,22 +4478,19 @@
                         <CustomProperty Name="AuditFormat" Value="130" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="DeliveredDutyPaid" Ordinal="4" DbType="2" />
-                    <Field Name="NonMachinable" Ordinal="5" DbType="2" />
-                    <Field Name="SaturdayDelivery" Ordinal="6" DbType="2" />
-                    <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
-                    <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="12" />
-                    <Field Name="DimsProfileID" Ordinal="11" DbType="0" Precision="19" />
-                    <Field Name="DimsLength" Ordinal="12" DbType="6" Precision="38" />
-                    <Field Name="DimsWidth" Ordinal="13" DbType="6" Precision="38" />
-                    <Field Name="DimsHeight" Ordinal="14" DbType="6" Precision="38" />
-                    <Field Name="DimsAddWeight" Ordinal="15" DbType="2" />
-                    <Field Name="DimsWeight" Ordinal="16" DbType="6" Precision="38" />
-                    <Field Name="Insurance" Ordinal="17" DbType="2" />
-                    <Field Name="InsuranceValue" Ordinal="18" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="TrackingNumber" Ordinal="19" DbType="24" Length="50" />
+                    <Field Name="RequestedLabelFormat" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="7" DbType="12" Length="12" />
+                    <Field Name="DimsProfileID" Ordinal="8" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="9" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="10" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="11" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="12" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="13" DbType="6" Precision="38" />
+                    <Field Name="Insurance" Ordinal="14" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="TrackingNumber" Ordinal="16" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -10354,7 +10348,6 @@
           <FieldMappings>
             <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
-            <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
             <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
             <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
@@ -10364,9 +10357,7 @@
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
-            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
-            <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />

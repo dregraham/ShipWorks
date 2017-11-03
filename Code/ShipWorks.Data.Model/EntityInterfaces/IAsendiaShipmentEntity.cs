@@ -39,24 +39,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         Interapptive.Shared.Enums.AsendiaServiceType Service { get; }
-        /// <summary> The DeliveredDutyPaid property of the Entity AsendiaShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaShipment"."DeliveredDutyPaid"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean DeliveredDutyPaid { get; }
-        /// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaShipment"."NonMachinable"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean NonMachinable { get; }
-        /// <summary> The SaturdayDelivery property of the Entity AsendiaShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaShipment"."SaturdayDelivery"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean SaturdayDelivery { get; }
         /// <summary> The RequestedLabelFormat property of the Entity AsendiaShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaShipment"."RequestedLabelFormat"<br/>

@@ -730,12 +730,6 @@ namespace ShipWorks.Data.Model
 		AsendiaAccountID,
 		///<summary>Service. </summary>
 		Service,
-		///<summary>DeliveredDutyPaid. </summary>
-		DeliveredDutyPaid,
-		///<summary>NonMachinable. </summary>
-		NonMachinable,
-		///<summary>SaturdayDelivery. </summary>
-		SaturdayDelivery,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
 		///<summary>Contents. </summary>

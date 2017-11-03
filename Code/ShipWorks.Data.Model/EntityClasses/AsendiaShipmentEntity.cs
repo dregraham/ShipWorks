@@ -356,12 +356,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Service", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DeliveredDutyPaid", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("SaturdayDelivery", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Contents", fieldHashtable);
@@ -513,36 +507,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Interapptive.Shared.Enums.AsendiaServiceType)GetValue((int)AsendiaShipmentFieldIndex.Service, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.Service, value); }
-		}
-
-		/// <summary> The DeliveredDutyPaid property of the Entity AsendiaShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaShipment"."DeliveredDutyPaid"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean DeliveredDutyPaid
-		{
-			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.DeliveredDutyPaid, true); }
-			set	{ SetValue((int)AsendiaShipmentFieldIndex.DeliveredDutyPaid, value); }
-		}
-
-		/// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaShipment"."NonMachinable"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean NonMachinable
-		{
-			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.NonMachinable, true); }
-			set	{ SetValue((int)AsendiaShipmentFieldIndex.NonMachinable, value); }
-		}
-
-		/// <summary> The SaturdayDelivery property of the Entity AsendiaShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaShipment"."SaturdayDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean SaturdayDelivery
-		{
-			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.SaturdayDelivery, true); }
-			set	{ SetValue((int)AsendiaShipmentFieldIndex.SaturdayDelivery, value); }
 		}
 
 		/// <summary> The RequestedLabelFormat property of the Entity AsendiaShipment<br/><br/></summary>
