@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Enums
 {
     /// <summary>
     /// This is the authentication type for shopsite stores
     /// </summary>
-    [Obfuscation(Exclude = true, ApplyToMembers = true)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum ShopSiteAuthenticationType
     {
         // Basic auth

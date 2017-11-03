@@ -1,4 +1,5 @@
 using System;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Tokens;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// <summary>
     /// An implementation of the IFedExShipmentTokenProcessor interface.
     /// </summary>
+    [Component]
     public class FedExShipmentTokenProcessor : IFedExShipmentTokenProcessor
     {
         /// <summary>

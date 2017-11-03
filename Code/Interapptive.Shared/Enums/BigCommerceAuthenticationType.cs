@@ -6,7 +6,7 @@ namespace Interapptive.Shared.Enums
     /// <summary>
     /// Enum for BigCommerce authentication types
     /// </summary>
-    [Obfuscation(Exclude = true, ApplyToMembers = true)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum BigCommerceAuthenticationType
     {
         // Basic auth

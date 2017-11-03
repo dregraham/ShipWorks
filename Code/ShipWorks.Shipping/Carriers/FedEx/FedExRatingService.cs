@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -18,14 +19,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         private readonly FedExAccountRepository fedExAccountRepository;
         private readonly FedExShipmentType fedExShipmentType;
-        private readonly FedExShippingClerkFactory shippingClerkFactory;
+        private readonly IFedExShippingClerkFactory shippingClerkFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExRatingService(FedExAccountRepository fedExAccountRepository,
             FedExShipmentType fedExShipmentType,
-            FedExShippingClerkFactory shippingClerkFactory)
+            IFedExShippingClerkFactory shippingClerkFactory)
         {
             this.fedExAccountRepository = fedExAccountRepository;
             this.fedExShipmentType = fedExShipmentType;
@@ -45,11 +46,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (!fedExAccountRepository.Accounts.Any() && !fedExShipmentType.IsShipmentTypeRestricted)
                 {
                     CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-                    return shippingClerkFactory.CreateShippingClerk(shipment, true).GetRates(shipment);
+                    return shippingClerkFactory.CreateForCounterRates(shipment)
+                        .GetRates(shipment, new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData));
                 }
 
                 // there must be at least one FedEx account so we get rates using it
-                return shippingClerkFactory.CreateShippingClerk(shipment, false).GetRates(shipment);
+                return shippingClerkFactory.Create(shipment).GetRates(shipment, new TrustingCertificateInspector());
             }
             catch (FedExException ex)
             {

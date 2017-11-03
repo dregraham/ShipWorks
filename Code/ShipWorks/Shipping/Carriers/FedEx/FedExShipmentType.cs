@@ -9,6 +9,7 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -19,7 +20,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -28,6 +28,7 @@ using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -423,6 +424,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
 
             shipment.FedEx.ThirdPartyConsignee = false;
+
+            shipment.FedEx.FreightClass = FedExFreightClassType.None;
+            shipment.FedEx.FreightCollectTerms = FedExFreightCollectTermsType.None;
+            shipment.FedEx.FreightRole = FedExFreightShipmentRoleType.None;
+            shipment.FedEx.FreightSpecialServices = (int) FedExFreightSpecialServicesType.None;
+            shipment.FedEx.FreightTotalHandlinUnits = 0;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
@@ -918,10 +925,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates if the residential status indicator is required for the given shipment
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return IsDomestic(shipment); // shipment.ShipCountryCode == "US";
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) =>
+        	IsDomestic(shipment);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used
@@ -1028,8 +1033,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
-                return shippingClerk.Track(shipment);
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    return lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment).Track(shipment);
+                }
             }
             catch (FedExException ex)
             {
@@ -1057,7 +1064,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines if a shipment will be domestic or international
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
             if (shipmentEntity == null)
             {
