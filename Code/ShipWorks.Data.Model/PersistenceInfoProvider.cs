@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(218);
+			this.InitClass(219);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -63,6 +63,7 @@ namespace ShipWorks.Data.Model
 			InitAmazonStoreEntityMappings();
 			InitAmeriCommerceStoreEntityMappings();
 			InitAsendiaAccountEntityMappings();
+			InitAsendiaShipmentEntityMappings();
 			InitAuditEntityMappings();
 			InitAuditChangeEntityMappings();
 			InitAuditChangeDetailEntityMappings();
@@ -513,6 +514,31 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AsendiaAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("AsendiaAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
+		}
+
+		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>
+		private void InitAsendiaShipmentEntityMappings()
+		{
+			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 19, 0);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "AsendiaAccountID", "AsendiaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DeliveredDutyPaid", "DeliveredDutyPaid", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "SaturdayDelivery", "SaturdayDelivery", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "Contents", "Contents", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonDelivery", "NonDelivery", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", false, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsProfileID", "DimsProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsLength", "DimsLength", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsWidth", "DimsWidth", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 12);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsHeight", "DimsHeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 13);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsAddWeight", "DimsAddWeight", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 14);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 15);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 17);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "TrackingNumber", "TrackingNumber", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 18);
 		}
 
 		/// <summary>Inits AuditEntity's mappings</summary>

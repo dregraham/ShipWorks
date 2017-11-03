@@ -1629,6 +1629,106 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AsendiaShipmentEntity</summary>
+	public partial class AsendiaShipmentFields
+	{
+		/// <summary>Creates a new AsendiaShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.AsendiaAccountID field instance</summary>
+		public static EntityField2 AsendiaAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.AsendiaAccountID);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Service);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DeliveredDutyPaid field instance</summary>
+		public static EntityField2 DeliveredDutyPaid
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DeliveredDutyPaid);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.NonMachinable field instance</summary>
+		public static EntityField2 NonMachinable
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.NonMachinable);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.SaturdayDelivery field instance</summary>
+		public static EntityField2 SaturdayDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.SaturdayDelivery);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.NonDelivery);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.ShipEngineLabelID);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsAddWeight);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.Insurance field instance</summary>
+		public static EntityField2 Insurance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.InsuranceValue field instance</summary>
+		public static EntityField2 InsuranceValue
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.InsuranceValue);}
+		}
+		/// <summary>Creates a new AsendiaShipmentEntity.TrackingNumber field instance</summary>
+		public static EntityField2 TrackingNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.TrackingNumber);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AuditEntity</summary>
 	public partial class AuditFields
 	{

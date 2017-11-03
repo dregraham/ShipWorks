@@ -351,6 +351,29 @@
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="AsendiaShipment" ObjectID="fbbc5278-1284-409b-ba77-c07c9b69fbb9">
+        <Fields>
+          <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="14" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="13" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="11" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="10" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="15" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="12" />
+          <Field Name="Insurance" Type="bool" FieldIndex="16" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="17" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
+          <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
+          <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="9" />
+          <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="18" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
         <Fields>
           <Field Name="Action" Type="int" FieldIndex="8" />
@@ -3404,6 +3427,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="AsendiaShipment.Shipment-Shipment.AsendiaShipment" Start=":AsendiaShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="AsendiaShipment" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="Audit.Computer-Computer.Audit" Start=":Audit" End=":Computer" StartNavigator="Computer" EndNavigator="Audit" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
@@ -4172,7 +4200,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-01T20:46:17.3410855Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-03T15:06:25.215289Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4436,6 +4464,38 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaShipment">
+                  <PkConstraintName Name="PK_AsendiaShipment" />
+                  <Fields>
+                    <Field Name="ShipmentID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AsendiaAccountID" Ordinal="2" DbType="0" Precision="19">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="4" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="Service" Ordinal="3" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="130" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="DeliveredDutyPaid" Ordinal="4" DbType="2" />
+                    <Field Name="NonMachinable" Ordinal="5" DbType="2" />
+                    <Field Name="SaturdayDelivery" Ordinal="6" DbType="2" />
+                    <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="12" />
+                    <Field Name="DimsProfileID" Ordinal="11" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="12" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="13" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="14" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="15" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="16" DbType="6" Precision="38" />
+                    <Field Name="Insurance" Ordinal="17" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="18" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="TrackingNumber" Ordinal="19" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -9107,6 +9167,11 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmeriCommerceStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AsendiaShipment:FK_AsendiaShipment_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:AsendiaShipment:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Audit:FK_Audit_Computer">
               <FieldPairs>
                 <FieldPair PkField="dbo:Computer:ComputerID" FkField="dbo:Audit:ComputerID" />
@@ -10282,6 +10347,29 @@
             <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AsendiaShipment" TargetName="ShipWorksLocal:dbo:AsendiaShipment">
+          <FieldMappings>
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Audit" TargetName="ShipWorksLocal:dbo:Audit">

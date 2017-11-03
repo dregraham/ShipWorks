@@ -111,6 +111,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BilledWeight = source.BilledWeight;
             
             Amazon = (IAmazonShipmentEntity) source.Amazon?.AsReadOnly(objectMap);
+            AsendiaShipment = (IAsendiaShipmentEntity) source.AsendiaShipment?.AsReadOnly(objectMap);
             BestRate = (IBestRateShipmentEntity) source.BestRate?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressShipmentEntity) source.DhlExpress?.AsReadOnly(objectMap);
             FedEx = (IFedExShipmentEntity) source.FedEx?.AsReadOnly(objectMap);
@@ -574,6 +575,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.Double BilledWeight { get; }
         
         public IAmazonShipmentEntity Amazon { get; }
+        
+        public IAsendiaShipmentEntity AsendiaShipment { get; }
         
         public IBestRateShipmentEntity BestRate { get; }
         
