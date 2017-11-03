@@ -81,8 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment)
         {
-            throw new NotImplementedException("Should return shipment.Asendia.AsendiaAccountID");
+            return shipment.Asendia.AsendiaAccountID;
         }
-
     }
 }
