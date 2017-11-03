@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             base.Initialize();
 
-            EnumHelper.BindComboBox<DhlExpressServiceType>(service);
+            EnumHelper.BindComboBox<AsendiaServiceType>(service);
 
             originControl.Initialize(ShipmentTypeCode.DhlExpress);
 
