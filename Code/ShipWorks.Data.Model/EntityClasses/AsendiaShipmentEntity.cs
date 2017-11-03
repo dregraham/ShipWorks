@@ -395,7 +395,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			this.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAsendiaShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "AsendiaShipment", false, new int[] { (int)AsendiaShipmentFieldIndex.ShipmentID } );
+			this.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAsendiaShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "Asendia", false, new int[] { (int)AsendiaShipmentFieldIndex.ShipmentID } );
 			_shipment = null;
 		}
 		
@@ -686,7 +686,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(this.IsDeserializing)
 				{
 					SetupSyncShipment(value);
-					CallSetRelatedEntityDuringDeserialization(value, "AsendiaShipment");
+					CallSetRelatedEntityDuringDeserialization(value, "Asendia");
 				}
 				else
 				{
@@ -703,7 +703,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					{
 						if(_shipment!=value)
 						{
-							((IEntity2)value).SetRelatedEntity(this, "AsendiaShipment");
+							((IEntity2)value).SetRelatedEntity(this, "Asendia");
 							SetupSyncShipment(value);
 						}
 					}

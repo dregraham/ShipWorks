@@ -3428,7 +3428,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="AsendiaShipment.Shipment-Shipment.AsendiaShipment" Start=":AsendiaShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="AsendiaShipment" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+      <NormalRelationship Name="AsendiaShipment.Shipment-Shipment.Asendia" Start=":AsendiaShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>

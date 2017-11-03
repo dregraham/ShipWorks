@@ -125,7 +125,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "AsendiaShipment", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Asendia", true);
 
 				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, AsendiaShipmentFields.ShipmentID);
 
