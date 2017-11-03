@@ -1,4 +1,12 @@
-﻿PRINT N'Altering [dbo].[FedExPackage]'
+﻿PRINT N'Updating [dbo].[ShippingSettings]'
+GO
+UPDATE ShippingSettings
+SET	FedExUsername = 'MFG2EvMKBLcxcCsk',
+	FedExPassword = 'nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE='
+	WHERE ISNULL(FedExUsername,'') != ''
+GO
+
+PRINT N'Altering [dbo].[FedExPackage]'
 GO
 ALTER TABLE [dbo].[FedExPackage] ADD
 	[BatteryMaterial] [int] NOT NULL CONSTRAINT [DF_FedExPackage_BatteryMaterial] DEFAULT (0),

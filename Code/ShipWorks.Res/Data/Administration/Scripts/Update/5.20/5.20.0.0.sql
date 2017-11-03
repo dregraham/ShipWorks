@@ -1,7 +1,14 @@
-﻿PRINT N'Updating [dbo].[ShippingSettings]'
+﻿PRINT N'Altering [dbo].[WalmartOrderSearch]'
 GO
-UPDATE ShippingSettings
-SET	FedExUsername = 'MFG2EvMKBLcxcCsk',
-	FedExPassword = 'nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE='
-	WHERE ISNULL(FedExUsername,'') != ''
+ALTER TABLE [WalmartOrderSearch]
+ADD CustomerOrderID varchar(50) NOT NULL
+CONSTRAINT DF_CustomerOrderID DEFAULT ''
+GO
+PRINT N'Dropping Constraint on [dbo].[WalmartOrderSearch]'
+ALTER TABLE [WalmartOrderSearch]
+DROP CONSTRAINT DF_CustomerOrderID
+GO
+PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
 GO
