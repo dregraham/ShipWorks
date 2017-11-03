@@ -77,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendiaShipment.AsendiaAccountID = 0;
             asendiaShipment.ShipEngineLabelID = string.Empty;
+            asendiaShipment.DimsProfileID = 0;
             asendiaShipment.DimsLength = 0;
             asendiaShipment.DimsWidth = 0;
             asendiaShipment.DimsHeight = 0;
