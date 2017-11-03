@@ -24,17 +24,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         /// <summary>
         /// Initializes a new instance of the <see cref="AsendiaServiceControl"/> class.
         /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public AsendiaServiceControl(RateControl rateControl)
             : base(ShipmentTypeCode.Asendia, rateControl)
         {
             InitializeComponent();
-
-            this.residentialDetermination.TextChanged += OnRateCriteriaChanged;
-            this.insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
-            this.dimensionsControl.DimensionsChanged += OnRateCriteriaChanged;
-            this.weight.WeightChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -87,7 +80,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
-            SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
@@ -100,7 +92,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
-            ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
 
@@ -115,7 +106,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             List<DimensionsAdapter> dimensions = new List<DimensionsAdapter>();
 
             // Update the service types
-            service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(LoadedShipments);
             
             using (new MultiValueScope())
@@ -137,8 +127,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                     dimensions.Add(new DimensionsAdapter(shipment.Asendia));
                 }
             }
-
-            service.SelectedValueChanged += OnServiceChanged;
 
             //Load the dimensions
             dimensionsControl.LoadDimensions(dimensions);
@@ -187,7 +175,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
-            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
@@ -213,7 +200,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         [NDependIgnoreLongMethod]
         public override void SaveToShipments()
         {
-            SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
             base.SaveToShipments();
@@ -238,23 +224,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
             }
 
-            ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
-        }
-
-        /// <summary>
-        /// A rate has been selected.
-        /// </summary>
-        public override void OnRateSelected(object sender, RateSelectedEventArgs e)
-        {
-            int oldIndex = service.SelectedIndex;
-            AsendiaServiceType servicetype = (AsendiaServiceType) e.Rate.OriginalTag;
-
-            service.SelectedValue = servicetype;
-            if (service.SelectedIndex == -1 && oldIndex != -1)
-            {
-                service.SelectedIndex = oldIndex;
-            }
         }
 
         /// <summary>
@@ -262,10 +232,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         /// </summary>
         public override void UpdateInsuranceDisplay()
         {
-            insuranceControl.InsuranceOptionsChanged -= OnRateCriteriaChanged;
             insuranceControl.LoadInsuranceChoices(LoadedShipments.Select(shipment => ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance));
-
-            insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -284,42 +251,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         {
             RaiseShipSenseFieldChanged();
         }
-
-        /// <summary>
-        /// Called when the service type has changed.
-        /// </summary>
-        private void OnServiceChanged(object sender, EventArgs e)
-        {
-            SyncSelectedRate();
-        }
-
-        /// <summary>
-        /// Synchronizes the selected rate in the rate control.
-        /// </summary>
-        public override void SyncSelectedRate()
-        {
-            if (!service.MultiValued && service.SelectedValue != null)
-            {
-                // Update the selected rate in the rate control to coincide with the service change
-                AsendiaServiceType serviceType = (AsendiaServiceType) service.SelectedValue;
-                RateResult matchingRate = RateControl.RateGroup.Rates.FirstOrDefault(r =>
-                {
-                    if (r.Tag == null || r.ShipmentType != ShipmentTypeCode.Asendia)
-                    {
-                        return false;
-                    }
-
-                    return (AsendiaServiceType) r.OriginalTag == serviceType;
-                });
-
-                RateControl.SelectRate(matchingRate);
-            }
-            else
-            {
-                RateControl.ClearSelection();
-            }
-        }
-
+       
         /// <summary>
         /// Refresh the weight box with the latest weight information from the loaded shipments
         /// </summary>

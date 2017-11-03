@@ -231,7 +231,6 @@
             this.service.PromptText = "(Multiple Values)";
             this.service.Size = new System.Drawing.Size(175, 21);
             this.service.TabIndex = 65;
-            this.service.SelectedIndexChanged += new System.EventHandler(this.OnServiceChanged);
             // 
             // labelShipDate
             // 
@@ -271,6 +270,7 @@
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 73;
+            this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // dimensionsLabel
             // 
@@ -307,6 +307,7 @@
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
+            this.weight.WeightChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // AsendiaServiceControl
             // 
