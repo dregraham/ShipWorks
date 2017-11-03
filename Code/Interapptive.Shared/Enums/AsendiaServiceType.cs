@@ -1,8 +1,8 @@
-﻿using Interapptive.Shared.Utility;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.Carriers.Asendia
+namespace Interapptive.Shared.Enums
 {
     /// <summary>
     /// Available Asendia service types

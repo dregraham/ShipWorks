@@ -511,7 +511,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AsendiaShipmentFieldIndex), "AsendiaShipmentEntity");
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AsendiaShipmentFieldIndex.ShipmentID, 0, 0, 19);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "AsendiaAccountID", typeof(System.Int64), false, false, false, false,  (int)AsendiaShipmentFieldIndex.AsendiaAccountID, 0, 0, 19);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "Service", typeof(Interapptive.Shared.Enums.AsendiaServiceType), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DeliveredDutyPaid", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DeliveredDutyPaid, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "SaturdayDelivery", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.SaturdayDelivery, 0, 0, 0);

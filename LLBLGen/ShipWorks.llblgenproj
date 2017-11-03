@@ -84,6 +84,7 @@
     <Property Name="UseCustomFieldOrderingOnNewElements" Value="true" />
   </Properties>
   <TypeShortcuts>
+    <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -368,7 +369,7 @@
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
-          <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="18" />

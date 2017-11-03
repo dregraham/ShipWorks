@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "AsendiaShipment"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 Service { get; }
+        Interapptive.Shared.Enums.AsendiaServiceType Service { get; }
         /// <summary> The DeliveredDutyPaid property of the Entity AsendiaShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaShipment"."DeliveredDutyPaid"<br/>
