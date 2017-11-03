@@ -36,6 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Gets or sets the index of this package adapter in a list of package adapters.
         /// </summary>
+        [SuppressMessage("SonarQube", "S3237: \"value\" parameters should be used",
+            Justification = "Package type isn't supported for Asendia, so the setter is not necessary")]
         [Obfuscation(Exclude = true)]
         public int Index
         {
