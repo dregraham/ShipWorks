@@ -97,8 +97,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             }
             catch (ORMConcurrencyException)
             {
-                messageHelper.ShowError(
-                    this, "Your changes cannot be saved because another use has deleted the account.");
+                messageHelper.ShowError(this, "Your changes cannot be saved because another use has deleted the account.");
 
                 DialogResult = DialogResult.Abort;
             }
