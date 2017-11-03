@@ -67,7 +67,7 @@ namespace Interapptive.Shared.Utility
         /// Constructor
         /// </summary>
         internal GenericResult(bool success, T value, string message) :
-            this(success, value, message, new Exception(message))
+            this(success, value, message, string.IsNullOrEmpty(message) ? null : new Exception(message))
         {
 
         }
