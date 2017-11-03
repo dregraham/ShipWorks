@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public int Index
         {
             get { return 1; }
-            set { }
+            set { /* Not supported by DHL */ }
         }
 
         /// <summary>
