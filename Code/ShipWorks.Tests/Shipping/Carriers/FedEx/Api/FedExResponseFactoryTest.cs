@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
@@ -34,59 +33,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             var dataResourceManager = new Mock<IDataResourceManager>();
 
             testObject = new FedExResponseFactory(new FedExLabelRepository(dataResourceManager.Object));
-        }
-
-        [Fact]
-        public void CreateShipResponse_ReturnsFedExShipResponse()
-        {
-            ICarrierResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity());
-            Assert.IsAssignableFrom<FedExShipResponse>(carrierResponse);
-        }
-
-        [Fact]
-        public void CreateShipResponse_ThrowsCarrierException_WhenNativeResponseIsNotProcessShipmentReply()
-        {
-            // Try sending a string as the native response
-            const string nativeResponseText = "the native response";
-
-            Assert.Throws<CarrierException>(() => testObject.CreateShipResponse(nativeResponseText, carrierRequest.Object, new ShipmentEntity()));
-        }
-
-        [Fact]
-        public void CreateShipResponse_PopulatesManipulators()
-        {
-            // This will obviously need to change as manipulators are added in the factory and also serve as a
-            // reminder that to write the tests to ensure the manipulator type is present in the list
-            FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.Equal(3, carrierResponse.ShipmentManipulators.Count());
-        }
-
-        [Fact]
-        public void CreateShipResponse_AddsFedExShipmentTrackingManipulator()
-        {
-            FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentTrackingManipulator)));
-        }
-
-        [Fact]
-        public void CreateShipResponse_AddsFedExShipmentCodManipulator()
-        {
-            FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCodManipulator)));
-        }
-
-        [Fact]
-        public void CreateShipResponse_AddsFedExShipmentCostManipulator()
-        {
-            FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.Equal(1, carrierResponse.ShipmentManipulators.Count(m => m.GetType() == typeof(FedExShipmentCostManipulator)));
-        }
-
-        [Fact]
-        public void CreateShipResponse_AddsFedExLabelRepository()
-        {
-            FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
-            Assert.IsAssignableFrom<FedExLabelRepository>(carrierResponse.LabelRepository);
         }
 
         #region CreateGroundResponse Tests

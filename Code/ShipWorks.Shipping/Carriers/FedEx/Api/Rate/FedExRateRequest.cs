@@ -49,9 +49,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate
             try
             {
                 var request = manipulatorFactory
-                .Select(x => x(settingsRepository))
-                .Where(x => x.ShouldApply(shipment, options))
-                .Aggregate(new RateRequest(), (req, manipulator) => manipulator.Manipulate(shipment, req));
+                    .Select(x => x(settingsRepository))
+                    .Where(x => x.ShouldApply(shipment, options))
+                    .Aggregate(new RateRequest(), (req, manipulator) => manipulator.Manipulate(shipment, req));
 
                 RateReply nativeResponse = serviceGatewayFactory.Create(settingsRepository).GetRates(request, shipment);
 

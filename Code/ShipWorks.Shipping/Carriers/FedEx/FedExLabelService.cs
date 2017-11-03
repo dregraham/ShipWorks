@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -14,13 +15,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExLabelService : ILabelService
     {
         private readonly IFedExShippingClerkFactory shippingClerkFactory;
-        private readonly Func<IEnumerable<ICarrierResponse>, FedExDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExLabelService(IFedExShippingClerkFactory shippingClerkFactory,
-            Func<IEnumerable<ICarrierResponse>, FedExDownloadedLabelData> createDownloadedLabelData)
+            Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData)
         {
             this.shippingClerkFactory = shippingClerkFactory;
             this.createDownloadedLabelData = createDownloadedLabelData;
@@ -31,12 +32,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public IDownloadedLabelData Create(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory.Create(shipment);
-
             try
             {
-                IEnumerable<ICarrierResponse> carrierResponses = shippingClerk.Ship(shipment);
-                return createDownloadedLabelData(carrierResponses);
+                return shippingClerkFactory.Create(shipment)
+                    .Ship(shipment)
+                    .Map(createDownloadedLabelData)
+                    .Match(x => x, ex => throw ex);
             }
             catch (FedExException ex)
             {

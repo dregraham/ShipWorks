@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Xunit;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
 {
@@ -34,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
             fedExService = new Mock<IFedExServiceGateway>();
-            fedExService.Setup(s => s.Ship(It.IsAny<ProcessShipmentRequest>())).Returns(new ProcessShipmentReply());
+            fedExService.Setup(s => s.Ship(It.IsAny<ProcessShipmentRequest>())).Returns(GenericResult.FromSuccess(new ProcessShipmentReply()));
 
             settingsRespository = new Mock<ICarrierSettingsRepository>();
             settingsRespository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
@@ -65,11 +66,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
             reply.SetupGet(x => x.HighestSeverity).Returns(NotificationSeverityType.SUCCESS);
             reply.SetupGet(x => x.CompletedShipmentDetail).Returns(completedShipmentDetails);
 
-            FedExShipResponse shipResponse = new FedExShipResponse(reply.Object, null, null, null, new List<ICarrierResponseManipulator>());
+            //FedExShipResponse shipResponse = new FedExShipResponse(reply.Object, null, null, null, new List<ICarrierResponseManipulator>());
 
-            responseFactory.Setup(
-                x => x.CreateShipResponse(It.IsAny<object>(), It.IsAny<CarrierRequest>(), It.IsAny<ShipmentEntity>()))
-                .Returns(shipResponse);
+            //responseFactory.Setup(
+            //    x => x.CreateShipResponse(It.IsAny<object>(), It.IsAny<CarrierRequest>(), It.IsAny<ShipmentEntity>()))
+            //    .Returns(shipResponse);
         }
 
         [Fact]
@@ -107,16 +108,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
 
             // Verify that the ship method was called using the test object's native request
             fedExService.Verify(s => s.Ship(testObject.NativeRequest as ProcessShipmentRequest), Times.Once());
-        }
-
-        [Fact]
-        public void Submit_DelegatesToResponseFactory_WhenCreatingShipResponse()
-        {
-            // No additional setup needed since it was performed in Initialize()
-            ICarrierResponse response = testObject.Submit();
-
-            // Verify the ship response is created via the response factory using the test object's shipment entity
-            responseFactory.Verify(f => f.CreateShipResponse(It.IsAny<ProcessShipmentReply>(), testObject, testObject.ShipmentEntity), Times.Once());
         }
     }
 }

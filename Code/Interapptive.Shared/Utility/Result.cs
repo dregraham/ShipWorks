@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 
 namespace Interapptive.Shared.Utility
 {
@@ -14,7 +15,7 @@ namespace Interapptive.Shared.Utility
         {
             Message = message;
             Success = success;
-            Exception = null;
+            Exception = string.IsNullOrEmpty(message) ? null : new Exception(message);
         }
 
         /// <summary>
@@ -68,5 +69,41 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static ExceptionResultHandler<TException> Handle<TException>() where TException : Exception =>
             new ExceptionResultHandler<TException>();
+
+        /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public GenericResult<TResult> Map<TResult>(Func<GenericResult<TResult>> map) =>
+            Match(map, ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public GenericResult<TResult> Map<TResult>(Func<TResult> map) =>
+            Match(() => GenericResult.FromSuccess(map()),
+                ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Match on the result, calling the first method on success and the second on failure
+        /// </summary>
+        /// <returns>
+        /// The result of the called function
+        /// </returns>
+        public TResult Match<TResult>(Func<TResult> onSuccess, Func<Exception, TResult> onError) =>
+            Success ?
+                onSuccess() :
+                onError(Exception);
+
+        /// <summary>
+        /// Convert from a GenericResult to a Result
+        /// </summary>
+        public static implicit operator GenericResult<Unit>(Result result) =>
+            result.Match(() => GenericResult.FromSuccess(Unit.Default), ex => GenericResult.FromError<Unit>(ex));
     }
 }

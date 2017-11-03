@@ -1,11 +1,15 @@
 using System.Collections.Generic;
-using Xunit;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
 {
@@ -13,27 +17,30 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
     {
         private FedExShipResponse testObject;
 
-        private List<ICarrierResponseManipulator> manipulators;
-        private Mock<ILabelRepository> mockLabelRepository;
-        private Mock<ICarrierResponseManipulator> mockedShipmentManipulator;
+        private List<IFedExShipResponseManipulator> manipulators;
+        private Mock<IFedExLabelRepository> mockLabelRepository;
+        private readonly AutoMock mock;
+        private Mock<IFedExShipResponseManipulator> mockedShipmentManipulator;
         private Mock<CarrierRequest> carrierRequest;
 
         public FedExShipResponseTest()
         {
-            mockedShipmentManipulator = new Mock<ICarrierResponseManipulator>();
-            manipulators = new List<ICarrierResponseManipulator>
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            mockedShipmentManipulator = new Mock<IFedExShipResponseManipulator>();
+            manipulators = new List<IFedExShipResponseManipulator>
             {
                 mockedShipmentManipulator.Object
             };
 
-            mockLabelRepository = new Mock<ILabelRepository>();
+            mockLabelRepository = new Mock<IFedExLabelRepository>();
 
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
             ProcessShipmentReply processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
             ShipmentEntity setupShipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
 
-            testObject = new FedExShipResponse(processShipmentReply, carrierRequest.Object, setupShipmentEntity, mockLabelRepository.Object, manipulators);
+            testObject = mock.Create<FedExShipResponse>();
         }
 
         [Fact]
@@ -51,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
                 }
             };
 
-            testObject = new FedExShipResponse(processShipmentReply, carrierRequest.Object, null, mockLabelRepository.Object, manipulators);
+            //testObject =  new FedExShipResponse(processShipmentReply, carrierRequest.Object, null, mockLabelRepository.Object, manipulators);
 
             try
             {
@@ -66,9 +73,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
         [Fact]
         public void ApplyResponseManipulators_AppliesResponseManipulators_WhenProcessShipmentReplyContainsNoErrors()
         {
-            testObject.ApplyResponseManipulators();
+            testObject.ApplyManipulators();
 
-            mockedShipmentManipulator.Verify(x => x.Manipulate(It.IsAny<FedExShipResponse>()),Times.Once());
+            mockedShipmentManipulator.Verify(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), AnyShipment), Times.Once());
         }
 
         [Fact]
@@ -76,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
         {
             testObject.Process();
 
-            mockLabelRepository.Verify(x => x.SaveLabels(testObject), Times.Once());
+            mockLabelRepository.Verify(x => x.SaveLabels(AnyShipment, It.IsAny<ProcessShipmentReply>()), Times.Once());
         }
     }
 }

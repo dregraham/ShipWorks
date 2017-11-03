@@ -1,9 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
@@ -23,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Communicates with the FedEx API to process a shipment.
         /// </summary>
-        public override IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
+        public override GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest)
         {
             using (ShipService service = new FedExShipServiceWrapper(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
             {

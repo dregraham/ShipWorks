@@ -136,5 +136,11 @@ namespace Interapptive.Shared.Utility
             Success ?
                 onSuccess(Value) :
                 onError(Exception);
+
+        /// <summary>
+        /// Convert from a Result to a GenericResult
+        /// </summary>
+        public static implicit operator Result(GenericResult<T> result) =>
+            result.Match(x => Result.FromSuccess(), ex => Result.FromError(ex));
     }
 }

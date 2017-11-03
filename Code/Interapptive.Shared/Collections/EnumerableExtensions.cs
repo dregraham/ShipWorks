@@ -234,7 +234,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Create a ReadOnlyDictionary from the given IDictionary
         /// </summary>
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(this IDictionary<TKey, TValue> source) => 
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(this IDictionary<TKey, TValue> source) =>
             new ReadOnlyDictionary<TKey, TValue>(source.ToDictionary(k => k.Key, v => v.Value));
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace Interapptive.Shared.Collections
         /// <summary>
         /// Performs the specified action for each item in source
         /// </summary>
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             MethodConditions.EnsureArgumentIsNotNull(source, nameof(source));
             MethodConditions.EnsureArgumentIsNotNull(action, nameof(action));
@@ -318,6 +318,8 @@ namespace Interapptive.Shared.Collections
             {
                 action(item);
             }
+
+            return source;
         }
 
         /// <summary>

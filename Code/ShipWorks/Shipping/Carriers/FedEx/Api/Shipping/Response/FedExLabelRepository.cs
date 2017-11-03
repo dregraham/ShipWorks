@@ -8,8 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
@@ -33,13 +32,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// <summary>
         /// Responsible for saving retrieved FedEx Labels to Database
         /// </summary>
-        public void SaveLabels(ICarrierResponse response)
+        public void SaveLabels(IShipmentEntity shipment, ProcessShipmentReply reply)
         {
-            FedExShipResponse fedExShipResponse = (FedExShipResponse) response;
-
-            ShipmentEntity shipment = fedExShipResponse.Shipment;
-            IFedExNativeShipmentReply reply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
-
             SaveShipmentLabels(reply, shipment);
 
             SavePackageLabels(reply, shipment);
@@ -53,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
         [NDependIgnoreLongMethod]
-        private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
+        private void SavePackageLabels(IFedExNativeShipmentReply reply, IShipmentEntity shipment)
         {
             string certificationId = GetCertificationId(reply);
 
@@ -62,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             {
                 foreach (CompletedPackageDetail packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
                 {
-                    FedExPackageEntity package = shipment.FedEx.Packages[int.Parse(packageReply.SequenceNumber) - 1];
+                    var package = shipment.FedEx.Packages.ElementAt(int.Parse(packageReply.SequenceNumber) - 1);
 
                     // Save the primary label image
                     if (packageReply.Label != null)
@@ -115,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
-        private void SaveShipmentLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
+        private void SaveShipmentLabels(IFedExNativeShipmentReply reply, IShipmentEntity shipment)
         {
             // Documents
             if (reply.CompletedShipmentDetail.ShipmentDocuments != null)
@@ -137,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// <param name="reply">The reply.</param>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="System.NotImplementedException"></exception>
-        private void SaveAssociatedShipments(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
+        private void SaveAssociatedShipments(IFedExNativeShipmentReply reply, IShipmentEntity shipment)
         {
             if (reply.CompletedShipmentDetail.AssociatedShipments != null)
             {
@@ -226,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// If we had saved an image for this shipment previously, but the shipment errored out later (like for an MPS), then clear before
         /// we start.
         /// </summary>
-        public void ClearReferences(ShipmentEntity shipment)
+        public void ClearReferences(IShipmentEntity shipment)
         {
             if (shipment == null)
             {

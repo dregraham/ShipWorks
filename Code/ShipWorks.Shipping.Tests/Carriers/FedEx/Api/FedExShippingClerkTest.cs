@@ -19,7 +19,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
@@ -46,8 +47,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<CarrierRequest> packageMovementRequest;
         private Mock<CarrierRequest> versionCaptureRequest;
 
-        private Mock<CarrierRequest> shippingRequest;
-        private Mock<ICarrierResponse> shipResponse;
+        private Mock<IFedExShipRequest> shippingRequest;
+        private Mock<IFedExShipResponse> shipResponse;
 
         private Mock<CarrierRequest> groundCloseRequest;
         private Mock<ICarrierResponse> groundCloseResponse;
@@ -102,11 +103,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             versionCaptureRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
             versionCaptureRequest.Setup(r => r.Submit());
 
-            shipResponse = new Mock<ICarrierResponse>();
+            shipResponse = new Mock<IFedExShipResponse>();
             shipResponse.Setup(r => r.Process());
 
-            shippingRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null);
-            shippingRequest.Setup(r => r.Submit()).Returns(shipResponse.Object);
+            //shippingRequest = new Mock<CarrierRequest>();
+            //shippingRequest.Setup(r => r.Submit()).Returns(shipResponse.Object);
 
             groundCloseResponse = new Mock<ICarrierResponse>();
             groundCloseResponse.Setup(r => r.Process());
@@ -191,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             var requestFactory = mock.Mock<IFedExRequestFactory>();
             requestFactory.Setup(f => f.CreatePackageMovementRequest(AnyShipment, It.IsAny<FedExAccountEntity>())).Returns(packageMovementRequest.Object);
-            requestFactory.Setup(f => f.CreateShipRequest(AnyShipment)).Returns(shippingRequest.Object);
+            requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
             requestFactory.Setup(f => f.CreateVersionCaptureRequest(AnyShipment, It.IsAny<string>(), It.IsAny<FedExAccountEntity>())).Returns(versionCaptureRequest.Object);
             requestFactory.Setup(f => f.CreateGroundCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(groundCloseRequest.Object);
             requestFactory.Setup(f => f.CreateSmartPostCloseRequest(It.IsAny<FedExAccountEntity>())).Returns(smartPostCloseRequest.Object);
@@ -204,6 +205,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             {
                 x.Setup(r => r.Submit(AnyIShipment)).Returns(GenericResult.FromSuccess(rateResponse.Object));
                 x.Setup(r => r.Submit(AnyIShipment, It.IsAny<FedExRateRequestOptions>())).Returns(GenericResult.FromSuccess(rateResponse.Object));
+            });
+
+            shipResponse = mock.CreateMock<IFedExShipResponse>();
+            shippingRequest = mock.CreateMock<IFedExShipRequest>(x =>
+            {
+                x.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(GenericResult.FromSuccess(shipResponse.Object));
             });
 
             requestFactory.Setup(x => x.CreateRateRequest())
@@ -270,7 +277,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.ForceVersionCapture = true;
 
             // Setup the request to return a null value
-            packageMovementRequest.Setup(r => r.Submit()).Returns(new FedExShipResponse(null, null, null, null, null));
+            packageMovementRequest.Setup(r => r.Submit()).Returns(new FedExVoidResponse(null, null));
 
             Assert.Throws<FedExException>(() => testObject.PerformVersionCapture(new ShipmentEntity()));
         }
@@ -362,7 +369,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject.Ship(shipmentEntity);
 
             mock.Mock<IFedExRequestFactory>()
-                .Verify(f => f.CreateShipRequest(shipmentEntity), Times.Exactly(2));
+                .Verify(f => f.CreateShipRequest(), Times.Exactly(1));
         }
 
         [Fact]
@@ -370,7 +377,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             testObject.Ship(shipmentEntity);
 
-            shippingRequest.Verify(r => r.Submit(), Times.Exactly(2));
+            shippingRequest.Verify(r => r.Submit(shipmentEntity, 0));
+            shippingRequest.Verify(r => r.Submit(shipmentEntity, 1));
         }
 
         [Fact]
@@ -387,7 +395,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_CatchesSoapException_AndThrowsFedExSoapException()
         {
             // Setup the ship request to throw a soap exception
-            shippingRequest.Setup(r => r.Submit()).Throws(new SoapException("Catch me!", XmlQualifiedName.Empty));
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new SoapException("Catch me!", XmlQualifiedName.Empty));
 
             Assert.Throws<FedExSoapCarrierException>(() => testObject.Ship(shipmentEntity));
         }
@@ -396,7 +404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_CatchesCarrierException_AndThrowsFedExException()
         {
             // Setup the ship request to throw an exception unrelated to a web request
-            shippingRequest.Setup(r => r.Submit()).Throws(new CarrierException());
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new CarrierException());
 
             Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
         }
@@ -405,7 +413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_CatchesWebException_AndThrowsFedExException()
         {
             // Setup the ship request to throw a "web-request-type" of exception
-            shippingRequest.Setup(r => r.Submit()).Throws(new TimeoutException("This is slow"));
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new TimeoutException("This is slow"));
 
             Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
         }
@@ -414,7 +422,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_CatchesNonWebException_AndThrowsExceptionOfSameType()
         {
             // Setup the ship request to throw an exception unrelated to a web request
-            shippingRequest.Setup(r => r.Submit()).Throws(new ArgumentNullException());
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new ArgumentNullException());
 
             Assert.Throws<ArgumentNullException>(() => testObject.Ship(shipmentEntity));
         }

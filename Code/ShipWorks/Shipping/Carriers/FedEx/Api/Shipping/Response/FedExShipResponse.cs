@@ -1,5 +1,7 @@
 using System.Collections.Generic;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using System.Linq;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
@@ -10,126 +12,74 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
     /// This object is used to process the FedExShipmentResponse, saving labels and other shipment information
     /// to the shipment object. It is populated with the actual WSDL response object.
     /// </summary>
-    public class FedExShipResponse : ICarrierResponse
+    public class FedExShipResponse : IFedExShipResponse, ICarrierResponse
     {
-        private readonly ILabelRepository labelRepository;
-        private readonly List<ICarrierResponseManipulator> shipmentManipulators;
-        private readonly IFedExNativeShipmentReply nativeResponse;
-        private readonly CarrierRequest request;
+        private readonly IFedExLabelRepository labelRepository;
+        private readonly IEnumerable<IFedExShipResponseManipulator> manipulators;
+        private readonly ShipmentEntity shipment;
+        private readonly ProcessShipmentReply reply;
+
+        public FedExShipResponse(object a, object b, object c, object d, object e)
+        {
+
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExShipResponse(IFedExNativeShipmentReply reply, CarrierRequest request, ShipmentEntity shipment, ILabelRepository labelRepository, List<ICarrierResponseManipulator> shipmentManipulators)
+        public FedExShipResponse(
+            ShipmentEntity shipment,
+            ProcessShipmentReply reply,
+            IFedExLabelRepository labelRepository,
+            IEnumerable<IFedExShipResponseManipulator> manipulators)
         {
-            this.nativeResponse = reply;
-            Shipment = shipment;
+            this.reply = reply;
+            this.shipment = shipment;
+            this.manipulators = manipulators;
             this.labelRepository = labelRepository;
-            this.shipmentManipulators = shipmentManipulators;
-            this.request = request;
         }
 
-        /// <summary>
-        /// Gets the request the was used to generate the response.
-        /// </summary>
-        /// <value>The CarrierRequest object.</value>
-        public CarrierRequest Request
-        {
-            get { return request; }
-        }
+        //TODO: Remove these when 
+        public ShipmentEntity Shipment => shipment;
+        public ProcessShipmentReply NativeResponse => reply;
 
-        /// <summary>
-        /// Gets the native response received from the carrier API.
-        /// </summary>
-        /// <value>The native response.</value>
-        public object NativeResponse
-        {
-            get { return nativeResponse; }
-        }
+        public CarrierRequest Request => throw new System.NotImplementedException();
 
-        /// <summary>
-        /// Gets the label repository.
-        /// </summary>
-        /// <value>The label repository.</value>
-        public ILabelRepository LabelRepository
-        {
-            get { return labelRepository; }
-        }
-
-        /// <summary>
-        /// Gets the shipment manipulators.
-        /// </summary>
-        /// <value>The shipment manipulators.</value>
-        public List<ICarrierResponseManipulator> ShipmentManipulators
-        {
-            get { return shipmentManipulators; }
-        }
-
-        /// <summary>
-        /// The shipment entity whose information we sent to FedEx
-        /// </summary>
-        public ShipmentEntity Shipment
-        {
-            get;
-            private set;
-        }
+        object ICarrierResponse.NativeResponse => throw new System.NotImplementedException();
 
         /// <summary>
         /// Function that tells FedExShipResponse to process the request for shipment.
         /// </summary>
-        public void Process()
-        {
-            labelRepository.SaveLabels(this);
-        }
+        public void Process() =>
+            labelRepository.SaveLabels(shipment, reply);
 
         /// <summary>
         /// Applies the response manipulators.
         /// </summary>
-        public void ApplyResponseManipulators()
-        {
-            Verify();
-
-            ApplyManipulators();
-        }
+        public GenericResult<IFedExShipResponse> ApplyManipulators() =>
+            Verify()
+                .Map(() => manipulators.Aggregate(shipment, (s, m) => m.Manipulate(reply, shipment)))
+                .Map(x => this as IFedExShipResponse);
 
         /// <summary>
         /// Verify no severe errors were returned from FedEx.
         /// </summary>
-        private void Verify()
+        private Result Verify()
         {
-            if (nativeResponse.HighestSeverity == NotificationSeverityType.ERROR || nativeResponse.HighestSeverity == NotificationSeverityType.FAILURE)
+            if (reply.HighestSeverity == NotificationSeverityType.ERROR || reply.HighestSeverity == NotificationSeverityType.FAILURE)
             {
-                if (nativeResponse.Notifications?.Length == 0)
-                {
-                    throw new CarrierException("An error occurred while attempting to process the shipment.");
-                }
-
-                throw new FedExApiCarrierException(nativeResponse.Notifications);
+                return reply.Notifications?.Any() == true ?
+                    Result.FromError(new FedExApiCarrierException(reply.Notifications)) :
+                    Result.FromError(new CarrierException("An error occurred while attempting to process the shipment."));
             }
 
             // This should never happen, but our users will let us know if it does
-            if (nativeResponse.CompletedShipmentDetail.CompletedPackageDetails.Length != 1)
+            if (reply.CompletedShipmentDetail.CompletedPackageDetails.Length != 1)
             {
-                throw new CarrierException("Invalid number of package details returned for a shipment request.");
+                Result.FromError(new CarrierException("Invalid number of package details returned for a shipment request."));
             }
-        }
 
-        /// <summary>
-        /// Applies the manipulators to the shipment.
-        /// </summary>
-        protected virtual void ApplyManipulators()
-        {
-            foreach (ICarrierResponseManipulator manipulator in shipmentManipulators)
-            {
-                // Let each manipulator inspect/change the shipment as needed
-                manipulator.Manipulate(this);
-            }
+            return Result.FromSuccess();
         }
-
-        /// <summary>
-        /// Gets the carrier account entity.
-        /// </summary>
-        /// <value>The carrier account entity.</value>
-        public IEntity2 CarrierAccountEntity { get; set; }
     }
 }

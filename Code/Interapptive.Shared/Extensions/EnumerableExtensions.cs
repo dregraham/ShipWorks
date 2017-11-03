@@ -46,5 +46,13 @@ namespace Interapptive.Shared.Extensions
                 throw createException(string.Join(Environment.NewLine, exceptions.Select(x => x.Message)), exceptions.First());
             }
         }
+
+        /// <summary>
+        /// Applies an accumulator function over a sequence 
+        /// </summary>
+        public static GenericResult<TResult> Aggregate<T, TResult>(this IEnumerable<T> source, TResult accumulator, Func<TResult, T, GenericResult<TResult>> aggregator) =>
+            source.Aggregate(
+                GenericResult.FromSuccess(accumulator),
+                (acc, item) => acc.Map(v => aggregator(v, item)));
     }
 }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -21,6 +23,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -43,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExShippingClerk : IFedExShippingClerk
     {
         private static bool hasDoneVersionCapture;
-        private readonly ILabelRepository labelRepository;
+        private readonly IFedExLabelRepository labelRepository;
         private readonly IFedExRequestFactory requestFactory;
         private readonly IFedExSettingsRepository settingsRepository;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -53,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
         public FedExShippingClerk(
-            ILabelRepository labelRepository,
+            IFedExLabelRepository labelRepository,
             IFedExRequestFactory requestFactory,
             IFedExSettingsRepository settingsRepository,
             IExcludedServiceTypeRepository excludedServiceTypeRepository,
@@ -87,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity)
+        public GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -105,24 +109,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 PerformVersionCapture(shipmentEntity);
 
-                int packageCount = shipmentEntity.FedEx.Packages.Count();
-
                 // Make sure package dimensions are valid.
                 ValidatePackageDimensions(shipmentEntity);
 
                 // Clear out any previously saved labels for this shipment (in case there was an error shipping the first time (MPS))
                 labelRepository.ClearReferences(shipmentEntity);
 
-                // Each package in the shipment must be submitted to FedEx in an individual request
-                return Enumerable.Range(0, packageCount)
-                    .Select(x =>
-                    {
-                        CarrierRequest shippingRequest = requestFactory.CreateShipRequest(shipmentEntity);
-                        shippingRequest.SequenceNumber = x;
-
-                        return shippingRequest.Submit();
-                    })
-                    .ToList();
+                var request = requestFactory.CreateShipRequest();
+                return Enumerable.Range(0, shipmentEntity.FedEx.Packages.Count)
+                    .Aggregate(
+                        Enumerable.Empty<IFedExShipResponse>(),
+                        (list, i) => request.Submit(shipmentEntity, i).Map(list.Append));
             }
             catch (Exception ex)
             {

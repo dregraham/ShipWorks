@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting requests to a carrier API to 
         /// ship an order/create a label.</returns>
-        CarrierRequest CreateShipRequest(ShipmentEntity shipmentEntity);
+        IFedExShipRequest CreateShipRequest();
 
         /// <summary>
         /// Creates the package movement request.

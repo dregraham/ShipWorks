@@ -1,5 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+﻿using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
 {
@@ -8,15 +7,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
     /// </summary>
     public interface IFedExResponseFactory : ICarrierResponseFactory
     {
-        /// <summary>
-        /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
-        /// carrier API request to ship an order/create a label.
-        /// </summary>
-        /// <param name="nativeResponse">The native response (WSDL object, raw XML, etc.) that is received from the carrier.</param>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="request">The request object that submitted the API request.</param>
-        /// <returns>An ICarrierResponse representing the response of a shipment request.</returns>
-        FedExShipResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity);
+        ///// <summary>
+        ///// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
+        ///// carrier API request to ship an order/create a label.
+        ///// </summary>
+        ///// <param name="nativeResponse">The native response (WSDL object, raw XML, etc.) that is received from the carrier.</param>
+        ///// <param name="shipmentEntity">The shipment entity.</param>
+        ///// <param name="request">The request object that submitted the API request.</param>
+        ///// <returns>An ICarrierResponse representing the response of a shipment request.</returns>
+        //FedExShipResponse CreateShipResponse(object nativeResponse, CarrierRequest request, ShipmentEntity shipmentEntity);
 
         /// <summary>
         /// Creates theICarrierResponse that will be to represent the carrier-specific result of a

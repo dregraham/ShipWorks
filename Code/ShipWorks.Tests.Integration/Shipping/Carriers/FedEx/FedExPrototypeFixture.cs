@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
@@ -14,11 +15,11 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
@@ -234,12 +235,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                         LogManager.GetLogger
                     );
 
-                    var responses = shippingClerk.Ship(shipment);
-
-                    foreach (ICarrierResponse response in responses)
-                    {
-                        response.Process();
-                    }
+                    shippingClerk.Ship(shipment)
+                        .Map(r => r.ForEach(x => x.Process()));
 
                     shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
                     shipment.Processed = true;

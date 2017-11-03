@@ -2,14 +2,13 @@ using System;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
@@ -58,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </returns>
         /// <exception cref="System.ArgumentException">nativeShipmentRequest doesn't appear to be a ProcessShipmentRequest or a CreatePendingShipmentRequest.</exception>
         /// <exception cref="FedExSoapCarrierException"></exception>
-        public virtual IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest)
+        public virtual GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest)
         {
             using (ShipService service = new ShipService(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
             {
@@ -72,22 +71,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <returns>
         /// The ProcessShipmentReply received from FedEx.
         /// </returns>
-        protected IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest, ShipService service)
+        protected GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest, ShipService service)
         {
             try
             {
-                IFedExNativeShipmentReply processReply;
-
-                // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
-                // ShipService object here (i.e. no more abstractions can be made)
-
                 // Point the service to the correct endpoint
                 service.Url = settings.EndpointUrl;
 
                 // The request should already be configured at this point, so we just need to send
                 // it across the wire to FedEx
-                ProcessShipmentRequest processShipmentRequest = nativeShipmentRequest as ProcessShipmentRequest;
-                processReply = service.processShipment(processShipmentRequest);
+                ProcessShipmentReply processReply = service.processShipment(nativeShipmentRequest);
 
                 // If we are an Interapptive user, save for certification
                 if (InterapptiveOnly.IsInterapptiveUser)
@@ -96,16 +89,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);
                 }
 
-
-                return processReply;
+                return GenericResult.FromSuccess(processReply);
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapCarrierException(ex);
+                return GenericResult.FromError<ProcessShipmentReply>(new FedExSoapCarrierException(ex));
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(FedExException));
+                var translated = WebHelper.TranslateWebException(ex, typeof(FedExException));
+                if (translated is FedExException)
+                {
+                    return GenericResult.FromError<ProcessShipmentReply>(translated);
+                }
+
+                throw translated;
             }
         }
 

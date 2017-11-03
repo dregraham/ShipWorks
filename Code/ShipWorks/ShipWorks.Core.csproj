@@ -2700,7 +2700,6 @@
     <Compile Include="Shipping\Api\ICarrierResponseFactory.cs" />
     <Compile Include="Shipping\Api\IShippingClerk.cs" />
     <Compile Include="Shipping\Api\ICarrierRequestManipulator.cs" />
-    <Compile Include="Shipping\Api\ILabelRepository.cs" />
     <Compile Include="Shipping\Api\ICarrierResponse.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCustomsExportFilingOption.cs" />

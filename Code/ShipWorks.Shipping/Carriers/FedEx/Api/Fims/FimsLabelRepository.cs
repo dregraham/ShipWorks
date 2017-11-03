@@ -2,8 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -37,18 +36,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         }
 
         /// <summary>
-        /// DO NOT USE FOR FIMS
-        /// </summary>
-        public void SaveLabels(ICarrierResponse response)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// If we had saved an image for this shipment previously, but the shipment errored out later (like for an MPS), then clear before
         /// we start.
         /// </summary>
-        public void ClearReferences(ShipmentEntity shipment)
+        public void ClearReferences(IShipmentEntity shipment)
         {
             if (shipment == null)
             {
