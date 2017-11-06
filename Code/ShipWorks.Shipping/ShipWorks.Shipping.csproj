@@ -253,6 +253,7 @@
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExCustomsManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExInternationalControlledExportManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExTrafficInArmsManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExLabelSpecificationResponseManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCodManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCostManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentTrackingManipulator.cs" />

@@ -127,6 +127,16 @@ namespace Interapptive.Shared.Utility
                 ex => GenericResult.FromError<TResult>(ex));
 
         /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public Result Map(Action<T> map) =>
+            Match(x => { map(x); return Result.FromSuccess(); },
+                ex => Result.FromError(ex));
+
+        /// <summary>
         /// Match on the result, calling the first method on success and the second on failure
         /// </summary>
         /// <returns>
