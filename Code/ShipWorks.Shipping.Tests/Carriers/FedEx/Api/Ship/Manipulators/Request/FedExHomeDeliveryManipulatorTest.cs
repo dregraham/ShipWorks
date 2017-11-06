@@ -1,27 +1,21 @@
 using System;
-using System.Collections.Generic;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
     public class FedExHomeDeliveryManipulatorTest
     {
-        private FedExHomeDeliveryManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private ProcessShipmentRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
-
+        private readonly FedExHomeDeliveryManipulator testObject;
+        private readonly ShipmentEntity shipment;
 
         public FedExHomeDeliveryManipulatorTest()
         {
-            shipmentEntity = new ShipmentEntity
+            shipment = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity
                 {
@@ -32,173 +26,117 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 }
             };
 
-            nativeRequest = new ProcessShipmentRequest()
-            {
-                RequestedShipment = new RequestedShipment()
-                {
-                    SpecialServicesRequested = new ShipmentSpecialServicesRequested() { SpecialServiceTypes = new ShipmentSpecialServiceType[0] }
-                }
-            };
-
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject = new FedExHomeDeliveryManipulator();
-
         }
 
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        [Theory]
+        [InlineData(FedExServiceType.GroundHomeDelivery, FedExHomeDeliveryType.Appointment, true)]
+        [InlineData(FedExServiceType.GroundHomeDelivery, FedExHomeDeliveryType.DateCertain, true)]
+        [InlineData(FedExServiceType.GroundHomeDelivery, FedExHomeDeliveryType.Evening, true)]
+        [InlineData(FedExServiceType.GroundHomeDelivery, FedExHomeDeliveryType.None, false)]
+        [InlineData(FedExServiceType.PriorityOvernight, FedExHomeDeliveryType.DateCertain, false)]
+        [InlineData(FedExServiceType.FedExFreightPriority, FedExHomeDeliveryType.DateCertain, false)]
+        [InlineData(FedExServiceType.FedExGround, FedExHomeDeliveryType.DateCertain, false)]
+        public void ShoudlApply_ReturnsAppropriateValue_ForGivenInputs(FedExServiceType service, FedExHomeDeliveryType homeDelivery, bool expected)
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            var testShipment = Create.Shipment().AsFedEx(f => f
+                    .Set(x => x.Service, (int) service)
+                    .Set(x => x.HomeDeliveryType, (int) homeDelivery))
+                .Build();
+            var result = testObject.ShouldApply(testShipment);
+            Assert.Equal(expected, result);
         }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
-        {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
-        {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_AccountsForNullRequestedShipment()
-        {
-            // setup the test by setting the requested shipment to null
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.NotNull(nativeRequest.RequestedShipment);
-        }
-
-        [Fact]
-        public void Manipulate_SpecialServiceIsNotChanged_WhenServiceIsNotHomeDelivery()
-        {
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FirstOvernight;
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Null(nativeRequest.RequestedShipment.SpecialServicesRequested);
-        }
-
-        [Fact]
-        public void Manipulate_SpecialServiceIsNotChanged_WhenHomeDeliveryTypeIsNone()
-        {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.None;
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Null(nativeRequest.RequestedShipment.SpecialServicesRequested);
-        }
-
+        
         [Fact]
         public void Manipulate_ServiceTypeArraySizeIsOne()
         {
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal(1, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(1, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
         [Fact]
         public void Manipulate_AddsHomeDeliveryServiceType_WhenServiceTypeArrayIsNull()
         {
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal(ShipmentSpecialServiceType.HOME_DELIVERY_PREMIUM, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Contains(ShipmentSpecialServiceType.HOME_DELIVERY_PREMIUM, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_AddsHomeDeliveryServiceType_WhenSpecialServicesRequestIsNull()
         {
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal(ShipmentSpecialServiceType.HOME_DELIVERY_PREMIUM, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Contains(ShipmentSpecialServiceType.HOME_DELIVERY_PREMIUM, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_HomeDeliveryDetailsIsNotNull()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
+            Assert.NotNull(result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
         }
 
         [Fact]
         public void Manipulate_PremiumTypeIsDateCertain()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(HomeDeliveryPremiumType.DATE_CERTAIN, nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
+            Assert.Equal(HomeDeliveryPremiumType.DATE_CERTAIN, result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
         }
 
         [Fact]
         public void Manipulate_PremiumTypeIsEvening()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Evening;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Evening;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(HomeDeliveryPremiumType.EVENING, nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
+            Assert.Equal(HomeDeliveryPremiumType.EVENING, result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
         }
 
         [Fact]
         public void Manipulate_PremiumTypeIsAppointment()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Appointment;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Appointment;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(HomeDeliveryPremiumType.APPOINTMENT, nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
+            Assert.Equal(HomeDeliveryPremiumType.APPOINTMENT, result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType);
         }
 
         [Fact]
         public void Manipulate_HomeDeliveryPhoneNumber()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Appointment;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.Appointment;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(shipmentEntity.FedEx.HomeDeliveryPhone, nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.PhoneNumber);
+            Assert.Equal(shipment.FedEx.HomeDeliveryPhone, result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.PhoneNumber);
         }
 
         [Fact]
         public void Manipulate_HomeDeliveryDateIsAssigned_WhenDeliveryTypeIsDateCertain()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(shipmentEntity.FedEx.HomeDeliveryDate, nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.Date);
+            Assert.Equal(shipment.FedEx.HomeDeliveryDate, result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.Date);
         }
 
         [Fact]
         public void Manipulate_HomeDeliveryDateSpecifiedIsTrue_WhenDeliveryTypeIsDateCertain()
         {
-            shipmentEntity.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
+            shipment.FedEx.HomeDeliveryType = (int) FedExHomeDeliveryType.DateCertain;
 
-            testObject.Manipulate(carrierRequest.Object);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.True(nativeRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.DateSpecified);
+            Assert.True(result.Value.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.DateSpecified);
         }
 
     }
