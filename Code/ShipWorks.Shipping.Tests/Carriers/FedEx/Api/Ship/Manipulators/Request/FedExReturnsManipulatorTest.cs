@@ -1,61 +1,50 @@
 using System;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExReturnsManipulatorTest
     {
-        private FedExShipRequest shipRequest;
-
-        private ShipmentEntity shipmentEntity;
-
-        private FedExReturnsManipulator testObject;
-
-        /// <summary>
-        /// NativeRequest from shipRequest converted to ProcessShipmentRequest
-        /// </summary>
-        private ProcessShipmentRequest processShipmentRequest
-        {
-            get
-            {
-                return shipRequest.NativeRequest as ProcessShipmentRequest;
-            }
-        }
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
+        private readonly FedExReturnsManipulator testObject;
 
         public FedExReturnsManipulatorTest()
         {
-            testObject = new FedExReturnsManipulator();
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
+            shipment = Create.Shipment().AsFedEx().Build();
+            shipment.ReturnShipment = true;
+            shipment.FedEx.ReturnType = (int) FedExReturnType.EmailReturnLabel;
 
-            shipmentEntity.ReturnShipment = true;
-            shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.EmailReturnLabel;
+            processShipmentRequest = new ProcessShipmentRequest();
 
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
+            testObject = mock.Create<FedExReturnsManipulator>();
+        }
 
-            shipRequest = new FedExShipRequest(
-                null,
-                shipmentEntity,
-                null,
-                null,
-                settingsRepository.Object,
-                new ProcessShipmentRequest());
+        [Theory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void ShouldApply_ReturnsCorrectValue(bool isReturn, bool expectedValue)
+        {
+            shipment.ReturnShipment = isReturn;
+            Assert.Equal(expectedValue, testObject.ShouldApply(shipment));
         }
 
         [Fact]
         public void Manipulate_ReturnNotAddedToRequest_ShipmentNotAReturn()
         {
-            shipmentEntity.ReturnShipment = false;
+            shipment.ReturnShipment = false;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Null(processShipmentRequest.RequestedShipment);
         }
@@ -63,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_ReturnTypePending_ShipmentEmailReturnLabel()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(ReturnType.PENDING, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
         }
@@ -71,9 +60,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_ReturnTypePrintReturnLabel_ShipmentPrintReturnLabel()
         {
-            shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
+            shipment.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(ReturnType.PRINT_RETURN_LABEL, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
         }
@@ -83,9 +72,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             string rmaReason = "test rma reason";
 
-            shipmentEntity.FedEx.RmaReason = rmaReason;
+            shipment.FedEx.RmaReason = rmaReason;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(rmaReason, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma.Reason);
         }
@@ -93,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_RmaReasonNotSet_ShipmentHasNoRmaReason()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma);
         }
@@ -103,9 +92,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             string rmaNumber = "test rma number";
 
-            shipmentEntity.FedEx.RmaNumber = rmaNumber;
+            shipment.FedEx.RmaNumber = rmaNumber;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(1, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count(x => x.CustomerReferenceType == CustomerReferenceType.RMA_ASSOCIATION && x.Value == rmaNumber));
         }
@@ -113,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_NoCustomerReferences_ShipmentHasNoRmaNumber()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(0, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count());
         }
@@ -121,9 +110,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_NoEmailDetails_ShipmentPrintReturnLabel()
         {
-            shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
+            shipment.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail);
         }
@@ -131,9 +120,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_NoPendingShipmentDetail_ShipmentPrintReturnLabel()
         {
-            shipmentEntity.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
+            shipment.FedEx.ReturnType = (int) FedExReturnType.PrintReturnLabel;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail);
         }
@@ -141,17 +130,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_MerchantPhoneNumberSet_ShipmentEmailReturnLabel()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(
-                shipmentEntity.OriginPhone,
+                shipment.OriginPhone,
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.MerchantPhoneNumber);
         }
 
         [Fact]
         public void Manipulate_PendingShipmentTypeSetToEmail_ShipmentEmailReturnLabel()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(
                 PendingShipmentType.EMAIL,
@@ -161,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_PendingShipmentExpirationSetToThirtyDaysOut_ShipmentEmailReturnLabel()
         {
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(
                 DateTime.Today.AddDays(30),
@@ -171,9 +160,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SautrdayPickupSet_ShipmentEmailReturnLabelWithSaturdayPickup()
         {
-            shipmentEntity.FedEx.ReturnSaturdayPickup = true;
+            shipment.FedEx.ReturnSaturdayPickup = true;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.Equal(
                 1,
@@ -183,9 +172,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SautrdayPickupNotSet_ShipmentEmailReturnLabelWithNoSaturdayPickup()
         {
-            shipmentEntity.FedEx.ReturnSaturdayPickup = false;
+            shipment.FedEx.ReturnSaturdayPickup = false;
 
-            testObject.Manipulate(shipRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             Assert.True(
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.AllowedSpecialServices == null ||
