@@ -1,46 +1,52 @@
 using System;
 using System.Collections.Generic;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Collections;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExTotalInsuredValueManipulatorTest
     {
-        private FedExTotalInsuredValueManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private object nativeRequest;
-        private ShipmentEntity shipmentEntity;
-        private FedExAccountEntity fedExAccount;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private readonly FedExTotalInsuredValueManipulator testObject;
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
 
         public FedExTotalInsuredValueManipulatorTest()
         {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
-            nativeRequest = new ProcessShipmentRequest()
+            processShipmentRequest = new ProcessShipmentRequest()
             {
                 RequestedShipment = new RequestedShipment()
             };
 
-            // Create our default shipment entity and initialize the properties our test object will be accessing
-            shipmentEntity = new ShipmentEntity()
-            {
-                FedEx = new FedExShipmentEntity()
-            };
+            shipment = Create.Shipment().AsFedEx().Build();
 
-            fedExAccount = new FedExAccountEntity { AccountNumber = "123", CountryCode = "US", LastName = "Doe", FirstName = "John" };
+            IFedExAccountEntity fedExAccount = new FedExAccountEntity { AccountNumber = "123", CountryCode = "US", LastName = "Doe", FirstName = "John" };
+
+            mock.Mock<IFedExSettingsRepository>()
+                .Setup(x => x.GetAccountReadOnly(AnyIShipment))
+                .Returns(fedExAccount);
 
             // Setup the carrier request's NativeRequest property to return the ProcessShipmentRequest object
             SetUpNewCarrierRequest();
 
-            testObject = new FedExTotalInsuredValueManipulator(new FedExSettings(settingsRepository.Object));
+            testObject = mock.Create<FedExTotalInsuredValueManipulator>();
         }
 
         /// <summary>
@@ -49,41 +55,34 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private void SetUpNewCarrierRequest()
         {
             // Add some packages for the sum test
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.02m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.03m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.02m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.03m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+        }
 
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
-            carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(fedExAccount);
+        [Theory]
+        [InlineData(FedExServiceType.FedExGround, 0, false)]
+        [InlineData(FedExServiceType.FedExGround, 1, true)]
+        [InlineData(FedExServiceType.SmartPost, 0, false)]
+        [InlineData(FedExServiceType.SmartPost, 1, false)]
+        public void ShouldApply_ReturnsCorrectValue(FedExServiceType serviceType, decimal declaredValue, bool expectedValue)
+        {
+            shipment.FedEx.Service = (int) serviceType;
+            shipment.FedEx.Packages.ForEach(p => p.DeclaredValue = declaredValue);
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(fedExAccount);
+            Assert.Equal(expectedValue, testObject.ShouldApply(shipment));
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
         {
-            // Setup the native request to be null
-            nativeRequest = null;
-            SetUpNewCarrierRequest();
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
-        {
-            // Setup the native request to be an unexpected type
-            nativeRequest = new object();
-            SetUpNewCarrierRequest();
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
         }
 
         [Fact]
@@ -91,21 +90,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
-            ((ProcessShipmentRequest)nativeRequest).RequestedShipment = null;
+            processShipmentRequest.RequestedShipment = null;
             SetUpNewCarrierRequest();
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // The requested shipment property should be created now
-            Assert.NotNull(((ProcessShipmentRequest)nativeRequest).RequestedShipment);
+            Assert.NotNull(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_SetsCurrencyToUSD()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Money totalInsuredValue = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
+            Money totalInsuredValue = processShipmentRequest.RequestedShipment.TotalInsuredValue;
             Assert.Equal("USD", totalInsuredValue.Currency);
         }
 
@@ -114,9 +113,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             const decimal expectedTotal = 300.06m;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Money totalInsuredValue = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalInsuredValue;
+            Money totalInsuredValue = processShipmentRequest.RequestedShipment.TotalInsuredValue;
             Assert.Equal(expectedTotal, totalInsuredValue.Amount);
         }
     }

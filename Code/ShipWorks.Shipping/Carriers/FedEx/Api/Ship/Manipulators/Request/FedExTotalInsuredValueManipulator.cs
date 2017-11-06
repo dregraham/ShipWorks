@@ -1,90 +1,67 @@
-using System;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.Api;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
-    public class FedExTotalInsuredValueManipulator : FedExShippingRequestManipulatorBase
+    public class FedExTotalInsuredValueManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExTotalInsuredValueManipulator" /> class.
-        /// </summary>
-        public FedExTotalInsuredValueManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExTotalInsuredValueManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExTotalInsuredValueManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public FedExTotalInsuredValueManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment)
+        {
+            return (FedExServiceType) shipment.FedEx.Service != FedExServiceType.SmartPost &&
+                   shipment.FedEx.Packages.Sum(p => p.DeclaredValue) > 0;
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            decimal amount = request.ShipmentEntity.FedEx.Packages.Sum(p => p.DeclaredValue);
-
-            // If there's not declared value, just return
-            if (amount == 0)
+            if (!ShouldApply(shipment))
             {
-                return;
+                return request;
             }
 
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
-
-            // We can safely cast this since we've passed initialization 
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-
-            // If we aren't SmartPost, return
-            if ((FedExServiceType)request.ShipmentEntity.FedEx.Service == FedExServiceType.SmartPost)
-            {
-                return;
-            }
-
+            
             // Just need to assign the weight value in pounds
-            nativeRequest.RequestedShipment.TotalInsuredValue = new Money
+            request.RequestedShipment.TotalInsuredValue = new Money
                 {
-                    Currency = GetShipmentCurrencyType(request.ShipmentEntity), 
-                    Amount = amount
+                    Currency = FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment)),
+                    Amount = shipment.FedEx.Packages.Sum(p => p.DeclaredValue),
                 };
+
+            return request;
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(ProcessShipmentRequest request)
         {
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
+            request.Ensure(x => x.RequestedShipment);
         }
     }
 }
