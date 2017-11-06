@@ -142,5 +142,17 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static implicit operator Result(GenericResult<T> result) =>
             result.Match(x => Result.FromSuccess(), ex => Result.FromError(ex));
+
+        /// <summary>
+        /// Convert from a value of the result type to a successful result
+        /// </summary>
+        public static implicit operator GenericResult<T>(T value) =>
+            GenericResult.FromSuccess(value);
+
+        /// <summary>
+        /// Convert from an exception to an error result
+        /// </summary>
+        public static implicit operator GenericResult<T>(Exception exception) =>
+            GenericResult.FromError<T>(exception);
     }
 }

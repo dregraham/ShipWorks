@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 return shippingClerkFactory.Create(shipment)
                     .Ship(shipment)
                     .Map(createDownloadedLabelData)
-                    .Match(x => x, ex => throw ex);
+                    .Match(x => x, ex => { throw ex; });
             }
             catch (FedExException ex)
             {

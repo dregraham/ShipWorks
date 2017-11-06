@@ -1,6 +1,6 @@
-using System;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
@@ -17,12 +17,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="tokenText">The token text.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>A formatted string having the token values replaced with values from the shipment.</returns>
-        public string ProcessTokens(string tokenText, ShipmentEntity shipmentEntity)
+        public string ProcessTokens(string tokenText, IShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity == null)
-            {
-                throw new ArgumentNullException("shipmentEntity");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity, nameof(shipmentEntity));
 
             return TemplateTokenProcessor.ProcessTokens(tokenText, shipmentEntity.ShipmentID);
         }

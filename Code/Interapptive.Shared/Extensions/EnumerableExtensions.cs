@@ -51,7 +51,7 @@ namespace Interapptive.Shared.Extensions
         /// Applies an accumulator function over a sequence 
         /// </summary>
         public static GenericResult<TResult> Aggregate<T, TResult>(this IEnumerable<T> source, TResult accumulator, Func<TResult, T, GenericResult<TResult>> aggregator) =>
-            source.Aggregate(
+            Enumerable.Aggregate(source,
                 GenericResult.FromSuccess(accumulator),
                 (acc, item) => acc.Map(v => aggregator(v, item)));
     }
