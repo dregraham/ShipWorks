@@ -1,45 +1,48 @@
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Manipulator for adding service type information to the FedEx request
     /// </summary>
-    public class FedExServiceTypeManipulator : FedExShippingRequestManipulatorBase
+    public class FedExServiceTypeManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExServiceTypeManipulator" /> class.
-        /// </summary>
-        public FedExServiceTypeManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExServiceTypeManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExServiceTypeManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public FedExServiceTypeManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment)
+        {
+            return true;
         }
 
         /// <summary>
         /// Add the Service Type to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Get the RequestedShipment object for the request
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
+            request.Ensure(r => r.RequestedShipment);
 
             // Set the service type for the shipment
-            requestedShipment.ServiceType = FedExRequestManipulatorUtilities.GetApiServiceType((FedExServiceType)fedExShipment.Service);
+            request.RequestedShipment.ServiceType = FedExRequestManipulatorUtilities.GetApiServiceType((FedExServiceType) shipment.FedEx.Service);
+
+            return request;
         }
     }
 }
