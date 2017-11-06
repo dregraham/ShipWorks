@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
@@ -12,77 +11,42 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     /// <summary>
     /// Add Dry Ice information to shipment
     /// </summary>
-    public class FedExFreightManipulator : FedExShippingRequestManipulatorBase
+    public class FedExFreightManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExFreightManipulator" /> class and 
-        /// uses the the FedExSettingsRepository.
-        /// </summary>
-        public FedExFreightManipulator()
-            : base(new FedExSettingsRepository())
-        { }
+        readonly IFedExSettingsRepository settingsRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExFreightManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExFreightManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public FedExFreightManipulator(IFedExSettingsRepository settingsRepository)
         {
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExFreightManipulator" /> class.
+        /// Should the manipulator be applied
         /// </summary>
-        public FedExFreightManipulator(ICarrierSettingsRepository settingsRepository) : base(settingsRepository)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment) =>
+            FedExUtility.IsFreightExpressService((FedExServiceType) shipment.FedEx.Service);
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            Validate(request);
+            Initialize(request);
+            CreateFedExExpressFreightDetailManipulations(request.RequestedShipment, shipment.FedEx);
 
-            FedExShipmentEntity fedex = request.ShipmentEntity.FedEx;
-            // If we aren't freight, just return
-            if (!FedExUtility.IsFreightExpressService((FedExServiceType)fedex.Service))
-            {
-                return;
-            }
-
-            IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request, fedex);
-
-            // Add the express freight detail
-            CreateFedExExpressFreightDetailManipulations(nativeRequest.RequestedShipment, fedex);
+            return request;
         }
 
         /// <summary>
         /// Add options for express freight
         /// </summary>
-        private void CreateFedExExpressFreightDetailManipulations(RequestedShipment requestedShipment, FedExShipmentEntity fedex)
+        private void CreateFedExExpressFreightDetailManipulations(RequestedShipment requestedShipment, IFedExShipmentEntity fedex)
         {
             ExpressFreightDetail expressFreightDetail = requestedShipment.ExpressFreightDetail;
             expressFreightDetail.BookingConfirmationNumber = fedex.FreightBookingNumber;
-
-            List<ShipmentSpecialServiceType> specialServiceTypes = new List<ShipmentSpecialServiceType>();
-            specialServiceTypes.AddRange(requestedShipment.SpecialServicesRequested.SpecialServiceTypes);
-
-            // So far, this needs to stay US...  even if shipping CA => CA
-            if (fedex.Shipment.AdjustedShipCountryCode() == "US")
-            {
-                if (fedex.FreightInsideDelivery && !specialServiceTypes.Contains(ShipmentSpecialServiceType.INSIDE_DELIVERY))
-                {
-                    specialServiceTypes.Add(ShipmentSpecialServiceType.INSIDE_DELIVERY);
-                }
-
-                if (fedex.FreightInsidePickup && !specialServiceTypes.Contains(ShipmentSpecialServiceType.INSIDE_PICKUP))
-                {
-                    specialServiceTypes.Add(ShipmentSpecialServiceType.INSIDE_PICKUP);
-                }
-            }
 
             if (fedex.FreightLoadAndCount > 0)
             {
@@ -90,118 +54,61 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             }
 
             // For certification, so far, everything is true.  
-            if (SettingsRepository.IsInterapptiveUser)
+            if (settingsRepository.IsInterapptiveUser)
             {
                 expressFreightDetail.PackingListEnclosed = true;
                 expressFreightDetail.PackingListEnclosedSpecified = true;
             }
 
-            // Add shipping document types 
-            AddShippingDocumentTypes(requestedShipment);
-
-            // Set the special service types on the requested shipment
-            requestedShipment.SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
+            AddSpecialServiceTypes(requestedShipment.SpecialServicesRequested, fedex);
+            AddShippingDocumentTypes(requestedShipment.ShippingDocumentSpecification);
         }
 
         /// <summary>
-        /// Validates the specified request.
+        /// Add special service types
         /// </summary>
-        private static void Validate(CarrierRequest request)
+        private static void AddSpecialServiceTypes(ShipmentSpecialServicesRequested servicesRequested, IFedExShipmentEntity fedex)
         {
-            if (request == null)
+            // So far, this needs to stay US...  even if shipping CA => CA
+            if (fedex.Shipment.AdjustedShipCountryCode() != "US")
             {
-                throw new ArgumentNullException("request");
+                return;
             }
 
-            if (!(request.NativeRequest is IFedExNativeShipmentRequest))
+            var serviceTypes = servicesRequested.SpecialServiceTypes.AsEnumerable();
+
+            if (fedex.FreightInsideDelivery)
             {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
+                serviceTypes = serviceTypes.Union(new[] { ShipmentSpecialServiceType.INSIDE_DELIVERY });
             }
 
-            if (request.ShipmentEntity == null)
+            if (fedex.FreightInsidePickup)
             {
-                throw new CarrierException("request.ShipmentEntity is null");
+                serviceTypes = serviceTypes.Union(new[] { ShipmentSpecialServiceType.INSIDE_PICKUP });
             }
 
-            if (request.ShipmentEntity.FedEx == null)
-            {
-                throw new CarrierException("request.ShipmentEntity.FedEx is null");
-            }
+            servicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
         }
 
         /// <summary>
         /// Initialize the request properties needed for freight
         /// </summary>
-        private static IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request, FedExShipmentEntity fedex)
+        private static void Initialize(ProcessShipmentRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            // Make sure the ExpressFreightDetail is there
-            if (nativeRequest.RequestedShipment.ExpressFreightDetail == null)
-            {
-                nativeRequest.RequestedShipment.ExpressFreightDetail = new ExpressFreightDetail();
-            }
-
-            // Make sure the SpecialSericesRequested is there
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
-            {
-                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
-            }
-
-            // Make sure the SpecialServiceTypes is there
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            }
-
-            // Make sure the ShippingDocumentSpecification is there
-            if (nativeRequest.RequestedShipment.ShippingDocumentSpecification == null)
-            {
-                nativeRequest.RequestedShipment.ShippingDocumentSpecification = new ShippingDocumentSpecification();
-            }
-
-            // Make sure the ShippingDocumentTypes is there
-            if (nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes == null)
-            {
-                nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = new RequestedShippingDocumentType[0];
-            }
-
-            return nativeRequest;
+            var requestedShipment = request.Ensure(x => x.RequestedShipment);
+            requestedShipment.Ensure(x => x.ExpressFreightDetail);
+            requestedShipment.Ensure(x => x.SpecialServicesRequested)
+                .Ensure(x => x.SpecialServiceTypes);
+            requestedShipment.Ensure(x => x.ShippingDocumentSpecification)
+                .Ensure(x => x.ShippingDocumentTypes);
         }
 
         /// <summary>
         /// Adds the label shipping document type if it's not already present.
         /// </summary>
-        private static void AddShippingDocumentTypes(RequestedShipment requestedShipment)
-        {
-            List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>();
-            shippingDocumentTypes.AddRange(requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes);
-
-            if (!shippingDocumentTypes.Contains(RequestedShippingDocumentType.LABEL))
-            {
-                shippingDocumentTypes.Add(RequestedShippingDocumentType.LABEL);
-            }
-            
-            requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
-        }
+        private static void AddShippingDocumentTypes(ShippingDocumentSpecification specification) =>
+            specification.ShippingDocumentTypes = specification.ShippingDocumentTypes
+                .Union(new[] { RequestedShippingDocumentType.LABEL })
+                .ToArray();
     }
 }
