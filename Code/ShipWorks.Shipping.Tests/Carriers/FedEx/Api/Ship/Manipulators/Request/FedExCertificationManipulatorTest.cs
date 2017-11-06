@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -8,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The token processor was mocked in the initializer to return "Processed Token"
-            TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
+            TransactionDetail transactionDetail = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).TransactionDetail;
             Assert.Equal("Processed Token", transactionDetail.CustomerTransactionId);
         }
 
@@ -130,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
+            TransactionDetail transactionDetail = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).TransactionDetail;
             Assert.Null(transactionDetail.CustomerTransactionId);
         }
 
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
+            TransactionDetail transactionDetail = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).TransactionDetail;
             Assert.Null(transactionDetail.CustomerTransactionId);
         }
 
@@ -159,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
+            TransactionDetail transactionDetail = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).TransactionDetail;
             Assert.Null(transactionDetail.CustomerTransactionId);
         }
     }

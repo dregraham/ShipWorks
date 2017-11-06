@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -9,6 +8,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -33,8 +33,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 {
                     CodEnabled = true,
                     CodAmount = 100.50M,
-                    Service = (int)FedExServiceType.PriorityOvernight,
-                    CodPaymentType = (int)FedExCodPaymentType.Secured,
+                    Service = (int) FedExServiceType.PriorityOvernight,
+                    CodPaymentType = (int) FedExCodPaymentType.Secured,
 
                     CodCity = "St. Louis",
                     CodFirstName = "Samir",
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForNullPackageLineItemArray()
         {
             // Change this to use a ground service so the package data is updated
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
 
             // setup the test by setting the line item array to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems = null;
@@ -195,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForNullPackageSpecialServicesRequested()
         {
             // Change this to use a ground service so the package data is updated
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
 
             // setup the test by setting the special services requested property to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = null;
@@ -211,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AccountsForNullPackageCodDetail()
         {
             // Change this to use a ground service so the package data is updated
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
 
             // setup the test by setting the special services requested property to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail = null;
@@ -273,7 +273,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SetsCurrencyToUSD_WhenRecipientCountryCodeIsUS_AndServiceIsFedExGround()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -285,7 +285,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SetsCurrencyToCAD_WhenRecipientCountryCodeIsCA_AndServiceIsFedExGround()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
             shipmentEntity.ShipCountryCode = "CA";
 
             testObject.Manipulate(carrierRequest.Object);
@@ -298,7 +298,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SetsCurrencyToCAD_WhenRecipientCountryCodeIsCA_AndServiceIsGroundHomeDelivery()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
             shipmentEntity.ShipCountryCode = "CA";
 
             testObject.Manipulate(carrierRequest.Object);
@@ -311,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_SetsCurrencyToUSD_WhenRecipientCountryCodeIsUS_AndServiceIsGroundHomeDelivery()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -323,7 +323,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_DistributesAmountAcrossAllPackages_WhenServiceIsFedExGround()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -337,7 +337,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_DistributesAmountAcrossAllPackages_WhenServiceIsGroundHomeDelivery()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -353,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AssignsGuaranteedFundsPaymentType_WhenPaymentTypeIsSecured()
         {
-            shipmentEntity.FedEx.CodPaymentType = (int)FedExCodPaymentType.Secured;
+            shipmentEntity.FedEx.CodPaymentType = (int) FedExCodPaymentType.Secured;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -364,7 +364,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AssignsCashPaymentType_WhenPaymentTypeIsUnsecured()
         {
-            shipmentEntity.FedEx.CodPaymentType = (int)FedExCodPaymentType.Unsecured;
+            shipmentEntity.FedEx.CodPaymentType = (int) FedExCodPaymentType.Unsecured;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -375,7 +375,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AssignsAnyPaymentType_WhenPaymentTypeIsAny()
         {
-            shipmentEntity.FedEx.CodPaymentType = (int)FedExCodPaymentType.Any;
+            shipmentEntity.FedEx.CodPaymentType = (int) FedExCodPaymentType.Any;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -397,7 +397,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             shipmentEntity.FedEx.CodAddFreight = true;
 
-            shipmentEntity.FedEx.CodChargeBasis = (int)CodAddTransportationChargeBasisType.NET_FREIGHT;
+            shipmentEntity.FedEx.CodChargeBasis = (int) CodAddTransportationChargeBasisType.NET_FREIGHT;
 
             testObject.Manipulate(carrierRequest.Object);
 

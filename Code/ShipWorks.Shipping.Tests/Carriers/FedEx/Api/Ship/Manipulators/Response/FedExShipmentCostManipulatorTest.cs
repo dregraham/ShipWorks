@@ -1,10 +1,10 @@
-using Xunit;
+using log4net;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using log4net;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         private Mock<ILog> mockLog;
 
         private FedExShipmentCostManipulator testObject;
-        private ProcessShipmentReply nativeResponse;
+        private ProcessShipmentReply nativeResponse = new ProcessShipmentReply();
         private Mock<CarrierRequest> carrierRequest;
 
         public FedExShipmentCostManipulatorTest()
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject = new FedExShipmentCostManipulator(mockLog.Object);
 
-            nativeResponse = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
+            //nativeResponse = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
             fedExShipResponse = new FedExShipResponse(nativeResponse, carrierRequest.Object, BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);

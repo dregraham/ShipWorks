@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -37,8 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
 
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
-            ProcessShipmentReply processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
-            ShipmentEntity setupShipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            //ProcessShipmentReply processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
+            //ShipmentEntity setupShipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
 
             testObject = mock.Create<FedExShipResponse>();
         }

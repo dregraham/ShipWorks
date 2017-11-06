@@ -1,23 +1,23 @@
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request
 {
     public class FedExTrackingRequestTest
     {
         private FedExTrackRequest testObject;
-        
+
         private Mock<IFedExServiceGateway> fedExService;
         private Mock<ICarrierResponse> carrierResponse;
         private Mock<IFedExResponseFactory> responseFactory;
-        
+
         private Mock<ICarrierRequestManipulator> firstManipulator;
         private Mock<ICarrierRequestManipulator> secondManipulator;
 
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request
         public FedExTrackingRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
-            account = new FedExAccountEntity {AccountNumber = "1234", MeterNumber = "45453"};
+            account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.Track(It.IsAny<TrackRequest>())).Returns(new TrackReply());

@@ -1,9 +1,9 @@
-using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
@@ -18,7 +18,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         {
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
-            fedExShipResponse = new FedExShipResponse(BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply(), carrierRequest.Object, 
+            //fedExShipResponse = new FedExShipResponse(BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply(), carrierRequest.Object,
+            //    BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
+            fedExShipResponse = new FedExShipResponse(new object(), carrierRequest.Object,
                 BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
 
             testObject = new FedExShipmentCodManipulator();

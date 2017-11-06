@@ -1,10 +1,10 @@
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
@@ -19,10 +19,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
         public FedExTrackingManipulatorTest()
         {
-            
 
-            shipmentEntity= BuildFedExShipmentEntity.SetupBaseShipmentEntity();
-            processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
+
+            shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            //processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
 
             carrierRequest = new Mock<CarrierRequest>(null, null);
             fedExShipResponse = new FedExShipResponse(processShipmentReply, carrierRequest.Object, shipmentEntity, null, null);
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         {
             //remove master tracking
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
-            
+
             testObject.Manipulate(fedExShipResponse);
             Assert.Equal(shipmentEntity.TrackingNumber, "Package1Tracking");
         }
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.Null(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);           
+            Assert.Null(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);
             Assert.Equal("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
         }
     }

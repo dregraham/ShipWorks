@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
 {
     /// <summary>
     /// Label repository for FedEx

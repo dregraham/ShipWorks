@@ -6,10 +6,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
+namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
     public class FedExShippingWebAuthenticationDetailManipulatorTest
     {
@@ -18,8 +18,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private ShippingSettingsEntity shippingSettings;
         private FedExSettings settings;
-        private readonly ProcessShipmentRequest processShipmentRequest;
-        private readonly ShipmentEntity shipment;
+
+        private Mock<CarrierRequest> carrierRequest;
+        private ProcessShipmentRequest nativeRequest;
 
         public FedExShippingWebAuthenticationDetailManipulatorTest()
         {
@@ -30,34 +31,45 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             settings = new FedExSettings(settingsRepository.Object);
 
-            shipment = new ShipmentEntity();
-
-            processShipmentRequest = new ProcessShipmentRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
+            nativeRequest = new ProcessShipmentRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
 
             testObject = new FedExShippingWebAuthenticationDetailManipulator(settings);
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
+            // Setup the native request to be null
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
+
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+        }
+
+        [Fact]
+        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
+        {
+            // Setup the native request to be an unexpected type
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new object());
+
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull()
         {
             // Only setup is  to set the detail to null value
-            processShipmentRequest.WebAuthenticationDetail = null;
+            nativeRequest.WebAuthenticationDetail = null;
 
-            testObject.Manipulate(shipment, processShipmentRequest, 0);
+            testObject.Manipulate(carrierRequest.Object);
 
-            WebAuthenticationDetail detail = processShipmentRequest.WebAuthenticationDetail;
+            WebAuthenticationDetail detail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).WebAuthenticationDetail;
             Assert.NotNull(detail);
         }
 
@@ -65,9 +77,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull()
         {
             // No additional setup since everything is in the Initialize method
-            testObject.Manipulate(shipment, processShipmentRequest, 0);
+            testObject.Manipulate(carrierRequest.Object);
 
-            WebAuthenticationDetail detail = processShipmentRequest.WebAuthenticationDetail;
+            WebAuthenticationDetail detail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).WebAuthenticationDetail;
             Assert.NotNull(detail);
         }
     }

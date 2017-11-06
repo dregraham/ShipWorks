@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_HoldAtLocationDetailIsNotNull_ShipmentEntityHoldAtLocationIsFullyPopulated()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
-            
+
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_HoldAtLocationDetailValuesMatchShipmentEntity_ShipmentEntityHoldAtLocationIsFullyPopulated()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
-            
+
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
@@ -75,13 +75,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.Equal(shipmentEntity.FedEx.HoldResidential.HasValue, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
             Assert.Equal(shipmentEntity.FedEx.HoldStateOrProvinceCode, holdAtLocationDetail.LocationContactAndAddress.Address.StateOrProvinceCode);
             Assert.Equal(shipmentEntity.FedEx.HoldUrbanizationCode, holdAtLocationDetail.LocationContactAndAddress.Address.UrbanizationCode);
-                                                 
+
             // Check each street line            
             Assert.Equal(2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines.Length);
             Assert.Equal(shipmentEntity.FedEx.HoldStreet1, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[0]);
             Assert.Equal(shipmentEntity.FedEx.HoldStreet2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[1]);
-            
-                                                 
+
+
             // Check contact values              
             Assert.Equal(shipmentEntity.FedEx.HoldCompanyName, holdAtLocationDetail.LocationContactAndAddress.Contact.CompanyName);
             Assert.Equal(shipmentEntity.FedEx.HoldContactId, holdAtLocationDetail.LocationContactAndAddress.Contact.ContactId);
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.Equal(shipmentEntity.FedEx.HoldTitle, holdAtLocationDetail.LocationContactAndAddress.Contact.Title);
 
             // Check location type and phone number
-            Assert.Equal(shipmentEntity.FedEx.HoldLocationType, (int)holdAtLocationDetail.LocationType);
+            Assert.Equal(shipmentEntity.FedEx.HoldLocationType, (int) holdAtLocationDetail.LocationType);
             Assert.Equal(shipmentEntity.FedEx.HoldLocationType.HasValue, holdAtLocationDetail.LocationTypeSpecified);
             Assert.Equal(shipmentEntity.ShipPhone, holdAtLocationDetail.PhoneNumber);
         }
@@ -106,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Null LocationType so we can verify LocationTypeSpecified is false
             shipmentEntity.FedEx.HoldLocationType = null;
-            
+
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
@@ -175,7 +175,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 HoldEmailAddress = "Contact33@fedex.com",
                 HoldFaxNumber = "8881234567",
                 HoldLocationId = "Location33",
-                HoldLocationType = (int)FedExLocationType.FEDEX_EXPRESS_STATION,
+                HoldLocationType = (int) FedExLocationType.FEDEX_EXPRESS_STATION,
                 HoldPagerNumber = "7771234567",
                 HoldPersonName = "Fedex Clerk",
                 HoldPhoneExtension = "124",

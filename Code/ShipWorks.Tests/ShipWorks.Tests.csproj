@@ -352,7 +352,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsWebClientTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\CarrierRequestTest.cs" />
@@ -400,45 +399,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExVersionCaptureResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\BuildFedExProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\BuildFedExShipmentEntity.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\FedExShipRequestTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCertificationManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCodOptionsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDangerousGoodsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDryIceManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExEmailNotificationsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExFreightManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHoldAtLocationManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHomeDeliveryManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExLabelSpecificationManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExMasterTrackingManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageDetailsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageSpecialServicesManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackagingTypeManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPickupManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPriorityAlertManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRateTypeManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRecipientManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReferenceManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReturnsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExServiceTypeManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipmentSpecialServiceTypeManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipperManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingChargesManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingClientDetailManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingVersionManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExSmartPostManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalInsuredValueManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalWeightManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExAdmissibilityManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExBrokerManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCommercialInvoiceManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCustomsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExInternationalControlledExportManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExTrafficInArmsManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\FedExShipResponseTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCodManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCostManipulatorTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExTrackingManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\FedExTrackingUtilities.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\FedExTrackingRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulatorTest.cs" />
@@ -786,6 +746,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\" />
+    <Folder Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\" />
     <Folder Include="Shipping\Carriers\Postal\Endicia\Express1\" />
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
     <Folder Include="Shipping\Carriers\UPS\Validation\" />
