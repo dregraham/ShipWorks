@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -225,6 +226,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             ShipmentTypeDataService.LoadShipmentData(
                             this, shipment, shipment, "Asendia", typeof(AsendiaShipmentEntity), refreshIfPresent);
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not been excluded).
+        /// </summary>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            return EnumHelper.GetEnumList<AsendiaServiceType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedServiceTypes(repository));
         }
     }
 }
