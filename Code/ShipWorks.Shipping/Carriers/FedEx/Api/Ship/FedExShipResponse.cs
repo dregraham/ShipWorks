@@ -48,7 +48,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             get { throw new System.NotImplementedException(); }
         }
 
-        object ICarrierResponse.NativeResponse => throw new System.NotImplementedException();
+        object ICarrierResponse.NativeResponse
+        {
+            get { throw new System.NotImplementedException(); }
+        }
 
         /// <summary>
         /// Function that tells FedExShipResponse to process the request for shipment.
