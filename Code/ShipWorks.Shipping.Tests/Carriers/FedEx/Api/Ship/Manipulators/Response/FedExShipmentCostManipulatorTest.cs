@@ -1,9 +1,12 @@
+using Autofac.Extras.Moq;
 using log4net;
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
@@ -11,84 +14,77 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
     public class FedExShipmentCostManipulatorTest
     {
         private FedExShipResponse fedExShipResponse;
-
-        private Mock<ILog> mockLog;
-
+        private readonly AutoMock mock;
+        private readonly ProcessShipmentReply reply;
+        private readonly ShipmentEntity shipment;
         private FedExShipmentCostManipulator testObject;
-        private ProcessShipmentReply nativeResponse = new ProcessShipmentReply();
-        private Mock<CarrierRequest> carrierRequest;
 
         public FedExShipmentCostManipulatorTest()
         {
-            mockLog = new Mock<ILog>();
-            mockLog.Setup(log => log.WarnFormat(It.IsAny<string>(), 77));
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            testObject = new FedExShipmentCostManipulator(mockLog.Object);
-
-            //nativeResponse = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
-            carrierRequest = new Mock<CarrierRequest>(null, null);
-
-            fedExShipResponse = new FedExShipResponse(nativeResponse, carrierRequest.Object, BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
+            reply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
+            shipment = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            testObject = mock.Create<FedExShipmentCostManipulator>();
         }
 
         [Fact]
         public void Manipulate_ActualRateCostAddedToShipment_ActualRateTypeMatchesIncludedShipRateDetail()
         {
-            testObject.Manipulate(fedExShipResponse);
+            var result = testObject.Manipulate(reply, shipment);
 
-            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
-                fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
+                result.Value.ShipmentCost);
         }
-
-
+        
         [Fact]
         public void Manipulate_UsesTotalNetFedExCharge_OriginIsCA()
         {
-            fedExShipResponse.Shipment.OriginCountryCode = "CA";
+            shipment.OriginCountryCode = "CA";
 
-            testObject.Manipulate(fedExShipResponse);
+            var result = testObject.Manipulate(reply, shipment);
 
-            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
-                fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
+                result.Value.ShipmentCost);
         }
 
         [Fact]
         public void Manipulate_FirstRateCostAddedToShipment_ActualRateTypeDoesNotMatchIncludedShipRateDetail()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
-            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
+            reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
 
-            testObject.Manipulate(fedExShipResponse);
+            var result = testObject.Manipulate(reply, shipment);
 
-            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
-                fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
+                result.Value.ShipmentCost);
         }
 
         [Fact]
         public void Manipulate_ShippingCostLoggedAsZeroAndWarningLogged_NoShipmentRatingInformation()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating = null;
-            nativeResponse.CompletedShipmentDetail.ShipmentRating = null;
+            reply.CompletedShipmentDetail.ShipmentRating = null;
 
-            testObject.Manipulate(fedExShipResponse);
+            var result = testObject.Manipulate(reply, shipment);
 
-            Assert.Equal(0, fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(0, result.Value.ShipmentCost);
 
-            mockLog.Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
+            mock.Mock<ILog>().Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
         }
 
         [Fact]
         public void Manipulate_ShippingCostLoggedAsTotalNetFedExCharge_OriginIsCanada()
         {
-            nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
+            reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
 
-            fedExShipResponse.Shipment.OriginCountryCode = "CA";
+            shipment.OriginCountryCode = "CA";
 
-            testObject.Manipulate(fedExShipResponse);
+            var result = testObject.Manipulate(reply, shipment);
 
             Assert.Equal(
-                nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,
-                fedExShipResponse.Shipment.ShipmentCost);
+                reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,
+                result.Value.ShipmentCost);
         }
     }
 }

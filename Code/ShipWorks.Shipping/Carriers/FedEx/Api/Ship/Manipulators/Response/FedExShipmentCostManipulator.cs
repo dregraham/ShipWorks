@@ -1,50 +1,33 @@
 using System;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
     /// <summary>
     /// Manipulator to add cost to shipment
     /// </summary>
-    public class FedExShipmentCostManipulator : ICarrierResponseManipulator
+    public class FedExShipmentCostManipulator : IFedExShipResponseManipulator
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(FedExShipmentCostManipulator));
-
-        private IFedExNativeShipmentReply reply;
-
-        private ShipmentEntity shipment;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExShipmentCostManipulator()
+        public FedExShipmentCostManipulator(Func<Type, ILog> createLog)
         {
-        }
-
-        /// <summary>
-        /// Constructor - Anticipating this will only used for unit tests.
-        /// </summary>
-        public FedExShipmentCostManipulator(ILog log)
-        {
-            this.log = log;
+            this.log = createLog(GetType());
         }
 
         /// <summary>
         /// Add Cost to shipment
         /// </summary>
-        /// <param name="carrierResponse"></param>
-        public void Manipulate(ICarrierResponse carrierResponse)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
         {
-            FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
-
-            shipment = fedExShipResponse.Shipment;
-            reply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
-
-            ShipmentRating ratingInfo = reply.CompletedShipmentDetail.ShipmentRating;
+            ShipmentRating ratingInfo = response.CompletedShipmentDetail.ShipmentRating;
 
             if (ratingInfo != null)
             {
@@ -71,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
                 }
 
                 // Set the shipment's billed type and billed weight.
-                SetBilledTypeAndWeight(rateDetail);
+                SetBilledTypeAndWeight(rateDetail, shipment);
             }
             else
             {
@@ -79,26 +62,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 
                 log.WarnFormat("FedEx did not return rating details for shipment {0}", shipment.ShipmentID);
             }
+
+            return shipment;
         }
 
         /// <summary>
         /// Sets the shipment's billed type and billed weight.
         /// </summary>
-        private void SetBilledTypeAndWeight(ShipmentRateDetail rateDetail)
+        private void SetBilledTypeAndWeight(ShipmentRateDetail rateDetail, ShipmentEntity shipment)
         {
             if (rateDetail.RatedWeightMethodSpecified)
             {
                 switch (rateDetail.RatedWeightMethod)
                 {
                     case RatedWeightMethod.ACTUAL:
-                        shipment.BilledType = (int)BilledType.ActualWeight;
+                        shipment.BilledType = (int) BilledType.ActualWeight;
                         if (rateDetail.TotalBillingWeight != null)
                         {
                             shipment.BilledWeight = (double) rateDetail.TotalBillingWeight.Value;
                         }
                         break;
                     case RatedWeightMethod.DIM:
-                        shipment.BilledType = (int)BilledType.DimensionalWeight;
+                        shipment.BilledType = (int) BilledType.DimensionalWeight;
                         if (rateDetail.TotalDimWeight != null)
                         {
                             shipment.BilledWeight = (double) rateDetail.TotalDimWeight.Value;
@@ -109,13 +94,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
                         }
                         break;
                     default:
-                        shipment.BilledType = (int)BilledType.Unknown;
+                        shipment.BilledType = (int) BilledType.Unknown;
                         break;
                 }
             }
             else
             {
-                shipment.BilledType = (int)BilledType.Unknown;
+                shipment.BilledType = (int) BilledType.Unknown;
             }
         }
     }

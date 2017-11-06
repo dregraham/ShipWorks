@@ -190,6 +190,7 @@
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateWebAuthenticationManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\FedExShipRequestTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\FedExShipResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\BuildFedExProcessShipmentReply.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCertificationManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCodOptionsManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExDangerousGoodsManipulatorTest.cs" />
