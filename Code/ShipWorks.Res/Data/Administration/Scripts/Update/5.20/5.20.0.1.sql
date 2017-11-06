@@ -4,6 +4,7 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[ShipmentID] [bigint] NOT NULL,
 	[AsendiaAccountID] [bigint] NOT NULL,
 	[Service] [int] NOT NULL,
+	[NonMachinable] [bit] NOT NULL,
 	[RequestedLabelFormat] [int] NOT NULL,
 	[Contents][int] Not Null,
 	[NonDelivery] [int] Not Null,

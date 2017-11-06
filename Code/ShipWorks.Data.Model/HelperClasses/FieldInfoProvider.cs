@@ -525,6 +525,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AsendiaShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.TrackingNumber, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
 		private void InitAuditEntityInfos()

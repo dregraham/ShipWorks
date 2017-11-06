@@ -381,6 +381,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 		}
 		#endregion
 
@@ -637,6 +639,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, value); }
+		}
+
+		/// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."NonMachinable"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean NonMachinable
+		{
+			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.NonMachinable, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.NonMachinable, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

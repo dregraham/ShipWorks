@@ -756,6 +756,8 @@ namespace ShipWorks.Data.Model
 		InsuranceValue,
 		///<summary>TrackingNumber. </summary>
 		TrackingNumber,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
 		/// <summary></summary>
 		AmountOfFields
 	}

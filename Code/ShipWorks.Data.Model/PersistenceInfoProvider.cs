@@ -519,7 +519,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>
 		private void InitAsendiaShipmentEntityMappings()
 		{
-			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 16, 0);
+			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 17, 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "AsendiaAccountID", "AsendiaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -536,6 +536,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 14);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "TrackingNumber", "TrackingNumber", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
 		}
 
 		/// <summary>Inits AuditEntity's mappings</summary>

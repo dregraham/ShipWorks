@@ -52,6 +52,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Insurance = source.Insurance;
             InsuranceValue = source.InsuranceValue;
             TrackingNumber = source.TrackingNumber;
+            NonMachinable = source.NonMachinable;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -157,6 +158,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String TrackingNumber { get; }
+        /// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "AsendiaShipment"."NonMachinable"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean NonMachinable { get; }
         
         public IShipmentEntity Shipment { get; }
         

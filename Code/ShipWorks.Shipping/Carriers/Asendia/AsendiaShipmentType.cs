@@ -75,6 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             asendiaShipment.Contents = (int) ShipEngineContentsType.Merchandise;
             asendiaShipment.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
+            asendiaShipment.NonMachinable = false;
             asendiaShipment.AsendiaAccountID = 0;
             asendiaShipment.ShipEngineLabelID = string.Empty;
             asendiaShipment.DimsProfileID = 0;
