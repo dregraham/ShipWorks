@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -31,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return (FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost;
         }
@@ -45,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             // If we shouldn't apply, return
-            if (!ShouldApply(shipment))
+            if (!ShouldApply(shipment, sequenceNumber))
             {
                 return request;
             }
@@ -69,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             smartPostShipmentDetail.Indicia = GetSmartPostIndiciaType((FedExSmartPostIndicia) fedExShipment.SmartPostIndicia);
             smartPostShipmentDetail.IndiciaSpecified = true;
 
-            var endorsement = GetSmartPostEndorsementType((FedExSmartPostEndorsement)fedExShipment.SmartPostEndorsement);
+            var endorsement = GetSmartPostEndorsementType((FedExSmartPostEndorsement) fedExShipment.SmartPostEndorsement);
             if (endorsement != null)
             {
                 smartPostShipmentDetail.AncillaryEndorsement = endorsement.Value;
@@ -77,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
             else
             {
-                smartPostShipmentDetail.AncillaryEndorsementSpecified = false; 
+                smartPostShipmentDetail.AncillaryEndorsementSpecified = false;
             }
 
             if (!string.IsNullOrWhiteSpace(fedExShipment.SmartPostCustomerManifest))
@@ -92,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
 
             // For smartpost this is always zero
-            requestedShipment.TotalInsuredValue = null; 
+            requestedShipment.TotalInsuredValue = null;
 
             requestedShipment.SmartPostDetail = smartPostShipmentDetail;
 

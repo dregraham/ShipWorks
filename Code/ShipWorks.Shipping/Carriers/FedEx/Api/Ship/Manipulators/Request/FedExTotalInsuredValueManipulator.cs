@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return (FedExServiceType) shipment.FedEx.Service != FedExServiceType.SmartPost &&
                    shipment.FedEx.Packages.Sum(p => p.DeclaredValue) > 0;
@@ -38,20 +38,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            if (!ShouldApply(shipment))
+            if (!ShouldApply(shipment, sequenceNumber))
             {
                 return request;
             }
 
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request);
-            
+
             // Just need to assign the weight value in pounds
             request.RequestedShipment.TotalInsuredValue = new Money
-                {
-                    Currency = FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment)),
-                    Amount = shipment.FedEx.Packages.Sum(p => p.DeclaredValue),
-                };
+            {
+                Currency = FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment)),
+                Amount = shipment.FedEx.Packages.Sum(p => p.DeclaredValue),
+            };
 
             return request;
         }

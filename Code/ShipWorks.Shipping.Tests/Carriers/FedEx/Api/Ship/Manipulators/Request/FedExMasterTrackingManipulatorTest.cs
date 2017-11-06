@@ -1,8 +1,4 @@
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Xunit;
@@ -12,69 +8,42 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
     public class FedExMasterTrackingManipulatorTest
     {
         private FedExMasterTrackingManipulator testObject;
-
-        private FedExShipRequest request;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private readonly ShipmentEntity shipment;
 
         public FedExMasterTrackingManipulatorTest()
         {
-            ShipmentEntity shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
-            shipmentEntity.TrackingNumber = "xyz";
-            shipmentEntity.FedEx.MasterFormID = "xyz";
-
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-
-            request = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
+            shipment = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            shipment.TrackingNumber = "foo";
+            shipment.FedEx.MasterFormID = "bar";
 
             testObject = new FedExMasterTrackingManipulator();
         }
 
-        [Fact]
-        public void Manipulate_HasNoMasterInformation_SequenceNumberIsZero()
+        [Theory]
+        [InlineData(0, false)]
+        [InlineData(1, true)]
+        [InlineData(2, true)]
+        public void ShouldApply_ReturnsAppropriateValue_ForGivenInput(int sequence, bool expected)
         {
-            request.SequenceNumber = 0;
+            var result = testObject.ShouldApply(shipment, sequence);
 
-            testObject.Manipulate(request);
-
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            Assert.Null(requestedShipment.MasterTrackingId);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void Manipulate_HasMasterInformation_SequenceNumberIsOne()
+        public void Manipulate_CorrectFormIdSet_FromShipment()
         {
-            request.SequenceNumber = 1;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 1);
 
-            testObject.Manipulate(request);
-
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            Assert.NotNull(requestedShipment.MasterTrackingId);
+            Assert.Equal("bar", result.Value.RequestedShipment.MasterTrackingId.FormId);
         }
 
         [Fact]
-        public void Manipulate_CorrectFormIdSet_FormIdIsXyz()
+        public void Manipulate_CorrectTrackingIdSet_FromShipment()
         {
-            request.SequenceNumber = 1;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 1);
 
-            testObject.Manipulate(request);
-
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            Assert.Equal(request.ShipmentEntity.FedEx.MasterFormID, requestedShipment.MasterTrackingId.FormId);
-        }
-
-        [Fact]
-        public void Manipulate_CorrectTrackingIdSet_TrackingNumberIsAbc()
-        {
-            request.SequenceNumber = 1;
-
-            testObject.Manipulate(request);
-
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            Assert.Equal(request.ShipmentEntity.TrackingNumber, requestedShipment.MasterTrackingId.TrackingNumber);
+            Assert.Equal("foo", result.Value.RequestedShipment.MasterTrackingId.TrackingNumber);
         }
     }
 }

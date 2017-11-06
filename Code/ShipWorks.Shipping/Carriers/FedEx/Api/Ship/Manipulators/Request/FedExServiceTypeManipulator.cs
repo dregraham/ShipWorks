@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return true;
         }

@@ -1,5 +1,6 @@
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
@@ -7,40 +8,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
     /// <summary>
     /// Manipulator for adding master tracking information if not first package
     /// </summary>
-    public class FedExMasterTrackingManipulator : FedExShippingRequestManipulatorBase
+    public class FedExMasterTrackingManipulator : IFedExShipRequestManipulator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExMasterTrackingManipulator" /> class.
+        /// Should the manipulator be applied
         /// </summary>
-        public FedExMasterTrackingManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExMasterTrackingManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExMasterTrackingManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => sequenceNumber > 0;
 
         /// <summary>
         /// A master tracking information if not first package
         /// </summary>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Get the RequestedShipment object for the request
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
-
-            if (request.SequenceNumber > 0)
-            {
-                requestedShipment.MasterTrackingId = new TrackingId()
+            request.Ensure(x => x.RequestedShipment)
+                .MasterTrackingId = new TrackingId()
                 {
-                    FormId = request.ShipmentEntity.FedEx.MasterFormID,
-                    TrackingNumber = FedExUtility.GetTrackingNumberForApi(request.ShipmentEntity.TrackingNumber, request.ShipmentEntity.FedEx)
+                    FormId = shipment.FedEx.MasterFormID,
+                    TrackingNumber = FedExUtility.GetTrackingNumberForApi(shipment.TrackingNumber, shipment.FedEx)
                 };
-            }
+
+            return request;
         }
     }
 }

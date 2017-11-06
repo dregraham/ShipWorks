@@ -1,20 +1,15 @@
 using System;
-using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
-using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
@@ -70,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             shipment.FedEx.Service = (int) serviceType;
             shipment.FedEx.Packages.ForEach(p => p.DeclaredValue = declaredValue);
 
-            Assert.Equal(expectedValue, testObject.ShouldApply(shipment));
+            Assert.Equal(expectedValue, testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]

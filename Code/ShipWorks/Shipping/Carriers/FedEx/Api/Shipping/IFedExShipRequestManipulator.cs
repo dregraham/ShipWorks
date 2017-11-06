@@ -19,6 +19,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        bool ShouldApply(IShipmentEntity shipment);
+        bool ShouldApply(IShipmentEntity shipment, int sequenceNumber);
     }
 }

@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment) => true;
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => true;
 
         /// <summary>
         /// Add the email notifications to the FedEx carrier request

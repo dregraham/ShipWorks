@@ -1,8 +1,8 @@
 using System;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             shipment.FedEx.InternationalTrafficInArmsService = serviceEnabled;
             shipment.FedEx.TrafficInArmsLicenseNumber = licenseNumber;
 
-            Assert.Equal(expectedResult, testObject.ShouldApply(shipment));
+            Assert.Equal(expectedResult, testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]

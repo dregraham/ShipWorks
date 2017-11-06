@@ -1,11 +1,11 @@
 using System;
 using Autofac.Extras.Moq;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void ShouldApply_ReturnsTrue()
         {
-            Assert.True(testObject.ShouldApply(shipment));
+            Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_ResidentialSpecifiedIsTrue()
         {
-            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified()
         {
-            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty()
         {
-            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
             shipment.OriginCompany = string.Empty;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue()
         {
-            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
             shipment.OriginCompany = "Penetrode";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
         {
-            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
+            shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
 
             Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
         }

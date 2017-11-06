@@ -3,11 +3,9 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
@@ -30,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment) => true;
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => true;
 
         /// <summary>
         /// Add the Shipper info to the FedEx carrier request
@@ -77,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <exception cref="System.InvalidOperationException">FedExAddressLookup is not a valid residential determination type for the shipment's origin address.</exception>
         private void DetermineAddressType(Party shipper, IShipmentEntity shipment)
         {
-            ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType)shipment.FedEx.OriginResidentialDetermination;
+            ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType) shipment.FedEx.OriginResidentialDetermination;
             if (residentialDeterminationType == ResidentialDeterminationType.FedExAddressLookup)
             {
                 // Don't allow this determination type for the origin address so we cut down on service calls

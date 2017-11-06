@@ -1,7 +1,7 @@
+using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void ShouldApply_ReturnsTrue()
         {
-            Assert.True(testObject.ShouldApply(shipment));
+            Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]

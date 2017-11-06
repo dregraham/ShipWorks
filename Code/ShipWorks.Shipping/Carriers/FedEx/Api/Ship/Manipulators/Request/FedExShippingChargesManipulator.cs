@@ -1,13 +1,11 @@
 using System;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -30,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment) => true;
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => true;
 
         /// <summary>
         /// Manipulates the specified request.
@@ -44,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // the payment account and country code
             IFedExAccountEntity fedExAccount = settings.GetAccountReadOnly(shipment);
             IFedExShipmentEntity fedExShipment = shipment.FedEx;
-            
+
             // Use the FedEx account and shipment to create the shipping charges payment
             ConfigureShippingCharges(request.RequestedShipment.ShippingChargesPayment, fedExShipment, fedExAccount);
 
@@ -59,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="fedExAccount">The FedEx account.</param>
         private void ConfigureShippingCharges(Payment shippingCharges, IFedExShipmentEntity fedExShipment, IFedExAccountEntity fedExAccount)
         {
-            shippingCharges.PaymentType = GetApiPaymentType((FedExPayorType)fedExShipment.PayorTransportType);
+            shippingCharges.PaymentType = GetApiPaymentType((FedExPayorType) fedExShipment.PayorTransportType);
 
             InitializePayor(shippingCharges);
 

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void ShouldApply_ReturnsTrue()
         {
-            Assert.True(testObject.ShouldApply(shipment));
+            Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             // Setup the test by adjusting the ship date to be a Saturday
             shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
-            shipment.FedEx.DropoffType = (int)FedExDropoffType.RegularPickup;
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             // Setup the test by adjusting the ship date to be a Saturday
             shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
-            shipment.FedEx.DropoffType = (int)FedExDropoffType.Station;
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.Station;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             // test object, we won't be testing each of those every combinations
 
             // A priority overnight must be shipped on friday to be eligible for Saturday delivery
-            shipment.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
             shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
             shipment.FedEx.SaturdayDelivery = true;
 
@@ -211,7 +211,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             // A priority overnight must be shipped on friday to be eligible for Saturday delivery, so 
             // set the ship date to a Monday (i.e. not eligible for Saturday delivery)
-            shipment.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
             shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Monday);
             shipment.FedEx.SaturdayDelivery = true;
 
@@ -230,7 +230,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
             shipment.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
-            shipment.FedEx.DropoffType = (int)FedExDropoffType.RegularPickup;
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -247,7 +247,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
             shipment.ShipDate = GetNext(DateTime.Now.AddDays(7), DayOfWeek.Saturday);
-            shipment.FedEx.DropoffType = (int)FedExDropoffType.Station;
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.Station;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -267,7 +267,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             // test object, we won't be testing each of those every combinations
 
             // A priority overnight must be shipped on Friday to be eligible for Saturday delivery
-            shipment.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
             shipment.FedEx.SaturdayDelivery = true;
 
             // Setup the test by adjusting the ship date to be a Friday that is at least a week away so the

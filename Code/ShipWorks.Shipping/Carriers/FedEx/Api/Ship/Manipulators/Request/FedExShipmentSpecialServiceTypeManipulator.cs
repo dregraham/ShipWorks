@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return true;
         }
@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Pull out the FedEx shipment info from the shipment entity and check if they want Saturday 
             // delivery and whether it could be delivered on a Saturday
             IFedExShipmentEntity fedExShipmentEntity = shipment.FedEx;
-            if (fedExShipmentEntity.SaturdayDelivery && FedExUtility.CanDeliverOnSaturday((FedExServiceType)fedExShipmentEntity.Service, shipTimestamp))
+            if (fedExShipmentEntity.SaturdayDelivery && FedExUtility.CanDeliverOnSaturday((FedExServiceType) fedExShipmentEntity.Service, shipTimestamp))
             {
                 // Saturday delivery is available 
                 specialServiceTypes.Add(ShipmentSpecialServiceType.SATURDAY_DELIVERY);

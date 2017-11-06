@@ -1,11 +1,11 @@
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return (shipment.FedEx.InternationalTrafficInArmsService ?? false) ||
                    !string.IsNullOrEmpty(shipment.FedEx.TrafficInArmsLicenseNumber);

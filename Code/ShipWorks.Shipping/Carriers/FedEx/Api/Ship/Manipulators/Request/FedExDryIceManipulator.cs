@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <summary>
         /// Should the manipulator be applied
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment) =>
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) =>
             shipment.FedEx.Packages.Any(x => x.DryIceWeight > 0);
 
         /// <summary>

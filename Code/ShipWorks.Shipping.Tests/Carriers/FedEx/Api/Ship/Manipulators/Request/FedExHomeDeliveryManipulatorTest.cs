@@ -43,10 +43,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     .Set(x => x.Service, (int) service)
                     .Set(x => x.HomeDeliveryType, (int) homeDelivery))
                 .Build();
-            var result = testObject.ShouldApply(testShipment);
+            var result = testObject.ShouldApply(testShipment, 0);
             Assert.Equal(expected, result);
         }
-        
+
         [Fact]
         public void Manipulate_ServiceTypeArraySizeIsOne()
         {

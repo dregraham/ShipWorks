@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             shipment.FedEx.ReferencePO = referencePO;
 
-            var result = testObject.ShouldApply(shipment);
+            var result = testObject.ShouldApply(shipment, 0);
 
             Assert.Equal(expected, result);
         }

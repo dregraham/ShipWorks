@@ -673,7 +673,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <remarks>For most shipments, this will simply return the tracking number as-is.  For SmartPost shipments,
         /// this will remove the application id from the tracking number first.</remarks>
-        public static string GetTrackingNumberForApi(string trackingNumber, FedExShipmentEntity fedexShipment)
+        public static string GetTrackingNumberForApi(string trackingNumber, IFedExShipmentEntity fedexShipment)
         {
             if (fedexShipment != null &&
                 (FedExServiceType) fedexShipment.Service == FedExServiceType.SmartPost &&

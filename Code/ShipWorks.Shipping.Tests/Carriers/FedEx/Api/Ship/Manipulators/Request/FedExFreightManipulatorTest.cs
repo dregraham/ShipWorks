@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void ShouldApply_ReturnsAppropriateValue_ForGivenInput(FedExServiceType serviceType, bool expected)
         {
             var testShipment = Create.Shipment().AsFedEx(f => f.Set(x => x.Service, (int) serviceType)).Build();
-            var result = testObject.ShouldApply(testShipment);
+            var result = testObject.ShouldApply(testShipment, 0);
             Assert.Equal(expected, result);
         }
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void ShouldApply_ReturnsFalse_WhenShipmentEntityHoldAtLocationEnabledisFalse(bool holdAtLocation, bool expected)
         {
             var testShipment = Create.Shipment().AsFedEx(f => f.Set(x => x.FedExHoldAtLocationEnabled, holdAtLocation)).Build();
-            var result = testObject.ShouldApply(testShipment);
+            var result = testObject.ShouldApply(testShipment, 0);
             Assert.Equal(expected, result);
         }
 

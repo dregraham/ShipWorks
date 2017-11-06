@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request
         {
             return manipulatorFactory
                 .Select(x => x(settingsRepository))
-                .Where(x => x.ShouldApply(shipment))
+                .Where(x => x.ShouldApply(shipment, sequenceNumber))
                 .Aggregate(
                     new ProcessShipmentRequest(),
                     (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber))
