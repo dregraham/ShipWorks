@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -225,6 +226,42 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             ShipmentTypeDataService.LoadShipmentData(
                             this, shipment, shipment, "Asendia", typeof(AsendiaShipmentEntity), refreshIfPresent);
+        }
+
+        /// <summary>
+        /// Ensure the carrier specific profile data is created and loaded for the given profile
+        /// </summary>
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
+        {
+            ShipmentTypeDataService.LoadProfileData(profile, "Asendia", typeof(AsendiaProfileEntity), refreshIfPresent);
+        }
+
+        /// <summary>
+        /// Get the default profile for the shipment type
+        /// </summary>
+        public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+            profile.OriginID = (int)ShipmentOriginSource.Account;
+
+            AsendiaProfileEntity asendia = profile.Asendia;
+
+            asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any()
+                ? accountRepository.AccountsReadOnly.First().AsendiaAccountID
+                : 0;
+
+            asendia.Service = (int)AsendiaServiceType.AsendiaPriorityTracked;
+            asendia.Contents = (int)ShipEngineContentsType.Merchandise;
+            asendia.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
+            asendia.NonMachinable = false;
+
+            asendia.Weight = 0;
+            asendia.DimsProfileID = 0;
+            asendia.DimsLength = 0;
+            asendia.DimsWidth = 0;
+            asendia.DimsHeight = 0;
+            asendia.DimsWeight = 0;
+            asendia.DimsAddWeight = true;
         }
     }
 }
