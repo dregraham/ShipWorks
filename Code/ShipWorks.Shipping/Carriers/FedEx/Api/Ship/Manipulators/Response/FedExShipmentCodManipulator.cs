@@ -1,36 +1,29 @@
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
 {
     /// <summary>
-    /// Adds COD informaiton to a FedEx Shipment - Does not save COD label
+    /// Adds COD information to a FedEx Shipment - Does not save COD label
     /// </summary>
-    public class FedExShipmentCodManipulator : ICarrierResponseManipulator
+    public class FedExShipmentCodManipulator : IFedExShipResponseManipulator
     {
-        private IFedExNativeShipmentReply processShipmentReply;
-
-        private ShipmentEntity shipment;
-
         /// <summary>
         /// Performs manipulation
         /// </summary>
-        public void Manipulate(ICarrierResponse carrierResponse)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
         {
-            FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
-
-            shipment = fedExShipResponse.Shipment;
-            processShipmentReply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
-
-            // For COD we have to save off the cod tracking info.  Null for ground
-
-            if (processShipmentReply.CompletedShipmentDetail.MasterTrackingId != null)
+            if (response.CompletedShipmentDetail.MasterTrackingId != null)
             {
-                TrackingId codTrackingID = processShipmentReply.CompletedShipmentDetail.MasterTrackingId;
+                TrackingId codTrackingID = response.CompletedShipmentDetail.MasterTrackingId;
                 shipment.FedEx.CodTrackingNumber = codTrackingID.TrackingNumber;
                 shipment.FedEx.CodTrackingFormID = codTrackingID.FormId;
             }
+
+            return shipment;
         }
     }
 }

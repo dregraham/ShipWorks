@@ -1,27 +1,25 @@
 using Moq;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
 {
     public class FedExShipmentCodManipulatorTest
     {
         private FedExShipmentCodManipulator testObject;
-
-        private FedExShipResponse fedExShipResponse;
-        private Mock<CarrierRequest> carrierRequest;
+        private readonly ShipmentEntity shipmentEntity;
+        private readonly ProcessShipmentReply processShipmentReply;
 
         public FedExShipmentCodManipulatorTest()
         {
-            carrierRequest = new Mock<CarrierRequest>(null, null);
-
-            //fedExShipResponse = new FedExShipResponse(BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply(), carrierRequest.Object,
-            //    BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
-            fedExShipResponse = new FedExShipResponse(new object(), carrierRequest.Object,
-                BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
+            shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
+            processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
 
             testObject = new FedExShipmentCodManipulator();
         }
@@ -29,11 +27,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         [Fact]
         public void Manipulate_CodTrackingNumberAndFormIDAddedToShipment_ResponseIncludesCodTrackingInfo()
         {
-            testObject.Manipulate(fedExShipResponse);
+            testObject.Manipulate(processShipmentReply, shipmentEntity);
 
-            ProcessShipmentReply nativeResponse = fedExShipResponse.NativeResponse as ProcessShipmentReply;
-            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingNumber, nativeResponse.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
-            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingFormID, nativeResponse.CompletedShipmentDetail.MasterTrackingId.FormId);
+            Assert.Equal(shipmentEntity.FedEx.CodTrackingNumber, processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
+            Assert.Equal(shipmentEntity.FedEx.CodTrackingFormID, processShipmentReply.CompletedShipmentDetail.MasterTrackingId.FormId);
         }
     }
 }
