@@ -40,7 +40,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         {
             base.LoadProfile(profile);
 
-            AsendiaProfileEntity AsendiaProfile = profile.Asendia;
+            dimensionsControl.Initialize();
+
+            AsendiaProfileEntity asendiaProfile = profile.Asendia;
             
             LoadAsendiaAccounts();
 
@@ -48,11 +50,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             EnumHelper.BindComboBox<ShipEngineContentsType>(contents);
             EnumHelper.BindComboBox<ShipEngineNonDeliveryType>(nonDelivery);
 
-            //From
-            AddValueMapping(AsendiaProfile, AsendiaProfileFields.AsendiaAccountID, accountState, asendiaAccount, labelAccount);
+            // From
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.AsendiaAccountID, accountState, asendiaAccount, labelAccount);
 
-            //Service
-            AddValueMapping(AsendiaProfile, AsendiaProfileFields.Service, serviceState, service, labelService);
+            // Service
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.Service, serviceState, service, labelService);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.Weight, weightState, weight, labelWeight);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.DimsProfileID, dimensionsState, dimensionsControl, labelDimensions);
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat, labelThermalNote);
@@ -61,11 +65,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
             
             //Options
-            AddValueMapping(AsendiaProfile, AsendiaProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
 
             //Customs
-            AddValueMapping(AsendiaProfile, AsendiaProfileFields.Contents, contentsState, contents, labelContents);
-            AddValueMapping(AsendiaProfile, AsendiaProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.Contents, contentsState, contents, labelContents);
+            AddValueMapping(asendiaProfile, AsendiaProfileFields.NonDelivery, nonDeliveryState, nonDelivery, labelNonDelivery);
         }
 
         /// <summary>
