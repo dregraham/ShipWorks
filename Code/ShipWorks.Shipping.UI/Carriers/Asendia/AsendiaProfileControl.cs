@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             ResizeGroupBoxes(tabPageSettings);
 
-            // ShipEngine does not support ZPL
+            // ShipEngine does not support EPL
             requestedLabelFormat.ExcludeFormats(ThermalLanguage.EPL);
         }
 
