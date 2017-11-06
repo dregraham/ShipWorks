@@ -1,68 +1,58 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator that modifies the Broker
     /// properties of the customs detail portion of the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
-    public class FedExBrokerManipulator : FedExShippingRequestManipulatorBase
+    public class FedExBrokerManipulator : IFedExShipRequestManipulator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExBrokerManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        public FedExBrokerManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExBrokerManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExBrokerManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
+            return shipment.FedEx.BrokerEnabled;
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(shipment, request);
 
-            // We can safely cast this since we've passed initialization
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-
-            if (request.ShipmentEntity.FedEx.BrokerEnabled)
+            if (ShouldApply(shipment, sequenceNumber))
             {
                 // Get a list of the existing special service types; FedEx sometimes throws an exception if "empty" elements 
                 // are sent over, so this is done here rather than the initialize request method so any objects of the request 
                 // that needs instantiated is only instantiated if there is an actual broker that needs to be added.
-                List<ShipmentSpecialServiceType> serviceTypes = GetSpecialServiceTypes(nativeRequest);
+                List<ShipmentSpecialServiceType> serviceTypes = GetSpecialServiceTypes(request);
                 
                 // Add the broker service to the list and reset the array on the request
                 serviceTypes.Add(ShipmentSpecialServiceType.BROKER_SELECT_OPTION);
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
+                request.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
 
                 // Get a handle to the customs detail on the request and prepare a person adapter for creating
                 // the contact and address info
-                CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
-                PersonAdapter person = new PersonAdapter(request.ShipmentEntity.FedEx, "Broker");
+                CustomsClearanceDetail customsDetail = GetCustomsDetail(request);
+                PersonAdapter person = new PersonAdapter(shipment.FedEx as FedExShipmentEntity, "Broker");
 
                 BrokerDetail brokerDetail = new BrokerDetail()
                 {
                     Broker = new Party()
                     {
-                        AccountNumber = request.ShipmentEntity.FedEx.BrokerAccount,
+                        AccountNumber = shipment.FedEx.BrokerAccount,
                         Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(person),
                         Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(person)
                     },
@@ -70,75 +60,45 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                     TypeSpecified = true
                 };
                 
-                brokerDetail.Broker.Contact.PhoneExtension = request.ShipmentEntity.FedEx.BrokerPhoneExtension;
+                brokerDetail.Broker.Contact.PhoneExtension = shipment.FedEx.BrokerPhoneExtension;
                 
                 // Add the broker to brokers array of the customs detail and update the custom detail
                 // on the native request (in case a new object was created during the GetCustomsDetail method)
                 customsDetail.Brokers = new BrokerDetail[] {brokerDetail};
-                nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
+                request.RequestedShipment.CustomsClearanceDetail = customsDetail;
             }
+
+            return request;
         }
 
         /// <summary>
         /// Gets a list of any special service types from the IFedExNativeShipmentRequest object.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <returns>A List of ShipmentSpecialServiceType objects.</returns>
-        private List<ShipmentSpecialServiceType> GetSpecialServiceTypes(IFedExNativeShipmentRequest nativeRequest)
+        private List<ShipmentSpecialServiceType> GetSpecialServiceTypes(ProcessShipmentRequest request)
         {
-            // We want to build a list of the special service types from the existing request
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
-            {
-                // The "owning" object of the array we're interested in needs to be created
-                nativeRequest.RequestedShipment.SpecialServicesRequested = new ShipmentSpecialServicesRequested();
-            }
+            request.RequestedShipment.Ensure(rs => rs.SpecialServicesRequested)
+                .Ensure(sst => sst.SpecialServiceTypes);
 
-            if (nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                // Initialize the array to an empty array, so an empty list is returned
-                nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            }
-
-            return nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
+            return request.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
         }
 
         /// <summary>
         /// Gets the customs detail from the request or creates a new one if the one on the request is null.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        /// <returns>A CustomsClearanceDetail object.</returns>
-        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest nativeRequest)
+        private CustomsClearanceDetail GetCustomsDetail(ProcessShipmentRequest request)
         {
-            return nativeRequest.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
+            return request.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }            
+            request.Ensure(r => r.RequestedShipment);
         }
     }
 }
