@@ -7,18 +7,18 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.ComponentRegistration;
 
-namespace ShipWorks.Shipping.UI.Carriers.Dhl
+namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
     /// <summary>
-    /// DhlExpress specific customs stuff
+    /// Asendia specific customs stuff
     /// </summary>
-    [KeyedComponent(typeof(CustomsControlBase), ShipmentTypeCode.DhlExpress)]
-    public partial class DhlExpressCustomsControl : CustomsControlBase
+    [KeyedComponent(typeof(CustomsControlBase), ShipmentTypeCode.Asendia)]
+    public partial class AsendiaCustomsControl : CustomsControlBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressCustomsControl()
+        public AsendiaCustomsControl()
         {
             InitializeComponent();
         }
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// Load the shipments into the controls
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing)
-        {   
+        {
             // A null reference error was being thrown.  Discoverred by Crash Reports.
             // Let's figure out what is null....
             if (shipments == null)
@@ -55,20 +55,20 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
-                    if (shipment.DhlExpress == null)
+                    if (shipment.Asendia == null)
                     {
                         ShippingManager.EnsureShipmentLoaded(shipment);
                     }
 
-                    MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, "DhlExpress");
-                    
-                    contentType.ApplyMultiValue((ShipEngineContentsType) shipment.DhlExpress.Contents);
-                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType)shipment.DhlExpress.NonDelivery);
+                    MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, "Asendia");
+
+                    contentType.ApplyMultiValue((ShipEngineContentsType) shipment.Asendia.Contents);
+                    nonDeliveryType.ApplyMultiValue((ShipEngineNonDeliveryType) shipment.Asendia.NonDelivery);
                 }
             }
 
-            contentType.SelectedIndexChanged += new EventHandler(OnChangeOption);
-            nonDeliveryType.SelectedIndexChanged += new EventHandler(OnChangeOption);
+            contentType.SelectedIndexChanged += OnChangeOption;
+            nonDeliveryType.SelectedIndexChanged += OnChangeOption;
         }
 
         /// <summary>
@@ -78,10 +78,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                contentType.ReadMultiValue(v => shipment.DhlExpress.Contents = (int)(ShipEngineContentsType)v);
-                contentType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int)(ShipEngineNonDeliveryType)v);
+                contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
+                contentType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
             }
-            
+
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
 
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                contentType.ReadMultiValue(v => shipment.DhlExpress.Contents = (int) (ShipEngineContentsType) v);
-                nonDeliveryType.ReadMultiValue(v => shipment.DhlExpress.NonDelivery = (int)(ShipEngineNonDeliveryType)v);
+                contentType.ReadMultiValue(v => shipment.Asendia.Contents = (int) (ShipEngineContentsType) v);
+                nonDeliveryType.ReadMultiValue(v => shipment.Asendia.NonDelivery = (int) (ShipEngineNonDeliveryType) v);
             }
         }
     }

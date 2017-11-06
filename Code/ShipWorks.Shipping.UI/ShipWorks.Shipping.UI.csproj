@@ -182,6 +182,12 @@
     <Compile Include="Carriers\Asendia\AsendiaAccountEditorDlg.Designer.cs">
       <DependentUpon>AsendiaAccountEditorDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.Designer.cs">
+      <DependentUpon>AsendiaCustomsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -486,6 +492,9 @@
     <EmbeddedResource Include="Carriers\Asendia\AsendiaAccountEditorDlg.resx">
       <DependentUpon>AsendiaAccountEditorDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaCustomsControl.resx">
+      <DependentUpon>AsendiaCustomsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
