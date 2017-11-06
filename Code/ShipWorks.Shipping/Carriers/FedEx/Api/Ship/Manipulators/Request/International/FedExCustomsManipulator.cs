@@ -2,58 +2,64 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface for adding customs information
     /// to a FedEx ProcessShipmentReply object.
     /// </summary>
-    public class FedExCustomsManipulator : FedExShippingRequestManipulatorBase
+    public class FedExCustomsManipulator : IFedExShipRequestManipulator
     {
+        private readonly IFedExSettingsRepository settings;
         private readonly ICustomsRequired customsRequired;
         private string shipmentCurrencyType;
+        private IFedExAccountEntity account;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExCustomsManipulator" /> class.
+        /// Constructor
         /// </summary>
-        public FedExCustomsManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()), new FedExShipmentType())
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExCustomsManipulator" /> class.
-        /// </summary>
-        public FedExCustomsManipulator(FedExSettings fedExSettings, ICustomsRequired customsRequired) : base(fedExSettings)
+        public FedExCustomsManipulator(IFedExSettingsRepository settings, ICustomsRequired customsRequired)
         {
+            this.settings = settings;
             this.customsRequired = customsRequired;
+        }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
+        {
+            return customsRequired.IsCustomsRequired(shipment as ShipmentEntity);
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(shipment, request);
 
-            // We can safely cast this since we've passed initialization
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            ShipmentEntity shipment = request.ShipmentEntity;
 
-            shipmentCurrencyType = GetShipmentCurrencyType(request.ShipmentEntity);
-
-            if (customsRequired.IsCustomsRequired(request.ShipmentEntity))
+            if (ShouldApply(shipment, sequenceNumber))
             {
+                account = settings.GetAccountReadOnly(shipment);
+
+                shipmentCurrencyType = GetShipmentCurrencyType(shipment);
+
                 // Obtain a handle to the customs detail
-                CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
+                CustomsClearanceDetail customsDetail = GetCustomsDetail(request);
 
                 customsDetail.CustomsValue = new Money
                 {
@@ -66,17 +72,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
                 
                 ConfigureCommodities(shipment, customsDetail);
                 ConfigureNaftaDetails(shipment, customsDetail);
-                ConfigurePaymentDetail(shipment, customsDetail, request.CarrierAccountEntity as FedExAccountEntity);
+                ConfigurePaymentDetail(shipment, customsDetail, account);
                 ConfigureExportDetail(shipment, customsDetail);
                 ConfigureRecipientIdentification(shipment, customsDetail);
                 ConfigureCustomsOptions(shipment, customsDetail);
 
                 // Make sure the customs data is assigned back to the request (in the event that a new customs object was
                 // created in the GetCustomsDetail method)
-                nativeRequest.RequestedShipment.CustomsClearanceDetail = customsDetail;
+                request.RequestedShipment.CustomsClearanceDetail = customsDetail;
                 
-                ConfigureTaxPayerIdentification(shipment, nativeRequest);
+                ConfigureTaxPayerIdentification(shipment, request);
             }
+
+            return request;
         }
 
         /// <summary>
@@ -84,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
-        private void ConfigureRecipientIdentification(ShipmentEntity shipment, CustomsClearanceDetail customsDetail)
+        private void ConfigureRecipientIdentification(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             if (shipment.FedEx.CustomsRecipientIdentificationType != (int) FedExCustomsRecipientIdentificationType.None)
             {
@@ -103,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="fedExShipment">The fed ex shipment.</param>
         /// <returns></returns>
         /// <exception cref="System.InvalidOperationException">An unrecognized type of customs identification was provided.</exception>
-        private RecipientCustomsIdType GetApiRecipientIdentificationType(FedExShipmentEntity fedExShipment)
+        private RecipientCustomsIdType GetApiRecipientIdentificationType(IFedExShipmentEntity fedExShipment)
         {
             FedExCustomsRecipientIdentificationType type = (FedExCustomsRecipientIdentificationType) fedExShipment.CustomsRecipientIdentificationType;
 
@@ -122,7 +130,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
-        private void ConfigureExportDetail(ShipmentEntity shipment, CustomsClearanceDetail customsDetail)
+        private void ConfigureExportDetail(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             FedExCustomsExportFilingOption filingOption = (FedExCustomsExportFilingOption) shipment.FedEx.CustomsExportFilingOption;
 
@@ -139,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             }
         }
 
-        private void ConfigureCustomsOptions(ShipmentEntity shipment, CustomsClearanceDetail customsDetail)
+        private void ConfigureCustomsOptions(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             FedExCustomsOptionType optionType = (FedExCustomsOptionType) shipment.FedEx.CustomsOptionsType;
 
@@ -202,17 +210,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// Configures the tax payer identification.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureTaxPayerIdentification(ShipmentEntity shipment, IFedExNativeShipmentRequest nativeRequest)
+        /// <param name="request">The native request.</param>
+        private void ConfigureTaxPayerIdentification(IShipmentEntity shipment, IFedExNativeShipmentRequest request)
         {
-            if (nativeRequest.RequestedShipment.Recipient.Tins == null || nativeRequest.RequestedShipment.Recipient.Tins.Length == 0)
+            if (request.RequestedShipment.Recipient.Tins == null || request.RequestedShipment.Recipient.Tins.Length == 0)
             {
-                nativeRequest.RequestedShipment.Recipient.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
+                request.RequestedShipment.Recipient.Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() };
             }
 
             // TODO: We may need to set shipping/recipeint based on who's paying.  See ETD_Request.xml where The Tins info
             // is on Shipper.
-            nativeRequest.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() {Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE};
+            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() {Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE};
 
         }
 
@@ -222,7 +230,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="shipment">The shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
         /// <param name="fedExAccount">The FedEx account.</param>
-        private void ConfigurePaymentDetail(ShipmentEntity shipment, CustomsClearanceDetail customsDetail, FedExAccountEntity fedExAccount)
+        private void ConfigurePaymentDetail(IShipmentEntity shipment, CustomsClearanceDetail customsDetail, IFedExAccountEntity fedExAccount)
         {
             Payment payment = new Payment();
             payment.PaymentType = GetApiPaymentType((FedExPayorType)shipment.FedEx.PayorDutiesType);
@@ -285,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
-        private void ConfigureCommodities(ShipmentEntity shipment, CustomsClearanceDetail customsDetail)
+        private void ConfigureCommodities(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             // According to 2012 test cases, all commodities have properties set in the same manner rather
             // than separate settings depending on documents only vs. non-documents as was the case in 
@@ -321,7 +329,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// The FedEx API WeightUnits value.
         /// </returns>
         /// <exception cref="System.InvalidOperationException">Unrecognized weight unit.</exception>
-        private WeightUnits GetApiWeightUnits(ShipmentEntity shipment)
+        private WeightUnits GetApiWeightUnits(IShipmentEntity shipment)
         {
             WeightUnitOfMeasure type = (WeightUnitOfMeasure)shipment.FedEx.WeightUnitType;
 
@@ -340,7 +348,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
-        private void ConfigureNaftaDetails(ShipmentEntity shipment, CustomsClearanceDetail customsDetail)
+        private void ConfigureNaftaDetails(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             if (shipment.FedEx.CustomsNaftaEnabled)
             {
@@ -369,7 +377,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="shipment">The shipment.</param>
         /// <returns>A NaftaProducerDeterminationCode value.</returns>
         /// <exception cref="System.InvalidOperationException">Unknown value for producer determination code</exception>
-        private NaftaProducerDeterminationCode GetApiProducerCode(ShipmentEntity shipment)
+        private NaftaProducerDeterminationCode GetApiProducerCode(IShipmentEntity shipment)
         {
             FedExNaftaDeterminationCode determinationCode = (FedExNaftaDeterminationCode) shipment.FedEx.CustomsNaftaDeterminationCode;
 
@@ -391,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="shipment">The shipment.</param>
         /// <returns>A NaftaPreferenceCriterionCode value.</returns>
         /// <exception cref="System.InvalidOperationException">Unknown value for preference criterion</exception>
-        private NaftaPreferenceCriterionCode GetApiPreferenceCode(ShipmentEntity shipment)
+        private NaftaPreferenceCriterionCode GetApiPreferenceCode(IShipmentEntity shipment)
         {
             FedExNaftaPreferenceCriteria preference = (FedExNaftaPreferenceCriteria)shipment.FedEx.CustomsNaftaPreferenceType;
 
@@ -414,7 +422,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="shipment">The shipment.</param>
         /// <returns>The NaftaNetCostMethodCode value.</returns>
         /// <exception cref="System.InvalidOperationException">Unknown value for net cost method</exception>
-        private NaftaNetCostMethodCode GetApiNetCostMethodCode(ShipmentEntity shipment)
+        private NaftaNetCostMethodCode GetApiNetCostMethodCode(IShipmentEntity shipment)
         {
             FedExNaftaNetCostMethod costMethod = (FedExNaftaNetCostMethod) shipment.FedEx.CustomsNaftaNetCostMethod;
             switch (costMethod)
@@ -431,11 +439,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// Gets the customs detail from the native request if it is not null; if the CustomsClearanceDetail
         /// of the native request is null, a CustomsClearanceDetail object is returned.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
+        /// <param name="request">The native request.</param>
         /// <returns>A CustomsClearanceDetail object.</returns>
-        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest nativeRequest)
+        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest request)
         {
-            return nativeRequest.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
+            return request.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
         }
 
         /// <summary>
@@ -444,33 +452,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
+            request.Ensure(r => r.RequestedShipment)
+                .Ensure(rs => rs.Recipient);
+        }
 
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.Recipient == null)
-            {
-                // We'll be manipulating the TINs portion of the recipient, so make sure it's been created
-                nativeRequest.RequestedShipment.Recipient = new Party();
-            }
+        /// <summary>
+        /// Helper method to get shipment currency
+        /// </summary>
+        protected string GetShipmentCurrencyType(IShipmentEntity shipment)
+        {
+            return FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment));
         }
     }
 }
