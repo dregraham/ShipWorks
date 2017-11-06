@@ -1,129 +1,94 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that will manipulate the Priority Alert settings
     /// of a FedEx IFedExNativeShipmentRequest.
     /// </summary>
-    public class FedExPriorityAlertManipulator : FedExShippingRequestManipulatorBase
+    public class FedExPriorityAlertManipulator : IFedExShipRequestManipulator
     {
         private int currentPackageIndex;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPriorityAlertManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        public FedExPriorityAlertManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPriorityAlertManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExPriorityAlertManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
+            return sequenceNumber < shipment.FedEx.Packages.Count();
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(shipment, request);
 
             // Pull out the sequence number so we know which package in the shipment to use
-            this.currentPackageIndex = request.SequenceNumber;
+            currentPackageIndex = sequenceNumber;
 
-            if (currentPackageIndex < request.ShipmentEntity.FedEx.Packages.Count)
+            IFedExPackageEntity[] packages = shipment.FedEx.Packages.ToArray();
+            if (currentPackageIndex < packages.Length)
             {
-                // We can safely cast this since we've passed initialization
-                IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-
                 // Extract any API enhancement type to a FedEx enhancement type array for the current package
-                FedExPackageEntity package = request.ShipmentEntity.FedEx.Packages[currentPackageIndex];
+                IFedExPackageEntity package = packages[currentPackageIndex];
 
                 if (package.PriorityAlert)
                 {
                     List<PackageSpecialServiceType> specialServiceTypes =
-                        nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.ToList();
+                        request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.ToList();
 
                     specialServiceTypes.Add(PackageSpecialServiceType.PRIORITY_ALERT);
-                    nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
+                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
                 }
 
                 if (!string.IsNullOrWhiteSpace(package.PriorityAlertDetailContent))
                 {
                     // Each package should be in it's own request, so we always use the first item in the line item aray
-                    nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail = new PriorityAlertDetail();
+                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail = new PriorityAlertDetail();
 
                     // Update the package line item in the native request with the API enhancement type array and the content
-                    nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.Content = new string[] { package.PriorityAlertDetailContent };
+                    request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.Content = new string[] { package.PriorityAlertDetailContent };
 
                     PriorityAlertEnhancementType[] apiEnhancementTypes = GetApiEnhancementType(package);
 
                     if (apiEnhancementTypes.Length > 0)
                     {
 
-                        nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes = apiEnhancementTypes;
+                        request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes = apiEnhancementTypes;
                     }
                 }
             }
+
+            return request;
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
+            request.Ensure(r => r.RequestedShipment)
+                .EnsureAtLeastOne(rs => rs.RequestedPackageLineItems)
+                .Ensure(rp => rp.SpecialServicesRequested)
+                .Ensure(s => s.SpecialServiceTypes);
 
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null || nativeRequest.RequestedShipment.RequestedPackageLineItems.Length == 0)
-            {
-                // We'll be inspecting/manipulating properties of the package line items, so make sure it's been created
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested == null)
-            {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested = new PackageSpecialServicesRequested();
-            }
-
-            PackageSpecialServiceType[] specialServiceTypes = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
+            PackageSpecialServiceType[] specialServiceTypes = request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
             if (specialServiceTypes == null)
             {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
+                request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
             }
         }
 
@@ -132,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// </summary>
         /// <param name="package">The package.</param>
         /// <returns>An array of PriorityAlertEnhancementType values.</returns>
-        private PriorityAlertEnhancementType[] GetApiEnhancementType(FedExPackageEntity package)
+        private PriorityAlertEnhancementType[] GetApiEnhancementType(IFedExPackageEntity package)
         {
             List<PriorityAlertEnhancementType> apiEnhancementTypes = new List<PriorityAlertEnhancementType>();
 
