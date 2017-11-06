@@ -1,46 +1,47 @@
 using System;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Manipulator for adding shipper information to the FedEx request
     /// </summary>
-    public class FedExShipperManipulator : FedExShippingRequestManipulatorBase
+    public class FedExShipperManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShipperManipulator" /> class.
-        /// </summary>
-        public FedExShipperManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShipperManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExShipperManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public FedExShipperManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
         }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Add the Shipper info to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Get the RequestedShipment object for the request
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
+            request.Ensure(r => r.RequestedShipment);
 
             // Get the contact and address for the shipment
-            ShipmentEntity shipment = request.ShipmentEntity;
-            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment, "Origin"));
-            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment, "Origin"));
+            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment as ShipmentEntity, "Origin"));
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment as ShipmentEntity, "Origin"));
 
             // Create the shipper
             Party shipper = new Party()
@@ -56,12 +57,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             // Set the shipper on the requested shipment
             if (shipment.ReturnShipment)
             {
-                requestedShipment.Recipient = shipper;
+                request.RequestedShipment.Recipient = shipper;
             }
             else
             {
-                requestedShipment.Shipper = shipper;
+                request.RequestedShipment.Shipper = shipper;
             }
+
+            return request;
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="shipper">The shipper.</param>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="System.InvalidOperationException">FedExAddressLookup is not a valid residential determination type for the shipment's origin address.</exception>
-        private void DetermineAddressType(Party shipper, ShipmentEntity shipment)
+        private void DetermineAddressType(Party shipper, IShipmentEntity shipment)
         {
             ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType)shipment.FedEx.OriginResidentialDetermination;
             if (residentialDeterminationType == ResidentialDeterminationType.FedExAddressLookup)
@@ -86,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             if (residentialDeterminationType == ResidentialDeterminationType.CommercialIfCompany)
             {
                 // We need to inspect the origin address further to determine whether the address is a residential
-                // address based on the presense of a company name
+                // address based on the presence of a company name
                 isResidentialAddress = string.IsNullOrEmpty(shipment.OriginCompany);
             }
 

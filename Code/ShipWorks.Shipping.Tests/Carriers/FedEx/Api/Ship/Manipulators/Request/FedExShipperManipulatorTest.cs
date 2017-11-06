@@ -1,132 +1,125 @@
 using System;
-using System.Collections.Generic;
+using Autofac.Extras.Moq;
 using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExShipperManipulatorTest
     {
-        private FedExShipperManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private ProcessShipmentRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
+        private readonly FedExShipperManipulator testObject;
 
         public FedExShipperManipulatorTest()
         {
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            shipment = Create.Shipment().AsFedEx().Build();
 
-            testObject = new FedExShipperManipulator();
+            processShipmentRequest = new ProcessShipmentRequest();
+
+            testObject = mock.Create<FedExShipperManipulator>();
+        }
+
+        [Fact]
+        public void ShouldApply_ReturnsTrue()
+        {
+            Assert.True(testObject.ShouldApply(shipment));
         }
 
         [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsRequestedShipment()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
+            Assert.IsAssignableFrom<RequestedShipment>(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsValidRequestedShipmentShipper()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Make sure we got a Shipper back
-            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Shipper);
+            Assert.IsAssignableFrom<Party>(processShipmentRequest.RequestedShipment.Shipper);
 
             // Make sure Address fields match
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.City, shipmentEntity.OriginCity);
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.CountryCode, shipmentEntity.OriginCountryCode);
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.PostalCode, shipmentEntity.OriginPostalCode);
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipmentEntity.OriginStateProvCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Address.City, shipment.OriginCity);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Address.CountryCode, shipment.OriginCountryCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Address.PostalCode, shipment.OriginPostalCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipment.OriginStateProvCode);
 
             // Make sure Contact fields match
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.CompanyName, shipmentEntity.OriginCompany);
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.EMailAddress, shipmentEntity.OriginEmail);
-            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.PhoneNumber, shipmentEntity.OriginPhone);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Contact.CompanyName, shipment.OriginCompany);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Contact.EMailAddress, shipment.OriginEmail);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Shipper.Contact.PhoneNumber, shipment.OriginPhone);
         }
 
         [Fact]
         public void Manipulate_ResidentialSpecifiedIsTrue()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
+            Assert.True(processShipmentRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
+            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
-        }
-
-        [Fact]
-        public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsNull()
-        {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
-            shipmentEntity.OriginCompany = null;
-
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(processShipmentRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
-            shipmentEntity.OriginCompany = string.Empty;
+            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            shipment.OriginCompany = string.Empty;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(processShipmentRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
-            shipmentEntity.OriginCompany = "Penetrode";
+            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            shipment.OriginCompany = "Penetrode";
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(processShipmentRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
+            shipment.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
         }
 
         [Fact]
         public void Manipulate_AddressAddedToRecipeint_RequestedShipmentIsReturn()
         {
-            shipmentEntity.ReturnShipment = true;
+            shipment.ReturnShipment = true;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Null(nativeRequest.RequestedShipment.Shipper);
+            Assert.Null(processShipmentRequest.RequestedShipment.Shipper);
 
-            Assert.Equal(shipmentEntity.OriginCity, nativeRequest.RequestedShipment.Recipient.Address.City);
+            Assert.Equal(shipment.OriginCity, processShipmentRequest.RequestedShipment.Recipient.Address.City);
         }
     }
 }
