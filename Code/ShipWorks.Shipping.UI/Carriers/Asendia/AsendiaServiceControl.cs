@@ -123,6 +123,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                         service.ApplyMultiValue(asendiaServiceType);
                     }
 
+                    nonMachinable.ApplyMultiCheck(shipment.Asendia.NonMachinable);
                     shipDate.ApplyMultiDate(shipment.ShipDate);
                     dimensions.Add(new DimensionsAdapter(shipment.Asendia));
                 }
@@ -219,6 +220,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                 asendiaAccount.ReadMultiValue(v => shipment.Asendia.AsendiaAccountID = (long) v);
 
                 service.ReadMultiValue(v => shipment.Asendia.Service = (AsendiaServiceType) v);
+                nonMachinable.ReadMultiCheck(c => shipment.Asendia.NonMachinable = c);
                 shipDate.ReadMultiDate(v => shipment.ShipDate = v);
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
