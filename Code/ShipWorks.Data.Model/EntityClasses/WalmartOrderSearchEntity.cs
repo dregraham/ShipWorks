@@ -354,6 +354,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PurchaseOrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CustomerOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -490,6 +492,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)WalmartOrderSearchFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)WalmartOrderSearchFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The CustomerOrderID property of the Entity WalmartOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "WalmartOrderSearch"."CustomerOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String CustomerOrderID
+		{
+			get { return (System.String)GetValue((int)WalmartOrderSearchFieldIndex.CustomerOrderID, true); }
+			set	{ SetValue((int)WalmartOrderSearchFieldIndex.CustomerOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'WalmartOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

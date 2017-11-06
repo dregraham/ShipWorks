@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
             webClient.Setup(w => w.GetItem(It.IsAny<long>())).Returns(item);
             webClient.Setup(w => w.GetItem(15)).Returns(itemWithOptions);
             webClient.Setup(w => w.GetItem(14)).Returns(itemWithOptions);
-            webClient.Setup(w => w.GetProduct(It.IsAny<string>())).Returns(product);
+            webClient.Setup(w => w.GetProductBySku(It.IsAny<string>())).Returns(product);
 
             orderEntity = new MagentoOrderEntity();
 

@@ -11068,6 +11068,8 @@ namespace ShipWorks.Data.Model
 		PurchaseOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>CustomerOrderID. </summary>
+		CustomerOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
