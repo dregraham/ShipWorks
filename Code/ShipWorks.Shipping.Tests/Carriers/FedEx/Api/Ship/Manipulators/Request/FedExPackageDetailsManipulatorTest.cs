@@ -1,82 +1,80 @@
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
     public class FedExPackageDetailsManipulatorTest
     {
-        private FedExPackageDetailsManipulator testObject;
-
-        private FedExShipRequest request;
-
-        private ProcessShipmentRequest processShipmentRequest;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
-        private FedExAccountEntity fedExAccount;
+        private readonly FedExPackageDetailsManipulator testObject;
+        private readonly FedExAccountEntity fedExAccount;
+        private readonly AutoMock mock;
+        private readonly ShipmentEntity shipment;
 
         public FedExPackageDetailsManipulatorTest()
         {
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            request = new FedExShipRequest(
-                null,
-                BuildFedExShipmentEntity.SetupRequestShipmentEntity(),
-                null,
-                null,
-                settingsRepository.Object,
-                new ProcessShipmentRequest());
+            shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
+            fedExAccount = new FedExAccountEntity();
 
-            processShipmentRequest = ((ProcessShipmentRequest) request.NativeRequest);
+            mock.Mock<ICarrierSettingsRepository>().Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(fedExAccount);
 
-            fedExAccount = new FedExAccountEntity { AccountNumber = "123", CountryCode = "US", LastName = "Doe", FirstName = "John" };
-            //carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(fedExAccount);
+            testObject = mock.Create<FedExPackageDetailsManipulator>();
+        }
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(fedExAccount);
-
-            testObject = new FedExPackageDetailsManipulator(new FedExSettings(settingsRepository.Object));
+        [Theory]
+        [InlineData(FedExServiceType.FedExFreightEconomy, false)]
+        [InlineData(FedExServiceType.FedExFreightPriority, false)]
+        [InlineData(FedExServiceType.FedExGround, true)]
+        [InlineData(FedExServiceType.PriorityOvernight, true)]
+        public void ShouldApply_ReturnsAppropriateValue_ForGivenInput(FedExServiceType service, bool expected)
+        {
+            shipment.FedEx.Service = (int) service;
+            var result = testObject.ShouldApply(shipment, 0);
+            Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment()
+        public void Manipulate_PackageCountIsTwo_TwoPackagesInShipment()
         {
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(request.ShipmentEntity.FedEx.Packages.Count, 2);
-            Assert.Equal(processShipmentRequest.RequestedShipment.PackageCount, "2");
+            Assert.Equal(shipment.FedEx.Packages.Count, 2);
+            Assert.Equal(result.Value.RequestedShipment.PackageCount, "2");
         }
 
         [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndLinearUnitsIsInchesTest()
         {
-            request.ShipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
+            shipment.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
 
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal((int) FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType);
+            Assert.Equal((int) FedExPackagingType.Custom, shipment.FedEx.PackagingType);
 
-            CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            CompareDimensions(shipment, shipment.FedEx.Packages[0], result.Value.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_DimensionsRoundedProperly_WhenDimensionsAreDecimals()
         {
-            request.ShipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
-            request.ShipmentEntity.FedEx.Packages[0].DimsHeight = 3.2;
-            request.ShipmentEntity.FedEx.Packages[0].DimsLength = 3.9;
-            request.ShipmentEntity.FedEx.Packages[0].DimsWidth = 3.5;
+            shipment.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
+            shipment.FedEx.Packages[0].DimsHeight = 3.2;
+            shipment.FedEx.Packages[0].DimsLength = 3.9;
+            shipment.FedEx.Packages[0].DimsWidth = 3.5;
 
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            RequestedPackageLineItem requestedPackage = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0];
+            RequestedPackageLineItem requestedPackage = result.Value.RequestedShipment.RequestedPackageLineItems[0];
 
             Assert.Equal("3", requestedPackage.Dimensions.Height);
             Assert.Equal("4", requestedPackage.Dimensions.Length);
@@ -86,53 +84,52 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndLinearUnitsIsCentimetersTest()
         {
-            request.ShipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.CM;
+            shipment.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.CM;
 
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal((int) FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType);
+            Assert.Equal((int) FedExPackagingType.Custom, shipment.FedEx.PackagingType);
 
-            CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            CompareDimensions(shipment, shipment.FedEx.Packages[0], result.Value.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsPounds()
         {
-            request.ShipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
+            shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
 
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            ValidateWeight(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            ValidateWeight(shipment, shipment.FedEx.Packages[0], result.Value.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsKilograms()
         {
-            request.ShipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
+            shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
 
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            ValidateWeight(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            ValidateWeight(shipment, shipment.FedEx.Packages[0], result.Value.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue()
         {
-            testObject.Manipulate(request);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            ValidateValue(request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            ValidateValue(shipment.FedEx.Packages[0], result.Value.RequestedShipment.RequestedPackageLineItems[0]);
 
         }
 
-        [Fact]
-        public void Manipulate_AssignsSequenceNumber()
+        [Theory]
+        [InlineData(0, "1")]
+        [InlineData(1, "2")]
+        public void Manipulate_AssignsSequenceNumber(int sequence, string expected)
         {
-            request.SequenceNumber = 0;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), sequence);
 
-            testObject.Manipulate(request);
-
-            ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
-            Assert.Equal(1.ToString(), nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SequenceNumber);
+            Assert.Equal(expected, result.Value.RequestedShipment.RequestedPackageLineItems[0].SequenceNumber);
         }
 
         private void ValidateValue(FedExPackageEntity fedExPackageEntity, RequestedPackageLineItem requestedPackageLineItem)
