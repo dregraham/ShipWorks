@@ -1,62 +1,66 @@
 using System;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Templates.Tokens;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Manipulator for adding SmartPost information to the FedEx request
     /// </summary>
-    public class FedExSmartPostManipulator : FedExShippingRequestManipulatorBase
+    public class FedExSmartPostManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExSmartPostManipulator" /> class.
-        /// </summary>
-        public FedExSmartPostManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExSmartPostManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExSmartPostManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public FedExSmartPostManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
+        }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment)
+        {
+            return (FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost;
         }
 
         /// <summary>
         /// Add the SmartPost to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            if (request == null)
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
+            // If we shouldn't apply, return
+            if (!ShouldApply(shipment))
             {
-                throw new ArgumentNullException("request");
+                return request;
             }
 
             // Get the FedEx shipment and account
-            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
-            FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
-
-            // If we aren't SmartPost, return
-            if ((FedExServiceType)fedExShipment.Service != FedExServiceType.SmartPost)
-            {
-                return;
-            }
+            IFedExShipmentEntity fedExShipment = shipment.FedEx;
+            IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
 
             // Get the RequestedShipment object for the request
             RequestedShipment requestedShipment = InitializeRequest(request);
 
             SmartPostShipmentDetail smartPostShipmentDetail = new SmartPostShipmentDetail();
 
-            fedExShipment.SmartPostHubID = FedExUtility.GetSmartPostHub(fedExShipment.SmartPostHubID, account);
-            if (string.IsNullOrWhiteSpace(fedExShipment.SmartPostHubID))
+            string smartPostHubID = FedExUtility.GetSmartPostHub(fedExShipment.SmartPostHubID, account);
+            if (string.IsNullOrWhiteSpace(smartPostHubID))
             {
                 throw new CarrierException("A SmartPost Hub ID is required for shipping with SmartPost.");
             }
@@ -76,11 +80,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 smartPostShipmentDetail.AncillaryEndorsementSpecified = false; 
             }
 
-            if (smartPostShipmentDetail.Indicia == SmartPostIndiciaType.PARCEL_SELECT)
-            {
-                fedExShipment.SmartPostConfirmation = true;
-            }
-
             if (!string.IsNullOrWhiteSpace(fedExShipment.SmartPostCustomerManifest))
             {
                 string smartPostCustomerManifest = TemplateTokenProcessor.ProcessTokens(fedExShipment.SmartPostCustomerManifest,
@@ -88,8 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
                 if (!string.IsNullOrWhiteSpace(smartPostCustomerManifest))
                 {
-                    fedExShipment.SmartPostCustomerManifest = smartPostCustomerManifest;
-                    smartPostShipmentDetail.CustomerManifestId = fedExShipment.SmartPostCustomerManifest;
+                    smartPostShipmentDetail.CustomerManifestId = smartPostCustomerManifest;
                 }
             }
 
@@ -97,6 +95,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             requestedShipment.TotalInsuredValue = null; 
 
             requestedShipment.SmartPostDetail = smartPostShipmentDetail;
+
+            return request;
         }
 
         /// <summary>
@@ -105,9 +105,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private static RequestedShipment InitializeRequest(CarrierRequest request)
+        private static RequestedShipment InitializeRequest(ProcessShipmentRequest request)
         {
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
+            request.Ensure(r => r.RequestedShipment);
+
+            RequestedShipment requestedShipment = request.RequestedShipment;
 
             // Make sure a package is there
             if (requestedShipment.RequestedPackageLineItems == null)
@@ -126,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         }
 
         /// <summary>
-        /// Get the FedEx API value that correspons to our internal value
+        /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
         private static SmartPostIndiciaType GetSmartPostIndiciaType(FedExSmartPostIndicia indicia)
         {
