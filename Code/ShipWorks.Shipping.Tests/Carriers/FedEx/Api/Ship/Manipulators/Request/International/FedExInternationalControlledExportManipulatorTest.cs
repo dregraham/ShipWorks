@@ -1,428 +1,172 @@
 using System;
-using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
     public class FedExInternationalControlledExportManipulatorTest
     {
         private FedExInternationalControlledExportManipulator testObject;
-
-        private ShipmentEntity shipmentEntity;
-
-        private FedExShipRequest shipRequest;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private ShipmentEntity shipment;
 
         public FedExInternationalControlledExportManipulatorTest()
         {
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-
-            // All dry ice shipments need to use custom packaging
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
-
-            shipRequest = new FedExShipRequest(
-                null,
-                shipmentEntity,
-                null,
-                null,
-                settingsRepository.Object,
-                new ProcessShipmentRequest());
-
+            shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             testObject = new FedExInternationalControlledExportManipulator();
+        }
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+        [Theory]
+        [InlineData(FedExInternationalControlledExportType.None, false)]
+        [InlineData(FedExInternationalControlledExportType.Dea036, true)]
+        [InlineData(FedExInternationalControlledExportType.Dea236, true)]
+        [InlineData(FedExInternationalControlledExportType.Dea486, true)]
+        [InlineData(FedExInternationalControlledExportType.Dsp05, true)]
+        [InlineData(FedExInternationalControlledExportType.Dsp61, true)]
+        [InlineData(FedExInternationalControlledExportType.Dsp73, true)]
+        [InlineData(FedExInternationalControlledExportType.Dsp85, true)]
+        [InlineData(FedExInternationalControlledExportType.Dsp94, true)]
+        [InlineData(FedExInternationalControlledExportType.DspLicenseAgreement, true)]
+        [InlineData(FedExInternationalControlledExportType.FromForeignTradeZone, true)]
+        [InlineData(FedExInternationalControlledExportType.WarehouseWithdrawal, true)]
+        public void ShouldApply_ReturnsAppropriateValue_ForGivenInput(FedExInternationalControlledExportType type, bool expected)
+        {
+            shipment.FedEx.IntlExportDetailType = (int) type;
+
+            var result = testObject.ShouldApply(shipment, 0);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(FedExInternationalControlledExportType.Dea036, InternationalControlledExportType.DEA_036)]
+        [InlineData(FedExInternationalControlledExportType.Dea236, InternationalControlledExportType.DEA_236)]
+        [InlineData(FedExInternationalControlledExportType.Dea486, InternationalControlledExportType.DEA_486)]
+        [InlineData(FedExInternationalControlledExportType.Dsp05, InternationalControlledExportType.DSP_05)]
+        [InlineData(FedExInternationalControlledExportType.Dsp61, InternationalControlledExportType.DSP_61)]
+        [InlineData(FedExInternationalControlledExportType.Dsp73, InternationalControlledExportType.DSP_73)]
+        [InlineData(FedExInternationalControlledExportType.Dsp85, InternationalControlledExportType.DSP_85)]
+        [InlineData(FedExInternationalControlledExportType.Dsp94, InternationalControlledExportType.DSP_94)]
+        [InlineData(FedExInternationalControlledExportType.DspLicenseAgreement, InternationalControlledExportType.DSP_LICENSE_AGREEMENT)]
+        [InlineData(FedExInternationalControlledExportType.FromForeignTradeZone, InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE)]
+        [InlineData(FedExInternationalControlledExportType.WarehouseWithdrawal, InternationalControlledExportType.WAREHOUSE_WITHDRAWAL)]
+        public void Manipulate_ICEDTypeIsCorrect_WhenConverted(FedExInternationalControlledExportType type, InternationalControlledExportType expected)
+        {
+            shipment.FedEx.IntlExportDetailType = (int) type;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+            Assert.Equal(expected,
+                result.Value.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
         }
 
         [Fact]
-        public void Manipulate_InternationalControlledExportIsNull_WhenInternationalControlledExportDetailTypeIsNone()
+        public void Manipulate_ReturnsFailure_WhenTypeIsUnknown()
         {
-            shipRequest.ShipmentEntity.FedEx.IntlExportDetailType =
-                (int)FedExInternationalControlledExportType.None;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Null(processShipmentRequest.RequestedShipment);
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
-        }
-
-        [Fact]
-        public void Manipulate_ICEDTypeIsCorrect_WhenConverted()
-        {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea036;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DEA_036,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea236;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DEA_236,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DEA_486,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp05;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_05,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp61;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_61,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp73;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_73,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp85;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_85,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp94;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_94,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.DspLicenseAgreement;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.DSP_LICENSE_AGREEMENT,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
-
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.FromForeignTradeZone;
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.Equal(InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
+            shipment.FedEx.IntlExportDetailType = int.MaxValue;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]
         public void Manipulate_ForeignTradeZoneCodeMatches()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
-            fedExEntity.IntlExportDetailForeignTradeZoneCode = "ftzc";
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailForeignTradeZoneCode = "ftzc";
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
             Assert.Equal("ftzc",
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.ForeignTradeZoneCode);
         }
 
         [Fact]
         public void Manipulate_EntryNumberMatches()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
-            fedExEntity.IntlExportDetailEntryNumber = "123456";
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailEntryNumber = "123456";
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
             Assert.Equal("123456",
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.EntryNumber);
         }
 
         [Fact]
         public void Manipulate_LicenseOrPermitNumberMatches()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
-            fedExEntity.IntlExportDetailLicenseOrPermitNumber = "abcde123456";
-            testObject.Manipulate(shipRequest);
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailLicenseOrPermitNumber = "abcde123456";
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
             Assert.Equal("abcde123456",
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitNumber);
         }
 
         [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateMatches()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
 
             DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
+            shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
 
-            testObject.Manipulate(shipRequest);
-
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
             Assert.Equal(licenseOrPermitExpirationDate,
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDate);
         }
 
         [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateSpecifiedIsFalse_WhenNoExpirationDateProvided()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
             Assert.Equal(false,
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
 
         [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateSpecifiedIsTrue_WhenNoExpirationDateProvided()
         {
-            ProcessShipmentRequest processShipmentRequest;
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea486;
 
             DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
+            shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
 
-            testObject.Manipulate(shipRequest);
-
-            processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
             Assert.Equal(true,
-                            processShipmentRequest.RequestedShipment.SpecialServicesRequested
+                            result.Value.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
 
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA236()
+        [Theory]
+        [InlineData(FedExInternationalControlledExportType.Dea036, InternationalControlledExportType.DEA_036)]
+        [InlineData(FedExInternationalControlledExportType.Dea236, InternationalControlledExportType.DEA_236)]
+        [InlineData(FedExInternationalControlledExportType.Dea486, InternationalControlledExportType.DEA_486)]
+        [InlineData(FedExInternationalControlledExportType.Dsp05, InternationalControlledExportType.DSP_05)]
+        [InlineData(FedExInternationalControlledExportType.Dsp61, InternationalControlledExportType.DSP_61)]
+        [InlineData(FedExInternationalControlledExportType.Dsp73, InternationalControlledExportType.DSP_73)]
+        [InlineData(FedExInternationalControlledExportType.Dsp85, InternationalControlledExportType.DSP_85)]
+        [InlineData(FedExInternationalControlledExportType.Dsp94, InternationalControlledExportType.DSP_94)]
+        [InlineData(FedExInternationalControlledExportType.DspLicenseAgreement, InternationalControlledExportType.DSP_LICENSE_AGREEMENT)]
+        [InlineData(FedExInternationalControlledExportType.FromForeignTradeZone, InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE)]
+        [InlineData(FedExInternationalControlledExportType.WarehouseWithdrawal, InternationalControlledExportType.WAREHOUSE_WITHDRAWAL)]
+        public void Manipulate_AddsControlledExportOption_WhenExportIsValidType(FedExInternationalControlledExportType type, InternationalControlledExportType expected)
         {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea236;
+            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea236;
+            shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
 
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA036()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea036;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA486()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP05()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp05;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP61()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp61;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP73()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp73;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP85()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp85;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP94()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp94;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSPLicenseAgreement()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.DspLicenseAgreement;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsForeignTradeZone()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.FromForeignTradeZone;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_AddsControlledExportOption_WhenExportTypeIsWarehouseWithdrawal()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.WarehouseWithdrawal;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
-        }
-
-        [Fact]
-        public void Manipulate_DoesNotAddControlledExportOption_WhenExportTypeIsNone()
-        {
-            FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
-            fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.None;
-
-            DateTime licenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
-            fedExEntity.IntlExportDetailLicenseOrPermitExpirationDate = licenseOrPermitExpirationDate;
-
-            testObject.Manipulate(shipRequest);
-
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-
-            Assert.Null(processShipmentRequest.RequestedShipment);
+            Assert.Equal(1, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Contains(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE,
+                result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
     }
 }
