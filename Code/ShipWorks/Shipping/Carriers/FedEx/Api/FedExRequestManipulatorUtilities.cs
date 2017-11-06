@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
+        public static ClientDetail CreateShippingClientDetail(IFedExAccountEntity account)
         {
             return new ClientDetail
             {

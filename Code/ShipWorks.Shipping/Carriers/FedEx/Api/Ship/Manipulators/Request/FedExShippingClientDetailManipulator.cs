@@ -1,72 +1,59 @@
 using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
-    public class FedExShippingClientDetailManipulator : FedExShippingRequestManipulatorBase
+    public class FedExShippingClientDetailManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClientDetailManipulator" /> class using 
-        /// a FedExSettings backed by the FedExSettingsRepository.
-        /// </summary>
-        public FedExShippingClientDetailManipulator() : this(new FedExSettings(new FedExSettingsRepository()))
-        { }
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClientDetailManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The FedEx settings.</param>
-        public FedExShippingClientDetailManipulator(FedExSettings fedExSettings) : base(fedExSettings)
+        public FedExShippingClientDetailManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClientDetailManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExShippingClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
-            : base(settingsRepository)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            ValidateRequest(request);
+            ValidateRequest(request, shipment);
 
-            // We can safely cast this since we've passed validation
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
+            IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
+            request.ClientDetail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
-            FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity; 
-            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
+            return GenericResult.FromSuccess(request);
         }
 
         /// <summary>
         /// Validates the request making sure it is not null and of the correct type.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void ValidateRequest(CarrierRequest request)
+        private void ValidateRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
         {
             if (request == null)
             {
                 throw new ArgumentNullException("request");
             }
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
+            if (shipment == null)
             {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
+                throw new ArgumentNullException("shipment");
             }
         }
     }
