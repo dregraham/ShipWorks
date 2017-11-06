@@ -188,6 +188,7 @@
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateTotalWeightManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateVersionManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateWebAuthenticationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingWebAuthenticationDetailManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\FedExServiceGatewayFactoryTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />

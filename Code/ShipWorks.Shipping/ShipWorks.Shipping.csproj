@@ -212,6 +212,7 @@
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateWebAuthenticationManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\International\FedExRateBrokerManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\International\ManipulatorHelpers.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />

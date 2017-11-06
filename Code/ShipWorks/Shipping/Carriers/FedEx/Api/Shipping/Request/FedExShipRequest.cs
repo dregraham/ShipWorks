@@ -72,10 +72,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request
         }
 
         //TODO: Remove these lines when manipulators are converted
-        public override IEntity2 CarrierAccountEntity =>
-            throw new NotImplementedException("REMOVE THIS WHEN MANIPULATORS ARE CONVERTED");
+        public override IEntity2 CarrierAccountEntity
+        {
+            get { throw new NotImplementedException("REMOVE THIS WHEN MANIPULATORS ARE CONVERTED"); }
+        }
 
-        public override ICarrierResponse Submit() =>
+        public override ICarrierResponse Submit()
+        {
             throw new NotImplementedException("REMOVE THIS WHEN MANIPULATORS ARE CONVERTED");
+        }
     }
 }

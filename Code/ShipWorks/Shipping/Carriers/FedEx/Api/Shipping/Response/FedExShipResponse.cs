@@ -43,7 +43,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         public ShipmentEntity Shipment => shipment;
         public ProcessShipmentReply NativeResponse => reply;
 
-        public CarrierRequest Request => throw new System.NotImplementedException();
+        public CarrierRequest Request
+        {
+            get { throw new System.NotImplementedException(); }
+        }
 
         object ICarrierResponse.NativeResponse => throw new System.NotImplementedException();
 
