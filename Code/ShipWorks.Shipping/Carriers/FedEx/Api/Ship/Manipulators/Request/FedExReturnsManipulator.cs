@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
             return shipment.ReturnShipment;
         }
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            if (!ShouldApply(shipment))
+            if (!ShouldApply(shipment, sequenceNumber))
             {
                 return request;
             }
@@ -117,14 +117,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
                 PendingShipmentDetail pendingShipmentDetail = new PendingShipmentDetail
                 {
-                    Type = PendingShipmentType.EMAIL, 
-                    ExpirationDate = DateTime.Today.AddDays(30), 
+                    Type = PendingShipmentType.EMAIL,
+                    ExpirationDate = DateTime.Today.AddDays(30),
                     ExpirationDateSpecified = true
                 };
 
                 EMailLabelDetail emailLabelDetail = new EMailLabelDetail
                 {
-                    Recipients = new EMailRecipient[1] {eMailRecipient}
+                    Recipients = new EMailRecipient[1] { eMailRecipient }
                 };
 
                 //NotificationEMailAddress = shipment.ShipEmail

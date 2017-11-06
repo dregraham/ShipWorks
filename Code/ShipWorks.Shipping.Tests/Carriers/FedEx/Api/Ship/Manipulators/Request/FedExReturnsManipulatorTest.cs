@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using Autofac.Extras.Moq;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         public void ShouldApply_ReturnsCorrectValue(bool isReturn, bool expectedValue)
         {
             shipment.ReturnShipment = isReturn;
-            Assert.Equal(expectedValue, testObject.ShouldApply(shipment));
+            Assert.Equal(expectedValue, testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]
