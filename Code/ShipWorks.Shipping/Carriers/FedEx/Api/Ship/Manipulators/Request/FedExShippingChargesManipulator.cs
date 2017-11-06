@@ -1,52 +1,54 @@
 using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator interface that manipulates the shipping charges
     /// of a IFedExNativeShipmentRequest object.
     /// </summary>
-    public class FedExShippingChargesManipulator : FedExShippingRequestManipulatorBase
+    public class FedExShippingChargesManipulator : IFedExShipRequestManipulator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingChargesManipulator" /> class.
-        /// </summary>
-        public FedExShippingChargesManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        private readonly IFedExSettingsRepository settings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingChargesManipulator" /> class.
+        /// Constructor
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExShippingChargesManipulator(FedExSettings fedExSettings) : base(fedExSettings)
+        public FedExShippingChargesManipulator(IFedExSettingsRepository settings)
         {
+            this.settings = settings;
         }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
-
-            // We can safely cast this since we've passed initialization 
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
+            InitializeRequest(request, shipment);
 
             // Use the the FedEx account information associated with the request to populate 
             // the payment account and country code
-            FedExAccountEntity fedExAccount = request.CarrierAccountEntity as FedExAccountEntity;
-            FedExShipmentEntity fedExShipment = request.ShipmentEntity.FedEx;
+            IFedExAccountEntity fedExAccount = settings.GetAccountReadOnly(shipment);
+            IFedExShipmentEntity fedExShipment = shipment.FedEx;
             
             // Use the FedEx account and shipment to create the shipping charges payment
-            ConfigureShippingCharges(nativeRequest.RequestedShipment.ShippingChargesPayment, fedExShipment, fedExAccount);
+            ConfigureShippingCharges(request.RequestedShipment.ShippingChargesPayment, fedExShipment, fedExAccount);
+
+            return request;
         }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="shippingCharges">The shipping charges being configured.</param>
         /// <param name="fedExShipment">The FedEx shipment.</param>
         /// <param name="fedExAccount">The FedEx account.</param>
-        private void ConfigureShippingCharges(Payment shippingCharges, FedExShipmentEntity fedExShipment, FedExAccountEntity fedExAccount)
+        private void ConfigureShippingCharges(Payment shippingCharges, IFedExShipmentEntity fedExShipment, IFedExAccountEntity fedExAccount)
         {
             shippingCharges.PaymentType = GetApiPaymentType((FedExPayorType)fedExShipment.PayorTransportType);
 
@@ -97,23 +99,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="shippingCharges"></param>
         private void InitializePayor(Payment shippingCharges)
         {
-            if (shippingCharges.Payor == null)
-            {
-                // We'll be manipulating properties of the payor, so make sure it's been created
-                shippingCharges.Payor = new Payor();
-            }
-
-            if (shippingCharges.Payor.ResponsibleParty == null)
-            {
-                // We'll be manipulating properties of the responsible party, so make sure it's been created
-                shippingCharges.Payor.ResponsibleParty = new Party();
-            }
-
-            if (shippingCharges.Payor.ResponsibleParty.Address == null)
-            {
-                // We'll be manipulating properties of the address, so make sure it's been created
-                shippingCharges.Payor.ResponsibleParty.Address = new Address();
-            }
+            shippingCharges.Ensure(sc => sc.Payor)
+                .Ensure(p => p.ResponsibleParty)
+                .Ensure(rp => rp.Address);
         }
 
         /// <summary>
@@ -122,32 +110,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.ShippingChargesPayment == null)
-            {
-                // We'll be manipulating properties of the shipping charge, so make sure it's been created
-                nativeRequest.RequestedShipment.ShippingChargesPayment = new Payment();
-            }
+            request.Ensure(r => r.RequestedShipment)
+                        .Ensure(r => r.ShippingChargesPayment);
         }
 
         /// <summary>
