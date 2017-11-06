@@ -1,157 +1,147 @@
-using System.Collections.Generic;
+using Autofac.Extras.Moq;
 using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExRecipientManipulatorTest
     {
-        private Mock<CarrierRequest> carrierRequest;
-
-        private ProcessShipmentRequest nativeRequest;
-
-        private ShipmentEntity shipmentEntity;
-
-        private FedExRecipientManipulator testObject;
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
+        private readonly FedExRecipientManipulator testObject;
 
         public FedExRecipientManipulatorTest()
         {
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
-            testObject = new FedExRecipientManipulator();
+            processShipmentRequest = new ProcessShipmentRequest();
+
+            testObject = mock.Create<FedExRecipientManipulator>();
+        }
+
+        [Fact]
+        public void ShouldApply_ReturnsTrue()
+        {
+            Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]
         public void Manipulate_FedExRecipientManipulator_ReturnsRequestedShipment()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
+            Assert.IsAssignableFrom<RequestedShipment>(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_FedExRecipientManipulator_ReturnsValidRequestedShipmentRecipient()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Make sure we got a Recipient back
-            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Recipient);
+            Assert.IsAssignableFrom<Party>(processShipmentRequest.RequestedShipment.Recipient);
 
             // Make sure the Address matches what we input
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.City, shipmentEntity.ShipCity);
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.CountryCode, shipmentEntity.ShipCountryCode);
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.PostalCode, shipmentEntity.ShipPostalCode);
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode, shipmentEntity.ShipStateProvCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.City, shipment.ShipCity);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.CountryCode, shipment.ShipCountryCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.PostalCode, shipment.ShipPostalCode);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode, shipment.ShipStateProvCode);
 
             // Make sure Contact fields match
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Contact.CompanyName, shipmentEntity.ShipCompany);
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Contact.EMailAddress, shipmentEntity.ShipEmail);
-            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Contact.PhoneNumber, shipmentEntity.ShipPhone);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Contact.CompanyName, shipment.ShipCompany);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Contact.EMailAddress, shipment.ShipEmail);
+            Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Contact.PhoneNumber, shipment.ShipPhone);
 
             // Make sure residential info matches
-            if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipmentEntity))
+            if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipment))
             {
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, shipmentEntity.ResidentialResult);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
+                Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.Residential, shipment.ResidentialResult);
+                Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
             }
             else
             {
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, false);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
+                Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.Residential, false);
+                Assert.Equal(processShipmentRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
             }
         }
 
         [Fact]
         public void Manipulate_AddressAddedToSender_RequestedShipmentIsReturn()
         {
-            shipmentEntity.ReturnShipment = true;
+            shipment.ReturnShipment = true;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Null(nativeRequest.RequestedShipment.Recipient);
+            Assert.Null(processShipmentRequest.RequestedShipment.Recipient);
 
-            Assert.Equal(shipmentEntity.ShipCity, nativeRequest.RequestedShipment.Shipper.Address.City);
+            Assert.Equal(shipment.ShipCity, processShipmentRequest.RequestedShipment.Shipper.Address.City);
         }
 
         [Fact]
         public void Manipulate_AddressIsWrappedToSecondLine_WhenSingleLineAddressIsTooLong()
         {
-            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
-            shipmentEntity.ShipStreet2 = string.Empty;
-            shipmentEntity.ShipStreet3 = string.Empty;
+            shipment.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
+            shipment.ShipStreet2 = string.Empty;
+            shipment.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
+            shipment.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal("1234 1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
-            Assert.Equal("1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+            Assert.Equal("1234 1234 1234 1234 1234 1234 1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.Equal("1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
 
         [Fact]
         public void Manipulate_AddressIsWrappedToSecondLineAtWord_WhenSingleLineAddressIsTooLong()
         {
-            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234567890";
-            shipmentEntity.ShipStreet2 = string.Empty;
-            shipmentEntity.ShipStreet3 = string.Empty;
+            shipment.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234567890";
+            shipment.ShipStreet2 = string.Empty;
+            shipment.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipment.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal("1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
-            Assert.Equal("1234567890", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+            Assert.Equal("1234 1234 1234 1234 1234 1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.Equal("1234567890", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
 
         [Fact]
         public void Manipulate_AddressIsTruncated_WhenMultiLineAddressIsTooLong()
         {
-            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
-            shipmentEntity.ShipStreet2 = "y";
-            shipmentEntity.ShipStreet3 = string.Empty;
+            shipment.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
+            shipment.ShipStreet2 = "y";
+            shipment.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipment.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal("1234 1234 1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
-            Assert.Equal("y", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+            Assert.Equal("1234 1234 1234 1234 1234 1234 1234 1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.Equal("y", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
 
         [Fact]
         public void Manipulate_AddressIsWrappedAtThirtyChars_WhenSingleLineAddressIsTooLongAndSmartPost()
         {
-            shipmentEntity.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
-            shipmentEntity.ShipStreet2 = string.Empty;
-            shipmentEntity.ShipStreet3 = string.Empty;
+            shipment.ShipStreet1 = "1234 1234 1234 1234 1234 1234 1234 1234";
+            shipment.ShipStreet2 = string.Empty;
+            shipment.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
+            shipment.FedEx.Service = (int)FedExServiceType.SmartPost;
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal("1234 1234 1234 1234 1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
-            Assert.Equal("1234 1234", nativeRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
+            Assert.Equal("1234 1234 1234 1234 1234 1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[0]);
+            Assert.Equal("1234 1234", processShipmentRequest.RequestedShipment.Recipient.Address.StreetLines[1]);
         }
 
         [Theory]
@@ -161,16 +151,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [InlineData("GGG", "guam")]
         public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
         {
-            shipmentEntity.ShipStateProvCode = "GU";
-            shipmentEntity.ShipCountryCode = "US";
+            shipment.ShipStateProvCode = "GU";
+            shipment.ShipCountryCode = "US";
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            testObject.Manipulate(carrierRequest.Object);
-
-            Assert.Equal(string.Empty, nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode);
-            Assert.Equal("GU", nativeRequest.RequestedShipment.Recipient.Address.CountryCode);
+            Assert.Equal(string.Empty, processShipmentRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode);
+            Assert.Equal("GU", processShipmentRequest.RequestedShipment.Recipient.Address.CountryCode);
         }
     }
 }

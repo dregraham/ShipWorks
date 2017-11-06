@@ -1,55 +1,44 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Manipulator for adding recipient information to the FedEx request
     /// </summary>
-    public class FedExRecipientManipulator : FedExShippingRequestManipulatorBase
+    public class FedExRecipientManipulator : IFedExShipRequestManipulator
     {
         private const int maxAddressLength = 35;
         private const int maxSmartPostLength = 30;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        public FedExRecipientManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExRecipientManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
         {
+            return true;
         }
 
         /// <summary>
         /// Add the Recipient info to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Get the RequestedShipment object for the request
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
+            request.Ensure(r => r.RequestedShipment);
+            RequestedShipment requestedShipment = request.RequestedShipment;
 
             // Get the contact and address for the shipment
-            ShipmentEntity shipment = request.ShipmentEntity;
-            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment, "Ship"));
-            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment, "Ship"));
+            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment as ShipmentEntity, "Ship"));
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment as ShipmentEntity, "Ship"));
 
             if (address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
             {
@@ -91,6 +80,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             {
                 requestedShipment.Recipient = recipient;                
             }
+
+            return request;
         }
 
         /// <summary>
@@ -98,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// </summary>
         /// <param name="address">The address.</param>
         /// <param name="shipment"></param>
-        private static void WrapAddress(Address address, ShipmentEntity shipment)
+        private static void WrapAddress(Address address, IShipmentEntity shipment)
         {
             int calculatedMathLenght = ((FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost)
                 ? maxSmartPostLength
