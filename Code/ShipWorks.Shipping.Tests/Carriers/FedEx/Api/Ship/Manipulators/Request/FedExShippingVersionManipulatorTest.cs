@@ -32,6 +32,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
+        public void ShouldApply_ReturnsTrue()
+        {
+            Assert.True(testObject.ShouldApply(shipment));
+        }
+
+        [Fact]
         public void Manipulate_SetsServiceIdToShip()
         {
             testObject.Manipulate(shipment, processShipmentRequest, 0);

@@ -1,64 +1,56 @@
-using System;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using System.Linq;
 using System.Collections.Generic;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the InternationalTrafficInArmsRegulationsDetail
     /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment has a traffic in arms license number.
     /// </summary>
-    public class FedExTrafficInArmsManipulator : FedExShippingRequestManipulatorBase
+    public class FedExTrafficInArmsManipulator : IFedExShipRequestManipulator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExTrafficInArmsManipulator" /> class.
+        /// Should the manipulator be applied
         /// </summary>
-        public FedExTrafficInArmsManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExTrafficInArmsManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExTrafficInArmsManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
+        public bool ShouldApply(IShipmentEntity shipment)
         {
+            return (shipment.FedEx.InternationalTrafficInArmsService ?? false) ||
+                   !string.IsNullOrEmpty(shipment.FedEx.TrafficInArmsLicenseNumber);
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(request, shipment);
 
-            // We can safely cast this since we've passed initialization
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-
-            if (request.ShipmentEntity.FedEx.InternationalTrafficInArmsService ?? false)
+            if (shipment.FedEx.InternationalTrafficInArmsService ?? false)
             {
-                AddTrafficInArmsOption(nativeRequest);
+                AddTrafficInArmsOption(request);
             }
 
-            if (!string.IsNullOrEmpty(request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber))
+            if (!string.IsNullOrEmpty(shipment.FedEx.TrafficInArmsLicenseNumber))
             {
                 InternationalTrafficInArmsRegulationsDetail armsDetail = new InternationalTrafficInArmsRegulationsDetail();
-                armsDetail.LicenseOrExemptionNumber = request.ShipmentEntity.FedEx.TrafficInArmsLicenseNumber;
+                armsDetail.LicenseOrExemptionNumber = shipment.FedEx.TrafficInArmsLicenseNumber;
 
-                nativeRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail = armsDetail;
+                request.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail = armsDetail;
             }
+
+            return GenericResult.FromSuccess(request);
         }
 
         /// <summary>
         /// Adds the traffic in arms option to the reqeust.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
         private void AddTrafficInArmsOption(IFedExNativeShipmentRequest nativeRequest)
         {
             if (nativeRequest.RequestedShipment.SpecialServicesRequested == null)
@@ -74,31 +66,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
+            request.Ensure(x => x.RequestedShipment);
         }
     }
 }

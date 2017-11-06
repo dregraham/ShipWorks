@@ -1,30 +1,25 @@
 using System;
-using System.Collections.Generic;
 using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
     public class FedExTrafficInArmsManipulatorTest
     {
         private FedExTrafficInArmsManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private ProcessShipmentRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
+        private ProcessShipmentRequest processShipmentRequest;
+        private ShipmentEntity shipment;
 
         public FedExTrafficInArmsManipulatorTest()
         {
-            shipmentEntity = new ShipmentEntity
+            shipment = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity()
             };
 
-            nativeRequest = new ProcessShipmentRequest()
+            processShipmentRequest = new ProcessShipmentRequest()
             {
                 RequestedShipment = new RequestedShipment()
                 {
@@ -32,139 +27,131 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 }
             };
 
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject = new FedExTrafficInArmsManipulator();
         }
 
-
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
         {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
         }
 
-        [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
+        [Theory]
+        [InlineData(null, null, false)]
+        [InlineData(true, null, true)]
+        [InlineData(true, "asdf", true)]
+        [InlineData(null, null, false)]
+        [InlineData(false, null, false)]
+        [InlineData(false, "asdf", true)]
+        public void ShouldApply_ReturnsCorrectValue(bool? serviceEnabled, string licenseNumber, bool expectedResult)
         {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
+            shipment.FedEx.InternationalTrafficInArmsService = serviceEnabled;
+            shipment.FedEx.TrafficInArmsLicenseNumber = licenseNumber;
 
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Equal(expectedResult, testObject.ShouldApply(shipment));
         }
 
         [Fact]
         public void Manipulate_AccountsForNullRequestedShipment()
         {
-            // setup the test by setting the requested shipment to null
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.NotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_AccountsForNullSpecialServicesRequested_WhenLicencseNumberIsProvided()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
-            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
+            shipment.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipment.FedEx.InternationalTrafficInArmsService = true;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
+            Assert.NotNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
         public void Manipulate_AccountsForNullSpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
-            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
+            shipment.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipment.FedEx.InternationalTrafficInArmsService = true;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
+            Assert.NotNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
         [Fact]
         public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenLicencseNumberIsProvided()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
-            shipmentEntity.FedEx.InternationalTrafficInArmsService = true;
+            shipment.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipment.FedEx.InternationalTrafficInArmsService = true;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Equal(1, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
         [Fact]
         public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsEmptyString()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = string.Empty;
+            shipment.FedEx.TrafficInArmsLicenseNumber = string.Empty;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Equal(0, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(0, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
         [Fact]
         public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsNull()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = null;
+            shipment.FedEx.TrafficInArmsLicenseNumber = null;
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Equal(0, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(0, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
         [Fact]
         public void Manipulate_ArmsDetailIsNotNull_WhenLicencseNumberIsProvided()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipment.FedEx.TrafficInArmsLicenseNumber = "123456";
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail);
+            Assert.NotNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail);
         }
 
         [Fact]
         public void Manipulate_LicenseNumberIsAssigned_WhenLicencseNumberIsProvided()
         {
-            shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
+            shipment.FedEx.TrafficInArmsLicenseNumber = "123456";
 
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            Assert.Equal("123456", nativeRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail.LicenseOrExemptionNumber);
+            Assert.Equal("123456", processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail.LicenseOrExemptionNumber);
         }
     }
 }
