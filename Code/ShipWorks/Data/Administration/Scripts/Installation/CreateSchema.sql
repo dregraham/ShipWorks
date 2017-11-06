@@ -2813,9 +2813,9 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[NonMachinable] [bit] NOT NULL,
 	[SaturdayDelivery] [bit] NOT NULL,
 	[RequestedLabelFormat] [int] NOT NULL,
-	[Contents][int] Not Null,
-	[NonDelivery] [int] Not Null,
-	[ShipEngineLabelID] [nvarchar] (12) Not Null
+	[Contents][int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (12) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
@@ -2911,9 +2911,9 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[AsendiaAccountID] [bigint] NOT NULL,
 	[Service] [int] NOT NULL,
 	[RequestedLabelFormat] [int] NOT NULL,
-	[Contents][int] Not Null,
-	[NonDelivery] [int] Not Null,
-	[ShipEngineLabelID] [nvarchar] (12) Not Null,
+	[Contents][int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
 	[DimsProfileID] [bigint] NOT NULL,
 	[DimsLength] [float] NOT NULL,
 	[DimsWidth] [float] NOT NULL,

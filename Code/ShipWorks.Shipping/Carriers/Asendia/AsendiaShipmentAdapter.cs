@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Are customs allowed?
         /// </summary>
-        public override bool CustomsAllowed => false;
+        public override bool CustomsAllowed => true;
 
         /// <summary>
         /// Update the insurance fields on the shipment and packages

@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public int Index
         {
             get { return 1; }
-            set { /* Not supported by DHL */ }
+            set { /* Not supported by Asendia */ }
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public int PackagingType
         {
             get { return -1; }
-            set { /* Not supported by DHL */ }
+            set { /* Not supported by Asendia */ }
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             base.Initialize();
 
-            EnumHelper.BindComboBox<AsendiaServiceType>(service);
+            EnumHelper.BindComboBox<DhlExpressServiceType>(service);
 
             originControl.Initialize(ShipmentTypeCode.DhlExpress);
 
