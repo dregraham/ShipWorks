@@ -1,114 +1,91 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// An implementation of the ICarrierRequestManipulator for handling customer references of a
     /// FedEx shipping request.
     /// </summary>
-    public class FedExReferenceManipulator : FedExShippingRequestManipulatorBase
+    public class FedExReferenceManipulator : IFedExShipRequestManipulator
     {
+        private readonly IFedExSettingsRepository settings;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExReferenceManipulator" /> class and 
-        /// uses the FedExShipmentTokenProcessor and the FedExSettingsRepository.
+        /// Constructor
         /// </summary>
-        public FedExReferenceManipulator()
-            : this(new FedExShipmentTokenProcessor(), new FedExSettingsRepository())
+        public FedExReferenceManipulator(IFedExSettingsRepository settings, IFedExShipmentTokenProcessor tokenProcessor)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExReferenceManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExReferenceManipulator" /> class.
-        /// </summary>
-        /// <param name="tokenProcessor">The token processor.</param>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExReferenceManipulator(IFedExShipmentTokenProcessor tokenProcessor, ICarrierSettingsRepository settingsRepository) : base(settingsRepository)
-        {
+            this.settings = settings;
             this.tokenProcessor = tokenProcessor;
+        }
+
+        /// <summary>
+        /// Does this manipulator apply to this shipment
+        /// </summary>
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
+        {
+            return true;
         }
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(shipment, request);
 
-            // We can safely cast this since we've passed initialization
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
+            List<CustomerReference> customerReferences = request.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
 
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            ShipmentEntity writableShipment = shipment as ShipmentEntity;
 
             // A little unique in that we're updating the shipment entity as well as manipulating the request that gets sent to FedEx
-            request.ShipmentEntity.FedEx.ReferenceCustomer = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceCustomer, CustomerReferenceType.CUSTOMER_REFERENCE);
-            request.ShipmentEntity.FedEx.ReferenceInvoice = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceInvoice, CustomerReferenceType.INVOICE_NUMBER);
-            request.ShipmentEntity.FedEx.ReferencePO = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferencePO, CustomerReferenceType.P_O_NUMBER);
-            request.ShipmentEntity.FedEx.ReferenceShipmentIntegrity = AddCustomerReference(request.ShipmentEntity, customerReferences, request.ShipmentEntity.FedEx.ReferenceShipmentIntegrity, CustomerReferenceType.SHIPMENT_INTEGRITY);
+            writableShipment.FedEx.ReferenceCustomer = AddCustomerReference(shipment, customerReferences, shipment.FedEx.ReferenceCustomer, CustomerReferenceType.CUSTOMER_REFERENCE);
+            writableShipment.FedEx.ReferenceInvoice = AddCustomerReference(shipment, customerReferences, shipment.FedEx.ReferenceInvoice, CustomerReferenceType.INVOICE_NUMBER);
+            writableShipment.FedEx.ReferencePO = AddCustomerReference(shipment, customerReferences, shipment.FedEx.ReferencePO, CustomerReferenceType.P_O_NUMBER);
+            writableShipment.FedEx.ReferenceShipmentIntegrity = AddCustomerReference(shipment, customerReferences, shipment.FedEx.ReferenceShipmentIntegrity, CustomerReferenceType.SHIPMENT_INTEGRITY);
 
             if (customerReferences.Count > 0)
             {
                 // Each package should be in it's own request, so we always use the first item in the line item aray
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = customerReferences.ToArray();
+                request.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = customerReferences.ToArray();
             }
+
+            return request;
         }
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            if (nativeRequest.RequestedShipment == null)
+            if (request.RequestedShipment == null)
             {
                 // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
+                request.RequestedShipment = new RequestedShipment();
             }
 
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null || nativeRequest.RequestedShipment.RequestedPackageLineItems.Length == 0)
+            if (request.RequestedShipment.RequestedPackageLineItems == null || request.RequestedShipment.RequestedPackageLineItems.Length == 0)
             {
                 // We'll be inspecting/manipulating properties of the package line items, so make sure it's been created
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
+                request.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
+                request.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
             }
 
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences == null)
+            if (request.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences == null)
             {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = new CustomerReference[0];
+                request.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = new CustomerReference[0];
             }
         }
 
@@ -122,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <param name="referenceToken">The reference token.</param>
         /// <param name="referenceType">Type of the reference.</param>
         /// <returns>The reference number/value.</returns>
-        private string AddCustomerReference(ShipmentEntity shipment, List<CustomerReference> references, string referenceToken, CustomerReferenceType referenceType)
+        private string AddCustomerReference(IShipmentEntity shipment, List<CustomerReference> references, string referenceToken, CustomerReferenceType referenceType)
         {
             string referenceValue = tokenProcessor.ProcessTokens(referenceToken, shipment);
 

@@ -1,33 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Extras.Moq;
 using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExReferenceManipulatorTest
     {
-        private FedExReferenceManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
+        private readonly FedExReferenceManipulator testObject;
+        private readonly AutoMock mock;
         private Mock<IFedExShipmentTokenProcessor> tokenProcessor;
-
-        private ProcessShipmentRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
 
         public FedExReferenceManipulatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
             // Setup the carrier request that will be sent to the test object
-            nativeRequest = new ProcessShipmentRequest
+            processShipmentRequest = new ProcessShipmentRequest
             {
                 RequestedShipment = new RequestedShipment
                 {
@@ -35,46 +35,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 }
             };
 
-            shipmentEntity = new ShipmentEntity
+            shipment = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity()
             };
+            
+            mock.Mock<IFedExSettingsRepository>()
+                .Setup(x => x.IsInterapptiveUser)
+                .Returns(true);
 
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            tokenProcessor = mock.Mock<IFedExShipmentTokenProcessor>();
+            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>()))
+                .Returns("I have processed your tokens.");
 
-
-            // Create the test object with the mocked processor and repository
-            tokenProcessor = new Mock<IFedExShipmentTokenProcessor>();
-            tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns("I have processed your tokens.");
-
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.IsInterapptiveUser).Returns(true);
-
-            testObject = new FedExReferenceManipulator(tokenProcessor.Object, settingsRepository.Object);
+            testObject = mock.Create<FedExReferenceManipulator>();
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull()
+        public void ShouldApply_ReturnsTrue()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
+            Assert.True(testObject.ShouldApply(shipment, 0));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull()
+        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
         {
-            // Setup the native request to be null
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
         }
 
         [Fact]
-        public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest()
+        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
         {
-            // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
-
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
         }
 
         [Fact]
@@ -82,13 +74,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
             // the carrier request with the updated native request
-            nativeRequest.RequestedShipment = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // The requested shipment property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
@@ -96,13 +87,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup the test by configuring the native request to have a null requested package line items
             // property and re-initialize the carrier request with the updated native request
-            nativeRequest.RequestedShipment.RequestedPackageLineItems = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.RequestedPackageLineItems = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // The requested package line items property should be created now
-            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
+            Assert.NotNull(processShipmentRequest.RequestedShipment.RequestedPackageLineItems);
         }
 
         [Fact]
@@ -110,13 +100,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup the test by configuring the native request to have an empty arrary for the requested 
             // package line items property and re-initialize the carrier request with the updated native request
-            nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[0];
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[0];
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // The requested package line items property should have one item in the array
-            Assert.Equal(1, nativeRequest.RequestedShipment.RequestedPackageLineItems.Length);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.RequestedPackageLineItems.Length);
         }
 
         [Fact]
@@ -124,13 +113,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup the test by configuring the native request to a null value for the customer references
             // property and re-initialize the carrier request with the updated native request
-            nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = null;
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences = null;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // The requested package line items property should have one item in the array
-            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences);
+            Assert.NotNull(processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences);
         }
 
         #region Customer Reference Tests
@@ -138,21 +126,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AddsCustomerReferenceToRequest_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should be a customer reference
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> customerReferences = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(1, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.CUSTOMER_REFERENCE));
         }
 
         [Fact]
         public void Manipulate_AssignsReferenceCustomerToFedExShipment_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should 
             // be a value on the reference customer
-            Assert.False(string.IsNullOrEmpty(shipmentEntity.FedEx.ReferenceCustomer));
+            Assert.False(string.IsNullOrEmpty(shipment.FedEx.ReferenceCustomer));
         }
 
         [Fact]
@@ -161,10 +149,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a customer reference
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> customerReferences = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.CUSTOMER_REFERENCE));
         }
 
@@ -174,10 +162,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a value on the reference customer
-            Assert.Equal(string.Empty, shipmentEntity.FedEx.ReferenceCustomer);
+            Assert.Equal(string.Empty, shipment.FedEx.ReferenceCustomer);
         }
 
         [Fact]
@@ -186,10 +174,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return null
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a customer reference
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> customerReferences = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+
             Assert.Equal(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.CUSTOMER_REFERENCE));
         }
 
@@ -197,12 +186,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_AssignsReferenceCustomerToFedExShipment_WhenReferenceValueIsNull()
         {
             // Setup the token processor to return null
+            tokenProcessor = mock.Mock<IFedExShipmentTokenProcessor>();
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a value on the reference customer
-            Assert.Equal(null, shipmentEntity.FedEx.ReferenceCustomer);
+            Assert.Equal(null, shipment.FedEx.ReferenceCustomer);
         }
 
         #endregion Customer Reference Tests
@@ -213,21 +203,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AddsInvoiceNumberToRequest_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should be a invoice reference
-            List<CustomerReference> InvoiceNumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> InvoiceNumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(1, InvoiceNumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.INVOICE_NUMBER));
         }
 
         [Fact]
         public void Manipulate_AssignsReferenceInvoiceToFedExShipment_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should 
             // be a value on the reference invoice
-            Assert.False(string.IsNullOrEmpty(shipmentEntity.FedEx.ReferenceInvoice));
+            Assert.False(string.IsNullOrEmpty(shipment.FedEx.ReferenceInvoice));
         }
 
         [Fact]
@@ -236,10 +226,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a invoice reference
-            List<CustomerReference> InvoiceNumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> InvoiceNumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, InvoiceNumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.INVOICE_NUMBER));
         }
 
@@ -249,10 +239,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a value on the reference invoice
-            Assert.Equal(string.Empty, shipmentEntity.FedEx.ReferenceInvoice);
+            Assert.Equal(string.Empty, shipment.FedEx.ReferenceInvoice);
         }
 
         [Fact]
@@ -261,10 +251,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return null
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a invoice reference
-            List<CustomerReference> InvoiceNumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> InvoiceNumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, InvoiceNumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.INVOICE_NUMBER));
         }
 
@@ -274,10 +264,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return null
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a value on the reference invoice
-            Assert.Equal(null, shipmentEntity.FedEx.ReferenceInvoice);
+            Assert.Equal(null, shipment.FedEx.ReferenceInvoice);
         }
 
         #endregion Invoice Number Tests
@@ -290,10 +280,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // No additional setup needed since repository was initialized to return true in Initialize method
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should be a PO reference
-            List<CustomerReference> PONumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> PONumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(1, PONumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.P_O_NUMBER));
         }
 
@@ -302,11 +292,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // No additional setup needed since repository was initialized to return true in Initialize method
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should 
             // be a value on the reference PO
-            Assert.False(string.IsNullOrEmpty(shipmentEntity.FedEx.ReferencePO));
+            Assert.False(string.IsNullOrEmpty(shipment.FedEx.ReferencePO));
         }
 
         [Fact]
@@ -317,10 +307,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a PO reference
-            List<CustomerReference> PONumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> PONumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, PONumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.P_O_NUMBER));
         }
 
@@ -331,10 +321,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // repository was initialized to return true in Initialize method
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a value on the reference PO
-            Assert.Equal(string.Empty, shipmentEntity.FedEx.ReferencePO);
+            Assert.Equal(string.Empty, shipment.FedEx.ReferencePO);
         }
 
         [Fact]
@@ -344,10 +334,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // repository was initialized to return true in Initialize method
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a PO reference
-            List<CustomerReference> PONumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> PONumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, PONumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.P_O_NUMBER));
         }
 
@@ -358,29 +348,29 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // repository was initialized to return true in Initialize method
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a value on the reference PO
-            Assert.Equal(null, shipmentEntity.FedEx.ReferencePO);
+            Assert.Equal(null, shipment.FedEx.ReferencePO);
         }
 
         [Fact]
         public void Manipulate_AddsPONumberToRequest_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should be a PO reference
-            List<CustomerReference> PONumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> PONumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(1, PONumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.P_O_NUMBER));
         }
 
         [Fact]
         public void Manipulate_AssignsReferencePOToFedExShipment_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // This should not be null
-            Assert.NotNull(shipmentEntity.FedEx.ReferencePO);
+            Assert.NotNull(shipment.FedEx.ReferencePO);
         }
 
         [Fact]
@@ -389,9 +379,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string and setup the repository to return false for this test
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
-            List<CustomerReference> PONumbers = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> PONumbers = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, PONumbers.Count(r => r.CustomerReferenceType == CustomerReferenceType.P_O_NUMBER));
         }
         #endregion PO Number Tests
@@ -401,11 +391,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AssignsReferenceShipmentIntegrityToFedExShipment_WhenReferenceValueIsNotBlank()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup in the initialize method to always return a value, so there should 
             // be a value on the reference customer
-            Assert.False(string.IsNullOrEmpty(shipmentEntity.FedEx.ReferenceShipmentIntegrity));
+            Assert.False(string.IsNullOrEmpty(shipment.FedEx.ReferenceShipmentIntegrity));
         }
 
         [Fact]
@@ -414,10 +404,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a customer reference
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> customerReferences = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.SHIPMENT_INTEGRITY));
         }
 
@@ -427,10 +417,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return an empty string
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(string.Empty);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return an empty string, so there should not be a value on the reference customer
-            Assert.Equal(string.Empty, shipmentEntity.FedEx.ReferenceShipmentIntegrity);
+            Assert.Equal(string.Empty, shipment.FedEx.ReferenceShipmentIntegrity);
         }
 
         [Fact]
@@ -439,10 +429,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return null
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a customer reference
-            List<CustomerReference> customerReferences = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
+            List<CustomerReference> customerReferences = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.ToList();
             Assert.Equal(0, customerReferences.Count(r => r.CustomerReferenceType == CustomerReferenceType.SHIPMENT_INTEGRITY));
         }
 
@@ -452,10 +442,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the token processor to return null
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns<string>(null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Our token processor is setup to return null, so there should not be a value on the reference customer
-            Assert.Equal(null, shipmentEntity.FedEx.ReferenceShipmentIntegrity);
+            Assert.Equal(null, shipment.FedEx.ReferenceShipmentIntegrity);
         }
 
         #endregion Shipment Integrity Tests
@@ -467,7 +457,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             string lengthyString = new string('A', 31);
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(lengthyString);
 
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<FedExException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
         }
 
         [Fact]
@@ -477,7 +467,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             string lengthyString = new string('A', 30);
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(lengthyString);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
         }
 
         [Fact]
@@ -487,7 +477,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             string lengthyString = new string('A', 29);
             tokenProcessor.Setup(p => p.ProcessTokens(It.IsAny<string>(), It.IsAny<ShipmentEntity>())).Returns(lengthyString);
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
         }
 
     }
