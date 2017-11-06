@@ -1,35 +1,35 @@
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
 {
     /// <summary>
-    /// Manipulator to add tracking informaiton to shipment
+    /// Manipulator to add tracking information to shipment
     /// </summary>
-    public class FedExShipmentTrackingManipulator : ICarrierResponseManipulator
+    public class FedExShipmentTrackingManipulator : IFedExShipResponseManipulator
     {
-        private IFedExNativeShipmentReply processShipmentReply;
-
         private ShipmentEntity shipment;
+        private ProcessShipmentReply response;
 
         /// <summary>
         /// Adds tracking information to shipment
         /// </summary>
-        public void Manipulate(ICarrierResponse carrierResponse)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
         {
-            FedExShipResponse fedExShipResponse = (FedExShipResponse) carrierResponse;
+            this.response = response;
+            this.shipment = shipment;
 
-            shipment = fedExShipResponse.Shipment;
-            processShipmentReply = fedExShipResponse.NativeResponse as IFedExNativeShipmentReply;
-
-            if (processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber == "1")
+            if (response.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber == "1")
             {
                 SetShipmentTrackingNumber();
             }
 
             SetPackageTrackingNumber();
+
+            return shipment;
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
         /// </summary>
         private void SetPackageTrackingNumber()
         {
-            CompletedPackageDetail completedPackageDetail = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0];
+            CompletedPackageDetail completedPackageDetail = response.CompletedShipmentDetail.CompletedPackageDetails[0];
 
             FedExPackageEntity fedExPackageEntity = shipment.FedEx.Packages[int.Parse(completedPackageDetail.SequenceNumber) - 1];
             fedExPackageEntity.TrackingNumber = completedPackageDetail.TrackingIds[0].TrackingNumber;
@@ -48,20 +48,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
         /// </summary>
         private void SetShipmentTrackingNumber()
         {
-            if (processShipmentReply.CompletedShipmentDetail.MasterTrackingId != null)
+            if (response.CompletedShipmentDetail.MasterTrackingId != null)
             {
-                shipment.TrackingNumber = processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber;
-                shipment.FedEx.MasterFormID = processShipmentReply.CompletedShipmentDetail.MasterTrackingId.FormId;
+                shipment.TrackingNumber = response.CompletedShipmentDetail.MasterTrackingId.TrackingNumber;
+                shipment.FedEx.MasterFormID = response.CompletedShipmentDetail.MasterTrackingId.FormId;
             }
             else
             {
-                // To track SmartPost on USPS.com, we need to save the appliction id for removal later
+                // To track SmartPost on USPS.com, we need to save the application id for removal later
                 if ((FedExServiceType)shipment.FedEx.Service == FedExServiceType.SmartPost)
                 {
-                    shipment.FedEx.SmartPostUspsApplicationId = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId;
+                    shipment.FedEx.SmartPostUspsApplicationId = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId;
                 }
 
-                string trackingNumber = processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber; ;
+                string trackingNumber = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].TrackingNumber; ;
                 shipment.TrackingNumber = FedExUtility.BuildTrackingNumber(trackingNumber, shipment.FedEx);
 
                 shipment.FedEx.MasterFormID = "";

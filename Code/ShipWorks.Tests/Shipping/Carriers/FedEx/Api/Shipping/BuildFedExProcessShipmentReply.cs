@@ -5,7 +5,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
     /// <summary>
     /// A Utility class for building test FedExProcessShipmentReplies
     /// </summary>
-    class BuildFedExProcessShipmentReply
+    public static class BuildFedExProcessShipmentReply
     {
         public static ProcessShipmentReply BuildValidFedExProcessShipmentReply()
         {

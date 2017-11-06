@@ -380,6 +380,10 @@
       <Project>{c12e4e75-63bc-4720-8bb2-5acba56285ca}</Project>
       <Name>ShipWorks.Tests.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Tests\ShipWorks.Tests.csproj">
+      <Project>{14a91d06-21a1-4496-8f41-25e53bdd88ed}</Project>
+      <Name>ShipWorks.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
       <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
       <Name>ShipWorks.ThirdPartyApi</Name>

@@ -1,40 +1,36 @@
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
 {
     public class FedExTrackingManipulatorTest
     {
         private FedExShipmentTrackingManipulator testObject;
-
-        FedExShipResponse fedExShipResponse;
-        private ShipmentEntity shipmentEntity;
-        ProcessShipmentReply processShipmentReply;
+        private readonly FedExShipResponse fedExShipResponse;
+        private readonly ShipmentEntity shipmentEntity;
+        private readonly ProcessShipmentReply processShipmentReply;
         private Mock<CarrierRequest> carrierRequest;
 
         public FedExTrackingManipulatorTest()
         {
-
-
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
-            //processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
-
             carrierRequest = new Mock<CarrierRequest>(null, null);
-            fedExShipResponse = new FedExShipResponse(processShipmentReply, carrierRequest.Object, shipmentEntity, null, null);
+            processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
 
+            fedExShipResponse = new FedExShipResponse(processShipmentReply, carrierRequest.Object, shipmentEntity, null, null);
             testObject = new FedExShipmentTrackingManipulator();
         }
-
 
         [Fact]
         public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent()
         {
-            testObject.Manipulate(fedExShipResponse);
+            testObject.Manipulate(processShipmentReply, shipmentEntity);
             Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
         }
 
@@ -44,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             //remove master tracking
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
 
-            testObject.Manipulate(fedExShipResponse);
+            testObject.Manipulate(processShipmentReply, shipmentEntity);
             Assert.Equal(shipmentEntity.TrackingNumber, "Package1Tracking");
         }
 
@@ -53,10 +49,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         {
             processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber = "2";
 
-            testObject.Manipulate(fedExShipResponse);
+            testObject.Manipulate(processShipmentReply, shipmentEntity);
 
-            Assert.Null(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);
-            Assert.Equal("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
+            Assert.Null(shipmentEntity.FedEx.Packages[0].TrackingNumber);
+            Assert.Equal("Package1Tracking", shipmentEntity.FedEx.Packages[1].TrackingNumber);
         }
     }
 }
