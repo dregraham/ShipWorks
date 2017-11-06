@@ -1,65 +1,70 @@
 using System;
-using System.Collections.Generic;
+using Autofac.Extras.Moq;
 using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
+using ShipWorks.Tests.Shared.EntityBuilders;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExPickupManipulatorTest
     {
-        private FedExPickupManipulator testObject;
-
-        private Mock<CarrierRequest> carrierRequest;
-        private ProcessShipmentRequest nativeRequest;
-        private ShipmentEntity shipmentEntity;
+        private readonly ProcessShipmentRequest processShipmentRequest;
+        private readonly ShipmentEntity shipment;
+        private readonly FedExPickupManipulator testObject;
 
         public FedExPickupManipulatorTest()
         {
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box;
-            shipmentEntity.ShipDate = DateTime.Now.AddDays(1);
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            nativeRequest = new ProcessShipmentRequest();
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
+            shipment = Create.Shipment().AsFedEx().Build();
+            shipment.FedEx.PackagingType = (int) FedExPackagingType.Box;
+            shipment.ShipDate = DateTime.Now.AddDays(1);
 
-            testObject = new FedExPickupManipulator();
+            processShipmentRequest = new ProcessShipmentRequest();
+            
+            testObject = mock.Create<FedExPickupManipulator>();
         }
-        
+
+        [Fact]
+        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
+        {
+            Assert.True(testObject.ShouldApply(shipment, 0));
+        }
+
         [Fact]
         public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffRequestCourrier()
         {
-            shipmentEntity.FedEx.DropoffType = (int) FedExDropoffType.RequestCourier;
+            shipment.FedEx.DropoffType = (int) FedExDropoffType.RequestCourier;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
             
             // Make sure we got a the same values back
-            Assert.Equal(DropoffType.REQUEST_COURIER, nativeRequest.RequestedShipment.DropoffType);
+            Assert.Equal(DropoffType.REQUEST_COURIER, processShipmentRequest.RequestedShipment.DropoffType);
         }
 
         [Fact]
         public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffStation()
         {
-            shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.Station;
+            shipment.FedEx.DropoffType = (int)FedExDropoffType.Station;
 
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Make sure we got a the same values back
-            Assert.Equal(DropoffType.STATION, nativeRequest.RequestedShipment.DropoffType);
+            Assert.Equal(DropoffType.STATION, processShipmentRequest.RequestedShipment.DropoffType);
         }
 
         [Fact]
         public void Manipulate_FedExPickupManipulator_ReturnsRequestedShipDate()
         {
-            testObject.Manipulate(carrierRequest.Object);
+            testObject.Manipulate(shipment, processShipmentRequest, 0);
 
             // Make sure we got a the same values back
-            Assert.Equal(shipmentEntity.ShipDate, nativeRequest.RequestedShipment.ShipTimestamp);
+            Assert.Equal(shipment.ShipDate, processShipmentRequest.RequestedShipment.ShipTimestamp);
         }
     }
 }

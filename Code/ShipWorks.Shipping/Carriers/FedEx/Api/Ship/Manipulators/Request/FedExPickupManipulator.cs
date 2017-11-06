@@ -1,46 +1,38 @@
 using System;
-using ShipWorks.Shipping.Carriers.Api;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Manipulator for adding recipient information to the FedEx request
     /// </summary>
-    public class FedExPickupManipulator : FedExShippingRequestManipulatorBase
+    public class FedExPickupManipulator : IFedExShipRequestManipulator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPickupManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        public FedExPickupManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPickupManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExPickupManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => true;
 
         /// <summary>
         /// Add the Recipient info to the FedEx carrier request
         /// </summary>
-        /// <param name="request">The FedEx carrier request</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Get the RequestedShipment object for the request
-            RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
+            request.Ensure(r => r.RequestedShipment);
+            RequestedShipment requestedShipment = request.RequestedShipment;
 
             // Set the drop off type for the shipment
-            requestedShipment.DropoffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType)request.ShipmentEntity.FedEx.DropoffType);
+            requestedShipment.DropoffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType) shipment.FedEx.DropoffType);
 
             // Set the shipment date/time
-            requestedShipment.ShipTimestamp = new DateTime(request.ShipmentEntity.ShipDate.Ticks, DateTimeKind.Local);
+            requestedShipment.ShipTimestamp = new DateTime(shipment.ShipDate.Ticks, DateTimeKind.Local);
+
+            return request;
         }
     }
 }
