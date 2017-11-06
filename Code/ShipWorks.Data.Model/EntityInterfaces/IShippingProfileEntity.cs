@@ -89,6 +89,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         Nullable<System.Int32> RequestedLabelFormat { get; }
         
         IAmazonProfileEntity Amazon { get; }
+        IAsendiaProfileEntity Asendia { get; }
         IBestRateProfileEntity BestRate { get; }
         IDhlExpressProfileEntity DhlExpress { get; }
         IFedExProfileEntity FedEx { get; }
@@ -126,6 +127,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ShippingProfileEntity : IShippingProfileEntity
     {
         IAmazonProfileEntity IShippingProfileEntity.Amazon => Amazon;
+        IAsendiaProfileEntity IShippingProfileEntity.Asendia => Asendia;
         IBestRateProfileEntity IShippingProfileEntity.BestRate => BestRate;
         IDhlExpressProfileEntity IShippingProfileEntity.DhlExpress => DhlExpress;
         IFedExProfileEntity IShippingProfileEntity.FedEx => FedEx;

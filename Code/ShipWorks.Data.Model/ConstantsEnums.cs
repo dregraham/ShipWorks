@@ -721,6 +721,38 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaProfile.</summary>
+	public enum AsendiaProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaShipment.</summary>
 	public enum AsendiaShipmentFieldIndex
 	{
@@ -11877,6 +11909,8 @@ namespace ShipWorks.Data.Model
 		AmeriCommerceStoreEntity,
 		///<summary>AsendiaAccount</summary>
 		AsendiaAccountEntity,
+		///<summary>AsendiaProfile</summary>
+		AsendiaProfileEntity,
 		///<summary>AsendiaShipment</summary>
 		AsendiaShipmentEntity,
 		///<summary>Audit</summary>

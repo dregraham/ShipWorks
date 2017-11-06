@@ -202,6 +202,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AsendiaAccountEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AsendiaProfile entity</summary>
+		public EntityQuery<AsendiaProfileEntity> AsendiaProfile
+		{
+			get { return Create<AsendiaProfileEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the AsendiaShipment entity</summary>
 		public EntityQuery<AsendiaShipmentEntity> AsendiaShipment
 		{

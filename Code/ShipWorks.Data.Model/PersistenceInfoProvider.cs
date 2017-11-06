@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(219);
+			this.InitClass(220);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -63,6 +63,7 @@ namespace ShipWorks.Data.Model
 			InitAmazonStoreEntityMappings();
 			InitAmeriCommerceStoreEntityMappings();
 			InitAsendiaAccountEntityMappings();
+			InitAsendiaProfileEntityMappings();
 			InitAsendiaShipmentEntityMappings();
 			InitAuditEntityMappings();
 			InitAuditChangeEntityMappings();
@@ -514,6 +515,25 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("AsendiaAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("AsendiaAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
+		}
+
+		/// <summary>Inits AsendiaProfileEntity's mappings</summary>
+		private void InitAsendiaProfileEntityMappings()
+		{
+			this.AddElementMapping("AsendiaProfileEntity", @"ShipWorksLocal", @"dbo", "AsendiaProfile", 13, 0);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "AsendiaAccountID", "AsendiaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "NonMachinable", "NonMachinable", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "Contents", "Contents", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "NonDelivery", "NonDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "Weight", "Weight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 6);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsProfileID", "DimsProfileID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 7);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsLength", "DimsLength", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 8);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsWidth", "DimsWidth", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 9);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsHeight", "DimsHeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 10);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsWeight", "DimsWeight", true, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 11);
+			this.AddElementFieldMapping("AsendiaProfileEntity", "DimsAddWeight", "DimsAddWeight", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 12);
 		}
 
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>

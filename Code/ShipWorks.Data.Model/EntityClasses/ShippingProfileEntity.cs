@@ -33,6 +33,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private AmazonProfileEntity _amazon;
+		private AsendiaProfileEntity _asendia;
 		private BestRateProfileEntity _bestRate;
 		private DhlExpressProfileEntity _dhlExpress;
 		private FedExProfileEntity _fedEx;
@@ -55,6 +56,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			/// <summary>Member name Amazon</summary>
 			public static readonly string Amazon = "Amazon";
+			/// <summary>Member name Asendia</summary>
+			public static readonly string Asendia = "Asendia";
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name DhlExpress</summary>
@@ -133,6 +136,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_amazon.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
+				_asendia = (AsendiaProfileEntity)info.GetValue("_asendia", typeof(AsendiaProfileEntity));
+				if(_asendia!=null)
+				{
+					_asendia.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				_bestRate = (BestRateProfileEntity)info.GetValue("_bestRate", typeof(BestRateProfileEntity));
 				if(_bestRate!=null)
 				{
@@ -191,6 +199,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Amazon":
 					this.Amazon = (AmazonProfileEntity)entity;
 					break;
+				case "Asendia":
+					this.Asendia = (AsendiaProfileEntity)entity;
+					break;
 				case "BestRate":
 					this.BestRate = (BestRateProfileEntity)entity;
 					break;
@@ -239,6 +250,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case "Amazon":
 					toReturn.Add(Relations.AmazonProfileEntityUsingShippingProfileID);
+					break;
+				case "Asendia":
+					toReturn.Add(Relations.AsendiaProfileEntityUsingShippingProfileID);
 					break;
 				case "BestRate":
 					toReturn.Add(Relations.BestRateProfileEntityUsingShippingProfileID);
@@ -295,6 +309,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Amazon":
 					SetupSyncAmazon(relatedEntity);
 					break;
+				case "Asendia":
+					SetupSyncAsendia(relatedEntity);
+					break;
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
 					break;
@@ -335,6 +352,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Amazon":
 					DesetupSyncAmazon(false, true);
 					break;
+				case "Asendia":
+					DesetupSyncAsendia(false, true);
+					break;
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
 					break;
@@ -372,6 +392,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_amazon!=null)
 			{
 				toReturn.Add(_amazon);
+			}
+
+			if(_asendia!=null)
+			{
+				toReturn.Add(_asendia);
 			}
 
 			if(_bestRate!=null)
@@ -441,6 +466,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+
+
 			return toReturn;
 		}
 		
@@ -461,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
+				info.AddValue("_asendia", (!this.MarkedForDeletion?_asendia:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_dhlExpress", (!this.MarkedForDeletion?_dhlExpress:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
@@ -490,6 +518,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'AsendiaProfile' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAsendia()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AsendiaProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
 			return bucket;
 		}
 
@@ -609,6 +646,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
 			toReturn.Add("Amazon", _amazon);
+			toReturn.Add("Asendia", _asendia);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("DhlExpress", _dhlExpress);
 			toReturn.Add("FedEx", _fedEx);
@@ -688,6 +726,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnAmazonPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Removes the sync logic for member _asendia</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncAsendia(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _asendia, new PropertyChangedEventHandler( OnAsendiaPropertyChanged ), "Asendia", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.AsendiaProfileEntityUsingShippingProfileIDStatic, false, signalRelatedEntity, "ShippingProfile", false, new int[] { (int)ShippingProfileFieldIndex.ShippingProfileID } );
+			_asendia = null;
+		}
+		
+		/// <summary> setups the sync logic for member _asendia</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncAsendia(IEntityCore relatedEntity)
+		{
+			if(_asendia!=relatedEntity)
+			{
+				DesetupSyncAsendia(true, true);
+				_asendia = (AsendiaProfileEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _asendia, new PropertyChangedEventHandler( OnAsendiaPropertyChanged ), "Asendia", ShipWorks.Data.Model.RelationClasses.StaticShippingProfileRelations.AsendiaProfileEntityUsingShippingProfileIDStatic, false, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnAsendiaPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -998,6 +1069,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Amazon")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.AmazonProfileEntity, 0, null, null, null, null, "Amazon", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AsendiaProfile' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAsendia
+		{
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AsendiaProfileEntityFactory))), (IEntityRelation)GetRelationsForField("Asendia")[0], (int)ShipWorks.Data.Model.EntityType.ShippingProfileEntity, (int)ShipWorks.Data.Model.EntityType.AsendiaProfileEntity, 0, null, null, null, null, "Asendia", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
+		}
+
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'BestRateProfile' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
 		public static IPrefetchPathElement2 PrefetchPathBestRate
@@ -1218,6 +1296,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 						{
 							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
 							SetupSyncAmazon(value);
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary> Gets / sets related entity of type 'AsendiaProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
+		public virtual AsendiaProfileEntity Asendia
+		{
+			get { return _asendia; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncAsendia(value);
+					CallSetRelatedEntityDuringDeserialization(value, "ShippingProfile");
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_asendia !=null);
+						DesetupSyncAsendia(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Asendia");
+						}
+					}
+					else
+					{
+						if(_asendia!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "ShippingProfile");
+							SetupSyncAsendia(value);
 						}
 					}
 				}

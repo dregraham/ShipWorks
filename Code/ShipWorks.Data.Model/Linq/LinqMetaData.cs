@@ -110,6 +110,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AsendiaAccountEntity:
 					toReturn = this.AsendiaAccount;
 					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaProfileEntity:
+					toReturn = this.AsendiaProfile;
+					break;
 				case ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity:
 					toReturn = this.AsendiaShipment;
 					break;
@@ -829,6 +832,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AsendiaAccountEntity> AsendiaAccount
 		{
 			get { return new DataSource2<AsendiaAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AsendiaProfileEntity instances in the database.</summary>
+		public DataSource2<AsendiaProfileEntity> AsendiaProfile
+		{
+			get { return new DataSource2<AsendiaProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting AsendiaShipmentEntity instances in the database.</summary>

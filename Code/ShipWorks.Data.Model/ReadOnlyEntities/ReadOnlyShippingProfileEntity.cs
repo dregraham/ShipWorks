@@ -49,6 +49,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequestedLabelFormat = source.RequestedLabelFormat;
             
             Amazon = (IAmazonProfileEntity) source.Amazon?.AsReadOnly(objectMap);
+            Asendia = (IAsendiaProfileEntity) source.Asendia?.AsReadOnly(objectMap);
             BestRate = (IBestRateProfileEntity) source.BestRate?.AsReadOnly(objectMap);
             DhlExpress = (IDhlExpressProfileEntity) source.DhlExpress?.AsReadOnly(objectMap);
             FedEx = (IFedExProfileEntity) source.FedEx?.AsReadOnly(objectMap);
@@ -132,6 +133,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public Nullable<System.Int32> RequestedLabelFormat { get; }
         
         public IAmazonProfileEntity Amazon { get; }
+        
+        public IAsendiaProfileEntity Asendia { get; }
         
         public IBestRateProfileEntity BestRate { get; }
         
