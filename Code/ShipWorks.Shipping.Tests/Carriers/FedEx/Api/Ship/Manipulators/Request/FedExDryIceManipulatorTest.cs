@@ -1,12 +1,11 @@
-using Moq;
+using System.Linq;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System.Linq;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
@@ -14,163 +13,148 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
     public class FedExDryIceManipulatorTest
     {
         private FedExDryIceManipulator testObject;
-
-        private ShipmentEntity shipmentEntity;
-
-        private FedExShipRequest shipRequest;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private ShipmentEntity shipment;
+        private readonly AutoMock mock;
 
         public FedExDryIceManipulatorTest()
         {
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
+            shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
             // All dry ice shipments need to use custom packaging
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
-
-            shipRequest = new FedExShipRequest(
-                null,
-                shipmentEntity,
-                null,
-                null,
-                settingsRepository.Object,
-                new ProcessShipmentRequest());
+            shipment.FedEx.PackagingType = (int) FedExPackagingType.Custom;
+            shipment.FedEx.Packages[0].DryIceWeight = 2.2046; //1KG
+            shipment.FedEx.Packages[1].DryIceWeight = 4.4092; //2KG
+            shipment.FedEx.Service = (int) FedExServiceType.FedExGround;
 
             testObject = new FedExDryIceManipulator();
-
-            shipmentEntity.FedEx.Packages[0].DryIceWeight = 2.2046; //1KG
-            shipmentEntity.FedEx.Packages[1].DryIceWeight = 4.4092; //2KG
-
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
         }
 
         [Fact]
         public void Manipulate_DryIceInPackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(1, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count(t => t == PackageSpecialServiceType.DRY_ICE));
+            Assert.Equal(1, result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count(t => t == PackageSpecialServiceType.DRY_ICE));
         }
 
         [Fact]
         public void Manipulate_HasOnePackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(1, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count());
+            Assert.Equal(1, result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count());
         }
 
         [Fact]
         public void Manipulate_WeightOfPackageIsOne_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(1, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight.Value);
+            Assert.Equal(1, result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight.Value);
         }
 
         [Fact]
         public void Manipulate_WeightOfPackageIsInKg_FirstPackageHasDryIceWeight_WhenNotUsingGroundService()
         {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
+            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(WeightUnits.KG, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight.Units);
+            Assert.Equal(WeightUnits.KG, result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight.Units);
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingFedExBoxPackagingType()
+        public void Manipulate_DryIceInShipmentSpecialServiceType_WhenUsingLTLFreightService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightPriority;
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(1, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count(t => t == ShipmentSpecialServiceType.DRY_ICE));
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingEnvelopePackagingType()
+        public void Manipulate_HasOneShipmentSpecialServiceType_WhenUsingLTLFreightService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Envelope;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightPriority;
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(1, result.Value.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count());
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingPakPackagingType()
+        public void Manipulate_WeightOfShipmentIsOne_WhenUsingLTLFreightService_ShipmentEntityHasThreeKgOfDryIce()
         {
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Pak;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightPriority;
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(1, result.Value.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail.TotalWeight.Value);
         }
 
         [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsingTubePackagingType()
+        public void Manipulate_WeightOfShipmentIsInKg_FirstPackageHasDryIceWeight_WhenUsingLTLFreightService()
         {
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightPriority;
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.Equal(WeightUnits.KG, result.Value.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail.TotalWeight.Units);
         }
 
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsing10KgBoxPackagingType()
+        [Theory]
+        [InlineData(FedExPackagingType.Box)]
+        [InlineData(FedExPackagingType.Envelope)]
+        [InlineData(FedExPackagingType.Pak)]
+        [InlineData(FedExPackagingType.Tube)]
+        [InlineData(FedExPackagingType.Box10Kg)]
+        [InlineData(FedExPackagingType.Box25Kg)]
+        public void Manipulate_ReturnsFailure_WhenUsingPackagingOtherThanCustom(FedExPackagingType packaging)
         {
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box10Kg;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsFedExException_WhenUsing25KgBoxPackagingType()
-        {
-            shipmentEntity.FedEx.Packages[0].DryIceWeight = 0;
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
-            Assert.Throws<FedExException>(() => testObject.Manipulate(shipRequest));
+            shipment.FedEx.PackagingType = (int) packaging;
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<FedExException>(result.Exception);
         }
 
         [Fact]
         public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0AndCustomPackagingType()
         {
-            shipmentEntity.FedEx.Packages[0].DryIceWeight = 0;
-            shipmentEntity.FedEx.Packages[1].DryIceWeight = 0;
+            shipment.FedEx.Packages[0].DryIceWeight = 0;
+            shipment.FedEx.Packages[1].DryIceWeight = 0;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(0, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count(t => t == PackageSpecialServiceType.DRY_ICE));
+            Assert.Null(result.Value.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_DryIceNotAddedToSecondPackage_WhenDryIceAmountIs0()
         {
-            shipmentEntity.FedEx.Packages[1].DryIceWeight = 0;
-            shipRequest.SequenceNumber = 1;
+            shipment.FedEx.Packages[1].DryIceWeight = 0;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 1);
 
-            Assert.Equal(0, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count(t => t == PackageSpecialServiceType.DRY_ICE));
+            Assert.Null(result.Value.RequestedShipment);
         }
 
         [Fact]
         public void Manipulate_DryIceNotAdded_WhenDryIceAmountIs0()
         {
-            shipmentEntity.FedEx.Packages[0].DryIceWeight = 0;
+            shipment.FedEx.Packages[0].DryIceWeight = 0;
 
-            testObject.Manipulate(shipRequest);
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
-            Assert.Equal(0, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Count(t => t == PackageSpecialServiceType.DRY_ICE));
+            Assert.Null(result.Value.RequestedShipment);
         }
-
-        /// <summary>
-        /// NativeRequest from shipRequest converted to ProcessShipmentRequest
-        /// </summary>
-        private ProcessShipmentRequest ProcessShipmentRequest
-        {
-            get
-            {
-                return shipRequest.NativeRequest as ProcessShipmentRequest;
-            }
-        }
-
-
     }
 }

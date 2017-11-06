@@ -33,12 +33,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.Intern
         /// <typeparam name="TProp"></typeparam>
         /// <param name="obj"></param>
         /// <param name="getter"></param>
-        public static void Ensure<T, TProp>(this T obj, Expression<Func<T, TProp[]>> getter)
+        public static TProp[] Ensure<T, TProp>(this T obj, Expression<Func<T, TProp[]>> getter)
         {
+            var value = getter.Compile()(obj);
+
             if (getter.Compile()(obj) == null)
             {
-                GetSetter(getter)(obj, new TProp[0]);
+                value = new TProp[0];
+                GetSetter(getter)(obj, value);
             }
+
+            return value;
         }
 
         /// <summary>
