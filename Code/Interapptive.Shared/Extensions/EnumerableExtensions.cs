@@ -54,5 +54,23 @@ namespace Interapptive.Shared.Extensions
             Enumerable.Aggregate(source,
                 GenericResult.FromSuccess(accumulator),
                 (acc, item) => acc.Map(v => aggregator(v, item)));
+
+        /// <summary>
+        /// Match on a dictionary
+        /// </summary>
+        /// <returns>
+        /// Success response with the result of the onFound method, or else the value of the onMissing method
+        /// </returns>
+        public static GenericResult<T> Match<T, TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, T> onFound, Func<Exception> onMissing) =>
+            source.Match(key, x => onFound(x), () => GenericResult.FromError<T>(onMissing()));
+
+        /// <summary>
+        /// Match on a dictionary
+        /// </summary>
+        /// <returns>
+        /// Success response with the result of the onFound method, or else the value of the onMissing method
+        /// </returns>
+        public static T Match<T, TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, T> onFound, Func<T> onMissing) =>
+            source.ContainsKey(key) ? onFound(source[key]) : onMissing();
     }
 }

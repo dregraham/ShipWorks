@@ -1,9 +1,11 @@
-using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using System;
+using System.Collections.Generic;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
@@ -11,118 +13,74 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
     /// An implementation of the ICarrierRequestManipulator for modifying the packaging properties of
     /// the package line items in the FedEx IFedExNativeShipmentRequest object.
     /// </summary>
-    public class FedExAdmissibilityManipulator : FedExShippingRequestManipulatorBase
+    public class FedExAdmissibilityManipulator : IFedExShipRequestManipulator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExAdmissibilityManipulator" /> class.
+        /// Should the manipulator be applied
         /// </summary>
-        public FedExAdmissibilityManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExAdmissibilityManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExAdmissibilityManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) =>
+            shipment.AdjustedShipCountryCode() == "CA";
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            var package = InitializeRequest(request);
 
-            // We can safely cast this since we've passed initialization
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-
-            if (request.ShipmentEntity.AdjustedShipCountryCode() == "CA")
-            {
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging = GetApiAdmissibilityPackagingType((FedExPhysicalPackagingType) request.ShipmentEntity.FedEx.CustomsAdmissibilityPackaging);
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified = true;
-            }
+            return GetApiAdmissibilityPackagingType((FedExPhysicalPackagingType) shipment.FedEx.CustomsAdmissibilityPackaging)
+                .Map(packaging =>
+                {
+                    package.PhysicalPackaging = packaging;
+                    package.PhysicalPackagingSpecified = true;
+                    return request;
+                });
         }
 
         /// <summary>
         /// Determine the API value corresponding to our internal type
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
-        private PhysicalPackagingType GetApiAdmissibilityPackagingType(FedExPhysicalPackagingType type)
-        {
-            switch (type)
-            {
-                case FedExPhysicalPackagingType.Bag: return PhysicalPackagingType.BAG;
-                case FedExPhysicalPackagingType.Barrel: return PhysicalPackagingType.BARREL;
-                case FedExPhysicalPackagingType.BasketOrHamper: return PhysicalPackagingType.BASKET;
-                case FedExPhysicalPackagingType.Box: return PhysicalPackagingType.BOX;
-                case FedExPhysicalPackagingType.Bucket: return PhysicalPackagingType.BUCKET;
-                case FedExPhysicalPackagingType.Bundle: return PhysicalPackagingType.BUNDLE;
-                case FedExPhysicalPackagingType.Carton: return PhysicalPackagingType.CARTON;
-                case FedExPhysicalPackagingType.Case: return PhysicalPackagingType.CASE;
-                case FedExPhysicalPackagingType.Container: return PhysicalPackagingType.CONTAINER;
-                case FedExPhysicalPackagingType.Crate: return PhysicalPackagingType.CRATE;
-                case FedExPhysicalPackagingType.Cylinder: return PhysicalPackagingType.CYLINDER;
-                case FedExPhysicalPackagingType.Drum: return PhysicalPackagingType.DRUM;
-                case FedExPhysicalPackagingType.Envelope: return PhysicalPackagingType.ENVELOPE;
-                case FedExPhysicalPackagingType.Pail: return PhysicalPackagingType.PAIL;
-                case FedExPhysicalPackagingType.Pallet: return PhysicalPackagingType.PALLET;
-                case FedExPhysicalPackagingType.Pieces: return PhysicalPackagingType.PIECE;
-                case FedExPhysicalPackagingType.Reel: return PhysicalPackagingType.REEL;
-                case FedExPhysicalPackagingType.Roll: return PhysicalPackagingType.ROLL;
-                case FedExPhysicalPackagingType.Skid: return PhysicalPackagingType.SKID;
-                case FedExPhysicalPackagingType.Tank: return PhysicalPackagingType.TANK;
-                case FedExPhysicalPackagingType.Tube: return PhysicalPackagingType.TUBE;
-                case FedExPhysicalPackagingType.Hamper: return PhysicalPackagingType.HAMPER;
-                case FedExPhysicalPackagingType.Other: return PhysicalPackagingType.OTHER;
-
-                default: throw new InvalidOperationException("Invalid FedEx Admissibility Type: " + type);
-            }
-        }
+        private GenericResult<PhysicalPackagingType> GetApiAdmissibilityPackagingType(FedExPhysicalPackagingType type) =>
+            packagingLookup.Value
+                .Match(type, x => x, () => new InvalidOperationException("Invalid FedEx Admissibility Type: " + type));
 
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(CarrierRequest request)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
+        private RequestedPackageLineItem InitializeRequest(ProcessShipmentRequest request) =>
+            request.Ensure(x => x.RequestedShipment)
+            .EnsureAtLeastOne(x => x.RequestedPackageLineItems);
 
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
-            if (nativeRequest == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            // Make sure the RequestedShipment is there
-            if (nativeRequest.RequestedShipment == null)
-            {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
-                nativeRequest.RequestedShipment = new RequestedShipment();
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems == null || nativeRequest.RequestedShipment.RequestedPackageLineItems.Length == 0)
-            {
-                // Make sure the line item object is are there
-                nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-            }
-
-            if (nativeRequest.RequestedShipment.RequestedPackageLineItems[0] == null)
-            {
-                // Be sure the first element is has been instantiated
-                nativeRequest.RequestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
-        }
+        /// <summary>
+        /// Lookup for valid packaging types
+        /// </summary>
+        private static Lazy<Dictionary<FedExPhysicalPackagingType, PhysicalPackagingType>> packagingLookup =
+            new Lazy<Dictionary<FedExPhysicalPackagingType, PhysicalPackagingType>>(() =>
+                new Dictionary<FedExPhysicalPackagingType, PhysicalPackagingType>
+                {
+                    { FedExPhysicalPackagingType.Bag, PhysicalPackagingType.BAG },
+                    { FedExPhysicalPackagingType.Barrel, PhysicalPackagingType.BARREL },
+                    { FedExPhysicalPackagingType.BasketOrHamper, PhysicalPackagingType.BASKET },
+                    { FedExPhysicalPackagingType.Box, PhysicalPackagingType.BOX },
+                    { FedExPhysicalPackagingType.Bucket, PhysicalPackagingType.BUCKET },
+                    { FedExPhysicalPackagingType.Bundle, PhysicalPackagingType.BUNDLE },
+                    { FedExPhysicalPackagingType.Carton, PhysicalPackagingType.CARTON },
+                    { FedExPhysicalPackagingType.Case, PhysicalPackagingType.CASE },
+                    { FedExPhysicalPackagingType.Container, PhysicalPackagingType.CONTAINER },
+                    { FedExPhysicalPackagingType.Crate, PhysicalPackagingType.CRATE },
+                    { FedExPhysicalPackagingType.Cylinder, PhysicalPackagingType.CYLINDER },
+                    { FedExPhysicalPackagingType.Drum, PhysicalPackagingType.DRUM },
+                    { FedExPhysicalPackagingType.Envelope, PhysicalPackagingType.ENVELOPE },
+                    { FedExPhysicalPackagingType.Pail, PhysicalPackagingType.PAIL },
+                    { FedExPhysicalPackagingType.Pallet, PhysicalPackagingType.PALLET },
+                    { FedExPhysicalPackagingType.Pieces, PhysicalPackagingType.PIECE },
+                    { FedExPhysicalPackagingType.Reel, PhysicalPackagingType.REEL },
+                    { FedExPhysicalPackagingType.Roll, PhysicalPackagingType.ROLL },
+                    { FedExPhysicalPackagingType.Skid, PhysicalPackagingType.SKID },
+                    { FedExPhysicalPackagingType.Tank, PhysicalPackagingType.TANK },
+                    { FedExPhysicalPackagingType.Tube, PhysicalPackagingType.TUBE },
+                    { FedExPhysicalPackagingType.Hamper, PhysicalPackagingType.HAMPER },
+                    { FedExPhysicalPackagingType.Other, PhysicalPackagingType.OTHER }
+                });
     }
 }
