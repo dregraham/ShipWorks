@@ -22,12 +22,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
             this.response = response;
             this.shipment = shipment;
 
-            if (response.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber == "1")
+            if (FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
             {
                 SetShipmentTrackingNumber();
-            }
 
-            SetPackageTrackingNumber();
+                // TODO: See if we need to handle packages.
+            }
+            else
+            {
+                if (response.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber == "1")
+                {
+                    SetShipmentTrackingNumber();
+                }
+
+                SetPackageTrackingNumber();
+            }
 
             return shipment;
         }

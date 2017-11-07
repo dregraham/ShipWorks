@@ -64,9 +64,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
             }
 
             // This should never happen, but our users will let us know if it does
-            if (reply.CompletedShipmentDetail.CompletedPackageDetails.Length != 1)
+            if (!FedExUtility.IsFreightLtlService(shipment.FedEx.Service) &&
+                reply.CompletedShipmentDetail.CompletedPackageDetails?.Length != 1)
             {
-                Result.FromError(new CarrierException("Invalid number of package details returned for a shipment request."));
+                return Result.FromError(new CarrierException("Invalid number of package details returned for a shipment request."));
+            }
+
+            // This should never happen, but our users will let us know if it does
+            if (FedExUtility.IsFreightLtlService(shipment.FedEx.Service) &&
+                reply.CompletedShipmentDetail.ShipmentDocuments?.Length == 0)
+            {
+                return Result.FromError(new CarrierException("Invalid number of shipping documents returned for an LTL Freight shipment request."));
             }
 
             return Result.FromSuccess();

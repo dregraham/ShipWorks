@@ -53,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         private GenericResult<ProcessShipmentRequest> CreateFedExLtlFreightDetailManipulations(ProcessShipmentRequest request, IFedExShipmentEntity fedex, IFedExAccountEntity account, int sequenceNumber)
         {
             var requestedShipment = request.RequestedShipment;
+
             requestedShipment.PackageCount = fedex.Packages.Count().ToString();
             requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes =
                 requestedShipment.ShippingDocumentSpecification

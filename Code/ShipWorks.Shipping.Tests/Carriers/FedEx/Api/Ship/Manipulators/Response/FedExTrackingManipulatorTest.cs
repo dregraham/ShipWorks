@@ -3,7 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Shared.Carriers.FedEx;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
@@ -26,16 +26,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             testObject = new FedExShipmentTrackingManipulator();
         }
 
-        [Fact]
-        public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent()
+        [Theory]
+        [InlineData(FedExServiceType.FedExGround)]
+        [InlineData(FedExServiceType.FedEx1DayFreight)]
+        [InlineData(FedExServiceType.FedExFreightEconomy)]
+        public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent(FedExServiceType serviceType)
         {
+            shipmentEntity.FedEx.Service = (int)serviceType;
+
             testObject.Manipulate(processShipmentReply, shipmentEntity);
             Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
         }
 
-        [Fact]
-        public void Manipulate_PackageTrackingNumberAddedToShipment_WhenNoMasterTrackingIdPresent()
+        [Theory]
+        [InlineData(FedExServiceType.FedExGround)]
+        [InlineData(FedExServiceType.FedEx1DayFreight)]
+        [InlineData(FedExServiceType.FedExFreightEconomy)]
+        public void Manipulate_PackageTrackingNumberAddedToShipment_WhenNoMasterTrackingIdPresent(FedExServiceType serviceType)
         {
+            shipmentEntity.FedEx.Service = (int)serviceType;
+
             //remove master tracking
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
 
@@ -46,6 +56,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         [Fact]
         public void Manipulate_PackageTrackingNumberAddedToSecondPackage_WhenSequenceNumberIsTwo()
         {
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
             processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails[0].SequenceNumber = "2";
 
             testObject.Manipulate(processShipmentReply, shipmentEntity);
