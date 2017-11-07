@@ -32,7 +32,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipment = new ShipmentEntity()
             {
                 ShipmentID = 123,
-                DhlExpress = new DhlExpressShipmentEntity()
+                DhlExpress = new DhlExpressShipmentEntity(), 
+                ShipmentTypeCode = ShipmentTypeCode.DhlExpress
             };
 
             link = new LinkDTO() { Href = "http://www.google.com" };
@@ -101,24 +102,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void Save_ThrowsDhlExpressException_WhenLabelFormatIsNotSupported()
+        public void Save_ThrowsShipEngineException_WhenLabelFormatIsNotSupported()
         {
             label.LabelFormat = Label.LabelFormatEnum.Png;
 
             var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
-            DhlExpressException ex = Assert.Throws<DhlExpressException>(() => testObject.Save());
+            ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Save());
 
             Assert.Equal("DHL Express returned an unsupported label format.", ex.Message);
         }
 
         [Fact]
-        public void Save_ThrowsDhlExpressException_WhenResourceDownloaderThrowsShipEngineException()
+        public void Save_ThrowsShipEngineException_WhenResourceDownloaderThrowsShipEngineException()
         {
             mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>())).Throws(new ShipEngineException("something went wrong"));
             var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
-            DhlExpressException ex = Assert.Throws<DhlExpressException>(() => testObject.Save());
+            ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Save());
 
             Assert.Equal("something went wrong", ex.Message);
         }

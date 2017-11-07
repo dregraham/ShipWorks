@@ -53,12 +53,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            EnsureCarrierShipmentIsNotNull(shipment);
+
             ShipmentType shipmentType = shipmentTypeManager.Get(shipment.ShipmentTypeCode);
             if (shipmentType.SupportsGetRates)
             {
-                MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-                EnsureCarrierShipmentIsNotNull(shipment);
-
                 RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
                 request.RateOptions = new RateRequest() { CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) } };
 

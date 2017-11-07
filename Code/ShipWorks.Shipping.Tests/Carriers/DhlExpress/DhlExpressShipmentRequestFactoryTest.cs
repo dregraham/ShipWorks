@@ -10,21 +10,24 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
-    public class DhlExpressRateShipmentRequestFactoryTest : IDisposable
+    public class DhlExpressShipmentRequestFactoryTest : IDisposable
     {
-        readonly AutoMock mock;
-        readonly Mock<IDhlExpressAccountRepository> accountRepo;
-        readonly Mock<IShipEngineRequestFactory> shipmentElementFactory;
-        readonly PurchaseLabelRequest purchaseLabelRequest;
+        private readonly AutoMock mock;
+        private readonly Mock<IDhlExpressAccountRepository> accountRepo;
+        private readonly Mock<IShipEngineRequestFactory> shipmentElementFactory;
+        private readonly Mock<IShipmentTypeManager> shipmentTypeManager;
+        private readonly PurchaseLabelRequest purchaseLabelRequest;
+        private ShipmentEntity shipment;
+        List<IPackageAdapter> packageAdapters;
+        Mock<ShipmentType> dhlShipmentType;
+        DhlExpressShipmentRequestFactory testObject;
 
-        public DhlExpressRateShipmentRequestFactoryTest()
+        public DhlExpressShipmentRequestFactoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             accountRepo = mock.Mock<IDhlExpressAccountRepository>();
@@ -41,31 +44,45 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipmentElementFactory
                 .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString))
                 .Returns(purchaseLabelRequest);
+
+            packageAdapters = new List<IPackageAdapter>();
+
+            dhlShipmentType = mock.Mock<ShipmentType>();
+            dhlShipmentType.Setup(t => t.GetPackageAdapters(shipment))
+                .Returns(packageAdapters);
+            dhlShipmentType.Setup(t => t.IsCustomsRequired(It.IsAny<ShipmentEntity>()))
+                .Returns(true);
+            dhlShipmentType.Setup(t => t.SupportsGetRates)
+                .Returns(true);
+
+            shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
+                .Returns(dhlShipmentType.Object);
+
+            shipment = new ShipmentEntity()
+            {
+                DhlExpress = new DhlExpressShipmentEntity(),
+                ShipmentTypeCode = ShipmentTypeCode.DhlExpress
+            };
+
+            testObject = mock.Create<DhlExpressShipmentRequestFactory>();
         }
 
         [Fact]
         public void CreateRateShipmentRequest_ThrowsError_WhenShipmentIsNull()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
             Assert.Throws<ArgumentNullException>(() => testObject.CreateRateShipmentRequest(null));
         }
 
         [Fact]
         public void CreateRateShipmentRequest_ThrowsError_WhenDhlExpressShipmentIsNull()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
             Assert.Throws<ArgumentNullException>(() => testObject.CreateRateShipmentRequest(new ShipmentEntity()));
         }
 
         [Fact]
         public void CreateRateShipmentRequest_DelegatesToAccountRepository_ToGetAccount()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             testObject.CreateRateShipmentRequest(shipment);
 
             accountRepo.Verify(r => r.GetAccount(shipment), Times.Once());
@@ -74,10 +91,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void CreateRateShipmentRequest_SetsCarrierIDFromAccount()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             var request = testObject.CreateRateShipmentRequest(shipment);
 
             Assert.Equal("se-1234", request.RateOptions.CarrierIds.First());
@@ -90,11 +103,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipmentElementFactory
                 .Setup(f => f.CreateRateRequest(AnyShipment))
                 .Returns(requestFromShipmentElementFactory);
-
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
+            
             var request = testObject.CreateRateShipmentRequest(shipment);
 
             Assert.Equal(requestFromShipmentElementFactory, request);
@@ -106,16 +115,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(false, true, true)]
         public void CreateRateShipmentRequest_AdvancedOptionsAreSet(bool deliveryDutyPaid, bool nonMachinable, bool saturdayDelivery)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity()
             {
-                DhlExpress = new DhlExpressShipmentEntity()
-                {
-                    DeliveredDutyPaid = deliveryDutyPaid,
-                    NonMachinable = nonMachinable,
-                    SaturdayDelivery = saturdayDelivery
-                }
+                DeliveredDutyPaid = deliveryDutyPaid,
+                NonMachinable = nonMachinable,
+                SaturdayDelivery = saturdayDelivery
             };
 
             var request = testObject.CreateRateShipmentRequest(shipment);
@@ -134,10 +138,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 .Setup(f => f.CreateCustomsItems(AnyShipment))
                 .Returns(customsItems);
 
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             var request = testObject.CreateRateShipmentRequest(shipment);
 
             shipmentElementFactory.Verify(f => f.CreateCustomsItems(shipment), Times.Once);
@@ -151,14 +151,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(ShipEngineContentsType.Sample, InternationalOptions.ContentsEnum.Sample)]
         public void CreateRateShipmentRequest_ContentsSet(ShipEngineContentsType contents, InternationalOptions.ContentsEnum apiContents)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity
             {
-                DhlExpress = new DhlExpressShipmentEntity
-                {
-                    Contents = (int) contents
-                }
+                Contents = (int) contents
             };
 
             var request = testObject.CreateRateShipmentRequest(shipment);
@@ -171,14 +166,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(ShipEngineNonDeliveryType.TreatAsAbandoned, InternationalOptions.NonDeliveryEnum.Treatasabandoned)]
         public void CreateRateShipmentRequest_NonDeliverySet(ShipEngineNonDeliveryType nonDelivery, InternationalOptions.NonDeliveryEnum apiNonDelivery)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity
             {
-                DhlExpress = new DhlExpressShipmentEntity
-                {
-                    NonDelivery = (int) nonDelivery
-                }
+                NonDelivery = (int) nonDelivery
             };
 
             var request = testObject.CreateRateShipmentRequest(shipment);
@@ -187,28 +177,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void CreateRateShipmentRequest_CreatesPackages_FromPacakgeAdapterDelegatesToShipmentTypeAndElementFactory()
+        public void CreateRateShipmentRequest_CreatesPackages_FromPackageAdapterDelegatesToShipmentTypeAndElementFactory()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                DhlExpress = new DhlExpressShipmentEntity()
-            };
-            
-            var packageAdapters = new List<IPackageAdapter>();
-
-            var dhlShipmentType = mock.Mock<ShipmentType>();
-            dhlShipmentType.Setup(t => t.GetPackageAdapters(shipment))
-                .Returns(packageAdapters);
-
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
-                .Returns(dhlShipmentType.Object);
-
             testObject.CreateRateShipmentRequest(shipment);
 
-            shipmentTypeManager.Verify(m => m.Get(ShipmentTypeCode.DhlExpress), Times.Once());
             dhlShipmentType.Verify(t => t.GetPackageAdapters(shipment), Times.Once());
             shipmentElementFactory.Verify(f => f.CreatePackages(packageAdapters), Times.Once());
         }
@@ -219,24 +191,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
             shipmentElementFactory.Setup(f => f.CreatePackages(It.IsAny<List<IPackageAdapter>>()))
                 .Returns(apiPackages);            
-
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                DhlExpress = new DhlExpressShipmentEntity()
-            };
-
-            var packageAdapters = new List<IPackageAdapter>();
-
-            var dhlShipmentType = mock.Mock<ShipmentType>();
-            dhlShipmentType.Setup(t => t.GetPackageAdapters(shipment))
-                .Returns(packageAdapters);
-
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
-                .Returns(dhlShipmentType.Object);
-
+            
             var request = testObject.CreateRateShipmentRequest(shipment);
 
             Assert.Equal(apiPackages, request.Shipment.Packages);
@@ -245,26 +200,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void CreatePurchaseLabelRequest_ThrowsError_WhenShipmentIsNull()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
             Assert.Throws<ArgumentNullException>(() => testObject.CreatePurchaseLabelRequest(null));
         }
 
         [Fact]
         public void CreatePurchaseLabelRequest_ThrowsError_WhenDhlExpressShipmentIsNull()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
             Assert.Throws<ArgumentNullException>(() => testObject.CreatePurchaseLabelRequest(new ShipmentEntity()));
         }
 
         [Fact]
         public void CreatePurchaseLabelRequest_DelegatesToAccountRepository_ToGetAccount()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             testObject.CreatePurchaseLabelRequest(shipment);
 
             accountRepo.Verify(r => r.GetAccount(shipment), Times.Once());
@@ -273,10 +220,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void CreatePurchaseLabelRequest_SetsCarrierIDFromAccount()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             var request = testObject.CreatePurchaseLabelRequest(shipment);
 
             Assert.Equal("se-1234", request.Shipment.CarrierId);
@@ -285,10 +228,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void CreatePurchaseLabelRequest_RequestFromShipmentElementFactoryIsReturned()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             var request = testObject.CreatePurchaseLabelRequest(shipment);
 
             Assert.Equal(purchaseLabelRequest, request);
@@ -300,16 +239,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(false, true, true)]
         public void CreatePurchaseLabelRequest_AdvancedOptionsAreSet(bool deliveryDutyPaid, bool nonMachinable, bool saturdayDelivery)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity()
             {
-                DhlExpress = new DhlExpressShipmentEntity()
-                {
-                    DeliveredDutyPaid = deliveryDutyPaid,
-                    NonMachinable = nonMachinable,
-                    SaturdayDelivery = saturdayDelivery
-                }
+                DeliveredDutyPaid = deliveryDutyPaid,
+                NonMachinable = nonMachinable,
+                SaturdayDelivery = saturdayDelivery
             };
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
@@ -328,10 +262,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 .Setup(f => f.CreateCustomsItems(AnyShipment))
                 .Returns(customsItems);
 
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity() { DhlExpress = new DhlExpressShipmentEntity() };
-
             var request = testObject.CreatePurchaseLabelRequest(shipment);
 
             shipmentElementFactory.Verify(f => f.CreateCustomsItems(shipment), Times.Once);
@@ -345,14 +275,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(ShipEngineContentsType.Sample, InternationalOptions.ContentsEnum.Sample)]
         public void CreatePurchaseLabelRequest_ContentsSet(ShipEngineContentsType contents, InternationalOptions.ContentsEnum apiContents)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity
             {
-                DhlExpress = new DhlExpressShipmentEntity
-                {
-                    Contents = (int) contents
-                }
+                Contents = (int) contents
             };
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
@@ -365,14 +290,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(ShipEngineNonDeliveryType.TreatAsAbandoned, InternationalOptions.NonDeliveryEnum.Treatasabandoned)]
         public void CreatePurchaseLabelRequest_NonDeliverySet(ShipEngineNonDeliveryType nonDelivery, InternationalOptions.NonDeliveryEnum apiNonDelivery)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity
             {
-                DhlExpress = new DhlExpressShipmentEntity
-                {
-                    NonDelivery = (int) nonDelivery
-                }
+                NonDelivery = (int) nonDelivery
             };
 
             var request = testObject.CreatePurchaseLabelRequest(shipment);
@@ -383,49 +303,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void CreatePurchaseLabelRequest_CreatesPackages_FromShipmentTypeGetPackageAdapters()
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                DhlExpress = new DhlExpressShipmentEntity()
-            };
-
-            var packageAdapters = new List<IPackageAdapter>();
-
-            var dhlShipmentType = mock.Mock<ShipmentType>();
-            dhlShipmentType.Setup(t => t.GetPackageAdapters(shipment))
-                .Returns(packageAdapters);
-
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
-                .Returns(dhlShipmentType.Object);
-
             testObject.CreatePurchaseLabelRequest(shipment);
 
-            shipmentTypeManager.Verify(m => m.Get(ShipmentTypeCode.DhlExpress), Times.Once());
             dhlShipmentType.Verify(t => t.GetPackageAdapters(shipment), Times.Once());
         }
 
         [Fact]
         public void CreatePurchaseLabelRequest_SendsPackageAdapters_FromShipmentTypeGetPackageAdapters()
-        {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity
-            {
-                DhlExpress = new DhlExpressShipmentEntity()
-            };
-
-            var packageAdapters = new List<IPackageAdapter>();
-
-            var dhlShipmentType = mock.Mock<ShipmentType>();
-            dhlShipmentType.Setup(t => t.GetPackageAdapters(shipment))
-                .Returns(packageAdapters);
-
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
-            shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.DhlExpress))
-                .Returns(dhlShipmentType.Object);
-
+        {            
             testObject.CreatePurchaseLabelRequest(shipment);
 
             shipmentElementFactory.Verify(f=>f.CreatePurchaseLabelRequest(shipment, packageAdapters, AnyString), Times.Once());
@@ -436,14 +321,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [InlineData(DhlExpressServiceType.ExpressWorldWide)]
         public void CreatePurchaseLabelRequest_SetsServiceCorrectly(DhlExpressServiceType serviceType)
         {
-            var testObject = mock.Create<DhlExpressShipmentRequestFactory>();
-
-            ShipmentEntity shipment = new ShipmentEntity()
+            shipment.DhlExpress = new DhlExpressShipmentEntity()
             {
-                DhlExpress = new DhlExpressShipmentEntity()
-                {
-                    Service = (int) serviceType
-                }
+                Service = (int) serviceType
             };
 
             testObject.CreatePurchaseLabelRequest(shipment);
