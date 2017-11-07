@@ -249,7 +249,6 @@
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShipperManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingChargesManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingClientDetailManipulator.cs" />
-    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingRequestManipulatorBase.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingVersionManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExSmartPostManipulator.cs" />
