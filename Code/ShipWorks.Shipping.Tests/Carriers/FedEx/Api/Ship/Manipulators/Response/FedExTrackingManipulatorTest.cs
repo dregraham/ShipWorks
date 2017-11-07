@@ -2,7 +2,6 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
@@ -12,7 +11,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
     public class FedExTrackingManipulatorTest
     {
         private FedExShipmentTrackingManipulator testObject;
-        private readonly FedExShipResponse fedExShipResponse;
         private readonly ShipmentEntity shipmentEntity;
         private readonly ProcessShipmentReply processShipmentReply;
         private Mock<CarrierRequest> carrierRequest;
@@ -23,7 +21,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             carrierRequest = new Mock<CarrierRequest>(null, null);
             processShipmentReply = BuildFedExProcessShipmentReply.BuildValidFedExProcessShipmentReply();
 
-            fedExShipResponse = new FedExShipResponse(processShipmentReply, carrierRequest.Object, shipmentEntity, null, null);
             testObject = new FedExShipmentTrackingManipulator();
         }
 

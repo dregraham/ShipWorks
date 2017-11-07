@@ -959,7 +959,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             if (shipment.AdjustedOriginCountryCode() == "PR" &&
                 shipment.AdjustedShipCountryCode() == "US")

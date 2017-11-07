@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 ProcessShipmentReply processReply = service.processShipment(nativeShipmentRequest);
 
                 // If we are an Interapptive user, save for certification
-                if (InterapptiveOnly.IsInterapptiveUser)
+                if (InterapptiveOnly.IsInterapptiveUser && nativeShipmentRequest.TransactionDetail != null)
                 {
                     string customerTransactionId = nativeShipmentRequest.TransactionDetail.CustomerTransactionId;
                     FedExUtility.SaveCertificationRequestAndResponseFiles(customerTransactionId, "Ship", service.RawSoap);

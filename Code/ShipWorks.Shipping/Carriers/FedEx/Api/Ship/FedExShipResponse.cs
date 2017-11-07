@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,17 +13,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
     /// This object is used to process the FedExShipmentResponse, saving labels and other shipment information
     /// to the shipment object. It is populated with the actual WSDL response object.
     /// </summary>
-    public class FedExShipResponse : IFedExShipResponse, ICarrierResponse
+    [Component]
+    public class FedExShipResponse : IFedExShipResponse
     {
         private readonly IFedExLabelRepository labelRepository;
         private readonly IEnumerable<IFedExShipResponseManipulator> manipulators;
         private readonly ShipmentEntity shipment;
         private readonly ProcessShipmentReply reply;
-
-        public FedExShipResponse(object a, object b, object c, object d, object e)
-        {
-
-        }
 
         /// <summary>
         /// Constructor
@@ -37,20 +34,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
             this.shipment = shipment;
             this.manipulators = manipulators;
             this.labelRepository = labelRepository;
-        }
-
-        //TODO: Remove these when 
-        public ShipmentEntity Shipment => shipment;
-        public ProcessShipmentReply NativeResponse => reply;
-
-        public CarrierRequest Request
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        object ICarrierResponse.NativeResponse
-        {
-            get { throw new System.NotImplementedException(); }
         }
 
         /// <summary>

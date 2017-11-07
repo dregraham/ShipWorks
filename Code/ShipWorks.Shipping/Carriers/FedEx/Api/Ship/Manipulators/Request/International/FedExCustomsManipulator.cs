@@ -5,7 +5,6 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -51,7 +50,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(shipment, request);
 
-
             if (ShouldApply(shipment, sequenceNumber))
             {
                 account = settings.GetAccountReadOnly(shipment);
@@ -69,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
 
                 customsDetail.DocumentContent = shipment.FedEx.CustomsDocumentsOnly ? InternationalDocumentContentType.DOCUMENTS_ONLY : InternationalDocumentContentType.NON_DOCUMENTS;
                 customsDetail.DocumentContentSpecified = true;
-                
+
                 ConfigureCommodities(shipment, customsDetail);
                 ConfigureNaftaDetails(shipment, customsDetail);
                 ConfigurePaymentDetail(shipment, customsDetail, account);
@@ -80,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 // Make sure the customs data is assigned back to the request (in the event that a new customs object was
                 // created in the GetCustomsDetail method)
                 request.RequestedShipment.CustomsClearanceDetail = customsDetail;
-                
+
                 ConfigureTaxPayerIdentification(shipment, request);
             }
 
@@ -147,6 +145,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             }
         }
 
+        /// <summary>
+        /// Configure the customs options
+        /// </summary>
         private void ConfigureCustomsOptions(IShipmentEntity shipment, CustomsClearanceDetail customsDetail)
         {
             FedExCustomsOptionType optionType = (FedExCustomsOptionType) shipment.FedEx.CustomsOptionsType;
@@ -220,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
 
             // TODO: We may need to set shipping/recipeint based on who's paying.  See ETD_Request.xml where The Tins info
             // is on Shipper.
-            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() {Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE};
+            request.RequestedShipment.Recipient.Tins[0] = new TaxpayerIdentification() { Number = shipment.FedEx.CustomsRecipientTIN, TinType = TinType.PERSONAL_STATE };
 
         }
 
@@ -233,13 +234,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         private void ConfigurePaymentDetail(IShipmentEntity shipment, CustomsClearanceDetail customsDetail, IFedExAccountEntity fedExAccount)
         {
             Payment payment = new Payment();
-            payment.PaymentType = GetApiPaymentType((FedExPayorType)shipment.FedEx.PayorDutiesType);
+            payment.PaymentType = GetApiPaymentType((FedExPayorType) shipment.FedEx.PayorDutiesType);
 
             if (payment.PaymentType != PaymentType.COLLECT)
             {
                 payment.Payor = new Payor()
                 {
-                    ResponsibleParty = new Party() {Address = new Address(), Contact = new Contact()}
+                    ResponsibleParty = new Party() { Address = new Address(), Contact = new Contact() }
                 };
 
                 if (payment.PaymentType == PaymentType.SENDER)
@@ -304,9 +305,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 Commodity commodity = new Commodity
                 {
                     Description = customsItem.Description,
-                    Quantity = (decimal)customsItem.Quantity, //Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
+                    Quantity = (decimal) customsItem.Quantity, //Math.Ceiling(customsItem.Quantity).ToString(CultureInfo.InvariantCulture),
                     QuantitySpecified = true,
-                    QuantityUnits = "EA", 
+                    QuantityUnits = "EA",
                     NumberOfPieces = customsItem.NumberOfPieces.ToString(CultureInfo.InvariantCulture),
                     Weight = new Weight { Value = (decimal) customsItem.Weight, Units = GetApiWeightUnits(shipment) },
                     UnitPrice = new Money { Amount = customsItem.UnitPriceAmount, Currency = shipmentCurrencyType },
@@ -331,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <exception cref="System.InvalidOperationException">Unrecognized weight unit.</exception>
         private WeightUnits GetApiWeightUnits(IShipmentEntity shipment)
         {
-            WeightUnitOfMeasure type = (WeightUnitOfMeasure)shipment.FedEx.WeightUnitType;
+            WeightUnitOfMeasure type = (WeightUnitOfMeasure) shipment.FedEx.WeightUnitType;
 
             switch (type)
             {
@@ -352,7 +353,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         {
             if (shipment.FedEx.CustomsNaftaEnabled)
             {
-                customsDetail.RegulatoryControls = new RegulatoryControlType[] {RegulatoryControlType.NAFTA};
+                customsDetail.RegulatoryControls = new RegulatoryControlType[] { RegulatoryControlType.NAFTA };
 
                 foreach (Commodity commodity in customsDetail.Commodities)
                 {
@@ -401,7 +402,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <exception cref="System.InvalidOperationException">Unknown value for preference criterion</exception>
         private NaftaPreferenceCriterionCode GetApiPreferenceCode(IShipmentEntity shipment)
         {
-            FedExNaftaPreferenceCriteria preference = (FedExNaftaPreferenceCriteria)shipment.FedEx.CustomsNaftaPreferenceType;
+            FedExNaftaPreferenceCriteria preference = (FedExNaftaPreferenceCriteria) shipment.FedEx.CustomsNaftaPreferenceType;
 
             switch (preference)
             {

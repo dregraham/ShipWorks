@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -42,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx implementation of ShipmentType
     /// </summary>
+    [Component(RegistrationType.SpecificService, Service = typeof(ICustomsRequired))]
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -926,7 +928,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Indicates if the residential status indicator is required for the given shipment
         /// </summary>
         public override bool IsResidentialStatusRequired(IShipmentEntity shipment) =>
-        	IsDomestic(shipment);
+            IsDomestic(shipment);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used
@@ -1136,7 +1138,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             if (FedExUtility.IsSmartPostEnabled(shipment)
                 && shipment.ShipPerson.IsUSInternationalTerritory()
@@ -1147,5 +1149,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return base.IsCustomsRequiredByShipment(shipment);
         }
+
+        /// <summary>
+        /// Implement the ICustomsRequired interface explicitly
+        /// </summary>
+        bool ICustomsRequired.IsCustomsRequired(IShipmentEntity shipment) =>
+            IsCustomsRequired(shipment);
     }
 }

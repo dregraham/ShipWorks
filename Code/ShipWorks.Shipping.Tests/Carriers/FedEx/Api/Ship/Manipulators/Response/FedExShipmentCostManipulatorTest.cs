@@ -2,8 +2,6 @@ using Autofac.Extras.Moq;
 using log4net;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
@@ -13,7 +11,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 {
     public class FedExShipmentCostManipulatorTest
     {
-        private FedExShipResponse fedExShipResponse;
         private readonly AutoMock mock;
         private readonly ProcessShipmentReply reply;
         private readonly ShipmentEntity shipment;
@@ -36,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
                 result.Value.ShipmentCost);
         }
-        
+
         [Fact]
         public void Manipulate_UsesTotalNetFedExCharge_OriginIsCA()
         {

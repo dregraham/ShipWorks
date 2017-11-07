@@ -510,10 +510,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Customs is never required for OnTrac.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             return false;
         }
+
         /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
