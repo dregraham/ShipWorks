@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
 {
@@ -34,8 +34,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
 
             firstManipulator = mock.CreateMock<IFedExShipRequestManipulator>();
             firstManipulator.Setup(x => x.ShouldApply(AnyShipment, AnyInt)).Returns(true);
+            firstManipulator.Setup(x => x.Manipulate(AnyShipment, It.IsAny<ProcessShipmentRequest>(), AnyInt))
+                .Returns(new ProcessShipmentRequest());
             secondManipulator = mock.CreateMock<IFedExShipRequestManipulator>();
             secondManipulator.Setup(x => x.ShouldApply(AnyShipment, AnyInt)).Returns(true);
+            secondManipulator.Setup(x => x.Manipulate(AnyShipment, It.IsAny<ProcessShipmentRequest>(), AnyInt))
+                .Returns(new ProcessShipmentRequest());
 
             firstManipulatorFactory = mock.MockFunc<IFedExSettingsRepository, IFedExShipRequestManipulator>(firstManipulator);
             secondManipulatorFactory = mock.MockFunc<IFedExSettingsRepository, IFedExShipRequestManipulator>(secondManipulator);
@@ -76,14 +80,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         {
             var shipmentReply = new ProcessShipmentReply();
             var response = mock.CreateMock<IFedExShipResponse>();
+            response.Setup(x => x.ApplyManipulators())
+                .Returns(GenericResult.FromSuccess(response.Object));
 
             mock.FromFactory<IFedExServiceGatewayFactory>()
                 .Mock(x => x.Create(It.IsAny<IFedExSettingsRepository>()))
                 .Setup(x => x.Ship(It.IsAny<ProcessShipmentRequest>()))
                 .Returns(shipmentReply);
 
-            mock.MockFunc<ProcessShipmentReply, IFedExShipResponse>()
-                .Setup(f => f(shipmentReply)).Returns(() => response.Object);
+            var function = mock.MockRepository
+                .Create<Func<ShipmentEntity, ProcessShipmentReply, IFedExShipResponse>>();
+            function.Setup(f => f(AnyShipment, It.IsAny<ProcessShipmentReply>()))
+                .Returns(() => response.Object);
+            mock.Provide(function.Object);
 
             var testObject = mock.Create<FedExShipRequest>();
             var result = testObject.Submit(shipmentEntity, 0);
