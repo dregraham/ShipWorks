@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
             
-            if (asendiaProfile.Weight.HasValue && asendiaProfile.Weight.Value != 0)
+            if (asendiaProfile.Weight.HasValue && !asendiaProfile.Weight.Value.IsEquivalentTo(0))
             {
                 ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
