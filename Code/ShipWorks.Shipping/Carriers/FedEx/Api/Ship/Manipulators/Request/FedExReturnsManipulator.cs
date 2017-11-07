@@ -97,6 +97,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
 
             //Email Info
+            AddEmailReturnInfo(shipment, request, returnType);
+
+            return request;
+        }
+
+        /// <summary>
+        /// Add email info if needed
+        /// </summary>
+        private static void AddEmailReturnInfo(IShipmentEntity shipment, ProcessShipmentRequest request, FedExReturnType returnType)
+        {
             if (returnType == FedExReturnType.EmailReturnLabel)
             {
                 request.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail = new ReturnEMailDetail
@@ -127,13 +137,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                     Recipients = new EMailRecipient[1] { eMailRecipient }
                 };
 
-                //NotificationEMailAddress = shipment.ShipEmail
-
                 pendingShipmentDetail.EmailLabelDetail = emailLabelDetail;
                 request.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail = pendingShipmentDetail;
             }
-
-            return request;
         }
 
         /// <summary>
