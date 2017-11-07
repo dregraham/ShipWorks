@@ -14,20 +14,32 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     /// Factory for creating Asendia RateShipmentRequests
     /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.Asendia)]
-    public class AsendiaShipmentRequestFactory : ICarrierShipmentRequestFactory
+    public class AsendiaShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
         private readonly IAsendiaAccountRepository accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
-
+        
         /// <summary>
-        /// Creates a PurchaseLabelRequest with Asendia specific details from the given shipment
+        /// Constructor
         /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        public AsendiaShipmentRequestFactory(IAsendiaAccountRepository accountRepository,
+            IShipEngineRequestFactory shipmentElementFactory,
+            IShipmentTypeManager shipmentTypeManager) 
+            : base(shipmentElementFactory, shipmentTypeManager)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, nameof(shipment.Asendia));
+            this.accountRepository = accountRepository;
+            this.shipmentElementFactory = shipmentElementFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
+        }
 
+        protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, nameof(shipment.Asendia));
+        }
+
+        protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
+        {
             AsendiaAccountEntity account = accountRepository.GetAccount(shipment);
 
             if (account == null)
@@ -35,34 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 throw new AsendiaException("Invalid account associated with shipment.");
             }
 
-            List<IPackageAdapter> packages = shipmentTypeManager.Get(ShipmentTypeCode.Asendia).GetPackageAdapters(shipment).ToList();
-
-            AsendiaServiceType service = (AsendiaServiceType) shipment.Asendia.Service;
-            string serviceApiValue = EnumHelper.GetApiValue(service);
-
-            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue);
-            request.Shipment.CarrierId = account.ShipEngineCarrierId;
-
-            request.Shipment.AdvancedOptions = new Dictionary<string, object>();
-            request.Shipment.AdvancedOptions.Add("non_machinable", shipment.Asendia.NonMachinable);
-
-            request.Shipment.Customs = CreateCustoms(shipment);
-
-            return request;
+            return account.ShipEngineCarrierId;
         }
 
-        /// <summary>
-        /// Asendia does not support rates, so return empty rate request
-        /// </summary>
-        public RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
-        {
-            return new RateShipmentRequest();
-        }
-        
         /// <summary>
         /// Creates customs for a ShipEngine request
         /// </summary>
-        private InternationalOptions CreateCustoms(ShipmentEntity shipment)
+        protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
             InternationalOptions customs = new InternationalOptions()
             {
@@ -72,6 +63,24 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             };
 
             return customs;
+        }
+
+        protected override List<IPackageAdapter> GetPackages(ShipmentEntity shipment)
+        {
+            return shipmentTypeManager.Get(ShipmentTypeCode.Asendia).GetPackageAdapters(shipment).ToList();
+        }
+
+        protected override string GetServiceApiValue(ShipmentEntity shipment)
+        {
+            return EnumHelper.GetApiValue(shipment.Asendia.Service);
+        }
+
+        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        {
+            return new Dictionary<string, object>()
+            {
+                {"non_machinable", shipment.Asendia.NonMachinable}
+            };
         }
     }
 }
