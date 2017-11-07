@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Factory for creating DHL RateShipmentRequests
     /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressShipmentRequestFactory : ICarrierShipmentRequestFactory
+    public class DhlExpressShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
         private readonly IDhlExpressAccountRepository accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
@@ -24,52 +24,21 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public DhlExpressShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, 
             IShipEngineRequestFactory shipmentElementFactory, 
-            IShipmentTypeManager shipmentTypeManager)
+            IShipmentTypeManager shipmentTypeManager) 
+            : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.accountRepository = accountRepository;
             this.shipmentElementFactory = shipmentElementFactory;
             this.shipmentTypeManager = shipmentTypeManager;
         }
-
-        /// <summary>
-        /// Create a RateShipmentRequest
-        /// </summary>
-        public RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
+        
+        protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
-
-            DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
-
-            if (account == null)
-            {
-                throw new DhlExpressException("Invalid account associated with shipment.");
-            }
-
-            RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
-            request.RateOptions = new RateRequest() { CarrierIds = new List<string> { account.ShipEngineCarrierId } };
-
-            request.Shipment.AdvancedOptions = new Dictionary<string, object>();
-            request.Shipment.AdvancedOptions.Add("delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid);
-            request.Shipment.AdvancedOptions.Add("non_machinable", shipment.DhlExpress.NonMachinable);
-            request.Shipment.AdvancedOptions.Add("saturday_delivery", shipment.DhlExpress.SaturdayDelivery);
-
-            request.Shipment.Customs = CreateCustoms(shipment);
-
-            List<IPackageAdapter> packages = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
-            request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);
-
-            return request;
         }
 
-        /// <summary>
-        /// Creates a PurchaseLabelRequest with DHL Express specific details from the given shipment
-        /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
-
             DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
             if (account == null)
@@ -77,28 +46,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 throw new DhlExpressException("Invalid account associated with shipment.");
             }
 
-            List<IPackageAdapter> packages = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
-
-            DhlExpressServiceType service = (DhlExpressServiceType) shipment.DhlExpress.Service;
-            string serviceApiValue = EnumHelper.GetApiValue(service);
-
-            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue);
-            request.Shipment.CarrierId = account.ShipEngineCarrierId;
-
-            request.Shipment.AdvancedOptions = new Dictionary<string, object>();
-            request.Shipment.AdvancedOptions.Add("delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid);
-            request.Shipment.AdvancedOptions.Add("non_machinable", shipment.DhlExpress.NonMachinable);
-            request.Shipment.AdvancedOptions.Add("saturday_delivery", shipment.DhlExpress.SaturdayDelivery);
-
-            request.Shipment.Customs = CreateCustoms(shipment);
-
-            return request;
+            return account.ShipEngineCarrierId;
         }
 
         /// <summary>
         /// Creates customs for a ShipEngine request
         /// </summary>
-        private InternationalOptions CreateCustoms(ShipmentEntity shipment)
+        protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
             InternationalOptions customs = new InternationalOptions()
             {
@@ -108,6 +62,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             };
 
             return customs;
+        }
+
+        protected override List<IPackageAdapter> GetPackages(ShipmentEntity shipment) =>
+            shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
+        
+        protected override string GetServiceApiValue(ShipmentEntity shipment) => 
+            EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
+        
+        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        {
+            return new Dictionary<string, object>()
+            {
+                {"delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid},
+                {"non_machinable", shipment.DhlExpress.NonMachinable},
+                {"saturday_delivery", shipment.DhlExpress.SaturdayDelivery}
+            };
         }
     }
 }

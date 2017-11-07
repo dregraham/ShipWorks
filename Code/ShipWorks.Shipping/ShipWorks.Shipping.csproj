@@ -288,6 +288,7 @@
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
