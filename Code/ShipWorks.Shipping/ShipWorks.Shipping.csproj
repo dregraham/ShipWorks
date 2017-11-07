@@ -239,6 +239,7 @@
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackagingTypeManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPickupManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPriorityAlertManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRateTypeManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRecipientManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReferenceManipulator.cs" />

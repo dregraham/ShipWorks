@@ -214,6 +214,7 @@
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackagingTypeManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPickupManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPriorityAlertManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRateTypeManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRecipientManipulatorTest.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReferenceManipulatorTest.cs" />

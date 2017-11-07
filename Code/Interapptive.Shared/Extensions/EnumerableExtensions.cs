@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Extensions
@@ -54,6 +55,14 @@ namespace Interapptive.Shared.Extensions
             Enumerable.Aggregate(source,
                 GenericResult.FromSuccess(accumulator),
                 (acc, item) => acc.Map(v => aggregator(v, item)));
+
+        /// <summary>
+        /// Applies an accumulator function over a sequence 
+        /// </summary>
+        public static GenericResult<IEnumerable<T>> Flatten<T>(this IEnumerable<GenericResult<T>> source) =>
+            Enumerable.Aggregate(source,
+                GenericResult.FromSuccess(Enumerable.Empty<T>()),
+                (acc, item) => acc.Map(v => item.Map(i => v.Append(i))));
 
         /// <summary>
         /// Match on a dictionary
