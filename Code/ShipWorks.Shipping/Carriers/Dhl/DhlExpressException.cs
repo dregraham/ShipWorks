@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
-    /// Base exception for all exceptions thrown by the i-Parcel integration.
+    /// Base exception for all exceptions thrown by the DHL Express integration.
     /// </summary>
     [Serializable]
     public class DhlExpressException : Exception

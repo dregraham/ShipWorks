@@ -1,16 +1,11 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
 using log4net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using Autofac.Features.Indexed;
-using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.ShipEngine
 {

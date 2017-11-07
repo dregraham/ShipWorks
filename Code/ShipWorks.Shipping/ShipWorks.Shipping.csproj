@@ -176,8 +176,10 @@
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountRepository.cs" />
     <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaException.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
     <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountManager.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountDescription.cs" />

@@ -1,14 +1,10 @@
 ﻿using ShipWorks.Shipping.ShipEngine;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
