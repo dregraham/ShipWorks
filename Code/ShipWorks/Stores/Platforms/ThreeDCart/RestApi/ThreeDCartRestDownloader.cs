@@ -173,7 +173,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             {
                 invoiceNumber = orderId.ToString();
             }
-            else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix))
+            else if (!string.IsNullOrWhiteSpace(invoiceNumberPrefix) &&
+                     threeDCartStore.OrderIDUpgradeFixDate.HasValue &&
+                     threeDCartStore.OrderIDUpgradeFixDate.Value > DateTimeUtility.ConvertTimeToUtcForTimeZone(order.OrderDate, threeDCartStore.StoreTimeZone))
             {
                 // 3dcart allows you to add a prefix to the invoice number.
                 // The legacy order importer stripped the prefix, so we'll do that here too.
@@ -248,7 +250,12 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                     }
                 }
                 ordersProcessed++;
-                Progress.PercentComplete = ordersProcessed / totalCount;
+
+                // totalCount should only be 0 in integration tests
+                if (totalCount > 0)
+                {
+                    Progress.PercentComplete = ordersProcessed / totalCount;
+                }
             }
         }
 
