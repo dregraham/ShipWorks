@@ -624,7 +624,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
 

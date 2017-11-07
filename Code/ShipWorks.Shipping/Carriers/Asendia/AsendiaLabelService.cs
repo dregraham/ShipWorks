@@ -5,12 +5,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using log4net;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
     /// Label service for Asendia
     /// </summary>
+    [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.Asendia)]
     public class AsendiaLabelService : ShipEngineLabelService
     {
         private readonly IAsendiaAccountRepository accountRepository;

@@ -17,6 +17,9 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System.Drawing.Imaging;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -302,6 +305,34 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             UpdateTotalWeight(shipment);
 
             UpdateDynamicShipmentData(shipment);
+        }
+
+        /// <summary>
+        /// Create the XML input to the XSL engine
+        /// </summary>
+        public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
+        {
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+
+            // Add the labels content
+            container.AddElement(
+                "Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                ElementOutline.If(() => shipment().Processed));
+        }
+
+        /// <summary>
+        /// Load all the label data for the given shipmentID
+        /// </summary>
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
+
+            return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                .ToList();
         }
     }
 }

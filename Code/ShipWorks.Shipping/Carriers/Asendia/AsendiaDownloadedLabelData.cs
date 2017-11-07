@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
-        /// Save the ShipEngine label ID to the DHL Express shipment
+        /// Save the ShipEngine label ID to the Asendia shipment
         /// </summary>
         protected override void SaveShipEngineLabelID(ShipmentEntity shipment, Label label)
         {

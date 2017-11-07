@@ -1,17 +1,17 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using System;
 using ShipEngine.ApiClient.Model;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
-using ShipWorks.Shipping.ShipEngine;
 using static ShipEngine.ApiClient.Model.Label;
-using ShipWorks.ApplicationCore.Logging;
 using System.IO;
 using ShipWorks.Common.IO.Hardware.Printers;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
+    /// <summary>
+    /// Base class for saving ShipEngine label data
+    /// </summary>
     public abstract class ShipEngineDownloadedLabelData : IDownloadedLabelData
     {
         private readonly ShipmentEntity shipment;

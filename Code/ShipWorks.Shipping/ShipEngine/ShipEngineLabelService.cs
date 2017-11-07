@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.ShipEngine
         }
         
         /// <summary>
-        /// Void the Shipment
+        /// Void the shipment
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {

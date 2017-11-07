@@ -6,12 +6,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
-using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
-    /// Factory for creating Asendia RateShipmentRequests
+    /// Factory for creating Asendia ShipmentRequests
     /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.Asendia)]
     public class AsendiaShipmentRequestFactory : ShipEngineShipmentRequestFactory
@@ -33,11 +32,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             this.shipmentTypeManager = shipmentTypeManager;
         }
 
+        /// <summary>
+        /// Ensures the Asendia shipment is not null
+        /// </summary>
         protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, nameof(shipment.Asendia));
         }
 
+        /// <summary>
+        /// Gets the ShipEngine carrier ID from the Asendia shipment
+        /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
             AsendiaAccountEntity account = accountRepository.GetAccount(shipment);
@@ -51,7 +56,26 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
-        /// Creates customs for a ShipEngine request
+        /// Gets the api value for the Asendia service
+        /// </summary>
+        protected override string GetServiceApiValue(ShipmentEntity shipment)
+        {
+            return EnumHelper.GetApiValue(shipment.Asendia.Service);
+        }
+
+        /// <summary>
+        /// Creates the Asendia advanced options node
+        /// </summary>
+        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        {
+            return new Dictionary<string, object>()
+            {
+                {"non_machinable", shipment.Asendia.NonMachinable}
+            };
+        }
+
+        /// <summary>
+        /// Creates the Asendia customs node
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
@@ -63,24 +87,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             };
 
             return customs;
-        }
-
-        protected override List<IPackageAdapter> GetPackages(ShipmentEntity shipment)
-        {
-            return shipmentTypeManager.Get(ShipmentTypeCode.Asendia).GetPackageAdapters(shipment).ToList();
-        }
-
-        protected override string GetServiceApiValue(ShipmentEntity shipment)
-        {
-            return EnumHelper.GetApiValue(shipment.Asendia.Service);
-        }
-
-        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
-        {
-            return new Dictionary<string, object>()
-            {
-                {"non_machinable", shipment.Asendia.NonMachinable}
-            };
         }
     }
 }

@@ -10,7 +10,7 @@ using log4net;
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
-    /// Dhl Express Implmentation
+    /// Dhl Express Implementation
     /// </summary>
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressLabelService : ShipEngineLabelService

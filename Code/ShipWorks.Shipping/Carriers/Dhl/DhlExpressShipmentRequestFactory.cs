@@ -10,7 +10,7 @@ using ShipWorks.Shipping.Services;
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
-    /// Factory for creating DHL RateShipmentRequests
+    /// Factory for creating DHL Express ShipmentRequests
     /// </summary>
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressShipmentRequestFactory : ShipEngineShipmentRequestFactory
@@ -31,12 +31,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             this.shipmentElementFactory = shipmentElementFactory;
             this.shipmentTypeManager = shipmentTypeManager;
         }
-        
+
+        /// <summary>
+        /// Ensures the DHL Express shipment is not null
+        /// </summary>
         protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
         }
 
+        /// <summary>
+        /// Gets the ShipEngine carrier ID from the DHL Express shipment
+        /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
             DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
@@ -50,7 +56,26 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Creates customs for a ShipEngine request
+        /// Gets the api value for the DHL Express service
+        /// </summary>
+        protected override string GetServiceApiValue(ShipmentEntity shipment) => 
+            EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
+
+        /// <summary>
+        /// Creates the DHL Express advanced options node
+        /// </summary>
+        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
+        {
+            return new Dictionary<string, object>()
+            {
+                {"delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid},
+                {"non_machinable", shipment.DhlExpress.NonMachinable},
+                {"saturday_delivery", shipment.DhlExpress.SaturdayDelivery}
+            };
+        }
+
+        /// <summary>
+        /// Creates the DHL Express customs node
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
@@ -62,22 +87,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             };
 
             return customs;
-        }
-
-        protected override List<IPackageAdapter> GetPackages(ShipmentEntity shipment) =>
-            shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress).GetPackageAdapters(shipment).ToList();
-        
-        protected override string GetServiceApiValue(ShipmentEntity shipment) => 
-            EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
-        
-        protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
-        {
-            return new Dictionary<string, object>()
-            {
-                {"delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid},
-                {"non_machinable", shipment.DhlExpress.NonMachinable},
-                {"saturday_delivery", shipment.DhlExpress.SaturdayDelivery}
-            };
         }
     }
 }
