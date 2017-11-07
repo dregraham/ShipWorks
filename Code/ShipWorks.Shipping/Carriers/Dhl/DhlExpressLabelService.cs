@@ -15,13 +15,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Dhl Express Implmentation
     /// </summary>
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressLabelService : ILabelService
+    public class DhlExpressLabelService : ShipEngineLabelService
     {
-        private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IDhlExpressAccountRepository accountRepository;
-        private readonly ICarrierShipmentRequestFactory shipmentRequestFactory;
-        private readonly Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -31,81 +27,32 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IDhlExpressAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData,
-            Func<Type, ILog> logFactory)
+            Func<Type, ILog> logFactory) 
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
         {
-            this.shipEngineWebClient = shipEngineWebClient;
-            this.accountRepository = accountRepository;
             this.shipmentRequestFactory = shipmentRequestFactory[ShipmentTypeCode.DhlExpress];
-            this.createDownloadedLabelData = createDownloadedLabelData;
             log = logFactory(typeof(DhlExpressLabelService));
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
-        /// Create the label
+        /// The api log source for this label service
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            PurchaseLabelRequest request = shipmentRequestFactory.CreatePurchaseLabelRequest(shipment);
-
-            try
-            {
-                Label label = Task.Run(() =>
-                {
-                    return shipEngineWebClient.PurchaseLabel(request, ApiLogSource.DHLExpress);
-                }).Result;
-
-                return createDownloadedLabelData(shipment, label);
-            }
-            catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
-            {
-                string seAccountId = accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;
-                throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), seAccountId));
-            }
-        }
+        public override ApiLogSource ApiLogSource => ApiLogSource.DHLExpress;
 
         /// <summary>
-        /// Get a user friendly message based on the exception
+        /// The shipment type code for this label service
         /// </summary>
-        private static string GetExceptionMessage(Exception ex, string seAccountId)
-        {
-            string message = ex.Message;
-
-            if (message.Equals($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}" +
-                ", Carrier: DHL Express. One or more errors occurred.", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return "There was a problem creating the label while communicating with the DHL Express API";
-            }
-
-            if (message.StartsWith($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}" +
-                ", Carrier: DHL Express.", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return message
-                    .Replace($"A shipping carrier reported an error when processing your request. Carrier ID: {seAccountId}, Carrier: DHL Express.", string.Empty)
-                    .Trim();
-            }
-
-            return ex.Message;
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.DhlExpress;
 
         /// <summary>
-        /// Void the Shipment
+        /// Get the ShipEngine carrier ID from the shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment)
-        {
-            VoidLabelResponse response;
-            try
-            {
-                response = Task.Run(async () =>
-                {
-                    return await shipEngineWebClient.VoidLabel(shipment.DhlExpress.ShipEngineLabelID, ApiLogSource.DHLExpress).ConfigureAwait(false);
-                }).Result;
-            }
-            catch (Exception ex) when (ex.GetBaseException().GetType() == typeof(ShipEngineException))
-            {
-                log.Error(ex.GetBaseException());
-            }
-        }
+        protected override string GetShipEngineCarrierID(ShipmentEntity shipment) => accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;
+
+        /// <summary>
+        /// Get the ShipEngine label ID from the shipment
+        /// </summary>
+        protected override string GetShipEngineLabelID(ShipmentEntity shipment) => shipment.DhlExpress.ShipEngineLabelID;        
     }
 }

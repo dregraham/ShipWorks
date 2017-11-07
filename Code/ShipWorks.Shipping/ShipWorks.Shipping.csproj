@@ -278,6 +278,7 @@
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
