@@ -287,8 +287,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             {
                 ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
-
-
+            
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
@@ -300,7 +299,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
             
-
             UpdateTotalWeight(shipment);
 
             UpdateDynamicShipmentData(shipment);
