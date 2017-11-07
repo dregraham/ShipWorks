@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -52,11 +53,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         private GenericResult<ProcessShipmentRequest> CreateFedExLtlFreightDetailManipulations(ProcessShipmentRequest request, IFedExShipmentEntity fedex, IFedExAccountEntity account, int sequenceNumber)
         {
             var requestedShipment = request.RequestedShipment;
+            requestedShipment.PackageCount = fedex.Packages.Count().ToString();
+            requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes =
+                requestedShipment.ShippingDocumentSpecification
+                    .ShippingDocumentTypes
+                    .Append(RequestedShippingDocumentType.LABEL)
+                    .ToArray();
+
             FreightShipmentRoleType? role = EnumHelper.GetApiValue<FreightShipmentRoleType>(fedex.FreightRole);
             FreightClassType? freightClass = EnumHelper.GetApiValue<FreightClassType>(fedex.FreightClass);
             FreightCollectTermsType? collectTerms = EnumHelper.GetApiValue<FreightCollectTermsType>(fedex.FreightCollectTerms);
-            FreightShipmentDetail freightDetail = requestedShipment.FreightShipmentDetail;
 
+            FreightShipmentDetail freightDetail = requestedShipment.FreightShipmentDetail;
             freightDetail.FedExFreightAccountNumber = account.AccountNumber;
             freightDetail.FedExFreightBillingContactAndAddress = new ContactAndAddress
             {
@@ -84,8 +92,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             AddLineItems(fedex, freightClass, freightDetail, sequenceNumber);
 
             return GetFreightSpecialServices(fedex.FreightSpecialServices)
-                .Map(x => requestedShipment.SpecialServicesRequested.SpecialServiceTypes = x.ToArray())
-                .Map(x => request);
+                .Map(x =>
+                {
+                    if (x.Any())
+                    {
+                        requestedShipment.SpecialServicesRequested.SpecialServiceTypes = x.ToArray();
+                    }
+                })
+                .Map(() => request);
         }
 
         /// <summary>

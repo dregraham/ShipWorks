@@ -107,6 +107,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             Assert.Equal(1, shippingDocumentTypes.Count(sdt => sdt == RequestedShippingDocumentType.LABEL));
         }
-
     }
 }
