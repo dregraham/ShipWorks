@@ -1,13 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.FedEx;
 
@@ -18,8 +19,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
     /// attributes within the FedEx API's IFedExNativeShipmentRequest object if the shipment
     /// has dangerous goods enabled.
     /// </summary>
-    public class FedExDangerousGoodsManipulator : FedExShippingRequestManipulatorBase
+    public class FedExDangerousGoodsManipulator : IFedExShipRequestManipulator
     {
+        private readonly IFedExSettingsRepository settings;
+
         private readonly IDictionary<FedExBatteryMaterialType, BatteryMaterialType> batteryMaterialLookup =
             new Dictionary<FedExBatteryMaterialType, BatteryMaterialType>
             {
@@ -41,30 +44,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExDangerousGoodsManipulator" /> class.
+        /// Constructor
         /// </summary>
-        public FedExDangerousGoodsManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        public FedExDangerousGoodsManipulator(IFedExSettingsRepository settings)
+        {
+            this.settings = settings;
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExDangerousGoodsManipulator" /> class.
+        /// Does this manipulator apply to this shipment
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExDangerousGoodsManipulator(FedExSettings fedExSettings)
-            : base(fedExSettings)
-        {
-        }
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) => true;
 
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        /// <param name="request">The request being manipulated.</param>
-        public override void Manipulate(CarrierRequest request)
+        public void Manipulate(CarrierRequest request)
         {
             MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
-            Manipulate(request.ShipmentEntity, request.NativeRequest as IFedExNativeShipmentRequest,
+            Manipulate(request.ShipmentEntity, request.NativeRequest as ProcessShipmentRequest, 
                 request.SequenceNumber);
         } 
 
@@ -72,12 +71,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// Manipulates the specified request.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
-        public IFedExNativeShipmentRequest Manipulate(IShipmentEntity shipment, IFedExNativeShipmentRequest request, int sequenceNumber)
+        public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             ValidateRequest(shipment, request);
 
             // Make sure all of the properties we'll be accessing have been created
-            InitializeRequest(request);
+            InitializeRequest(shipment, request);
 
             if (shipment.FedEx.Packages.ElementAt(sequenceNumber).DangerousGoodsEnabled)
             {
@@ -133,21 +132,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Validate the requests
         /// </summary>
-        private void ValidateRequest(IShipmentEntity shipment, IFedExNativeShipmentRequest request)
+        private void ValidateRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
 
             if (shipment.FedEx.RequestedLabelFormat != (int) ThermalLanguage.None &&
                 shipment.FedEx.Packages.Any(package => package.DangerousGoodsEnabled))
             {
                 throw new FedExException("Cannot create thermal dangerous goods label.");
-            }
-
-            // The native FedEx request type should be a IFedExNativeShipmentRequest
-            if (request == null)
-            {
-                // Abort - we have an unexpected native request
-                throw new CarrierException("An unexpected request type was provided.");
             }
         }
 
@@ -420,12 +413,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(IFedExNativeShipmentRequest request)
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            // Make sure the RequestedShipment is there
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+
             if (request.RequestedShipment == null)
             {
-                // We'll be manipulating properties of the requested shipment, so make sure it's been created
                 request.RequestedShipment = new RequestedShipment();
             }
 
