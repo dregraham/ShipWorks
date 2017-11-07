@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.HelperClasses;
@@ -232,6 +233,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShipmentTypeDataService.LoadShipmentData(
                             this, shipment, shipment, "Asendia", typeof(AsendiaShipmentEntity), refreshIfPresent);
         }
+		
+		/// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not been excluded).
+        /// </summary>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            return EnumHelper.GetEnumList<AsendiaServiceType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedServiceTypes(repository));
+        }
 
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
@@ -333,6 +345,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
                     TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
                 .ToList();
+        }
+		
+        /// <summary>
+        /// Saves the requested label format to the child shipment
+        /// </summary>
+        public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
+        {
+            if (shipment.Asendia != null)
+            {
+                shipment.Asendia.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Editing;
@@ -284,6 +285,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             dimensionsControl.FlushChanges();
             weight.FlushChanges();
+        }
+
+        /// <summary>
+        /// Should the specified label format be included in the list of available formats
+        /// </summary>
+        protected override bool ShouldIncludeLabelFormatInList(ThermalLanguage format)
+        {
+            return format != ThermalLanguage.EPL;
         }
     }
 }
