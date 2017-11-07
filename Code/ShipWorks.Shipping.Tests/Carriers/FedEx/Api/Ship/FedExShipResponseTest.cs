@@ -3,7 +3,6 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
@@ -19,13 +18,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
     public class FedExShipResponseTest
     {
         private FedExShipResponse testObject;
-
-        private List<IFedExShipResponseManipulator> manipulators;
         private readonly ProcessShipmentReply reply;
-        private Mock<IFedExLabelRepository> mockLabelRepository;
         private readonly AutoMock mock;
         private Mock<IFedExShipResponseManipulator> manipulator;
-        private Mock<CarrierRequest> carrierRequest;
 
         public FedExShipResponseTest()
         {
@@ -35,15 +30,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
             manipulator.Setup(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), AnyShipment))
                 .Returns(new ShipmentEntity());
             mock.Provide<IEnumerable<IFedExShipResponseManipulator>>(new[] { manipulator.Object });
-
-
-            //var manipulatorFactory = mock.MockFunc<IFedExSettingsRepository, IFedExShipResponseManipulator>(manipulator);
-
-            //mock.Provide<IEnumerable<Func<IFedExSettingsRepository, IFedExShipResponseManipulator>>>(
-            //    new List<Func<IFedExSettingsRepository, IFedExShipResponseManipulator>>
-            //    {
-            //        manipulatorFactory.Object,
-            //    });
 
             reply = new ProcessShipmentReply { HighestSeverity = NotificationSeverityType.SUCCESS };
             reply.Ensure(x => x.CompletedShipmentDetail).EnsureAtLeastOne(x => x.CompletedPackageDetails);
