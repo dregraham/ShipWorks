@@ -1,4 +1,5 @@
-using ShipWorks.Shipping.Carriers.Api;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
@@ -7,25 +8,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
     /// <summary>
     /// Request Manipulator to add Constraint information to nativeRequest.
     /// </summary>
-    public class FedExGlobalShipAddressConstraintManipulator : ICarrierRequestManipulator
+    public class FedExGlobalShipAddressConstraintManipulator : IFedExGlobalShipAddressRequestManipulator
     {
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
         /// <param name="request">The request being manipulated.</param>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        public void Manipulate(CarrierRequest request)
+        public GenericResult<SearchLocationsRequest> Manipulate(IShipmentEntity shipment, SearchLocationsRequest request)
         {
-            SearchLocationsRequest nativeRequest = request.NativeRequest as SearchLocationsRequest;
+            SupportedRedirectToHoldServiceType supportedRedirectToHoldServiceType = GetSupportedRedirectToHoldServiceType(shipment.FedEx.Service);
 
-            if (nativeRequest == null)
-            {
-                throw new CarrierException("An unexpected request type was provided.");
-            }
-
-            SupportedRedirectToHoldServiceType supportedRedirectToHoldServiceType = GetSupportedRedirectToHoldServiceType(request.ShipmentEntity.FedEx.Service);
-
-            nativeRequest.Constraints = new SearchLocationConstraints
+            request.Constraints = new SearchLocationConstraints
             {
                 SupportedRedirectToHoldServices = new[]
                 {
@@ -40,8 +33,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
                 }
             };
 
-            nativeRequest.MultipleMatchesActionSpecified = true;
-            nativeRequest.MultipleMatchesAction = MultipleMatchesActionType.RETURN_ALL;
+            request.MultipleMatchesActionSpecified = true;
+            request.MultipleMatchesAction = MultipleMatchesActionType.RETURN_ALL;
+
+            return request;
         }
 
         /// <summary>

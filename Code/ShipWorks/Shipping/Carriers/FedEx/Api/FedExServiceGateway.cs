@@ -165,13 +165,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
         }
 
-
         /// <summary>
         /// Communicates with FedEx getting drop off locations near the destination address.
         /// </summary>
-        /// <exception cref="FedExSoapCarrierException"></exception>
-        /// <exception cref="FedExException"></exception>
-        public SearchLocationsReply GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest)
+        public GenericResult<SearchLocationsReply> GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest)
         {
             try
             {
@@ -187,11 +184,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
             catch (SoapException ex)
             {
-                throw new FedExSoapCarrierException(ex);
+                return new FedExSoapCarrierException(ex);
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(CarrierException));
+                return WebHelper.TranslateWebException(ex, typeof(CarrierException));
             }
         }
 

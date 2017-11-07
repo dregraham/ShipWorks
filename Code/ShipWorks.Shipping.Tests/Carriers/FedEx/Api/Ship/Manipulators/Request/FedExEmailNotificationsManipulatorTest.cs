@@ -2,7 +2,6 @@ using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Xunit;
@@ -11,10 +10,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 {
     public class FedExEmailNotificationsManipulatorTest
     {
-        private FedExShipRequest shipRequest;
-
         private ShipmentEntity shipment;
-
         private FedExEmailNotificationsManipulator testObject;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
@@ -23,7 +19,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
             shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
-            shipRequest = new FedExShipRequest(null, shipment, null, null, settingsRepository.Object, new ProcessShipmentRequest());
             testObject = new FedExEmailNotificationsManipulator();
 
             shipment.FedEx.EmailNotifySender = 0;

@@ -19,12 +19,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -518,18 +515,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Queries FedEx for HoldAtLocations near the destination address.
         /// </summary>
-        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment)
-        {
-            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
-
-            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) requestFactory.CreateSearchLocationsRequest(shipment, account);
-
-            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
-
-            carrierResponse.Process();
-
-            return carrierResponse.DistanceAndLocationDetails;
-        }
+        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment) =>
+            requestFactory.CreateSearchLocationsRequest()
+                .Submit(shipment)
+                .Map(x => x.Process())
+                .Match(x => x, ex => { throw ex; });
 
         /// <summary>
         /// Validates the FedEx account associated with the shipment entity to make sure it is not null

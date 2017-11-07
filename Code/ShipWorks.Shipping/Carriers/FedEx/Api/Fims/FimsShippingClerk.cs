@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -224,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Not supported
         /// </summary>
-        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment)
+        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }

@@ -8,15 +8,13 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
@@ -34,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly IFedExSettingsRepository settingsRepository;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
         private readonly IFedExServiceGatewayFactory serviceGatewayFactory;
-        readonly ILifetimeScope lifetimeScope;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class
@@ -172,25 +170,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Creates the Search Location request.
+        /// Creates the Search Location request
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="accountEntity">The account entity.</param>
-        /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx searching drop-off location.</returns>
-        public FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipmentEntity, FedExAccountEntity accountEntity)
-        {
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
-            {
-                new FedExGlobalShipAddressAddressManipulator(),
-                new FedExGlobalShipAddressConstraintManipulator(),
-                new FedExGlobalShipAddressWebAuthenticationDetailManipulator(settingsRepository),
-                new FedExGlobalShipAddressVersionManipulator(),
-                new FedExGlobalShipAddressClientDetailManipulator(settingsRepository)
-            };
+        public IFedExGlobalShipAddressRequest CreateSearchLocationsRequest() =>
+            lifetimeScope.Resolve<IFedExGlobalShipAddressRequest>(TypedParameter.From(settingsRepository));
 
-            return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, responseFactory, serviceGatewayFactory.Create(settingsRepository), accountEntity);
-        }
+        ///// <summary>
+        ///// Creates the Search Location request.
+        ///// </summary>
+        ///// <param name="shipmentEntity">The shipment entity.</param>
+        ///// <param name="accountEntity">The account entity.</param>
+        ///// <returns>A CarrierRequest object that can be used for submitting a request to
+        ///// FedEx searching drop-off location.</returns>
+        //public FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipmentEntity, FedExAccountEntity accountEntity)
+        //{
+        //    List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
+        //    {
+        //        new FedExGlobalShipAddressAddressManipulator(),
+        //        new FedExGlobalShipAddressConstraintManipulator(),
+        //        new FedExGlobalShipAddressWebAuthenticationDetailManipulator(settingsRepository),
+        //        new FedExGlobalShipAddressVersionManipulator(),
+        //        new FedExGlobalShipAddressClientDetailManipulator(settingsRepository)
+        //    };
+
+        //    return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, responseFactory, serviceGatewayFactory.Create(settingsRepository), accountEntity);
+        //}
 
         /// <summary>
         /// Creates the ground close request.

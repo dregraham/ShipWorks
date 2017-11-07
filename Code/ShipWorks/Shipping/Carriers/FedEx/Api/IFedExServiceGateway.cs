@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Makes GlobalShipAddressInquiry call to FedEx
         /// </summary>
         /// <returns>The SearchLocationsReply received from FedEx</returns>
-        SearchLocationsReply GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest);
+        GenericResult<SearchLocationsReply> GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API for performing an end of day ground close.

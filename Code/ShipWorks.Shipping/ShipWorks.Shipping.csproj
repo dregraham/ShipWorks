@@ -187,6 +187,13 @@
     <Compile Include="Carriers\FedEx\Api\Fims\FimsShipRequest.cs" />
     <Compile Include="Carriers\FedEx\Api\Fims\FimsShipResponse.cs" />
     <Compile Include="Carriers\FedEx\Api\Fims\FimsWebClient.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressRequest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressResponse.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressAddressManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressClientDetailManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressConstraintManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressVersionManipulator.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressWebAuthenticationDetailManipulator.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\FedExRateRequest.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\FedExRateResponse.cs" />
     <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateLtlFreightManipulator.cs" />

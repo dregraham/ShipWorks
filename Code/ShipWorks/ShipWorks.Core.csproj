@@ -1220,6 +1220,9 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Environment\IFedExSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressRequestManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExOpenShipServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShippingClerkFactory.cs" />
@@ -2503,13 +2506,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExShipmentTokenProcessor.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapCarrierException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\FedExGlobalShipAddressRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressConstraintManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Response\FedExGlobalShipAddressResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExRequestFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShipmentTokenProcessor.cs" />

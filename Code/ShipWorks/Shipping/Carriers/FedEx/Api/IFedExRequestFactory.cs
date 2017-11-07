@@ -1,7 +1,7 @@
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
@@ -105,10 +105,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Creates the Search Location request.
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="accountEntity">The account entity.</param>
         /// <returns>A CarrierRequest object that can be used for submitting a request to
         /// FedEx searching drop-off location.</returns>
-        FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipment, FedExAccountEntity account);
+        IFedExGlobalShipAddressRequest CreateSearchLocationsRequest();
     }
 }

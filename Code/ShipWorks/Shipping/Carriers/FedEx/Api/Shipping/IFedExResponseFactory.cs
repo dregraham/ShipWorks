@@ -8,15 +8,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
     public interface IFedExResponseFactory : ICarrierResponseFactory
     {
         /// <summary>
-        /// Creates theICarrierResponse that will be to represent the carrier-specific result of a
-        /// carrier API request to get Pickup Location if supported by API
-        /// </summary>
-        /// <param name="nativeResponse">The native response object received from the carrier.</param>
-        /// <param name="request">The request object that submitted the API request.</param>
-        /// <returns>An ICarrierResponse representing the response of a Pickup Location request. </returns>
-        ICarrierResponse CreateGlobalShipAddressResponse(object nativeResponse, CarrierRequest request);
-
-        /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request when performing the end of day ground close.
         /// </summary>
@@ -31,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
         /// </summary>
         /// <param name="nativeResponse">The native response.</param>
         /// <param name="request">The request object that submitted the API request.</param>
-        /// <returns>An ICarrierResponse representing the response of a Smartpost close request.</returns>
+        /// <returns>An ICarrierResponse representing the response of a SmartPost close request.</returns>
         ICarrierResponse CreateSmartPostCloseResponse(object nativeResponse, CarrierRequest request);
 
         /// <summary>
