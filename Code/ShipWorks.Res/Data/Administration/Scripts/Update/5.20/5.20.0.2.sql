@@ -23,4 +23,5 @@ GO
 PRINT N'Adding foreign keys to [dbo].[AsemdoaProfile]'
 GO
 ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [FK_AsendiaProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID])
+ON DELETE CASCADE
 GO

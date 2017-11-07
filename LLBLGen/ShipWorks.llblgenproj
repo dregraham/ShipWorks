@@ -364,7 +364,7 @@
           <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="9" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
           <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
-          <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
+          <Field Name="Service" Type="AsendiaServiceType" IsOptional="true" FieldIndex="2" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
         </Fields>
