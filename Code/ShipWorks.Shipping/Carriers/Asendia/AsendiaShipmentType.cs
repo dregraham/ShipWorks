@@ -15,6 +15,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -262,6 +264,46 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.DimsHeight = 0;
             asendia.DimsWeight = 0;
             asendia.DimsAddWeight = true;
+        }
+
+        /// <summary>
+        /// Apply the given shipping profile to the shipment
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
+        {
+            base.ApplyProfile(shipment, profile);
+
+            AsendiaShipmentEntity asendiaShipment = shipment.Asendia;
+            IAsendiaProfileEntity asendiaProfile = profile.Asendia;
+
+            long? accountID = (asendiaProfile.AsendiaAccountID == 0 && accountRepository.AccountsReadOnly.Any()) ?
+                accountRepository.AccountsReadOnly.First().AsendiaAccountID :
+                asendiaProfile.AsendiaAccountID;
+
+            ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
+            
+            if (asendiaProfile.Weight.HasValue && asendiaProfile.Weight.Value != 0)
+            {
+                ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Weight, shipment, ShipmentFields.ContentWeight);
+            }
+
+
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
+
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsProfileID, asendiaShipment, AsendiaShipmentFields.DimsProfileID);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWeight, asendiaShipment, AsendiaShipmentFields.DimsWeight);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsLength, asendiaShipment, AsendiaShipmentFields.DimsLength);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
+            ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
+            
+
+            UpdateTotalWeight(shipment);
+
+            UpdateDynamicShipmentData(shipment);
         }
     }
 }
