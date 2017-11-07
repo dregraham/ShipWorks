@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 

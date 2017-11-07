@@ -3,6 +3,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 

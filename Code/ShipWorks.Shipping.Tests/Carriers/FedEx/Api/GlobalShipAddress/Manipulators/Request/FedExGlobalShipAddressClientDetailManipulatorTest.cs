@@ -7,8 +7,9 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress.Manipulators.Request
 {
     public class FedExGlobalShipAddressClientDetailManipulatorTest
     {

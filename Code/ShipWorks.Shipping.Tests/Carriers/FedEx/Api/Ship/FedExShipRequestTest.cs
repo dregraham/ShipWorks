@@ -12,6 +12,7 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
 {

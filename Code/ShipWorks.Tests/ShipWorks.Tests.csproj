@@ -390,7 +390,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExRegisterCspUserResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExSubscriptionResponseTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExVersionCaptureResponseTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\BuildFedExShipmentEntity.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\FedExTrackingUtilities.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\FedExTrackingRequestTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulatorTest.cs" />

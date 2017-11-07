@@ -300,7 +300,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             // than separate settings depending on documents only vs. non-documents as was the case in 
             // previous certifications
             List<Commodity> commodities = new List<Commodity>();
-            foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
+            foreach (IShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
             {
                 Commodity commodity = new Commodity
                 {

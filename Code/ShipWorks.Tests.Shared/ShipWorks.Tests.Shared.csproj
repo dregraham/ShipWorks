@@ -143,6 +143,7 @@
   <ItemGroup>
     <Compile Include="AssemblyProvider.cs" />
     <Compile Include="AutoMockExtensions.cs" />
+    <Compile Include="Carriers\FedEx\BuildFedExShipmentEntity.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTestHelpers.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
     <Compile Include="Database\DatabaseFixtureWithReusableContext.cs" />

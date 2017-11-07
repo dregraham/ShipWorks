@@ -3,7 +3,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using Xunit;
 using VersionId = ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress.VersionId;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress.Manipulators.Request
 {
     public class FedExGlobalShipAddressVersionManipulatorTest
     {

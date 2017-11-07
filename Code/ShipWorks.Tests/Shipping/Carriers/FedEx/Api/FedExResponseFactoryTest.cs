@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;

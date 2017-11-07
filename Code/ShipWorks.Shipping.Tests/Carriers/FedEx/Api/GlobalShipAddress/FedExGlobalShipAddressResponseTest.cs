@@ -5,7 +5,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using Xunit;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
+namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.GlobalShipAddress
 {
     public class FedExGlobalShipAddressResponseTest
     {

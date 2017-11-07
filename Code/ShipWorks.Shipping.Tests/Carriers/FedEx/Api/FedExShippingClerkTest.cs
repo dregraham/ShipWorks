@@ -106,8 +106,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipResponse = new Mock<IFedExShipResponse>();
             shipResponse.Setup(r => r.Process());
 
-            //shippingRequest = new Mock<CarrierRequest>();
-            //shippingRequest.Setup(r => r.Submit()).Returns(shipResponse.Object);
+            shippingRequest = new Mock<IFedExShipRequest>();
+            shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Returns(GenericResult.FromSuccess(shipResponse.Object));
 
             groundCloseResponse = new Mock<ICarrierResponse>();
             groundCloseResponse.Setup(r => r.Process());
@@ -405,6 +405,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             // Setup the ship request to throw an exception unrelated to a web request
             shippingRequest.Setup(r => r.Submit(AnyShipment, AnyInt)).Throws(new CarrierException());
+
+            ////mock.Mock<IFedExRequestFactory>()
+            //mock. .Mock<IFedExRequestFactory>()
+
+            //requestFactory.Setup(f => f.CreateShipRequest()).Returns(shippingRequest.Object);
 
             Assert.Throws<FedExException>(() => testObject.Ship(shipmentEntity));
         }

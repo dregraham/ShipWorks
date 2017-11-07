@@ -2,14 +2,13 @@ using System;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims

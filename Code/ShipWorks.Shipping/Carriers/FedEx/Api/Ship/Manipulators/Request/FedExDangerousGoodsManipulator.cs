@@ -1,5 +1,4 @@
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -9,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.FedEx;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// An ICarrierRequestManipulator implementation that modifies the DangerousGoodsDetail
@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// <summary>
         /// Set a specific battery detail
         /// </summary>
-        private bool SetBatteryDetail<T, K>(T value, IDictionary<T, K> lookup, Action<K> setProperty)
+        private bool SetBatteryDetail<TKey, TValue>(TKey value, IDictionary<TKey, TValue> lookup, Action<TValue> setProperty)
         {
             if (lookup.ContainsKey(value))
             {

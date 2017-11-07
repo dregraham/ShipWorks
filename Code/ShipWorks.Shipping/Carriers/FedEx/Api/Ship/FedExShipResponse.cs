@@ -6,8 +6,9 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
 {
     /// <summary>
     /// This object is used to process the FedExShipmentResponse, saving labels and other shipment information

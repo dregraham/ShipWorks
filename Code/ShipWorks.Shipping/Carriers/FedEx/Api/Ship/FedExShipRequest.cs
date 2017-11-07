@@ -6,9 +6,10 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
 {
     /// <summary>
     /// An implementation of the CarrierRequest interface that sends a request to the FedEx API for shipping an order/creating a label.

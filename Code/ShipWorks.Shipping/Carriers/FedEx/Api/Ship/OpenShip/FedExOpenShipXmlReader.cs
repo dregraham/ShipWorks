@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.OpenShip
     public class FedExOpenShipXmlReader : XmlReader
     {
         // the decorated XmlReader
-        private XmlReader wrappedReader;
+        private readonly XmlReader wrappedReader;
 
         /// <summary>
         /// Nodes that match the name of the key will be renamed to the value name.

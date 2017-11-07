@@ -3,7 +3,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
-namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
+namespace ShipWorks.Tests.Shared.Carriers.FedEx
 {
     /// <summary>
     /// A Utility class for building Test ShipmentEntities

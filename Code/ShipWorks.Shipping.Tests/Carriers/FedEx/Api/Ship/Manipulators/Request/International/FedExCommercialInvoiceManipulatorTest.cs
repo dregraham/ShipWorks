@@ -16,7 +16,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
     public class FedExCommercialInvoiceManipulatorTest
     {
         private readonly FedExAccountEntity fedExAccount;
-        private Mock<ICarrierSettingsRepository> settingsRepository;
         private readonly ProcessShipmentRequest processShipmentRequest;
         private readonly ShipmentEntity shipment;
         private readonly FedExCommercialInvoiceManipulator testObject;
