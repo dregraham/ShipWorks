@@ -59,17 +59,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
-        public void Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-
-            Manipulate(shipment, request, 0);
-        } 
-
-        /// <summary>
-        /// Manipulates the specified request.
-        /// </summary>
-        /// <param name="request">The request being manipulated.</param>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
             ValidateRequest(shipment, request);
