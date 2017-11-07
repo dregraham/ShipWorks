@@ -512,7 +512,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AsendiaProfileFieldIndex), "AsendiaProfileEntity");
 			this.AddElementFieldInfo("AsendiaProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AsendiaProfileFieldIndex.ShippingProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "AsendiaAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AsendiaProfileFieldIndex.AsendiaAccountID, 0, 0, 19);
-			this.AddElementFieldInfo("AsendiaProfileEntity", "Service", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "Service", typeof(Nullable<Interapptive.Shared.Enums.AsendiaServiceType>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonMachinable, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonDelivery, 0, 0, 10);

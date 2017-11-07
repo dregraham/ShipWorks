@@ -38,7 +38,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "AsendiaProfile"."Service"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int32> Service { get; }
+        Nullable<Interapptive.Shared.Enums.AsendiaServiceType> Service { get; }
         /// <summary> The NonMachinable property of the Entity AsendiaProfile<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaProfile"."NonMachinable"<br/>
