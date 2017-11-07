@@ -22962,6 +22962,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.RestUser);}
 		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.OrderIDUpgradeFixDate field instance</summary>
+		public static EntityField2 OrderIDUpgradeFixDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsAccountEntity</summary>

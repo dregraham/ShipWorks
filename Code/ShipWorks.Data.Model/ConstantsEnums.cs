@@ -9892,6 +9892,8 @@ namespace ShipWorks.Data.Model
 		DownloadModifiedNumberOfDaysBack,
 		///<summary>RestUser. </summary>
 		RestUser,
+		///<summary>OrderIDUpgradeFixDate. </summary>
+		OrderIDUpgradeFixDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2639,6 +2639,7 @@
         <Fields>
           <Field Name="ApiUserKey" Type="string" MaxLength="65" FieldIndex="1" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" FieldIndex="4" />
+          <Field Name="OrderIDUpgradeFixDate" Type="datetime" IsOptional="true" FieldIndex="6" />
           <Field Name="RestUser" Type="bool" FieldIndex="5" />
           <Field Name="StatusCodes" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="3" />
           <Field Name="StoreUrl" Type="string" MaxLength="110" FieldIndex="0" />
@@ -4056,7 +4057,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-06T13:41:21.0172787Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-07T18:15:15.3067415Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7956,6 +7957,7 @@
                     <Field Name="StatusCodes" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
                     <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="RestUser" Ordinal="7" DbType="2" />
+                    <Field Name="OrderIDUpgradeFixDate" Ordinal="8" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="UpsAccount">
@@ -12359,6 +12361,7 @@
           <FieldMappings>
             <FieldMapping FieldName="ApiUserKey" TargetFieldName="ApiUserKey" />
             <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
+            <FieldMapping FieldName="OrderIDUpgradeFixDate" TargetFieldName="OrderIDUpgradeFixDate" />
             <FieldMapping FieldName="RestUser" TargetFieldName="RestUser" />
             <FieldMapping FieldName="StatusCodes" TargetFieldName="StatusCodes" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
