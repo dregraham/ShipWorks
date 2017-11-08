@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
 {
     public class FedExShipResponseTest
     {
+        private readonly Mock<IFedExLabelRepository> labelRepository;
         private FedExShipResponse testObject;
         private readonly ProcessShipmentReply reply;
         private readonly AutoMock mock;
@@ -38,6 +39,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
 
             ShipmentEntity shipment = Create.Shipment().AsFedEx().Build();
             shipment.FedEx.Service = (int) FedExServiceType.FedExGround;
+
+            labelRepository = mock.FromFactory<IFedExLabelRepositoryFactory>()
+                .Mock(x => x.Create(AnyShipment));
 
             testObject = mock.Create<FedExShipResponse>(
                 TypedParameter.From(reply),
@@ -68,9 +72,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         public void Process_SaveLabelsCalled_WhenProcessShipmentReplyContainsNoErrors()
         {
             testObject.Process();
-
-            mock.Mock<IFedExLabelRepository>()
-                .Verify(x => x.SaveLabels(AnyShipment, It.IsAny<ProcessShipmentReply>()), Times.Once());
+            
+            labelRepository.Verify(x => x.SaveLabels(AnyShipment, It.IsAny<ProcessShipmentReply>()), Times.Once());
         }
 
         [Fact]

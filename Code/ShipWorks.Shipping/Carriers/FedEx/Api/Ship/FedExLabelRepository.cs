@@ -9,16 +9,16 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
 {
     /// <summary>
     /// Responsible for saving retrieved FedEx Labels to Database
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public class FedExLabelRepository : IFedExLabelRepository
     {
         private readonly IDataResourceManager dataResourceManager;

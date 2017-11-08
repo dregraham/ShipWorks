@@ -21,16 +21,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     [Component]
     public class FedExResponseFactory : IFedExResponseFactory
     {
-        private readonly IFedExLabelRepository labelRepository;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExResponseFactory(IFedExLabelRepository labelRepository)
-        {
-            this.labelRepository = labelRepository;
-        }
-
         /// <summary>
         /// Creates an ICarrierResponse that will be to represent the carrier-specific result of a
         /// carrier API request when performing the end of day ground close.

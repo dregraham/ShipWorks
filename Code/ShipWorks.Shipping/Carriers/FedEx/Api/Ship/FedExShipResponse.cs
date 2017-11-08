@@ -5,8 +5,8 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
 {
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
     [Component]
     public class FedExShipResponse : IFedExShipResponse
     {
-        private readonly IFedExLabelRepository labelRepository;
+        private readonly IFedExLabelRepositoryFactory labelRepositoryFactory;
         private readonly IEnumerable<IFedExShipResponseManipulator> manipulators;
         private readonly ShipmentEntity shipment;
         private readonly ProcessShipmentReply reply;
@@ -28,20 +28,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         public FedExShipResponse(
             ShipmentEntity shipment,
             ProcessShipmentReply reply,
-            IFedExLabelRepository labelRepository,
+            IFedExLabelRepositoryFactory labelRepositoryFactory,
             IEnumerable<IFedExShipResponseManipulator> manipulators)
         {
             this.reply = reply;
             this.shipment = shipment;
             this.manipulators = manipulators;
-            this.labelRepository = labelRepository;
+            this.labelRepositoryFactory = labelRepositoryFactory;
         }
 
         /// <summary>
         /// Function that tells FedExShipResponse to process the request for shipment.
         /// </summary>
         public void Process() =>
-            labelRepository.SaveLabels(shipment, reply);
+            labelRepositoryFactory.Create(shipment).SaveLabels(shipment, reply);
 
         /// <summary>
         /// Applies the response manipulators.

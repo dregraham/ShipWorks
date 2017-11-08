@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExShippingClerk : IFedExShippingClerk
     {
         private static bool hasDoneVersionCapture;
-        private readonly IFedExLabelRepository labelRepository;
+        private readonly IFedExLabelRepositoryFactory labelRepositoryFactory;
         private readonly IFedExRequestFactory requestFactory;
         private readonly IFedExSettingsRepository settingsRepository;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
         public FedExShippingClerk(
-            IFedExLabelRepository labelRepository,
+            IFedExLabelRepositoryFactory labelRepositoryFactory,
             IFedExRequestFactory requestFactory,
             IFedExSettingsRepository settingsRepository,
             IExcludedServiceTypeRepository excludedServiceTypeRepository,
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             this.settingsRepository = settingsRepository;
             this.requestFactory = requestFactory;
-            this.labelRepository = labelRepository;
+            this.labelRepositoryFactory = labelRepositoryFactory;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
             log = createLog(GetType());
         }
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 ValidatePackageDimensions(shipmentEntity);
 
                 // Clear out any previously saved labels for this shipment (in case there was an error shipping the first time (MPS))
-                labelRepository.ClearReferences(shipmentEntity);
+                labelRepositoryFactory.Create(shipmentEntity).ClearReferences(shipmentEntity);
 
                 var request = requestFactory.CreateShipRequest();
                 return Enumerable.Range(0, shipmentEntity.FedEx.Packages.Count)
