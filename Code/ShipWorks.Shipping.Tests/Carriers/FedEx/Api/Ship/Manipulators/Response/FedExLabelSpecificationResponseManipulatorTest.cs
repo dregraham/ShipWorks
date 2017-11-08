@@ -40,14 +40,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         [InlineData(ThermalLanguage.None, null)]
         public void Test_LtlFreight(ThermalLanguage language, ThermalLanguage? expected)
         {
-            var shipment = Create.Shipment().AsFedEx().Set(x => x.RequestedLabelFormat, (int)language).Build();
-            shipment.FedEx.Service = (int)FedExServiceType.FedExFreightEconomy;
+            var shipment = Create.Shipment().AsFedEx().Set(x => x.RequestedLabelFormat, (int) language).Build();
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightEconomy;
 
             var testObject = mock.Create<FedExLabelSpecificationResponseManipulator>();
 
-            var result = testObject.Manipulate(null, shipment);
+            var result = testObject.Manipulate(null, null, shipment);
 
-            Assert.Equal(expected, (ThermalLanguage?)result.Value.ActualLabelFormat);
+            Assert.Equal(expected, (ThermalLanguage?) result.Value.ActualLabelFormat);
         }
 
         public void Dispose()
