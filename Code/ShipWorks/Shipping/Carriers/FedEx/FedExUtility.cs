@@ -146,7 +146,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalPriorityExpress,
                 FedExServiceType.InternationalEconomy,
                 FedExServiceType.InternationalPriorityFreight,
-                FedExServiceType.InternationalEconomyFreight
+                FedExServiceType.InternationalEconomyFreight,
+                FedExServiceType.FedExFreightEconomy,
+                FedExServiceType.FedExFreightPriority
             };
 
             if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") ||
