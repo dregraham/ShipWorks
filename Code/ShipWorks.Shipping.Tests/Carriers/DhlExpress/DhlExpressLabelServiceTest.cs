@@ -102,6 +102,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
+        public void Create_ThrowsShippingExceptionWithPrettyError_WhenDhlExpressErrorHasSeOrderId()
+        {
+            mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
+
+            mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress))
+                .Throws(new Exception("Unable to create label. Order ID: se-164205986. \"K1A 0G9\" is an invalid postal code for the country \"US\"."));
+
+            DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
+
+            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            Assert.Equal("\"K1A 0G9\" is an invalid postal code for the country \"US\".", ex.Message);
+        }
+
+        [Fact]
         public void Create_CreatesDownloadedLabelData_WithShipmentAndLabel()
         {
             var labelData = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment));
