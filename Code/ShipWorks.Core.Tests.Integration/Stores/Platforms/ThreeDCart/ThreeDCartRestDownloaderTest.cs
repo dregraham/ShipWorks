@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
         private long downloadLogID;
         private DbConnection dbConnection;
         private ThreeDCartRestDownloader testObject;
-        private ThreeDCartOrder threeDCartOrder;
+        private readonly ThreeDCartOrder threeDCartOrder;
         private DateTime orderDate = DateTime.Now;
 
         public ThreeDCartRestDownloaderTest(DatabaseFixture db)

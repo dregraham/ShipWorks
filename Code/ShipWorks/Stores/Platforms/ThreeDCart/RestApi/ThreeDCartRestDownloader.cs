@@ -249,13 +249,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                         return;
                     }
                 }
-                ordersProcessed++;
 
-                // totalCount should only be 0 in integration tests
-                if (totalCount > 0)
-                {
-                    Progress.PercentComplete = ordersProcessed / totalCount;
-                }
+                ordersProcessed++;
+                Progress.PercentComplete = ordersProcessed / totalCount;
             }
         }
 
