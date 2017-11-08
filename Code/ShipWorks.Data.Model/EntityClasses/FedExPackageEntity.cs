@@ -436,6 +436,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("BatteryPacking", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("BatteryRegulatorySubtype", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightPackaging", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightPieces", fieldHashtable);
 		}
 		#endregion
 
@@ -982,6 +986,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType)GetValue((int)FedExPackageFieldIndex.BatteryRegulatorySubtype, true); }
 			set	{ SetValue((int)FedExPackageFieldIndex.BatteryRegulatorySubtype, value); }
+		}
+
+		/// <summary> The FreightPackaging property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."FreightPackaging"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType FreightPackaging
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType)GetValue((int)FedExPackageFieldIndex.FreightPackaging, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.FreightPackaging, value); }
+		}
+
+		/// <summary> The FreightPieces property of the Entity FedExPackage<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."FreightPieces"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 FreightPieces
+		{
+			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.FreightPieces, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.FreightPieces, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'FedExShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

@@ -23,7 +23,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -295,7 +295,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Pull the credentials from the response; none of the fields are encrypted in the response
             // so we can easily/quickly update them in Tango if they ever need to change
             // Use the correct version that ShipWorks should work with.
-            string fedExBasePath = string.Format("/CounterRateCredentials/FedEx_v{0}/", FedExShippingClerk.ShipWebServiceVersion);
+            string fedExBasePath = string.Format("/CounterRateCredentials/FedEx_v{0}/", FedExWebServiceVersions.Ship);
 
             // FedEx fields - password needs to encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "FedExAccountNumber", fedExBasePath + "AccountNumber", results);
@@ -1025,7 +1025,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 // add the new default which enables best rate but limits it to local rating only
                 XmlDocumentFragment newBestRateFunctionality = xmlResponse.CreateDocumentFragment();
-                newBestRateFunctionality.InnerXml = 
+                newBestRateFunctionality.InnerXml =
                     @"<ShipmentType TypeCode='14'> 
                         <Feature>
                             <Type>BestRateUpsRestriction</Type>

@@ -81,6 +81,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BatteryMaterial = source.BatteryMaterial;
             BatteryPacking = source.BatteryPacking;
             BatteryRegulatorySubtype = source.BatteryRegulatorySubtype;
+            FreightPackaging = source.FreightPackaging;
+            FreightPieces = source.FreightPieces;
             
             
             FedExShipment = (IFedExShipmentEntity) source.FedExShipment?.AsReadOnly(objectMap);
@@ -360,6 +362,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType BatteryRegulatorySubtype { get; }
+        /// <summary> The FreightPackaging property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."FreightPackaging"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType FreightPackaging { get; }
+        /// <summary> The FreightPieces property of the Entity FedExPackage<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExPackage"."FreightPieces"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 FreightPieces { get; }
         
         
         public IFedExShipmentEntity FedExShipment { get; }

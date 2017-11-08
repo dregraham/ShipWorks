@@ -55,23 +55,30 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GenericResult(bool success, T value, string message)
+        private GenericResult(bool success, T value, string message, Exception exception)
         {
             Success = success;
             Message = message;
             Value = value;
-            Exception = null;
+            Exception = exception;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GenericResult(bool success, T value, Exception exception)
+        internal GenericResult(bool success, T value, string message) :
+            this(success, value, message, string.IsNullOrEmpty(message) ? null : new Exception(message))
         {
-            Success = success;
-            Message = exception?.Message;
-            Exception = exception;
-            Value = value;
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal GenericResult(bool success, T value, Exception exception) :
+            this(success, value, exception?.Message, exception)
+        {
+
         }
 
         /// <summary>
@@ -99,5 +106,35 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         /// <remarks>This is so that we can test for failure instead of not success</remarks>
         public bool Failure => !Success;
+
+        /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public GenericResult<TResult> Map<TResult>(Func<T, GenericResult<TResult>> map) =>
+            Match(map, ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public GenericResult<TResult> Map<TResult>(Func<T, TResult> map) =>
+            Match(x => GenericResult.FromSuccess(map(x)),
+                ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Match on the result, calling the first method on success and the second on failure
+        /// </summary>
+        /// <returns>
+        /// The result of the called function
+        /// </returns>
+        public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<Exception, TResult> onError) =>
+            Success ?
+                onSuccess(Value) :
+                onError(Exception);
     }
 }

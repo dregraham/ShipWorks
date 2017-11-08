@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Autofac;
-using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -17,17 +17,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
     /// <summary>
     /// Responsible for saving retrieved FedEx Labels to Database
     /// </summary>
-    public class FedExLabelRepository : ILabelRepository
+    [Component]
+    public class FedExLabelRepository : IFedExLabelRepository
     {
         private readonly IDataResourceManager dataResourceManager;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExLabelRepository()
-        {
-            dataResourceManager = IoC.UnsafeGlobalLifetimeScope.Resolve<Owned<IDataResourceManager>>().Value;
-        }
 
         /// <summary>
         /// Constructor

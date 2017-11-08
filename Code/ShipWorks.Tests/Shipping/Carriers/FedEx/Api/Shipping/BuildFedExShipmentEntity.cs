@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
     /// <summary>
     /// A Utility class for building Test ShipmentEntities
     /// </summary>
-    internal class BuildFedExShipmentEntity
+    public static class BuildFedExShipmentEntity
     {
         /// <summary>
         /// Create's a shipment entity

@@ -277,7 +277,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             List<DimensionsAdapter> dimensionsToLoad = new List<DimensionsAdapter>();
 
-
             // Stop the dimensions control from listening to weight changes
             dimensionsControl.ShipmentWeightBox = null;
 

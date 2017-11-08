@@ -6,12 +6,10 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Xunit;
@@ -90,7 +88,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             FedExShipResponse carrierResponse = testObject.CreateShipResponse(nativeShipResponse, carrierRequest.Object, new ShipmentEntity()) as FedExShipResponse;
             Assert.IsAssignableFrom<FedExLabelRepository>(carrierResponse.LabelRepository);
         }
-
 
         #region CreateGroundResponse Tests
 
@@ -249,19 +246,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         }
 
         #endregion CreateSubscriptionResponse Tests
-
-        [Fact]
-        public void CreateRateResponse_ThrowsCarrierException_WhenNativeResponseIsNotRateReply()
-        {
-            Assert.Throws<CarrierException>(() => testObject.CreateRateResponse(new GroundCloseReply(), carrierRequest.Object));
-        }
-
-        [Fact]
-        public void CreateRateResponse_ReturnsFedExRateResponse()
-        {
-            ICarrierResponse response = testObject.CreateRateResponse(new RateReply(), carrierRequest.Object);
-
-            Assert.IsAssignableFrom<FedExRateResponse>(response);
-        }
     }
 }

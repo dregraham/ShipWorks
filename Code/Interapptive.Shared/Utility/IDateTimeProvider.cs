@@ -18,7 +18,7 @@ namespace Interapptive.Shared.Utility
         DateTime UtcNow { get; }
 
         /// <summary>
-        /// Gets the current Epoc in seconds
+        /// Gets the current Epoch in seconds
         /// </summary>
         double Epoc { get; }
 

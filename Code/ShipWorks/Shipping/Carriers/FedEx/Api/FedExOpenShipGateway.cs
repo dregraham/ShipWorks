@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Interapptive.Shared.Net;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
@@ -15,13 +11,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     /// <summary>
     /// Derives from FedExServiceGateway overwriting the OpenShip methods.
     /// </summary>
-    public class FedExOpenShipGateway : FedExServiceGateway
+    [Component(RegistrationType.SpecificService, Service = typeof(IFedExOpenShipServiceGateway))]
+    public class FedExOpenShipGateway : FedExServiceGateway, IFedExOpenShipServiceGateway
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExOpenShipGateway(ICarrierSettingsRepository settingsRepository) : base(settingsRepository)
-        {}
+        { }
 
         /// <summary>
         /// Communicates with the FedEx API to process a shipment.
@@ -31,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             using (ShipService service = new FedExShipServiceWrapper(new ApiLogEntry(ApiLogSource.FedEx, "Process")))
             {
                 return Ship(nativeShipmentRequest, service);
-            }   
+            }
         }
 
         /// <summary>

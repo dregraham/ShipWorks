@@ -1,6 +1,6 @@
-﻿using SD.LLBLGen.Pro.ORMSupportClasses;
+﻿using System.Collections.Generic;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Api
 {
@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Api
         ///   <c>true</c> if [use test server]; otherwise, <c>false</c>.
         /// </value>
         bool UseTestServer { get; set; }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to [use list rates]. Indicates if LIST rates are in 
         /// effect, instead of the standard ACCOUNT rates

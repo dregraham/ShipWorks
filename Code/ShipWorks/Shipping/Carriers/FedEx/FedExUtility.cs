@@ -10,6 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
@@ -98,7 +99,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx2Day,
                 FedExServiceType.FedEx1DayFreight,
-                FedExServiceType.FedEx2DayAM
+                FedExServiceType.FedEx2DayAM,
+                FedExServiceType.FedExFreightEconomy,
+                FedExServiceType.FedExFreightPriority
             };
 
             // Since all shipments are going to the same country, just pick out the first one
@@ -190,6 +193,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public static List<FedExPackagingType> GetValidPackagingTypes(FedExServiceType service)
         {
             List<FedExPackagingType> types = new List<FedExPackagingType>();
+
+            if (IsFreightLtlService(service))
+            {
+                types.Add(FedExPackagingType.Custom);
+                return types;
+            }
 
             switch (service)
             {
@@ -283,6 +292,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.NumberOfContainers = 0;
             package.PackingDetailsCargoAircraftOnly = false;
             package.PackingDetailsPackingInstructions = string.Empty;
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.None;
+            package.FreightPieces = 0;
 
             ApplyDangerousGoodsDefaults(package);
             ApplyHazardousMaterialsDefaults(package);
@@ -347,6 +358,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines if the shipment is a FIMS shipment.
         /// </summary>
+        public static bool IsFimsService(int service)
+        {
+            return IsFimsService((FedExServiceType) service);
+        }
+
+        /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
             List<FedExServiceType> fimsServices = new List<FedExServiceType>
@@ -361,9 +380,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Indicates if the given service is a freight service
+        /// Is the service any freight service?  Express or LTL
         /// </summary>
-        public static bool IsFreightService(FedExServiceType serviceType)
+        public static bool IsFreightAnyService(FedExServiceType serviceType)
+        {
+            return IsFreightExpressService(serviceType) || IsFreightLtlService(serviceType);
+        }
+
+        /// <summary>
+        /// Is the service any freight service?  Express or LTL
+        /// </summary>
+        public static bool IsFreightAnyService(int serviceType)
+        {
+            return IsFreightExpressService(serviceType) || IsFreightLtlService(serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight express service
+        /// </summary>
+        public static bool IsFreightExpressService(int serviceType)
+        {
+            return IsFreightExpressService((FedExServiceType) serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight express service
+        /// </summary>
+        public static bool IsFreightExpressService(FedExServiceType serviceType)
         {
             switch (serviceType)
             {
@@ -373,6 +416,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.InternationalPriorityFreight:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight LTL service
+        /// </summary>
+        public static bool IsFreightLtlService(int serviceType)
+        {
+            return IsFreightLtlService((FedExServiceType) serviceType);
+        }
+
+        /// <summary>
+        /// Indicates if the given service is a freight LTL service
+        /// </summary>
+        public static bool IsFreightLtlService(FedExServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case FedExServiceType.FedExFreightEconomy:
+                case FedExServiceType.FedExFreightPriority:
                     return true;
             }
 
@@ -440,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Get the total weight of the package including the dimensional weight
         /// </summary>
-        public static decimal GetPackageTotalWeight(FedExPackageEntity package)
+        public static decimal GetPackageTotalWeight(IFedExPackageEntity package)
         {
             double weight = package.Weight;
 
@@ -497,7 +563,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// If a valid HubID is given it is returned.  If the special HubID of zero is given, then
         /// if the account has a configured default HubID it is returned.  Otherwise empty is returned.
         /// </summary>
-        public static string GetSmartPostHub(string hubID, FedExAccountEntity account)
+        public static string GetSmartPostHub(string hubID, IFedExAccountEntity account)
         {
             if (string.IsNullOrEmpty(hubID))
             {
@@ -580,7 +646,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns><c>true</c> if [smart post is enabled]; otherwise, <c>false</c>.</returns>
-        public static bool IsSmartPostEnabled(ShipmentEntity shipment)
+        public static bool IsSmartPostEnabled(IShipmentEntity shipment)
         {
             bool isEnabled = false;
 

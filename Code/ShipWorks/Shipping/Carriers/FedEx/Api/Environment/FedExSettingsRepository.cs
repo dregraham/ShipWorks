@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Settings;
 
@@ -11,31 +13,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
     /// A FedEx implementation of the ICarrierSettingsRepository interface. This communicates with external
     /// dependencies/data stores such as the ShipWorks database and the Windows registry.
     /// </summary>
-    public class FedExSettingsRepository : ICarrierSettingsRepository
+    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(ICarrierSettingsRepository), ShipmentTypeCode.FedEx)]
+    public class FedExSettingsRepository : IFedExSettingsRepository
     {
         /// <summary>
         /// Gets or sets a value indicating whether [use test server] based on a registry setting.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use test server]; otherwise, <c>false</c>.
-        /// </value>
         public bool UseTestServer
         {
-            get { return InterapptiveOnly.Registry.GetValue("FedExTestServer", false); }
-            set { InterapptiveOnly.Registry.SetValue("FedExTestServer", value); }
+            get { return FedExRegistryOptions.UseTestServer; }
+            set { FedExRegistryOptions.UseTestServer = value; }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether to [use list rates] based on a registry setting. Indicates if LIST rates are in
         /// effect, instead of the standard ACCOUNT rates
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use list rates]; otherwise, <c>false</c>.
-        /// </value>
         public bool UseListRates
         {
-            get { return InterapptiveOnly.Registry.GetValue("FedExListRates", false); }
-            set { InterapptiveOnly.Registry.SetValue("FedExListRates", value); }
+            get { return FedExRegistryOptions.UseListRates; }
+            set { FedExRegistryOptions.UseListRates = value; }
         }
 
         /// <summary>
@@ -74,7 +72,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
             return FedExAccountManager.GetAccount(shipment.FedEx.FedExAccountID);
         }
 
-
         /// <summary>
         /// Gets all of the active FedEx accounts that have been created in ShipWorks.
         /// </summary>
@@ -95,5 +92,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get { return InterapptiveOnly.IsInterapptiveUser; }
         }
+
+        /// <summary>
+        /// Get a read-only FedEx account
+        /// </summary>
+        /// <param name="accountID"></param>
+        /// <returns></returns>
+        public IFedExAccountEntity GetAccountReadOnly(long accountID) => FedExAccountManager.GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Get a read-only FedEx account
+        /// </summary>
+        public IFedExAccountEntity GetAccountReadOnly(IShipmentEntity shipment) =>
+            FedExAccountManager.GetAccountReadOnly(shipment?.FedEx?.FedExAccountID ?? -1);
+
+        /// <summary>
+        /// Get a read-only collection of accounts
+        /// </summary>
+        public IEnumerable<IFedExAccountEntity> AccountsReadOnly => FedExAccountManager.AccountsReadOnly;
     }
 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Divelements.SandRibbon;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -11,7 +13,6 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -25,20 +26,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static List<FedExEndOfDayCloseEntity> ProcessClose()
         {
-            List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
-
-            IFedExShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(null, new FedExSettingsRepository());
-
-            foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
             {
-                FedExEndOfDayCloseEntity closing = shippingClerk.CloseGround(account);
-                if (closing != null)
-                {
-                    closings.Add(closing);
-                }
-            }
+                List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
 
-            return closings;
+                IFedExShippingClerk shippingClerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create();
+
+                foreach (FedExAccountEntity account in FedExAccountManager.Accounts)
+                {
+                    FedExEndOfDayCloseEntity closing = shippingClerk.CloseGround(account);
+                    if (closing != null)
+                    {
+                        closings.Add(closing);
+                    }
+                }
+
+                return closings;
+            }
         }
 
         /// <summary>

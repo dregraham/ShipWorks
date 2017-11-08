@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
@@ -18,24 +16,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request
         private readonly ICarrierResponseFactory responseFactory;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRegisterCspUserRequest" /> class using
-        /// the "live" implementations for the FedExServiceGateway and FedExResponseFactory.
-        /// </summary>
-        /// <param name="requestManipulators">The request manipulators.</param>
-        /// <param name="accountEntity">The account entity.</param>
-        public FedExRegisterCspUserRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, FedExAccountEntity accountEntity)
-            : this(requestManipulators, new FedExServiceGateway(new FedExSettingsRepository()), new FedExResponseFactory(new FedExLabelRepository()), accountEntity)
-        { }
-
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FedExRegisterCspUserRequest" /> class.
         /// </summary>
         /// <param name="requestManipulators">The request manipulators.</param>
         /// <param name="serviceGateway">The service gateway.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public FedExRegisterCspUserRequest(IEnumerable<ICarrierRequestManipulator> requestManipulators, IFedExServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, FedExAccountEntity accountEntity)
+        public FedExRegisterCspUserRequest(
+                IEnumerable<ICarrierRequestManipulator> requestManipulators,
+                IFedExServiceGateway serviceGateway,
+                ICarrierResponseFactory responseFactory,
+                FedExAccountEntity accountEntity)
             : base(requestManipulators, null)
         {
             this.serviceGateway = serviceGateway;
