@@ -21,6 +21,10 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System.Drawing.Imaging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Tracking;
+using ShipEngine.ApiClient.Model;
+using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -355,6 +359,26 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             if (shipment.Asendia != null)
             {
                 shipment.Asendia.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
+        }
+
+        /// <summary>
+        /// Track the shipment
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            try
+            {
+                TrackingInformation trackingInfo = Task.Run(() =>
+                {
+                    return shipEngineWebClient.Track(shipment.Asendia.ShipEngineLabelID, ApiLogSource.Asendia);
+                }).Result;
+
+                return trackingResultFactory.Create(trackingInfo);
+            }
+            catch (Exception)
+            {
+                return new TrackingResult { Summary = $"<a href='http://www.asendia.com/tracking/' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
             }
         }
     }
