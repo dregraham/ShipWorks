@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
     /// <summary>
     /// Factory for creating label repositories for a FedEx shipment
     /// </summary>
+    [Component]
     public class FedExLabelRepositoryFactory : IFedExLabelRepositoryFactory
     {
         private readonly Func<FedExLabelRepository> createBasicRepository;
