@@ -320,7 +320,8 @@
     <Compile Include="Interapptive.Shared\MessengerTest.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
-    <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />
+    <Compile Include="Interapptive.Shared\Pdf\PdfColorDocumentTest.cs" />
+    <Compile Include="Interapptive.Shared\Pdf\PdfBlackAndWhiteDocumentTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\MethodConditionsTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\PathUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Utility\StringUtilityTest.cs" />

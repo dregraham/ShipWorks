@@ -5,6 +5,9 @@
     /// </summary>
     public interface IPdfDocumentFactory
     {
+        /// <summary>
+        /// Create an IPdfDocument for a given 
+        /// </summary>
         IPdfDocument Create(PdfDocumentType pdfDocumentType);
     }
 }
