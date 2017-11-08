@@ -1230,6 +1230,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateRequestManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipRequestManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipResponse.cs" />
