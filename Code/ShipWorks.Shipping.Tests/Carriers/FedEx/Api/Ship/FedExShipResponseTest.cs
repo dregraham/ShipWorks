@@ -3,7 +3,6 @@ using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
@@ -30,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             manipulator = mock.CreateMock<IFedExShipResponseManipulator>();
-            manipulator.Setup(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), AnyShipment))
+            manipulator.Setup(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), It.IsAny<ProcessShipmentRequest>(), AnyShipment))
                 .Returns(new ShipmentEntity());
             mock.Provide<IEnumerable<IFedExShipResponseManipulator>>(new[] { manipulator.Object });
 
@@ -54,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
             reply.HighestSeverity = NotificationSeverityType.FAILURE;
             reply.Notifications = new[] { new Notification { Message = "TestFailure" } };
 
-            var result = testObject.ApplyManipulators();
+            var result = testObject.ApplyManipulators(null);
 
             Assert.True(result.Failure);
             Assert.IsAssignableFrom<FedExApiCarrierException>(result.Exception);
@@ -63,16 +62,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         [Fact]
         public void ApplyManipulators_AppliesResponseManipulators_WhenProcessShipmentReplyContainsNoErrors()
         {
-            testObject.ApplyManipulators();
+            testObject.ApplyManipulators(null);
 
-            manipulator.Verify(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), AnyShipment), Times.Once());
+            manipulator.Verify(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), null, AnyShipment), Times.Once());
         }
 
         [Fact]
         public void Process_SaveLabelsCalled_WhenProcessShipmentReplyContainsNoErrors()
         {
             testObject.Process();
-            
+
             labelRepository.Verify(x => x.SaveLabels(AnyShipment, It.IsAny<ProcessShipmentReply>()), Times.Once());
         }
 
@@ -80,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         public void ApplyManipulators_ReturnsFailure_WhenLtlFreightServiceAndMissingShipmentDocs()
         {
             ShipmentEntity shipment = Create.Shipment().AsFedEx().Build();
-            shipment.FedEx.Service = (int)FedExServiceType.FedExFreightEconomy;
+            shipment.FedEx.Service = (int) FedExServiceType.FedExFreightEconomy;
 
             reply.CompletedShipmentDetail.ShipmentDocuments = new ShippingDocument[0];
 
@@ -88,7 +87,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
                 TypedParameter.From(reply),
                 TypedParameter.From(shipment));
 
-            var result = testObject.ApplyManipulators();
+            var result = testObject.ApplyManipulators(null);
 
             Assert.True(result.Failure);
         }
@@ -97,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         public void ApplyManipulators_ReturnsFailure_WhenNotLtlFreightServiceAndMissingCompletedPackageDetails()
         {
             ShipmentEntity shipment = Create.Shipment().AsFedEx().Build();
-            shipment.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipment.FedEx.Service = (int) FedExServiceType.FedExGround;
 
             reply.CompletedShipmentDetail.CompletedPackageDetails = null;
 
@@ -105,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
                 TypedParameter.From(reply),
                 TypedParameter.From(shipment));
 
-            var result = testObject.ApplyManipulators();
+            var result = testObject.ApplyManipulators(null);
 
             Assert.True(result.Failure);
         }

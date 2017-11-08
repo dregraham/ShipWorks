@@ -1,9 +1,5 @@
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared.Carriers.FedEx;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
@@ -28,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         [Fact]
         public void Manipulate_CodTrackingNumberAndFormIDAddedToShipment_ResponseIncludesCodTrackingInfo()
         {
-            testObject.Manipulate(processShipmentReply, shipmentEntity);
+            testObject.Manipulate(processShipmentReply, null, shipmentEntity);
 
             Assert.Equal(shipmentEntity.FedEx.CodTrackingNumber, processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
             Assert.Equal(shipmentEntity.FedEx.CodTrackingFormID, processShipmentReply.CompletedShipmentDetail.MasterTrackingId.FormId);

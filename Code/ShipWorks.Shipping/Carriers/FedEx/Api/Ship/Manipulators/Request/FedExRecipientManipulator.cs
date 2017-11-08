@@ -1,8 +1,6 @@
 using System;
 using System.Text;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -37,8 +35,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             RequestedShipment requestedShipment = request.RequestedShipment;
 
             // Get the contact and address for the shipment
-            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment as ShipmentEntity, "Ship"));
-            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment as ShipmentEntity, "Ship"));
+            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(shipment.ShipPerson);
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(shipment.ShipPerson);
 
             if (address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase))
             {
@@ -78,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
             else
             {
-                requestedShipment.Recipient = recipient;                
+                requestedShipment.Recipient = recipient;
             }
 
             return request;
@@ -103,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 bool line1Full = false;
 
                 string[] addressWords = address.StreetLines[0].Split(' ');
-                
+
                 foreach (string line1Word in addressWords)
                 {
                     if (!line1Full)
@@ -125,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 // if both lines are under max length, use them. If not, don't wrap.
                 if (newLine1.Length <= calculatedMathLenght && newLine2.Length <= calculatedMathLenght)
                 {
-                    address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };                    
+                    address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };
                 }
             }
         }

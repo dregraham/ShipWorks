@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
         /// <summary>
         /// Manipulate the given shipment
         /// </summary>
-        GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment);
+        GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ProcessShipmentRequest request, ShipmentEntity shipment);
     }
 }

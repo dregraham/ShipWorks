@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
         /// <summary>
         /// Adds tracking information to shipment
         /// </summary>
-        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ProcessShipmentRequest request, ShipmentEntity shipment)
         {
             this.response = response;
             this.shipment = shipment;
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
             else
             {
                 // To track SmartPost on USPS.com, we need to save the application id for removal later
-                if ((FedExServiceType)shipment.FedEx.Service == FedExServiceType.SmartPost)
+                if ((FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost)
                 {
                     shipment.FedEx.SmartPostUspsApplicationId = response.CompletedShipmentDetail.CompletedPackageDetails[0].TrackingIds[0].UspsApplicationId;
                 }

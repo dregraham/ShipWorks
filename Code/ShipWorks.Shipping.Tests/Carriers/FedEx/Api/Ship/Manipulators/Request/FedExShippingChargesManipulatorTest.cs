@@ -48,18 +48,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
-        }
-
-        [Fact]
         public void ShouldApply_ReturnsTrue()
         {
             Assert.True(testObject.ShouldApply(shipment, 0));
@@ -390,7 +378,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Setup the fedex shipment payor type for the test by setting the type to an unsupported value
             shipment.FedEx.PayorTransportType = 23;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
     }
 }

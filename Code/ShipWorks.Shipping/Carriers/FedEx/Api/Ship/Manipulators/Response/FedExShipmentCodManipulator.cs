@@ -1,7 +1,6 @@
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
@@ -14,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
         /// <summary>
         /// Performs manipulation
         /// </summary>
-        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ProcessShipmentRequest request, ShipmentEntity shipment)
         {
             if (response.CompletedShipmentDetail.MasterTrackingId != null)
             {

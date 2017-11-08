@@ -38,15 +38,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(request, shipment);
 
-            // Use the the FedEx account information associated with the request to populate 
+            // Use the FedEx account information associated with the request to populate 
             // the payment account and country code
             IFedExAccountEntity fedExAccount = settings.GetAccountReadOnly(shipment);
             IFedExShipmentEntity fedExShipment = shipment.FedEx;
 
             // Use the FedEx account and shipment to create the shipping charges payment
-            ConfigureShippingCharges(request.RequestedShipment.ShippingChargesPayment, fedExShipment, fedExAccount);
-
-            return request;
+            return ConfigureShippingCharges(request.RequestedShipment.ShippingChargesPayment, fedExShipment, fedExAccount)
+                .Map(() => request);
         }
 
         /// <summary>
@@ -55,40 +54,44 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="shippingCharges">The shipping charges being configured.</param>
         /// <param name="fedExShipment">The FedEx shipment.</param>
         /// <param name="fedExAccount">The FedEx account.</param>
-        private void ConfigureShippingCharges(Payment shippingCharges, IFedExShipmentEntity fedExShipment, IFedExAccountEntity fedExAccount)
+        private Result ConfigureShippingCharges(Payment shippingCharges, IFedExShipmentEntity fedExShipment, IFedExAccountEntity fedExAccount)
         {
-            shippingCharges.PaymentType = GetApiPaymentType((FedExPayorType) fedExShipment.PayorTransportType);
+            return GetApiPaymentType((FedExPayorType) fedExShipment.PayorTransportType)
+                .Do(paymentType =>
+                {
+                    shippingCharges.PaymentType = paymentType;
 
-            InitializePayor(shippingCharges);
+                    InitializePayor(shippingCharges);
 
-            switch (shippingCharges.PaymentType)
-            {
-                case PaymentType.COLLECT:
-                    shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
-                    shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
+                    switch (shippingCharges.PaymentType)
+                    {
+                        case PaymentType.COLLECT:
+                            shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
+                            shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
 
-                    shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
-                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
-                    break;
-                case PaymentType.SENDER:
-                    shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
-                    shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
+                            shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
+                            shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
+                            break;
+                        case PaymentType.SENDER:
+                            shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
+                            shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExAccount.FirstName + " " + fedExAccount.LastName;
 
-                    shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
-                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = fedExAccount.CountryCode;
-                    break;
-                case PaymentType.RECIPIENT:
-                case PaymentType.ACCOUNT:
-                case PaymentType.THIRD_PARTY:
+                            shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExAccount.AccountNumber;
+                            shippingCharges.Payor.ResponsibleParty.Address.CountryCode = fedExAccount.CountryCode;
+                            break;
+                        case PaymentType.RECIPIENT:
+                        case PaymentType.ACCOUNT:
+                        case PaymentType.THIRD_PARTY:
 
-                    shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
-                    shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExShipment.PayorTransportName;
+                            shippingCharges.Payor.ResponsibleParty.Contact = new Contact();
+                            shippingCharges.Payor.ResponsibleParty.Contact.PersonName = fedExShipment.PayorTransportName;
 
-                    // For this to work correctly, CountryCode needs to be specified (as opposed to Duties)
-                    shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExShipment.PayorTransportAccount;
-                    shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
-                    break;
-            }
+                            // For this to work correctly, CountryCode needs to be specified (as opposed to Duties)
+                            shippingCharges.Payor.ResponsibleParty.AccountNumber = fedExShipment.PayorTransportAccount;
+                            shippingCharges.Payor.ResponsibleParty.Address.CountryCode = string.IsNullOrEmpty(fedExShipment.PayorDutiesCountryCode) ? "US" : fedExShipment.PayorDutiesCountryCode;
+                            break;
+                    }
+                });
         }
 
         /// <summary>
@@ -108,22 +111,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="request">The request.</param>
         /// <exception cref="System.ArgumentNullException">request</exception>
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
-        private void InitializeRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            request.Ensure(r => r.RequestedShipment)
-                        .Ensure(r => r.ShippingChargesPayment);
-        }
+        private void InitializeRequest(ProcessShipmentRequest request, IShipmentEntity shipment) =>
+            request.Ensure(r => r.RequestedShipment).Ensure(r => r.ShippingChargesPayment);
 
         /// <summary>
-        /// Maps the FedExPayorType to the the FedEx PaymentType value.
+        /// Maps the FedExPayorType to the FedEx PaymentType value.
         /// </summary>
         /// <param name="payorType">Type of the payor.</param>
         /// <returns>The FedEx PaymentType value.</returns>
-        /// <exception cref="System.InvalidOperationException">Invalid FedEx payor type  + payorType</exception>
-        private PaymentType GetApiPaymentType(FedExPayorType payorType)
+        private GenericResult<PaymentType> GetApiPaymentType(FedExPayorType payorType)
         {
             switch (payorType)
             {
@@ -133,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExPayorType.Collect: return PaymentType.COLLECT;
             }
 
-            throw new InvalidOperationException("Invalid FedEx payor type " + payorType);
+            return new InvalidOperationException("Invalid FedEx payor type " + payorType);
         }
     }
 }

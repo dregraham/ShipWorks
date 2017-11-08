@@ -1,4 +1,3 @@
-using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -29,29 +28,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            // Make sure all of the properties we'll be accessing have been created
-            ValidateRequest(request, shipment);
-
             IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
             request.ClientDetail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
-            return GenericResult.FromSuccess(request);
-        }
-
-        /// <summary>
-        /// Validates the request making sure it is not null and of the correct type.
-        /// </summary>
-        private void ValidateRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException("request");
-            }
-
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            return request;
         }
     }
 }

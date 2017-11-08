@@ -7,6 +7,9 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
+    /// <summary>
+    /// Set the rate type on the request
+    /// </summary>
     public class FedExRateTypeManipulator : IFedExShipRequestManipulator
     {
         private readonly IFedExSettingsRepository settings;
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 // Don't send NONE as the rate type because even though that works for rates and the 
                 // documentation suggests that NONE should return account rates, it actually returns
                 // no rates while processing.  Not sending a value results in rates being returned.
-                request.RequestedShipment.RateRequestTypes = new [] { RateRequestType.LIST };   
+                request.RequestedShipment.RateRequestTypes = new[] { RateRequestType.LIST };
             }
 
             return request;
@@ -50,9 +53,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-
             request.Ensure(r => r.RequestedShipment);
         }
     }

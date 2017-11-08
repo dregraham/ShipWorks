@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         [Fact]
         public void Manipulate_ActualRateCostAddedToShipment_ActualRateTypeMatchesIncludedShipRateDetail()
         {
-            var result = testObject.Manipulate(reply, shipment);
+            var result = testObject.Manipulate(reply, null, shipment);
 
             Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
                 result.Value.ShipmentCost);
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         {
             shipment.OriginCountryCode = "CA";
 
-            var result = testObject.Manipulate(reply, shipment);
+            var result = testObject.Manipulate(reply, null, shipment);
 
             Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
                 result.Value.ShipmentCost);
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
             reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
 
-            var result = testObject.Manipulate(reply, shipment);
+            var result = testObject.Manipulate(reply, null, shipment);
 
             Assert.Equal(reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
                 result.Value.ShipmentCost);
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating = null;
             reply.CompletedShipmentDetail.ShipmentRating = null;
 
-            var result = testObject.Manipulate(reply, shipment);
+            var result = testObject.Manipulate(reply, null, shipment);
 
             Assert.Equal(0, result.Value.ShipmentCost);
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
 
             shipment.OriginCountryCode = "CA";
 
-            var result = testObject.Manipulate(reply, shipment);
+            var result = testObject.Manipulate(reply, null, shipment);
 
             Assert.Equal(
                 reply.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,

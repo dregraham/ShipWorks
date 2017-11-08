@@ -77,9 +77,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-
             request.Ensure(r => r.RequestedShipment)
                 .EnsureAtLeastOne(rs => rs.RequestedPackageLineItems)
                 .Ensure(rp => rp.SpecialServicesRequested)

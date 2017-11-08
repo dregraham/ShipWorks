@@ -21,5 +21,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the Hold At address
         /// </summary>
         public PersonAdapter HoldPerson => new PersonAdapter(this, "Hold");
+
+        /// <summary>
+        /// Get the Importer address
+        /// </summary>
+        public PersonAdapter ImporterPerson => new PersonAdapter(this, "Importer");
     }
 }

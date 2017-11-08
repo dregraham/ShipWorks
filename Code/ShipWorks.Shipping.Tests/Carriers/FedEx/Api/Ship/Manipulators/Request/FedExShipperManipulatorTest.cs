@@ -107,7 +107,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             shipment.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.FedExAddressLookup;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]

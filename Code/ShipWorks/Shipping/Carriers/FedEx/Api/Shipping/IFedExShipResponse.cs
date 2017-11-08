@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping
         /// <summary>
         /// Apply the response manipulators
         /// </summary>
-        GenericResult<IFedExShipResponse> ApplyManipulators();
+        GenericResult<IFedExShipResponse> ApplyManipulators(ProcessShipmentRequest request);
     }
 }

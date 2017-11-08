@@ -1,4 +1,3 @@
-using System;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -8,8 +7,8 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -38,30 +37,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
-        }
-
-        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenSmartPostHubIDIsBlank()
         {
             shipment.FedEx.SmartPostHubID = string.Empty;
 
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<CarrierException>(result.Exception);
         }
 
         [Fact]
         public void Manipulate_ThrowsCarrierException_WhenSmartPostIndiciaTypeIsInvalid()
         {
             shipment.FedEx.SmartPostIndicia = 239955;
-            Assert.Throws<CarrierException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<CarrierException>(result.Exception);
         }
 
         [Fact]
@@ -84,16 +77,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             // The requested shipment property should be created now
             Assert.Null(processShipmentRequest.RequestedShipment.TotalInsuredValue);
-        }
-
-        [Fact]
-        public void Manipulate_SmartPostShipmentDetailIsNull_WhenShipmentTypeIsNotSmartPost()
-        {
-            shipment.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
-
-            testObject.Manipulate(shipment, processShipmentRequest, 0);
-
-            Assert.Null(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]

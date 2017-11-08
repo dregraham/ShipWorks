@@ -23,8 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            request.Ensure(r => r.RequestedShipment);
-            RequestedShipment requestedShipment = request.RequestedShipment;
+            RequestedShipment requestedShipment = request.Ensure(r => r.RequestedShipment);
 
             // Set the drop off type for the shipment
             requestedShipment.DropoffType = FedExRequestManipulatorUtilities.GetShipmentDropoffType((FedExDropoffType) shipment.FedEx.DropoffType);

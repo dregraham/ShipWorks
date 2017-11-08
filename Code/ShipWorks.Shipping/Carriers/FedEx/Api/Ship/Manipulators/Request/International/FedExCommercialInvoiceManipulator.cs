@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
@@ -158,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             if (fedExShipment.ImporterOfRecord)
             {
                 Party importer = new Party();
-                PersonAdapter importerPerson = new PersonAdapter(fedExShipment as FedExShipmentEntity, "Importer");
+                PersonAdapter importerPerson = fedExShipment.ImporterPerson;
 
                 importer.Address = FedExRequestManipulatorUtilities.CreateAddress<Address>(importerPerson);
                 importer.Contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(importerPerson);

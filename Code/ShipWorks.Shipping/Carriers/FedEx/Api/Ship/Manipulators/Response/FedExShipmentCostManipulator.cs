@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
         /// <summary>
         /// Add Cost to shipment
         /// </summary>
-        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
+        public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ProcessShipmentRequest request, ShipmentEntity shipment)
         {
             ShipmentRating ratingInfo = response.CompletedShipmentDetail.ShipmentRating;
 

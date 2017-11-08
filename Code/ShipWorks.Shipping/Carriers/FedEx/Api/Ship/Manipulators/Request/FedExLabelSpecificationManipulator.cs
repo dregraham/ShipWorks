@@ -7,7 +7,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
@@ -49,12 +48,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             //Fetch the latest shipping settings from the repository
             ShippingSettingsEntity shippingSettings = settingsRepository.GetShippingSettings();
 
-            // All we need to do is mask the account data and configure the type of label being generated
-            LabelSpecification labelSpecification = new LabelSpecification();
-            MaskAccountData(shippingSettings, labelSpecification, shipment);
-
-            return ConfigureLabelType(shipment, shippingSettings, labelSpecification)
-                .Map(() =>
+            return GenericResult.FromSuccess(new LabelSpecification())
+                .Do(labelSpecification => MaskAccountData(shippingSettings, shipment, labelSpecification))
+                .Do(labelSpecification => ConfigureLabelType(shipment, shippingSettings, labelSpecification))
+                .Map(labelSpecification =>
                 {
                     // Add alcohol label request if needed
                     AddAlcoholRegulatoryLabels(labelSpecification, shipment);
@@ -192,7 +189,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="shippingSettings">The shipping settings.</param>
         /// <param name="labelSpecification">The label specification.</param>
         /// <param name="shipment">The shipment.</param>
-        private void MaskAccountData(ShippingSettingsEntity shippingSettings, LabelSpecification labelSpecification, IShipmentEntity shipment)
+        private void MaskAccountData(ShippingSettingsEntity shippingSettings, IShipmentEntity shipment, LabelSpecification labelSpecification) =>
+            GetFedExLabelMaskableDataType(shipment.FedEx.MaskedData)
+                .Do(x => MaskAccountData(shippingSettings, labelSpecification, shipment, x));
+
+        /// <summary>
+        /// Masks the account data based on the shipping settings.
+        /// </summary>
+        private void MaskAccountData(
+            ShippingSettingsEntity shippingSettings,
+            LabelSpecification labelSpecification,
+            IShipmentEntity shipment,
+            LabelMaskableDataType? maskableDataType)
         {
             List<LabelMaskableDataType> maskableDataTypes = new List<LabelMaskableDataType>();
 
@@ -221,7 +229,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 }
             }
 
-            LabelMaskableDataType? maskableDataType = GetFedExLabelMaskableDataType(shipment.FedEx.MaskedData);
             if (maskableDataType.HasValue)
             {
                 maskableDataTypes.AddRange(new List<LabelMaskableDataType>()
@@ -238,14 +245,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
         }
 
+
         /// <summary>
         /// Given a MaskedDataType (as int) return corresponding value
         /// </summary>
-        public static LabelMaskableDataType? GetFedExLabelMaskableDataType([Obfuscation(Exclude = true)] int? maskedDataType)
+        public static GenericResult<LabelMaskableDataType?> GetFedExLabelMaskableDataType([Obfuscation(Exclude = true)] int? maskedDataType)
         {
             if (!maskedDataType.HasValue)
             {
-                return null;
+                return GenericResult.FromSuccess<LabelMaskableDataType?>(null);
             }
 
             switch ((FedExMaskedDataType) maskedDataType.Value)
@@ -253,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExMaskedDataType.SecondaryBarcode:
                     return LabelMaskableDataType.SECONDARY_BARCODE;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(maskedDataType));
+                    return new ArgumentOutOfRangeException(nameof(maskedDataType));
             }
         }
 

@@ -1,3 +1,4 @@
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
@@ -28,25 +29,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>
-        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber)
-        {
-            return (FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost;
-        }
+        public bool ShouldApply(IShipmentEntity shipment, int sequenceNumber) =>
+            (FedExServiceType) shipment.FedEx.Service == FedExServiceType.SmartPost;
 
         /// <summary>
         /// Add the SmartPost to the FedEx carrier request
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            // If we shouldn't apply, return
-            if (!ShouldApply(shipment, sequenceNumber))
-            {
-                return request;
-            }
-
             // Get the FedEx shipment and account
             IFedExShipmentEntity fedExShipment = shipment.FedEx;
             IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
@@ -54,46 +44,70 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Get the RequestedShipment object for the request
             RequestedShipment requestedShipment = InitializeRequest(request);
 
-            SmartPostShipmentDetail smartPostShipmentDetail = new SmartPostShipmentDetail();
+            return GenericResult.FromSuccess(new SmartPostShipmentDetail())
+                .Do(detail => SetHubId(fedExShipment, account, detail))
+                .Do(detail => SetIndicia(fedExShipment, detail))
+                .Do(detail => SetEndorsementType(fedExShipment, detail))
+                .Do(detail => SetCustomerManifest(fedExShipment, detail))
+                .Map(detail =>
+                {
+                    // For smartpost this is always zero
+                    requestedShipment.TotalInsuredValue = null;
+                    requestedShipment.SmartPostDetail = detail;
+                    return request;
+                });
+        }
 
+        /// <summary>
+        /// Set the Hub ID
+        /// </summary>
+        private static Result SetHubId(IFedExShipmentEntity fedExShipment, IFedExAccountEntity account, SmartPostShipmentDetail detail)
+        {
             string smartPostHubID = FedExUtility.GetSmartPostHub(fedExShipment.SmartPostHubID, account);
             if (string.IsNullOrWhiteSpace(smartPostHubID))
             {
-                throw new CarrierException("A SmartPost Hub ID is required for shipping with SmartPost.");
-            }
-            smartPostShipmentDetail.HubId = fedExShipment.SmartPostHubID;
-
-            smartPostShipmentDetail.Indicia = GetSmartPostIndiciaType((FedExSmartPostIndicia) fedExShipment.SmartPostIndicia);
-            smartPostShipmentDetail.IndiciaSpecified = true;
-
-            var endorsement = GetSmartPostEndorsementType((FedExSmartPostEndorsement) fedExShipment.SmartPostEndorsement);
-            if (endorsement != null)
-            {
-                smartPostShipmentDetail.AncillaryEndorsement = endorsement.Value;
-                smartPostShipmentDetail.AncillaryEndorsementSpecified = true;
-            }
-            else
-            {
-                smartPostShipmentDetail.AncillaryEndorsementSpecified = false;
+                return new CarrierException("A SmartPost Hub ID is required for shipping with SmartPost.");
             }
 
+            detail.HubId = fedExShipment.SmartPostHubID;
+
+            return Result.FromSuccess();
+        }
+
+        /// <summary>
+        /// Set the indecia value
+        /// </summary>
+        private static Result SetIndicia(IFedExShipmentEntity fedExShipment, SmartPostShipmentDetail detail) =>
+            GetSmartPostIndiciaType((FedExSmartPostIndicia) fedExShipment.SmartPostIndicia)
+                .Do(x =>
+                {
+                    detail.Indicia = x;
+                    detail.IndiciaSpecified = true;
+                });
+
+        /// <summary>
+        /// Set the endorsement type
+        /// </summary>
+        private static Result SetEndorsementType(IFedExShipmentEntity fedExShipment, SmartPostShipmentDetail detail) =>
+            GetSmartPostEndorsementType((FedExSmartPostEndorsement) fedExShipment.SmartPostEndorsement)
+                .Map(endorsementType => endorsementType.Match(v => detail.AncillaryEndorsement = v, () => { }))
+                .Do(hasValue => detail.AncillaryEndorsementSpecified = hasValue);
+
+        /// <summary>
+        /// Set the customer manifest
+        /// </summary>
+        private static void SetCustomerManifest(IFedExShipmentEntity fedExShipment, SmartPostShipmentDetail detail)
+        {
             if (!string.IsNullOrWhiteSpace(fedExShipment.SmartPostCustomerManifest))
             {
-                string smartPostCustomerManifest = TemplateTokenProcessor.ProcessTokens(fedExShipment.SmartPostCustomerManifest,
-                                                         fedExShipment.ShipmentID);
+                string smartPostCustomerManifest = TemplateTokenProcessor
+                    .ProcessTokens(fedExShipment.SmartPostCustomerManifest, fedExShipment.ShipmentID);
 
                 if (!string.IsNullOrWhiteSpace(smartPostCustomerManifest))
                 {
-                    smartPostShipmentDetail.CustomerManifestId = smartPostCustomerManifest;
+                    detail.CustomerManifestId = smartPostCustomerManifest;
                 }
             }
-
-            // For smartpost this is always zero
-            requestedShipment.TotalInsuredValue = null;
-
-            requestedShipment.SmartPostDetail = smartPostShipmentDetail;
-
-            return request;
         }
 
         /// <summary>
@@ -104,30 +118,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private static RequestedShipment InitializeRequest(ProcessShipmentRequest request)
         {
-            request.Ensure(r => r.RequestedShipment);
-
-            RequestedShipment requestedShipment = request.RequestedShipment;
-
-            // Make sure a package is there
-            if (requestedShipment.RequestedPackageLineItems == null)
-            {
-                requestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[1];
-                requestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
-
-            // Make sure a package is there
-            if (requestedShipment.RequestedPackageLineItems[0] == null)
-            {
-                requestedShipment.RequestedPackageLineItems[0] = new RequestedPackageLineItem();
-            }
-
+            RequestedShipment requestedShipment = request.Ensure(r => r.RequestedShipment);
+            requestedShipment.EnsureAtLeastOne(x => x.RequestedPackageLineItems);
             return requestedShipment;
         }
 
         /// <summary>
         /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private static SmartPostIndiciaType GetSmartPostIndiciaType(FedExSmartPostIndicia indicia)
+        private static GenericResult<SmartPostIndiciaType> GetSmartPostIndiciaType(FedExSmartPostIndicia indicia)
         {
             switch (indicia)
             {
@@ -138,13 +137,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExSmartPostIndicia.ParcelReturn: return SmartPostIndiciaType.PARCEL_RETURN;
             }
 
-            throw new CarrierException("Invalid indicia type: " + indicia);
+            return new CarrierException("Invalid indicia type: " + indicia);
         }
 
         /// <summary>
-        /// Get the FedEx API value that corresponds to our internal vlaue
+        /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private static SmartPostAncillaryEndorsementType? GetSmartPostEndorsementType(FedExSmartPostEndorsement endorsement)
+        private static GenericResult<SmartPostAncillaryEndorsementType?> GetSmartPostEndorsementType(FedExSmartPostEndorsement endorsement)
         {
             switch (endorsement)
             {
@@ -153,10 +152,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExSmartPostEndorsement.ForwardingService: return SmartPostAncillaryEndorsementType.FORWARDING_SERVICE;
                 case FedExSmartPostEndorsement.LeaveIfNoResponse: return SmartPostAncillaryEndorsementType.CARRIER_LEAVE_IF_NO_RESPONSE;
                 case FedExSmartPostEndorsement.ReturnService: return SmartPostAncillaryEndorsementType.RETURN_SERVICE;
-                case FedExSmartPostEndorsement.None: return null;
+                case FedExSmartPostEndorsement.None: return GenericResult.FromSuccess<SmartPostAncillaryEndorsementType?>(null);
             }
 
-            throw new CarrierException("Invalid endorsement value: " + endorsement);
+            return new CarrierException("Invalid endorsement value: " + endorsement);
         }
     }
 }

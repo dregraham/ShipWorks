@@ -3,6 +3,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Apply response manipulators
         /// </summary>
-        public GenericResult<IFedExShipResponse> ApplyManipulators() =>
+        public GenericResult<IFedExShipResponse> ApplyManipulators(ProcessShipmentRequest request) =>
             GenericResult.FromSuccess<IFedExShipResponse>(this);
 
         /// <summary>

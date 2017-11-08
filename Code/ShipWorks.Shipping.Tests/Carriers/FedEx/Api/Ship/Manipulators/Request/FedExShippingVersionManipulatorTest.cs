@@ -1,7 +1,8 @@
-using System;
+using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
@@ -10,25 +11,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
     {
         private FedExShippingVersionManipulator testObject;
         private readonly ShipmentEntity shipment;
+        private readonly AutoMock mock;
         private ProcessShipmentRequest processShipmentRequest;
 
         public FedExShippingVersionManipulatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             processShipmentRequest = new ProcessShipmentRequest { Version = new VersionId() };
             shipment = new ShipmentEntity();
-            testObject = new FedExShippingVersionManipulator();
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
+            testObject = mock.Create<FedExShippingVersionManipulator>();
         }
 
         [Fact]

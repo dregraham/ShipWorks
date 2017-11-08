@@ -1,7 +1,5 @@
 using System;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
@@ -38,8 +36,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             request.Ensure(r => r.RequestedShipment);
 
             // Get the contact and address for the shipment
-            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(new PersonAdapter(shipment as ShipmentEntity, "Origin"));
-            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(new PersonAdapter(shipment as ShipmentEntity, "Origin"));
+            Contact contact = FedExRequestManipulatorUtilities.CreateContact<Contact>(shipment.OriginPerson);
+            Address address = FedExRequestManipulatorUtilities.CreateAddress<Address>(shipment.OriginPerson);
 
             // Create the shipper
             Party shipper = new Party()
@@ -50,19 +48,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             // Not using the ResidentialDeterminationService here since the determination is for the 
             // origin address and not the ship address. 
-            DetermineAddressType(shipper, shipment);
+            return DetermineAddressType(shipper, shipment)
+                .Map(() =>
+                {
+                    // Set the shipper on the requested shipment
+                    if (shipment.ReturnShipment)
+                    {
+                        request.RequestedShipment.Recipient = shipper;
+                    }
+                    else
+                    {
+                        request.RequestedShipment.Shipper = shipper;
+                    }
 
-            // Set the shipper on the requested shipment
-            if (shipment.ReturnShipment)
-            {
-                request.RequestedShipment.Recipient = shipper;
-            }
-            else
-            {
-                request.RequestedShipment.Shipper = shipper;
-            }
-
-            return request;
+                    return request;
+                });
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="shipper">The shipper.</param>
         /// <param name="shipment">The shipment.</param>
         /// <exception cref="System.InvalidOperationException">FedExAddressLookup is not a valid residential determination type for the shipment's origin address.</exception>
-        private void DetermineAddressType(Party shipper, IShipmentEntity shipment)
+        private Result DetermineAddressType(Party shipper, IShipmentEntity shipment)
         {
             ResidentialDeterminationType residentialDeterminationType = (ResidentialDeterminationType) shipment.FedEx.OriginResidentialDetermination;
             if (residentialDeterminationType == ResidentialDeterminationType.FedExAddressLookup)
             {
                 // Don't allow this determination type for the origin address so we cut down on service calls
-                throw new InvalidOperationException("FedExAddressLookup is not a valid residential determination type for the shipment's origin address.");
+                return new InvalidOperationException("FedExAddressLookup is not a valid residential determination type for the shipment's origin address.");
             }
 
             // Try to determine if the address is residential just based on the whether the residential value was selected
@@ -93,6 +93,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             shipper.Address.Residential = isResidentialAddress;
             shipper.Address.ResidentialSpecified = true;
+
+            return Result.FromSuccess();
         }
     }
 }

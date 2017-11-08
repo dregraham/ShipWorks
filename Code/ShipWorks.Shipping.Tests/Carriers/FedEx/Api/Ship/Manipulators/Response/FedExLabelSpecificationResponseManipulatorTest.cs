@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
 
             var testObject = mock.Create<FedExLabelSpecificationResponseManipulator>();
 
-            var result = testObject.Manipulate(null, shipment);
+            var result = testObject.Manipulate(null, null, shipment);
 
             Assert.Equal(expected, (ThermalLanguage?) result.Value.ActualLabelFormat);
         }

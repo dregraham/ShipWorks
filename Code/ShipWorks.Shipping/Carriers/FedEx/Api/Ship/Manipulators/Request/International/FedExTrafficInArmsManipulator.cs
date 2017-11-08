@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         }
 
         /// <summary>
-        /// Adds the traffic in arms option to the reqeust.
+        /// Adds the traffic in arms option to the request.
         /// </summary>
         private void AddTrafficInArmsOption(IFedExNativeShipmentRequest nativeRequest)
         {
@@ -68,9 +68,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// </summary>
         private void InitializeRequest(ProcessShipmentRequest request, IShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
             request.Ensure(x => x.RequestedShipment);
         }
     }

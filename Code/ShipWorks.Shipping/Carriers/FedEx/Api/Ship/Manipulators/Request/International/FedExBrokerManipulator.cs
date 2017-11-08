@@ -6,7 +6,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International
 {
@@ -38,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 // are sent over, so this is done here rather than the initialize request method so any objects of the request 
                 // that needs instantiated is only instantiated if there is an actual broker that needs to be added.
                 List<ShipmentSpecialServiceType> serviceTypes = GetSpecialServiceTypes(request);
-                
+
                 // Add the broker service to the list and reset the array on the request
                 serviceTypes.Add(ShipmentSpecialServiceType.BROKER_SELECT_OPTION);
                 request.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
@@ -46,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 // Get a handle to the customs detail on the request and prepare a person adapter for creating
                 // the contact and address info
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(request);
-                PersonAdapter person = new PersonAdapter(shipment.FedEx as FedExShipmentEntity, "Broker");
+                PersonAdapter person = shipment.FedEx.BrokerPerson;
 
                 BrokerDetail brokerDetail = new BrokerDetail()
                 {
@@ -59,12 +58,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                     Type = BrokerType.IMPORT,
                     TypeSpecified = true
                 };
-                
+
                 brokerDetail.Broker.Contact.PhoneExtension = shipment.FedEx.BrokerPhoneExtension;
-                
+
                 // Add the broker to brokers array of the customs detail and update the custom detail
                 // on the native request (in case a new object was created during the GetCustomsDetail method)
-                customsDetail.Brokers = new BrokerDetail[] {brokerDetail};
+                customsDetail.Brokers = new BrokerDetail[] { brokerDetail };
                 request.RequestedShipment.CustomsClearanceDetail = customsDetail;
             }
 
@@ -93,12 +92,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-
+        private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request) =>
             request.Ensure(r => r.RequestedShipment);
-        }
     }
 }

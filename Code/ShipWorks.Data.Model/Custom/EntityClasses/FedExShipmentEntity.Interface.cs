@@ -21,5 +21,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Get the Hold At Location address
         /// </summary>
         PersonAdapter HoldPerson { get; }
+
+        /// <summary>
+        /// Get the Importer address
+        /// </summary>
+        PersonAdapter ImporterPerson { get; }
     }
 }

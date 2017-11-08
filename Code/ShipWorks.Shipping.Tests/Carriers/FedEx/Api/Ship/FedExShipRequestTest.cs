@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         {
             var shipmentReply = new ProcessShipmentReply();
             var response = mock.CreateMock<IFedExShipResponse>();
-            response.Setup(x => x.ApplyManipulators())
+            response.Setup(x => x.ApplyManipulators(It.IsAny<ProcessShipmentRequest>()))
                 .Returns(GenericResult.FromSuccess(response.Object));
 
             mock.FromFactory<IFedExServiceGatewayFactory>()
