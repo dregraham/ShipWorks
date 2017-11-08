@@ -10,5 +10,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("options")]
         public IEnumerable<ProductOptionDetail> Options { get; set; }
+
+        [JsonProperty("sku")]
+        public string Sku { get; set; }
     }
 }

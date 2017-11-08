@@ -342,7 +342,8 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                 if (magentoOrderItem?.ProductOption?.ExtensionAttributes != null)
                 {
-                    AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions);
+                    int productId = itemList.FirstOrDefault(i => i.ProductType == "configurable" && i.Sku == orderItem.SKU)?.ProductId ?? item.ProductId;
+                    AddCustomOptions(orderItem, magentoOrderItem.ProductOption.ExtensionAttributes.CustomOptions, productId);
                 }
 
                 if (magentoOrderItem?.ParentItemId != null)
@@ -351,7 +352,8 @@ namespace ShipWorks.Stores.Platforms.Magento
 
                     if (magentoParentOrderItem?.ProductOption?.ExtensionAttributes != null)
                     {
-                        AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions);
+
+                        AddCustomOptions(orderItem, magentoParentOrderItem.ProductOption.ExtensionAttributes.CustomOptions, magentoParentOrderItem.ProductId);
                     }
                 }
             }
@@ -360,34 +362,80 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Add all of the custom options for the order item
         /// </summary>
-        private void AddCustomOptions(OrderItemEntity item, IEnumerable<CustomOption> options)
+        private void AddCustomOptions(OrderItemEntity item, IEnumerable<CustomOption> options, int productId)
         {
             if (options == null || options.None())
             {
                 return;
             }
 
+            // We have to get the option from magento to get the option title
+            Product product = GetProduct(item, productId, false);
+
+            foreach (CustomOption option in options)
+            {
+                ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+
+                if (optionDetail == null)
+                {
+                    product = GetProduct(item, productId, true);
+                    optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
+                }
+
+                OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
+                string optionValue = optionDetail?.Values?.FirstOrDefault(v => v.OptionTypeID.ToString() == option.OptionValue)?.Title;
+
+                if (string.IsNullOrEmpty(optionValue))
+                {
+                    optionValue = option.OptionValue;
+                }
+
+                orderItemAttribute.Description = optionValue;
+                orderItemAttribute.Name = optionDetail?.Title ?? "Option";
+                orderItemAttribute.UnitPrice = 0;
+            }
+        }
+
+        /// <summary>
+        /// Get the product that matches the given item
+        /// </summary>
+        private Product GetProduct(OrderItemEntity item, int productId, bool getProductFromId)
+        {
+            if (!getProductFromId)
+            {
+                try
+                {
+                    return webClient.GetProductBySku(item.SKU);
+                }
+                catch (MagentoException ex)
+                {
+                    // if there is an issue getting product options keep going
+                    // we don't want options to keep the download from succeeding
+                    log.Error($"Error getting Item Options by SKU {ex.Message}", ex);
+                }
+            }
+            
             try
             {
-                // We have to get the option from magento to get the option title
-                Product product = webClient.GetProduct(item.SKU);
+                // Getting a prodcut by Id does not give us all the product info we need like option info
+                Product tempProduct = webClient.GetProductById(productId);
 
-                foreach (CustomOption option in options)
+                if (tempProduct != null)
                 {
-                    ProductOptionDetail optionDetail = product.Options.FirstOrDefault(o => o.OptionID == option.OptionID);
-
-                    OrderItemAttributeEntity orderItemAttribute = InstantiateOrderItemAttribute(item);
-                    orderItemAttribute.Description = option.OptionValue;
-                    orderItemAttribute.Name = optionDetail?.Title ?? "Option";
-                    orderItemAttribute.UnitPrice = 0;
+                    // Now that we have the product from its Id, try getting the actual product using SKU which 
+                    // gives us more detail about the product and is different from the sku above
+                    return webClient.GetProductBySku(tempProduct.Sku);
                 }
             }
             catch (MagentoException ex)
             {
                 // if there is an issue getting product options keep going
                 // we don't want options to keep the download from succeeding
-                log.Error($"Error getting Item Options {ex.Message}", ex);
+                log.Error($"Error getting Item Options by ID {ex.Message}", ex);
             }
+
+            // Cant get the product 
+            return null;
         }
 
         /// <summary>
