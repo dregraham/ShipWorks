@@ -97,7 +97,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.DimsAddWeight = true;
             asendiaShipment.Insurance = false;
             asendiaShipment.InsuranceValue = 0;
-            asendiaShipment.TrackingNumber = string.Empty;
 
             base.ConfigureNewShipment(shipment);
         }

@@ -380,8 +380,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 		}
 		#endregion
@@ -629,16 +627,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Decimal)GetValue((int)AsendiaShipmentFieldIndex.InsuranceValue, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.InsuranceValue, value); }
-		}
-
-		/// <summary> The TrackingNumber property of the Entity AsendiaShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaShipment"."TrackingNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String TrackingNumber
-		{
-			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, true); }
-			set	{ SetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, value); }
 		}
 
 		/// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/></summary>
