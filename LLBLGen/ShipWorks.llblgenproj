@@ -352,6 +352,23 @@
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="AsendiaProfile" ObjectID="edeb8e73-3ab9-4612-a981-c5d945574738">
+        <Fields>
+          <Field Name="AsendiaAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
+          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="12" />
+          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="10" />
+          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="8" />
+          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="7" />
+          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="11" />
+          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="9" />
+          <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
+          <Field Name="Service" Type="AsendiaServiceType" IsOptional="true" FieldIndex="2" />
+          <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="AsendiaShipment" ObjectID="fbbc5278-1284-409b-ba77-c07c9b69fbb9">
         <Fields>
           <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
@@ -3427,6 +3444,11 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="AsendiaProfile.ShippingProfile-ShippingProfile.Asendia" Start=":AsendiaProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Asendia" Type="1" StartIsOptional="true">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="AsendiaShipment.Shipment-Shipment.Asendia" Start=":AsendiaShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
@@ -4200,7 +4222,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-06T15:28:48.9752436Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-06T19:57:54.340814Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4464,6 +4486,24 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaProfile">
+                  <PkConstraintName Name="PK_AsendiaProfile" />
+                  <Fields>
+                    <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AsendiaAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Weight" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="8" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="10" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="11" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="12" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="13" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="AsendiaShipment">
@@ -9166,6 +9206,11 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmeriCommerceStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AsendiaProfile:FK_AsendiaProfile_ShippingProfile">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:AsendiaProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:AsendiaShipment:FK_AsendiaShipment_Shipment" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:AsendiaShipment:ShipmentID" />
@@ -10346,6 +10391,23 @@
             <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AsendiaProfile" TargetName="ShipWorksLocal:dbo:AsendiaProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":AsendiaShipment" TargetName="ShipWorksLocal:dbo:AsendiaShipment">

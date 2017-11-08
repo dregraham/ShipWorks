@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (219 + 0));
+			this.InitClass( (220 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -66,6 +66,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAsendiaAccountEntityInfos();
+			InitAsendiaProfileEntityInfos();
 			InitAsendiaShipmentEntityInfos();
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
@@ -504,6 +505,24 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Phone, 15, 0, 0);
+		}
+		/// <summary>Inits AsendiaProfileEntity's FieldInfo objects</summary>
+		private void InitAsendiaProfileEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AsendiaProfileFieldIndex), "AsendiaProfileEntity");
+			this.AddElementFieldInfo("AsendiaProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)AsendiaProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "AsendiaAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AsendiaProfileFieldIndex.AsendiaAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "Service", typeof(Nullable<Interapptive.Shared.Enums.AsendiaServiceType>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "NonMachinable", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonMachinable, 0, 0, 0);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Contents, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)AsendiaProfileFieldIndex.NonDelivery, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "Weight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.Weight, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsProfileID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsLength", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWidth", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsHeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsWeight", typeof(Nullable<System.Double>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaProfileEntity", "DimsAddWeight", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)AsendiaProfileFieldIndex.DimsAddWeight, 0, 0, 0);
 		}
 		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
 		private void InitAsendiaShipmentEntityInfos()

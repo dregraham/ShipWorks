@@ -1629,6 +1629,76 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity AsendiaProfileEntity</summary>
+	public partial class AsendiaProfileFields
+	{
+		/// <summary>Creates a new AsendiaProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.AsendiaAccountID field instance</summary>
+		public static EntityField2 AsendiaAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.AsendiaAccountID);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.Service field instance</summary>
+		public static EntityField2 Service
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.Service);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.NonMachinable field instance</summary>
+		public static EntityField2 NonMachinable
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.NonMachinable);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.Contents field instance</summary>
+		public static EntityField2 Contents
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.Contents);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.NonDelivery field instance</summary>
+		public static EntityField2 NonDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.NonDelivery);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsProfileID field instance</summary>
+		public static EntityField2 DimsProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsProfileID);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsLength field instance</summary>
+		public static EntityField2 DimsLength
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsLength);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsWidth field instance</summary>
+		public static EntityField2 DimsWidth
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsWidth);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsHeight field instance</summary>
+		public static EntityField2 DimsHeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsHeight);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsWeight field instance</summary>
+		public static EntityField2 DimsWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsWeight);}
+		}
+		/// <summary>Creates a new AsendiaProfileEntity.DimsAddWeight field instance</summary>
+		public static EntityField2 DimsAddWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AsendiaProfileFieldIndex.DimsAddWeight);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity AsendiaShipmentEntity</summary>
 	public partial class AsendiaShipmentFields
 	{

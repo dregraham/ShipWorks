@@ -346,7 +346,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 if (value is Enum)
                 {
-                    value = (int) value;
+                    value = (int)value;
                 }
             }
 
@@ -390,10 +390,10 @@ namespace ShipWorks.Shipping.Profiles
             InsuranceProfileControl insuranceControl = control as InsuranceProfileControl;
             if (insuranceControl != null)
             {
-                ShippingProfileEntity profile = (ShippingProfileEntity) entity;
+                ShippingProfileEntity profile = (ShippingProfileEntity)entity;
 
                 profile.Insurance = insuranceControl.UseInsurance;
-                profile.InsuranceInitialValueSource = (int) insuranceControl.Source;
+                profile.InsuranceInitialValueSource = (int)insuranceControl.Source;
                 profile.InsuranceInitialValueAmount = insuranceControl.OtherAmount;
 
                 return;
@@ -416,14 +416,13 @@ namespace ShipWorks.Shipping.Profiles
             {
                 // if datatype is nullable, llblgen gets confused. This settles the confusion by defining the datatype.
                 Type dataType = entity.Fields[field.FieldIndex].DataType;
+                dataType = Nullable.GetUnderlyingType(dataType) ?? dataType;
 
-                if (dataType.Name.Contains("Nullable"))
-                {
-                    string dataTypeName = dataType.FullName.Substring(dataType.FullName.IndexOf("[[", StringComparison.OrdinalIgnoreCase) + "[[".Length, dataType.FullName.IndexOf(",", StringComparison.OrdinalIgnoreCase) - dataType.FullName.IndexOf("[[", StringComparison.OrdinalIgnoreCase) - "[[".Length);
-                    dataType = Type.GetType(dataTypeName);
-                }
+                var convertedValue = dataType.IsEnum ?
+                    Enum.ToObject(dataType, value) :
+                    Convert.ChangeType(value, dataType);
 
-                entity.SetNewFieldValue(field.FieldIndex, Convert.ChangeType(value, dataType));
+                entity.SetNewFieldValue(field.FieldIndex, convertedValue);
             }
             else
             {
