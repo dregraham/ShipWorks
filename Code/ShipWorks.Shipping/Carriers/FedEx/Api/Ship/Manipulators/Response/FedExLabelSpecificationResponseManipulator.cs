@@ -16,9 +16,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
         /// </summary>
         public GenericResult<ShipmentEntity> Manipulate(ProcessShipmentReply response, ShipmentEntity shipment)
         {
-            shipment.FedEx.Shipment.ActualLabelFormat = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ?
-                null :
-                (int?) shipment.RequestedLabelFormat;
+            shipment.FedEx.Shipment.ActualLabelFormat = 
+                shipment.RequestedLabelFormat == (int) ThermalLanguage.None || 
+                FedExUtility.IsFreightLtlService(shipment.FedEx.Service) ? 
+                    null : (int?) shipment.RequestedLabelFormat;
             return shipment;
         }
     }
