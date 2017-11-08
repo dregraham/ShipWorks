@@ -11,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Retrieve a cache for the given store
         /// </summary>
-        LruCache<string, Product> GetStoreProductCache(long storeID);
+        LruCache<int, Product> GetStoreProductByIdCache(long storeID);
+
+        /// <summary>
+        /// Retrieve a cache for the given store
+        /// </summary>
+        LruCache<string, Product> GetStoreProductBySkuCache(long storeID);
     }
 }

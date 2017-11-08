@@ -114,7 +114,6 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
-        [NDependIgnoreComplexMethodAttribute]
         public virtual IHttpResponseReader GetResponse()
         {
             HttpWebRequest webRequest = PrepareRequest();

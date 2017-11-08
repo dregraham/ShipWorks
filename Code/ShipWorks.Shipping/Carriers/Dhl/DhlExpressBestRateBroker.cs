@@ -1,16 +1,9 @@
 ﻿using ShipWorks.Shipping.Carriers.BestRate;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers.Dhl;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Carriers;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -24,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Constructor
         /// </summary>
         public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "DHL Express")
+            base(shipmentType, accountRepository, "")
         {
 
         }

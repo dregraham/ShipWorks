@@ -382,12 +382,11 @@
           <Field Name="Insurance" Type="bool" FieldIndex="13" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
-          <Field Name="NonMachinable" Type="bool" FieldIndex="16" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="15" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="15" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
@@ -3189,6 +3188,7 @@
       </EntityDefinition>
       <EntityDefinition Name="WalmartOrderSearch" ObjectID="0f104b64-2c28-414b-b3df-9de63987f694">
         <Fields>
+          <Field Name="CustomerOrderID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="3" />
           <Field Name="PurchaseOrderID" Type="string" MaxLength="32" FieldIndex="2" />
@@ -8860,6 +8860,7 @@
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="PurchaseOrderID" Ordinal="3" DbType="24" Length="32" />
                     <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="CustomerOrderID" Ordinal="5" DbType="24" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="WalmartStore">
@@ -10426,7 +10427,6 @@
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
-            <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Audit" TargetName="ShipWorksLocal:dbo:Audit">
@@ -13277,6 +13277,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":WalmartOrderSearch" TargetName="ShipWorksLocal:dbo:WalmartOrderSearch">
           <FieldMappings>
+            <FieldMapping FieldName="CustomerOrderID" TargetFieldName="CustomerOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="PurchaseOrderID" TargetFieldName="PurchaseOrderID" />

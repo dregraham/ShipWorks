@@ -539,7 +539,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits AsendiaShipmentEntity's mappings</summary>
 		private void InitAsendiaShipmentEntityMappings()
 		{
-			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 17, 0);
+			this.AddElementMapping("AsendiaShipmentEntity", @"ShipWorksLocal", @"dbo", "AsendiaShipment", 16, 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "AsendiaAccountID", "AsendiaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -555,8 +555,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "DimsWeight", "DimsWeight", false, "Float", 0, 38, 0, false, "", null, typeof(System.Double), 12);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 13);
 			this.AddElementFieldMapping("AsendiaShipmentEntity", "InsuranceValue", "InsuranceValue", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 14);
-			this.AddElementFieldMapping("AsendiaShipmentEntity", "TrackingNumber", "TrackingNumber", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
+			this.AddElementFieldMapping("AsendiaShipmentEntity", "NonMachinable", "NonMachinable", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
 		}
 
 		/// <summary>Inits AuditEntity's mappings</summary>
@@ -3790,11 +3789,12 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits WalmartOrderSearchEntity's mappings</summary>
 		private void InitWalmartOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 4, 0);
+			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 5, 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "WalmartOrderSearchID", "WalmartOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "PurchaseOrderID", "PurchaseOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("WalmartOrderSearchEntity", "CustomerOrderID", "CustomerOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits WalmartStoreEntity's mappings</summary>

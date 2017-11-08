@@ -786,8 +786,6 @@ namespace ShipWorks.Data.Model
 		Insurance,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
-		///<summary>TrackingNumber. </summary>
-		TrackingNumber,
 		///<summary>NonMachinable. </summary>
 		NonMachinable,
 		/// <summary></summary>
@@ -11178,6 +11176,8 @@ namespace ShipWorks.Data.Model
 		PurchaseOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>CustomerOrderID. </summary>
+		CustomerOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

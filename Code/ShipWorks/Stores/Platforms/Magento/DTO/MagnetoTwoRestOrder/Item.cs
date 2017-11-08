@@ -33,5 +33,8 @@ namespace ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder
 
         [JsonProperty("product_option")]
         public ProductOption ProductOption { get; set; }
+
+        [JsonProperty("product_id")]
+        public int ProductId { get; set; }
     }
 }

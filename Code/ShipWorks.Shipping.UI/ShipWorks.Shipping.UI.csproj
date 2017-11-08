@@ -164,7 +164,13 @@
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.Designer.cs">
       <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
+    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
+      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
+    </Compile>
+      <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Carriers\Asendia\AsendiaSetupWizard.Designer.cs">
@@ -193,12 +199,6 @@
     </Compile>
     <Compile Include="Carriers\Asendia\AsendiaProfileControl.Designer.cs">
       <DependentUpon>AsendiaProfileControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
-      <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
@@ -241,6 +241,9 @@
     </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressCustomsControl.Designer.cs">
       <DependentUpon>DhlExpressCustomsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Dhl\DhlExpressServicePickerControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Carriers\Postal\Usps\GlobalPostLabelNotification.cs" />
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml.cs">

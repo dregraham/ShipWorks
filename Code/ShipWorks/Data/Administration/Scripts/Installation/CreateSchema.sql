@@ -2949,7 +2949,6 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsWeight] [float] NOT NULL,
 	[Insurance] [bit] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
-	[TrackingNumber] [varchar](50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'
@@ -6760,7 +6759,8 @@ CREATE TABLE [dbo].[WalmartOrderSearch]
 [WalmartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[CustomerOrderID] [varchar] (50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderSearch] on [dbo].[WalmartOrderSearch]'
@@ -6770,6 +6770,10 @@ GO
 PRINT N'Creating index [IX_WalmartOrderSearch_PurchaseOrderID] on [dbo].[WalmartOrderSearch]'
 GO
 CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_PurchaseOrderID] ON [dbo].[WalmartOrderSearch] ([PurchaseOrderID]) INCLUDE ([OrderID])
+GO
+PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[YahooOrderSearch]'
 GO

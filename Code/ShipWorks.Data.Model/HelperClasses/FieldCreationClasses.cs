@@ -1777,11 +1777,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.InsuranceValue);}
 		}
-		/// <summary>Creates a new AsendiaShipmentEntity.TrackingNumber field instance</summary>
-		public static EntityField2 TrackingNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.TrackingNumber);}
-		}
 		/// <summary>Creates a new AsendiaShipmentEntity.NonMachinable field instance</summary>
 		public static EntityField2 NonMachinable
 		{
@@ -25836,6 +25831,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new WalmartOrderSearchEntity.CustomerOrderID field instance</summary>
+		public static EntityField2 CustomerOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderSearchFieldIndex.CustomerOrderID);}
 		}
 	}
 

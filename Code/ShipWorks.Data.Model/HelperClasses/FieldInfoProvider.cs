@@ -543,7 +543,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsWeight, 0, 0, 38);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AsendiaShipmentFieldIndex.InsuranceValue, 0, 4, 19);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.TrackingNumber, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
@@ -3591,6 +3590,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)WalmartOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "PurchaseOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.PurchaseOrderID, 32, 0, 0);
 			this.AddElementFieldInfo("WalmartOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("WalmartOrderSearchEntity", "CustomerOrderID", typeof(System.String), false, false, false, false,  (int)WalmartOrderSearchFieldIndex.CustomerOrderID, 50, 0, 0);
 		}
 		/// <summary>Inits WalmartStoreEntity's FieldInfo objects</summary>
 		private void InitWalmartStoreEntityInfos()

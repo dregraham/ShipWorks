@@ -25,9 +25,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 200, 2000, "100000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(
+            It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000 && t.BuyerID == "100000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 300, 3000, "100000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000 && t.BuyerID == "100000"), CommentTypeCodeType.Positive, "Foo"));
         }
 
         [Fact]
@@ -42,10 +43,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 400, 4000, "200000", CommentTypeCodeType.Positive, "Foo"),
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 400 && t.TransactionID == 4000 && t.BuyerID == "200000"), CommentTypeCodeType.Positive, "Foo"),
                 Times.Never);
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 300, 3000, "100000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000 && t.BuyerID == "100000"), CommentTypeCodeType.Positive, "Foo"));
         }
 
         [Fact]
@@ -59,9 +60,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 200, 2000, "200000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000 && t.BuyerID == "200000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 300, 3000, "300000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000 && t.BuyerID == "300000"), CommentTypeCodeType.Positive, "Foo"));
         }
 
         [Fact]
@@ -75,10 +76,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 200, 2000, "200000", CommentTypeCodeType.Positive, "Foo"),
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000 && t.BuyerID == "200000"), CommentTypeCodeType.Positive, "Foo"),
                 Times.Never);
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 300, 3000, "300000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000 && t.BuyerID == "300000"), CommentTypeCodeType.Positive, "Foo"));
         }
 
         [Fact]
@@ -93,13 +94,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 200, 2000, "100000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 200 && t.TransactionID == 2000 && t.BuyerID == "100000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 300, 3000, "100000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 300 && t.TransactionID == 3000 && t.BuyerID == "100000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 500, 5000, "500000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 500 && t.TransactionID == 5000 && t.BuyerID == "500000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 600, 6000, "600000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.TransactionID == 6000 && t.BuyerID == "600000"), CommentTypeCodeType.Positive, "Foo"));
         }
 
         [Fact]
@@ -110,10 +111,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false, 8);
 
             webClient.Setup(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 200, It.IsAny<long>(), It.IsAny<string>(), It.IsAny<CommentTypeCodeType>(), It.IsAny<string>()))
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 200), It.IsAny<CommentTypeCodeType>(), It.IsAny<string>()))
                 .Throws(new EbayException("Foo"));
             webClient.Setup(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 500, It.IsAny<long>(), It.IsAny<string>(), It.IsAny<CommentTypeCodeType>(), It.IsAny<string>()))
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 500), It.IsAny<CommentTypeCodeType>(), It.IsAny<string>()))
                 .Throws(new EbayException("Foo"));
 
             SetupFeedbackDetails();
@@ -122,9 +123,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             await commandCreator.OnLeaveFeedback(menuContext.Object);
 
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 600, 6000, "600000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 600 && t.TransactionID == 6000 && t.BuyerID == "600000"), CommentTypeCodeType.Positive, "Foo"));
             webClient.Verify(x =>
-                x.LeaveFeedback(It.IsAny<EbayToken>(), 800, 8000, "700000", CommentTypeCodeType.Positive, "Foo"));
+                x.LeaveFeedback(It.Is<EbayTransactionDetails>(t => t.ItemID == 800 && t.TransactionID == 8000 && t.BuyerID == "700000"), CommentTypeCodeType.Positive, "Foo"));
+            
         }
 
         private void SetupFeedbackDetails()
