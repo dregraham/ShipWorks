@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
 
             using (Stream pdfFileStream = assembly.GetManifestResourceStream(path))
             {
-                new PdfDocument().SavePages(pdfFileStream, (x, i) => pageCount++);
+                new PdfBlackAndWhiteDocument().SavePages(pdfFileStream, (x, i) => pageCount++);
             }
 
             Assert.Equal(expectedPageCount, pageCount);
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
 
             using (Stream pdfFileStream = assembly.GetManifestResourceStream(ResourceName))
             {
-                new PdfDocument().SavePages(pdfFileStream, (x, i) =>
+                new PdfBlackAndWhiteDocument().SavePages(pdfFileStream, (x, i) =>
                 {
                     using (Bitmap bitmap = new Bitmap(x))
                     {

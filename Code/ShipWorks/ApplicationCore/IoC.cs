@@ -179,7 +179,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<PdfDocument>()
+            builder.RegisterType<PdfBlackAndWhiteDocument>()
                 .AsImplementedInterfaces();
 
             RegisterWrappers(builder);

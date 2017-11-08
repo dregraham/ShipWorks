@@ -1,4 +1,5 @@
 using System.Linq;
+using Interapptive.Shared.Pdf;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +20,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
     public class FedExResponseFactoryTest
     {
         private FedExResponseFactory testObject;
-
         private ProcessShipmentReply nativeShipResponse;
         private Mock<CarrierRequest> carrierRequest;
 
@@ -31,9 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // Create a ship response with the correct native type
             nativeShipResponse = new ProcessShipmentReply();
 
-            var dataResourceManager = new Mock<IDataResourceManager>();
-
-            testObject = new FedExResponseFactory(new FedExLabelRepository(dataResourceManager.Object));
+            testObject = new FedExResponseFactory();
         }
 
         #region CreateGroundResponse Tests

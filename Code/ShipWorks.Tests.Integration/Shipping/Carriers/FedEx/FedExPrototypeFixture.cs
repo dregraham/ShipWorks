@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
@@ -218,18 +219,21 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 if (!MagicKeysDown)
                 {
                     var settingsRepository = new FedExSettingsRepository();
-                    var labelRepository = new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()));
+                    IFedExLabelRepositoryFactory labelRepositoryFactory = 
+                        new FedExLabelRepositoryFactory(
+                            () => new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())), 
+                            () => new FedExLTLFreightLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())));
 
                     //TODO: See if we can use Autofac for this
                     FedExShippingClerk shippingClerk = new FedExShippingClerk(
-                        labelRepository,
+                        labelRepositoryFactory,
                         new FedExRequestFactory(
                             new FedExServiceGatewayFactory(
                                 _ => new FedExServiceGateway(settingsRepository),
                                 _ => new FedExOpenShipGateway(settingsRepository)),
                             settingsRepository,
                             new FedExShipmentTokenProcessor(),
-                            new FedExResponseFactory(labelRepository),
+                            new FedExResponseFactory(),
                             null),
                         settingsRepository,
                         new ExcludedServiceTypeRepository(),

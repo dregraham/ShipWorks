@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Pdf;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
@@ -48,60 +47,72 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         /// </summary>
         /// <param name="reply">ProcessShipmentReply from FedEx</param>
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
-        [NDependIgnoreLongMethod]
         private void SavePackageLabels(IFedExNativeShipmentReply reply, IShipmentEntity shipment)
         {
             string certificationId = GetCertificationId(reply);
 
+            SaveStandardPackageLabels(reply, shipment, certificationId);
+        }
+
+        /// <summary>
+        /// Save standard package labels (Not LTL Freight)
+        /// </summary>
+        private void SaveStandardPackageLabels(IFedExNativeShipmentReply reply, IShipmentEntity shipment, string certificationId)
+        {
             // Save the label images
-            using (SqlAdapter adapter = new SqlAdapter())
+            foreach (CompletedPackageDetail packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
             {
-                foreach (CompletedPackageDetail packageReply in reply.CompletedShipmentDetail.CompletedPackageDetails)
+                var package = shipment.FedEx.Packages.ElementAt(int.Parse(packageReply.SequenceNumber) - 1);
+
+                // Save the primary label image
+                if (packageReply.Label != null)
                 {
-                    var package = shipment.FedEx.Packages.ElementAt(int.Parse(packageReply.SequenceNumber) - 1);
+                    SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);
+                }
 
-                    // Save the primary label image
-                    if (packageReply.Label != null)
-                    {
-                        SaveLabel("LabelImage", packageReply.Label, package.FedExPackageID, certificationId);
-                    }
+                // Package level COD
+                if (shipment.FedEx.CodEnabled && packageReply.CodReturnDetail != null && packageReply.CodReturnDetail.Label != null)
+                {
+                    SaveLabel("COD", packageReply.CodReturnDetail.Label, package.FedExPackageID, certificationId);
+                }
 
-                    // Package level COD
-                    if (shipment.FedEx.CodEnabled && packageReply.CodReturnDetail != null && packageReply.CodReturnDetail.Label != null)
-                    {
-                        SaveLabel("COD", packageReply.CodReturnDetail.Label, package.FedExPackageID, certificationId);
-                    }
+                // Save all the additional labels
+                SavePackageDocuments(certificationId, packageReply, package);
+            }
+        }
 
-                    // Save all the additional labels
-                    if (packageReply.PackageDocuments != null)
-                    {
-                        IEnumerable<ShippingDocument> shippingDocs = packageReply.PackageDocuments
-                                                                          .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS);
+        /// <summary>
+        /// Saves package documents, if necessary
+        /// </summary>
+        private void SavePackageDocuments(string certificationId, CompletedPackageDetail packageReply, IFedExPackageEntity package)
+        {
+            if (packageReply.PackageDocuments != null)
+            {
+                IEnumerable<ShippingDocument> shippingDocs = packageReply.PackageDocuments
+                    .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS);
 
-                        // Save off any alcohol stickers
-                        foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL"))
-                        {
-                            SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
-                        }
+                // Save off any alcohol stickers
+                foreach (ShippingDocument document in shippingDocs.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() == "ALCOHOL-SEL"))
+                {
+                    SaveLabel(GetLabelName(document.Type) + "AlcoholSticker", document, package.FedExPackageID, certificationId);
+                }
 
-                        // Save off non alcohol labels that have an AccessReference value
-                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
-                        {
-                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
-                        }
+                // Save off non alcohol labels that have an AccessReference value
+                foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.AccessReference != null && d.AccessReference.ToUpperInvariant() != "ALCOHOL-SEL"))
+                {
+                    SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
+                }
 
-                        // Save off the OP-900 document (AccessReference is null, so it's not captured in the section above)
-                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.OP_900))
-                        {
-                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
-                        }
+                // Save off the OP-900 document (AccessReference is null, so it's not captured in the section above)
+                foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.OP_900))
+                {
+                    SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
+                }
 
-                        // Save off the Dangerous Goods Shipper Declaration document (AccessReference is null, so it's not captured in the section above)
-                        foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION))
-                        {
-                            SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
-                        }
-                    }
+                // Save off the Dangerous Goods Shipper Declaration document (AccessReference is null, so it's not captured in the section above)
+                foreach (ShippingDocument document in packageReply.PackageDocuments.Where(d => d.Type == ReturnedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION))
+                {
+                    SaveLabel("Document" + GetLabelName(document.Type), document, package.FedExPackageID, certificationId);
                 }
             }
         }
@@ -116,13 +127,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
             // Documents
             if (reply.CompletedShipmentDetail.ShipmentDocuments != null)
             {
-                using (SqlAdapter adapter = new SqlAdapter())
+                foreach (ShippingDocument document in reply.CompletedShipmentDetail.ShipmentDocuments
+                                                            .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS))
                 {
-                    foreach (ShippingDocument document in reply.CompletedShipmentDetail.ShipmentDocuments
-                                                               .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS))
-                    {
-                        SaveLabel("Document" + GetLabelName(document.Type), document, shipment.ShipmentID, GetCertificationId(reply));
-                    }
+                    SaveLabel("Document" + GetLabelName(document.Type), document, shipment.ShipmentID, GetCertificationId(reply));
                 }
             }
         }
@@ -137,13 +145,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         {
             if (reply.CompletedShipmentDetail.AssociatedShipments != null)
             {
-                using (SqlAdapter adapter = new SqlAdapter())
+                foreach (AssociatedShipmentDetail associatedShipment in reply.CompletedShipmentDetail.AssociatedShipments
+                                                                                .Where(a => a.Label != null && a.Label.Type == ReturnedShippingDocumentType.COD_RETURN_LABEL))
                 {
-                    foreach (AssociatedShipmentDetail associatedShipment in reply.CompletedShipmentDetail.AssociatedShipments
-                                                                                 .Where(a => a.Label != null && a.Label.Type == ReturnedShippingDocumentType.COD_RETURN_LABEL))
-                    {
-                        SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, GetCertificationId(reply));
-                    }
+                    SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, GetCertificationId(reply));
                 }
             }
         }
@@ -169,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                         File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
                     }
 
-                    dataResourceManager.CreateFromPdf(pdfBytes, ownerID, name);
+                    dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, ownerID, name);
                 }
             }
             else
@@ -224,18 +229,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         /// </summary>
         public void ClearReferences(IShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            using (SqlAdapter adapter = new SqlAdapter())
+            ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
+            foreach (var package in shipment.FedEx.Packages)
             {
-                ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
-                foreach (var package in shipment.FedEx.Packages)
-                {
-                    ObjectReferenceManager.ClearReferences(package.FedExPackageID);
-                }
+                ObjectReferenceManager.ClearReferences(package.FedExPackageID);
             }
         }
 

@@ -210,6 +210,11 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Pdf\IPdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfColorDocument.cs" />
+    <Compile Include="Pdf\PdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfDocumentType.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
@@ -316,7 +321,6 @@
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IOpenFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
-    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialogException.cs" />
@@ -506,7 +510,7 @@
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectDeletedException.cs" />
-    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\PdfBlackAndWhiteDocument.cs" />
     <Compile Include="Properties\Flags.Designer.cs">
       <DependentUpon>Flags.resx</DependentUpon>
       <AutoGen>True</AutoGen>

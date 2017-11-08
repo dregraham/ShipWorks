@@ -1,14 +1,10 @@
 using System.Linq;
-using Interapptive.Shared.Pdf;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Tests.Shared.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.IntegrationTest
@@ -44,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
                     _ => new FedExOpenShipGateway(MockSettingsRepository.Object)),
                 MockSettingsRepository.Object,
                 new FedExShipmentTokenProcessor(),
-                new FedExResponseFactory(new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()))),
+                new FedExResponseFactory(),
                 null);
             var searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest();
             var carrierResponse = searchLocationsRequest.Submit(shipment);
