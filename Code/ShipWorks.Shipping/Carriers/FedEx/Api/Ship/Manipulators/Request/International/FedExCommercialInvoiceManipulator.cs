@@ -52,24 +52,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
 
             shipmentCurrencyType = FedExSettings.GetCurrencyTypeApiValue(shipment, () => settings.GetAccountReadOnly(shipment));
 
-            if (ShouldApply(shipment, sequenceNumber))
-            {
-                CustomsClearanceDetail customsDetail = GetCustomsDetail(request);
+            CustomsClearanceDetail customsDetail = request.RequestedShipment.CustomsClearanceDetail;
 
-                ConfigureInvoice(fedExShipment, customsDetail);
-                ConfigureImporter(fedExShipment, customsDetail);
-
-                customsDetail.InsuranceCharges = new Money
+            return ConfigureInvoice(fedExShipment, customsDetail)
+                .Map(() =>
                 {
-                    Amount = fedExShipment.CommercialInvoiceInsurance,
-                    Currency = shipmentCurrencyType
-                };
-                request.RequestedShipment.CustomsClearanceDetail = customsDetail;
+                    ConfigureImporter(fedExShipment, customsDetail);
 
-                ConfigureEtd(fedExShipment, request);
-            }
+                    customsDetail.InsuranceCharges = new Money
+                    {
+                        Amount = fedExShipment.CommercialInvoiceInsurance,
+                        Currency = shipmentCurrencyType
+                    };
+                    request.RequestedShipment.CustomsClearanceDetail = customsDetail;
 
-            return request;
+                    ConfigureEtd(fedExShipment, request);
+                })
+                .Map(() => request);
         }
 
         /// <summary>
@@ -129,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             List<RequestedShippingDocumentType> shippingDocumentTypes = new List<RequestedShippingDocumentType>(shippingDocumentSpecification.ShippingDocumentTypes);
             shippingDocumentTypes.Add(RequestedShippingDocumentType.COMMERCIAL_INVOICE);
             shippingDocumentSpecification.ShippingDocumentTypes = shippingDocumentTypes.ToArray();
-            
+
             CommercialInvoiceDetail commercialInvoiceDetail = shippingDocumentSpecification.CommercialInvoiceDetail;
             if (commercialInvoiceDetail == null)
             {
@@ -175,26 +174,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// </summary>
         /// <param name="fedExShipment">The FedEx shipment.</param>
         /// <param name="customsDetail">The customs detail.</param>
-        private void ConfigureInvoice(IFedExShipmentEntity fedExShipment, CustomsClearanceDetail customsDetail)
+        private Result ConfigureInvoice(IFedExShipmentEntity fedExShipment, CustomsClearanceDetail customsDetail)
         {
             CommercialInvoice invoice = new CommercialInvoice();
-            invoice.TermsOfSale = GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale);
-
-            invoice.Purpose = GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose);
             invoice.PurposeSpecified = true;
-            
-            invoice.Comments = new string[] {fedExShipment.CommercialInvoiceComments};
+
+            invoice.Comments = new string[] { fedExShipment.CommercialInvoiceComments };
 
             invoice.FreightCharge = new Money
-                {
-                    Amount = fedExShipment.CommercialInvoiceFreight,
-                    Currency = shipmentCurrencyType 
-                };
-            invoice.TaxesOrMiscellaneousCharge = new Money 
-                { 
-                    Amount = fedExShipment.CommercialInvoiceOther,
-                    Currency = shipmentCurrencyType 
-                };
+            {
+                Amount = fedExShipment.CommercialInvoiceFreight,
+                Currency = shipmentCurrencyType
+            };
+            invoice.TaxesOrMiscellaneousCharge = new Money
+            {
+                Amount = fedExShipment.CommercialInvoiceOther,
+                Currency = shipmentCurrencyType
+            };
 
             if (!string.IsNullOrEmpty(fedExShipment.CommercialInvoiceReference))
             {
@@ -205,24 +201,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 };
             }
 
-            customsDetail.CommercialInvoice = invoice;
-        }
-
-
-        /// <summary>
-        /// Gets the customs detail from the request or creates a new one if the one on the request is null.
-        /// </summary>
-        /// <param name="request">The native request.</param>
-        /// <returns>A CustomsClearanceDetail object.</returns>
-        private CustomsClearanceDetail GetCustomsDetail(IFedExNativeShipmentRequest request)
-        {
-            return request.RequestedShipment.CustomsClearanceDetail ?? new CustomsClearanceDetail();
+            return GenericResult.FromSuccess(customsDetail)
+                .Do(_ =>
+                    GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale)
+                        .Do(x => invoice.TermsOfSale = x))
+                .Do(_ =>
+                    GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose)
+                        .Do(x => invoice.Purpose = x))
+                .Do(x => x.CommercialInvoice = invoice);
         }
 
         /// <summary>
         /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private string GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
+        private GenericResult<string> GetApiTermsOfSale(FedExTermsOfSale termsOfSale)
         {
             // TODO: We need to determine if the "or" types need to be split into individual types.
             // TODO: We need to determine the actual values for the rest.
@@ -239,13 +231,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 case FedExTermsOfSale.DAT: return "DAT";
             }
 
-            throw new InvalidOperationException("Invalid FedEx TermsOfSale: " + termsOfSale);
+            return new InvalidOperationException("Invalid FedEx TermsOfSale: " + termsOfSale);
         }
 
         /// <summary>
         /// Get the FedEx API value that corresponds to our internal value
         /// </summary>
-        private PurposeOfShipmentType GetApiCommercialInvoicePurpose(FedExCommercialInvoicePurpose purpose)
+        private GenericResult<PurposeOfShipmentType> GetApiCommercialInvoicePurpose(FedExCommercialInvoicePurpose purpose)
         {
             switch (purpose)
             {
@@ -257,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
                 case FedExCommercialInvoicePurpose.Repair: return PurposeOfShipmentType.REPAIR_AND_RETURN;
             }
 
-            throw new InvalidOperationException("Invalid FedEx Commercial Invoice Purpose: " + purpose);
+            return new InvalidOperationException("Invalid FedEx Commercial Invoice Purpose: " + purpose);
         }
 
         /// <summary>
@@ -265,11 +257,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// </summary>
         private void InitializeRequest(IShipmentEntity shipment, ProcessShipmentRequest request)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            MethodConditions.EnsureArgumentIsNotNull(request, nameof(request));
-
             request.Ensure(r => r.RequestedShipment)
                 .Ensure(rs => rs.SpecialServicesRequested);
+            request.RequestedShipment.Ensure(x => x.CustomsClearanceDetail);
         }
     }
 }

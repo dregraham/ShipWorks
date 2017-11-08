@@ -1,14 +1,12 @@
 using System;
 using Autofac.Extras.Moq;
-using Xunit;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
+using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.International
@@ -24,14 +22,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public FedExCommercialInvoiceManipulatorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            
+
             shipment = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity
                 {
                     CommercialInvoice = true,
-                    CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CFR_or_CPT,
-                    CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Gift,
+                    CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.CFR_or_CPT,
+                    CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Gift,
                     CommercialInvoiceComments = "some comments",
                     CommercialInvoiceFreight = 40.23M,
                     CommercialInvoiceOther = 84.20M,
@@ -70,18 +68,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
-        }
-
-        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment()
         {
             // setup the test by setting the requested shipment to null
@@ -116,22 +102,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_CustomClearanceDetailsIsNull_WhenCommercialInvoiceIsFalse()
-        {
-            shipment.FedEx.CommercialInvoice = false;
-            processShipmentRequest.RequestedShipment.CustomsClearanceDetail = null;
-
-            testObject.Manipulate(shipment, processShipmentRequest, 0);
-
-            // The customs detail should not have been initialized
-            Assert.Null(processShipmentRequest.RequestedShipment.CustomsClearanceDetail);
-        }
-
-        [Fact]
         public void Manipulate_CommercialInvoiceIsNotNull()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.FOB_or_FCA;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -143,7 +117,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsFca()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.FOB_or_FCA;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.FOB_or_FCA;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -155,7 +129,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsCptOrCf()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CFR_or_CPT;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.CFR_or_CPT;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -167,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsCipOrCif()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.CIF_or_CIP;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.CIF_or_CIP;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -179,7 +153,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsEXW()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.EXW;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.EXW;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -191,7 +165,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsDDP()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.DDP;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.DDP;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -203,7 +177,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_TermsOfSaleIsDDU()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoiceTermsOfSale = (int)FedExTermsOfSale.DDU;
+            shipment.FedEx.CommercialInvoiceTermsOfSale = (int) FedExTermsOfSale.DDU;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -217,14 +191,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             shipment.FedEx.CommercialInvoice = true;
             shipment.FedEx.CommercialInvoiceTermsOfSale = 112;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]
         public void Manipulate_PurposeIsSold()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Sold;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Sold;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -236,7 +213,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PurposeIsNotSold()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.NotSold;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.NotSold;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -248,7 +225,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PurposeIsGift()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Gift;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Gift;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -260,7 +237,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PurposeIsSample()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Sample;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Sample;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -272,7 +249,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PurposeIsPersonalEffects()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Personal;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Personal;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -284,7 +261,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PurposeIsRepairAndReturn()
         {
             shipment.FedEx.CommercialInvoice = true;
-            shipment.FedEx.CommercialInvoicePurpose = (int)FedExCommercialInvoicePurpose.Repair;
+            shipment.FedEx.CommercialInvoicePurpose = (int) FedExCommercialInvoicePurpose.Repair;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -298,7 +275,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             shipment.FedEx.CommercialInvoice = true;
             shipment.FedEx.CommercialInvoicePurpose = 54;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]

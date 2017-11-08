@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.International;
 using ShipWorks.Tests.Shared;
+using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.International
@@ -49,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
                 ShipCountryCode = "NZ",
                 OriginCountryCode = "CA",
                 CustomsValue = 123.45M,
-                FedEx = new FedExShipmentEntity() { PayorDutiesAccount = "987", PayorTransportName = "Transport Name", PayorDutiesType = (int)FedExPayorType.Sender, CustomsRecipientTIN = "5468" }
+                FedEx = new FedExShipmentEntity() { PayorDutiesAccount = "987", PayorTransportName = "Transport Name", PayorDutiesType = (int) FedExPayorType.Sender, CustomsRecipientTIN = "5468" }
             };
 
             shipment.CustomsItems.Add(new ShipmentCustomsItemEntity { Description = "item one", Quantity = 4, Weight = 2.3, UnitValue = 15.36M, HarmonizedCode = "Harmonized 1", UnitPriceAmount = 51.36M, NumberOfPieces = 4 });
@@ -70,18 +68,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
                 .Returns(true);
 
             testObject = mock.Create<FedExCustomsManipulator>();
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenShipmentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null, new ProcessShipmentRequest(), 0));
-        }
-
-        [Fact]
-        public void Manipulate_ThrowsArgumentNullException_WhenProcessShipmentRequestIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(new ShipmentEntity(), null, 0));
         }
 
         [Theory]
@@ -119,18 +105,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
 
             // The recipient property should be created now
             Assert.NotNull(processShipmentRequest.RequestedShipment.Recipient);
-        }
-
-        [Fact]
-        public void Manipulate_CustomsDetailIsNull_WhenCustomsNotRequired()
-        {
-            customsRequired
-                .Setup(c => c.IsCustomsRequired(It.IsAny<ShipmentEntity>()))
-                .Returns(false);
-
-            testObject.Manipulate(shipment, processShipmentRequest, 0);
-
-            Assert.Null(processShipmentRequest.RequestedShipment.CustomsClearanceDetail);
         }
 
         [Fact]
@@ -205,7 +179,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
 
             for (int i = 0; i < shipment.CustomsItems.Count; i++)
             {
-                Assert.Equal(shipment.CustomsItems[i].Quantity, (double)processShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
+                Assert.Equal(shipment.CustomsItems[i].Quantity, (double) processShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
             }
         }
 
@@ -244,7 +218,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
 
             for (int i = 0; i < shipment.CustomsItems.Count; i++)
             {
-                Assert.Equal((decimal)shipment.CustomsItems[i].Weight, processShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Value);
+                Assert.Equal((decimal) shipment.CustomsItems[i].Weight, processShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Value);
             }
         }
 
@@ -252,7 +226,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_CommoditiesWeightsIsPounds_WhenFedExCustomsDocumentsOnlyIsFalse_AndCustomItemWeightIsPounds()
         {
             shipment.FedEx.CustomsDocumentsOnly = false;
-            shipment.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Pounds;
+            shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -266,7 +240,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_CommoditiesWeightsIsKilograms_WhenFedExCustomsDocumentsOnlyIsFalse_AndCustomItemWeightIsKilograms()
         {
             shipment.FedEx.CustomsDocumentsOnly = false;
-            shipment.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
+            shipment.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -277,12 +251,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenFedExCustomsDocumentsOnlyIsFalse_AndShipmentWeightTypeIsUnknown()
+        public void Manipulate_ReturnsInvalidOperationException_WhenFedExCustomsDocumentsOnlyIsFalse_AndShipmentWeightTypeIsUnknown()
         {
             shipment.FedEx.CustomsDocumentsOnly = false;
             shipment.FedEx.WeightUnitType = 42;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]
@@ -448,7 +425,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_NetCostMethodIsNO_WhenNaftaIsEnabled_AndNetCostIsNotCalculated()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaNetCostMethod = (int)FedExNaftaNetCostMethod.NotCalculated;
+            shipment.FedEx.CustomsNaftaNetCostMethod = (int) FedExNaftaNetCostMethod.NotCalculated;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -463,7 +440,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_NetCostMethodIsNC_WhenNaftaIsEnabled_AndNetCostIsCalculated()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaNetCostMethod = (int)FedExNaftaNetCostMethod.NetCostMethod;
+            shipment.FedEx.CustomsNaftaNetCostMethod = (int) FedExNaftaNetCostMethod.NetCostMethod;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -475,19 +452,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnabled_AndNetCostIsInvalid()
+        public void Manipulate_ReturnsInvalidOperationException_WhenNaftaIsEnabled_AndNetCostIsInvalid()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
             shipment.FedEx.CustomsNaftaNetCostMethod = 54;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         [Fact]
         public void Manipulate_NetCostMethodIsSpecified_WhenNaftaIsEnabled()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaNetCostMethod = (int)FedExNaftaNetCostMethod.NetCostMethod;
+            shipment.FedEx.CustomsNaftaNetCostMethod = (int) FedExNaftaNetCostMethod.NetCostMethod;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -503,7 +483,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsA_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.A;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.A;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -518,7 +498,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsB_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.B;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.B;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -533,7 +513,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsC_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.C;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.C;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -548,7 +528,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsD_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.D;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.D;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -563,7 +543,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsE_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.E;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.E;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -578,7 +558,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_PreferenceCriterionIsF_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.F;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.F;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -590,20 +570,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnable_AndPreferenceIsInvalid()
+        public void Manipulate_ReturnsInvalidOperationException_WhenNaftaIsEnable_AndPreferenceIsInvalid()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
             shipment.FedEx.CustomsNaftaPreferenceType = 40;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
-        }
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
 
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
+        }
 
         [Fact]
         public void Manipulate_PreferenceCriterionIsSpecified_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.F;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.F;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -614,12 +596,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             }
         }
 
-
         [Fact]
         public void Manipulate_ProducerDeterminationIsYes_WhenNaftaIsEnable_AndCodeIsProducerOfCommodity()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaDeterminationCode = (int)FedExNaftaDeterminationCode.ProducerOfCommodity;
+            shipment.FedEx.CustomsNaftaDeterminationCode = (int) FedExNaftaDeterminationCode.ProducerOfCommodity;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -634,7 +615,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_ProducerDeterminationIsNo1_WhenNaftaIsEnable_AndCodeIsNotProducerKnowledge()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaDeterminationCode = (int)FedExNaftaDeterminationCode.NotProducerKnowledgeOfCommodity;
+            shipment.FedEx.CustomsNaftaDeterminationCode = (int) FedExNaftaDeterminationCode.NotProducerKnowledgeOfCommodity;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -649,7 +630,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_ProducerDeterminationIsNo2_WhenNaftaIsEnable_AndCodeIsNotProducerStatement()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaDeterminationCode = (int)FedExNaftaDeterminationCode.NotProducerWrittenStatement;
+            shipment.FedEx.CustomsNaftaDeterminationCode = (int) FedExNaftaDeterminationCode.NotProducerWrittenStatement;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -664,7 +645,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_ProducerDeterminationIsNo3_WhenNaftaIsEnable_AndCodeIsNotProducerSignedCertificate()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaDeterminationCode = (int)FedExNaftaDeterminationCode.NotProducerSignedCertificate;
+            shipment.FedEx.CustomsNaftaDeterminationCode = (int) FedExNaftaDeterminationCode.NotProducerSignedCertificate;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -676,12 +657,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnable_AndProducerIsInvalid()
+        public void Manipulate_ReturnsInvalidOperationException_WhenNaftaIsEnable_AndProducerIsInvalid()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
             shipment.FedEx.CustomsNaftaPreferenceType = 13;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
 
@@ -689,7 +673,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         public void Manipulate_ProducerDeterminationIsSpecified_WhenNaftaIsEnable()
         {
             shipment.FedEx.CustomsNaftaEnabled = true;
-            shipment.FedEx.CustomsNaftaPreferenceType = (int)FedExNaftaPreferenceCriteria.F;
+            shipment.FedEx.CustomsNaftaPreferenceType = (int) FedExNaftaPreferenceCriteria.F;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -699,8 +683,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
                 Assert.True(commodity.NaftaDetail.ProducerDeterminationSpecified);
             }
         }
-
-
 
         #endregion NAFTA Tests
 
@@ -715,12 +697,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             Assert.NotNull(processShipmentRequest.RequestedShipment.CustomsClearanceDetail.DutiesPayment);
         }
 
-
         [Fact]
         public void Manipulate_UsesFedExAccountNumber_WhenPayorDutiesTypeIsSender()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Sender;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Sender;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -731,8 +712,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesFedExAccountCountryCode_WhenPayorDutiesTypeIsSender()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Sender;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Sender;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -743,8 +724,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesFedExAccountNameAsContactName_WhenPayorDutiesTypeIsSender()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Sender;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Sender;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -752,12 +733,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             Assert.Equal(fedExAccount.FirstName + " " + fedExAccount.LastName, dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
         }
 
-
         [Fact]
         public void Manipulate_SetsPaymentTypeToRecipient()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Recipient;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -768,8 +748,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesPayorDutiesCountryCode_WhenPayorDutiesTypeIsRecipient()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Recipient;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
             shipment.FedEx.PayorDutiesCountryCode = "CA";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -781,8 +761,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesFedExShipmentPayorDutiesAccount_WhenPayorDutiesTypeIsRecipient()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Recipient;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -793,7 +773,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesPayorDutiesName_WhenPayorDutiesTypeIsRecepient()
         {
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Recipient;
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Recipient;
             shipment.FedEx.PayorDutiesName = "Peter Gibbons";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -805,8 +785,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_SetsPaymentTypeToThirdParty()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.ThirdParty;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.ThirdParty;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -817,8 +797,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesFedExShipmentPayorDutiesAccount_WhenPayorDutiesTypeIsThirdParty()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.ThirdParty;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.ThirdParty;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -829,7 +809,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesPayorDutiesName_WhenPayorDutiesTypeIsThirdParty()
         {
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.ThirdParty;
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.ThirdParty;
             shipment.FedEx.PayorDutiesName = "Michael Bolton";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -841,8 +821,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_UsesPayorDutiesCountryCode_WhenPayorDutiesTypeIsThirdParty()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.ThirdParty;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.ThirdParty;
             shipment.FedEx.PayorDutiesCountryCode = "UK";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -854,8 +834,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_SetsPaymentTypeToCollect()
         {
-            // Setup the fedex shipment payor type for the test
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Collect;
+            // Setup the FedEx shipment payor type for the test
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Collect;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -866,7 +846,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_ContactPersonNameIsNullOrEmpty_WhenPayorDutiesTypeIsCollect()
         {
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Collect;
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Collect;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -878,7 +858,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_AccountNumberIsNullOrEmpty_WhenPayorDutiesTypeIsCollect()
         {
-            shipment.FedEx.PayorDutiesType = (int)FedExPayorType.Collect;
+            shipment.FedEx.PayorDutiesType = (int) FedExPayorType.Collect;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -888,16 +868,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_ForUnknownPayorType()
+        public void Manipulate_ReturnsInvalidOperationException_ForUnknownPayorType()
         {
-            // Setup the fedex shipment payor type for the test by setting the type to an unsupported value
+            // Setup the FedEx shipment payor type for the test by setting the type to an unsupported value
             shipment.FedEx.PayorDutiesType = 23;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         #endregion Payment Detail Tests
-
 
         #region Tax Payer Tests
 
@@ -953,7 +935,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
             Assert.Equal(TinType.PERSONAL_STATE, processShipmentRequest.RequestedShipment.Recipient.Tins[0].TinType);
         }
 
-
         #endregion Tax Payer Tests
 
         [Fact]
@@ -997,7 +978,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_B13FilingOptionSpecifiedIsNotRequired()
         {
-            shipment.FedEx.CustomsExportFilingOption = (int)FedExCustomsExportFilingOption.NotRequired;
+            shipment.FedEx.CustomsExportFilingOption = (int) FedExCustomsExportFilingOption.NotRequired;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1007,7 +988,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_B13FilingOptionSpecifiedIsManuallyAttached()
         {
-            shipment.FedEx.CustomsExportFilingOption = (int)FedExCustomsExportFilingOption.ManuallyAttached;
+            shipment.FedEx.CustomsExportFilingOption = (int) FedExCustomsExportFilingOption.ManuallyAttached;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1017,7 +998,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_B13FilingOptionSpecifiedIsFiledElectronically()
         {
-            shipment.FedEx.CustomsExportFilingOption = (int)FedExCustomsExportFilingOption.FiledElectonically;
+            shipment.FedEx.CustomsExportFilingOption = (int) FedExCustomsExportFilingOption.FiledElectonically;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1027,7 +1008,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_B13FilingOptionSpecifiedIsSummaryReporting()
         {
-            shipment.FedEx.CustomsExportFilingOption = (int)FedExCustomsExportFilingOption.SummaryReporting;
+            shipment.FedEx.CustomsExportFilingOption = (int) FedExCustomsExportFilingOption.SummaryReporting;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1057,7 +1038,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdIsNull_WhenIdentificationTypeIsNone()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.None;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.None;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1067,7 +1048,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeIsPassport_WhenIdentificationTypeIsPassport()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Passport;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Passport;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1077,7 +1058,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeSpecifiedIsTrue_WhenIdentificationTypeIsPassport()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Passport;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Passport;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1087,7 +1068,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdValue_WhenIdentificationTypeIsPassport()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Passport;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Passport;
             shipment.FedEx.CustomsRecipientIdentificationValue = "123456";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1098,7 +1079,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeIsIndividual_WhenIdentificationTypeIsIndividual()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Individual;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Individual;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1108,7 +1089,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeSpecifiedIsTrue_WhenIdentificationTypeIsIndividual()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Individual;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Individual;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1118,7 +1099,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdValue_WhenIdentificationTypeIsIndividual()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Individual;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Individual;
             shipment.FedEx.CustomsRecipientIdentificationValue = "123456";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1129,7 +1110,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeIsCompany_WhenIdentificationTypeIsCompany()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Company;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Company;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1139,7 +1120,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdTypeSpecifiedIsTrue_WhenIdentificationTypeIsCompany()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Company;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Company;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1149,7 +1130,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_RecipientCustomsIdValue_WhenIdentificationTypeIsCompany()
         {
-            shipment.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.Company;
+            shipment.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.Company;
             shipment.FedEx.CustomsRecipientIdentificationValue = "123456";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1158,11 +1139,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenIdentificationTypeIsNotRecognized()
+        public void Manipulate_ReturnsInvalidOperationException_WhenIdentificationTypeIsNotRecognized()
         {
             shipment.FedEx.CustomsRecipientIdentificationType = 53;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
 
@@ -1171,7 +1155,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionsIsNull_WhenOptionTypeIsNone()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.None;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1181,7 +1165,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsCourtesyReturnLabel()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.CourtesyReturnLabel;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.CourtesyReturnLabel;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1191,7 +1175,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsCourtesyReturnLabel()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.CourtesyReturnLabel;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.CourtesyReturnLabel;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1201,7 +1185,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsCourtesyReturnLabel()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.CourtesyReturnLabel;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.CourtesyReturnLabel;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1212,7 +1196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsExhibitionTradeShow()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ExhibitionTradeShow;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ExhibitionTradeShow;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1222,7 +1206,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsExhibitionTradeShow()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ExhibitionTradeShow;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ExhibitionTradeShow;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1232,7 +1216,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsExhibitionTradeShow()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ExhibitionTradeShow;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ExhibitionTradeShow;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1243,7 +1227,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsFaultyItem()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FaultyItem;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1253,7 +1237,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsFaultyItem()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FaultyItem;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1263,7 +1247,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsFaultyItem()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FaultyItem;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1274,7 +1258,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsFollowingRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FollowingRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FollowingRepair;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1284,7 +1268,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsFollowingRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FollowingRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FollowingRepair;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1294,7 +1278,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsFollowingRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FollowingRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FollowingRepair;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1305,7 +1289,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsForRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ForRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ForRepair;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1315,7 +1299,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsForRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ForRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ForRepair;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1325,7 +1309,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsForRepair()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ForRepair;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ForRepair;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1336,7 +1320,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsItemForLoan()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ItemForLoan;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ItemForLoan;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1346,7 +1330,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsItemForLoan()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ItemForLoan;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ItemForLoan;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1356,7 +1340,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsItemForLoan()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.ItemForLoan;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.ItemForLoan;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1367,7 +1351,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsOther()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Other;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1377,7 +1361,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsOther()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Other;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1387,7 +1371,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsOther()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Other;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1398,7 +1382,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsRejected()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Rejected;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Rejected;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1408,7 +1392,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsRejected()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Rejected;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Rejected;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1418,7 +1402,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsRejected()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Rejected;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Rejected;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1429,7 +1413,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsReplacement()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Replacement;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Replacement;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1439,7 +1423,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsReplacement()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Replacement;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Replacement;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1449,7 +1433,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsReplacement()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Replacement;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Replacement;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1460,7 +1444,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeIsTrial()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Trial;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Trial;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1470,7 +1454,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionTypeSpecifiedIsTrue_WhenTypeIsTrial()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Trial;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Trial;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -1480,7 +1464,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [Fact]
         public void Manipulate_CustomOptionDescription_WhenTypeIsTrial()
         {
-            shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Trial;
+            shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.Trial;
             shipment.FedEx.CustomsOptionsDesription = "option description";
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
@@ -1489,11 +1473,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Fact]
-        public void Manipulate_ThrowsInvalidOperationException_WhenTypeIsNotRecognized()
+        public void Manipulate_ReturnsInvalidOperationException_WhenTypeIsNotRecognized()
         {
             shipment.FedEx.CustomsOptionsType = 32;
 
-            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(shipment, processShipmentRequest, 0));
+            var result = testObject.Manipulate(shipment, processShipmentRequest, 0);
+
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<InvalidOperationException>(result.Exception);
         }
 
         #endregion Customs Options Tests
