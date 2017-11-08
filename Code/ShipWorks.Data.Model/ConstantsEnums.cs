@@ -721,6 +721,46 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaShipment.</summary>
+	public enum AsendiaShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>Insurance. </summary>
+		Insurance,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>TrackingNumber. </summary>
+		TrackingNumber,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: Audit.</summary>
 	public enum AuditFieldIndex
 	{
@@ -11839,6 +11879,8 @@ namespace ShipWorks.Data.Model
 		AmeriCommerceStoreEntity,
 		///<summary>AsendiaAccount</summary>
 		AsendiaAccountEntity,
+		///<summary>AsendiaShipment</summary>
+		AsendiaShipmentEntity,
 		///<summary>Audit</summary>
 		AuditEntity,
 		///<summary>AuditChange</summary>

@@ -158,6 +158,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaServiceControl.Designer.cs">
+      <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -181,6 +187,12 @@
     </Compile>
     <Compile Include="Carriers\Asendia\AsendiaAccountEditorDlg.Designer.cs">
       <DependentUpon>AsendiaAccountEditorDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaCustomsControl.Designer.cs">
+      <DependentUpon>AsendiaCustomsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSetupWizard.cs">
       <SubType>Form</SubType>
@@ -471,6 +483,9 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonProfileControl.resx">
       <DependentUpon>AmazonProfileControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaServiceControl.resx">
+      <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Asendia\AsendiaSetupWizard.resx">
       <DependentUpon>AsendiaSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
@@ -480,6 +495,9 @@
     <EmbeddedResource Include="Carriers\Asendia\AsendiaAccountEditorDlg.resx">
       <DependentUpon>AsendiaAccountEditorDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Asendia\AsendiaCustomsControl.resx">
+      <DependentUpon>AsendiaCustomsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Dhl\DhlExpressSettingsControl.resx">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>

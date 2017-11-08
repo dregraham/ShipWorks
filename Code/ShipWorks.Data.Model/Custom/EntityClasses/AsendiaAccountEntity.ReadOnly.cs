@@ -36,8 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment)
         {
-            //shipment.Asendia.AsendiaAccountID = AccountId;
-            throw new NotImplementedException();
+            shipment.Asendia.AsendiaAccountID = AccountId;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (218 + 0));
+			this.InitClass( (219 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -66,6 +66,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAmazonStoreEntityInfos();
 			InitAmeriCommerceStoreEntityInfos();
 			InitAsendiaAccountEntityInfos();
+			InitAsendiaShipmentEntityInfos();
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
 			InitAuditChangeDetailEntityInfos();
@@ -503,6 +504,28 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Phone, 15, 0, 0);
+		}
+		/// <summary>Inits AsendiaShipmentEntity's FieldInfo objects</summary>
+		private void InitAsendiaShipmentEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(AsendiaShipmentFieldIndex), "AsendiaShipmentEntity");
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)AsendiaShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "AsendiaAccountID", typeof(System.Int64), false, false, false, false,  (int)AsendiaShipmentFieldIndex.AsendiaAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "Service", typeof(Interapptive.Shared.Enums.AsendiaServiceType), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Service, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "Contents", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Contents, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonDelivery, 0, 0, 10);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsLength, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsWidth, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsHeight, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsWeight, 0, 0, 38);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AsendiaShipmentFieldIndex.InsuranceValue, 0, 4, 19);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "TrackingNumber", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.TrackingNumber, 50, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 		}
 		/// <summary>Inits AuditEntity's FieldInfo objects</summary>
 		private void InitAuditEntityInfos()

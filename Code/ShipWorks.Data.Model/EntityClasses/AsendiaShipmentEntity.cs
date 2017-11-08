@@ -25,13 +25,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'AsendiaAccount'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'AsendiaShipment'.<br/><br/></summary>
 	[Serializable]
-	public partial class AsendiaAccountEntity : CommonEntityBase
+	public partial class AsendiaShipmentEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
+		private ShipmentEntity _shipment;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -44,17 +45,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
+			/// <summary>Member name Shipment</summary>
+			public static readonly string Shipment = "Shipment";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static AsendiaAccountEntity()
+		static AsendiaShipmentEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public AsendiaAccountEntity():base("AsendiaAccountEntity")
+		public AsendiaShipmentEntity():base("AsendiaShipmentEntity")
 		{
 			InitClassEmpty(null, null);
 		}
@@ -62,51 +65,71 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public AsendiaAccountEntity(IEntityFields2 fields):base("AsendiaAccountEntity")
+		public AsendiaShipmentEntity(IEntityFields2 fields):base("AsendiaShipmentEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this AsendiaAccountEntity</param>
-		public AsendiaAccountEntity(IValidator validator):base("AsendiaAccountEntity")
+		/// <param name="validator">The custom validator object for this AsendiaShipmentEntity</param>
+		public AsendiaShipmentEntity(IValidator validator):base("AsendiaShipmentEntity")
 		{
 			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="asendiaAccountID">PK value for AsendiaAccount which data should be fetched into this AsendiaAccount object</param>
+		/// <param name="shipmentID">PK value for AsendiaShipment which data should be fetched into this AsendiaShipment object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AsendiaAccountEntity(System.Int64 asendiaAccountID):base("AsendiaAccountEntity")
+		public AsendiaShipmentEntity(System.Int64 shipmentID):base("AsendiaShipmentEntity")
 		{
 			InitClassEmpty(null, null);
-			this.AsendiaAccountID = asendiaAccountID;
+			this.ShipmentID = shipmentID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="asendiaAccountID">PK value for AsendiaAccount which data should be fetched into this AsendiaAccount object</param>
-		/// <param name="validator">The custom validator object for this AsendiaAccountEntity</param>
+		/// <param name="shipmentID">PK value for AsendiaShipment which data should be fetched into this AsendiaShipment object</param>
+		/// <param name="validator">The custom validator object for this AsendiaShipmentEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public AsendiaAccountEntity(System.Int64 asendiaAccountID, IValidator validator):base("AsendiaAccountEntity")
+		public AsendiaShipmentEntity(System.Int64 shipmentID, IValidator validator):base("AsendiaShipmentEntity")
 		{
 			InitClassEmpty(validator, null);
-			this.AsendiaAccountID = asendiaAccountID;
+			this.ShipmentID = shipmentID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected AsendiaAccountEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected AsendiaShipmentEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
+				if(_shipment!=null)
+				{
+					_shipment.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((AsendiaShipmentFieldIndex)fieldIndex)
+			{
+				case AsendiaShipmentFieldIndex.ShipmentID:
+					DesetupSyncShipment(true, false);
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -116,6 +139,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
+				case "Shipment":
+					this.Shipment = (ShipmentEntity)entity;
+					break;
 				default:
 					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
@@ -138,6 +164,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
+				case "Shipment":
+					toReturn.Add(Relations.ShipmentEntityUsingShipmentID);
+					break;
 				default:
 					break;				
 			}
@@ -166,6 +195,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Shipment":
+					SetupSyncShipment(relatedEntity);
+					break;
 				default:
 					break;
 			}
@@ -179,6 +211,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
+				case "Shipment":
+					DesetupSyncShipment(false, true);
+					break;
 				default:
 					break;
 			}
@@ -189,6 +224,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+
+
 			return toReturn;
 		}
 		
@@ -198,6 +235,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
+			if(_shipment!=null)
+			{
+				toReturn.Add(_shipment);
+			}
+
 			return toReturn;
 		}
 		
@@ -217,6 +259,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
+				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
@@ -229,14 +272,23 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new AsendiaAccountRelations().GetAllRelations();
+			return new AsendiaShipmentRelations().GetAllRelations();
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'Shipment' to this entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoShipment()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			return bucket;
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(AsendiaAccountEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(AsendiaShipmentEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -275,6 +327,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("Shipment", _shipment);
 			return toReturn;
 		}
 
@@ -297,42 +350,77 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AsendiaAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
+			_fieldsCustomProperties.Add("Service", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AccountNumber", fieldHashtable);
+			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
+			_fieldsCustomProperties.Add("Contents", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("FirstName", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("MiddleName", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsProfileID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("LastName", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsLength", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Company", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsWidth", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Street1", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsHeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("City", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsAddWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("StateProvCode", fieldHashtable);
+			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("PostalCode", fieldHashtable);
+			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("CountryCode", fieldHashtable);
+			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Email", fieldHashtable);
+			_fieldsCustomProperties.Add("TrackingNumber", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Phone", fieldHashtable);
+			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _shipment</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
+		{
+			this.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAsendiaShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, signalRelatedEntity, "Asendia", false, new int[] { (int)AsendiaShipmentFieldIndex.ShipmentID } );
+			_shipment = null;
+		}
+		
+		/// <summary> setups the sync logic for member _shipment</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncShipment(IEntityCore relatedEntity)
+		{
+			if(_shipment!=relatedEntity)
+			{
+				DesetupSyncShipment(true, true);
+				_shipment = (ShipmentEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", ShipWorks.Data.Model.RelationClasses.StaticAsendiaShipmentRelations.ShipmentEntityUsingShipmentIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this AsendiaAccountEntity</param>
+		/// <param name="validator">The validator object for this AsendiaShipmentEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -350,9 +438,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static AsendiaAccountRelations Relations
+		public  static AsendiaShipmentRelations Relations
 		{
-			get	{ return new AsendiaAccountRelations(); }
+			get	{ return new AsendiaShipmentRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -360,6 +448,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
+		}
+
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' for this entity.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathShipment
+		{
+			get { return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentEntityFactory))), (IEntityRelation)GetRelationsForField("Shipment")[0], (int)ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, 0, null, null, null, null, "Shipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);	}
 		}
 
 
@@ -386,164 +481,210 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The AsendiaAccountID property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."AsendiaAccountID"<br/>
+		/// <summary> The ShipmentID property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		public virtual System.Int64 ShipmentID
+		{
+			get { return (System.Int64)GetValue((int)AsendiaShipmentFieldIndex.ShipmentID, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.ShipmentID, value); }
+		}
+
+		/// <summary> The AsendiaAccountID property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."AsendiaAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Int64 AsendiaAccountID
 		{
-			get { return (System.Int64)GetValue((int)AsendiaAccountFieldIndex.AsendiaAccountID, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.AsendiaAccountID, value); }
+			get { return (System.Int64)GetValue((int)AsendiaShipmentFieldIndex.AsendiaAccountID, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.AsendiaAccountID, value); }
 		}
 
-		/// <summary> The RowVersion property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."RowVersion"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
+		/// <summary> The Service property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."Service"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Byte[] RowVersion
+		public virtual Interapptive.Shared.Enums.AsendiaServiceType Service
 		{
-			get { return (System.Byte[])GetValue((int)AsendiaAccountFieldIndex.RowVersion, true); }
-
+			get { return (Interapptive.Shared.Enums.AsendiaServiceType)GetValue((int)AsendiaShipmentFieldIndex.Service, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.Service, value); }
 		}
 
-		/// <summary> The AccountNumber property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."AccountNumber"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// <summary> The RequestedLabelFormat property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."RequestedLabelFormat"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 AccountNumber
+		public virtual System.Int32 RequestedLabelFormat
 		{
-			get { return (System.Int64)GetValue((int)AsendiaAccountFieldIndex.AccountNumber, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.AccountNumber, value); }
+			get { return (System.Int32)GetValue((int)AsendiaShipmentFieldIndex.RequestedLabelFormat, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.RequestedLabelFormat, value); }
 		}
 
-		/// <summary> The ShipEngineCarrierId property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."ShipEngineCarrierId"<br/>
+		/// <summary> The Contents property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."Contents"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 Contents
+		{
+			get { return (System.Int32)GetValue((int)AsendiaShipmentFieldIndex.Contents, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.Contents, value); }
+		}
+
+		/// <summary> The NonDelivery property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."NonDelivery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 NonDelivery
+		{
+			get { return (System.Int32)GetValue((int)AsendiaShipmentFieldIndex.NonDelivery, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.NonDelivery, value); }
+		}
+
+		/// <summary> The ShipEngineLabelID property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."ShipEngineLabelID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShipEngineCarrierId
+		public virtual System.String ShipEngineLabelID
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.ShipEngineCarrierId, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.ShipEngineCarrierId, value); }
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.ShipEngineLabelID, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.ShipEngineLabelID, value); }
 		}
 
-		/// <summary> The Description property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."Description"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The DimsProfileID property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsProfileID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Description
+		public virtual System.Int64 DimsProfileID
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.Description, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.Description, value); }
+			get { return (System.Int64)GetValue((int)AsendiaShipmentFieldIndex.DimsProfileID, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsProfileID, value); }
 		}
 
-		/// <summary> The FirstName property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."FirstName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsLength property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsLength"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String FirstName
+		public virtual System.Double DimsLength
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.FirstName, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.FirstName, value); }
+			get { return (System.Double)GetValue((int)AsendiaShipmentFieldIndex.DimsLength, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsLength, value); }
 		}
 
-		/// <summary> The MiddleName property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."MiddleName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsWidth property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsWidth"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String MiddleName
+		public virtual System.Double DimsWidth
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.MiddleName, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.MiddleName, value); }
+			get { return (System.Double)GetValue((int)AsendiaShipmentFieldIndex.DimsWidth, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsWidth, value); }
 		}
 
-		/// <summary> The LastName property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."LastName"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsHeight property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsHeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String LastName
+		public virtual System.Double DimsHeight
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.LastName, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.LastName, value); }
+			get { return (System.Double)GetValue((int)AsendiaShipmentFieldIndex.DimsHeight, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsHeight, value); }
 		}
 
-		/// <summary> The Company property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."Company"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The DimsAddWeight property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsAddWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Company
+		public virtual System.Boolean DimsAddWeight
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.Company, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.Company, value); }
+			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.DimsAddWeight, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsAddWeight, value); }
 		}
 
-		/// <summary> The Street1 property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."Street1"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 43<br/>
+		/// <summary> The DimsWeight property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."DimsWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Street1
+		public virtual System.Double DimsWeight
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.Street1, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.Street1, value); }
+			get { return (System.Double)GetValue((int)AsendiaShipmentFieldIndex.DimsWeight, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsWeight, value); }
 		}
 
-		/// <summary> The City property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."City"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+		/// <summary> The Insurance property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."Insurance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String City
+		public virtual System.Boolean Insurance
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.City, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.City, value); }
+			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.Insurance, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.Insurance, value); }
 		}
 
-		/// <summary> The StateProvCode property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."StateProvCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The InsuranceValue property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."InsuranceValue"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String StateProvCode
+		public virtual System.Decimal InsuranceValue
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.StateProvCode, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.StateProvCode, value); }
+			get { return (System.Decimal)GetValue((int)AsendiaShipmentFieldIndex.InsuranceValue, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.InsuranceValue, value); }
 		}
 
-		/// <summary> The PostalCode property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."PostalCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
+		/// <summary> The TrackingNumber property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."TrackingNumber"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String PostalCode
+		public virtual System.String TrackingNumber
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.PostalCode, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.PostalCode, value); }
+			get { return (System.String)GetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.TrackingNumber, value); }
 		}
 
-		/// <summary> The CountryCode property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."CountryCode"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The NonMachinable property of the Entity AsendiaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "AsendiaShipment"."NonMachinable"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String CountryCode
+		public virtual System.Boolean NonMachinable
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.CountryCode, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.CountryCode, value); }
+			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.NonMachinable, true); }
+			set	{ SetValue((int)AsendiaShipmentFieldIndex.NonMachinable, value); }
 		}
 
-		/// <summary> The Email property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."Email"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Email
+		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
+		/// </summary>
+		[Browsable(true)]
+		public virtual ShipmentEntity Shipment
 		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.Email, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.Email, value); }
-		}
-
-		/// <summary> The Phone property of the Entity AsendiaAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaAccount"."Phone"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Phone
-		{
-			get { return (System.String)GetValue((int)AsendiaAccountFieldIndex.Phone, true); }
-			set	{ SetValue((int)AsendiaAccountFieldIndex.Phone, value); }
+			get { return _shipment; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncShipment(value);
+					CallSetRelatedEntityDuringDeserialization(value, "Asendia");
+				}
+				else
+				{
+					if(value==null)
+					{
+						bool raisePropertyChanged = (_shipment !=null);
+						DesetupSyncShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Shipment");
+						}
+					}
+					else
+					{
+						if(_shipment!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "Asendia");
+							SetupSyncShipment(value);
+						}
+					}
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -562,7 +703,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.AsendiaAccountEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity; }
 		}
 
 		#endregion

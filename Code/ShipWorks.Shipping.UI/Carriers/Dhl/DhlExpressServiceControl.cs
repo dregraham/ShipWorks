@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.ComponentRegistration;
 using Autofac;
+using Interapptive.Shared.Enums;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
