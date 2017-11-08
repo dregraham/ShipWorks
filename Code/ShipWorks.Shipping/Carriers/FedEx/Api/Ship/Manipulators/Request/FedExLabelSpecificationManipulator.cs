@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         private Result ConfigureThermalLabel(IShipmentEntity shipmentEntity, IShippingSettingsEntity shippingSettings, LabelSpecification labelSpecification)
         {
             return GetFedExApiThermalType((ThermalLanguage) shipmentEntity.RequestedLabelFormat)
-                .Map(x =>
+                .Do(x =>
                 {
                     labelSpecification.ImageType = x;
                     labelSpecification.LabelStockType = GetLabelStockType(shippingSettings, labelSpecification);

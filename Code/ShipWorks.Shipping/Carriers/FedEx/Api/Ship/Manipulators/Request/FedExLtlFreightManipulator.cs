@@ -93,14 +93,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             AddLineItems(fedex, freightClass, freightDetail, sequenceNumber);
 
             return GetFreightSpecialServices(fedex.FreightSpecialServices)
-                .Map(x =>
+                .Do(x =>
                 {
                     if (x.Any())
                     {
                         requestedShipment.SpecialServicesRequested.SpecialServiceTypes = x.ToArray();
                     }
                 })
-                .Map(() => request);
+                .Map(x => request);
         }
 
         /// <summary>
