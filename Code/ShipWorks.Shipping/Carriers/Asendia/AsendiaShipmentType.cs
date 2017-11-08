@@ -361,25 +361,5 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 shipment.Asendia.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
-
-        /// <summary>
-        /// Track the shipment
-        /// </summary>
-        public override TrackingResult TrackShipment(ShipmentEntity shipment)
-        {
-            try
-            {
-                TrackingInformation trackingInfo = Task.Run(() =>
-                {
-                    return shipEngineWebClient.Track(shipment.Asendia.ShipEngineLabelID, ApiLogSource.Asendia);
-                }).Result;
-
-                return trackingResultFactory.Create(trackingInfo);
-            }
-            catch (Exception)
-            {
-                return new TrackingResult { Summary = $"<a href='http://www.asendia.com/tracking/' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
-            }
-        }
     }
 }
