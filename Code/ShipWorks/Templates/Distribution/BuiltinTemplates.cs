@@ -87,10 +87,11 @@ namespace ShipWorks.Templates.Distribution
                     
                     UpdateDatabaseTemplateVersion(swVersion);
                 }
-                
+
                 InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0000", false);
                 InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
                 InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
+                InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
             }
         }
 
