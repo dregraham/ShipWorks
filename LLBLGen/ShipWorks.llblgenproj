@@ -382,12 +382,11 @@
           <Field Name="Insurance" Type="bool" FieldIndex="13" />
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
-          <Field Name="NonMachinable" Type="bool" FieldIndex="16" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="15" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="15" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
@@ -10428,7 +10427,6 @@
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
-            <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Audit" TargetName="ShipWorksLocal:dbo:Audit">

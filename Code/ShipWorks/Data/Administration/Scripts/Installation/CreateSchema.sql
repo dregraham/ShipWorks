@@ -2949,7 +2949,6 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsWeight] [float] NOT NULL,
 	[Insurance] [bit] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
-	[TrackingNumber] [varchar](50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'

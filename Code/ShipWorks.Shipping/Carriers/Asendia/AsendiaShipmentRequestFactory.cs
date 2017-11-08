@@ -1,27 +1,29 @@
 ﻿using ShipWorks.Shipping.ShipEngine;
 using System.Collections.Generic;
+using System.Linq;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Services;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
-    /// Factory for creating DHL Express ShipmentRequests
+    /// Factory for creating Asendia ShipmentRequests
     /// </summary>
-    [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressShipmentRequestFactory : ShipEngineShipmentRequestFactory
+    [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.Asendia)]
+    public class AsendiaShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
-        private readonly IDhlExpressAccountRepository accountRepository;
+        private readonly IAsendiaAccountRepository accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressShipmentRequestFactory(IDhlExpressAccountRepository accountRepository, 
-            IShipEngineRequestFactory shipmentElementFactory, 
+        public AsendiaShipmentRequestFactory(IAsendiaAccountRepository accountRepository,
+            IShipEngineRequestFactory shipmentElementFactory,
             IShipmentTypeManager shipmentTypeManager) 
             : base(shipmentElementFactory, shipmentTypeManager)
         {
@@ -31,57 +33,57 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
-        /// Ensures the DHL Express shipment is not null
+        /// Ensures the Asendia shipment is not null
         /// </summary>
         protected override void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment)
         {
-            MethodConditions.EnsureArgumentIsNotNull(shipment.DhlExpress, nameof(shipment.DhlExpress));
+            MethodConditions.EnsureArgumentIsNotNull(shipment.Asendia, nameof(shipment.Asendia));
         }
 
         /// <summary>
-        /// Gets the ShipEngine carrier ID from the DHL Express shipment
+        /// Gets the ShipEngine carrier ID from the Asendia shipment
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
-            DhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
+            AsendiaAccountEntity account = accountRepository.GetAccount(shipment);
 
             if (account == null)
             {
-                throw new DhlExpressException("Invalid account associated with shipment.");
+                throw new AsendiaException("Invalid account associated with shipment.");
             }
 
             return account.ShipEngineCarrierId;
         }
 
         /// <summary>
-        /// Gets the api value for the DHL Express service
+        /// Gets the api value for the Asendia service
         /// </summary>
-        protected override string GetServiceApiValue(ShipmentEntity shipment) => 
-            EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service);
+        protected override string GetServiceApiValue(ShipmentEntity shipment)
+        {
+            return EnumHelper.GetApiValue(shipment.Asendia.Service);
+        }
 
         /// <summary>
-        /// Creates the DHL Express advanced options node
+        /// Creates the Asendia advanced options node
         /// </summary>
         protected override Dictionary<string, object> CreateAdvancedOptions(ShipmentEntity shipment)
         {
             return new Dictionary<string, object>()
             {
-                {"delivered_duty_paid", shipment.DhlExpress.DeliveredDutyPaid},
-                {"non_machinable", shipment.DhlExpress.NonMachinable},
-                {"saturday_delivery", shipment.DhlExpress.SaturdayDelivery}
+                {"non_machinable", shipment.Asendia.NonMachinable}
             };
         }
 
         /// <summary>
-        /// Creates the DHL Express customs node
+        /// Creates the Asendia customs node
         /// </summary>
         protected override InternationalOptions CreateCustoms(ShipmentEntity shipment)
         {
             InternationalOptions customs = new InternationalOptions()
             {
-                Contents = (InternationalOptions.ContentsEnum) shipment.DhlExpress.Contents,
+                Contents = (InternationalOptions.ContentsEnum) shipment.Asendia.Contents,
                 CustomsItems = shipmentElementFactory.CreateCustomsItems(shipment),
-                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipment.DhlExpress.NonDelivery
+                NonDelivery = (InternationalOptions.NonDeliveryEnum) shipment.Asendia.NonDelivery
             };
 
             return customs;

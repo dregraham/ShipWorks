@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.WebTools;
 using ShipWorks.Startup;
 using Xunit;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Asendia;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -32,7 +33,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         [Theory]
         [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonPrefetchProvider))]
+        [InlineData(ShipmentTypeCode.Asendia, typeof(AsendiaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.BestRate, typeof(BestRatePrefetchProvider))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(EndiciaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(UspsPrefetchProvider))]
@@ -44,7 +47,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(UpsPrefetchProvider))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(UpsPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsPrefetchProvider))]
-        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressPrefetchProvider))]
         public void EnsurePrefetchProvidersAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             IShipmentTypePrefetchProvider retriever = container.ResolveKeyed<IShipmentTypePrefetchProvider>(shipmentType);

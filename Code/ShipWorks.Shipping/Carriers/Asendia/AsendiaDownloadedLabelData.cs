@@ -4,31 +4,31 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
-    /// Save Dhl label data
+    /// Save Asendia label data
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class DhlExpressDownloadedLabelData : ShipEngineDownloadedLabelData
+    public class AsendiaDownloadedLabelData : ShipEngineDownloadedLabelData
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressDownloadedLabelData(ShipmentEntity shipment, 
-            Label label, 
-            IDataResourceManager resourceManager, 
+        public AsendiaDownloadedLabelData(ShipmentEntity shipment,
+            Label label,
+            IDataResourceManager resourceManager,
             IShipEngineResourceDownloader resourceDownloader) 
             : base(shipment, label, resourceManager, resourceDownloader)
         {
         }
 
         /// <summary>
-        /// Save the ShipEngine label ID to the DHL Express shipment
+        /// Save the ShipEngine label ID to the Asendia shipment
         /// </summary>
         protected override void SaveShipEngineLabelID(ShipmentEntity shipment, Label label)
         {
-            shipment.DhlExpress.ShipEngineLabelID = label.LabelId;
+            shipment.Asendia.ShipEngineLabelID = label.LabelId;
         }
     }
 }

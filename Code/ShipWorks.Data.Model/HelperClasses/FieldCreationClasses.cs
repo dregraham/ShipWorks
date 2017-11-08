@@ -1777,11 +1777,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.InsuranceValue);}
 		}
-		/// <summary>Creates a new AsendiaShipmentEntity.TrackingNumber field instance</summary>
-		public static EntityField2 TrackingNumber
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.TrackingNumber);}
-		}
 		/// <summary>Creates a new AsendiaShipmentEntity.NonMachinable field instance</summary>
 		public static EntityField2 NonMachinable
 		{

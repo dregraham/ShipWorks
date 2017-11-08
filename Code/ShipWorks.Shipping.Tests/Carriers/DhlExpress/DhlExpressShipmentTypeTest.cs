@@ -220,7 +220,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
                 .Throws(new Exception());
 
             var testResult = testObject.TrackShipment(shipment);
-            string expectedSummary = "<a href='http://www.dhl.com/en/express/tracking.html?AWB=test&brand=DHL' style='color:blue; background-color:white'>Click here to see tracking information</a>";
+            string expectedSummary = "<a href='http://www.dhl.com/en/express/tracking.html?AWB=test&brand=DHL' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
 
             Assert.Equal(expectedSummary, testResult.Summary);
         }

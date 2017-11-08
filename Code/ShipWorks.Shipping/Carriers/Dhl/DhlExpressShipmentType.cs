@@ -606,7 +606,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception)
             {
-                return new TrackingResult { Summary = $"<a href='http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL' style='color:blue; background-color:white'>Click here to see tracking information</a>" };
+                return new TrackingResult { Summary = $"<a href='http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
             }
         }
 
@@ -624,7 +624,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>
-        static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
 

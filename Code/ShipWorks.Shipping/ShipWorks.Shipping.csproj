@@ -175,7 +175,11 @@
     <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountRepository.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaException.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
     <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountManager.cs" />
     <Compile Include="Carriers\Asendia\AsendiaAccountDescription.cs" />
@@ -278,10 +282,13 @@
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
+    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
     <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
     <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />

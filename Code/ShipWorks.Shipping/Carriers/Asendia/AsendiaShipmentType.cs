@@ -18,6 +18,13 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using System.Drawing.Imaging;
+using ShipWorks.Data;
+using ShipWorks.Shipping.Tracking;
+using ShipEngine.ApiClient.Model;
+using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -90,7 +97,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.DimsAddWeight = true;
             asendiaShipment.Insurance = false;
             asendiaShipment.InsuranceValue = 0;
-            asendiaShipment.TrackingNumber = string.Empty;
 
             base.ConfigureNewShipment(shipment);
         }
@@ -317,6 +323,34 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
+        /// Create the XML input to the XSL engine
+        /// </summary>
+        public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
+        {
+            Lazy<List<TemplateLabelData>> labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+
+            // Add the labels content
+            container.AddElement(
+                "Labels",
+                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                ElementOutline.If(() => shipment().Processed));
+        }
+
+        /// <summary>
+        /// Load all the label data for the given shipmentID
+        /// </summary>
+        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipmentFactory)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentFactory, nameof(shipmentFactory));
+
+            return DataResourceManager.GetConsumerResourceReferences(shipmentFactory().ShipmentID)
+                .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                    TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                .ToList();
+        }
+		
+        /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
@@ -324,6 +358,26 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             if (shipment.Asendia != null)
             {
                 shipment.Asendia.RequestedLabelFormat = (int)requestedLabelFormat;
+            }
+        }
+
+        /// <summary>
+        /// Track the shipment
+        /// </summary>
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            try
+            {
+                TrackingInformation trackingInfo = Task.Run(() =>
+                {
+                    return shipEngineWebClient.Track(shipment.Asendia.ShipEngineLabelID, ApiLogSource.Asendia);
+                }).Result;
+
+                return trackingResultFactory.Create(trackingInfo);
+            }
+            catch (Exception)
+            {
+                return new TrackingResult { Summary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
             }
         }
     }
