@@ -3786,7 +3786,8 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [TimeZoneID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
 [DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
-[RestUser] [bit] NOT NULL
+[RestUser] [bit] NOT NULL,
+[OrderIDUpgradeFixDate] [datetime] NULL 
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'
