@@ -8,6 +8,7 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// For carriers that do not support package types, returns an empty list
     /// </summary>
+    [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.Asendia, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.DhlExpress, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.iParcel, SingleInstance = true)]
     [KeyedComponent(typeof(IShipmentPackageTypesBuilder), ShipmentTypeCode.None, SingleInstance = true)]
