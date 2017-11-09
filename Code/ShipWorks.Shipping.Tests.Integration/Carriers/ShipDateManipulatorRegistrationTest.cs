@@ -22,17 +22,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             ContainerInitializer.BuildRegistrations(container);
             expectedRegistrations = new Dictionary<ShipmentTypeCode, Type>
             {
-                {ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.Asendia, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.DhlExpress, typeof(WeekdaysOnlyShipmentDateManipulator)},
                 {ShipmentTypeCode.Endicia, typeof(PostalShipmentDateManipulator)},
-                {ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator)},
                 {ShipmentTypeCode.Express1Endicia, typeof(PostalShipmentDateManipulator)},
-                {ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator)},
+                {ShipmentTypeCode.Express1Usps, typeof(PostalShipmentDateManipulator)},
                 {ShipmentTypeCode.FedEx, typeof(WeekdaysOnlyShipmentDateManipulator)},
+                {ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator)},
                 {ShipmentTypeCode.Other, typeof(OtherShipmentDateManipulator)},
+                {ShipmentTypeCode.PostalWebTools, typeof(PostalShipmentDateManipulator)},
                 {ShipmentTypeCode.UpsOnLineTools, typeof(WeekdaysOnlyShipmentDateManipulator)},
                 {ShipmentTypeCode.UpsWorldShip, typeof(WeekdaysOnlyShipmentDateManipulator)},
-                {ShipmentTypeCode.OnTrac, typeof(WeekdaysOnlyShipmentDateManipulator)},
-                {ShipmentTypeCode.DhlExpress, typeof(WeekdaysOnlyShipmentDateManipulator)}
+                {ShipmentTypeCode.Usps, typeof(PostalShipmentDateManipulator)},
             };
         }
 
