@@ -44,6 +44,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
             LoadAccounts();
 
+            dimensionsControl.DimensionsChanged += (s, a) => RaiseShipSenseFieldChanged();
+            weight.WeightChanged += (s, a) => RaiseShipSenseFieldChanged();
+            ShipSenseFieldChanged += (s, a) => SaveToShipments();
+
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
             {
                 telemetryEvent.AddMetric(WeightControl.ShipmentQuantityTelemetryKey, LoadedShipments?.Count ?? 0);
@@ -247,14 +251,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
             LoadShipmentDetails();
         }
 
-        /// <summary>
-        /// Some aspect of the shipment that affects ShipSense has changed
-        /// </summary>
-        private void OnShipSenseFieldChanged(object sender, EventArgs e)
-        {
-            RaiseShipSenseFieldChanged();
-        }
-       
         /// <summary>
         /// Refresh the weight box with the latest weight information from the loaded shipments
         /// </summary>

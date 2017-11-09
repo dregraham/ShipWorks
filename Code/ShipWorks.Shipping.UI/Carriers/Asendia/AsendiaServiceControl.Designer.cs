@@ -293,7 +293,6 @@
             this.dimensionsControl.Name = "dimensionsControl";
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 73;
-            this.dimensionsControl.DimensionsChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // dimensionsLabel
             // 
@@ -351,7 +350,6 @@
             this.weight.Size = new System.Drawing.Size(269, 24);
             this.weight.TabIndex = 71;
             this.weight.Weight = 0D;
-            this.weight.WeightChanged += new System.EventHandler(this.OnShipSenseFieldChanged);
             // 
             // AsendiaServiceControl
             // 
