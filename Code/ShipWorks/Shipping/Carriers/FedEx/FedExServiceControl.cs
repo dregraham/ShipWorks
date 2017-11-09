@@ -90,8 +90,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             packageControl.Initialize();
 
-            packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
-            packageControl.PackageCountChanged = fedExFreightContainerControl.PackageCountChanged;
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
@@ -581,6 +579,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             else
             {
                 UpdateLayoutForMultipleServices();
+            }
+
+            if (FedExUtility.IsFreightLtlService((int) service.SelectedValue))
+            {
+                packageControl.PackageCountChanged = fedExFreightContainerControl.PackageCountChanged;
+            }
+            else
+            {
+                packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
             }
 
             UpdateLabelFormat();
