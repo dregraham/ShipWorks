@@ -2008,6 +2008,11 @@ namespace ShipWorks.Shipping
                 // Just in case it used to have an error remove it
                 ErrorManager?.Remove(shipment.ShipmentID);
             }
+            catch (ObjectDisposedException ex) 
+            {
+                log.Error("Shipping exception encountered while getting rates", ex);
+                Debug.Fail("Lifetime scope was disposed and we handled it.  If you see this, it means the error handling worked correctly and you can remove this Debug line.");
+            }
             catch (InvalidRateGroupShippingException ex)
             {
                 log.Error("Shipping exception encountered while getting rates", ex);
