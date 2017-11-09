@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                     carrierCode = ShipmentTypeManager.GetType(shipmentTypeCode).IsDomestic(shipment) ? "USPS" : "USPS-I";
-                break;
+                    break;
 
                 case ShipmentTypeCode.FedEx:
                     carrierCode = GetFedExCarrierCode(shipment, isDomestic);
@@ -65,6 +65,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                 case ShipmentTypeCode.DhlExpress:
                     carrierCode = "DHL-E-I-P1";
+                    break;
+
+                case ShipmentTypeCode.Asendia:
+                    carrierCode = ShipmentTypeManager.GetType(shipmentTypeCode).IsDomestic(shipment) ? "ASE-DOM" : "ASE-INTL";
                     break;
 
                 default:

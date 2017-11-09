@@ -3,6 +3,7 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores;
 
@@ -49,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
-        public override bool SupportsPackageTypes => true;
+        public override bool SupportsPackageTypes => false;
 
         /// <summary>
         /// Service type selected
@@ -70,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public override void UpdateInsuranceFields(ShippingSettingsEntity shippingSettings)
         {
-          // to do: insurance
+            Shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
 
         /// <summary>
