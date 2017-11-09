@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment) =>
             requestFactory.CreateSearchLocationsRequest()
                 .Submit(shipment)
-                .Map(x => x.Process())
+                .Bind(x => x.Process())
                 .Match(x => x, ex => { throw ex; });
 
         /// <summary>
@@ -657,7 +657,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return requestFactory.CreateRateRequest()
                 .Submit(shipment, options)
-                .Map(x => x.Process())
+                .Bind(x => x.Process())
                 .Map(x => BuildRateResults(shipment, x.RateReplyDetails));
         }
 

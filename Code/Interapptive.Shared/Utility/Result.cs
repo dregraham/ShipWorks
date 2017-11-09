@@ -71,31 +71,31 @@ namespace Interapptive.Shared.Utility
             new ExceptionResultHandler<TException>();
 
         /// <summary>
-        /// Map the value of the result
+        /// Bind the value of the result
         /// </summary>
         /// <returns>
-        /// A result containing the mapped value, or the original error
+        /// A GenericResult containing the mapped value, or the original error
         /// </returns>
-        public GenericResult<TResult> Map<TResult>(Func<GenericResult<TResult>> map) =>
+        public GenericResult<TResult> Bind<TResult>(Func<GenericResult<TResult>> map) =>
             Match(map, ex => GenericResult.FromError<TResult>(ex));
 
         /// <summary>
         /// Map the value of the result
         /// </summary>
         /// <returns>
-        /// A result containing the mapped value, or the original error
+        /// A GenericResult containing the mapped value, or the original error
         /// </returns>
         public GenericResult<TResult> Map<TResult>(Func<TResult> map) =>
             Match(() => GenericResult.FromSuccess(map()),
                 ex => GenericResult.FromError<TResult>(ex));
 
         /// <summary>
-        /// Map the value of the result
+        /// Perform an action
         /// </summary>
         /// <returns>
         /// A result containing success, or the original error
         /// </returns>
-        public Result Map(Action map) =>
+        public Result Do(Action map) =>
             Match(() => { map(); return Result.FromSuccess(); },
                 ex => Result.FromError(ex));
 

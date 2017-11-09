@@ -54,7 +54,7 @@ namespace Interapptive.Shared.Extensions
         public static GenericResult<TResult> Aggregate<T, TResult>(this IEnumerable<T> source, TResult accumulator, Func<TResult, T, GenericResult<TResult>> aggregator) =>
             Enumerable.Aggregate(source,
                 GenericResult.FromSuccess(accumulator),
-                (acc, item) => acc.Map(v => aggregator(v, item)));
+                (acc, item) => acc.Bind(v => aggregator(v, item)));
 
         /// <summary>
         /// Applies an accumulator function over a sequence 
@@ -62,7 +62,7 @@ namespace Interapptive.Shared.Extensions
         public static GenericResult<IEnumerable<T>> Flatten<T>(this IEnumerable<GenericResult<T>> source) =>
             Enumerable.Aggregate(source,
                 GenericResult.FromSuccess(Enumerable.Empty<T>()),
-                (acc, item) => acc.Map(v => item.Map(i => v.Append(i))));
+                (acc, item) => acc.Bind(v => item.Map(i => v.Append(i))));
 
         /// <summary>
         /// Match on a dictionary

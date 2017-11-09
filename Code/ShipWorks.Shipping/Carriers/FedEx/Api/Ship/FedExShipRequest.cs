@@ -49,9 +49,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                 .Aggregate(
                     new ProcessShipmentRequest(),
                     (req, manipulator) => manipulator.Manipulate(shipment, req, sequenceNumber))
-                .Map(x => serviceGatewayFactory.Create(settingsRepository).Ship(x).Map(r => new { Reply = r, Request = x }))
+                .Bind(x => serviceGatewayFactory.Create(settingsRepository).Ship(x).Map(r => new { Reply = r, Request = x }))
                 .Map(x => new { Response = createShipResponse(shipment, x.Reply), x.Request })
-                .Map(x => x.Response.ApplyManipulators(x.Request));
+                .Bind(x => x.Response.ApplyManipulators(x.Request));
         }
     }
 }

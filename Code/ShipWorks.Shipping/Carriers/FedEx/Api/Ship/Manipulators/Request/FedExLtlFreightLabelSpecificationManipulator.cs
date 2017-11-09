@@ -49,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             return
                 GenericResult.FromSuccess(new LabelSpecification())
-                .Do(labelSpecification => MaskAccountData(shippingSettings, shipment, labelSpecification))
-                .Do(labelSpecification => ConfigureLabelType(shipment, shippingSettings, labelSpecification))
+                .Bind(labelSpecification => MaskAccountData(shippingSettings, shipment, labelSpecification))
+                .Bind(labelSpecification => ConfigureLabelType(shipment, shippingSettings, labelSpecification))
                 .Map(labelSpecification =>
                 {
                     // Add alcohol label request if needed
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             labelSpecification.LabelFormatType = LabelFormatType.FEDEX_FREIGHT_STRAIGHT_BILL_OF_LADING;
 
             return ConfigureImageAndStockType(labelSpecification)
-                .Map(() =>
+                .Do(() =>
                 {
                     AddPrintedLabelOrigin(shipmentEntity, labelSpecification);
                 });

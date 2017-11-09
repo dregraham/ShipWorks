@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             return Validate(request, shipment, sequenceNumber)
                 .Map(InitializeRequest)
-                .Map(x => CreateFedExLtlFreightDetailManipulations(x, shipment.FedEx, account, sequenceNumber))
+                .Bind(x => CreateFedExLtlFreightDetailManipulations(x, shipment.FedEx, account, sequenceNumber))
                 .Map(x => ConfigureShippingCharges(x, shipment.FedEx, account));
         }
 

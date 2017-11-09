@@ -108,13 +108,23 @@ namespace Interapptive.Shared.Utility
         public bool Failure => !Success;
 
         /// <summary>
-        /// Map the value of the result
+        /// Bind the value of the result
         /// </summary>
         /// <returns>
-        /// A result containing the mapped value, or the original error
+        /// A result containing the mapped value or its error, or the original error
         /// </returns>
-        public GenericResult<TResult> Map<TResult>(Func<T, GenericResult<TResult>> map) =>
+        public GenericResult<TResult> Bind<TResult>(Func<T, GenericResult<TResult>> map) =>
             Match(map, ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Bind the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the original value or an error from the map action, or the original error
+        /// </returns>
+        public GenericResult<T> Bind(Func<T, Result> map) =>
+            Match(x => map(x).Match(() => GenericResult.FromSuccess(x), ex => ex),
+                ex => GenericResult.FromError<T>(ex));
 
         /// <summary>
         /// Map the value of the result
@@ -134,16 +144,6 @@ namespace Interapptive.Shared.Utility
         /// </returns>
         public GenericResult<T> Do(Action<T> map) =>
             Match(x => { map(x); return x; },
-                ex => GenericResult.FromError<T>(ex));
-
-        /// <summary>
-        /// Perform an operation on the value
-        /// </summary>
-        /// <returns>
-        /// A result containing the original value, or the original error
-        /// </returns>
-        public GenericResult<T> Do(Func<T, Result> map) =>
-            Match(x => map(x).Match(() => GenericResult.FromSuccess(x), ex => ex),
                 ex => GenericResult.FromError<T>(ex));
 
         /// <summary>

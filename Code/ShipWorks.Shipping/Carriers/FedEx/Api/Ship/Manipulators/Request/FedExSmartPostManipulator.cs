@@ -45,9 +45,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             RequestedShipment requestedShipment = InitializeRequest(request);
 
             return GenericResult.FromSuccess(new SmartPostShipmentDetail())
-                .Do(detail => SetHubId(fedExShipment, account, detail))
-                .Do(detail => SetIndicia(fedExShipment, detail))
-                .Do(detail => SetEndorsementType(fedExShipment, detail))
+                .Bind(detail => SetHubId(fedExShipment, account, detail))
+                .Bind(detail => SetIndicia(fedExShipment, detail))
+                .Bind(detail => SetEndorsementType(fedExShipment, detail))
                 .Do(detail => SetCustomerManifest(fedExShipment, detail))
                 .Map(detail =>
                 {

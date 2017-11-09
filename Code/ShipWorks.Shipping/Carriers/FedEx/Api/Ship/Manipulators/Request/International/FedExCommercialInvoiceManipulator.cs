@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             CustomsClearanceDetail customsDetail = request.RequestedShipment.CustomsClearanceDetail;
 
             return ConfigureInvoice(fedExShipment, customsDetail)
-                .Map(() =>
+                .Do(() =>
                 {
                     ConfigureImporter(fedExShipment, customsDetail);
 
@@ -201,12 +201,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             }
 
             return GenericResult.FromSuccess(customsDetail)
-                .Do(_ =>
+                .Bind((Func<CustomsClearanceDetail, Result>) (_ =>
                     GetApiTermsOfSale((FedExTermsOfSale) fedExShipment.CommercialInvoiceTermsOfSale)
-                        .Do(x => invoice.TermsOfSale = x))
-                .Do(_ =>
+                        .Do(x => invoice.TermsOfSale = x)))
+                .Bind((Func<CustomsClearanceDetail, Result>) (_ =>
                     GetApiCommercialInvoicePurpose((FedExCommercialInvoicePurpose) fedExShipment.CommercialInvoicePurpose)
-                        .Do(x => invoice.Purpose = x))
+                        .Do(x => invoice.Purpose = x)))
                 .Do(x => x.CommercialInvoice = invoice);
         }
 

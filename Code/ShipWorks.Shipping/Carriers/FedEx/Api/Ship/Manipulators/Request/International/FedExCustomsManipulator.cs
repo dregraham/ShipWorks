@@ -61,12 +61,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
             customsDetail.DocumentContentSpecified = true;
 
             return GenericResult.FromSuccess(customsDetail)
-                .Do(detail => ConfigureCommodities(shipment, shipmentCurrencyType, detail))
-                .Do(detail => ConfigureNaftaDetails(shipment, detail))
-                .Do(detail => ConfigurePaymentDetail(shipment, detail, account))
-                .Do(detail => ConfigureExportDetail(shipment, detail))
-                .Do(detail => ConfigureRecipientIdentification(shipment, detail))
-                .Do(detail => ConfigureCustomsOptions(shipment, detail))
+                .Bind(detail => ConfigureCommodities(shipment, shipmentCurrencyType, detail))
+                .Bind(detail => ConfigureNaftaDetails(shipment, detail))
+                .Bind(detail => ConfigurePaymentDetail(shipment, detail, account))
+                .Bind(detail => ConfigureExportDetail(shipment, detail))
+                .Bind(detail => ConfigureRecipientIdentification(shipment, detail))
+                .Bind(detail => ConfigureCustomsOptions(shipment, detail))
                 .Do(detail => request.RequestedShipment.CustomsClearanceDetail = detail)
                 .Map(_ => ConfigureTaxPayerIdentification(shipment, request));
         }
@@ -386,9 +386,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Intern
         /// </summary>
         private static GenericResult<NaftaCommodityDetail> CreateNaftaCommodityDetail(IShipmentEntity shipment) =>
             GenericResult.FromSuccess(new NaftaCommodityDetail())
-                .Do(x => SetNetCostMethod(shipment, x))
-                .Do(x => SetPreferenceCriterion(shipment, x))
-                .Do(x => SetProducerDetermination(shipment, x));
+                .Bind(x => SetNetCostMethod(shipment, x))
+                .Bind(x => SetPreferenceCriterion(shipment, x))
+                .Bind(x => SetProducerDetermination(shipment, x));
 
         /// <summary>
         /// Set the net cost method

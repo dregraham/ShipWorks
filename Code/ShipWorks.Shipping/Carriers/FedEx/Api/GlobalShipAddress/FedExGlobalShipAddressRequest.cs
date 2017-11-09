@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request
                 .Aggregate(
                     new SearchLocationsRequest(),
                     (req, manipulator) => manipulator.Manipulate(shipment, req))
-                .Map(x => serviceGatewayFactory.Create(settingsRepository).GlobalShipAddressInquiry(x))
+                .Bind(x => serviceGatewayFactory.Create(settingsRepository).GlobalShipAddressInquiry(x))
                 .Map(createResponse);
     }
 }

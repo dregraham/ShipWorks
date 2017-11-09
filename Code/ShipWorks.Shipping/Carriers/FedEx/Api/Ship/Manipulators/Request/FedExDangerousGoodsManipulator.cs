@@ -67,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             return ValidateRequest(shipment, request)
                 .Map(x => BuildDangerousGoods(shipment, x, package))
-                .Map(x => ApplyOptions(x, package))
-                .Map(x => ApplyHazardousMaterials(x, package))
+                .Bind(x => ApplyOptions(x, package))
+                .Bind(x => ApplyHazardousMaterials(x, package))
                 .Map(x => request.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail = x)
                 .Map(_ => ApplyBatteryDetails(request, package));
         }

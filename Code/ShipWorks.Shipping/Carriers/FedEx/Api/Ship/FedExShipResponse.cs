@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         /// </summary>
         public GenericResult<IFedExShipResponse> ApplyManipulators(ProcessShipmentRequest request) =>
             Verify()
-                .Map(() => manipulators.Aggregate(shipment, (s, m) => m.Manipulate(reply, request, shipment)))
+                .Bind(() => manipulators.Aggregate(shipment, (s, m) => m.Manipulate(reply, request, shipment)))
                 .Map(x => this as IFedExShipResponse);
 
         /// <summary>
