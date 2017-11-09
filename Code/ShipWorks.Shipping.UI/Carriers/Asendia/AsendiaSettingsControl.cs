@@ -1,4 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
@@ -15,6 +19,36 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             InitializeComponent();
             base.Initialize(ShipmentTypeCode.Asendia);
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            InitializeServicePicker(shipmentType);
+        }
+
+        /// <summary>
+        /// Asendia does support services
+        /// </summary>
+        protected override bool SupportsServices => true;
+
+        /// <summary>
+        /// Initialize the service picker control
+        /// </summary>
+        private void InitializeServicePicker(ShipmentType shipmentType)
+        {
+            IEnumerable<AsendiaServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Cast<AsendiaServiceType>();
+
+            IEnumerable<AsendiaServiceType> allServices = EnumHelper.GetEnumList<AsendiaServiceType>()
+                .OrderBy(s => s.Description)
+                .Select(s => s.Value);
+
+            excludedServiceControl.Initialize(allServices, excludedServices);
+        }
+        
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            return excludedServiceControl.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
