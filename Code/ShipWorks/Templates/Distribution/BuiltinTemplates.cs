@@ -52,7 +52,7 @@ namespace ShipWorks.Templates.Distribution
             if (swVersion.Major == 0)
             {
                 // Has to be set to the biggest number we check below
-                swVersion = new Version("5.18.0.0000");
+                swVersion = new Version("5.20.0.0000");
             }
 
             // No default templates are installed yet - we are safe to do the initial install
