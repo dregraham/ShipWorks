@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,15 +14,17 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
     /// </summary>
     public struct LoadedOrderSelection : IOrderSelection
     {
+        private readonly IImmutableDictionary<long, ShippingAddressEditStateType> destinationAddressEditable;
+
         /// <summary>
         /// Constructor for success
         /// </summary>
-        public LoadedOrderSelection(OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
+        public LoadedOrderSelection(OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, IEnumerable<KeyValuePair<long, ShippingAddressEditStateType>> destinationAddressEditable)
         {
             Order = order;
             ShipmentAdapters = shipmentAdapters.ToReadOnly();
             Exception = null;
-            DestinationAddressEditable = destinationAddressEditable;
+            this.destinationAddressEditable = destinationAddressEditable.ToImmutableDictionary();
         }
 
         /// <summary>
@@ -31,12 +34,12 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         /// In order to get the OrderSelectionChangedHandler to match orders and allow loading to complete
         /// we need the order id to be passed along in the LoadedOrderSelection
         /// </remarks>
-        public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, ShippingAddressEditStateType destinationAddressEditable)
+        public LoadedOrderSelection(Exception ex, OrderEntity order, IEnumerable<ICarrierShipmentAdapter> shipmentAdapters, IEnumerable<KeyValuePair<long, ShippingAddressEditStateType>> destinationAddressEditable)
         {
             Order = order;
             ShipmentAdapters = shipmentAdapters.ToReadOnly();
             Exception = ex;
-            DestinationAddressEditable = destinationAddressEditable;
+            this.destinationAddressEditable = destinationAddressEditable.ToImmutableDictionary();
         }
 
         /// <summary>
@@ -55,14 +58,15 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
         public OrderEntity Order { get; }
 
         /// <summary>
-        /// Returns the ShippingAddressEditStateType of the shipment.
-        /// </summary>
-        public ShippingAddressEditStateType DestinationAddressEditable { get; }
-
-        /// <summary>
         /// Id of the order selection
         /// </summary>
         public long OrderID => Order?.OrderID ?? -1;
+
+        /// <summary>
+        /// Is the destination address editable for the given shipment ID
+        /// </summary>
+        public ShippingAddressEditStateType IsDestinationAddressEditableFor(long shipmentID) =>
+            destinationAddressEditable.GetValueOrDefault(shipmentID, ShippingAddressEditStateType.Editable);
 
         /// <summary>
         /// Create a new LoadedOrderSelection with the given updated shipment
@@ -79,7 +83,7 @@ namespace ShipWorks.Core.Messaging.Messages.Shipping
                 .Concat(new[] { shipmentAdapter })
                 .ToList();
 
-            return new LoadedOrderSelection(Order, shipmentAdapters, DestinationAddressEditable);
+            return new LoadedOrderSelection(Order, shipmentAdapters, destinationAddressEditable);
         }
     }
 }
