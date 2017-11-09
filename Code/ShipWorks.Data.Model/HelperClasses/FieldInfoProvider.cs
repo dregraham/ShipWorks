@@ -541,7 +541,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsHeight", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsHeight, 0, 0, 38);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsAddWeight", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsAddWeight, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsWeight", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsWeight, 0, 0, 38);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Insurance, 0, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "InsuranceValue", typeof(System.Decimal), false, false, false, false,  (int)AsendiaShipmentFieldIndex.InsuranceValue, 0, 4, 19);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonMachinable", typeof(System.Boolean), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonMachinable, 0, 0, 0);
 		}

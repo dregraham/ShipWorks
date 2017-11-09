@@ -782,8 +782,6 @@ namespace ShipWorks.Data.Model
 		DimsAddWeight,
 		///<summary>DimsWeight. </summary>
 		DimsWeight,
-		///<summary>Insurance. </summary>
-		Insurance,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
 		///<summary>NonMachinable. </summary>

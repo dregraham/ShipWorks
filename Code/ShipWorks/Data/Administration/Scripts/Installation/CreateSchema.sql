@@ -2947,7 +2947,6 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[DimsHeight] [float] NOT NULL,
 	[DimsAddWeight] [bit] NOT NULL,
 	[DimsWeight] [float] NOT NULL,
-	[Insurance] [bit] NOT NULL,
 	[InsuranceValue] [money] NOT NULL,
 )
 GO

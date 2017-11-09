@@ -1767,11 +1767,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.DimsWeight);}
 		}
-		/// <summary>Creates a new AsendiaShipmentEntity.Insurance field instance</summary>
-		public static EntityField2 Insurance
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(AsendiaShipmentFieldIndex.Insurance);}
-		}
 		/// <summary>Creates a new AsendiaShipmentEntity.InsuranceValue field instance</summary>
 		public static EntityField2 InsuranceValue
 		{

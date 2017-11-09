@@ -379,10 +379,9 @@
           <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="12" />
           <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="9" />
-          <Field Name="Insurance" Type="bool" FieldIndex="13" />
-          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="14" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="13" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
-          <Field Name="NonMachinable" Type="bool" FieldIndex="15" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="14" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
@@ -3443,7 +3442,7 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="AsendiaProfile.ShippingProfile-ShippingProfile.Asendia" Start=":AsendiaProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Asendia" Type="1" StartIsOptional="true">
+      <NormalRelationship Name="AsendiaProfile.ShippingProfile-ShippingProfile.Asendia" Start=":AsendiaProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
         </FieldRelationships>
@@ -4221,7 +4220,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-06T19:57:54.340814Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-09T16:10:27.9475798Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4530,9 +4529,7 @@
                     <Field Name="DimsHeight" Ordinal="12" DbType="6" Precision="38" />
                     <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
                     <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
-                    <Field Name="Insurance" Ordinal="15" DbType="2" />
-                    <Field Name="InsuranceValue" Ordinal="16" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="TrackingNumber" Ordinal="17" DbType="24" Length="50" />
+                    <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -9205,7 +9202,7 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmeriCommerceStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:AsendiaProfile:FK_AsendiaProfile_ShippingProfile">
+            <ForeignKeyConstraint Name="dbo:AsendiaProfile:FK_AsendiaProfile_ShippingProfile" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:AsendiaProfile:ShippingProfileID" />
               </FieldPairs>
@@ -10419,7 +10416,6 @@
             <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
             <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
-            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />

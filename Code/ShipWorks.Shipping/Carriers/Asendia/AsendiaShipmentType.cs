@@ -95,7 +95,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendiaShipment.DimsHeight = 0;
             asendiaShipment.DimsWeight = 0;
             asendiaShipment.DimsAddWeight = true;
-            asendiaShipment.Insurance = false;
             asendiaShipment.InsuranceValue = 0;
 
             base.ConfigureNewShipment(shipment);
@@ -159,7 +158,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             base.UpdateDynamicShipmentData(shipment);
             
-            shipment.Insurance = shipment.Asendia.Insurance;
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
