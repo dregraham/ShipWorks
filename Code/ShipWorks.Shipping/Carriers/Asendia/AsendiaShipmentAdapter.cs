@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Does this shipment type support package Types?
         /// </summary>
-        public override bool SupportsPackageTypes => true;
+        public override bool SupportsPackageTypes => false;
 
         /// <summary>
         /// Service type selected
