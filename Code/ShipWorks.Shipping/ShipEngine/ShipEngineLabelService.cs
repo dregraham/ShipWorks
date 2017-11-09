@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     .Trim();
             }
 
-            if (message.StartsWith("Unable to create label. Order ID: se-") && message.Contains("is an invalid postal code for the country"))
+            if (message.StartsWith("Unable to create label. Order ID: se-"))
             {
                 string newMessage = message.Replace("Unable to create label. Order ID: se-", string.Empty);
                 return newMessage.Substring(newMessage.IndexOf('.') + 1).Trim();
