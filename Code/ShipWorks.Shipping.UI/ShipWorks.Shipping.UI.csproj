@@ -164,13 +164,16 @@
     <Compile Include="Carriers\Asendia\AsendiaServiceControl.Designer.cs">
       <DependentUpon>AsendiaServiceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\Asendia\AsendiaServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Carriers\Dhl\DhlExpressSettingsControl.Designer.cs">
       <DependentUpon>DhlExpressSettingsControl.cs</DependentUpon>
     </Compile>
-      <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
+    <Compile Include="Carriers\Asendia\AsendiaSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Carriers\Asendia\AsendiaSetupWizard.Designer.cs">
