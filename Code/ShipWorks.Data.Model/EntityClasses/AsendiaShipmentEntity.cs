@@ -376,8 +376,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DimsWeight", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NonMachinable", fieldHashtable);
@@ -607,16 +605,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Double)GetValue((int)AsendiaShipmentFieldIndex.DimsWeight, true); }
 			set	{ SetValue((int)AsendiaShipmentFieldIndex.DimsWeight, value); }
-		}
-
-		/// <summary> The Insurance property of the Entity AsendiaShipment<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "AsendiaShipment"."Insurance"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Insurance
-		{
-			get { return (System.Boolean)GetValue((int)AsendiaShipmentFieldIndex.Insurance, true); }
-			set	{ SetValue((int)AsendiaShipmentFieldIndex.Insurance, value); }
 		}
 
 		/// <summary> The InsuranceValue property of the Entity AsendiaShipment<br/><br/></summary>

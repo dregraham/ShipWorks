@@ -99,12 +99,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Double DimsWeight { get; }
-        /// <summary> The Insurance property of the Entity AsendiaShipment<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "AsendiaShipment"."Insurance"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean Insurance { get; }
         /// <summary> The InsuranceValue property of the Entity AsendiaShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaShipment"."InsuranceValue"<br/>
