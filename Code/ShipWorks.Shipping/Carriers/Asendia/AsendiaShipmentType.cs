@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             }
 
             return new ShipmentParcel(shipment, null,
-                new InsuranceChoice(shipment, shipment, shipment.Asendia, shipment.Asendia),
+                new InsuranceChoice(shipment, shipment, shipment.Asendia, null),
                 new DimensionsAdapter(shipment.Asendia))
             {
                 TotalWeight = shipment.TotalWeight
@@ -159,7 +159,6 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             base.UpdateDynamicShipmentData(shipment);
             
-            shipment.Insurance = shipment.Asendia.Insurance;
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
@@ -263,7 +262,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             base.ConfigurePrimaryProfile(profile);
             profile.OriginID = (int)ShipmentOriginSource.Account;
-
+            
             AsendiaProfileEntity asendia = profile.Asendia;
 
             asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any()
@@ -281,7 +280,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.DimsWidth = 0;
             asendia.DimsHeight = 0;
             asendia.DimsWeight = 0;
-            asendia.DimsAddWeight = true;
+            asendia.DimsAddWeight = true;            
         }
 
         /// <summary>

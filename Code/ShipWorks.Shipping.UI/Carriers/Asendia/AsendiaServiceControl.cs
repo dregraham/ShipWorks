@@ -199,7 +199,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
-        [NDependIgnoreLongMethod]
         public override void SaveToShipments()
         {
             SuspendShipSenseFieldChangeEvent();
