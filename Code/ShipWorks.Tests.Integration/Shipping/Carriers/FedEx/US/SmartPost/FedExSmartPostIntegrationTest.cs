@@ -46,5 +46,26 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
                 testObject.Ship(context.Order);
             }
         }
+
+        [ExcelData(@"DataSources\FedExAll\IMPB SmartPost Returns.xlsx", "IMpB Smartpost")]
+        [Trait("Category", "FedEx")]
+        [Theory]
+        public void Ship_FedExSmartPostReturns(DataRow row)
+        {
+            if (row["SaveLabel"] is DBNull || (string) row["SaveLabel"] != "TRUE")
+            {
+                return;
+            }
+
+            FedExSmartPostFixture testObject = new FedExSmartPostFixture();
+
+            if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
+
+                testObject.Ship(context.Order);
+            }
+        }
     }
 }
