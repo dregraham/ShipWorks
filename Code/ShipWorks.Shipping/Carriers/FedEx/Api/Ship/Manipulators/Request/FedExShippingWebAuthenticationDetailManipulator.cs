@@ -11,15 +11,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
     /// </summary>
     public class FedExShippingWebAuthenticationDetailManipulator : IFedExShipRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
+        private readonly IFedExSettingsRepository settingsRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShippingWebAuthenticationDetailManipulator" /> class.
         /// </summary>
-        /// <param name="fedExSettings">The FedEx settings.</param>
         public FedExShippingWebAuthenticationDetailManipulator(IFedExSettingsRepository settingsRepository)
         {
-            this.fedExSettings = new FedExSettings(settingsRepository);
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            request.WebAuthenticationDetail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(fedExSettings);
+            request.WebAuthenticationDetail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settingsRepository);
 
             return request;
         }

@@ -169,8 +169,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail object for a shipping API request.</returns>
-        public static WebAuthenticationDetail CreateShippingWebAuthenticationDetail(FedExSettings settings)
+        public static WebAuthenticationDetail CreateShippingWebAuthenticationDetail(IFedExSettingsRepository settingsRepository)
         {
+            FedExSettings settings = new FedExSettings(settingsRepository); 
+
             return new WebAuthenticationDetail
             {
                 ParentCredential = new WebAuthenticationCredential
