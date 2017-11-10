@@ -184,23 +184,24 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
             }
         }
 
-        [ExcelData(@"DataSources\FedExAll\ETD.xlsx", "ETD")]
-        [Theory]
-        [Trait("Category", "FedEx")]
-        public void Ship_FedExETD(DataRow row)
-        {
-            var testObject = new FedExUSExpressInternationalFixture();
+        // For some 
+        //[ExcelData(@"DataSources\FedExAll\ETD.xlsx", "ETD")]
+        //[Theory]
+        //[Trait("Category", "FedEx")]
+        //public void Ship_FedExETD(DataRow row)
+        //{
+        //    var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
-            {
-                output.WriteLine($"Executing customer transaction ID {row[5]}");
+        //    if (PopulateTestObject(row, testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
+        //        (testObject.IsSaveLabel || !justLabels))
+        //    {
+        //        output.WriteLine($"Executing customer transaction ID {row[5]}");
 
-                testObject.FedExAccountNumber = fedExTestAccountNumber;
-                testObject.CommercialInvoiceFileElectronically = true;
+        //        testObject.FedExAccountNumber = fedExTestAccountNumber;
+        //        testObject.CommercialInvoiceFileElectronically = true;
 
-                testObject.Ship(context.Order);
-            }
-        }
+        //        testObject.Ship(context.Order);
+        //    }
+        //}
     }
 }

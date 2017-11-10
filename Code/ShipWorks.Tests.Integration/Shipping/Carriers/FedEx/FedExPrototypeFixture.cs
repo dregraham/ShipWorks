@@ -79,6 +79,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         public string SpecialServiceType1 { get; set; }
         public string SpecialServiceType2 { get; set; }
         public string SpecialServiceType3 { get; set; }
+        public string SpecialServiceType4 { get; set; }
 
         public string CodCollectionCurrency { get; set; }
         public string CodCollectionAmount { get; set; }
@@ -1400,6 +1401,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 case "third_party": return FedExPayorType.ThirdParty;
                 case "recipient": return FedExPayorType.Recipient;
                 case "collect": return FedExPayorType.Collect;
+                default: return FedExPayorType.Sender;
             }
 
             throw new Exception("Unrecognized payment type");
