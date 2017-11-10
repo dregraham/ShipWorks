@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
     {
         private FedExRateWebAuthenticationManipulator testObject;
 
-        private Mock<ICarrierSettingsRepository> settingsRepository;
+        private Mock<IFedExSettingsRepository> settingsRepository;
         private ShippingSettingsEntity shippingSettings;
         private FedExSettings settings;
 
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         {
             shippingSettings = new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" };
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
+            settingsRepository = new Mock<IFedExSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(shippingSettings);
 
             settings = new FedExSettings(settingsRepository.Object);
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
             rateRequest = new RateRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), rateRequest);
 
-            testObject = new FedExRateWebAuthenticationManipulator(settings);
+            testObject = new FedExRateWebAuthenticationManipulator(settingsRepository.Object);
         }
 
         [Fact]

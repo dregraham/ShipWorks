@@ -12,17 +12,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
     /// </summary>
     public class FedExShippingVersionManipulator : IFedExShipRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingVersionManipulator" /> class.
-        /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExShippingVersionManipulator(IFedExSettingsRepository settingsRepository)
-        {
-            this.fedExSettings = new FedExSettings(settingsRepository);
-        }
-
         /// <summary>
         /// Does this manipulator apply to this shipment
         /// </summary>

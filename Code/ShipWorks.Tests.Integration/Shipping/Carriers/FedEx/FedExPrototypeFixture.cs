@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
@@ -11,6 +12,7 @@ using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -28,6 +30,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
+using ShipWorks.Shipping.FedEx;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
@@ -218,36 +221,50 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    var settingsRepository = new FedExSettingsRepository();
-                    IFedExLabelRepositoryFactory labelRepositoryFactory = 
-                        new FedExLabelRepositoryFactory(
-                            () => new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())), 
-                            () => new FedExLTLFreightLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())));
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        var settingsRepository = new FedExSettingsRepository();
+                        IFedExLabelRepositoryFactory labelRepositoryFactory =
+                            new FedExLabelRepositoryFactory(
+                                () => new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())),
+                                () => new FedExLTLFreightLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())));
 
-                    //TODO: See if we can use Autofac for this
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk(
-                        labelRepositoryFactory,
-                        new FedExRequestFactory(
-                            new FedExServiceGatewayFactory(
-                                _ => new FedExServiceGateway(settingsRepository),
-                                _ => new FedExOpenShipGateway(settingsRepository)),
+                        //TODO: See if we can use Autofac for this
+                        FedExShippingClerk shippingClerk = new FedExShippingClerk(
+                            labelRepositoryFactory,
+                            new FedExRequestFactory(
+                                new FedExServiceGatewayFactory(
+                                    _ => new FedExServiceGateway(settingsRepository),
+                                    _ => new FedExOpenShipGateway(settingsRepository)),
+                                settingsRepository,
+                                new FedExShipmentTokenProcessor(),
+                                new FedExResponseFactory(),
+                                scope
+                            ),
                             settingsRepository,
-                            new FedExShipmentTokenProcessor(),
-                            new FedExResponseFactory(),
-                            null),
-                        settingsRepository,
-                        new ExcludedServiceTypeRepository(),
-                        LogManager.GetLogger
-                    );
+                            new ExcludedServiceTypeRepository(),
+                            LogManager.GetLogger
+                        );
 
-                    shippingClerk.Ship(shipment)
-                        .Map(r => r.ForEach(x => x.Process()));
+                        var result = shippingClerk.Ship(shipment)
+                            .Map(r => r.ForEach(x => x.Process()));
 
-                    shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
-                    shipment.Processed = true;
-                    shipment.ProcessedDate = DateTime.UtcNow;
-                    shipment.Voided = false;
-                    shipment.CustomsGenerated = true;
+                        if (result.Failure)
+                        {
+                            if (result.Exception != null)
+                            {
+                                throw result.Exception;
+                            }
+
+                            throw new Exception(result.Message);
+                        }
+
+                        shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
+                        shipment.Processed = true;
+                        shipment.ProcessedDate = DateTime.UtcNow;
+                        shipment.Voided = false;
+                        shipment.CustomsGenerated = true;
+                    }
                 }
 
                 shipment.CustomsGenerated = true;
@@ -699,6 +716,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             package.HazardousMaterialQuantityValue = 0;
             package.PackingDetailsCargoAircraftOnly = false;
             package.PackingDetailsPackingInstructions = string.Empty;
+
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.Bag;
+            package.FreightPieces = 0;
+            package.BatteryMaterial = FedExBatteryMaterialType.NotSpecified;
+            package.BatteryPacking = FedExBatteryPackingType.NotSpecified;
+            package.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified;
 
             package.AlcoholRecipientType = 0;
         }

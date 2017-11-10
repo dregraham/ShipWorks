@@ -9,22 +9,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipula
     public class FedExPackageMovementWebAuthenticationDetailManipulator : ICarrierRequestManipulator
     {
         private readonly FedExSettings fedExSettings;
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExPackageMovementWebAuthenticationDetailManipulator"/> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExPackageMovementWebAuthenticationDetailManipulator(ICarrierSettingsRepository settingsRepository)
-            : this(new FedExSettings(settingsRepository))
-        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExPackageMovementWebAuthenticationDetailManipulator" /> class.
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExPackageMovementWebAuthenticationDetailManipulator(FedExSettings fedExSettings)
+        public FedExPackageMovementWebAuthenticationDetailManipulator(IFedExSettingsRepository settingsRepository)
         {
-            this.fedExSettings = fedExSettings;
+            fedExSettings = new FedExSettings(settingsRepository);
         }
 
         /// <summary>

@@ -9,20 +9,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
     public class FedExRateWebAuthenticationManipulator: IFedExRateRequestManipulator
     {
         private readonly FedExSettings fedExSettings;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExRateWebAuthenticationManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        { }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public FedExRateWebAuthenticationManipulator(FedExSettings fedExSettings)
+        public FedExRateWebAuthenticationManipulator(IFedExSettingsRepository settingsRepository)
         {
-            this.fedExSettings = fedExSettings;
+            fedExSettings = new FedExSettings(settingsRepository);
         }
 
         /// <summary>
