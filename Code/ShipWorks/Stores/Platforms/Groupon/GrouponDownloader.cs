@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.OrderDate = orderDate;
             order.OnlineLastModified = orderDate;
 
-            order.ParentOrderID = jsonOrder["parent_order_id"]?.ToString();
+            order.ParentOrderID = jsonOrder["parent_orderid"]?.ToString();
 
             //Order Address
             GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
