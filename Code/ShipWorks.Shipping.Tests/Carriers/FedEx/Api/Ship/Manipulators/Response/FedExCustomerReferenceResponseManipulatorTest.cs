@@ -27,6 +27,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
         }
 
         [Fact]
+        public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenRequestIsNull()
+        {
+            var result = testObject.Manipulate(null, new ProcessShipmentRequest(), Create.Shipment().AsFedEx(f => f.DoNotSetDefaults()).Build());
+
+            Assert.Null(result.Value.FedEx.ReferenceShipmentIntegrity);
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenRequestDoesNotHaveReference()
+        {
+            request.RequestedShipment.RequestedPackageLineItems = null;
+
+            var result = testObject.Manipulate(null, request, Create.Shipment().AsFedEx(f => f.DoNotSetDefaults()).Build());
+
+            Assert.Null(result.Value.FedEx.ReferenceShipmentIntegrity);
+        }
+
+        [Fact]
         public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenReferenceDoesNotExist()
         {
             lineItem.Ensure(x => x.CustomerReferences);
