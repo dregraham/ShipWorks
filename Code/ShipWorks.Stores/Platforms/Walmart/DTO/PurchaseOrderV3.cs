@@ -1326,10 +1326,18 @@
         /// <remarks/>
         OnTrac,
 
-        /// <summary>
-        /// Manually added.
-        /// </summary>
-        DHL
+        // Manually added:
+        DHL,
+
+        NG,
+
+        LS,
+
+        UDS, 
+
+        UPSMI,
+
+        FDX
     }
 
     /// <remarks/>
