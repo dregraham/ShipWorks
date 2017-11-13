@@ -1325,6 +1325,11 @@
 
         /// <remarks/>
         OnTrac,
+
+        /// <summary>
+        /// Manually added.
+        /// </summary>
+        DHL
     }
 
     /// <remarks/>
