@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;

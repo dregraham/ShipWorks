@@ -3,23 +3,30 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International
+namespace Interapptive.Shared.Extensions
 {
     /// <summary>
-    /// Helper methods for creating manipulators
+    /// Extensions for use on all objects
     /// </summary>
-    public static class ManipulatorHelpers
+    public static class ObjectExtensions
     {
         /// <summary>
         /// Ensure a property has a value
         /// </summary>
-        public static TProp Ensure<T, TProp>(this T obj, Expression<Func<T, TProp>> getter) where TProp : class, new()
+        public static TProp Ensure<T, TProp>(this T obj, Expression<Func<T, TProp>> getter) where TProp : class, new() =>
+            Ensure(obj, getter, () => new TProp());
+
+        /// <summary>
+        /// Ensure a property has a value
+        /// </summary>
+        public static TProp Ensure<T, TProp, TObj>(this T obj, Expression<Func<T, TProp>> getter, Func<TObj> creator)
+            where TObj : TProp
         {
             var value = getter.Compile()(obj);
 
             if (getter.Compile()(obj) == null)
             {
-                value = new TProp();
+                value = creator();
                 GetSetter(getter)(obj, value);
             }
 

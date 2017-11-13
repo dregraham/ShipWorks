@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -481,11 +480,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Save the origin
             originControl.SaveToEntities();
 
-            // Save the package crap
+            // Save the packages
             packageControl.SaveToEntities();
             packageDetailsControl.SaveToEntities();
 
-            // Save cod address crap
+            // Save cod address
             codOrigin.SaveToEntities();
 
             this.fedExFreightContainerControl.SaveToShipments(LoadedShipments);
@@ -524,7 +523,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
                 homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
                 homePremiumPhone.ReadMultiText(t => shipment.FedEx.HomeDeliveryPhone = t);
-                
+
                 codEnabled.ReadMultiCheck(c => shipment.FedEx.CodEnabled = c);
                 codAmount.ReadMultiAmount(a => shipment.FedEx.CodAmount = a);
                 codAddFreight.ReadMultiCheck(c => shipment.FedEx.CodAddFreight = c);
@@ -581,14 +580,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 UpdateLayoutForMultipleServices();
             }
 
-            if (FedExUtility.IsFreightLtlService((int) service.SelectedValue))
+            packageControl.PackageCountChanged = packageCount =>
             {
-                packageControl.PackageCountChanged = fedExFreightContainerControl.PackageCountChanged;
-            }
-            else
-            {
-                packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
-            }
+                fedExFreightContainerControl.PackageCountChanged(packageCount);
+                packageDetailsControl.PackageCountChanged(packageCount);
+            };
 
             UpdateLabelFormat();
 

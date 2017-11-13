@@ -1,5 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+﻿using Interapptive.Shared.Extensions;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;

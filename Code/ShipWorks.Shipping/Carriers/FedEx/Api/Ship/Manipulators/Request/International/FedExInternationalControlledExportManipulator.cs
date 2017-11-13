@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
