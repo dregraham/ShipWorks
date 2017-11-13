@@ -13,6 +13,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart.DTO
         [Fact]
         public void DhlExists()
         {
+            // DHL was added manually. Make sure it is still there.
             Assert.Equal(carrierType.DHL, carrierType.DHL);
         }
     }
