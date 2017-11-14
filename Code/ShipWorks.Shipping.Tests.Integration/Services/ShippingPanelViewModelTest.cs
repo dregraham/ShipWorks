@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Linq;
@@ -154,7 +155,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             viewModel.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
                 new LoadedOrderSelection(shipmentToLoad.Order, new [] {
                     context.Mock.Create<CarrierShipmentAdapterFactory>().Get(shipmentToLoad)
-                }, ShippingAddressEditStateType.Editable)
+                }, new Dictionary<long, ShippingAddressEditStateType>())
             }));
         }
 
