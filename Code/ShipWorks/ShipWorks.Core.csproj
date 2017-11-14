@@ -1827,6 +1827,7 @@
     <Compile Include="Stores\Platforms\GenericModule\IGenericStoreWebClient.cs" />
     <Compile Include="Stores\Platforms\GenericModule\OnlineUpdating\GenericModuleOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponParentOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
