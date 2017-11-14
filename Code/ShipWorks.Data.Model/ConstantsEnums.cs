@@ -3590,6 +3590,10 @@ namespace ShipWorks.Data.Model
 		FreightClass,
 		///<summary>FreightSpecialServices. </summary>
 		FreightSpecialServices,
+		///<summary>FreightGuaranteeType. </summary>
+		FreightGuaranteeType,
+		///<summary>FreightGuaranteeDate. </summary>
+		FreightGuaranteeDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

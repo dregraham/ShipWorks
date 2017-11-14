@@ -6,7 +6,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.FedEx;
@@ -93,14 +92,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             AddLineItems(fedex, freightClass, freightDetail, sequenceNumber);
 
             return GetFreightSpecialServices(fedex.FreightSpecialServices)
-                .Do(x =>
-                {
-                    if (x.Any())
-                    {
-                        requestedShipment.SpecialServicesRequested.SpecialServiceTypes = x.ToArray();
-                    }
-                })
+                .Do(x => AddSpecialServices(fedex, x, requestedShipment))
                 .Map(x => request);
+        }
+
+        /// <summary>
+        /// Add special services to the request
+        /// </summary>
+        private static void AddSpecialServices(IFedExShipmentEntity fedex, IEnumerable<ShipmentSpecialServiceType> serviceTypes, RequestedShipment requestedShipment)
+        {
+            if (serviceTypes.None())
+            {
+                return;
+            }
+
+            requestedShipment.SpecialServicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
+
+            if (serviceTypes.Contains(ShipmentSpecialServiceType.FREIGHT_GUARANTEE) &&
+                fedex.FreightGuaranteeType != FedExFreightGuaranteeType.None)
+            {
+                requestedShipment.SpecialServicesRequested.FreightGuaranteeDetail = new FreightGuaranteeDetail
+                {
+                    Date = fedex.FreightGuaranteeDate,
+                    DateSpecified = true,
+                    Type = fedex.FreightGuaranteeType == FedExFreightGuaranteeType.Date ?
+                        FreightGuaranteeType.GUARANTEED_DATE :
+                        FreightGuaranteeType.GUARANTEED_MORNING,
+                    TypeSpecified = true,
+                };
+            }
         }
 
         /// <summary>

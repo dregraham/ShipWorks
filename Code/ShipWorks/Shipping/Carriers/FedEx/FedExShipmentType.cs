@@ -432,6 +432,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.FreightRole = FedExFreightShipmentRoleType.None;
             shipment.FedEx.FreightSpecialServices = (int) FedExFreightSpecialServicesType.None;
             shipment.FedEx.FreightTotalHandlinUnits = 0;
+            shipment.FedEx.FreightGuaranteeType = FedExFreightGuaranteeType.None;
+            shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
@@ -802,6 +804,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (shipment.FedEx.HomeDeliveryDate < dateTimeProvider.Now.Date)
             {
                 shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
+            }
+
+            if (shipment.FedEx.FreightGuaranteeDate < dateTimeProvider.Now.Date)
+            {
+                shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now.Date.AddHours(12);
             }
 
             // Ensure the cod address is up-to-date

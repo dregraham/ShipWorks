@@ -91,6 +91,7 @@
     <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightClassType" Type="ShipWorks.Shipping.FedEx.FedExFreightClassType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightCollectTermsType" Type="ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightGuaranteeType" Type="ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightPhysicalPackagingType" Type="ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightShipmentRoleType" Type="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExFreightSpecialServicesType" Type="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -1116,6 +1117,8 @@
           <Field Name="FreightBookingNumber" Type="string" MaxLength="12" FieldIndex="25" />
           <Field Name="FreightClass" Type="FedExFreightClassType" FieldIndex="159" />
           <Field Name="FreightCollectTerms" Type="FedExFreightCollectTermsType" FieldIndex="157" />
+          <Field Name="FreightGuaranteeDate" Type="datetime" FieldIndex="162" />
+          <Field Name="FreightGuaranteeType" Type="FedExFreightGuaranteeType" FieldIndex="161" />
           <Field Name="FreightInsideDelivery" Type="bool" FieldIndex="24" />
           <Field Name="FreightInsidePickup" Type="bool" FieldIndex="23" />
           <Field Name="FreightLoadAndCount" Type="int" FieldIndex="26" />
@@ -4078,7 +4081,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-30T17:40:58.4515358Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-14T21:18:24.6428432Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5117,8 +5120,8 @@
                     <Field Name="BatteryMaterial" Ordinal="43" DbType="8" Precision="10" />
                     <Field Name="BatteryPacking" Ordinal="44" DbType="8" Precision="10" />
                     <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
-                    <Field Name="FreightPackaging" Ordinal="46" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="FreightPieces" Ordinal="47" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightPackaging" Ordinal="46" DbType="8" Precision="10" />
+                    <Field Name="FreightPieces" Ordinal="47" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -5917,11 +5920,13 @@
                     <Field Name="ThirdPartyConsignee" Ordinal="154" DbType="2" />
                     <Field Name="Currency" Ordinal="155" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InternationalTrafficInArmsService" Ordinal="156" IsOptional="true" DbType="2" />
-                    <Field Name="FreightRole" Ordinal="157" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="FreightCollectTerms" Ordinal="158" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="FreightTotalHandlinUnits" Ordinal="159" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10" />
-                    <Field Name="FreightClass" Ordinal="160" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
-                    <Field Name="FreightSpecialServices" Ordinal="161" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
+                    <Field Name="FreightRole" Ordinal="157" DbType="8" Precision="10" />
+                    <Field Name="FreightCollectTerms" Ordinal="158" DbType="8" Precision="10" />
+                    <Field Name="FreightTotalHandlinUnits" Ordinal="159" DbType="8" Precision="10" />
+                    <Field Name="FreightClass" Ordinal="160" DbType="8" Precision="10" />
+                    <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
+                    <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
+                    <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -10829,6 +10834,8 @@
             <FieldMapping FieldName="FreightBookingNumber" TargetFieldName="FreightBookingNumber" />
             <FieldMapping FieldName="FreightClass" TargetFieldName="FreightClass" />
             <FieldMapping FieldName="FreightCollectTerms" TargetFieldName="FreightCollectTerms" />
+            <FieldMapping FieldName="FreightGuaranteeDate" TargetFieldName="FreightGuaranteeDate" />
+            <FieldMapping FieldName="FreightGuaranteeType" TargetFieldName="FreightGuaranteeType" />
             <FieldMapping FieldName="FreightInsideDelivery" TargetFieldName="FreightInsideDelivery" />
             <FieldMapping FieldName="FreightInsidePickup" TargetFieldName="FreightInsidePickup" />
             <FieldMapping FieldName="FreightLoadAndCount" TargetFieldName="FreightLoadAndCount" />

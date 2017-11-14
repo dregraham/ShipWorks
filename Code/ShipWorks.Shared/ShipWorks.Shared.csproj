@@ -134,6 +134,7 @@
     <Compile Include="Settings\ShipmentDateCutoff.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightClassType.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightCollectTermsType.cs" />
+    <Compile Include="Shipping\FedEx\FedExFreightGuaranteeType.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightPhysicalPackagingType.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightShipmentRoleType.cs" />
     <Compile Include="Shipping\FedEx\FedExFreightSpecialServicesType.cs" />
