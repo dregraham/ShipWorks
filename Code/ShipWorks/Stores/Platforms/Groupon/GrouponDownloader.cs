@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 EntityQuery<GrouponOrderEntity> parentOrderQuery = new QueryFactory().GrouponOrder
                     .Where(GrouponOrderFields.ParentOrderID == childOrder.ParentOrderID & GrouponOrderFields.OrderID != childOrderID);
 
-                parentOrder = await adapter.FetchFirstAsync(parentOrderQuery);
+                parentOrder = await adapter.FetchFirstAsync(parentOrderQuery).ConfigureAwait(false);
             }
             
             if (parentOrder == null)
