@@ -3262,6 +3262,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.RefreshToken);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.DownloadModifiedNumberOfDaysBack field instance</summary>
+		public static EntityField2 DownloadModifiedNumberOfDaysBack
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>
