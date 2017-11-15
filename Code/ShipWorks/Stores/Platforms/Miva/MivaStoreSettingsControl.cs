@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Miva
 
             orderStatusControl.LoadStore(mivaStore);
             sebenzaOptions.LoadStore(mivaStore);
+            downloadAddendumCheckoutQuestions.Checked = mivaStore.AddendumCheckoutDataEnabled;
 
             GenericModuleStoreEntity genericStore = store as GenericModuleStoreEntity;
             if (genericStore != null)
@@ -68,6 +69,11 @@ namespace ShipWorks.Stores.Platforms.Miva
                 baseValue = orderStatusControl.SaveToEntity(mivaStore);
             }
 
+            if (baseValue)
+            {
+                mivaStore.AddendumCheckoutDataEnabled = downloadAddendumCheckoutQuestions.Checked;
+            }            
+            
             if (baseValue)
             {
                 if (encodingComboBox.SelectedValue != null)
