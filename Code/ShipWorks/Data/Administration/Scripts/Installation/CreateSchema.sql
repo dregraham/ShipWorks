@@ -1426,7 +1426,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -3786,7 +3787,8 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [TimeZoneID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
 [DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
-[RestUser] [bit] NOT NULL
+[RestUser] [bit] NOT NULL,
+[OrderIDUpgradeFixDate] [datetime] NULL 
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'

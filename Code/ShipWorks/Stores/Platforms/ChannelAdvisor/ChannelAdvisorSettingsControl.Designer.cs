@@ -1,4 +1,8 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+﻿using ShipWorks.Core.Stores.Platforms.ChannelAdvisor;
+using ShipWorks.UI.Controls;
+using System.Windows.Forms;
+
+namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
     partial class ChannelAdvisorSettingsControl
     {
@@ -31,6 +35,10 @@
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
             this.amazon = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAmazonSettingsControl();
+            this.daysBack = new ShipWorks.Core.Stores.Platforms.ChannelAdvisor.ChannelAdvisorDownloadModifiedDaysBackControl();
+            this.daysBackTitle = new ShipWorks.UI.Controls.SectionTitle();
+            this.daysBackPanel = new System.Windows.Forms.Panel();
+            this.daysBackPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // consolidator
@@ -62,15 +70,48 @@
             this.amazon.Size = new System.Drawing.Size(582, 129);
             this.amazon.TabIndex = 2;
             // 
+            // daysBack
+            // 
+            this.daysBack.AutoSize = true;
+            this.daysBack.Location = new System.Drawing.Point(0, 24);
+            this.daysBack.MaxDaysBack = 14;
+            this.daysBack.Name = "daysBack";
+            this.daysBack.Size = new System.Drawing.Size(582, 73);
+            this.daysBack.TabIndex = 3;
+            // 
+            // daysBackTitle
+            // 
+            this.daysBackTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.daysBackTitle.Location = new System.Drawing.Point(0, 0);
+            this.daysBackTitle.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
+            this.daysBackTitle.Name = "daysBackTitle";
+            this.daysBackTitle.Size = new System.Drawing.Size(582, 22);
+            this.daysBackTitle.TabIndex = 0;
+            this.daysBackTitle.Text = "Download Criteria";
+            // 
+            // daysBackPanel
+            // 
+            this.daysBackPanel.Controls.Add(this.daysBackTitle);
+            this.daysBackPanel.Controls.Add(this.daysBack);
+            this.daysBackPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.daysBackPanel.Location = new System.Drawing.Point(0, 300);
+            this.daysBackPanel.Name = "daysBackPanel";
+            this.daysBackPanel.Size = new System.Drawing.Size(582, 100);
+            this.daysBackPanel.TabIndex = 3;
+            // 
             // ChannelAdvisorSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.Controls.Add(this.amazon);
             this.Controls.Add(this.consolidator);
+            this.Controls.Add(this.daysBackPanel);
             this.Controls.Add(this.attributes);
             this.Name = "ChannelAdvisorSettingsControl";
-            this.Size = new System.Drawing.Size(582, 311);
+            this.Size = new System.Drawing.Size(582, 500);
+            this.daysBackPanel.ResumeLayout(false);
+            this.daysBackPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -81,5 +122,8 @@
         private ChannelAdvisorAttributesSettingsControl attributes;
         private ChannelAdvisorConsolidatorSettingsControl consolidator;
         private ChannelAdvisorAmazonSettingsControl amazon;
+        private Panel daysBackPanel;
+        private ChannelAdvisorDownloadModifiedDaysBackControl daysBack;
+        private SectionTitle daysBackTitle;
     }
 }

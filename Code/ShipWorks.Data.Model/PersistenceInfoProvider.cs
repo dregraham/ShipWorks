@@ -659,7 +659,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>
 		private void InitChannelAdvisorStoreEntityMappings()
 		{
-			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 9, 0);
+			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 10, 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -669,6 +669,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonAuthToken", "AmazonAuthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "RefreshToken", "RefreshToken", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 		}
 
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
@@ -3159,7 +3160,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ThreeDCartStoreEntity's mappings</summary>
 		private void InitThreeDCartStoreEntityMappings()
 		{
-			this.AddElementMapping("ThreeDCartStoreEntity", @"ShipWorksLocal", @"dbo", "ThreeDCartStore", 7, 0);
+			this.AddElementMapping("ThreeDCartStoreEntity", @"ShipWorksLocal", @"dbo", "ThreeDCartStore", 8, 0);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StoreUrl", "StoreUrl", false, "NVarChar", 110, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "ApiUserKey", "ApiUserKey", false, "NVarChar", 65, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3167,6 +3168,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StatusCodes", "StatusCodes", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "RestUser", "RestUser", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
+			this.AddElementFieldMapping("ThreeDCartStoreEntity", "OrderIDUpgradeFixDate", "OrderIDUpgradeFixDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 		}
 
 		/// <summary>Inits UpsAccountEntity's mappings</summary>

@@ -1420,6 +1420,8 @@ namespace ShipWorks.Data.Model
 		AmazonApiRegion,
 		///<summary>RefreshToken. </summary>
 		RefreshToken,
+		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
+		DownloadModifiedNumberOfDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9892,6 +9894,8 @@ namespace ShipWorks.Data.Model
 		DownloadModifiedNumberOfDaysBack,
 		///<summary>RestUser. </summary>
 		RestUser,
+		///<summary>OrderIDUpgradeFixDate. </summary>
+		OrderIDUpgradeFixDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

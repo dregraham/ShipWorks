@@ -167,6 +167,7 @@
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
     <Compile Include="Stores\Content\OrderUtilityTest.cs" />
     <Compile Include="Stores\Platforms\Shopify\ShopifyDownloaderTest.cs" />
+    <Compile Include="Stores\Platforms\ThreeDCart\ThreeDCartRestDownloaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

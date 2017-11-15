@@ -87,6 +87,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonApiRegion = string.Empty;
             caStore.AmazonAuthToken = string.Empty;
             caStore.AmazonMerchantID = string.Empty;
+            caStore.DownloadModifiedNumberOfDaysBack = 1;
 
             return caStore;
         }
