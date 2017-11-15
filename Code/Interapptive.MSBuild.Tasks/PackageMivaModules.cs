@@ -46,7 +46,7 @@ namespace Interapptive.MSBuild.Tasks
         }
 
         /// <summary>
-        /// The full path to the Miva5 module file
+        /// The full path to the Miva9 module file
         /// </summary>
         [Required]
         public string ModuleFileMiva9
