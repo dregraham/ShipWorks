@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         {
             this.reply = reply;
             this.shipment = shipment;
-            this.manipulators = manipulators;
+            this.manipulators = manipulators.Where(x => !x.GetType().Namespace.Contains("Castle"));
             this.labelRepositoryFactory = labelRepositoryFactory;
         }
 

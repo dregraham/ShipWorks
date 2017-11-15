@@ -284,6 +284,9 @@
     <None Include="DataSources\FedExAll\CA Exp Intl.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\CA Freight.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\FedExAll\CA Grn Dom Intl.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -291,6 +294,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\Grn Alcohol.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\IMPB SmartPost Returns.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\IMpB Smartpost.xlsx">
@@ -318,6 +324,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\US Exp Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Freight Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Freight.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx">
