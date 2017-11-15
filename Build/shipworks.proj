@@ -230,7 +230,11 @@
       <Output TaskParameter="Include" ItemName="Miva5Module"/>
     </CreateItem>
 
-    <PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" OutputDirectory="$(ModulesDirectory)">
+    <CreateItem Include="..\Code\**\shipworks3Miva9.mv" >
+      <Output TaskParameter="Include" ItemName="Miva9Module"/>
+    </CreateItem>
+
+    <PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" ModuleFileMiva9="@(Miva9Module)" OutputDirectory="$(ModulesDirectory)">
       <Output TaskParameter="PackagedFiles" PropertyName="PackagedMivaFiles" />
     </PackageMivaModules>
 
@@ -238,7 +242,6 @@
 
   <!-- Drives the process of creating the installer -->
   <PropertyGroup>
-    <CreateInstallerDependsOn>
       Obfuscate;
       StrongName;
       SignAssemblies;
