@@ -52,6 +52,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
         public string PackingDetailsCargoAircraftOnly { get; set; }
         public string PackingDetailsPackingInstructions { get; set; }
 
+        public string BatteryMaterial { get; set; }
+        public string BatteryPacking { get; set; }
+        public string BatteryRegulatorySubType { get; set; }
+
         /// <summary>
         /// Creates the shipment.
         /// </summary>
