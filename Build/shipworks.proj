@@ -242,6 +242,7 @@
 
   <!-- Drives the process of creating the installer -->
   <PropertyGroup>
+    <CreateInstallerDependsOn>
       Obfuscate;
       StrongName;
       SignAssemblies;
