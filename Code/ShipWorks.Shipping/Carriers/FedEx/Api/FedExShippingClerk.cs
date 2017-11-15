@@ -339,6 +339,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         public void Void(ShipmentEntity shipmentEntity)
         {
+            if (FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service))
+            {
+                var serviceDescription = EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service);
+                throw new FedExException($"{serviceDescription} shipments cannot be voided through ShipWorks. Please contact FedEx to void this shipment.");
+            }
+
             try
             {
                 // Make sure the shipment has a valid account associated with it
