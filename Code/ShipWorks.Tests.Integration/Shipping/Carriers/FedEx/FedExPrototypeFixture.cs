@@ -1376,6 +1376,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     return FedExServiceType.FedExFreightEconomy;
                 case "FEDEX_FREIGHT_PRIORITY":
                     return FedExServiceType.FedExFreightPriority;
+                case "EUROPE_FIRST_INTERNATIONAL_PRIORITY":
+                    return FedExServiceType.FedExEuropeFirstInternationalPriority;
             }
 
             throw new Exception($"Unrecognized service type. {ShipmentServiceType}");
