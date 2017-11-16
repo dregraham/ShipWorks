@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             freightDetail.TotalHandlingUnits = fedex.FreightTotalHandlinUnits.ToString();
 
-            AddLineItems(fedex, freightClass, freightDetail, sequenceNumber);
+            AddLineItems(fedex, freightClass, freightDetail);
 
             return GetFreightSpecialServices(fedex.FreightSpecialServices)
                 .Do(x => AddSpecialServices(fedex, x, requestedShipment))
@@ -126,33 +126,39 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Add line items to the request
         /// </summary>
-        private static void AddLineItems(IFedExShipmentEntity fedex, FreightClassType? freightClass, FreightShipmentDetail freightDetail, int sequenceNumber)
+        private static void AddLineItems(IFedExShipmentEntity fedex, FreightClassType? freightClass, FreightShipmentDetail freightDetail)
         {
-            var package = fedex.Packages.ElementAt(sequenceNumber);
-
-            FreightShipmentLineItem lineItem = new FreightShipmentLineItem()
+            List<FreightShipmentLineItem> lineItems = new List<FreightShipmentLineItem>();
+            int packageIndex = 1;
+            foreach (IFedExPackageEntity package in fedex.Packages)
             {
-                Description = $"Freight Package {sequenceNumber + 1}",
-                FreightClass = freightClass.Value,
-                FreightClassSpecified = true,
-                Dimensions = new Dimensions
+                FreightShipmentLineItem lineItem = new FreightShipmentLineItem()
                 {
-                    Height = package.DimsHeight.ToString(),
-                    Length = package.DimsLength.ToString(),
-                    Width = package.DimsWidth.ToString(),
-                    Units = LinearUnits.IN,
-                },
-                Packaging = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging).Value,
-                PackagingSpecified = true,
-                Pieces = package.FreightPieces.ToString(),
-                Weight = new Weight
-                {
-                    Value = (decimal) package.Weight,
-                    Units = WeightUnits.LB,
-                }
-            };
+                    Description = $"Freight Package {packageIndex}",
+                    FreightClass = freightClass.Value,
+                    FreightClassSpecified = true,
+                    Dimensions = new Dimensions
+                    {
+                        Height = package.DimsHeight.ToString(),
+                        Length = package.DimsLength.ToString(),
+                        Width = package.DimsWidth.ToString(),
+                        Units = LinearUnits.IN,
+                    },
+                    Packaging = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging).Value,
+                    PackagingSpecified = true,
+                    Pieces = package.FreightPieces.ToString(),
+                    Weight = new Weight
+                    {
+                        Value = (decimal) package.Weight,
+                        Units = WeightUnits.LB,
+                    }
+                };
 
-            freightDetail.LineItems = new[] { lineItem };
+                lineItems.Add(lineItem);
+                packageIndex++;
+            }
+
+            freightDetail.LineItems = lineItems.ToArray();
         }
 
         /// <summary>
