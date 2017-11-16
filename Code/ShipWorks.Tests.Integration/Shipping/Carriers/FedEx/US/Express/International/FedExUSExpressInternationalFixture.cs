@@ -288,7 +288,15 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
                 shipment.FedEx.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea236;
                 shipment.FedEx.IntlExportDetailEntryNumber = InternationalControlledExportDetailEntryNumber;
                 shipment.FedEx.IntlExportDetailForeignTradeZoneCode = InternationalControlledExportDetailForeignTradeZoneCode;
-                shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = DateTime.Parse(InternationalControlledExportDetailLicenseOrPermitExpirationDate);
+
+                if (!InternationalControlledExportDetailLicenseOrPermitExpirationDate.IsNullOrWhiteSpace())
+                {
+                    shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = DateTime.Parse(InternationalControlledExportDetailLicenseOrPermitExpirationDate);
+                }
+                else
+                {
+                    shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = DateTime.Now.AddMonths(6);
+                }
             }
 
             shipment.FedEx.IntlExportDetailLicenseOrPermitNumber = InternationalControlledExportDetailLicenseOrPermitNumber;

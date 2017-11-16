@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -80,6 +81,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
 
             // Set the special service type flags
+            specialServices.AddRange(specialServicesRequested.SpecialServiceTypes);
             specialServicesRequested.SpecialServiceTypes = specialServices.ToArray();
 
             return request;
@@ -93,6 +95,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             if (requestedPackageLineItem.SpecialServicesRequested == null)
             {
                 requestedPackageLineItem.SpecialServicesRequested = new PackageSpecialServicesRequested();
+            }
+            if (requestedPackageLineItem.SpecialServicesRequested.SpecialServiceTypes == null)
+            {
+                requestedPackageLineItem.SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
             }
 
             return requestedPackageLineItem.SpecialServicesRequested;

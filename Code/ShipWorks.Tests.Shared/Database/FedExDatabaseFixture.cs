@@ -182,6 +182,27 @@ namespace ShipWorks.Tests.Shared.Database
                 .Save();
 
             Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "604945186 - IPE Test Account")
+                .Set(x => x.AccountNumber, "604945186")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118975465")
+                .Set(x => x.SmartPostHubList, "<Root />")
+                .Set(x => x.FirstName, "IPE")
+                .Set(x => x.MiddleName, "Test")
+                .Set(x => x.LastName, "Account")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "MELEZHA STR")
+                .Set(x => x.Street2, "1-902")
+                .Set(x => x.City, "MINSK")
+                .Set(x => x.StateProvCode, "BY")
+                .Set(x => x.PostalCode, "220113")
+                .Set(x => x.CountryCode, "BY")
+                .Set(x => x.Phone, "3145551212")
+                .Set(x => x.Email, "me@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
+
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
                 .Set(x => x.Description, "612365903 - CA Test Account")
                 .Set(x => x.AccountNumber, "612365903")
                 .Set(x => x.SignatureRelease, "")

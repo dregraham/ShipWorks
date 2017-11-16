@@ -525,7 +525,17 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
             if (!DateTime.TryParse(ShipTimestamp, out shipTimestamp))
             {
-                shipTimestamp = string.IsNullOrEmpty(ShipTimestamp) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek) Enum.Parse(typeof(DayOfWeek), ShipTimestamp));
+                if (string.IsNullOrEmpty(ShipTimestamp))
+                {
+                    return DateTime.Now;
+                }
+
+                if (ShipTimestamp == "Next working day")
+                {
+                    return DateTime.Now.AddDays(1);
+                }
+
+                shipTimestamp = GetNext(DateTime.Now, (DayOfWeek) Enum.Parse(typeof(DayOfWeek), ShipTimestamp));
             }
 
             return shipTimestamp;
@@ -1419,6 +1429,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 {
                     // The only other option type is Faulty item so just hard code the type here
                     shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FaultyItem;
+                }
+
+                if (string.IsNullOrWhiteSpace(customsOptionDescription))
+                {
+                    customsOptionDescription = "Outbound shipment";
                 }
 
                 shipment.FedEx.CustomsOptionsDesription = customsOptionDescription;

@@ -120,11 +120,19 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))// && (string) row[5] == "413105")
+                (testObject.IsSaveLabel || !justLabels)) // && (row[2].ToString() == "IPE1" || row[2].ToString() == "IPE2")) // && ((string) row[5] == "413239" || (string)row[5] == "413240"))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
-                testObject.FedExAccountNumber = fedExTestAccountNumber;
+                if (row[2].ToString() == "IPE1" || row[2].ToString() == "IPE2")
+                {
+                    // IPE account number to use.
+                    testObject.FedExAccountNumber = "604945186";
+                }
+                else
+                {
+                    testObject.FedExAccountNumber = fedExTestAccountNumber;
+                }
 
                 testObject.Ship(context.Order);
             }

@@ -164,11 +164,22 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
         {
             if (!string.IsNullOrWhiteSpace(HomeDeliveryPremiumType))
             {
+                if (!string.IsNullOrWhiteSpace(HomeDeliveryPhoneNumber))
+                {
+                    shipment.FedEx.HomeDeliveryPhone = HomeDeliveryPhoneNumber;
+                }
+
                 shipment.FedEx.HomeDeliveryType = GetHomeDeliveryType();
 
                 // Can't deliver on Sunday or Monday
                 if (!string.IsNullOrWhiteSpace(HomeDeliveryDate))
                 {
+                    if (HomeDeliveryDate == "Expected a date one week ahead of the ship date.")
+                    {
+                        shipment.FedEx.HomeDeliveryDate = DateTime.Today.AddDays(8);
+                        return;
+                    }
+
                     switch (DateTime.Today.DayOfWeek)
                     {
                         case DayOfWeek.Sunday:
@@ -400,8 +411,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.DutiesPayment.Payor.ResponsibleParty.Address.CountryCode", PropertyName = "DutiesCountryCode", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.DutiesPayment.Payor.ResponsibleParty.Contact.PersonName", PropertyName = "DutiesPersonName", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.RegulatoryControls", PropertyName = "CustomsRegulatoryControls", SpreadsheetColumnIndex = -1 });
-                    //usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description", PropertyName = "CustomsOptionDescription", SpreadsheetColumnIndex = -1 });
-                    //usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type", PropertyName = "CustomsOptionType", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description", PropertyName = "CustomsOptionDescription", SpreadsheetColumnIndex = -1 });
+                    usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type", PropertyName = "CustomsOptionType", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.DropoffType", PropertyName = "DropoffType", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.LabelSpecification.LabelFormatType", PropertyName = "", SpreadsheetColumnIndex = -1 });
                     usGroundDomesticMapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems..PackageCount", PropertyName = "PackageCount", SpreadsheetColumnIndex = -1 });
