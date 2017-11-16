@@ -113,7 +113,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 labelRepositoryFactory.Create(shipmentEntity).ClearReferences(shipmentEntity);
 
                 var request = requestFactory.CreateShipRequest();
-                return Enumerable.Range(0, shipmentEntity.FedEx.Packages.Count)
+
+                int packageCount = FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service) ? 1 : shipmentEntity.FedEx.Packages.Count;
+
+                return Enumerable.Range(0, packageCount)
                     .Aggregate(
                         Enumerable.Empty<IFedExShipResponse>(),
                         (list, i) => request.Submit(shipmentEntity, i).Map(list.Append));
@@ -339,6 +342,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         public void Void(ShipmentEntity shipmentEntity)
         {
+            if (FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service))
+            {
+                var serviceDescription = EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service);
+                throw new FedExException($"{serviceDescription} shipments cannot be voided through ShipWorks. Please contact FedEx to void this shipment.");
+            }
+
             try
             {
                 // Make sure the shipment has a valid account associated with it

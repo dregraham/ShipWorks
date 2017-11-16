@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
@@ -37,13 +37,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         public GenericResult<ProcessShipmentRequest> Manipulate(IShipmentEntity shipment, ProcessShipmentRequest request, int sequenceNumber)
         {
-            InitializeShipmentRequest(request);
-
             var fedex = shipment.FedEx;
-            List<PackageSpecialServiceType> specialServices = new List<PackageSpecialServiceType>();
 
             // Each package should be in it's own request, so we always use the first item in the line item array
-            PackageSpecialServicesRequested specialServicesRequested = InitializePackageRequest(request.RequestedShipment.RequestedPackageLineItems[0]);
+            PackageSpecialServicesRequested specialServicesRequested = request.Ensure(x => x.RequestedShipment)
+                .EnsureAtLeastOne(x => x.RequestedPackageLineItems)
+                .Ensure(x => x.SpecialServicesRequested);
+            IEnumerable<PackageSpecialServiceType> specialServices = specialServicesRequested.Ensure(x => x.SpecialServiceTypes);
 
             // Signature
             FedExSignatureType fedExSignatureType = (FedExSignatureType) fedex.Signature;
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                     SignatureReleaseNumber = settings.GetAccountReadOnly(shipment).SignatureRelease
                 };
 
-                specialServices.Add(PackageSpecialServiceType.SIGNATURE_OPTION);
+                specialServices = specialServices.Append(PackageSpecialServiceType.SIGNATURE_OPTION);
             }
 
             ServiceType apiServiceType = FedExRequestManipulatorUtilities.GetApiServiceType((FedExServiceType) fedex.Service);
@@ -63,14 +63,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Non-standard container (only applies to Ground services)
             if (fedex.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
             {
-                specialServices.Add(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
+                specialServices = specialServices.Append(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
             }
 
             // Add Alcohol if selected
             var package = fedex.Packages.ElementAt(sequenceNumber);
             if (package.ContainsAlcohol)
             {
-                specialServices.Add(PackageSpecialServiceType.ALCOHOL);
+                specialServices = specialServices.Append(PackageSpecialServiceType.ALCOHOL);
                 specialServicesRequested.AlcoholDetail = new AlcoholDetail()
                 {
                     // TODO: Will this always be Consumer?  Or do we need a setting?
@@ -81,27 +81,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             }
 
             // Set the special service type flags
-            specialServices.AddRange(specialServicesRequested.SpecialServiceTypes);
             specialServicesRequested.SpecialServiceTypes = specialServices.ToArray();
 
             return request;
-        }
-
-        /// <summary>
-        /// Initializes package returning the SpecialServicesRequested for Package
-        /// </summary>
-        private PackageSpecialServicesRequested InitializePackageRequest(RequestedPackageLineItem requestedPackageLineItem)
-        {
-            if (requestedPackageLineItem.SpecialServicesRequested == null)
-            {
-                requestedPackageLineItem.SpecialServicesRequested = new PackageSpecialServicesRequested();
-            }
-            if (requestedPackageLineItem.SpecialServicesRequested.SpecialServiceTypes == null)
-            {
-                requestedPackageLineItem.SpecialServicesRequested.SpecialServiceTypes = new PackageSpecialServiceType[0];
-            }
-
-            return requestedPackageLineItem.SpecialServicesRequested;
         }
 
         /// <summary>
@@ -119,13 +101,5 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 
             return SignatureOptionType.SERVICE_DEFAULT;
         }
-
-        /// <summary>
-        /// Initializes request ensuring CarrierRequest is a IFedExNativeShipmentRequest and has
-        /// required object initialized
-        /// </summary>
-        private void InitializeShipmentRequest(ProcessShipmentRequest request) =>
-            request.Ensure(x => x.RequestedShipment)
-                .EnsureAtLeastOne(x => x.RequestedPackageLineItems);
     }
 }

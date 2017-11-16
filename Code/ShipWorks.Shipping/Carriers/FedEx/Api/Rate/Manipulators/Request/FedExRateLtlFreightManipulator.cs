@@ -101,6 +101,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             List<ShipmentSpecialServiceType> specialServiceTypes = GetFreightSpecialServices(fedex.FreightSpecialServices);
             specialServiceTypes.AddRange(requestedShipment.SpecialServicesRequested.SpecialServiceTypes);
             requestedShipment.SpecialServicesRequested.SpecialServiceTypes = specialServiceTypes.ToArray();
+
+            AddGuaranteedDetails(requestedShipment, fedex, specialServiceTypes);
+        }
+
+        /// <summary>
+        /// Add guaranteed details
+        /// </summary>
+        private static void AddGuaranteedDetails(RequestedShipment requestedShipment, IFedExShipmentEntity fedex, List<ShipmentSpecialServiceType> specialServiceTypes)
+        {
+            if (specialServiceTypes.Contains(ShipmentSpecialServiceType.FREIGHT_GUARANTEE) &&
+                            fedex.FreightGuaranteeType != FedExFreightGuaranteeType.None)
+            {
+                requestedShipment.SpecialServicesRequested.FreightGuaranteeDetail = new FreightGuaranteeDetail
+                {
+                    Date = fedex.FreightGuaranteeDate,
+                    DateSpecified = true,
+                    Type = fedex.FreightGuaranteeType == FedExFreightGuaranteeType.Date ?
+                        FreightGuaranteeType.GUARANTEED_DATE :
+                        FreightGuaranteeType.GUARANTEED_MORNING,
+                    TypeSpecified = true,
+                };
+            }
         }
 
         /// <summary>

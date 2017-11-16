@@ -37,6 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             };
 
             SetupShipment();
+
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFreightEconomy;
             shipmentEntity.FedEx.FreightRole = FedExFreightShipmentRoleType.Consignee;
             shipmentEntity.FedEx.FreightClass = FedExFreightClassType.CLASS_050;
@@ -69,20 +70,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
                 DeclaredValue = 64,
                 FreightPieces = 1,
                 FreightPackaging = FedExFreightPhysicalPackagingType.Bag
-            });
-
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity()
-            {
-                DimsLength = 3,
-                DimsWidth = 6,
-                DimsHeight = 12,
-                // total weight should be 72
-                DimsWeight = 24,
-                DimsAddWeight = true,
-                Weight = 48,
-                DeclaredValue = 96,
-                FreightPieces = 10,
-                FreightPackaging = FedExFreightPhysicalPackagingType.Pail
             });
         }
 
@@ -147,11 +134,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.POISON));
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void Manipulate_FedExLtlFreightManipulator_AppliesSinglePackage(int sequence)
+        [Fact]
+        public void Manipulate_FedExLtlFreightManipulator_AppliesSinglePackage()
         {
+            int sequence = 0;
             shipmentEntity.ShipCountryCode = "US";
             shipmentEntity.OriginCountryCode = "US";
 
@@ -176,5 +162,65 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.Equal(package.FreightPieces.ToString(), lineItem.Pieces);
             Assert.NotNull(lineItem.Weight);
         }
+
+        [Fact]
+        public void Manipulate_FedExLtlFreightManipulator_AppliesMultiplePackages()
+        {
+            int sequence = 0;
+            shipmentEntity.ShipCountryCode = "US";
+            shipmentEntity.OriginCountryCode = "US";
+
+            FedExShipmentEntity fedEx = shipmentEntity.FedEx;
+            fedEx.Packages.Add(new FedExPackageEntity()
+            {
+                DimsLength = 3,
+                DimsWidth = 6,
+                DimsHeight = 12,
+                // total weight should be 72
+                DimsWeight = 24,
+                DimsAddWeight = true,
+                Weight = 48,
+                DeclaredValue = 96,
+                FreightPieces = 10,
+                FreightPackaging = FedExFreightPhysicalPackagingType.Pail
+            });
+
+            fedEx.Service = (int)FedExServiceType.FedExFreightEconomy;
+
+            var result = testObject.Manipulate(shipmentEntity, new ProcessShipmentRequest(), sequence);
+
+            FreightShipmentDetail freightShipmentDetail = result.Value.RequestedShipment.FreightShipmentDetail;
+
+            Assert.Equal(2, freightShipmentDetail.LineItems.Length);
+
+            var package = fedEx.Packages.ElementAt(sequence);
+            FreightShipmentLineItem lineItem = freightShipmentDetail.LineItems.Where(li => li.Description == $"Freight Package {sequence + 1}").FirstOrDefault();
+
+            Assert.NotNull(lineItem);
+            Assert.Equal(EnumHelper.GetApiValue<FreightClassType>(fedEx.FreightClass), lineItem.FreightClass);
+            Assert.True(lineItem.FreightClassSpecified);
+            Assert.NotNull(lineItem.Dimensions);
+            Assert.Equal(EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging), lineItem.Packaging);
+            Assert.True(lineItem.PackagingSpecified);
+            Assert.Equal(package.FreightPieces.ToString(), lineItem.Pieces);
+            Assert.NotNull(lineItem.Weight);
+
+            sequence++;
+            package = fedEx.Packages.ElementAt(sequence);
+            lineItem = freightShipmentDetail.LineItems.Where(li => li.Description == $"Freight Package {sequence + 1}").FirstOrDefault();
+
+            Assert.NotNull(lineItem);
+            Assert.Equal(EnumHelper.GetApiValue<FreightClassType>(fedEx.FreightClass), lineItem.FreightClass);
+            Assert.True(lineItem.FreightClassSpecified);
+            Assert.NotNull(lineItem.Dimensions);
+            Assert.Equal(EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging), lineItem.Packaging);
+            Assert.True(lineItem.PackagingSpecified);
+            Assert.Equal(package.FreightPieces.ToString(), lineItem.Pieces);
+            Assert.NotNull(lineItem.Weight);
+        }
     }
 }
+
+
+
+

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             }
 
             // Start a new special services list for this package
-            List<PackageSpecialServiceType> specialServices = new List<PackageSpecialServiceType>();
+            IEnumerable<PackageSpecialServiceType> specialServices = specialServicesRequested.Ensure(x => x.SpecialServiceTypes);
 
             if (fedExSignatureType != FedExSignatureType.ServiceDefault)
             {
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                     SignatureReleaseNumber = account.SignatureRelease
                 };
 
-                specialServices.Add(PackageSpecialServiceType.SIGNATURE_OPTION);
+                specialServices = specialServices.Append(PackageSpecialServiceType.SIGNATURE_OPTION);
             }
 
             ServiceType apiServiceType = GetApiServiceType((FedExServiceType) shipment.FedEx.Service);
@@ -102,12 +102,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             // Non-standard container (only applies to Ground services)
             if (shipment.FedEx.NonStandardContainer && (apiServiceType == ServiceType.GROUND_HOME_DELIVERY || apiServiceType == ServiceType.FEDEX_GROUND))
             {
-                specialServices.Add(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
+                specialServices = specialServices.Append(PackageSpecialServiceType.NON_STANDARD_CONTAINER);
             }
 
             if (fedExPackage.ContainsAlcohol)
             {
-                specialServices.Add(PackageSpecialServiceType.ALCOHOL);
+                specialServices = specialServices.Append(PackageSpecialServiceType.ALCOHOL);
             }
 
             // Set the special service type flags

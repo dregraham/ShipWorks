@@ -21,26 +21,26 @@ namespace Interapptive.Shared.Pdf
         /// </summary>
         public IEnumerable<T> SavePages<T>(Stream inputPdfStream, Func<MemoryStream, int, T> savePageFunction)
         {
-            List<T> results = new List<T>();
-
             using (MemoryStream stream = new MemoryStream())
             {
                 using (Document doc = new Document(inputPdfStream))
                 {
-                    int pageIndex = 0;
-                    // Use the Apitron component to render pages to images
-                    foreach (var page in doc.Pages)
-                    {
-                        using (Image bitmap = page.Render(new RenderingSettings()))
-                        {
-                            results.Add(SavePage(pageIndex, bitmap, savePageFunction));
-                        }
-
-                        pageIndex++;
-                    }
+                    return doc.Pages
+                        .Select((page, index) => RenderPage(savePageFunction, page, index))
+                        .ToList();
                 }
+            }
+        }
 
-                return results;
+        /// <summary>
+        /// Render the given page
+        /// </summary>
+        private T RenderPage<T>(Func<MemoryStream, int, T> savePageFunction, Page page, int index)
+        {
+            var renderingSettings = new RenderingSettings { RenderMode = RenderMode.HighQuality };
+            using (Image bitmap = page.Render(To300Dpi(page.Width), To300Dpi(page.Height), renderingSettings))
+            {
+                return SavePage(index, bitmap, savePageFunction);
             }
         }
 
@@ -64,5 +64,10 @@ namespace Interapptive.Shared.Pdf
 
             return result;
         }
+
+        /// <summary>
+        /// Convert a 72 DPI measurement to 300
+        /// </summary>
+        int To300Dpi(double measurement) => (int) ((measurement / 72) * 300);
     }
 }

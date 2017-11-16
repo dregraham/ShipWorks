@@ -197,6 +197,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             FreightTotalHandlinUnits = source.FreightTotalHandlinUnits;
             FreightClass = source.FreightClass;
             FreightSpecialServices = source.FreightSpecialServices;
+            FreightGuaranteeType = source.FreightGuaranteeType;
+            FreightGuaranteeDate = source.FreightGuaranteeDate;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -1174,6 +1176,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 FreightSpecialServices { get; }
+        /// <summary> The FreightGuaranteeType property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightGuaranteeType"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType FreightGuaranteeType { get; }
+        /// <summary> The FreightGuaranteeDate property of the Entity FedExShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExShipment"."FreightGuaranteeDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.DateTime FreightGuaranteeDate { get; }
         
         public IShipmentEntity Shipment { get; }
         

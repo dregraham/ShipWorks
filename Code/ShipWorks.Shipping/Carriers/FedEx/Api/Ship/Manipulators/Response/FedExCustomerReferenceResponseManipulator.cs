@@ -28,7 +28,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
         /// Find the customer reference for the given type
         /// </summary>
         private static string FindCustomerReferenceFor(CustomerReferenceType referenceType, ProcessShipmentRequest request) =>
-            request.RequestedShipment.RequestedPackageLineItems
+            request.RequestedShipment?
+                .RequestedPackageLineItems?
                 .FirstOrDefault()?
                 .CustomerReferences
                 .Where(x => x.CustomerReferenceType == referenceType)

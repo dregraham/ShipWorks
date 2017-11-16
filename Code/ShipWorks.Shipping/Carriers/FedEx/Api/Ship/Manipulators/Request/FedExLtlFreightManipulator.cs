@@ -6,7 +6,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.FedEx;
@@ -90,49 +89,76 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
 
             freightDetail.TotalHandlingUnits = fedex.FreightTotalHandlinUnits.ToString();
 
-            AddLineItems(fedex, freightClass, freightDetail, sequenceNumber);
+            AddLineItems(fedex, freightClass, freightDetail);
 
             return GetFreightSpecialServices(fedex.FreightSpecialServices)
-                .Do(x =>
-                {
-                    if (x.Any())
-                    {
-                        requestedShipment.SpecialServicesRequested.SpecialServiceTypes = x.ToArray();
-                    }
-                })
+                .Do(x => AddSpecialServices(fedex, x, requestedShipment))
                 .Map(x => request);
+        }
+
+        /// <summary>
+        /// Add special services to the request
+        /// </summary>
+        private static void AddSpecialServices(IFedExShipmentEntity fedex, IEnumerable<ShipmentSpecialServiceType> serviceTypes, RequestedShipment requestedShipment)
+        {
+            if (serviceTypes.None())
+            {
+                return;
+            }
+
+            requestedShipment.SpecialServicesRequested.SpecialServiceTypes = serviceTypes.ToArray();
+
+            if (serviceTypes.Contains(ShipmentSpecialServiceType.FREIGHT_GUARANTEE) &&
+                fedex.FreightGuaranteeType != FedExFreightGuaranteeType.None)
+            {
+                requestedShipment.SpecialServicesRequested.FreightGuaranteeDetail = new FreightGuaranteeDetail
+                {
+                    Date = fedex.FreightGuaranteeDate,
+                    DateSpecified = true,
+                    Type = fedex.FreightGuaranteeType == FedExFreightGuaranteeType.Date ?
+                        FreightGuaranteeType.GUARANTEED_DATE :
+                        FreightGuaranteeType.GUARANTEED_MORNING,
+                    TypeSpecified = true,
+                };
+            }
         }
 
         /// <summary>
         /// Add line items to the request
         /// </summary>
-        private static void AddLineItems(IFedExShipmentEntity fedex, FreightClassType? freightClass, FreightShipmentDetail freightDetail, int sequenceNumber)
+        private static void AddLineItems(IFedExShipmentEntity fedex, FreightClassType? freightClass, FreightShipmentDetail freightDetail)
         {
-            var package = fedex.Packages.ElementAt(sequenceNumber);
-
-            FreightShipmentLineItem lineItem = new FreightShipmentLineItem()
+            List<FreightShipmentLineItem> lineItems = new List<FreightShipmentLineItem>();
+            int packageIndex = 1;
+            foreach (IFedExPackageEntity package in fedex.Packages)
             {
-                Description = $"Freight Package {sequenceNumber + 1}",
-                FreightClass = freightClass.Value,
-                FreightClassSpecified = true,
-                Dimensions = new Dimensions
+                FreightShipmentLineItem lineItem = new FreightShipmentLineItem()
                 {
-                    Height = package.DimsHeight.ToString(),
-                    Length = package.DimsLength.ToString(),
-                    Width = package.DimsWidth.ToString(),
-                    Units = LinearUnits.IN,
-                },
-                Packaging = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging).Value,
-                PackagingSpecified = true,
-                Pieces = package.FreightPieces.ToString(),
-                Weight = new Weight
-                {
-                    Value = (decimal) package.Weight,
-                    Units = WeightUnits.LB,
-                }
-            };
+                    Description = $"Freight Package {packageIndex}",
+                    FreightClass = freightClass.Value,
+                    FreightClassSpecified = true,
+                    Dimensions = new Dimensions
+                    {
+                        Height = package.DimsHeight.ToString(),
+                        Length = package.DimsLength.ToString(),
+                        Width = package.DimsWidth.ToString(),
+                        Units = LinearUnits.IN,
+                    },
+                    Packaging = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging).Value,
+                    PackagingSpecified = true,
+                    Pieces = package.FreightPieces.ToString(),
+                    Weight = new Weight
+                    {
+                        Value = (decimal) package.Weight,
+                        Units = WeightUnits.LB,
+                    }
+                };
 
-            freightDetail.LineItems = new[] { lineItem };
+                lineItems.Add(lineItem);
+                packageIndex++;
+            }
+
+            freightDetail.LineItems = lineItems.ToArray();
         }
 
         /// <summary>

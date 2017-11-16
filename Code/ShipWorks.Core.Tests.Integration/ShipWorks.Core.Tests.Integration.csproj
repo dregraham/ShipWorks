@@ -162,6 +162,7 @@
     <Compile Include="Shipping\CustomsControlCacheTest.cs" />
     <Compile Include="Shipping\CustomsManagerWrapperTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
+    <Compile Include="Shipping\PdfTests.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderRuleManagerRegistrationTest.cs" />
     <Compile Include="SingleScan\ScannerConfigurationRepositoryTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
@@ -217,6 +218,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Shipping\LTLOriginal.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />

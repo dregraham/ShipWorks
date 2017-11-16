@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
@@ -24,6 +24,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             lineItem = request.Ensure(x => x.RequestedShipment).EnsureAtLeastOne(x => x.RequestedPackageLineItems);
 
             testObject = mock.Create<FedExCustomerReferenceResponseManipulator>();
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenRequestIsNull()
+        {
+            var result = testObject.Manipulate(null, new ProcessShipmentRequest(), Create.Shipment().AsFedEx(f => f.DoNotSetDefaults()).Build());
+
+            Assert.Null(result.Value.FedEx.ReferenceShipmentIntegrity);
+        }
+
+        [Fact]
+        public void Manipulate_DoesNotAssignReferenceShipmentIntegrityToFedExShipment_WhenRequestDoesNotHaveReference()
+        {
+            request.RequestedShipment.RequestedPackageLineItems = null;
+
+            var result = testObject.Manipulate(null, request, Create.Shipment().AsFedEx(f => f.DoNotSetDefaults()).Build());
+
+            Assert.Null(result.Value.FedEx.ReferenceShipmentIntegrity);
         }
 
         [Fact]
