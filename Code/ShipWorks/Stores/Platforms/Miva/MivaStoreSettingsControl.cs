@@ -62,27 +62,17 @@ namespace ShipWorks.Stores.Platforms.Miva
                 throw new ArgumentException("A non-Miva store entity was supplied to MivaStoreSettingsControl.SaveToEntity", "store");
             }
 
-            bool baseValue = sebenzaOptions.SaveToEntity(mivaStore);
+            sebenzaOptions.SaveToEntity(mivaStore);
+            mivaStore.AddendumCheckoutDataEnabled = downloadAddendumCheckoutQuestions.Checked;
 
-            if (baseValue)
+            bool orderStatusSaved = orderStatusControl.SaveToEntity(mivaStore);
+
+            if (orderStatusSaved && encodingComboBox.SelectedValue != null)
             {
-                baseValue = orderStatusControl.SaveToEntity(mivaStore);
+                ((GenericModuleStoreEntity) store).ModuleResponseEncoding = (int) encodingComboBox.SelectedValue;
             }
 
-            if (baseValue)
-            {
-                mivaStore.AddendumCheckoutDataEnabled = downloadAddendumCheckoutQuestions.Checked;
-            }            
-            
-            if (baseValue)
-            {
-                if (encodingComboBox.SelectedValue != null)
-                {
-                    ((GenericModuleStoreEntity) store).ModuleResponseEncoding = (int) encodingComboBox.SelectedValue;
-                }
-            }
-
-            return baseValue;
+            return orderStatusSaved;
         }
     }
 }
