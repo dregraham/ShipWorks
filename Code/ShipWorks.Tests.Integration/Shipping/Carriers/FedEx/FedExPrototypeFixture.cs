@@ -572,8 +572,13 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 shipment.FedEx.RmaNumber = ReturnRmaNumber;
             }
-        }
 
+            if (!string.IsNullOrWhiteSpace(EmailAllowedSpecialServices) &&
+                EmailAllowedSpecialServices.ToUpperInvariant() == "SATURDAY_PICKUP")
+            {
+                shipment.FedEx.ReturnSaturdayPickup = true;
+            }
+        }
 
         private void SwapAddressForReturns(ShipmentEntity shipment)
         {

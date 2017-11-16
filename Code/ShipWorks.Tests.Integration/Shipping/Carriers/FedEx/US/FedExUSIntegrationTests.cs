@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
         public void Ship_FedExExpressDomestic(DataRow row)
         {
             output.WriteLine($"Preparing customer transaction ID {row[5]}");
-            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels)) // || !( (string) row[5] == "323234" || (string)row[5] == "323281"))
+            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels)) // !( (string) row[5] == "323234" || (string)row[5] == "323281"))
             {
                 output.WriteLine("Skipping");
                 return;

@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 specialServiceTypes.AddRange(request.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
             }
 
-            if (shipTimestamp.Date != DateTime.Today)
+            if (shipTimestamp.Date != DateTime.Today && !shipment.FedEx.ReturnSaturdayPickup)
             {
                 // This is a future delivery
                 specialServiceTypes.Add(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT);
