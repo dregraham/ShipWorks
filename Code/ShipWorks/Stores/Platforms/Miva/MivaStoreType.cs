@@ -67,6 +67,7 @@ namespace ShipWorks.Stores.Platforms.Miva
 
             // default ResponseEncoding to the most likely value for miva
             store.ModuleResponseEncoding = (int) GenericStoreResponseEncoding.Latin1;
+            store.AddendumCheckoutDataEnabled = true;
 
             return store;
         }
