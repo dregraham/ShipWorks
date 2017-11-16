@@ -148,6 +148,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             ElementOutline outline = container.AddElement("Groupon");
             outline.AddElement("GrouponOrderID", () => order.Value.GrouponOrderID);
+            outline.AddElement("GrouponParentOrderID", () => order.Value.ParentOrderID);
         }
 
         /// <summary>
@@ -295,11 +296,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public override ConditionGroup CreateBasicSearchOrderConditions(string search)
         {
             ConditionGroup group = new ConditionGroup();
+            group.JoinType = ConditionJoinType.Any;
 
-            GrouponOrderIdCondition condition = new GrouponOrderIdCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(condition);
+            GrouponOrderIdCondition orderIDCondition = new GrouponOrderIdCondition();
+            orderIDCondition.TargetValue = search;
+            orderIDCondition.Operator = StringOperator.BeginsWith;
+            group.Conditions.Add(orderIDCondition);
+
+            GrouponParentOrderIdCondition parentOrderIdCondition = new GrouponParentOrderIdCondition();
+            parentOrderIdCondition.TargetValue = search;
+            parentOrderIdCondition.Operator = StringOperator.BeginsWith;
+            group.Conditions.Add(parentOrderIdCondition);
 
             return group;
         }
