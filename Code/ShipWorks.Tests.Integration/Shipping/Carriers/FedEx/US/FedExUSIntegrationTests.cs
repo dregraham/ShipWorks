@@ -200,7 +200,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSFreightMapping.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExFreightPostFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
