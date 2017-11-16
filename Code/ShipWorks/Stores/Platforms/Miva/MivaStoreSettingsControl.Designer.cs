@@ -44,16 +44,16 @@
             // sebenzaOptions
             // 
             this.sebenzaOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sebenzaOptions.Location = new System.Drawing.Point(17, 133);
+            this.sebenzaOptions.Location = new System.Drawing.Point(17, 132);
             this.sebenzaOptions.Name = "sebenzaOptions";
-            this.sebenzaOptions.Size = new System.Drawing.Size(425, 21);
+            this.sebenzaOptions.Size = new System.Drawing.Size(410, 21);
             this.sebenzaOptions.TabIndex = 0;
             // 
             // sectionHeader
             // 
             this.sectionHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionHeader.Location = new System.Drawing.Point(0, 105);
+            this.sectionHeader.Location = new System.Drawing.Point(0, 104);
             this.sectionHeader.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
             this.sectionHeader.Name = "sectionHeader";
             this.sectionHeader.Size = new System.Drawing.Size(435, 22);
@@ -64,7 +64,7 @@
             // 
             this.internationalTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.internationalTitle.Location = new System.Drawing.Point(0, 202);
+            this.internationalTitle.Location = new System.Drawing.Point(0, 214);
             this.internationalTitle.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
             this.internationalTitle.Name = "internationalTitle";
             this.internationalTitle.Size = new System.Drawing.Size(435, 22);
@@ -73,7 +73,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(18, 232);
+            this.label1.Location = new System.Drawing.Point(18, 244);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(409, 28);
             this.label1.TabIndex = 20;
@@ -83,7 +83,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(39, 275);
+            this.label2.Location = new System.Drawing.Point(39, 287);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 21;
@@ -93,7 +93,7 @@
             // 
             this.encodingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.encodingComboBox.FormattingEnabled = true;
-            this.encodingComboBox.Location = new System.Drawing.Point(136, 272);
+            this.encodingComboBox.Location = new System.Drawing.Point(136, 284);
             this.encodingComboBox.Name = "encodingComboBox";
             this.encodingComboBox.Size = new System.Drawing.Size(206, 21);
             this.encodingComboBox.TabIndex = 22;
@@ -119,7 +119,7 @@
             // 
             this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitle1.Location = new System.Drawing.Point(0, 154);
+            this.sectionTitle1.Location = new System.Drawing.Point(0, 159);
             this.sectionTitle1.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
             this.sectionTitle1.Name = "sectionTitle1";
             this.sectionTitle1.Size = new System.Drawing.Size(435, 22);
@@ -129,7 +129,7 @@
             // downloadAddendumCheckoutQuestions
             // 
             this.downloadAddendumCheckoutQuestions.AutoSize = true;
-            this.downloadAddendumCheckoutQuestions.Location = new System.Drawing.Point(20, 185);
+            this.downloadAddendumCheckoutQuestions.Location = new System.Drawing.Point(20, 190);
             this.downloadAddendumCheckoutQuestions.Name = "downloadAddendumCheckoutQuestions";
             this.downloadAddendumCheckoutQuestions.Size = new System.Drawing.Size(303, 17);
             this.downloadAddendumCheckoutQuestions.TabIndex = 24;
@@ -140,7 +140,7 @@
             // 
             this.infoTipAddendumCheckoutQuestions.Caption = "Each questions response will be saved as a note for the order, prefixed with \"Add" +
     "endumAnswer: \" at the beginning of the note.";
-            this.infoTipAddendumCheckoutQuestions.Location = new System.Drawing.Point(320, 187);
+            this.infoTipAddendumCheckoutQuestions.Location = new System.Drawing.Point(320, 192);
             this.infoTipAddendumCheckoutQuestions.Name = "infoTipAddendumCheckoutQuestions";
             this.infoTipAddendumCheckoutQuestions.Size = new System.Drawing.Size(12, 12);
             this.infoTipAddendumCheckoutQuestions.TabIndex = 25;
@@ -163,7 +163,7 @@
             this.Controls.Add(this.sebenzaOptions);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "MivaStoreSettingsControl";
-            this.Size = new System.Drawing.Size(435, 303);
+            this.Size = new System.Drawing.Size(435, 307);
             this.ResumeLayout(false);
             this.PerformLayout();
 
