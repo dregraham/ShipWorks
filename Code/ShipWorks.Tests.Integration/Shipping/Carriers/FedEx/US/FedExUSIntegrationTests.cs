@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Interapptive.Shared.Utility;
-using Moq;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground;
-using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
@@ -237,6 +229,5 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
                 testObject.Ship(context.Order);
             }
         }
-
     }
 }
