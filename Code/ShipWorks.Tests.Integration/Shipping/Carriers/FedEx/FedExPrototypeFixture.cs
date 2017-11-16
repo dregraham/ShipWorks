@@ -1372,6 +1372,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     return FedExServiceType.FedExDistanceDeferred;
                 case "FEDEX_NEXT_DAY_FREIGHT":
                     return FedExServiceType.FedExNextDayFreight;
+                case "FEDEX_FREIGHT_ECONOMY":
+                    return FedExServiceType.FedExFreightEconomy;
+                case "FEDEX_FREIGHT_PRIORITY":
+                    return FedExServiceType.FedExFreightPriority;
             }
 
             throw new Exception($"Unrecognized service type. {ShipmentServiceType}");

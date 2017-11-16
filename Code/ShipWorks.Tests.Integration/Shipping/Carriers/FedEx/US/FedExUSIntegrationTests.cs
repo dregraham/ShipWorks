@@ -6,6 +6,7 @@ using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
@@ -192,26 +193,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
             }
         }
 
-        // For some 
-        //[ExcelData(@"DataSources\FedExAll\ETD.xlsx", "ETD")]
-        //[Theory]
-        //[Trait("Category", "FedEx")]
-        //public void Ship_FedExETD(DataRow row)
-        //{
-        //    var testObject = new FedExUSExpressInternationalFixture();
-
-        //    if (PopulateTestObject(row, testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
-        //        (testObject.IsSaveLabel || !justLabels))
-        //    {
-        //        output.WriteLine($"Executing customer transaction ID {row[5]}");
-
-        //        testObject.FedExAccountNumber = fedExTestAccountNumber;
-        //        testObject.CommercialInvoiceFileElectronically = true;
-
-        //        testObject.Ship(context.Order);
-        //    }
-        //}
-
         [ExcelData(@"DataSources\FedExAll\US Freight.xlsx", "US Freight")]
         [Theory]
         [Trait("Category", "FedEx")]
@@ -219,7 +200,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSFreightMapping.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");

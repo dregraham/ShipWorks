@@ -26,12 +26,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
 
         }
 
-        [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMpB Smartpost")]
+        [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMPB SmartPost")]
         [Trait("Category", "FedEx")]
         [Theory]
         public void Ship_FedExSmartPost(DataRow row)
         {
-            if (row["SaveLabel"] is DBNull || (string)row["SaveLabel"] != "TRUE")
+            if (row[0] is DBNull || row[0].ToString().ToUpperInvariant() != "TRUE")
             {
                 return;
             }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.SmartPost
         [Theory]
         public void Ship_FedExSmartPostReturns(DataRow row)
         {
-            if (row["SaveLabel"] is DBNull || (string)row["SaveLabel"] != "TRUE")
+            if (row[0] is DBNull || row[0].ToString().ToUpperInvariant() != "TRUE")
             {
                 return;
             }
