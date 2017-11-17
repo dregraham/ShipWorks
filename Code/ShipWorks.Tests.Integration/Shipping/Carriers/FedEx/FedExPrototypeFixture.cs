@@ -475,6 +475,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             SetLinearUnits(shipment);
             SetShipmentSpecialServiceType(shipment, SpecialServiceType1);
             SetShipmentSpecialServiceType(shipment, SpecialServiceType2);
+            SetShipmentSpecialServiceType(shipment, SpecialServiceType3);
 
             SetEmailOptions(shipment);
 
@@ -849,7 +850,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" ||
                 PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" ||
                 PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" ||
-                PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
+                PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS" ||
+                SpecialServiceType3 == "PRIORITY_ALERT")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
