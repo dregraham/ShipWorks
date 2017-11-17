@@ -415,8 +415,8 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
         [InlineData(FedExServiceType.InternationalPriorityFreight, "Internaional Priority Freight")]
         [InlineData(FedExServiceType.InternationalEconomyFreight, "International Economy Freight")]
         [InlineData(FedExServiceType.SmartPost, "SmartPost")]
-        [InlineData(FedExServiceType.FedExFreightEconomy, "FedEx Freight Economy")]
-        [InlineData(FedExServiceType.FedExFreightPriority, "FedEx Freight Priority")]
+        [InlineData(FedExServiceType.FedExFreightEconomy, "Freight Economy")]
+        [InlineData(FedExServiceType.FedExFreightPriority, "Freight Priority")]
         public void GetShipmentClassCode_ReturnsCorrectValue_ForFedExServices(FedExServiceType service, string expected)
         {
             SetupShipmentDefaults(ShipmentTypeCode.FedEx);

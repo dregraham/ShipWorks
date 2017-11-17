@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
@@ -75,7 +74,7 @@ namespace ShipWorks.Templates.Distribution
                     InstallTemplate(@"Packing Slips\Single Scan", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"Invoices\Single Scan", TemplateManager.Tree.CreateEditableClone());
 
-                    UpdateDatabaseTemplateVersion(swVersion);
+                    UpdateDatabaseTemplateVersion(new Version("5.10.0.0000"));
                 }
 
                 if (installed < new Version("5.17.0.0000") &&
@@ -85,10 +84,10 @@ namespace ShipWorks.Templates.Distribution
                     InstallTemplate(@"Invoices\Standard Grouping by SKU", TemplateManager.Tree.CreateEditableClone());
                     InstallTemplate(@"System\Snippets\ItemGroup", TemplateManager.Tree.CreateEditableClone());
                     
-                    UpdateDatabaseTemplateVersion(swVersion);
+                    UpdateDatabaseTemplateVersion(new Version("5.17.0.0000"));
                 }
 
-                InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0000", false);
+                InstallTemplate("Package Level Details", @"Reports\Exports", "5.19.0.0000", false);
                 InstallTemplate("Shipments by Provider", @"Reports\Financials", "5.19.0.0000", false);
                 InstallTemplate("Standard 4x6", "Labels", "5.19.0.0000", false);
                 InstallTemplate("Standard 8.5x11", "Labels", "5.20.0.0000", false);
@@ -109,7 +108,7 @@ namespace ShipWorks.Templates.Distribution
                 if (replaceExisting || TemplateManager.Tree.AllTemplates.None(t => t.Name == name))
                 {
                     InstallTemplate($"{folderPath}\\{name}", TemplateManager.Tree.CreateEditableClone());
-                    UpdateDatabaseTemplateVersion(Assembly.GetExecutingAssembly().GetName().Version);
+                    UpdateDatabaseTemplateVersion(new Version(version));
                 }
             }
         }

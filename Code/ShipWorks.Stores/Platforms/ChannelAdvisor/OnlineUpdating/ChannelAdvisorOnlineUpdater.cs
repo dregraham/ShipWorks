@@ -280,8 +280,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT");
 
-            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightEconomy, "FedEx Freight Economy");
-            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightPriority, "FedEx Freight Priority");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightEconomy, "Freight Economy");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightPriority, "Freight Priority");
 
             fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriority, "INTLPRIORITY");
             fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriorityExpress, "INTLPRIORITY");

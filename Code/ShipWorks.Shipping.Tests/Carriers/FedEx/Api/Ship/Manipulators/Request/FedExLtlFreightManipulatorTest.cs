@@ -4,8 +4,9 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.FedEx;
@@ -217,6 +218,37 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.True(lineItem.PackagingSpecified);
             Assert.Equal(package.FreightPieces.ToString(), lineItem.Pieces);
             Assert.NotNull(lineItem.Weight);
+        }
+
+        [Fact]
+        public void Manipulate_Fails_WhenPackagePackagingTypeIsNone()
+        {
+            int sequence = 0;
+            shipmentEntity.ShipCountryCode = "US";
+            shipmentEntity.OriginCountryCode = "US";
+
+            FedExShipmentEntity fedEx = shipmentEntity.FedEx;
+            fedEx.Packages.Add(new FedExPackageEntity()
+            {
+                DimsLength = 3,
+                DimsWidth = 6,
+                DimsHeight = 12,
+                // total weight should be 72
+                DimsWeight = 24,
+                DimsAddWeight = true,
+                Weight = 48,
+                DeclaredValue = 96,
+                FreightPieces = 10,
+                FreightPackaging = FedExFreightPhysicalPackagingType.Pail
+            });
+
+            fedEx.Service = (int)FedExServiceType.FedExFreightEconomy;
+
+            fedEx.Packages.First().FreightPackaging = FedExFreightPhysicalPackagingType.None;
+
+            var result = testObject.Manipulate(shipmentEntity, new ProcessShipmentRequest(), sequence);
+
+            Assert.True(result.Failure);
         }
     }
 }
