@@ -112,6 +112,7 @@
         <Condition identifier="EtsyOrder.WasPaid" />
         <Condition identifier="EtsyOrder.WasShipped" />
         <Condition identifier="Groupon.OrderID" />
+        <Condition identifier="Groupon.ParentOrderID" />
         <Condition identifier="MarketplaceAdvisorOrder.InvoiceNumber" />
         <Condition identifier="MarketplaceAdvisorOrder.SellerOrderNumber" />
         <Condition identifier="NeweggOrder.InvoiceNumber" />
