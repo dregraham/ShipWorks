@@ -197,6 +197,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Groupon
                         },
 
+                    new GridColumnDefinition("{F54E0346-E72A-489B-806E-6B5490156C43}", true,
+                        new GridOrderNumberDisplayType(), "Groupon Parent Order ID", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Groupon, "123456789"),
+                        GrouponOrderFields.ParentOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
                     new GridColumnDefinition("{CA3ECAB1-B96A-4c17-BC66-9EC7D0DF1035}", true,
                         new GridOrderNumberDisplayType(), "ClickCartPro #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.ClickCartPro, "ORD100002"),
                         ClickCartProOrderFields.ClickCartProOrderID)

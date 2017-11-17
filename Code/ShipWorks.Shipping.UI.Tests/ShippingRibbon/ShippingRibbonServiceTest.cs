@@ -420,7 +420,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
 
             Assert.Equal(expected, actions.Object.Return.Enabled);
         }
-        
+
         [Theory]
         [InlineData(false, true)]
         [InlineData(false, false)]
@@ -1063,7 +1063,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingRibbon
             messenger.Send(new OrderSelectionChangedMessage(this, new List<IOrderSelection> {
                 new LoadedOrderSelection(new OrderEntity(),
                     shipments ?? Enumerable.Empty<ICarrierShipmentAdapter>(),
-                    ShippingAddressEditStateType.Editable)
+                    new Dictionary<long, ShippingAddressEditStateType>())
             }));
         }
 

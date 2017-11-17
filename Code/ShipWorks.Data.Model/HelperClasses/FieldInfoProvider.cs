@@ -647,6 +647,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -3012,6 +3013,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "RestUser", typeof(System.Boolean), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.RestUser, 0, 0, 0);
+			this.AddElementFieldInfo("ThreeDCartStoreEntity", "OrderIDUpgradeFixDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate, 0, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()

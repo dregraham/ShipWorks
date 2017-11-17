@@ -1,14 +1,10 @@
-﻿PRINT N'Altering [dbo].[WalmartOrderSearch]'
+﻿PRINT N'Altering [dbo].[ThreeDCartStore]'
 GO
-ALTER TABLE [WalmartOrderSearch]
-ADD CustomerOrderID varchar(50) NOT NULL
-CONSTRAINT DF_CustomerOrderID DEFAULT ''
+ALTER TABLE [dbo].[ThreeDCartStore] ADD
+[OrderIDUpgradeFixDate] [datetime] NULL
 GO
-PRINT N'Dropping Constraint on [dbo].[WalmartOrderSearch]'
-ALTER TABLE [WalmartOrderSearch]
-DROP CONSTRAINT DF_CustomerOrderID
+PRINT N'Setting date of OrderIDUpgradeFixDate'
 GO
-PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
-GO
-CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
+UPDATE ThreeDCartStore 
+SET OrderIDUpgradeFixDate = GetUtcDate()
 GO

@@ -591,7 +591,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 
-            DestinationAddressEditableState = loadedOrderSelection.DestinationAddressEditable;
+            DestinationAddressEditableState = loadedOrderSelection.IsDestinationAddressEditableFor(fromShipmentAdapter.Shipment.ShipmentID);
 
             Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
 
