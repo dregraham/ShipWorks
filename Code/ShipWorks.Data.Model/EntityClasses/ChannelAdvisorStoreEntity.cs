@@ -347,6 +347,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AmazonApiRegion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RefreshToken", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
 		}
 		#endregion
 
@@ -478,6 +480,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.RefreshToken, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.RefreshToken, value); }
+		}
+
+		/// <summary> The DownloadModifiedNumberOfDaysBack property of the Entity ChannelAdvisorStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."DownloadModifiedNumberOfDaysBack"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 DownloadModifiedNumberOfDaysBack
+		{
+			get { return (System.Int32)GetValue((int)ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

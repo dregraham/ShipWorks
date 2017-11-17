@@ -1807,6 +1807,9 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadModifiedDaysBackControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1848,6 +1851,7 @@
     <Compile Include="Stores\Platforms\GenericModule\IGenericStoreWebClient.cs" />
     <Compile Include="Stores\Platforms\GenericModule\OnlineUpdating\GenericModuleOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponParentOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
@@ -4039,6 +4043,12 @@
     <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
     <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.Designer.cs">
+      <DependentUpon>DownloadModifiedDaysBackControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
       <SubType>UserControl</SubType>
@@ -8422,6 +8432,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.resx">
+      <DependentUpon>DownloadModifiedDaysBackControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
       <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>

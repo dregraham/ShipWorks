@@ -146,9 +146,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter> { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
-
 
             shippingErrorManager = mock.Mock<IShippingErrorManager>();
         }
@@ -165,7 +164,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             return testObject;
         }
-        
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -469,7 +468,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
 
             messenger.Verify(s => s.Send(It.IsAny<ShipmentChangedMessage>(), It.IsAny<string>()), Times.Never);
         }
-        
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -514,7 +513,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -527,7 +526,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity), shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -540,7 +539,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -551,11 +550,11 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Load_LoadedShipmentResult_IsError_WhenNullList()
         {
-            orderSelectionLoaded = new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new LoadedOrderSelection(new Exception(), null, null, new Dictionary<long, ShippingAddressEditStateType>());
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
-                new LoadedOrderSelection(new Exception(), null, null, ShippingAddressEditStateType.Editable)
+                new LoadedOrderSelection(new Exception(), null, null, new Dictionary<long, ShippingAddressEditStateType>())
             }));
 
             Assert.Equal(ShippingPanelLoadedShipmentResult.Error, testObject.LoadedShipmentResult);
@@ -566,7 +565,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-               ShippingAddressEditStateType.Editable
+               new Dictionary<long, ShippingAddressEditStateType>()
                );
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
@@ -581,7 +580,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.BestRate;
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -616,7 +615,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         [Fact]
         public void Save_DoesNotCallSaveToDatabase_WhenShipmentIsNull()
         {
-            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, null, ShippingAddressEditStateType.Editable);
+            orderSelectionLoaded = new LoadedOrderSelection(orderEntity, null, new Dictionary<long, ShippingAddressEditStateType>());
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
 
@@ -661,7 +660,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.Usps;
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -675,7 +674,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             shipmentEntity.ShipmentTypeCode = ShipmentTypeCode.PostalWebTools;
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Editable
+                new Dictionary<long, ShippingAddressEditStateType>()
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -712,7 +711,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             orderSelectionLoaded = new LoadedOrderSelection(orderEntity,
                 new List<ICarrierShipmentAdapter>() { shipmentAdapterFactory.Object.Get(shipmentEntity) },
-                ShippingAddressEditStateType.Processed
+                new Dictionary<long, ShippingAddressEditStateType> { { shipmentEntity.ShipmentID, ShippingAddressEditStateType.Processed } }
                 );
 
             ShippingPanelViewModel testObject = GetViewModelWithLoadedShipment(mock);
@@ -926,7 +925,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             var orderSelection = new LoadedOrderSelection(new OrderEntity(), new[]
             {
                 mock.CreateMock<ICarrierShipmentAdapter>(csa => csa.Setup(x => x.Shipment).Returns(shipment)).Object
-            }, ShippingAddressEditStateType.Editable);
+            }, new Dictionary<long, ShippingAddressEditStateType>());
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
 
             testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.AllShipments);
@@ -943,7 +942,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             {
                 shipmentAdapter.Object,
                 shipmentAdapter.Object
-            }, ShippingAddressEditStateType.Editable);
+            }, new Dictionary<long, ShippingAddressEditStateType>());
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
 
             testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.AllShipments);
@@ -989,7 +988,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
                 new LoadedOrderSelection(new OrderEntity(), new [] {
                     shipmentAdapter.Object,
                     shipmentAdapter.Object
-                }, ShippingAddressEditStateType.Editable)
+                }, new Dictionary<long, ShippingAddressEditStateType>())
             }));
 
             Assert.Equal(ShipmentStatus.Unprocessed, testObject.ShipmentStatus);
@@ -1009,7 +1008,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] {
                 new LoadedOrderSelection(new OrderEntity(), new [] {
                     mock.CreateMock<ICarrierShipmentAdapter>(c => c.Setup(x => x.Shipment).Returns(shipment)).Object
-                }, ShippingAddressEditStateType.Editable)
+                }, new Dictionary<long, ShippingAddressEditStateType>())
             }));
 
             Assert.Equal(expected, testObject.ShipmentStatus);
@@ -1076,7 +1075,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             ShippingPanelViewModel shippingPanelViewModel = mock.Create<ShippingPanelViewModel>();
 
-            var orderSelection = new LoadedOrderSelection(new OrderEntity(), shipmentAdapters, ShippingAddressEditStateType.Editable);
+            var orderSelection = new LoadedOrderSelection(new OrderEntity(), shipmentAdapters, new Dictionary<long, ShippingAddressEditStateType>());
             shippingPanelViewModel.LoadOrder(new OrderSelectionChangedMessage(this, new IOrderSelection[] { orderSelection }));
 
             return shippingPanelViewModel;

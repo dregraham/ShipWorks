@@ -1,28 +1,9 @@
-﻿PRINT N'Updating [dbo].[ShippingSettings]'
+﻿PRINT N'Altering [dbo].[ChannelAdvisorStore]'
 GO
-UPDATE ShippingSettings
-SET	FedExUsername = 'MFG2EvMKBLcxcCsk',
-	FedExPassword = 'nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE='
-	WHERE ISNULL(FedExUsername,'') != ''
+ALTER TABLE [dbo].[ChannelAdvisorStore] ADD
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL  CONSTRAINT [DF_ChannelAdvisorStore_DownloadModifiedNumberOfDaysBack] DEFAULT (1)
 GO
-
-PRINT N'Altering [dbo].[FedExPackage]'
+PRINT N'Dropping constraints from [dbo].[ChannelAdvisorStore]'
 GO
-ALTER TABLE [dbo].[FedExPackage] ADD
-	[BatteryMaterial] [int] NOT NULL CONSTRAINT [DF_FedExPackage_BatteryMaterial] DEFAULT (0),
-	[BatteryPacking] [int] NOT NULL CONSTRAINT [DF_FedExPackage_BatteryPacking] DEFAULT (0),
-	[BatteryRegulatorySubtype] [int] NOT NULL CONSTRAINT [DF_FedExPackage_BatteryRegulatorySubtype] DEFAULT (0)
-GO
-PRINT N'Dropping constraints from [dbo].[FedExPackage]'
-GO
-ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_BatteryMaterial]
-ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_BatteryPacking]
-ALTER TABLE [dbo].[FedExPackage] DROP CONSTRAINT [DF_FedExPackage_BatteryRegulatorySubtype]
-GO
-PRINT N'Altering [dbo].[FedExProfilePackage]'
-GO
-ALTER TABLE [dbo].[FedExProfilePackage] ADD
-	[BatteryMaterial] [int] NULL,
-	[BatteryPacking] [int] NULL,
-	[BatteryRegulatorySubtype] [int] NULL
+ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [DF_ChannelAdvisorStore_DownloadModifiedNumberOfDaysBack]
 GO

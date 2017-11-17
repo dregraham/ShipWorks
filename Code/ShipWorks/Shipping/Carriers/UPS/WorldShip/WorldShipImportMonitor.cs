@@ -374,8 +374,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                     .Where(ShipmentFields.ShipmentID == shipmentId)
                     .WithPath(ShipmentEntity.PrefetchPathOrder)
                     .WithPaths(prefetchPathProvider);
-
-                return sqlAdapter.FetchSingle(query);
+                return sqlAdapter.FetchFirst(query);
             }
         }
 
