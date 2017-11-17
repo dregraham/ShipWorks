@@ -196,6 +196,17 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
+        public void LoadOrder_UnkownFlagTypeIsSetToNoFlag()
+        {
+            downloadedOrder.FlagID = -1;
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            Assert.Equal(EnumHelper.GetDescription(ChannelAdvisorFlagType.NoFlag), orderToSave.FlagStyle);
+            Assert.Equal((int) ChannelAdvisorFlagType.NoFlag, orderToSave.FlagType);
+        }
+
+        [Fact]
         public void LoadOrder_TotalCalculated_WhenOrderIsNew()
         {
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);

@@ -20,6 +20,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
+using ShipWorks.Data.Model.FactoryClasses;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -33,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         private readonly IDataProvider dataProvider;
         private readonly IGrouponWebClient webClient;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -40,10 +44,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
         [NDependIgnoreTooManyParams]
         public GrouponDownloader(StoreEntity store, IGrouponWebClient webClient,
             ICombineOrder orderCombiner, IDataProvider dataProvider,
-            IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger)
+            IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger, 
+            ISqlAdapterFactory sqlAdapterFactory)
             : base(store)
         {
             this.dateTimeProvider = dateTimeProvider;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.webClient = webClient;
             this.dataProvider = dataProvider;
             this.orderCombiner = orderCombiner;
@@ -154,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.OrderDate = orderDate;
             order.OnlineLastModified = orderDate;
 
-            order.ParentOrderID = jsonOrder["parent_order_id"]?.ToString();
+            order.ParentOrderID = jsonOrder["parent_orderid"]?.ToString();
 
             //Order Address
             GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
@@ -185,17 +191,22 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 return GenericResult.FromError<long>("No parent order found.");
             }
-
-            GenericResult<OrderEntity> result = await InstantiateOrder(new GrouponOrderIdentifier(childOrder.ParentOrderID)).ConfigureAwait(false);
-            if (result.Failure)
+            
+            GrouponOrderEntity parentOrder;
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                string errorMsg = $"Skipping order '{childOrder.ParentOrderID}': {result.Message}.";
-                log.InfoFormat(errorMsg);
-                return GenericResult.FromError<long>(errorMsg);
+                // Look for orders that have the same ParentOrderID as the child order
+                EntityQuery<GrouponOrderEntity> parentOrderQuery = new QueryFactory().GrouponOrder
+                    .Where(GrouponOrderFields.ParentOrderID == childOrder.ParentOrderID & GrouponOrderFields.OrderID != childOrderID);
+
+                parentOrder = await adapter.FetchFirstAsync(parentOrderQuery).ConfigureAwait(false);
             }
-
-            OrderEntity parentOrder = result.Value;
-
+            
+            if (parentOrder == null)
+            {
+                return GenericResult.FromError<long>("No parent order found.");
+            }
+            
             return await orderCombiner.Combine(parentOrder.OrderID, new[] { childOrder, parentOrder }, parentOrder.OrderNumberComplete).ConfigureAwait(false);
         }
 

@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private readonly ISqlAdapterRetry sqlAdapter;
         private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
         private int totalOrders;
+        private readonly ChannelAdvisorStoreEntity caStore;
 
         /// <summary>
         /// Constructor
@@ -49,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.orderLoaderFactory = orderLoaderFactory;
 
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ChannelAdvisorRestDownloader.Download");
-            ChannelAdvisorStoreEntity caStore = Store as ChannelAdvisorStoreEntity;
+            caStore = Store as ChannelAdvisorStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
             refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
                 .Decrypt(caStore.RefreshToken);
@@ -73,8 +74,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                DateTime start = (await GetOrderDateStartingPoint().ConfigureAwait(false)) ??
-                    DateTime.UtcNow.AddDays(-30);
+                DateTime start = await GetChannelAdvisorOrderDateStartingPoint();
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
                 totalOrders = ordersResult.ResultCount;
@@ -116,6 +116,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
+        }
+
+        /// <summary>
+        /// Gets the start date for ChannelAdvisor downloads
+        /// </summary>
+        private async Task<DateTime> GetChannelAdvisorOrderDateStartingPoint()
+        {
+            DateTime? startDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
+
+            if (startDate.HasValue)
+            {
+                startDate = startDate.Value.AddDays(-1 * caStore.DownloadModifiedNumberOfDaysBack);
+            }
+            else
+            {
+                startDate = DateTime.UtcNow.AddDays(-30);
+            }
+
+            return startDate.Value;
         }
 
         /// <summary>

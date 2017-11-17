@@ -17,6 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // Show Amazon control if the Amazon ctrl is configured.
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            daysBack.MaxDaysBack = 7;
         }
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             attributes.LoadStore(caStore);
             consolidator.LoadStore(caStore);
             amazon.LoadStore(caStore);
+            daysBack.LoadStore(caStore);
         }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attributes.SaveToEntity(caStore);
                 consolidator.SaveToEntity(caStore);
                 amazon.SaveToEntity(caStore);
+                daysBack.SaveToEntity(caStore);
             }
             catch (ChannelAdvisorException ex)
             {
@@ -67,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnAttributesResize(object sender, EventArgs e)
         {
-            Height = attributes.Height + consolidator.Height;
+            Height = attributes.Height + consolidator.Height + daysBack.Height + 30;
 
             // Adjust height if the Amazon control is visible
             if (amazon.Visible)
