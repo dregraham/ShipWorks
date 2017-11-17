@@ -565,7 +565,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // This is a borderline integration test rather than unit test, since we're returning a "real" ground close response which will
             // be processed from the test object. Since it's the real ground request we have to have the knowledge of the inner workings of
             // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics).
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[]
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new[]
             {
                 new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification() { Code = "8" }
             };
@@ -686,7 +686,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             // This is a borderline integration test rather than unit test, since we're returning a "real" smartPost close response which will
             // be processed from the test object. Since it's the real smartPost request we have to have the knowledge of the inner workings of
             // the response and configure the reply to simulate the close entity being populated (i.e. the integration test characteristics).
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[]
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification[] notifications = new[]
             {
                 new ShipWorks.Shipping.Carriers.FedEx.WebServices.Close.Notification() { Code = "8" }
             };
@@ -1491,7 +1491,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [InlineData(ServiceType.FEDEX_DISTANCE_DEFERRED, FedExServiceType.FedExDistanceDeferred, "US", "US", false)]
         [InlineData(ServiceType.FEDEX_NEXT_DAY_FREIGHT, FedExServiceType.FedExNextDayFreight, "US", "US", false)]
         [InlineData(ServiceType.FEDEX_FREIGHT_ECONOMY, FedExServiceType.FedExFreightEconomy, "US", "US", false)]
-        [InlineData(ServiceType.FEDEX_FREIGHT_PRIORITY, FedExServiceType.FedExFreightPriority, "US", "US", false)]
         [InlineData(ServiceType.PRIORITY_OVERNIGHT, FedExServiceType.OneRatePriorityOvernight, "US", "US", true)]
         [InlineData(ServiceType.PRIORITY_OVERNIGHT, FedExServiceType.PriorityOvernight, "US", "US", false)]
         [InlineData(ServiceType.STANDARD_OVERNIGHT, FedExServiceType.OneRateStandardOvernight, "US", "US", true)]
@@ -1565,20 +1564,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [InlineData(FedExRateRequestOptions.LtlFreight)]
         public void GetRates_ReturnsRate_WhenAllButOneRequestThrowsFedExException(FedExRateRequestOptions validOption)
         {
-            var reply = new RateReply();
-            reply.EnsureAtLeastOne(x => x.RateReplyDetails)
+            var rateReply = new RateReply();
+            rateReply.EnsureAtLeastOne(x => x.RateReplyDetails)
                 .EnsureAtLeastOne(x => x.RatedShipmentDetails)
                 .Ensure(x => x.ShipmentRateDetail)
                 .TotalNetCharge = new Money { Amount = 1 };
-            reply.RateReplyDetails[0].ServiceType = ServiceType.PRIORITY_OVERNIGHT;
-            reply.HighestSeverity = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.NotificationSeverityType.SUCCESS;
+            rateReply.RateReplyDetails[0].ServiceType = ServiceType.PRIORITY_OVERNIGHT;
+            rateReply.HighestSeverity = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.NotificationSeverityType.SUCCESS;
 
             foreach (var option in Enum.GetValues(typeof(FedExRateRequestOptions)).OfType<FedExRateRequestOptions>())
             {
                 var setup = rateRequest.Setup(x => x.Submit(AnyShipment, option));
                 if (option == validOption)
                 {
-                    setup.Returns(GenericResult.FromSuccess<IFedExRateResponse>(new FedExRateResponse(reply)));
+                    setup.Returns(GenericResult.FromSuccess<IFedExRateResponse>(new FedExRateResponse(rateReply)));
                 }
                 else
                 {

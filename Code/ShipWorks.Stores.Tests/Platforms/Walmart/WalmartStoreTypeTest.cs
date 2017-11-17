@@ -2,7 +2,6 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions;
@@ -36,7 +35,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void CreateAddStoreWizardOnlineUpdateActionControl_ReturnsOnlineUpdateShipmentUpdateActionControlWithWalmartTaskType()
         {
-            IoC.Initialize(mock.Container);
             mock.Provide(mock.Create<WalmartShipmentUploadTask>());
 
             WalmartStoreEntity store = new WalmartStoreEntity();

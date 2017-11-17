@@ -5,7 +5,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request.International;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.FedEx;
@@ -274,9 +273,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private void InitializeRequest(RateRequest request)
         {
             request.Ensure(x => x.RequestedShipment)

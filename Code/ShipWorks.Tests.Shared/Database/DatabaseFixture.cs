@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
-using LibGit2Sharp;
 using Moq;
 using Respawn;
 using ShipWorks.ApplicationCore;
@@ -22,12 +21,12 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
+using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
-using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -153,6 +152,61 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Create a data context for use in a test
         /// </summary>
+        /// <remarks>
+        /// When this context is disposed, everything created inside it is rolled back.  Further,
+        /// calling this method again will dispose the previous context.  This is because when a test results
+        /// in an exception, the context may not be disposed properly in the test itself.
+        /// </remarks>
+        public DataContext CreateDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations)
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var container = ContainerInitializer.Initialize(builder =>
+            {
+                addExtraRegistrations(mock, builder);
+
+                var securityContext = mock.Override<ISecurityContext>();
+                securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), null));
+                securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
+                securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
+                securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
+
+                OverrideMainFormInAutofacContainer(mock, builder);
+            });
+
+            using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
+            {
+                using (var connection = SqlSession.Current.OpenConnection())
+                {
+                    checkpoint.Reset(connection);
+                    var command = connection.CreateCommand();
+                    command.CommandText =
+@"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
+DROP PROCEDURE [dbo].[GetDatabaseGuid]";
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            var context = SetupFreshData(container);
+
+            ShippingManager.InitializeForCurrentDatabase();
+
+            foreach (IInitializeForCurrentDatabase service in container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+            {
+                service.InitializeForCurrentDatabase(ExecutionModeScope.Current);
+            }
+
+            // This initializes all the other dependencies
+            UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
+
+            ShipWorksSession.Initialize(Guid.NewGuid());
+
+            return new DataContext(mock, context.Item1, context.Item2, container);
+        }
+
+        /// <summary>
+        /// Create a data context for use in a test
+        /// </summary>
         /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
         /// calling this method again will dispose the previous context.  This is because when a test results
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
@@ -177,7 +231,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                 }
             }
 
-            var context = SetupFreshData();
+            var context = SetupFreshData(mock.Container);
 
             var securityContext = mock.Override<ISecurityContext>();
             securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), null));
@@ -207,24 +261,33 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
         private static void OverrideMainFormInAutofacContainer(AutoMock mock)
         {
             var builder = new ContainerBuilder();
-            builder.Register(c => new Control())
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
+
+            OverrideMainFormInAutofacContainer(mock, builder);
+
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(mock.Container);
 #pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
+        /// Override registration for Control, which is usually MainForm
+        /// </summary>
+        /// <remarks>MainForm doesn't exist in tests, so this needs to be done</remarks>
+        private static void OverrideMainFormInAutofacContainer(AutoMock mock, ContainerBuilder builder) =>
+            builder.Register(c => new Control())
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+
+        /// <summary>
         /// Setup fresh data
         /// </summary>
-        private Tuple<UserEntity, ComputerEntity> SetupFreshData()
+        private Tuple<UserEntity, ComputerEntity> SetupFreshData(IContainer container)
         {
             ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
             ShipWorksDatabaseUtility.AddRequiredData();
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (var lifetimeScope = container.BeginLifetimeScope())
             {
                 var writer = lifetimeScope.Resolve<ICustomerLicenseWriter>();
                 writer.Write(new DummyLegacyLicense());

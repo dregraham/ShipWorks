@@ -1,5 +1,7 @@
 ﻿using System;
+using Autofac;
 using Autofac.Extras.Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
@@ -16,7 +18,7 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataContext(AutoMock mock, UserEntity user, ComputerEntity computer)
+        public DataContext(AutoMock mock, UserEntity user, ComputerEntity computer, IContainer container = null)
         {
             Mock = mock;
             User = user;
@@ -33,12 +35,19 @@ namespace ShipWorks.Tests.Shared.Database
                 .WithOrderNumber(12345)
                 .WithShipAddress("1 Memorial Dr.", "Suite 2000", "St. Louis", "MO", "63102", "US")
                 .Save();
+
+            Container = container ?? (IContainer) IoC.UnsafeGlobalLifetimeScope;
         }
 
         /// <summary>
         /// Mock repository used for this context
         /// </summary>
         public AutoMock Mock { get; }
+
+        /// <summary>
+        /// Gets the container that's used as the IoC root container
+        /// </summary>
+        public IContainer Container { get; }
 
         /// <summary>
         /// Current user entity

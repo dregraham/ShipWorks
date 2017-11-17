@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Express1Endicia
         public Express1EndiciaShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Create<ISqlAdapter>()));
+                mock => mock.Provide(mock.Build<ISqlAdapter>()));
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
         }
 

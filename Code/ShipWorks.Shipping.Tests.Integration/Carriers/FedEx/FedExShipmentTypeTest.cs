@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
         public FedExShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Create<ISqlAdapter>()));
+                mock => mock.Provide(mock.Build<ISqlAdapter>()));
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.FedExInsuranceProvider = (int) InsuranceProvider.Carrier);
         }
@@ -95,6 +95,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
                 .AsFedEx(x => x.WithPackage()
                     .WithPackage()
                     .Set(f => f.HomeDeliveryDate, new DateTime(2016, 3, 26))
+                    .Set(f => f.FreightGuaranteeDate, new DateTime(2016, 3, 26))
                     .Set(f => f.CodOriginID, (int) ShipmentOriginSource.Other))
                 .Set(x => x.InsuranceProvider, (int) InsuranceProvider.Carrier)
                 .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)

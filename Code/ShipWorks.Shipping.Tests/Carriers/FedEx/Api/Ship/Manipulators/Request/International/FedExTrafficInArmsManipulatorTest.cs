@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         [InlineData(null, null, false)]
         [InlineData(true, null, true)]
         [InlineData(true, "asdf", true)]
-        [InlineData(null, null, false)]
         [InlineData(false, null, false)]
         [InlineData(false, "asdf", true)]
         public void ShouldApply_ReturnsCorrectValue(bool? serviceEnabled, string licenseNumber, bool expectedResult)

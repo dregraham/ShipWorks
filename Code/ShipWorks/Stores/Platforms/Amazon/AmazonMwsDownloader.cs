@@ -356,15 +356,15 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Charges
             if ((Store as IAmazonStoreEntity)?.AmazonVATS != true)
             {
-	            decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
-	            AddToCharge(order, "Tax", "Tax", itemTax);
+                decimal itemTax = XPathUtility.Evaluate(xpath, "amz:ItemTax/amz:Amount", 0M);
+                AddToCharge(order, "Tax", "Tax", itemTax);
 
-	            decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
-	            AddToCharge(order, "Tax", "Tax", giftWrapTax);
+                decimal giftWrapTax = XPathUtility.Evaluate(xpath, "amz:GiftWrapTax/amz:Amount", 0M);
+                AddToCharge(order, "Tax", "Tax", giftWrapTax);
 
-	            decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
-	            AddToCharge(order, "Tax", "Tax", shippingTax);
-			}
+                decimal shippingTax = XPathUtility.Evaluate(xpath, "amz:ShippingTax/amz:Amount", 0M);
+                AddToCharge(order, "Tax", "Tax", shippingTax);
+            }
 
             decimal shipDiscount = XPathUtility.Evaluate(xpath, "amz:ShippingDiscount/amz:Amount", 0M);
             AddToCharge(order, "Shipping Discount", "Shipping Discount", -shipDiscount);

@@ -16,8 +16,7 @@ namespace ShipWorks.Core.Tests.Integration.Shipping.Settings
 
         public ShippingProviderRuleManagerRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

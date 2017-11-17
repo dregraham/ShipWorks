@@ -243,7 +243,7 @@ namespace ShipWorks.Stores.Tests.Content
         {
             var testObject = mock.Create<CombineOrderViewModel>();
 
-            testObject.SurvivingOrder = mock.Create<IOrderEntity>();
+            testObject.SurvivingOrder = mock.Build<IOrderEntity>();
             testObject.SelectedOrderNumber = "5";
             testObject.OrderNumberPostfix = "foo";
 
@@ -258,7 +258,7 @@ namespace ShipWorks.Stores.Tests.Content
         {
             var testObject = mock.Create<CombineOrderViewModel>();
 
-            testObject.SurvivingOrder = mock.Create<IOrderEntity>();
+            testObject.SurvivingOrder = mock.Build<IOrderEntity>();
             testObject.SelectedOrderNumber = "5";
             testObject.OrderNumberPostfix = "foo";
 

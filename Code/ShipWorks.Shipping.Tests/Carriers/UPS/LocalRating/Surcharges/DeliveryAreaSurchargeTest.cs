@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         [InlineData(UpsSurchargeType.DeliveryAreaCommercialExtendedAir, UpsServiceType.Ups2DayAir, DeliveryAreaExtendedSurchargeZip, false)]
         [InlineData(UpsSurchargeType.RemoteAreaAlaska, UpsServiceType.UpsGround, RemoteAlaskaZip, true)]
         [InlineData(UpsSurchargeType.RemoteAreaHawaii, UpsServiceType.UpsGround, RemoteHawaiiZip, true)]
-        public void Apply_AppliesSurchargesCorrectly(UpsSurchargeType surchargeType, UpsServiceType serviceType, string destZip, bool isResidential)
+        public void Apply_AppliesSurchargesCorrectly(UpsSurchargeType surchargeType, UpsServiceType serviceType, int destZip, bool isResidential)
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
                 Service = (int) serviceType,
                 Shipment = new ShipmentEntity
                 {
-                    ShipPostalCode = destZip.PadLeft(5,'0')
+                    ShipPostalCode = destZip.ToString().PadLeft(5,'0')
                 }
             };
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Startup;
 using Xunit;
 
@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Integration.Functional.Registrations
 
         public IInitializeForCurrentSessionRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]
