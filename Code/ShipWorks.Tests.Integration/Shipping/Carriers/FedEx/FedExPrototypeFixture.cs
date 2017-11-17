@@ -169,6 +169,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
         public string SaveLabel { get; set; }
 
+        public string BatteryMaterial { get; set; }
+        public string BatteryPacking { get; set; }
+        public string BatteryRegulatorySubType { get; set; }
+
         /// <summary>
         /// Gets a value indicating whether save label is "true"
         /// </summary>
@@ -971,9 +975,23 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     package.DimsWidth = double.Parse(PackageLineItemWidth);
                 }
 
+                if (!BatteryMaterial.IsNullOrWhiteSpace())
+                {
+                    package.BatteryMaterial = EnumHelper.GetEnumByApiValue<FedExBatteryMaterialType>(BatteryMaterial);
+                }
+
+                if (!BatteryPacking.IsNullOrWhiteSpace())
+                {
+                    package.BatteryPacking = EnumHelper.GetEnumByApiValue<FedExBatteryPackingType>(BatteryPacking);
+                }
+
+                if (!BatteryRegulatorySubType.IsNullOrWhiteSpace())
+                {
+                    package.BatteryRegulatorySubtype = EnumHelper.GetEnumByApiValue<FedExBatteryRegulatorySubType>(BatteryRegulatorySubType);
+                }
+
                 shipment.FedEx.Packages.Add(package);
             }
-
         }
 
         /// <summary>

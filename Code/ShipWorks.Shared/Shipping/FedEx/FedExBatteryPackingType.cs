@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.FedEx
 {
@@ -10,12 +11,15 @@ namespace ShipWorks.Shipping.FedEx
     public enum FedExBatteryPackingType
     {
         [Description("Not specified")]
+        [ApiValue("None")]
         NotSpecified = 0,
 
         [Description("Contained in equipment")]
+        [ApiValue("CONTAINED_IN_EQUIPMENT")]
         ContainsInEquipement = 1,
 
         [Description("Packed with equipment")]
+        [ApiValue("PACKED_WITH_EQUIPMENT")]
         PackedWithEquipment = 2,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.FedEx
 {
@@ -10,9 +11,11 @@ namespace ShipWorks.Shipping.FedEx
     public enum FedExBatteryRegulatorySubType
     {
         [Description("Not specified")]
+        [ApiValue("None")]
         NotSpecified = 0,
 
         [Description("IATA section II")]
+        [ApiValue("IATA_SECTION_II")]
         IATASectionII = 1,
     }
 }
