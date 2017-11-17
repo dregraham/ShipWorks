@@ -10,7 +10,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.FedEx;
 
-namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
+namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     /// <summary>
     /// Add LTL Freight information to shipment
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         {
             IFedExAccountEntity account = settings.GetAccountReadOnly(shipment);
 
-            return Validate(request, shipment, sequenceNumber)
+            return Validate(request, shipment)
                 .Map(InitializeRequest)
                 .Bind(x => CreateFedExLtlFreightDetailManipulations(x, shipment.FedEx, account, sequenceNumber))
                 .Map(x => ConfigureShippingCharges(x, shipment.FedEx, account));
@@ -132,6 +132,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
             int packageIndex = 1;
             foreach (IFedExPackageEntity package in fedex.Packages)
             {
+                PhysicalPackagingType? packagingType = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging);
+
                 FreightShipmentLineItem lineItem = new FreightShipmentLineItem()
                 {
                     Description = $"Freight Package {packageIndex}",
@@ -144,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                         Width = package.DimsWidth.ToString(),
                         Units = LinearUnits.IN,
                     },
-                    Packaging = EnumHelper.GetApiValue<PhysicalPackagingType>(package.FreightPackaging).Value,
+                    Packaging = packagingType.Value,
                     PackagingSpecified = true,
                     Pieces = package.FreightPieces.ToString(),
                     Weight = new Weight
@@ -202,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Validates the specified request.
         /// </summary>
-        private static GenericResult<ProcessShipmentRequest> Validate(ProcessShipmentRequest request, IShipmentEntity shipment, int sequenceNumber)
+        private static GenericResult<ProcessShipmentRequest> Validate(ProcessShipmentRequest request, IShipmentEntity shipment)
         {
             IFedExShipmentEntity fedex = shipment.FedEx;
 
@@ -218,8 +220,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
                 return new FedExException($"FedEx Freight Class is required.");
             }
 
-            var packagingType = EnumHelper.GetApiValue<PhysicalPackagingType>(fedex.Packages.ElementAt(sequenceNumber).FreightPackaging);
-            if (!packagingType.HasValue)
+            if (!fedex.Packages.All(p => EnumHelper.GetApiValue<PhysicalPackagingType>(p.FreightPackaging).HasValue))
             {
                 return new FedExException($"FedEx Freight Packaging Type is required.");
             }
