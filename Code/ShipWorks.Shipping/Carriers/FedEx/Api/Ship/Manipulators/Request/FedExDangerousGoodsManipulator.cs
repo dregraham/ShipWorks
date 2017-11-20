@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(shipment, request);
 
-            ConfigureShippingDocuments(request);
+            ConfigureShippingDocuments(request, shipment.FedEx.Packages.Count());
 
             // Add the service option to the request
             ConfigureDangerousGoodsOption(request, package);
@@ -198,24 +198,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="labelFormat">The format to print shipping documents</param>
-        private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest)
+        private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest, int packageCount)
         {
             var documentTypes = nativeRequest.RequestedShipment
                 .Ensure(x => x.ShippingDocumentSpecification)
                 .Ensure(x => x.ShippingDocumentTypes)
                 .AsEnumerable();
 
-            documentTypes = documentTypes.Append(RequestedShippingDocumentType.OP_900);
-            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
+            if (packageCount == 1)
             {
-                Format = new ShippingDocumentFormat
+                documentTypes = documentTypes.Append(RequestedShippingDocumentType.OP_900);
+                nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
                 {
-                    ImageType = ShippingDocumentImageType.PDF,
-                    ImageTypeSpecified = true,
-                    StockType = ShippingDocumentStockType.OP_900_LL_B,
-                    StockTypeSpecified = true
-                }
-            };
+                    Format = new ShippingDocumentFormat
+                    {
+                        ImageType = ShippingDocumentImageType.PDF,
+                        ImageTypeSpecified = true,
+                        StockType = ShippingDocumentStockType.OP_900_LL_B,
+                        StockTypeSpecified = true
+                    }
+                };
+            }
 
             documentTypes = documentTypes.Append(RequestedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION);
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.DangerousGoodsShippersDeclarationDetail = new DangerousGoodsShippersDeclarationDetail
