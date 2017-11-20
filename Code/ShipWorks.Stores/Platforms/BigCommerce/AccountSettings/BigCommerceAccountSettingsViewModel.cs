@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
         public async Task<bool> SaveToEntity(BigCommerceStoreEntity store)
         {
-            IResult result = await PerformSave(store).ConfigureAwait(false);
+            IResult result = await PerformSave(store).ConfigureAwait(true);
 
             if (result.Failure)
             {
