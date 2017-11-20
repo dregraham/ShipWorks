@@ -207,6 +207,29 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.True(dangerousGoods.AccessibilitySpecified);
         }
 
+        [Fact]
+        public void Manipulate_AddsBatterySpecialServiceType_WhenShipmentHasBatteries()
+        {
+            var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.LithiumIon);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.True(result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.BATTERY));
+        }
+        [Fact]
+        public void Manipulate_DoesNotAddBatterySpecialServiceType_WhenShipmentHasNoBatteries()
+        {
+            //var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.NotSpecified);
+            shipment.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.False(result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.BATTERY));
+        }
+
         [Theory]
         [InlineData(FedExBatteryMaterialType.LithiumIon, BatteryMaterialType.LITHIUM_ION)]
         [InlineData(FedExBatteryMaterialType.LithiumMetal, BatteryMaterialType.LITHIUM_METAL)]

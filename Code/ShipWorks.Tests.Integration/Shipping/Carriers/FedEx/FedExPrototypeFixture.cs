@@ -808,7 +808,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
                                (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol") ||
                                (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "alcohol") ||
-                               (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "alcohol"));
+                               (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "alcohol") ||
+                               (SpecialServiceType3 != null && SpecialServiceType3.ToLower() == "alcohol"));
 
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
@@ -914,10 +915,28 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     package.DangerousGoodsAccessibilityType = (int) accessibility;
                     package.DangerousGoodsCargoAircraftOnly = cargoAircraftOnly;
 
-                    // default the material type to not applicable
-                    package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+                    if (IsDangerousGoodsBatteries())
+                    {
+                        package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
+                    }
+                    else
+                    {
+                        package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if any special service type (shipment or package level) is battery
+        /// </summary>
+        private bool IsDangerousGoodsBatteries()
+        {
+            return (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "battery") ||
+                   (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "battery");
         }
 
         /// <summary>

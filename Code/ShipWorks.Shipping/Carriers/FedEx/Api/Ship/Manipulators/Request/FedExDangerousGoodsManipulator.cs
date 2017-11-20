@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             ConfigureShippingDocuments(request);
 
             // Add the service option to the request
-            ConfigureDangerousGoodsOption(request);
+            ConfigureDangerousGoodsOption(request, package);
 
             DangerousGoodsDetail dangerousGoods = new DangerousGoodsDetail();
 
@@ -335,14 +335,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Adds the dangerous goods option to the request.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureDangerousGoodsOption(IFedExNativeShipmentRequest nativeRequest)
+        private void ConfigureDangerousGoodsOption(IFedExNativeShipmentRequest nativeRequest, IFedExPackageEntity package)
         {
             var servicesRequested = nativeRequest.RequestedShipment.RequestedPackageLineItems[0]
                 .Ensure(x => x.SpecialServicesRequested);
             servicesRequested.SpecialServiceTypes = servicesRequested.Ensure(x => x.SpecialServiceTypes)
                 .Append(PackageSpecialServiceType.DANGEROUS_GOODS)
                 .ToArray();
+
+            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
+            {
+                servicesRequested.SpecialServiceTypes = servicesRequested.Ensure(x => x.SpecialServiceTypes)
+                    .Append(PackageSpecialServiceType.BATTERY)
+                    .ToArray();
+            }
         }
 
         /// <summary>
