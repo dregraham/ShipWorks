@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(store, strategy.Object))
-                .Returns(Task.FromResult<IResult>(verifierResult ? GenericResult.FromSuccess(Unit.Default) : GenericResult.FromError<Unit>("Foo")));
+                .ReturnsAsync(verifierResult ? GenericResult.FromSuccess(Unit.Default) : GenericResult.FromError<Unit>("Foo"));
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
@@ -177,7 +177,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
-                .Returns(Task.FromResult<IResult>(GenericResult.FromError<string>("Foo")));
+                .ReturnsAsync(GenericResult.FromError<string>("Foo"));
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
-                .Returns(Task.FromResult<IResult>(GenericResult.FromSuccess("")));
+                .ReturnsAsync(GenericResult.FromSuccess(""));
             
             var disposable = mock.CreateMock<IDisposable>();
             mock.Mock<IMessageHelper>().Setup(x => x.SetCursor(Cursors.WaitCursor))
