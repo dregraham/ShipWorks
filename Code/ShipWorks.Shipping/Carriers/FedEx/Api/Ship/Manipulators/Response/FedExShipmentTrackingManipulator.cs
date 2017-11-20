@@ -26,7 +26,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Response
             {
                 SetShipmentTrackingNumber();
 
-                // TODO: See if we need to handle packages.
+                foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+                {
+                    package.TrackingNumber = shipment.TrackingNumber;
+                }
             }
             else
             {

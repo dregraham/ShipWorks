@@ -64,5 +64,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Response
             Assert.Null(shipmentEntity.FedEx.Packages[0].TrackingNumber);
             Assert.Equal("Package1Tracking", shipmentEntity.FedEx.Packages[1].TrackingNumber);
         }
+
+        [Theory]
+        [InlineData(FedExServiceType.FedExFreightPriority)]
+        [InlineData(FedExServiceType.FedExFreightEconomy)]
+        public void Manipulate_PackageTrackingNumberAddedToAllPackages_WhenLtlFreight(FedExServiceType serviceType)
+        {
+            shipmentEntity.FedEx.Service = (int) serviceType;
+            processShipmentReply.CompletedShipmentDetail.CompletedPackageDetails = null;
+
+            testObject.Manipulate(processShipmentReply, null, shipmentEntity);
+
+            Assert.Equal(processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber, shipmentEntity.TrackingNumber);
+            Assert.Equal(processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber, shipmentEntity.FedEx.Packages[0].TrackingNumber);
+            Assert.Equal(processShipmentReply.CompletedShipmentDetail.MasterTrackingId.TrackingNumber, shipmentEntity.FedEx.Packages[1].TrackingNumber);
+        }
     }
 }

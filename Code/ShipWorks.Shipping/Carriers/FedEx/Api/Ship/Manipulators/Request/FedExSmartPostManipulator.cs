@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 return new CarrierException("A SmartPost Hub ID is required for shipping with SmartPost.");
             }
 
-            detail.HubId = fedExShipment.SmartPostHubID;
+            detail.HubId = smartPostHubID;
 
             return Result.FromSuccess();
         }
