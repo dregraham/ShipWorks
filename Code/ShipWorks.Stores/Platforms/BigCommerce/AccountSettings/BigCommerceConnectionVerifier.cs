@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         public async Task<IResult> Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy)
         {
             return ConnectionVerificationNeeded(store, persistenceStrategy) ?
-                await UpdateConnection(store) :
+                await UpdateConnection(store).ConfigureAwait(false) :
                 Result.FromSuccess();
         }
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
             try
             {
                 IBigCommerceWebClient webClient = webClientFactory.Create(store);
-                await webClient.TestConnection();
+                await webClient.TestConnection().ConfigureAwait(false);
 
                 using (Owned<IBigCommerceStatusCodeProvider> statusProvider = createStatusCodeProvider(store))
                 {
