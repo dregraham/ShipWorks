@@ -38,12 +38,12 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
         /// <summary>
         /// Stepping next
         /// </summary>
-        protected void OnStepNext(object sender, WizardStepEventArgs e)
+        protected async void OnStepNext(object sender, WizardStepEventArgs e)
         {
             BigCommerceStoreEntity store = GetStore<BigCommerceStoreEntity>();
 
             // Ask the account settings control to save it's info to the store.  If anything is invalid, stay on this page.
-            if (!accountSettingsControl.SaveToEntity(store))
+            if (! await accountSettingsControl.SaveToEntityAsync(store))
             {
                 e.NextPage = this;
             }

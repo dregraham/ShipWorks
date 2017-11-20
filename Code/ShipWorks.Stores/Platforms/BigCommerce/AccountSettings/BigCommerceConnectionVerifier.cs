@@ -38,10 +38,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Verify the connection
         /// </summary>
-        public IResult Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy)
+        public async Task<IResult> Verify(BigCommerceStoreEntity store, IBigCommerceAuthenticationPersistenceStrategy persistenceStrategy)
         {
             return ConnectionVerificationNeeded(store, persistenceStrategy) ?
-                UpdateConnection(store).Result :
+                await UpdateConnection(store) :
                 Result.FromSuccess();
         }
 

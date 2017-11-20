@@ -166,9 +166,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
-        public bool SaveToEntity(BigCommerceStoreEntity store)
+        public async Task<bool> SaveToEntity(BigCommerceStoreEntity store)
         {
-            IResult result = PerformSave(store);
+            IResult result = await PerformSave(store);
 
             if (result.Failure)
             {
@@ -181,7 +181,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
         /// <summary>
         /// Perform the actual save
         /// </summary>
-        private IResult PerformSave(BigCommerceStoreEntity store)
+        private async Task<IResult> PerformSave(BigCommerceStoreEntity store)
         {
             GenericResult<string> storeUrlToCheck = SaveApiUrlToStore(store, ApiUrl);
             if (storeUrlToCheck.Failure)
@@ -197,7 +197,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.AccountSettings
 
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                return connectionVerifier.Verify(store, PersistenceStrategy);
+                return await connectionVerifier.Verify(store, PersistenceStrategy);
             }
         }
 
