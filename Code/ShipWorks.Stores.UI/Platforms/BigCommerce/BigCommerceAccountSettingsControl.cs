@@ -61,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
-        public async override Task<bool> SaveToEntityAsync(StoreEntity store) =>
-            await viewModel.SaveToEntity(store as BigCommerceStoreEntity).ConfigureAwait(false);
+        public override Task<bool> SaveToEntityAsync(StoreEntity store) =>
+            viewModel.SaveToEntity(store as BigCommerceStoreEntity);
     }
 }
