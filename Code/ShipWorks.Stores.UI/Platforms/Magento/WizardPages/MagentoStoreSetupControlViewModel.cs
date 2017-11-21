@@ -13,6 +13,7 @@ using System.Security;
 using System.Text;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {
@@ -124,7 +125,7 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
                 IGenericModuleStoreType storeType = (IGenericModuleStoreType) storeTypeManager.GetType(store);
                 storeType.InitializeFromOnlineModule();
             }
-            catch (GenericStoreException ex)
+            catch (Exception ex) when (ex is GenericStoreException || ex is DownloadException)
             {
                 return GenericResult.FromError<MagentoStoreEntity>($"Could not connect to Magento: {ex.Message}");
             }
