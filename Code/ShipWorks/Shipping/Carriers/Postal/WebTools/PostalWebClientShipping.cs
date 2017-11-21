@@ -366,7 +366,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         private static void WriteShippingContents(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
         {
-
             xmlWriter.WriteStartElement("ShippingContents");
 
             foreach (ShipmentCustomsItemEntity customsItem in postalShipment.Shipment.CustomsItems)
