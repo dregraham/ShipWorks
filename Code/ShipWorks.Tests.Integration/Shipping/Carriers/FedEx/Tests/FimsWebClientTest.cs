@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 {
     public class FimsWebClientTest
     {

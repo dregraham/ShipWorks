@@ -8,7 +8,7 @@ using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.UK
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 {
     [Collection("Fedex Tests")]
     public class FedExUKIntegrationTests : DataDrivenIntegrationTestBase
