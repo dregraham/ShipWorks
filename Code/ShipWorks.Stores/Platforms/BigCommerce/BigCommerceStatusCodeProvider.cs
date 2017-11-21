@@ -6,6 +6,7 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using System;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         {
             try
             {
-                Dictionary<int, string> codeMap = GetCodeMap(Store as IBigCommerceStoreEntity);
+                Dictionary<int, string> codeMap = Task.Run(async () => await GetCodeMapAsync(Store as BigCommerceStoreEntity)).Result;
 
                 // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
                 if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
@@ -45,22 +46,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 return codeMap;
             }
-            catch (BigCommerceException ex)
+            catch (Exception ex)
             {
-                log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex);
+                log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex.GetBaseException());
 
                 return null;
             }
         }
-
-        /// <summary>
-        /// Get the code map from the given store
-        /// </summary>
-        /// <remarks>
-        /// This needs to be run in a new task so that we can block on it without deadlock
-        /// </remarks>
-        private Dictionary<int, string> GetCodeMap(IBigCommerceStoreEntity store) =>
-            Task.Run(() => GetCodeMapAsync(store)).Result;
 
         /// <summary>
         /// Get the code map from the given store
