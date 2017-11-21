@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
@@ -17,7 +21,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
         private const string fedExTestAccountNumber = "612365903";
-        private const bool justLabels = false;
         private readonly ITestOutputHelper output;
 
         private DataContext context;
@@ -28,6 +31,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
             context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
+
+            justLabels = false;
+            justForPhysicalPrint = true;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
 
         [ExcelData(@"DataSources\FedExAll\CA Exp Dom.xlsx", "CA Exp Dom")]
@@ -38,7 +47,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExCanadaExpressDomesticMapping testObject = new FedExCanadaExpressDomesticMapping();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressDomesticMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels)) // && (string) row["ProcessShipmentRequest#TransactionDetail"] == "1F-1001")
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
@@ -58,7 +68,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaGroundDomesticInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
@@ -81,7 +92,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels)) // && (string)row[3] == "IF-1003")
+            JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
 
                 output.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

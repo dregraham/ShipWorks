@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.Shared.Database
     public class FedExDatabaseFixture : DatabaseFixture
     {
         private DataContext context;
+        private const bool clearTestData = false;
 
         /// <summary>
         /// Gets the FedEx data context
@@ -54,12 +55,15 @@ namespace ShipWorks.Tests.Shared.Database
             LogSession.Initialize();
             UserSession.InitializeForCurrentDatabase();
 
-            UpdateStore(newContext);
+            if (clearTestData)
+            {
+                UpdateStore(newContext);
 
-            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int) ThermalLanguage.None).Save();
+            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
 
-            GenerateAccounts();
-            UpdateSettings();
+                GenerateAccounts();
+                UpdateSettings();
+            }
 
             return newContext;
         }
@@ -70,12 +74,13 @@ namespace ShipWorks.Tests.Shared.Database
         private static void UpdateSettings()
         {
             var settings = ShippingSettings.Fetch();
+            settings.AutoCreateShipments = false;
             settings.ShipSenseEnabled = false;
             settings.ConfiguredTypes = new[] { ShipmentTypeCode.FedEx };
             settings.ActivatedTypes = new[] { ShipmentTypeCode.FedEx };
             settings.FedExUsername = "MFG2EvMKBLcxcCsk";
             settings.FedExPassword = "nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE=";
-            settings.FedExThermalDocTab = true;
+            settings.FedExThermalDocTab = false;
             settings.FedExThermalDocTabType = 0; // Leading
             ShippingSettings.Save(settings);
         }

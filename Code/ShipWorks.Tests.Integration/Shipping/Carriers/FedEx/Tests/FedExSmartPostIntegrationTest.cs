@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
@@ -14,8 +15,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
         //note: smartpost gets it account number from the spreadsheet.
-        private const bool justLabels = false;
-
         private readonly ITestOutputHelper output;
         private DataContext context;
 
@@ -25,6 +24,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
 
+            justLabels = false;
+            justForPhysicalPrint = true;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
 
         [ExcelData(@"DataSources\FedExAll\IMpB Smartpost.xlsx", "IMPB SmartPost")]
@@ -40,7 +44,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
 
             if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 
@@ -61,7 +66,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
 
             if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 

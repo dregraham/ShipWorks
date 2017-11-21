@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
@@ -18,9 +19,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         private string SpainAccountNumber = "604824729";
         private string SwedenAccountNumber = "604849268";
         private string FranceAccountNumber = "602550940";
-        private bool justLabels = true;
         private readonly ITestOutputHelper output;
-
         private DataContext context;
 
         public FedExEMEAIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
@@ -29,6 +28,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
             context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
+
+            justLabels = false;
+            justForPhysicalPrint = true;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
 
         [ExcelData(@"DataSources\FedExAll\EMEA.xlsx", "EMEA")]
@@ -39,7 +44,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExEMEAFixture();
 
             if (PopulateTestObject(row, testObject, FedExEMEAFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[4]}");
 

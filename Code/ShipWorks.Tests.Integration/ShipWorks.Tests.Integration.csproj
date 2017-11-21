@@ -191,6 +191,7 @@
     <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTestCollection.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Tests\FimsWebClientTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\TestCasesForPhysicalPrinting.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKETDMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Tests\FedExUKIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK\FedExUkInternationalMapping.cs" />

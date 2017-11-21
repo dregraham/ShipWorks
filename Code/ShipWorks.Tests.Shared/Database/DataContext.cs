@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shared.Database
 
             Store = Create.Store<GenericModuleStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
-                .Set(x => x.StoreName, "A Test Store")
+                .Set(x => x.StoreName, $"A Test Store {Guid.NewGuid().ToString("N").Substring(0, 10)}")
                 .Save();
 
             Customer = Create.Entity<CustomerEntity>().Save();

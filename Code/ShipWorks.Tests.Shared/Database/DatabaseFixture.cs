@@ -43,6 +43,7 @@ namespace ShipWorks.Tests.Shared.Database
         Justification = "We don't want to dispose these fields since they need to live during the test")]
     public class DatabaseFixture : IDisposable
     {
+        private const bool clearTestData = false;
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
         private readonly ExecutionModeScope executionModeScope;
@@ -87,20 +88,29 @@ namespace ShipWorks.Tests.Shared.Database
 
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
-            checkpoint = new Checkpoint();
-            TempLocalDb db = new TempLocalDb(databaseName);
-
-            sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
-
-            SqlUtility.EnableClr(db.Open());
-
-            using (SqlCommand command = db.Open().CreateCommand())
+            if (clearTestData)
             {
-                command.CommandText = string.Format(enableChangeTrackingScript, databaseName);
-                command.ExecuteNonQuery();
-            }
+                checkpoint = new Checkpoint();
+                TempLocalDb db = new TempLocalDb(databaseName);
 
-            ShipWorksDatabaseUtility.CreateSchemaAndData();
+            	sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+
+                SqlUtility.EnableClr(db.Open());
+
+                using (SqlCommand command = db.Open().CreateCommand())
+                {
+                    command.CommandText = string.Format(enableChangeTrackingScript, databaseName);
+                    command.ExecuteNonQuery();
+                }
+
+                ShipWorksDatabaseUtility.CreateSchemaAndData();
+            }
+            else
+            {
+                string connectionString = $"Data Source = (localdb)\\v11.0; Initial Catalog = {databaseName}";
+
+                sqlSessionScope = CreateSqlSessionScope(connectionString);
+            }
 
             DataProvider.InitializeForApplication(ExecutionModeScope.Current);
         }
@@ -218,16 +228,19 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             configureMock?.Invoke(mock);
             OverrideMainFormInAutofacContainer(mock);
 
-            using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
+            if (clearTestData)
             {
-                using (var connection = SqlSession.Current.OpenConnection())
+                using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
                 {
-                    checkpoint.Reset(connection);
-                    var command = connection.CreateCommand();
-                    command.CommandText =
+                    using (var connection = SqlSession.Current.OpenConnection())
+                    {
+                    	checkpoint.Reset(connection);
+                        var command = connection.CreateCommand();
+                        command.CommandText =
 @"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
 DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                     command.ExecuteNonQuery();
+                    }
                 }
             }
 
@@ -284,8 +297,11 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
         /// </summary>
         private Tuple<UserEntity, ComputerEntity> SetupFreshData(IContainer container)
         {
-            ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
-            ShipWorksDatabaseUtility.AddRequiredData();
+            if (clearTestData)
+            {
+                ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
+                ShipWorksDatabaseUtility.AddRequiredData();
+            }
 
             using (var lifetimeScope = container.BeginLifetimeScope())
             {
@@ -295,8 +311,21 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
-                UserEntity user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
-                ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
+                UserEntity user;
+                ComputerEntity computer;
+
+                if (clearTestData)
+                {
+                    user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
+                    computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
+                }
+                else
+                {
+                    user = UserUtility.GetShipWorksUser("shipworks", string.Empty);
+
+                    ComputerManager.InitializeForCurrentSession();
+                    computer = ComputerManager.Computers.First();
+                }
 
                 UserSession.Logon(user, computer, true);
 

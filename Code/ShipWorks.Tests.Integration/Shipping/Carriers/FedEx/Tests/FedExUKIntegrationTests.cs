@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
@@ -14,11 +15,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     public class FedExUKIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string UKAccountNumber = "605517846";
-        private bool justLabels = true;
         private readonly ITestOutputHelper output;
-
         private DataContext context;
-
 
         public FedExUKIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
         {
@@ -26,6 +24,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
             context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
+
+            justLabels = false;
+            justForPhysicalPrint = true;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
 
         [ExcelData(@"DataSources\FedExAll\UK ETD.xlsx", "UK ETD")]
@@ -36,7 +40,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUKETDMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -55,7 +60,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUkInternationalMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))// && (string) row[4] == "UK-410")
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[4]}");
 
@@ -73,7 +79,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUKIntraFixture();
 
             if (PopulateTestObject(row, testObject, FedExUKIntraFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 

@@ -7,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests;
 
 
 namespace ShipWorks.Tests.Integration.MSTest
@@ -14,7 +17,32 @@ namespace ShipWorks.Tests.Integration.MSTest
     public class DataDrivenIntegrationTestBase
     {
         private bool isTranslationMapPopulated = false;
-        
+        protected bool justForPhysicalPrint = true;
+        protected ThermalLanguage physicalPrintType = ThermalLanguage.None;
+        protected List<string> physicalPrintTestCases;
+        protected bool justLabels = false;
+
+        protected void SetupPhysicalPrints()
+        {
+            physicalPrintTestCases = physicalPrintType == ThermalLanguage.None ? 
+                TestCasesForPhysicalPrinting.TestCasesForLaser : 
+                TestCasesForPhysicalPrinting.TestCasesForThermal;
+
+            SetProfileLabelFormat(physicalPrintType);
+        }
+
+        protected bool PhysicalPrint(string customerTransactionId, string customerRefValue)
+        {
+            return !justForPhysicalPrint || 
+                   physicalPrintTestCases.Contains(customerTransactionId) ||
+                   physicalPrintTestCases.Contains(customerRefValue);
+        }
+
+        protected bool JustLabels(bool isSaveLabel)
+        {
+            return isSaveLabel || !justLabels;
+        }
+
         /// <summary>
         /// Populates the test object based on the mapping of a spreadsheet columns to the test object's properties.
         /// </summary>
@@ -263,6 +291,15 @@ namespace ShipWorks.Tests.Integration.MSTest
             }
 
             Debug.Write(missingProperties);
+        }
+
+        protected void SetProfileLabelFormat(ThermalLanguage thermalLanguage)
+        {
+            foreach (var profile in ShippingProfileManager.Profiles)
+            {
+                profile.RequestedLabelFormat = (int)thermalLanguage;
+                ShippingProfileManager.SaveProfile(profile);
+            }
         }
     }
 }

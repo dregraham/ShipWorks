@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
@@ -20,28 +21,14 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         private string fedExTestAccountNumber = "612480567";
         private string fedExUSFreightTestAccountNumber = "630081440";
         private const string ecodAccountNumber = "222326460";
-        private bool justLabels = false;
+        //private bool justLabels = false;
         private readonly ITestOutputHelper output;
 
+        //private bool justForPhysicalPrint = true;
+        //private string physicalPrintType = "Thermal";
+        //private List<string> physicalPrintTestCases;
+
         private DataContext context;
-
-        [ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
-        [Theory]
-        [Trait("Category", "FedEx")]
-        public void Ship_CreateBlankDb(DataRow row)
-        {
-            var testObject = new FedExUSGroundAlcoholFixture();
-
-            //if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
-            //    (testObject.IsSaveLabel || !justLabels))
-            //{
-            //    output.WriteLine($"Executing customer transaction ID {row[5]}");
-
-            //    testObject.FedExAccountNumber = fedExTestAccountNumber;
-
-            //    testObject.Ship(context.Order);
-            //}
-        }
 
         public FedExUSIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
         {
@@ -49,7 +36,31 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
             context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
+
+            justLabels = false;
+            justForPhysicalPrint = true;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
+
+        //[ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
+        //[Theory]
+        //[Trait("Category", "FedEx")]
+        //public void Ship_CreateBlankDb(DataRow row)
+        //{
+        //    var testObject = new FedExUSGroundAlcoholFixture();
+
+        //    //if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
+        //    //    (testObject.IsSaveLabel || !justLabels))
+        //    //{
+        //    //    output.WriteLine($"Executing customer transaction ID {row[5]}");
+
+        //    //    testObject.FedExAccountNumber = fedExTestAccountNumber;
+
+        //    //    testObject.Ship(context.Order);
+        //    //}
+        //}
 
         [ExcelData(@"DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx", "US Grn Dom Intl And Home Del")]
         [Theory]
@@ -66,7 +77,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSGroundFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
-                (testObject.IsSaveLabel || !justLabels)) // && (string) row[5] == "605634")
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -95,7 +107,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSGroundAlcoholFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -113,7 +126,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressInternationalAlcoholMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -131,7 +145,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels)) // && (row[2].ToString() == "IPE1" || row[2].ToString() == "IPE2")) // && ((string) row[5] == "413239" || (string)row[5] == "413240"))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -159,7 +174,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExPrototypeFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -175,7 +191,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         public void Ship_FedExExpressDomestic(DataRow row)
         {
             output.WriteLine($"Preparing customer transaction ID {row[5]}");
-            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels)) // !( (string) row[5] == "323234" || (string)row[5] == "323281"))
+            if (row["SaveLabel"] is DBNull || (!(bool)row["SaveLabel"] && justLabels))
             {
                 output.WriteLine("Skipping");
                 return;
@@ -183,7 +199,9 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping))
+            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -201,7 +219,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
             if (PopulateTestObject(row, testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
@@ -219,7 +238,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             var testObject = new FedExPrototypeFixture();
 
             if (PopulateTestObject(row, testObject, FedExFreightPostFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
