@@ -237,7 +237,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.PriorityAlertDetail.Content", PropertyName = "PackageLineItemPriorityContent", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.PriorityAlertDetail.EnhancementTypes", PropertyName = "PackageLineItemPriorityEnhancementType", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Transaction Type", PropertyName = "", SpreadsheetColumnIndex = -1 });
-//                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ETD.CommercialInvoiceFileElectronically", PropertyName = "CommercialInvoiceFileElectronically", SpreadsheetColumnIndex = -1 });
+                    //                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ETD.CommercialInvoiceFileElectronically", PropertyName = "CommercialInvoiceFileElectronically", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.BatteryDetails.Material", PropertyName = "BatteryMaterial", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.BatteryDetails.Packing", PropertyName = "BatteryPacking", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.BatteryDetails.RegulatorySubType", PropertyName = "BatteryRegulatorySubType", SpreadsheetColumnIndex = -1 });
                 }
 
                 return columnPropertyMap;
