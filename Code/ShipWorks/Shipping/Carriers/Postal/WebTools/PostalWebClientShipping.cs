@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlWriter.WriteElementString("ToPhone", toAdapter.Phone10Digits);
             }
 
-            int weightOz = (int)Math.Ceiling(shipment.TotalWeight * 16.0);
+            int weightOz = (int) Math.Ceiling(shipment.TotalWeight * 16.0);
 
             // Since weight doesnt affect the label in any way, if its not valid just set it
             // to some valid number
@@ -170,8 +170,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("ImageType", "GIF");
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
 
+            GenerateCustomsXml(xmlWriter, postalShipment);
+
+            xmlWriter.WriteEndElement();
+        }
+
+        /// <summary>
+        /// Generates CustomsXml. This is used APO shipments and other instances where the shipment is kindof international.
+        /// </summary>
+        private static void GenerateCustomsXml(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
+        {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools);
-            if (shipmentType.IsCustomsRequired(shipment))
+            if (shipmentType.IsCustomsRequired(postalShipment.Shipment))
             {
                 WriteShippingContents(xmlWriter, postalShipment);
 
@@ -183,8 +193,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("ContentComments", postalShipment.CustomsContentDescription);
                 }
             }
-
-            xmlWriter.WriteEndElement();
         }
 
         /// <summary>
@@ -258,19 +266,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
             xmlWriter.WriteElementString("AddressServiceRequested", "False");
 
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools);
-            if (shipmentType.IsCustomsRequired(shipment))
-            {
-                WriteShippingContents(xmlWriter, postalShipment);
-
-                PostalCustomsContentType contentType = (PostalCustomsContentType) postalShipment.CustomsContentType;
-                xmlWriter.WriteElementString("CustomsContentType", GetContentTypeApiValue(contentType));
-
-                if (contentType == PostalCustomsContentType.Other)
-                {
-                    xmlWriter.WriteElementString("ContentComments", postalShipment.CustomsContentDescription);
-                }
-            }
+            GenerateCustomsXml(xmlWriter, postalShipment);
 
             xmlWriter.WriteEndElement();
         }
@@ -402,8 +398,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static WeightValue GetGrossWeightValue(double shipmentTotalWeight, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
             double totalContentWeight = shipmentCustomsItems.Sum(customsItem => customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
-
-            return new WeightValue(Math.Max(totalContentWeight, shipmentTotalWeight > 0 ? shipmentTotalWeight : 1.0 / 16));
+            double shipmentWeight = shipmentTotalWeight > 0 ? shipmentTotalWeight : 1.0 / 16;
+            return new WeightValue(Math.Max(totalContentWeight, shipmentWeight));
         }
         
         /// <summary>
