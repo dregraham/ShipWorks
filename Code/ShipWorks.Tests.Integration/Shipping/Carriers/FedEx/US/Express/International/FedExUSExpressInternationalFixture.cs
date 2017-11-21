@@ -277,10 +277,13 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
 
             SetupReturnsClearance(shipment);
 
+            if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToUpperInvariant() == "THIRD_PARTY_CONSIGNEE"))
+            {
+                shipment.FedEx.ThirdPartyConsignee = true;
+            }
+
             return shipment;
         }
-
-
 
         private void SetupExportDetail(ShipmentEntity shipment)
         {
@@ -461,6 +464,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Interna
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
+                    package.DangerousGoodsAccessibilityType = DangerousGoodsAccessibility?.ToUpperInvariant() == "ACCESSIBLE" ?
+                        (int) FedExDangerousGoodsAccessibilityType.Accessible :
+                        (int) FedExDangerousGoodsAccessibilityType.Inaccessible;
+
                     package.DangerousGoodsType = (int)GetDangerousGoodsMaterialType();
 
                     if (package.DangerousGoodsType == (int)FedExDangerousGoodsMaterialType.HazardousMaterials || !string.IsNullOrEmpty(HazardProperShippingName))

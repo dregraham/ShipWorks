@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shared.Database
         Justification = "We don't want to dispose these fields since they need to live during the test")]
     public class DatabaseFixture : IDisposable
     {
-        private const bool clearTestData = false;
+        protected bool clearTestData = true;
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
         private readonly ExecutionModeScope executionModeScope;
@@ -184,16 +184,19 @@ namespace ShipWorks.Tests.Shared.Database
                 OverrideMainFormInAutofacContainer(mock, builder);
             });
 
-            using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
+            if (clearTestData)
             {
-                using (var connection = SqlSession.Current.OpenConnection())
+                using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
                 {
-                    checkpoint.Reset(connection);
-                    var command = connection.CreateCommand();
-                    command.CommandText =
-@"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
-DROP PROCEDURE [dbo].[GetDatabaseGuid]";
-                    command.ExecuteNonQuery();
+                    using (var connection = SqlSession.Current.OpenConnection())
+                    {
+                        checkpoint.Reset(connection);
+                        var command = connection.CreateCommand();
+                        command.CommandText =
+                            @"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
+                              DROP PROCEDURE [dbo].[GetDatabaseGuid]";
+                        command.ExecuteNonQuery();
+                    }
                 }
             }
 

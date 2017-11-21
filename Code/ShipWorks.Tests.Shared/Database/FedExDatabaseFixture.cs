@@ -25,7 +25,6 @@ namespace ShipWorks.Tests.Shared.Database
     public class FedExDatabaseFixture : DatabaseFixture
     {
         private DataContext context;
-        private const bool clearTestData = false;
 
         /// <summary>
         /// Gets the FedEx data context
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shared.Database
             {
                 UpdateStore(newContext);
 
-            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
+                Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
 
                 GenerateAccounts();
                 UpdateSettings();

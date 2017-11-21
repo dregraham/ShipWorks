@@ -455,8 +455,17 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             shipment.FedEx.HomeDeliveryPhone = string.Empty;
             shipment.FedEx.HomeDeliveryInstructions = string.Empty;
             shipment.FedEx.HomeDeliveryDate = DateTime.Today;
-            shipment.FedEx.FreightRole = EnumHelper.GetEnumByApiValue<FedExFreightShipmentRoleType>(FreightRole);
-            shipment.FedEx.FreightClass = EnumHelper.GetEnumByApiValue<FedExFreightClassType>(FreightClass);
+
+            if (FreightRole != null)
+            {
+                shipment.FedEx.FreightRole = EnumHelper.GetEnumByApiValue<FedExFreightShipmentRoleType>(FreightRole);
+            }
+
+            if (FreightClass != null)
+            {
+                shipment.FedEx.FreightClass = EnumHelper.GetEnumByApiValue<FedExFreightClassType>(FreightClass);
+            }
+
             if (FreightCollectTermsType != null)
             {
                 shipment.FedEx.FreightCollectTerms =
@@ -674,7 +683,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             // Check all three locations because some of the tabs of the spreadsheet don't have a column for the hold at location type
             if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location")
                 || (!string.IsNullOrEmpty(SpecialServiceType2) && SpecialServiceType2.ToLower() == "hold_at_location")
-                || (!string.IsNullOrEmpty(HoldLocationType)))
+                || (!string.IsNullOrEmpty(PackageLineItemSpecialServiceType1) && PackageLineItemSpecialServiceType1.ToLower() == "hold_at_location")
+                || !string.IsNullOrEmpty(HoldLocationType))
             {
                 // Default to the FedEx Express Station if there isn't a location type pulled in from the spreadsheet
                 shipment.FedEx.HoldLocationType = string.IsNullOrEmpty(HoldLocationType) ? (int) FedExLocationType.FedExExpressStation : (int) GetLocationType();
@@ -1139,6 +1149,14 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                         break;
                     case "inside_delivery":
                         shipment.FedEx.FreightInsideDelivery = true;
+                        break;
+                    case "inside_pickup":
+                        shipment.FedEx.FreightInsidePickup = true;
+                        break;
+                    case "saturday_pickup":
+                        // We don't support this directly, so for certification, force it:
+                        shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
                         break;
                     case "saturday_delivery":
                         shipment.FedEx.SaturdayDelivery = true;

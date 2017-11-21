@@ -92,24 +92,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         private static GenericResult<DangerousGoodsDetail> ApplyHazardousMaterials(DangerousGoodsDetail dangerousGoods, IFedExPackageEntity package)
         {
-            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
-            {
-                return ConfigureHazardousMaterials(dangerousGoods, package);
-            }
-
-            // Accessibility options do not apply to hazardous materials
-            if (package.DangerousGoodsAccessibilityType == (int) FedExDangerousGoodsAccessibilityType.NotApplicable)
-            {
-                return dangerousGoods;
-            }
-
-            return GetApiDangerousGoodsAccessibilityType(package)
-                .Do(x =>
-                {
-                    dangerousGoods.Accessibility = x;
-                    dangerousGoods.AccessibilitySpecified = true;
-                })
-                .Map(x => dangerousGoods);
+            return ConfigureHazardousMaterials(dangerousGoods, package)
+                    .Bind(y => GetApiDangerousGoodsAccessibilityType(package))
+                    .Do(x =>
+                    {
+                        // Accessibility options do not apply to hazardous materials
+                        if (package.DangerousGoodsAccessibilityType != (int)FedExDangerousGoodsAccessibilityType.NotApplicable)
+                        {
+                            dangerousGoods.Accessibility = x;
+                            dangerousGoods.AccessibilitySpecified = true;
+                        }
+                    })
+                    .Map(x => dangerousGoods);
         }
 
         /// <summary>
@@ -242,6 +236,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="package">The package.</param>
         private static GenericResult<DangerousGoodsDetail> ConfigureHazardousMaterials(DangerousGoodsDetail dangerousGoods, IFedExPackageEntity package)
         {
+            if (package.DangerousGoodsType != (int)FedExDangerousGoodsMaterialType.HazardousMaterials)
+            {
+                return GenericResult.FromSuccess(dangerousGoods);
+            }
+
             // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials
             dangerousGoods.Containers = new[]
             {
@@ -408,7 +407,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExDangerousGoodsAccessibilityType.Inaccessible: return DangerousGoodsAccessibilityType.INACCESSIBLE;
             }
 
-            return new InvalidOperationException("An unrecognized dangerous goods accessibility type was provided.");
+            return DangerousGoodsAccessibilityType.ACCESSIBLE;
         }
 
         /// <summary>
