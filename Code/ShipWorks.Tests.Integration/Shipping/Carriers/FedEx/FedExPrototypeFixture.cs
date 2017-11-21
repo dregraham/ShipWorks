@@ -170,6 +170,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         public string FreightClass2 { get; set; }
         public string FreightPieces { get; set; }
         public string FreightPieces2 { get; set; }
+        public string FreightPackaging { get; set; }
         public string FreightPackaging2 { get; set; }
         public string FreightItemLength { get; set; }
         public string FreightItemLength2 { get; set; }
@@ -184,7 +185,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         public string FreightItemWeightUnits2 { get; set; }
         public string FreightItemDimensionUnits { get; set; }
         public string FreightItemDimensionUnits2 { get; set; }
+        public string FreightCollectTermsType { get; set; }
+        public string FreightRole { get; set; }
 
+        public string BatteryMaterial { get; set; }
+        public string BatteryPacking { get; set; }
+        public string BatteryRegulatorySubType { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether save label is "true"
@@ -456,8 +462,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 shipment.FedEx.FreightCollectTerms =
                     EnumHelper.GetEnumByApiValue<FedExFreightCollectTermsType>(FreightCollectTermsType);
             }
-
-
 
             shipment.FedEx.Currency = (int?) GetCurrency();
             shipment.ResidentialResult = !string.IsNullOrEmpty(RecipientResidential) && RecipientResidential.ToLower() == "true";
@@ -1037,8 +1041,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             }
         }
 
-
-
         /// <summary>
         /// Sets the signature option.
         /// </summary>
@@ -1542,8 +1544,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 FedExPackageEntity package = shipment.FedEx.Packages[0];
                 InitializeFreightPackage(package);
-
-                
 
                 if (!string.IsNullOrWhiteSpace(PackageLineItemInsuredValueAmount))
                 {

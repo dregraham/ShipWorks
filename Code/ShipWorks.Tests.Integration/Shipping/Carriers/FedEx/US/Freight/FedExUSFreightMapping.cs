@@ -6,7 +6,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight
 {
     public class FedExFreightPostFixture : FedExPrototypeFixture
     {
-
         private static List<ColumnPropertyMapDefinition> columnPropertyMap;
 
         /// <summary>
