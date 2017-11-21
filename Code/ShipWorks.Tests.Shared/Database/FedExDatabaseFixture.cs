@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -11,9 +13,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users;
-using System;
-using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -31,22 +32,23 @@ namespace ShipWorks.Tests.Shared.Database
         /// <remarks>
         /// Returns an existing context. If one doesn't exist, it is created.
         /// </remarks>
-        public DataContext GetFedExDataContext(Action<IContainer> initializeContainer, Guid instance)
+        public DataContext GetFedExDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance)
         {
-            return context ?? (context = CreateFedExDataContext(initializeContainer, instance));
+            return context ?? (context = CreateFedExDataContext(addExtraRegistrations, instance));
         }
 
         /// <summary>
         /// Creates the new reusable data context.
         /// </summary>
-        private DataContext CreateFedExDataContext(Action<IContainer> initializeContainer, Guid instance)
+        private DataContext CreateFedExDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance)
         {
-            var newContext = base.CreateDataContext(initializeContainer);
+            var newContext = base.CreateDataContext((mock, builder) =>
+            {
+                builder.RegisterMock<ITangoWebClient>(mock);
+                builder.RegisterMock<IMessageHelper>(mock);
 
-            newContext.Mock.Provide<Control>(new Control());
-            newContext.Mock.Provide<Func<Control>>(() => new Control());
-            newContext.Mock.Override<ITangoWebClient>();
-            newContext.Mock.Override<IMessageHelper>();
+                addExtraRegistrations(mock, builder);
+            });
 
             ShipWorksSession.Initialize(instance);
             LogSession.Initialize();
@@ -54,7 +56,7 @@ namespace ShipWorks.Tests.Shared.Database
 
             UpdateStore(newContext);
 
-            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
+            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int) ThermalLanguage.None).Save();
 
             GenerateAccounts();
             UpdateSettings();
@@ -101,7 +103,7 @@ namespace ShipWorks.Tests.Shared.Database
                     "<StatusCodes><StatusCode><Code>5</Code><Name>Blah</Name></StatusCode><StatusCode><Code>1</Code><Name>Shipped</Name></StatusCode></StatusCodes>")
                 .Set(x => x.ModuleDownloadPageSize, 50)
                 .Set(x => x.ModuleRequestTimeout, 60)
-                .Set(x => x.ModuleDownloadStrategy = (int)GenericStoreDownloadStrategy.ByModifiedTime)
+                .Set(x => x.ModuleDownloadStrategy = (int) GenericStoreDownloadStrategy.ByModifiedTime)
                 .Set(x => x.ModuleOnlineStatusSupport, 2)
                 .Set(x => x.ModuleOnlineStatusDataType, 0)
                 .Set(x => x.ModuleOnlineCustomerSupport, false)

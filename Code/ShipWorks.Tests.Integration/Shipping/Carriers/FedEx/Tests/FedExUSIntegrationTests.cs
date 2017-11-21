@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         {
             this.output = output;
 
-            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+            context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
         }
 
