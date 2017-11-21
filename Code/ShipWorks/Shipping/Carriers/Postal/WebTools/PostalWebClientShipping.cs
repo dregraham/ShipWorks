@@ -396,14 +396,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteEndElement();
         }
 
+        /// <summary>
+        /// Calculate the Gross Weight of a shipment
+        /// </summary>
         private static WeightValue GetGrossWeightValue(double shipmentTotalWeight, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
         {
             double totalContentWeight = shipmentCustomsItems.Sum(customsItem => customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
 
             return new WeightValue(Math.Max(totalContentWeight, shipmentTotalWeight > 0 ? shipmentTotalWeight : 1.0 / 16));
         }
-
-
+        
         /// <summary>
         /// Get the API string value to use for the given container type
         /// </summary>
