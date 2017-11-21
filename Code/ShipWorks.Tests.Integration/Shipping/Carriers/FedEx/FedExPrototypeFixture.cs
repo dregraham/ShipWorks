@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
@@ -23,7 +22,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.Settings;
@@ -42,7 +40,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         }
 
         public string FedExAccountNumber { get; set; }
-
         public string CustomerTransactionId { get; set; }
         public string ShipTimestamp { get; set; }
         public string DropoffType { get; set; }
@@ -169,9 +166,25 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
         public string SaveLabel { get; set; }
 
-        public string BatteryMaterial { get; set; }
-        public string BatteryPacking { get; set; }
-        public string BatteryRegulatorySubType { get; set; }
+        public string FreightClass { get; set; }
+        public string FreightClass2 { get; set; }
+        public string FreightPieces { get; set; }
+        public string FreightPieces2 { get; set; }
+        public string FreightPackaging2 { get; set; }
+        public string FreightItemLength { get; set; }
+        public string FreightItemLength2 { get; set; }
+        public string FreightItemWidth { get; set; }
+        public string FreightItemWidth2 { get; set; }
+        public string FreightItemHeight { get; set; }
+        public string FreightItemHeight2 { get; set; }
+        public int FreightTotalHandlingUnits { get; set; }
+        public string FreightItemWeightValue { get; set; }
+        public string FreightItemWeightValue2 { get; set; }
+        public string FreightItemWeightUnits { get; set; }
+        public string FreightItemWeightUnits2 { get; set; }
+        public string FreightItemDimensionUnits { get; set; }
+        public string FreightItemDimensionUnits2 { get; set; }
+
 
         /// <summary>
         /// Gets a value indicating whether save label is "true"
@@ -381,6 +394,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             shipment.FedEx.ReferencePO = CustomerTransactionId;
             shipment.FedEx.Service = (int) GetServiceType();
 
+            shipment.FedEx.FreightTotalHandlinUnits = FreightTotalHandlingUnits;
+
             SetPaymentInfo(shipment);
 
             shipment.FedEx.DropoffType = GetDropoffType();
@@ -434,9 +449,17 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             shipment.FedEx.HomeDeliveryPhone = string.Empty;
             shipment.FedEx.HomeDeliveryInstructions = string.Empty;
             shipment.FedEx.HomeDeliveryDate = DateTime.Today;
+            shipment.FedEx.FreightRole = EnumHelper.GetEnumByApiValue<FedExFreightShipmentRoleType>(FreightRole);
+            shipment.FedEx.FreightClass = EnumHelper.GetEnumByApiValue<FedExFreightClassType>(FreightClass);
+            if (FreightCollectTermsType != null)
+            {
+                shipment.FedEx.FreightCollectTerms =
+                    EnumHelper.GetEnumByApiValue<FedExFreightCollectTermsType>(FreightCollectTermsType);
+            }
+
+
 
             shipment.FedEx.Currency = (int?) GetCurrency();
-
             shipment.ResidentialResult = !string.IsNullOrEmpty(RecipientResidential) && RecipientResidential.ToLower() == "true";
             if (shipment.ResidentialResult)
             {
@@ -485,6 +508,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
             SetCodData(shipment);
             SetPackageData(shipment);
+            SetFreightPackageData(shipment);
 
             AddCustomerReferences(shipment);
             SetSignatureOption(shipment);
@@ -1013,6 +1037,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             }
         }
 
+
+
         /// <summary>
         /// Sets the signature option.
         /// </summary>
@@ -1503,6 +1529,152 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 shipment.FedEx.ReturnsClearance = true;
             }
+        }
+
+        /// <summary>
+        /// Sets the freight package data.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public void SetFreightPackageData(ShipmentEntity shipment)
+        {
+            if (shipment.FedEx.Service == (int) FedExServiceType.FedExFreightEconomy ||
+                shipment.FedEx.Service == (int) FedExServiceType.FedExFreightPriority)
+            {
+                FedExPackageEntity package = shipment.FedEx.Packages[0];
+                InitializeFreightPackage(package);
+
+                
+
+                if (!string.IsNullOrWhiteSpace(PackageLineItemInsuredValueAmount))
+                {
+                    decimal amount = decimal.Parse(PackageLineItemInsuredValueAmount);
+                    package.DeclaredValue = amount;
+                    package.Insurance = true;
+                }
+
+                package.Weight = string.IsNullOrEmpty(FreightItemWeightValue)
+                    ? 0
+                    : double.Parse(FreightItemWeightValue);
+
+                if (!string.IsNullOrEmpty(FreightItemLength))
+                {
+                    package.DimsLength = double.Parse(FreightItemLength);
+                }
+
+                if (!string.IsNullOrEmpty(FreightItemHeight))
+                {
+                    package.DimsHeight = double.Parse(FreightItemHeight);
+                }
+
+                if (!string.IsNullOrEmpty(FreightItemWidth))
+                {
+                    package.DimsWidth = double.Parse(FreightItemWidth);
+                }
+
+                if (!string.IsNullOrEmpty(FreightPieces))
+                {
+                    package.FreightPieces = int.Parse(FreightPieces);
+                }
+
+                if (PackageCount == 2)
+                {
+                    package = shipment.FedEx.Packages[1];
+                    InitializeFreightPackage(package);
+
+                    if (!string.IsNullOrWhiteSpace(PackageLineItemInsuredValueAmount))
+                    {
+                        decimal amount = decimal.Parse(PackageLineItemInsuredValueAmount);
+                        package.DeclaredValue = amount;
+                        package.Insurance = true;
+                    }
+
+                    package.Weight = string.IsNullOrEmpty(FreightItemWeightValue2)
+                        ? 0
+                        : double.Parse(FreightItemWeightValue2);
+
+                    if (!string.IsNullOrEmpty(FreightItemLength2))
+                    {
+                        package.DimsLength = double.Parse(FreightItemLength2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightItemHeight2))
+                    {
+                        package.DimsHeight = double.Parse(FreightItemHeight2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightItemWidth2))
+                    {
+                        package.DimsWidth = double.Parse(FreightItemWidth2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightPieces2))
+                    {
+                        package.FreightPieces = int.Parse(FreightPieces2);
+                    }
+                }
+            }
+        }
+
+        private void InitializeFreightPackage(FedExPackageEntity package)
+        {
+            if (package.Weight <= 0)
+            {
+                package.Weight = package.DimsWeight;
+            }
+
+            package.DimsProfileID = 0;
+            package.SkidPieces = 0;
+            package.InsurancePennyOne = false;
+            package.TrackingNumber = string.Empty;
+
+            package.PriorityAlertEnhancementType = 0;
+            package.PriorityAlertDetailContent = string.Empty;
+            package.PriorityAlert = false;
+
+            package.DryIceWeight = 0;
+            package.DeclaredValue = 0M;
+
+            package.DimsLength = 2;
+            package.DimsHeight = 1;
+            package.DimsWidth = 1;
+            package.DimsWeight = 0;
+            package.DimsAddWeight = false;
+
+            package.Insurance = false;
+            package.InsuranceValue = 0M;
+
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
+            package.ContainerType = string.Empty;
+            package.NumberOfContainers = 0;
+
+            package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
+            package.DangerousGoodsPackagingCount = 0;
+            package.DangerousGoodsOfferor = string.Empty;
+            package.DangerousGoodsEnabled = false;
+            package.DangerousGoodsEmergencyContactPhone = string.Empty;
+            package.DangerousGoodsCargoAircraftOnly = false;
+            package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
+
+            package.HazardousMaterialClass = string.Empty;
+            package.HazardousMaterialNumber = string.Empty;
+            package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.Default;
+            package.HazardousMaterialProperName = string.Empty;
+            package.HazardousMaterialTechnicalName = string.Empty;
+            package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
+            package.HazardousMaterialQuantityValue = 0;
+            package.PackingDetailsCargoAircraftOnly = false;
+            package.PackingDetailsPackingInstructions = string.Empty;
+
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.Bag;
+            package.FreightPieces = 0;
+
+            package.BatteryMaterial = FedExBatteryMaterialType.NotSpecified;
+            package.BatteryPacking = FedExBatteryPackingType.NotSpecified;
+            package.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified;
+
+            package.AlcoholRecipientType = 0;
         }
     }
 }

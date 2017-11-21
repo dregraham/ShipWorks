@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         {
             var shippingCharges = request.RequestedShipment.ShippingChargesPayment;
 
-            shippingCharges.PaymentType = PaymentType.SENDER;
+            //shippingCharges.PaymentType = PaymentType.SENDER;
 
             var responsibleParty = shippingCharges.Ensure(x => x.Payor).Ensure(x => x.ResponsibleParty);
             responsibleParty.Ensure(x => x.Contact).PersonName = account.FirstName + " " + account.LastName;

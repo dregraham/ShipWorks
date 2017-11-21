@@ -18,6 +18,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
         private string fedExTestAccountNumber = "612480567";
+        private string fedExUSFreightTestAccountNumber = "630081440";
         private const string ecodAccountNumber = "222326460";
         private bool justLabels = false;
         private readonly ITestOutputHelper output;
@@ -215,14 +216,14 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [Trait("Category", "FedEx")]
         public void Ship_FedExFreight(DataRow row)
         {
-            var testObject = new FedExUSExpressInternationalFixture();
+            var testObject = new FedExPrototypeFixture();
 
             if (PopulateTestObject(row, testObject, FedExFreightPostFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
 
-                testObject.FedExAccountNumber = fedExTestAccountNumber;
+                testObject.FedExAccountNumber = fedExUSFreightTestAccountNumber;
 
                 testObject.Ship(context.Order);
             }
