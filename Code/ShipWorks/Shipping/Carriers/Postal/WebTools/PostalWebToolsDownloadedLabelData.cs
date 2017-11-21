@@ -68,13 +68,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
-                if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools);
+                bool isCustomsRequired = shipmentType.IsCustomsRequired(postalShipment.Shipment);
+                if (postalShipment.Service == (int) PostalServiceType.ExpressMail)
                 {
-                    ProcessXmlResponseExpress(postalShipment, xmlDocument);
+                    ProcessXmlResponseExpress(postalShipment, xmlDocument, isCustomsRequired);
                 }
                 else
                 {
-                    ProcessXmlResponseDomestic(postalShipment, xmlDocument);
+                    ProcessXmlResponseDomestic(postalShipment, xmlDocument, isCustomsRequired);
                 }
             }
             else
@@ -86,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Process the given error=free xmlDocument response from a USPS domestic express shipment
         /// </summary>
-        private static void ProcessXmlResponseExpress(PostalShipmentEntity postalShipment, XmlDocument xmlDocument)
+        private static void ProcessXmlResponseExpress(PostalShipmentEntity postalShipment, XmlDocument xmlDocument, bool isCustomsRequired)
         {
             XPathNavigator xpath = xmlDocument.CreateNavigator();
 
@@ -98,33 +100,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 Debug.Assert(adapter.InSystemTransaction);
-
-                using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(imageBase64)))
-                {
-                    using (Image imageLabel = Image.FromStream(stream))
-                    {
-                        stream.Position = 0;
-
-                        using (Image imageLabelCrop = DisplayHelper.CropImage(imageLabel, 144, 130, 1207, 807))
-                        {
-                            imageLabelCrop.RotateFlip(RotateFlipType.Rotate270FlipNone);
-
-                            using (MemoryStream imageStream = new MemoryStream())
-                            {
-                                imageLabelCrop.Save(imageStream, ImageFormat.Png);
-
-                                DataResourceManager.CreateFromBytes(imageStream.ToArray(), postalShipment.ShipmentID, "LabelPrimary");
-                            }
-                        }
-                    }
-                }
+                RotateFlipType flipType = isCustomsRequired ? RotateFlipType.RotateNoneFlipNone : RotateFlipType.Rotate270FlipNone;
+                SaveAutoCropLabel(postalShipment, imageBase64, "LabelPrimary", flipType);
             }
         }
 
         /// <summary>
         /// Process the given error-free xmlDocument response from a USPS domestic shipment
         /// </summary>
-        private static void ProcessXmlResponseDomestic(PostalShipmentEntity postalShipment, XmlDocument xmlDocument)
+        private static void ProcessXmlResponseDomestic(PostalShipmentEntity postalShipment, XmlDocument xmlDocument, bool isCustomsRequired)
         {
             string imageBase64 = string.Empty;
             string tracking = string.Empty;
@@ -157,37 +141,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             postalShipment.Shipment.TrackingNumber = tracking;
 
             // Save the label images
-            SaveLabelImagesDomestic(imageBase64, postalShipment.ShipmentID);
+            SaveLabelImagesDomestic(postalShipment, imageBase64, isCustomsRequired);
         }
 
         /// <summary>
         /// Create the image from a base 64 string
         /// </summary>
-        private static void SaveLabelImagesDomestic(string imageBase64, long shipmentID)
+        private static void SaveLabelImagesDomestic(PostalShipmentEntity postalShipment, string imageBase64,bool isCustomsRequired)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 Debug.Assert(adapter.InSystemTransaction);
-
-                // Convert the string into an image stream
-                using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(imageBase64)))
-                {
-                    using (Image imageLabel = Image.FromStream(stream))
-                    {
-                        imageLabel.RotateFlip(RotateFlipType.Rotate270FlipNone);
-                        stream.Position = 0;
-
-                        using (Image imageLabelCrop = DisplayHelper.CropImage(imageLabel, 115, 354, 805, 1205))
-                        {
-                            using (MemoryStream imageStream = new MemoryStream())
-                            {
-                                imageLabelCrop.Save(imageStream, ImageFormat.Png);
-
-                                DataResourceManager.CreateFromBytes(imageStream.ToArray(), shipmentID, "LabelPrimary");
-                            }
-                        }
-                    }
-                }
+                RotateFlipType flipType = isCustomsRequired ? RotateFlipType.RotateNoneFlipNone : RotateFlipType.Rotate270FlipNone;
+                SaveAutoCropLabel(postalShipment, imageBase64, "LabelPrimary", flipType);
             }
         }
 
@@ -243,6 +209,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         private static void SaveAutoCropLabel(PostalShipmentEntity postalShipment, string labelImage, string name)
         {
+            SaveAutoCropLabel(postalShipment, labelImage, name, RotateFlipType.RotateNoneFlipNone);
+        }
+
+        /// <summary>
+        /// Save the given label using the specified cropping
+        /// </summary>
+        private static void SaveAutoCropLabel(PostalShipmentEntity postalShipment, string labelImage, string name, RotateFlipType flipType)
+        {
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 Debug.Assert(adapter.InSystemTransaction);
@@ -251,6 +225,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 {
                     using (Bitmap bitmapImage = EdgeDetection.CropImageStream(stream))
                     {
+                        bitmapImage.RotateFlip(flipType);
+
                         using (MemoryStream imageStream = new MemoryStream())
                         {
                             bitmapImage.Save(imageStream, ImageFormat.Png);

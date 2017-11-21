@@ -14,12 +14,14 @@ using ShipWorks.Data.Connection;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Imaging;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {
@@ -77,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                 if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
                 {
-                    if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
+                    if (postalShipment.Service == (int) PostalServiceType.ExpressMail)
                     {
                         GenerateXmlRequestExpress(xmlWriter, postalShipment);
                     }
@@ -168,6 +170,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("ImageType", "GIF");
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
 
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools);
+            if (shipmentType.IsCustomsRequired(shipment))
+            {
+                WriteShippingContents(xmlWriter, postalShipment);
+
+                PostalCustomsContentType contentType = (PostalCustomsContentType) postalShipment.CustomsContentType;
+                xmlWriter.WriteElementString("CustomsContentType", GetContentTypeApiValue(contentType));
+
+                if (contentType == PostalCustomsContentType.Other)
+                {
+                    xmlWriter.WriteElementString("ContentComments", postalShipment.CustomsContentDescription);
+                }
+            }
+
             xmlWriter.WriteEndElement();
         }
 
@@ -242,6 +258,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
             xmlWriter.WriteElementString("AddressServiceRequested", "False");
 
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools);
+            if (shipmentType.IsCustomsRequired(shipment))
+            {
+                WriteShippingContents(xmlWriter, postalShipment);
+
+                PostalCustomsContentType contentType = (PostalCustomsContentType) postalShipment.CustomsContentType;
+                xmlWriter.WriteElementString("CustomsContentType", GetContentTypeApiValue(contentType));
+
+                if (contentType == PostalCustomsContentType.Other)
+                {
+                    xmlWriter.WriteElementString("ContentComments", postalShipment.CustomsContentDescription);
+                }
+            }
+
             xmlWriter.WriteEndElement();
         }
 
@@ -303,33 +333,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 xmlWriter.WriteElementString("Container", GetContainerApiValue((PostalPackagingType)postalShipment.PackagingType));
             }
 
-            xmlWriter.WriteStartElement("ShippingContents");
-            double totalContentWeight = 0;
 
-            foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
-            {
-                decimal value = customsItem.UnitValue * (decimal)customsItem.Quantity;
+            WriteShippingContents(xmlWriter, postalShipment);
 
-                xmlWriter.WriteStartElement("ItemDetail");
-
-                xmlWriter.WriteElementString("Description", customsItem.Description);
-                xmlWriter.WriteElementString("Quantity", customsItem.Quantity.ToString());
-                xmlWriter.WriteElementString("Value",value.ToString(CultureInfo.InvariantCulture));
-
-                WeightValue contentWeight = new WeightValue(customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
-                xmlWriter.WriteElementString("NetPounds", contentWeight.PoundsOnly.ToString());
-                xmlWriter.WriteElementString("NetOunces", contentWeight.OuncesOnly.ToString());
-                totalContentWeight += contentWeight.TotalWeight;
-
-                xmlWriter.WriteElementString("HSTariffNumber", customsItem.HarmonizedCode);
-                xmlWriter.WriteElementString("CountryOfOrigin", Geography.GetCountryName(customsItem.CountryOfOrigin));
-
-                xmlWriter.WriteEndElement();
-            }
-
-            xmlWriter.WriteEndElement();
-
-            WeightValue weightValue = new WeightValue(Math.Max(totalContentWeight, shipment.TotalWeight > 0 ? shipment.TotalWeight : 1.0 / 16));
+            WeightValue weightValue = GetGrossWeightValue(postalShipment.Shipment.TotalWeight, postalShipment.Shipment.CustomsItems);
 
             xmlWriter.WriteElementString("GrossPounds", weightValue.PoundsOnly.ToString());
             xmlWriter.WriteElementString("GrossOunces", weightValue.OuncesOnly.ToString());
@@ -357,6 +364,45 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             xmlWriter.WriteEndElement();
         }
+
+        /// <summary>
+        /// Write out CustomsContentType object in request
+        /// </summary>
+        private static void WriteShippingContents(XmlTextWriter xmlWriter, PostalShipmentEntity postalShipment)
+        {
+
+            xmlWriter.WriteStartElement("ShippingContents");
+
+            foreach (ShipmentCustomsItemEntity customsItem in postalShipment.Shipment.CustomsItems)
+            {
+                decimal value = customsItem.UnitValue * (decimal) customsItem.Quantity;
+
+                xmlWriter.WriteStartElement("ItemDetail");
+
+                xmlWriter.WriteElementString("Description", customsItem.Description);
+                xmlWriter.WriteElementString("Quantity", customsItem.Quantity.ToString());
+                xmlWriter.WriteElementString("Value", value.ToString(CultureInfo.InvariantCulture));
+
+                WeightValue contentWeight = new WeightValue(customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
+                xmlWriter.WriteElementString("NetPounds", contentWeight.PoundsOnly.ToString());
+                xmlWriter.WriteElementString("NetOunces", contentWeight.OuncesOnly.ToString());
+
+                xmlWriter.WriteElementString("HSTariffNumber", customsItem.HarmonizedCode);
+                xmlWriter.WriteElementString("CountryOfOrigin", Geography.GetCountryName(customsItem.CountryOfOrigin));
+
+                xmlWriter.WriteEndElement();
+            }
+
+            xmlWriter.WriteEndElement();
+        }
+
+        private static WeightValue GetGrossWeightValue(double shipmentTotalWeight, EntityCollection<ShipmentCustomsItemEntity> shipmentCustomsItems)
+        {
+            double totalContentWeight = shipmentCustomsItems.Sum(customsItem => customsItem.Weight > 0 ? customsItem.Weight : 1.0 / 16);
+
+            return new WeightValue(Math.Max(totalContentWeight, shipmentTotalWeight > 0 ? shipmentTotalWeight : 1.0 / 16));
+        }
+
 
         /// <summary>
         /// Get the API string value to use for the given container type
