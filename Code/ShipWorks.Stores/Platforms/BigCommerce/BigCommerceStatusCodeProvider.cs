@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 try
                 {
-                    return GenericResult.FromSuccess<Dictionary<int, string>>(await GetCodeMapAsync(Store as BigCommerceStoreEntity));
+                    return GenericResult.FromSuccess(await GetCodeMapAsync(Store as BigCommerceStoreEntity).ConfigureAwait(false));
                 }
                 catch (BigCommerceException ex)
                 {
