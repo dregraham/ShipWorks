@@ -34,34 +34,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         protected override Dictionary<int, string> GetCodeMapFromOnline()
         {
-            GenericResult<Dictionary<int, string>> codeMapResult = Task.Run(async () =>
-            {
-                try
-                {
-                    return GenericResult.FromSuccess(await GetCodeMapAsync(Store as BigCommerceStoreEntity).ConfigureAwait(false));
-                }
-                catch (BigCommerceException ex)
-                {
-                    log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex);
-                    return GenericResult.FromError<Dictionary<int, string>>("Failed to fetch online status codes from BigCommerce.");
-                }
-
-            }).Result;
-
-            if (codeMapResult.Success)
-            {
-                Dictionary<int, string> codeMap = codeMapResult.Value;
-
-                // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
-                if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
-                {
-                    codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
-                }
-
-                return codeMap;
-            }
-
-            return null;
+            return Task.Run(() => 
+            Result.Handle<BigCommerceException>()
+                .LogError(ex => log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex))
+                .ExecuteAsync(() => GetCodeMapAsync(Store as BigCommerceStoreEntity))
+            ).Result.Value;
         }
 
         /// <summary>
@@ -70,8 +47,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         private async Task<Dictionary<int, string>> GetCodeMapAsync(IBigCommerceStoreEntity store)
         {
             IBigCommerceWebClient client = webClientFactory.Create(store);
-            var codes = await client.FetchOrderStatuses().ConfigureAwait(false);
-            return codes.ToDictionary(x => x.StatusID, x => x.StatusText);
+            IEnumerable<BigCommerceOrderStatus> codes = await client.FetchOrderStatuses().ConfigureAwait(false);
+            Dictionary<int, string> codeMap = codes.ToDictionary(x => x.StatusID, x => x.StatusText);
+
+            // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
+            if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
+            {
+                codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
+            }
+
+            return codeMap;
         }
     }
 }
