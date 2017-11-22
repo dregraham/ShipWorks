@@ -21,13 +21,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         private string fedExTestAccountNumber = "612480567";
         private string fedExUSFreightTestAccountNumber = "630081440";
         private const string ecodAccountNumber = "222326460";
-        //private bool justLabels = false;
         private readonly ITestOutputHelper output;
-
-        //private bool justForPhysicalPrint = true;
-        //private string physicalPrintType = "Thermal";
-        //private List<string> physicalPrintTestCases;
-
         private DataContext context;
 
         public FedExUSIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
@@ -44,23 +38,14 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             SetupPhysicalPrints();
         }
 
-        //[ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
-        //[Theory]
-        //[Trait("Category", "FedEx")]
-        //public void Ship_CreateBlankDb(DataRow row)
-        //{
-        //    var testObject = new FedExUSGroundAlcoholFixture();
-
-        //    //if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
-        //    //    (testObject.IsSaveLabel || !justLabels))
-        //    //{
-        //    //    output.WriteLine($"Executing customer transaction ID {row[5]}");
-
-        //    //    testObject.FedExAccountNumber = fedExTestAccountNumber;
-
-        //    //    testObject.Ship(context.Order);
-        //    //}
-        //}
+        [ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_CreateBlankDb(DataRow row)
+        {
+            output.WriteLine($"Preparing customer transaction ID {row[5]}");
+            var testObject = new FedExUSGroundAlcoholFixture();
+        }
 
         [ExcelData(@"DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx", "US Grn Dom Intl And Home Del")]
         [Theory]

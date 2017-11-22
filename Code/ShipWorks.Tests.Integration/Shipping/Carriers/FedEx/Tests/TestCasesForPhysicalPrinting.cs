@@ -18,7 +18,9 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             testCasesForLaser.Add("323390"); // Same as FOR1
 
             testCasesForLaser.Add("LB1");
+            testCasesForLaser.Add("323405");
             testCasesForLaser.Add("LB2");
+            testCasesForLaser.Add("323406");
 
             testCasesForLaser.Add("ES4");
             testCasesForLaser.Add("323365"); // Same as ES4
@@ -64,11 +66,21 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             testCasesForLaser.Add("TC-08");
             testCasesForLaser.Add("SP Returns IMPB");
 
+            testCasesForLaser.Add("F-413400");
+            testCasesForLaser.Add("F-413401");
+            testCasesForLaser.Add("CAF1");
+            testCasesForLaser.Add("CAF-413401");
+
             dangerousGoodsTestCases.Add("LB1");
+            dangerousGoodsTestCases.Add("323405");
             dangerousGoodsTestCases.Add("LB2");
+            dangerousGoodsTestCases.Add("323406");
             dangerousGoodsTestCases.Add("LIB1");
+            dangerousGoodsTestCases.Add("413244");
             dangerousGoodsTestCases.Add("LIB2");
+            dangerousGoodsTestCases.Add("413245");
             dangerousGoodsTestCases.Add("325");
+            dangerousGoodsTestCases.Add("605797");
             dangerousGoodsTestCases.Add("SO-1009");
             dangerousGoodsTestCases.Add("ES-1009");
 
