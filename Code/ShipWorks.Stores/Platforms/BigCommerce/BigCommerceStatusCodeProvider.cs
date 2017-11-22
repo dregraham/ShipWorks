@@ -6,7 +6,7 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -34,9 +34,23 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         protected override Dictionary<int, string> GetCodeMapFromOnline()
         {
-            try
+            GenericResult<Dictionary<int, string>> codeMapResult = Task.Run(async () =>
             {
-                Dictionary<int, string> codeMap = Task.Run(async () => await GetCodeMapAsync(Store as BigCommerceStoreEntity)).Result;
+                try
+                {
+                    return GenericResult.FromSuccess<Dictionary<int, string>>(await GetCodeMapAsync(Store as BigCommerceStoreEntity));
+                }
+                catch (BigCommerceException ex)
+                {
+                    log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex);
+                    return GenericResult.FromError<Dictionary<int, string>>("Failed to fetch online status codes from BigCommerce.");
+                }
+
+            }).Result;
+
+            if (codeMapResult.Success)
+            {
+                Dictionary<int, string> codeMap = codeMapResult.Value;
 
                 // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
                 if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
@@ -46,12 +60,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
                 return codeMap;
             }
-            catch (Exception ex)
-            {
-                log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex.GetBaseException());
 
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
