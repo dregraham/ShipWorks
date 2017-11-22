@@ -43,8 +43,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsDownloader(StoreEntity store, Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient)
-            : base(store)
+        public AmazonMwsDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, Func<AmazonStoreEntity, IAmazonMwsClient> createWebClient)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.createWebClient = createWebClient;
         }
