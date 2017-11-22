@@ -219,7 +219,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [ExcelData(@"DataSources\FedExAll\US Freight.xlsx", "US Freight")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExFreight(DataRow row)
+        public void Ship_FedExUSFreight(DataRow row)
         {
             var testObject = new FedExPrototypeFixture();
 
@@ -238,11 +238,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [ExcelData(@"DataSources\FedExAll\CA Freight Dom.xlsx", "CA Freight Dom")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExCAFreight(DataRow row)
+        public void Ship_FedExCADomesticFreight(DataRow row)
         {
             var testObject = new FedExPrototypeFixture();
 
-            if (PopulateTestObject(row, testObject, FedExUSFreightPostFixture.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExCAFreightDomesticPostFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");
@@ -256,11 +256,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [ExcelData(@"DataSources\FedExAll\CA Freight Intl.xlsx", "CA Freight Intl")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExCAIntlFreight(DataRow row)
+        public void Ship_FedExCAInternationalFreight(DataRow row)
         {
             var testObject = new FedExInternationalPrototypeFixture();
 
-            if (PopulateTestObject(row, testObject, FedExCAFreightPostFixture.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExCAFreightInternationalPostFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 output.WriteLine($"Executing customer transaction ID {row[5]}");

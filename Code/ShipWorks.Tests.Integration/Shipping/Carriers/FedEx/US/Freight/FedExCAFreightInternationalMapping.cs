@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Tests.Integration.MSTest;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight
 {
-    public class FedExUSFreightPostFixture : FedExPrototypeFixture
+    public class FedExCAFreightInternationalPostFixture : FedExInternationalPrototypeFixture
     {
         private static List<ColumnPropertyMapDefinition> columnPropertyMap;
 
@@ -26,8 +27,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.PackagingType", PropertyName = nameof(PackagingType), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalWeight.Units", PropertyName = nameof(ShipmentWeightUnits), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalWeight.Value", PropertyName = nameof(ShipmentTotalWeightValue), SpreadsheetColumnIndex = -1});
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalInsuredValue.Currency", PropertyName = nameof(PackageLineItemInsuredValueCurrency), SpreadsheetColumnIndex = -1});
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalInsuredValue.Amount", PropertyName = nameof(PackageLineItemInsuredValueAmount), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.Shipper.Contact.PersonName", PropertyName = nameof(ShipperPersonName), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.Shipper.Contact.CompanyName", PropertyName = nameof(ShipperCompanyName), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.Shipper.Contact.PhoneNumber", PropertyName = nameof(ShipperPhoneNumber), SpreadsheetColumnIndex = -1});
@@ -69,20 +68,25 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Height", PropertyName = nameof(FreightItemHeight), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Units", PropertyName = nameof(FreightItemDimensionUnits), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.FreightClass", PropertyName = nameof(FreightClass), SpreadsheetColumnIndex = -1});
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.FreightClass2", PropertyName = nameof(FreightClass2), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Packaging", PropertyName = nameof(FreightPackaging), SpreadsheetColumnIndex = -1});
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Packaging2", PropertyName = nameof(FreightPackaging2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Pieces2", PropertyName = nameof(FreightPieces2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Weight.Units2", PropertyName = nameof(FreightItemWeightUnits2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Weight.Value2", PropertyName = nameof(FreightItemWeightValue2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Length2", PropertyName = nameof(FreightItemLength2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Width2", PropertyName = nameof(FreightItemWidth2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Height2", PropertyName = nameof(FreightItemHeight2), SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.FreightShipmentDetail.LineItems.Dimensions.Units2", PropertyName = nameof(FreightItemDimensionUnits2), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.Requestedshipment.RateRequestTypes", PropertyName = nameof(RateRequestTypes), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.PackageCount", PropertyName = nameof(PackageCount), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.InsuredValue.Amount", PropertyName = nameof(PackageLineItemInsuredValueAmount), SpreadsheetColumnIndex = -1});
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.InsuredValue.Currency", PropertyName = nameof(PackageLineItemInsuredValueCurrency), SpreadsheetColumnIndex = -1});
-               }
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.NumberOfPieces", PropertyName = nameof(CommoditiesNumberOfPieces), SpreadsheetColumnIndex = -1});
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Description", PropertyName = nameof(CommoditiesDescription), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.CountryOfManufacture", PropertyName = nameof(CommoditiesCountryOfManufacture), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Weight.Units", PropertyName = nameof(CommoditiesWeightUnits), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Weight.Value", PropertyName = nameof(CommoditiesWeightValue), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Quantity", PropertyName = nameof(CommoditiesQuantity), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.QuantityUnits", PropertyName = nameof(CommoditiesQuantityUnits), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.UnitPrice.Currency", PropertyName = nameof(CommoditiesUnitPriceCurrency), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.UnitPrice.Amount", PropertyName = nameof(CommoditiesUnitPriceAmount), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.CustomsValue.Currency", PropertyName = nameof(CommoditiesCustomsValueCurrency), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.Commodities.CustomsValue.Amount", PropertyName = nameof(CommoditiesCustomsValueAmount), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Currency", PropertyName = nameof(CustomsClearanceValueCurrency), SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Amount", PropertyName = nameof(CustomsClearanceValueAmount), SpreadsheetColumnIndex = -1 });
+                }
 
                 return columnPropertyMap;
            }
