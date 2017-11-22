@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Integration.MSTest
     public class DataDrivenIntegrationTestBase
     {
         private bool isTranslationMapPopulated = false;
-        protected bool justForPhysicalPrint = true;
+        protected bool justForPhysicalPrint = false;
         protected ThermalLanguage physicalPrintType = ThermalLanguage.None;
         protected List<string> physicalPrintTestCases;
         protected bool justLabels = false;

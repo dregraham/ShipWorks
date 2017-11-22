@@ -97,7 +97,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                     .Do(x =>
                     {
                         // Accessibility options do not apply to hazardous materials
-                        if (package.DangerousGoodsAccessibilityType != (int)FedExDangerousGoodsAccessibilityType.NotApplicable)
+                        if (package.DangerousGoodsType != (int)FedExDangerousGoodsMaterialType.HazardousMaterials &&
+                            package.DangerousGoodsAccessibilityType != (int)FedExDangerousGoodsAccessibilityType.NotApplicable)
                         {
                             dangerousGoods.Accessibility = x;
                             dangerousGoods.AccessibilitySpecified = true;

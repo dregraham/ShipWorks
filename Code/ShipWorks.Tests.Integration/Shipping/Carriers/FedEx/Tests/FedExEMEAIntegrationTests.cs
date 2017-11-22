@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 ShipWorksInitializer.GetShipWorksInstance());
 
             justLabels = false;
-            justForPhysicalPrint = true;
+            justForPhysicalPrint = false;
             physicalPrintType = ThermalLanguage.None;
 
             SetupPhysicalPrints();
