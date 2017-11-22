@@ -459,6 +459,27 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
+
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "602091147 - CA Freight Test Account")
+                .Set(x => x.AccountNumber, "602091147")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118979178")
+                .Set(x => x.SmartPostHubList, "<Root />")
+                .Set(x => x.FirstName, "CAFreight")
+                .Set(x => x.MiddleName, "Test")
+                .Set(x => x.LastName, "Account")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "7075 ORDAN DR")
+                .Set(x => x.Street2, "")
+                .Set(x => x.City, "MISSISSAUGA")
+                .Set(x => x.StateProvCode, "ON")
+                .Set(x => x.PostalCode, "L5T1K6")
+                .Set(x => x.CountryCode, "CA")
+                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Email, "support@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
         }
     }
 }
