@@ -234,41 +234,5 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
-        
-        [ExcelData(@"DataSources\FedExAll\CA Freight Dom.xlsx", "CA Freight Dom")]
-        [Theory]
-        [Trait("Category", "FedEx")]
-        public void Ship_FedExCADomesticFreight(DataRow row)
-        {
-            var testObject = new FedExPrototypeFixture();
-
-            if (PopulateTestObject(row, testObject, FedExCAFreightDomesticPostFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
-            {
-                output.WriteLine($"Executing customer transaction ID {row[5]}");
-
-                testObject.FedExAccountNumber = fedExCAFreightTestAccountNumber;
-
-                testObject.Ship(context.Order);
-            }
-        }
-
-        [ExcelData(@"DataSources\FedExAll\CA Freight Intl.xlsx", "CA Freight Intl")]
-        [Theory]
-        [Trait("Category", "FedEx")]
-        public void Ship_FedExCAInternationalFreight(DataRow row)
-        {
-            var testObject = new FedExInternationalPrototypeFixture();
-
-            if (PopulateTestObject(row, testObject, FedExCAFreightInternationalPostFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
-            {
-                output.WriteLine($"Executing customer transaction ID {row[5]}");
-
-                testObject.FedExAccountNumber = fedExCAFreightTestAccountNumber;
-
-                testObject.Ship(context.Order);
-            }
-        }
     }
 }

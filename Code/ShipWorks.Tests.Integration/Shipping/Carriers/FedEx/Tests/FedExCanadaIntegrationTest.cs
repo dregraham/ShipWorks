@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Canada.Ground;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.International;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Freight;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
@@ -20,6 +17,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     [Collection("Fedex Tests")]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
+        private string fedExCAFreightTestAccountNumber = "602091147";
         private const string fedExTestAccountNumber = "612365903";
         private readonly ITestOutputHelper output;
 
@@ -103,6 +101,42 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
                 testObject.Ship(context.Order, justForPhysicalPrint);
+            }
+        }
+
+        [ExcelData(@"DataSources\FedExAll\CA Freight Dom.xlsx", "CA Freight Dom")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExCADomesticFreight(DataRow row)
+        {
+            var testObject = new FedExPrototypeFixture();
+
+            if (PopulateTestObject(row, testObject, FedExCAFreightDomesticPostFixture.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                output.WriteLine($"Executing customer transaction ID {row[5]}");
+
+                testObject.FedExAccountNumber = fedExCAFreightTestAccountNumber;
+
+                testObject.Ship(context.Order);
+            }
+        }
+
+        [ExcelData(@"DataSources\FedExAll\CA Freight Intl.xlsx", "CA Freight Intl")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExCAInternationalFreight(DataRow row)
+        {
+            var testObject = new FedExInternationalPrototypeFixture();
+
+            if (PopulateTestObject(row, testObject, FedExCAFreightInternationalPostFixture.Mapping) &&
+                (testObject.IsSaveLabel || !justLabels))
+            {
+                output.WriteLine($"Executing customer transaction ID {row[5]}");
+
+                testObject.FedExAccountNumber = fedExCAFreightTestAccountNumber;
+
+                testObject.Ship(context.Order);
             }
         }
     }
