@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.FedExAccountNumber = UKAccountNumber;
                 testObject.CommercialInvoiceFileElectronically = true;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = UKAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.FedExAccountNumber = UKAccountNumber;
                 testObject.CommercialInvoiceFileElectronically = true;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
     }

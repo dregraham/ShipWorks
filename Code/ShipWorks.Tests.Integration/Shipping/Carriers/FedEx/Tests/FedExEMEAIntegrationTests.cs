@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                     testObject.CommercialInvoiceFileElectronically = true;
                 }
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 

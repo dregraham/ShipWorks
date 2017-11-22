@@ -11,6 +11,7 @@ using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -233,7 +234,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         /// Ships the shipment
         /// </summary>
         /// <returns></returns>
-        public virtual bool Ship(OrderEntity order)
+        public virtual bool Ship(OrderEntity order, bool printLabels = false)
         {
             try
             {
@@ -294,6 +295,13 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 shipment.CustomsGenerated = true;
 
                 ShippingManager.SaveShipment(shipment);
+
+                if (printLabels)
+                {
+                    // We want returns to print, but they won't due to action settings so fake being a return shipment to print.
+                    shipment.ReturnShipment = false;
+                    ActionDispatcher.DispatchShipmentProcessed(shipment, SqlAdapter.Default);
+                }
 
                 return true;
             }

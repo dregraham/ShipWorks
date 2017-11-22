@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.FedExAccountNumber = transactionsForEcodAccount.Contains(testObject.CustomerTransactionId)
                     ? ecodAccountNumber : fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
                 }
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -211,7 +211,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -230,7 +230,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = fedExUSFreightTestAccountNumber;
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
     }

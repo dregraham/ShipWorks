@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             {
                 output.WriteLine($"Executing customer transaction ID {row["ProcessShipmentRequest#TransactionDetail"]}");
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
     }
