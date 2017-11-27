@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [ExcelData(@"DataSources\FedExAll\CA Freight Dom.xlsx", "CA Freight Dom")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExCADomesticFreight(DataRow row)
+        public void Ship_FedExCanadaDomesticFreight(DataRow row)
         {
             var testObject = new FedExPrototypeFixture();
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
         [ExcelData(@"DataSources\FedExAll\CA Freight Intl.xlsx", "CA Freight Intl")]
         [Theory]
         [Trait("Category", "FedEx")]
-        public void Ship_FedExCAInternationalFreight(DataRow row)
+        public void Ship_FedExCanadaInternationalFreight(DataRow row)
         {
             var testObject = new FedExInternationalPrototypeFixture();
 
