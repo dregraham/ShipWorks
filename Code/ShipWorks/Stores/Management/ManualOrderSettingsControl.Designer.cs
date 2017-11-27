@@ -123,7 +123,7 @@
             this.Controls.Add(this.labelInfo1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ManualOrderSettingsControl";
-            this.Size = new System.Drawing.Size(564, 172);
+            this.Size = new System.Drawing.Size(564, 157);
             this.ResumeLayout(false);
             this.PerformLayout();
 
