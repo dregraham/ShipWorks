@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
@@ -62,6 +64,54 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateShipmentDetails_SendsUsps_WhenOrderIsOther_AndCarrierIsUsps()
+        {
+            ShipmentEntity shipment = CreateShipment();
+            shipment.Other=new OtherShipmentEntity()
+            {
+                Carrier = "usps"
+            };
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Other;
+
+            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
+
+            var testObject = mock.Create<ShipmentDetailsUpdater>();
+            await testObject.UpdateShipmentDetails(store, 1);
+
+            mock.Mock<IWalmartWebClient>()
+                .Verify(
+                    w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(),
+                        It.Is<orderShipment>(s =>
+                            (carrierType) s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == carrierType.USPS),
+                        It.IsAny<string>()), Times.Once);
+
+        }
+
+        [Fact]
+        public async Task UpdateShipmentDetails_SendsOther_WhenOrderIsOther_AndCarrierIsUnknown()
+        {
+            ShipmentEntity shipment = CreateShipment();
+            shipment.Other = new OtherShipmentEntity()
+            {
+                Carrier = "blah"
+            };
+            shipment.ShipmentTypeCode = ShipmentTypeCode.Other;
+
+            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
+
+            var testObject = mock.Create<ShipmentDetailsUpdater>();
+            await testObject.UpdateShipmentDetails(store, 1);
+
+            mock.Mock<IWalmartWebClient>()
+                .Verify(
+                    w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(),
+                        It.Is<orderShipment>(s =>
+                            (string) s.orderLines[0].orderLineStatuses[0].trackingInfo.carrierName.Item == "Other"),
+                        It.IsAny<string>()), Times.Once);
+
         }
 
         [Fact]
