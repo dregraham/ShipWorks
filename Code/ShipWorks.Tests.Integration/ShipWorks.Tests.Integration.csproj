@@ -186,7 +186,7 @@
     <Compile Include="Functional\Registrations\IInitializeForCurrentSessionRegistrationTest.cs" />
     <Compile Include="Functional\Services\ServiceStatusManagerTest.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExCanadaIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExCAIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Tests\FedExEMEAIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTestCollection.cs" />

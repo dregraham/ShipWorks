@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 {
     [Collection("Fedex Tests")]
-    public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
+    public class FedExCAIntegrationTest : DataDrivenIntegrationTestBase
     {
         private string fedExCAFreightTestAccountNumber = "602091147";
         private const string fedExTestAccountNumber = "612365903";
@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
         private DataContext context;
 
-        public FedExCanadaIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
+        public FedExCAIntegrationTest(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
 
