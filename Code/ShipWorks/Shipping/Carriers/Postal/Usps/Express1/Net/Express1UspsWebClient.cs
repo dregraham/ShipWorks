@@ -33,7 +33,7 @@ using CustomsV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.Custom
 using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.EltronPrinterDPIType;
 using ImageType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ImageType;
 using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.NonDeliveryOption;
-using PackageTypeV6 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV6;
+using PackageTypeV7 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV7;
 using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PurchaseStatus;
 using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ResidentialDeliveryIndicatorType;
 using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ServiceType;
@@ -56,16 +56,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         // Maps USPS usernames to their latest authenticator tokens
-        static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
+        static readonly Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
 
         // Maps USPS usernames to the object lock used to make sure only one thread is trying to authenticate at a time
-        static Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
+        static readonly Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
 
         // Cleansed address map so we don't do common addresses over and over again
-        static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
+        static readonly Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         // Express1 API service connection info
-        static Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
+        static readonly Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
 
         private readonly ICertificateInspector certificateInspector;
 
@@ -925,7 +925,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            Usps.WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            PackageTypeV7 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
@@ -1247,41 +1247,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Gets the v36 version of the CodewordType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV6 packageType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV7 packageType)
         {
             switch (packageType)
             {
-                case PackageTypeV6.Postcard:
+                case PackageTypeV7.Postcard:
                     return Usps.WebServices.v36.PackageTypeV6.Postcard;
-                case PackageTypeV6.Letter:
+                case PackageTypeV7.Letter:
                     return Usps.WebServices.v36.PackageTypeV6.Letter;
-                case PackageTypeV6.LargeEnvelopeorFlat:
+                case PackageTypeV7.LargeEnvelopeorFlat:
                     return Usps.WebServices.v36.PackageTypeV6.LargeEnvelopeorFlat;
-                case PackageTypeV6.ThickEnvelope:
+                case PackageTypeV7.ThickEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.ThickEnvelope;
-                case PackageTypeV6.Package:
+                case PackageTypeV7.Package:
                     return Usps.WebServices.v36.PackageTypeV6.Package;
-                case PackageTypeV6.FlatRateBox:
+                case PackageTypeV7.FlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRateBox;
-                case PackageTypeV6.SmallFlatRateBox:
+                case PackageTypeV7.SmallFlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.SmallFlatRateBox;
-                case PackageTypeV6.LargeFlatRateBox:
+                case PackageTypeV7.LargeFlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.LargeFlatRateBox;
-                case PackageTypeV6.FlatRateEnvelope:
+                case PackageTypeV7.FlatRateEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRateEnvelope;
-                case PackageTypeV6.FlatRatePaddedEnvelope:
+                case PackageTypeV7.FlatRatePaddedEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRatePaddedEnvelope;
-                case PackageTypeV6.LargePackage:
+                case PackageTypeV7.LargePackage:
                     return Usps.WebServices.v36.PackageTypeV6.LargePackage;
-                case PackageTypeV6.OversizedPackage:
+                case PackageTypeV7.OversizedPackage:
                     return Usps.WebServices.v36.PackageTypeV6.OversizedPackage;
-                case PackageTypeV6.RegionalRateBoxA:
+                case PackageTypeV7.RegionalRateBoxA:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxA;
-                case PackageTypeV6.RegionalRateBoxB:
+                case PackageTypeV7.RegionalRateBoxB:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxB;
-                case PackageTypeV6.LegalFlatRateEnvelope:
+                case PackageTypeV7.LegalFlatRateEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.LegalFlatRateEnvelope;
-                case PackageTypeV6.RegionalRateBoxC:
+                case PackageTypeV7.RegionalRateBoxC:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxC;
                 default:
                     throw new ArgumentOutOfRangeException("packageType");
