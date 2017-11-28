@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Gets the default validation setting.
         /// </summary>
-        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected override AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }
