@@ -6,7 +6,6 @@ using System.Linq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -66,26 +65,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (packageResources.Count > 0)
                 {
                     // Add our standard label output
-                    DataResourceReference labelResource = packageResources.Single(i => i.Label == "LabelImage");
-                    labelData.Add(new TemplateLabelData(packageID, "Label", TemplateLabelCategory.Primary, labelResource));
+                    var labels = packageResources.Where(x => x.Label == "LabelImage")
+                        .Select(x => new TemplateLabelData(packageID, "Label", TemplateLabelCategory.Primary, x));
+                    labelData.AddRange(labels);
 
                     // For Ground it will be at the package level,
-                    DataResourceReference codPackageResource = packageResources.SingleOrDefault(r => r.Label == "COD");
-                    if (codPackageResource != null)
-                    {
-                        labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codPackageResource));
-                    }
+                    AddCODDocument(packageID, shipmentResources, labelData);
 
                     // Will be non-null first time through
                     if (shipmentResources != null)
                     {
-                        DataResourceReference codShipmentResource = shipmentResources.SingleOrDefault(r => r.Label == "COD");
-
-                        if (codShipmentResource != null)
-                        {
-                            labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codShipmentResource));
-                        }
-
+                        AddBOLDocuments(packageID, shipmentResources, labelData);
+                        AddCODDocument(packageID, shipmentResources, labelData);
                         AddDocumentResourceLabelData(packageID, shipmentResources, labelData);
 
                         // Don't need it anymore
@@ -101,6 +92,30 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Add bill of lading document
+        /// </summary>
+        private static void AddBOLDocuments(long packageID, List<DataResourceReference> shipmentResources, List<TemplateLabelData> labelData)
+        {
+            var bomDocuments = shipmentResources.Where(r => r.Label.StartsWith("BOL"));
+            if (bomDocuments.Any())
+            {
+                labelData.AddRange(bomDocuments.Select(x => new TemplateLabelData(packageID, x.Label, TemplateLabelCategory.Supplemental, x)));
+            }
+        }
+
+        /// <summary>
+        /// Add COD document
+        /// </summary>
+        private static void AddCODDocument(long packageID, List<DataResourceReference> resources, List<TemplateLabelData> labelData)
+        {
+            DataResourceReference codPackageResource = resources.SingleOrDefault(r => r.Label == "COD");
+            if (codPackageResource != null)
+            {
+                labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codPackageResource));
+            }
+        }
+
+        /// <summary>
         /// Add document resources to the label data collection
         /// </summary>
         private static void AddDocumentResourceLabelData(long packageID, IEnumerable<DataResourceReference> resources, ICollection<TemplateLabelData> labelData)
@@ -108,10 +123,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             IEnumerable<DataResourceReference> documentResources = resources.Where(r => r.Label.StartsWith("Document", StringComparison.OrdinalIgnoreCase));
             foreach (DataResourceReference documentResource in documentResources)
             {
-                labelData.Add(new TemplateLabelData(packageID, 
-                    documentResource.Label.Replace("Document", ""), 
-                    TemplateLabelCategory.Supplemental, 
-                    documentResource, 
+                labelData.Add(new TemplateLabelData(packageID,
+                    documentResource.Label.Replace("Document", ""),
+                    TemplateLabelCategory.Supplemental,
+                    documentResource,
                     documentResource.Label != "DocumentCommercialInvoice"));
             }
         }
@@ -142,10 +157,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 return new FedExLegacyPackageTemplateOutline(Context)
                 {
-                    labelData = (TemplateLabelData)data
+                    labelData = (TemplateLabelData) data
                 };
             }
         }
-
     }
 }

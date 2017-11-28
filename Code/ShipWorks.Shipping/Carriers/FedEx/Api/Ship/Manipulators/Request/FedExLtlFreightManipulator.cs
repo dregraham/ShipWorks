@@ -57,8 +57,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             requestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes =
                 requestedShipment.ShippingDocumentSpecification
                     .ShippingDocumentTypes
-                    .Append(RequestedShippingDocumentType.LABEL)
+                    .Append(RequestedShippingDocumentType.FREIGHT_ADDRESS_LABEL)
                     .ToArray();
+
+            requestedShipment.ShippingDocumentSpecification
+                .Ensure(x => x.FreightAddressLabelDetail)
+                .Format = new ShippingDocumentFormat
+                {
+                    ImageType = ShippingDocumentImageType.PNG,
+                    ImageTypeSpecified = true,
+                    StockType = ShippingDocumentStockType.PAPER_4X6,
+                    StockTypeSpecified = true,
+                    ProvideInstructions = true,
+                    ProvideInstructionsSpecified = true
+                };
 
             FreightShipmentRoleType? role = EnumHelper.GetApiValue<FreightShipmentRoleType>(fedex.FreightRole);
             FreightClassType? freightClass = EnumHelper.GetApiValue<FreightClassType>(fedex.FreightClass);
