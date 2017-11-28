@@ -516,15 +516,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Cleans the address of the given person using the specified USPS account
         /// </summary>
-        private Address CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch)
+        private Task<Address> CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
-            return ExceptionWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
+            return ExceptionWrapperAsync(() => CleanseAddressInternal(person, account, requireFullMatch), account);
         }
 
         /// <summary>
         /// Internal CleanseAddress implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private Address CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
+        private async Task<Address> CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
         {
             Address address;
             if (cleansedAddressMap.TryGetValue(person, out address))
@@ -532,9 +532,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 return address;
             }
 
-            Task<UspsAddressValidationResults> task = ValidateAddressAsync(person, account);
-            task.Wait();
-            UspsAddressValidationResults results = task.Result;
+            UspsAddressValidationResults results = await ValidateAddressAsync(person, account).ConfigureAwait(false);
+            
 
             if (!results.IsSuccessfulMatch)
             {
@@ -652,7 +651,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             taskCompletion.SetResult(e);
                         }
                     };
-
+                    
                     webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
                     return taskCompletion.Task;
                 }
@@ -835,9 +834,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public UspsLabelResponse ProcessShipment(ShipmentEntity shipment)
+        public async Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment)
         {
-            UspsLabelResponse uspsLabelParams = null;
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
@@ -846,11 +844,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                ExceptionWrapper(() =>
-                {
-                    uspsLabelParams = ProcessShipmentInternal(shipment, account);
-                    return true;
-                }, account);
+                return await ExceptionWrapperAsync(() => ProcessShipmentInternal(shipment, account), account).ConfigureAwait(false);
+
             }
             catch (UspsApiException ex)
             {
@@ -859,8 +854,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 // This isn't an exception we can handle, so just throw the original exception
                 throw;
             }
-
-            return uspsLabelParams;
         }
 
         /// <summary>
@@ -903,12 +896,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private UspsLabelResponse ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private async Task<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             Address fromAddress;
             Address toAddress;
 
-            FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
+            Tuple<Address, Address> addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
+            fromAddress = addresses.Item1;
+            toAddress = addresses.Item2;
 
             RateV24 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
@@ -1034,18 +1029,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Updates addresses based on shipment properties like ReturnShipment, etc
         /// </summary>
-        private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
+        private async Task<Tuple<Address,Address>> FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment)
         {
+            Address toAddress;
+            Address fromAddress;
+
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
-                toAddress = CleanseAddress(account, shipment.OriginPerson, false);
+                toAddress = await CleanseAddress(account, shipment.OriginPerson, false).ConfigureAwait(false);
                 fromAddress = CreateAddress(shipment.ShipPerson);
             }
             else
             {
                 fromAddress = CreateAddress(shipment.OriginPerson);
-                toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
+                toAddress = await CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation).ConfigureAwait(false);
             }
 
             if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
@@ -1063,6 +1061,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     toAddress.State = string.Empty;
                 }
             }
+
+            return Tuple.Create(toAddress, fromAddress);
         }
 
         /// <summary>
@@ -1497,6 +1497,49 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return contract;
+        }
+
+        /// <summary>
+        /// Handles exceptions when making calls to the USPS API
+        /// </summary>
+        private async Task<T> ExceptionWrapperAsync<T>(Func<Task<T>> executor, UspsAccountEntity account)
+        {
+            try
+            {
+                return await executor().ConfigureAwait(false);
+            }
+            catch (SoapException ex)
+            {
+                log.ErrorFormat("Failed connecting to USPS.  Account: {0}, Error Code: '{1}', Exception Message: {2}",
+                    account.UspsAccountID, UspsApiException.GetErrorCode(ex), ex.Message);
+
+                throw new UspsApiException(ex);
+            }
+            catch (WebException ex)
+            {
+                if (ex.Message.Contains("Unable to connect to the remote server") ||
+                    ex.Message.Contains("The underlying connection was closed") ||
+                    ex.Message.Contains("Bad gateway"))
+                {
+                    throw new UspsException("ShipWorks is unable to connect to USPS.");
+                }
+
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
+            }
+            catch (InvalidOperationException ex)
+            {
+                // We had a client that was seeing this exception, so rather than crash, we should fail the operation and
+                if (ex.Message.Contains("Response is not well-formed XML") || ex.Message.Contains("error in XML document"))
+                {
+                    throw new UspsException(ex.Message, ex);
+                }
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
+            }
         }
 
         /// <summary>

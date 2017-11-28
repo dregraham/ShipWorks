@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// Processes the OnTrac shipment
         /// </summary>
         /// <param name="shipment"></param>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 // Get new shipment from OnTrac and save the shipment info
                 ShipmentResponse shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequestList);
 
-                return createDownloadedLabelData(shipment, shipmentResponse);
+                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, shipmentResponse));
             }
             catch (OnTracException ex)
             {

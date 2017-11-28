@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        UspsLabelResponse ProcessShipment(ShipmentEntity shipment);
+        Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Populates a usps account entity.

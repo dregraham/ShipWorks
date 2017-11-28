@@ -581,7 +581,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public UspsLabelResponse ProcessShipment(ShipmentEntity shipment)
+        public Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment)
         {
             UspsLabelResponse uspsLabelResponse = null;
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -621,7 +621,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 throw;
             }
 
-            return uspsLabelResponse;
+            return Task.FromResult(uspsLabelResponse);
         }
 
         /// <summary>
