@@ -5,6 +5,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -25,6 +26,8 @@ namespace ShipWorks.Tests.Shared.Database
             Store = Create.Store<GenericModuleStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "A Test Store")
+                .Set(x => x.DomesticAddressValidationSetting, AddressValidationStoreSettingType.ValidateAndApply)
+                .Set(x => x.InternationalAddressValidationSetting, AddressValidationStoreSettingType.ValidateAndNotify)
                 .Save();
 
             Customer = Create.Entity<CustomerEntity>().Save();
