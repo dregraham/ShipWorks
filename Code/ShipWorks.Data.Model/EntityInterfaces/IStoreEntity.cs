@@ -170,7 +170,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on table field: "Store"."InternationalAddressValidationSetting"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 InternationalAddressValidationSetting { get; }
+        Interapptive.Shared.Enums.AddressValidationStoreSettingType InternationalAddressValidationSetting { get; }
         /// <summary> The ComputerDownloadPolicy property of the Entity Store<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Store"."ComputerDownloadPolicy"<br/>

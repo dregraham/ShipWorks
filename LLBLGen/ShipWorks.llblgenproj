@@ -2526,7 +2526,7 @@
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="17" />
           <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="29" />
           <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="30" />
-          <Field Name="InternationalAddressValidationSetting" Type="int" Precision="10" FieldIndex="24" />
+          <Field Name="InternationalAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
           <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
           <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />

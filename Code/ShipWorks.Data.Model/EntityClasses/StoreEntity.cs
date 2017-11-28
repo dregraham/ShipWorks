@@ -723,9 +723,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Store"."InternationalAddressValidationSetting"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 InternationalAddressValidationSetting
+		public virtual Interapptive.Shared.Enums.AddressValidationStoreSettingType InternationalAddressValidationSetting
 		{
-			get { return (System.Int32)GetValue((int)StoreFieldIndex.InternationalAddressValidationSetting, true); }
+			get { return (Interapptive.Shared.Enums.AddressValidationStoreSettingType)GetValue((int)StoreFieldIndex.InternationalAddressValidationSetting, true); }
 			set	{ SetValue((int)StoreFieldIndex.InternationalAddressValidationSetting, value); }
 		}
 
