@@ -87,7 +87,7 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AddressValidationSetting = (int) GetDefaultValidationSetting();
+            store.DomesticAddressValidationSetting = GetDefaultValidationSetting();
         }
 
         /// <summary>

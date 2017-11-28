@@ -399,7 +399,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoDownloadOnlyAway", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AddressValidationSetting", fieldHashtable);
+			_fieldsCustomProperties.Add("DomesticAddressValidationSetting", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InternationalAddressValidationSetting", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ComputerDownloadPolicy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -707,14 +709,24 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)StoreFieldIndex.AutoDownloadOnlyAway, value); }
 		}
 
-		/// <summary> The AddressValidationSetting property of the Entity Store<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "Store"."AddressValidationSetting"<br/>
+		/// <summary> The DomesticAddressValidationSetting property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."DomesticAddressValidationSetting"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 AddressValidationSetting
+		public virtual Interapptive.Shared.Enums.AddressValidationStoreSettingType DomesticAddressValidationSetting
 		{
-			get { return (System.Int32)GetValue((int)StoreFieldIndex.AddressValidationSetting, true); }
-			set	{ SetValue((int)StoreFieldIndex.AddressValidationSetting, value); }
+			get { return (Interapptive.Shared.Enums.AddressValidationStoreSettingType)GetValue((int)StoreFieldIndex.DomesticAddressValidationSetting, true); }
+			set	{ SetValue((int)StoreFieldIndex.DomesticAddressValidationSetting, value); }
+		}
+
+		/// <summary> The InternationalAddressValidationSetting property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."InternationalAddressValidationSetting"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 InternationalAddressValidationSetting
+		{
+			get { return (System.Int32)GetValue((int)StoreFieldIndex.InternationalAddressValidationSetting, true); }
+			set	{ SetValue((int)StoreFieldIndex.InternationalAddressValidationSetting, value); }
 		}
 
 		/// <summary> The ComputerDownloadPolicy property of the Entity Store<br/><br/></summary>

@@ -673,7 +673,6 @@
     <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Enums\AddressType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />

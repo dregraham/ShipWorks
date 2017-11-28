@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;

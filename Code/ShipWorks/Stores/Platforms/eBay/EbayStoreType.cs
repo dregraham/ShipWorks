@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;

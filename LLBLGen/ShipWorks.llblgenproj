@@ -84,6 +84,7 @@
     <Property Name="UseCustomFieldOrderingOnNewElements" Value="true" />
   </Properties>
   <TypeShortcuts>
+    <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -2510,24 +2511,25 @@
       </EntityDefinition>
       <EntityDefinition Name="Store" ObjectID="b04d13e2-55da-409e-b8f3-7bd29f22cb15" InheritanceType="2">
         <Fields>
-          <Field Name="AddressValidationSetting" Type="int" FieldIndex="23" />
           <Field Name="AutoDownload" Type="bool" FieldIndex="20" />
           <Field Name="AutoDownloadMinutes" Type="int" FieldIndex="21" />
           <Field Name="AutoDownloadOnlyAway" Type="bool" FieldIndex="22" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="12" />
           <Field Name="Company" Type="string" MaxLength="60" FieldIndex="8" />
-          <Field Name="ComputerDownloadPolicy" Type="string" MaxLength="2147483647" FieldIndex="24" />
+          <Field Name="ComputerDownloadPolicy" Type="string" MaxLength="2147483647" FieldIndex="25" />
           <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="15" />
-          <Field Name="DefaultEmailAccountID" Type="long" FieldIndex="25" />
+          <Field Name="DefaultEmailAccountID" Type="long" FieldIndex="26" />
+          <Field Name="DomesticAddressValidationSetting" Type="AddressValidationStoreSettingType" FieldIndex="23" />
           <Field Name="Edition" Type="string" MaxLength="2147483647" FieldIndex="3" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="18" />
           <Field Name="Enabled" Type="bool" FieldIndex="5" />
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="17" />
-          <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="28" />
-          <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="29" />
+          <Field Name="InitialDownloadDays" Type="int" IsOptional="true" FieldIndex="29" />
+          <Field Name="InitialDownloadOrder" Type="long" IsOptional="true" FieldIndex="30" />
+          <Field Name="InternationalAddressValidationSetting" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="License" Type="string" MaxLength="150" FieldIndex="2" />
-          <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="27" />
-          <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="26" />
+          <Field Name="ManualOrderPostfix" Type="string" MaxLength="10" FieldIndex="28" />
+          <Field Name="ManualOrderPrefix" Type="string" MaxLength="10" FieldIndex="27" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -4060,7 +4062,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-15T20:31:38.4340371Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-28T15:17:44.6734339Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7827,13 +7829,14 @@
                     <Field Name="AutoDownload" Ordinal="21" DbType="2" />
                     <Field Name="AutoDownloadMinutes" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="AutoDownloadOnlyAway" Ordinal="23" DbType="2" />
-                    <Field Name="AddressValidationSetting" Ordinal="24" DbType="8" Precision="10" />
-                    <Field Name="ComputerDownloadPolicy" Ordinal="25" DbType="12" Length="2147483647" />
-                    <Field Name="DefaultEmailAccountID" Ordinal="26" DbType="0" Precision="19" />
-                    <Field Name="ManualOrderPrefix" Ordinal="27" DbType="12" Length="10" />
-                    <Field Name="ManualOrderPostfix" Ordinal="28" DbType="12" Length="10" />
-                    <Field Name="InitialDownloadDays" Ordinal="29" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="InitialDownloadOrder" Ordinal="30" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DomesticAddressValidationSetting" Ordinal="24" DbType="8" Precision="10" />
+                    <Field Name="InternationalAddressValidationSetting" Ordinal="25" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10" />
+                    <Field Name="ComputerDownloadPolicy" Ordinal="26" DbType="12" Length="2147483647" />
+                    <Field Name="DefaultEmailAccountID" Ordinal="27" DbType="0" Precision="19" />
+                    <Field Name="ManualOrderPrefix" Ordinal="28" DbType="12" Length="10" />
+                    <Field Name="ManualOrderPostfix" Ordinal="29" DbType="12" Length="10" />
+                    <Field Name="InitialDownloadDays" Ordinal="30" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="InitialDownloadOrder" Ordinal="31" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -12236,7 +12239,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":Store" TargetName="ShipWorksLocal:dbo:Store">
           <FieldMappings>
-            <FieldMapping FieldName="AddressValidationSetting" TargetFieldName="AddressValidationSetting" />
             <FieldMapping FieldName="AutoDownload" TargetFieldName="AutoDownload" />
             <FieldMapping FieldName="AutoDownloadMinutes" TargetFieldName="AutoDownloadMinutes" />
             <FieldMapping FieldName="AutoDownloadOnlyAway" TargetFieldName="AutoDownloadOnlyAway" />
@@ -12245,12 +12247,14 @@
             <FieldMapping FieldName="ComputerDownloadPolicy" TargetFieldName="ComputerDownloadPolicy" />
             <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
             <FieldMapping FieldName="DefaultEmailAccountID" TargetFieldName="DefaultEmailAccountID" />
+            <FieldMapping FieldName="DomesticAddressValidationSetting" TargetFieldName="DomesticAddressValidationSetting" />
             <FieldMapping FieldName="Edition" TargetFieldName="Edition" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="Enabled" TargetFieldName="Enabled" />
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="InitialDownloadDays" TargetFieldName="InitialDownloadDays" />
             <FieldMapping FieldName="InitialDownloadOrder" TargetFieldName="InitialDownloadOrder" />
+            <FieldMapping FieldName="InternationalAddressValidationSetting" TargetFieldName="InternationalAddressValidationSetting" />
             <FieldMapping FieldName="License" TargetFieldName="License" />
             <FieldMapping FieldName="ManualOrderPostfix" TargetFieldName="ManualOrderPostfix" />
             <FieldMapping FieldName="ManualOrderPrefix" TargetFieldName="ManualOrderPrefix" />

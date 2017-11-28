@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -280,7 +281,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void LoadSettingsTab()
         {
-            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
 
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
             manualOrderSettingsControl.Location = new Point(23, sectionTitleManualOrders.Bottom + 8);
@@ -309,7 +310,7 @@ namespace ShipWorks.Stores.Management
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
-            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType) store.AddressValidationSetting;
+            domesticAddressValidationSetting.SelectedValue = store.DomesticAddressValidationSetting;
 
             panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
 
@@ -360,15 +361,15 @@ namespace ShipWorks.Stores.Management
             }
 
             // Check whether we should reset any pending address validations
-            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
-            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType) addressValidationSetting.SelectedValue;
+            AddressValidationStoreSettingType currentSetting = store.DomesticAddressValidationSetting;
+            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType) domesticAddressValidationSetting.SelectedValue;
 
             resetPendingValidations = (currentSetting == AddressValidationStoreSettingType.ValidateAndApply ||
                                        currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
                                       && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
                                           newSetting == AddressValidationStoreSettingType.ValidationDisabled);
 
-            store.AddressValidationSetting = (int) addressValidationSetting.SelectedValue;
+            store.DomesticAddressValidationSetting = (AddressValidationStoreSettingType) domesticAddressValidationSetting.SelectedValue;
 
             return result;
         }

@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Data.Controls
 {
@@ -1107,7 +1108,7 @@ namespace ShipWorks.Data.Controls
             }
             else
             {
-                if (store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                if (store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidationDisabled)
                 {
                     addressValidationPanel.Visible = false;
                 }

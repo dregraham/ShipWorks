@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Communication
         /// Gets the address validation setting.
         /// </summary>
         private AddressValidationStoreSettingType AddressValidationSetting =>
-            (AddressValidationStoreSettingType) Store.AddressValidationSetting;
+            (AddressValidationStoreSettingType) Store.DomesticAddressValidationSetting;
 
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.

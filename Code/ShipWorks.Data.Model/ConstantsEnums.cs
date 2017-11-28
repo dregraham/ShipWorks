@@ -550,8 +550,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -654,8 +656,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -908,8 +912,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -1056,8 +1062,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -1388,8 +1396,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -2342,8 +2352,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -2896,8 +2908,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -3766,8 +3780,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -3872,8 +3888,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4266,8 +4284,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4392,8 +4412,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4862,8 +4884,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5194,8 +5218,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5442,8 +5468,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5736,8 +5764,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5840,8 +5870,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -6134,8 +6166,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -6434,8 +6468,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -6566,8 +6602,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7202,8 +7240,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7516,8 +7556,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7942,8 +7984,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -8330,8 +8374,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9174,8 +9220,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9254,8 +9302,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9344,8 +9394,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9436,8 +9488,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. </summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. </summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -9868,8 +9922,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -10664,8 +10720,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -10986,8 +11044,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -11598,8 +11658,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
