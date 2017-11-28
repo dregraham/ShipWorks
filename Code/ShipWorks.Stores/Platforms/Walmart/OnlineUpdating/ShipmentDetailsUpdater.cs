@@ -133,6 +133,8 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         /// </remarks>
         private GenericResult<Order> InternalUpdateShipmentDetails(IWalmartStoreEntity store, IWalmartOrderEntity order, ShipmentEntity shipment, WalmartCombinedIdentifier identifier)
         {
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             orderShipment orderShipment = CreateShipment(order, shipment, identifier.OriginalOrderID);
             if (orderShipment.orderLines.None())
             {
