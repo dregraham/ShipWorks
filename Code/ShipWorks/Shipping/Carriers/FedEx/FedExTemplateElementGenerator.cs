@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     labelData.AddRange(labels);
 
                     // For Ground it will be at the package level,
-                    AddCODDocument(packageID, shipmentResources, labelData);
+                    AddCODDocument(packageID, packageResources, labelData);
 
                     // Will be non-null first time through
                     if (shipmentResources != null)
