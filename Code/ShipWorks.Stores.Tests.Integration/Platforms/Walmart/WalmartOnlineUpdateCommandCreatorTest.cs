@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         [Fact]
         public async Task UpdateShipment_MakesOneWebRequest_WhenOrderIsNotCombined()
         {
-            OrderEntity order = CreateNormalOrder(1, "track-123", false, true, 2, 3);
+            OrderEntity order = CreateNormalOrder(1, "track-123", false, 2, 3);
 
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
@@ -83,8 +83,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         [Fact]
         public async Task UpdateShipment_MakesOneWebRequest_WhenOneOfTwoNonCombinedOrdersIsManual()
         {
-            OrderEntity manualOrder = CreateNormalOrder(2, "track-456", true, true, 4);
-            OrderEntity order = CreateNormalOrder(1, "track-123", false, true, 3);
+            OrderEntity manualOrder = CreateNormalOrder(2, "track-456", true, 4);
+            OrderEntity order = CreateNormalOrder(1, "track-123", false, 3);
 
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualOrder.OrderID, order.OrderID });
 
@@ -131,7 +131,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         [Fact]
         public async Task UpdateShipment_MakesThreeWebRequests_WhenBothCombinedAndNonCombinedAreUploaded()
         {
-            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false, true, 2, 3);
+            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false, 2, 3);
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
 
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID });
@@ -154,9 +154,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         [Fact]
         public async Task UpdateShipment_ContinuesUploading_WhenFailuresOccur()
         {
-            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false, true, 2);
+            OrderEntity normalOrder = CreateNormalOrder(1, "track-123", false, 2);
             OrderEntity combinedOrder = CreateCombinedOrder(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
-            OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false, true, 8);
+            OrderEntity normalOrder2 = CreateNormalOrder(7, "track-789", false, 8);
 
             webClient.Setup(x => x.UpdateShipmentDetails(store, It.IsAny<orderShipment>(), "10000"))
                 .Throws(new WalmartException("Foo"));
@@ -189,11 +189,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 });
 
         }
-         
+
         /// <summary>
         /// Create a normal, non-combined order
         /// </summary>
-        private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual, bool withShipment, params int[] roots)
+        private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual, params int[] roots)
         {
             var order = roots.Aggregate(
                 Create.Order<WalmartOrderEntity>(store, context.Customer),
@@ -205,18 +205,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Set(x => x.RequestedShippingMethodCode, "Standard")
                 .Save();
 
-            if (withShipment)
-            {
-                Create.Shipment(order)
-                    .AsOther(o =>
-                    {
-                        o.Set(x => x.Carrier, "Foo")
-                            .Set(x => x.Service, "Bar");
-                    })
-                    .Set(x => x.TrackingNumber, trackingNumber)
-                    .Set(x => x.Processed, true)
-                    .Save();
-            }
+            Create.Shipment(order)
+                .AsOther(o =>
+                {
+                    o.Set(x => x.Carrier, "Foo")
+                    .Set(x => x.Service, "Bar");
+                })
+                .Set(x => x.TrackingNumber, trackingNumber)
+                .Set(x => x.Processed, true)
+                .Save();
 
             return order;
         }
