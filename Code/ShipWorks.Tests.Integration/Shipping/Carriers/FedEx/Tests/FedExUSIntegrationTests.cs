@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
 using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Express.Domestic;
@@ -83,7 +82,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
                 testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
-
 
         [ExcelData(@"DataSources\FedExAll\Grn Alcohol.xlsx", "Grn Alcohol")]
         [Theory]
