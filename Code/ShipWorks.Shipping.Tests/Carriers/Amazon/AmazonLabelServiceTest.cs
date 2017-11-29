@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public async Task Void_Calls_IAmazonShipmentRequest()
+        public void Void_Calls_IAmazonShipmentRequest()
         {
             AmazonLabelService testObject = mock.Create<AmazonLabelService>();
 

@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipment.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Equal((int) ThermalLanguage.ZPL, shipment.ActualLabelFormat);
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Equal((int) ThermalLanguage.EPL, shipment.ActualLabelFormat);
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Null(shipment.ActualLabelFormat);
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                 .Verify(x => x.GetAccountReadOnly(shipment.IParcel.IParcelAccountID), Times.Once);
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<IOrderManager>().Verify(x => x.PopulateOrderDetails(shipment), Times.Once);
         }
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<IiParcelServiceGateway>()
                 .Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once);
