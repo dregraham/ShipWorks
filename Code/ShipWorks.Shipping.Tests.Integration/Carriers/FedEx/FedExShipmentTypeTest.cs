@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
             var shipment = Create.Shipment(context.Order)
                 .AsFedEx(x => x.WithPackage()
                     .WithPackage()
+                    .Set(f => f.FreightGuaranteeDate, new DateTime(2016, 3, 26))
                     .Set(f => f.HomeDeliveryDate, new DateTime(2016, 3, 26))
                     .Set(f => f.FreightGuaranteeDate, new DateTime(2016, 3, 26))
                     .Set(f => f.CodOriginID, (int) ShipmentOriginSource.Other))

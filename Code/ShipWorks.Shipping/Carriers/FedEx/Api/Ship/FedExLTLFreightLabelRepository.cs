@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                 // Save the primary label image
                 if (shippingDocument?.Parts != null)
                 {
-                    SaveLabel("LabelImage", shippingDocument, package.FedExPackageID, certificationId);
+                    SaveLabel(shippingDocument, shipment.ShipmentID, package.FedExPackageID, certificationId);
                 }
             }
         }
@@ -59,35 +59,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
         /// <summary>
         /// Save a label of the given name to the database from the specified label document
         /// </summary>
-        private void SaveLabel(string name, ShippingDocument labelDocument, long ownerID, string certificationId)
+        private void SaveLabel(ShippingDocument labelDocument, long shipmentID, long ownerID, string certificationId)
         {
-            if (labelDocument.ImageType == ShippingDocumentImageType.PDF)
-            {
-                using (MemoryStream pdfStream = new MemoryStream(labelDocument.Parts[0].Image))
-                {
-                    if (InterapptiveOnly.IsInterapptiveUser)
-                    {
-                        string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, name + "_" + ownerID, "PDF", false);
-                        File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
-                    }
+            var labelName = GetNameForDocument(labelDocument);
 
-                    dataResourceManager.CreateFromPdf(PdfDocumentType.Color, pdfStream, ownerID, i => i == 0 ? "LabelImage" : $"DocumentAuxiliaryLabel-{i}", s => s.ToArray());
+            using (MemoryStream stream = new MemoryStream(labelDocument.Parts[0].Image))
+            {
+                if (labelDocument.ImageType == ShippingDocumentImageType.PDF)
+                {
+                    dataResourceManager.CreateFromPdf(PdfDocumentType.Color, stream, shipmentID, i => $"{labelName}-{i}", s => s.ToArray());
+                }
+                else
+                {
+                    dataResourceManager.CreateFromBytes(stream.ToArray(), ownerID, labelName);
                 }
             }
-            else
-            {
-                // Convert the string into an image stream
-                using (MemoryStream imageStream = new MemoryStream(labelDocument.Parts[0].Image))
-                {
-                    // Save the label image
-                    dataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
 
-                    if (InterapptiveOnly.IsInterapptiveUser)
-                    {
-                        string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, name + "_" + ownerID, "PNG", false);
-                        File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
-                    }
-                }
+            if (InterapptiveOnly.IsInterapptiveUser)
+            {
+                // Save the label for certification purposes
+                string format = labelDocument.ImageType == ShippingDocumentImageType.PDF ? "PDF" : "PNG";
+                string fileName = FedExUtility.GetCertificationFileName(certificationId, certificationId, "LabelImage" + "_" + shipmentID, format, false);
+                File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
             }
         }
 
@@ -114,6 +107,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
             return reply.TransactionDetail != null ?
                 reply.TransactionDetail.CustomerTransactionId :
                 string.Empty;
+        }
+
+        /// <summary>
+        /// Get the name of the document
+        /// </summary>
+        private string GetNameForDocument(ShippingDocument labelDocument)
+        {
+            switch (labelDocument.Type)
+            {
+                case ReturnedShippingDocumentType.FREIGHT_ADDRESS_LABEL:
+                    return "LabelImage";
+                case ReturnedShippingDocumentType.OUTBOUND_LABEL:
+                    return "BOL";
+                default:
+                    return "DocumentAuxiliaryLabel";
+            }
         }
     }
 }
