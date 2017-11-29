@@ -6,7 +6,6 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
 using ShipWorks.Stores.Platforms.Walmart.OnlineUpdating;
@@ -31,36 +30,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void UpdateShipmentDetails_DoesNotUploadShipmentDetails_WhenOrderHasNoShipments()
-        {
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(() => null);
-
-            var testObject = mock.Create<ShipmentDetailsUpdater>();
-            testObject.UpdateShipmentDetails(store, 1);
-
-            mock.Mock<IWalmartWebClient>().Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [Fact]
-        public void UpdateShipmentDetails_DoesNotUploadShipmentDetails_WhenOrderIsManual()
+        public async Task UpdateShipmentDetails_DoesNotUploadShipmentDetails_WhenOrderIsManual()
         {
             ShipmentEntity shipment = new ShipmentEntity { Order = new WalmartOrderEntity() { IsManual = true } };
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
 
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IWalmartWebClient>().Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
-        public void UpdateShipmentDetails_DelegatesToWalmartWebClient()
+        public async Task UpdateShipmentDetails_DelegatesToWalmartWebClient()
         {
             ShipmentEntity shipment = CreateShipment();
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
 
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(w => w.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Once);
@@ -70,16 +56,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         public async Task UpdateShipmentDetails_SendsUsps_WhenOrderIsOther_AndCarrierIsUsps()
         {
             ShipmentEntity shipment = CreateShipment();
-            shipment.Other=new OtherShipmentEntity()
+            shipment.Other = new OtherShipmentEntity()
             {
                 Carrier = "usps"
             };
             shipment.ShipmentTypeCode = ShipmentTypeCode.Other;
-
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
-
+            
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            await testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(
@@ -100,10 +84,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             };
             shipment.ShipmentTypeCode = ShipmentTypeCode.Other;
 
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
-
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            await testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(
@@ -115,10 +97,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void UpdateShipmentDetails_SavesShipmentReturnedFromWebClient()
+        public async Task UpdateShipmentDetails_SavesShipmentReturnedFromWebClient()
         {
             ShipmentEntity shipment = CreateShipment();
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
             Order order = GetOrderDto();
 
             mock.Mock<IWalmartWebClient>()
@@ -126,7 +107,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 .Returns(order);
 
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IOrderRepository>().Verify(r => r.Save(shipment.Order), Times.Once);
             mock.Mock<IWalmartWebClient>().Verify(c => c.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Once);
@@ -134,10 +115,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         }
 
         [Fact]
-        public void UpdateShipmentDetails_RedownloadsOrderAndSubmitsAgain_IfFirstUpdateFailed()
+        public async Task UpdateShipmentDetails_RedownloadsOrderAndSubmitsAgain_IfFirstUpdateFailed()
         {
             ShipmentEntity shipment = CreateShipment();
-            mock.Mock<IOrderManager>().Setup(o => o.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
             Order order = GetOrderDto();
 
             var badRequest = mock.CreateMock<HttpWebResponse>();
@@ -150,7 +130,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
                 .Returns(order);
 
             var testObject = mock.Create<ShipmentDetailsUpdater>();
-            testObject.UpdateShipmentDetails(store, 1);
+            await testObject.UpdateShipmentDetails(store, shipment);
 
             mock.Mock<IOrderRepository>().Verify(r => r.Save(shipment.Order), Times.Exactly(2));
             mock.Mock<IWalmartWebClient>().Verify(c => c.UpdateShipmentDetails(It.IsAny<WalmartStoreEntity>(), It.IsAny<orderShipment>(), It.IsAny<string>()), Times.Exactly(2));
