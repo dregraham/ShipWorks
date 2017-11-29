@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
@@ -12,14 +11,12 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Walmart;
-using ShipWorks.Stores.Platforms.Walmart.DTO;
 using ShipWorks.Stores.Platforms.Walmart.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
-
     public class OnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly AutoMock mock;
@@ -40,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             await testObject.OnUploadShipmentDetails(null, menuContext.Object);
 
-            mock.Mock<IOrderManager>().Verify(o=>o.GetLatestActiveShipmentAsync(42L), Times.Once);
+            mock.Mock<IOrderManager>().Verify(o => o.GetLatestActiveShipmentAsync(42L), Times.Once);
         }
 
         [Fact]
@@ -50,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             await testObject.OnUploadShipmentDetails(null, menuContext.Object);
 
-            mock.Mock<IShipmentDetailsUpdater>().Verify(u=>u.UpdateShipmentDetails(It.IsAny<IWalmartStoreEntity>(), It.IsAny<ShipmentEntity>()), Times.Never);
+            mock.Mock<IShipmentDetailsUpdater>().Verify(u => u.UpdateShipmentDetails(It.IsAny<IWalmartStoreEntity>(), It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
         [Fact]
@@ -65,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             await testObject.OnUploadShipmentDetails(null, menuContext.Object);
 
-            mock.Mock<IShipmentDetailsUpdater>().Verify(u=>u.UpdateShipmentDetails(It.IsAny<IWalmartStoreEntity>(), shipment), Times.Once);
+            mock.Mock<IShipmentDetailsUpdater>().Verify(u => u.UpdateShipmentDetails(It.IsAny<IWalmartStoreEntity>(), shipment), Times.Once);
         }
 
         [Fact]
@@ -94,8 +91,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             var testObject = mock.Create<WalmartOnlineUpdateInstanceCommands>();
 
             await testObject.OnUploadShipmentDetails(null, menuContext.Object);
-            
-            menuContext.Verify(c=>c.Complete(It.Is<IEnumerable<Exception>>(exceptions => exceptions.None()), MenuCommandResult.Error));
+
+            menuContext.Verify(c => c.Complete(It.Is<IEnumerable<Exception>>(exceptions => exceptions.None()), MenuCommandResult.Error));
         }
 
         [Fact]
