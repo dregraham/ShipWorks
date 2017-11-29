@@ -902,8 +902,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             Address toAddress;
 
             Tuple<Address, Address> addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
-            fromAddress = addresses.Item1;
-            toAddress = addresses.Item2;
+            toAddress = addresses.Item1;
+            fromAddress = addresses.Item2;
 
             RateV24 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
