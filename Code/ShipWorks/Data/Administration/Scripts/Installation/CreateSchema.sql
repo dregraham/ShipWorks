@@ -2646,7 +2646,8 @@ CREATE TABLE [dbo].[MivaStore]
 [LiveManualOrderNumbers] [bit] NOT NULL,
 [SebenzaCheckoutDataEnabled] [bit] NOT NULL,
 [OnlineUpdateStrategy] [int] NOT NULL,
-[OnlineUpdateStatusChangeEmail] [bit] NOT NULL
+[OnlineUpdateStatusChangeEmail] [bit] NOT NULL,
+[AddendumCheckoutDataEnabled] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MivaStore] on [dbo].[MivaStore]'

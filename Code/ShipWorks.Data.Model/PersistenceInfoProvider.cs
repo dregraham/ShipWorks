@@ -1973,13 +1973,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits MivaStoreEntity's mappings</summary>
 		private void InitMivaStoreEntityMappings()
 		{
-			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 6, 0);
+			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 7, 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "EncryptionPassphrase", "EncryptionPassphrase", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("MivaStoreEntity", "LiveManualOrderNumbers", "LiveManualOrderNumbers", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("MivaStoreEntity", "SebenzaCheckoutDataEnabled", "SebenzaCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStrategy", "OnlineUpdateStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStatusChangeEmail", "OnlineUpdateStatusChangeEmail", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("MivaStoreEntity", "AddendumCheckoutDataEnabled", "AddendumCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 		}
 
 		/// <summary>Inits NetworkSolutionsOrderEntity's mappings</summary>

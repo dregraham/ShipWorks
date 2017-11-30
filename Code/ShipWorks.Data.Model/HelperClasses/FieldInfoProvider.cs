@@ -1883,6 +1883,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("MivaStoreEntity", "SebenzaCheckoutDataEnabled", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.SebenzaCheckoutDataEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("MivaStoreEntity", "OnlineUpdateStrategy", typeof(System.Int32), false, false, false, false,  (int)MivaStoreFieldIndex.OnlineUpdateStrategy, 0, 0, 10);
 			this.AddElementFieldInfo("MivaStoreEntity", "OnlineUpdateStatusChangeEmail", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail, 0, 0, 0);
+			this.AddElementFieldInfo("MivaStoreEntity", "AddendumCheckoutDataEnabled", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.AddendumCheckoutDataEnabled, 0, 0, 0);
 		}
 		/// <summary>Inits NetworkSolutionsOrderEntity's FieldInfo objects</summary>
 		private void InitNetworkSolutionsOrderEntityInfos()

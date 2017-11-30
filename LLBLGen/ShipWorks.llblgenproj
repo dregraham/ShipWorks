@@ -1623,6 +1623,7 @@
       </EntityDefinition>
       <EntityDefinition Name="MivaStore" ObjectID="56917d76-4404-4264-83b8-5b88ef5118f6" InheritanceType="2">
         <Fields>
+          <Field Name="AddendumCheckoutDataEnabled" Type="bool" FieldIndex="5" />
           <Field Name="EncryptionPassphrase" Type="string" MaxLength="50" FieldIndex="0" />
           <Field Name="LiveManualOrderNumbers" Type="bool" FieldIndex="1" />
           <Field Name="OnlineUpdateStatusChangeEmail" Type="bool" FieldIndex="4" />
@@ -4083,7 +4084,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-10-30T17:40:58.4515358Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-13T17:11:24.6311515Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6493,6 +6494,7 @@
                     <Field Name="SebenzaCheckoutDataEnabled" Ordinal="4" DbType="2" />
                     <Field Name="OnlineUpdateStrategy" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="OnlineUpdateStatusChangeEmail" Ordinal="6" DbType="2" />
+                    <Field Name="AddendumCheckoutDataEnabled" Ordinal="7" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="NetworkSolutionsOrder">
@@ -11362,6 +11364,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":MivaStore" TargetName="ShipWorksLocal:dbo:MivaStore">
           <FieldMappings>
+            <FieldMapping FieldName="AddendumCheckoutDataEnabled" TargetFieldName="AddendumCheckoutDataEnabled" />
             <FieldMapping FieldName="EncryptionPassphrase" TargetFieldName="EncryptionPassphrase" />
             <FieldMapping FieldName="LiveManualOrderNumbers" TargetFieldName="LiveManualOrderNumbers" />
             <FieldMapping FieldName="OnlineUpdateStatusChangeEmail" TargetFieldName="OnlineUpdateStatusChangeEmail" />

@@ -39,11 +39,9 @@ namespace ShipWorks.Stores.Platforms.Miva
         /// <summary>
         /// Save the options from the UI into the store
         /// </summary>
-        public bool SaveToEntity(MivaStoreEntity store)
+        public void SaveToEntity(MivaStoreEntity store)
         {
             store.SebenzaCheckoutDataEnabled = sebenzaAddtionalCheckout.Checked;
-           
-            return true;
         }
     }
 }
