@@ -20,39 +20,39 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public void Verify_ReturnsSuccess_WhenApiHasNotChangedAndStrategyReturnsFalse()
+        public async void Verify_ReturnsSuccess_WhenApiHasNotChangedAndStrategyReturnsFalse()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Success);
         }
 
         [Fact]
-        public void Verify_DoesNotVerifyConnection_WhenApiHasNotChangedAndStrategyReturnsFalse()
+        public async void Verify_DoesNotVerifyConnection_WhenApiHasNotChangedAndStrategyReturnsFalse()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.Mock<IBigCommerceWebClientFactory>()
                 .Verify(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()), Times.Never);
         }
 
         [Fact]
-        public void Verify_VerifiesConnection_WhenOnlyApiHasChanged()
+        public async void Verify_VerifiesConnection_WhenOnlyApiHasChanged()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.Mock<IBigCommerceWebClientFactory>()
                 .Verify(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()));
         }
 
         [Fact]
-        public void Verify_VerifiesConnection_WhenStrategyHasChanged()
+        public async void Verify_VerifiesConnection_WhenStrategyHasChanged()
         {
             var strategy = mock.Mock<IBigCommerceAuthenticationPersistenceStrategy>();
             strategy.Setup(x => x.ConnectionVerificationNeeded(It.IsAny<BigCommerceStoreEntity>()))
@@ -60,24 +60,24 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            testObject.Verify(new BigCommerceStoreEntity(), strategy.Object);
+            await testObject.Verify(new BigCommerceStoreEntity(), strategy.Object);
 
             mock.Mock<IBigCommerceWebClientFactory>()
                 .Verify(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()));
         }
 
         [Fact]
-        public void Verify_ReturnsSuccess_WhenConnectionTestSucceeds()
+        public async void Verify_ReturnsSuccess_WhenConnectionTestSucceeds()
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Success);
         }
 
         [Fact]
-        public void Verify_ReturnsFailure_WhenConnectionTestFails()
+        public async void Verify_ReturnsFailure_WhenConnectionTestFails()
         {
             var store = new BigCommerceStoreEntity { ApiUrl = "foo" };
 
@@ -90,25 +90,25 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = testObject.Verify(store, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(store, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Failure);
         }
 
         [Fact]
-        public void Verify_UpdatesFromOnline_WhenConnectionTestSucceeds()
+        public async void Verify_UpdatesFromOnline_WhenConnectionTestSucceeds()
         {
             mock.Override<IBigCommerceStatusCodeProvider>().Setup(x => x.UpdateFromOnlineStore()).Verifiable();
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.VerifyAll = true;
         }
 
         [Fact]
-        public void Verify_ReturnsFailure_WhenOnlineUpdateFails()
+        public async void Verify_ReturnsFailure_WhenOnlineUpdateFails()
         {
             mock.Override<IBigCommerceStatusCodeProvider>()
                 .Setup(x => x.UpdateFromOnlineStore())
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Failure);
         }

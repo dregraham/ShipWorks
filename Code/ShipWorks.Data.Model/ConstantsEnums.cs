@@ -5936,6 +5936,8 @@ namespace ShipWorks.Data.Model
 		OnlineUpdateStrategy,
 		///<summary>OnlineUpdateStatusChangeEmail. </summary>
 		OnlineUpdateStatusChangeEmail,
+		///<summary>AddendumCheckoutDataEnabled. </summary>
+		AddendumCheckoutDataEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}

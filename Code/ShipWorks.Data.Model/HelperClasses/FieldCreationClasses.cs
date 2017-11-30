@@ -13802,6 +13802,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail);}
 		}
+		/// <summary>Creates a new MivaStoreEntity.AddendumCheckoutDataEnabled field instance</summary>
+		public static EntityField2 AddendumCheckoutDataEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AddendumCheckoutDataEnabled);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity NetworkSolutionsOrderEntity</summary>

@@ -29,24 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MivaOptionsPage));
-            this.label1 = new System.Windows.Forms.Label();
             this.labelManualOrders = new System.Windows.Forms.Label();
             this.labelManualOrderInfo = new System.Windows.Forms.Label();
             this.livaManualOrderNumbers = new System.Windows.Forms.CheckBox();
-            this.sebenzaOptions = new ShipWorks.Stores.Platforms.Miva.MivaSebenzaOptionsControl();
             this.label2 = new System.Windows.Forms.Label();
             this.orderStatusControl = new ShipWorks.Stores.Platforms.Miva.MivaOrderStatusControl();
             this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(19, 206);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Sebenza Modules";
             // 
             // labelManualOrders
             // 
@@ -76,14 +64,6 @@
             this.livaManualOrderNumbers.Text = "Get and reserve manual order numbers from my online store.";
             this.livaManualOrderNumbers.UseVisualStyleBackColor = true;
             // 
-            // sebenzaOptions
-            // 
-            this.sebenzaOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sebenzaOptions.Location = new System.Drawing.Point(37, 222);
-            this.sebenzaOptions.Name = "sebenzaOptions";
-            this.sebenzaOptions.Size = new System.Drawing.Size(406, 72);
-            this.sebenzaOptions.TabIndex = 6;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -107,11 +87,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.orderStatusControl);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.sebenzaOptions);
             this.Controls.Add(this.livaManualOrderNumbers);
             this.Controls.Add(this.labelManualOrderInfo);
             this.Controls.Add(this.labelManualOrders);
-            this.Controls.Add(this.label1);
             this.Name = "MivaOptionsPage";
             this.Size = new System.Drawing.Size(500, 276);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
@@ -122,12 +100,9 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelManualOrders;
         private System.Windows.Forms.Label labelManualOrderInfo;
         private System.Windows.Forms.CheckBox livaManualOrderNumbers;
-        private MivaSebenzaOptionsControl sebenzaOptions;
         private System.Windows.Forms.Label label2;
         private MivaOrderStatusControl orderStatusControl;
     }

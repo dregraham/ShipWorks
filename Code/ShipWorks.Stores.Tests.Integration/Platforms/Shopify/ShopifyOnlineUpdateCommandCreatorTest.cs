@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
             webClient.Verify(x => x.UploadOrderShipmentDetails(20000, AnyString, AnyString, AnyString), Times.Never);
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
         }
 
         [Fact]
@@ -89,8 +89,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, "track-123", "Other", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(20000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Foo", string.Empty));
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
             webClient.Verify(x => x.UploadOrderShipmentDetails(20000, AnyString, AnyString, AnyString), Times.Never);
-            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(30000, "track-123", "Foo", string.Empty));
         }
 
         [Fact]
@@ -116,9 +116,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Other", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(50000, "track-456", "Other", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(10000, "track-123", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(50000, "track-456", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Foo", string.Empty));
         }
 
         [Fact]
@@ -137,8 +137,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Other", string.Empty));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(70000, "track-789", "Other", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(60000, "track-456", "Foo", string.Empty));
+            webClient.Verify(x => x.UploadOrderShipmentDetails(70000, "track-789", "Foo", string.Empty));
         }
 
         private OrderEntity CreateNormalOrder(int orderRoot, string trackingNumber, bool manual)

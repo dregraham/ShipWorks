@@ -1,12 +1,9 @@
-﻿PRINT N'Altering [dbo].[FedExShipment]'
+﻿PRINT N'Altering [dbo].[MivaStore]'
 GO
-ALTER TABLE [dbo].[FedExShipment] ADD
-	[FreightGuaranteeType] [int] NOT NULL CONSTRAINT [DF_FedExShipment_FreightGuaranteeType] DEFAULT ((0)),
-	[FreightGuaranteeDate] [datetime] NOT NULL CONSTRAINT [DF_FedExShipment_FreightGuaranteeDate] DEFAULT ((GetDate()))
+ALTER TABLE [dbo].[MivaStore] ADD
+[AddendumCheckoutDataEnabled] [bit] NOT NULL CONSTRAINT [DF_MivaStore_AddendumCheckoutDataEnabled] DEFAULT ((1))
 GO
-
-PRINT N'Dropping constraints from [dbo].[FedExShipment]'
+PRINT N'Dropping constraints from [dbo].[MivaStore]'
 GO
-ALTER TABLE [dbo].[FedExShipment] DROP CONSTRAINT [DF_FedExShipment_FreightGuaranteeType]
-ALTER TABLE [dbo].[FedExShipment] DROP CONSTRAINT [DF_FedExShipment_FreightGuaranteeDate]
+ALTER TABLE [dbo].[MivaStore] DROP CONSTRAINT [DF_MivaStore_AddendumCheckoutDataEnabled]
 GO

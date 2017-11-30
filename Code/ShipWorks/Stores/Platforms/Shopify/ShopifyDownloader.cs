@@ -545,42 +545,35 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 return;
             }
 
-            GetImage(item, shopifyProduct);
-            GetBarcode(item, lineItem, shopifyProduct);
+            // We need the variantID to get the image and barcode
+            long variantID = lineItem.GetValue<long>("variant_id");
+
+            GetImage(item, shopifyProduct, variantID);
+            GetBarcode(item, shopifyProduct, variantID);
         }
 
         /// <summary>
         /// Gets the image from the shopifyProduct and copies them into the ShopifyOrderItemEntity
         /// </summary>
-        private static void GetImage(ShopifyOrderItemEntity item, JToken shopifyProduct)
+        private static void GetImage(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
         {
+            // Select all product images
             JToken images = shopifyProduct.SelectToken("product.images");
-
-            if (images != null)
+            
+            // Get the image with the corresponding variantID
+            JToken image = images.FirstOrDefault(i => i.SelectToken("variant_ids").Values<long>().Contains(variantID));
+            if (image != null)
             {
-                string imageUrl = string.Empty;
-                foreach (JToken prodImg in shopifyProduct.SelectToken("product.images").Select(img => img))
-                {
-                    imageUrl = prodImg.GetValue("src", string.Empty);
-                    if (!string.IsNullOrWhiteSpace(imageUrl))
-                    {
-                        break;
-                    }
-                }
-
-                item.Image = imageUrl;
-                item.Thumbnail = imageUrl;
+                item.Image = image.GetValue<string>("src");
+                item.Thumbnail = item.Image;
             }
         }
 
         /// <summary>
         /// Retrieves the corresponding variant barcode from the Shopify product and stores it as the UPC of the ShopifyOrderItemEntity
         /// </summary>
-        private void GetBarcode(ShopifyOrderItemEntity item, JToken lineItem, JToken shopifyProduct)
+        private void GetBarcode(ShopifyOrderItemEntity item, JToken shopifyProduct, long variantID)
         {
-            // The barcode is stored as part of the product variant, so we need the variantID.
-            long variantID = lineItem.GetValue<long>("variant_id");
-
             // Grab all the variants of the product
             JToken variants = shopifyProduct.SelectToken("product.variants");
 

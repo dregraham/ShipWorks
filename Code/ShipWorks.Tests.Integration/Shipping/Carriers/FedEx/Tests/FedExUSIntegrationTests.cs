@@ -19,7 +19,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
     {
         private string fedExTestAccountNumber = "612480567";
         private string fedExUSFreightTestAccountNumber = "630081440";
-        private string fedExCAFreightTestAccountNumber = "602091147";
         private const string ecodAccountNumber = "222326460";
         private readonly ITestOutputHelper output;
         private DataContext context;

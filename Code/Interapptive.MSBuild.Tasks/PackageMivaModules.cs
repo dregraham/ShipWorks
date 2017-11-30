@@ -19,6 +19,7 @@ namespace Interapptive.MSBuild.Tasks
 
         string miva4file;
         string miva5file;
+        string miva9file;
 
         string outputDirectory;
 
@@ -42,6 +43,16 @@ namespace Interapptive.MSBuild.Tasks
         {
             get { return miva5file; }
             set { miva5file = value; }
+        }
+
+        /// <summary>
+        /// The full path to the Miva9 module file
+        /// </summary>
+        [Required]
+        public string ModuleFileMiva9
+        {
+            get { return miva9file; }
+            set { miva9file = value; }
         }
 
         /// <summary>
@@ -73,6 +84,7 @@ namespace Interapptive.MSBuild.Tasks
             files.Add(PackageModule(miva4file, "MivaUncompiled", false));
             files.Add(PackageModule(miva4file, "Miva4", true));
             files.Add(PackageModule(miva5file, "Miva5", true));
+            files.Add(PackageModule(miva9file, "Miva9", true));
 
             packagedFiles = files.ToArray();
 
@@ -108,7 +120,7 @@ namespace Interapptive.MSBuild.Tasks
             string tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(mivaFile));
 
             // Strip off the "miva5" part of the file for miva
-            tempFile = tempFile.Replace("Miva5.mv", ".mv");
+            tempFile = tempFile.Replace($"{platform}.mv", ".mv");
 
             // Write the temp contents
             using (StreamWriter writer = File.CreateText(tempFile))
