@@ -194,6 +194,7 @@ namespace ShipWorks.Shipping.Editing
             personControl.DestinationChanged -= this.OnRecipientDestinationChanged;
             personControl.ContentChanged -= this.OnPersonContentChanged;
 
+
             EnableContentPanels(enableEditing, enableShippingAddress);
 
             personControl.LoadEntities(shipments.Select(s => new PersonAdapter(s, "Ship")).ToList());
@@ -507,7 +508,7 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendRateEvent--;
         }
-        
+
         /// <summary>
         /// One of the values that affects rates has changed
         /// </summary>
@@ -594,7 +595,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        protected void OnOriginDestinationChanged(object sender, EventArgs e) =>
+        protected virtual void OnOriginDestinationChanged(object sender, EventArgs e) =>
             OriginDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
