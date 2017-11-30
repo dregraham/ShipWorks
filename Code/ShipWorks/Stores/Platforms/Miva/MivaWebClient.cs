@@ -74,6 +74,8 @@ namespace ShipWorks.Stores.Platforms.Miva
                 // Additional Checkout Data
                 request.Variables.Add("sebenzaAcd", store.SebenzaCheckoutDataEnabled ? "1" : "0");
 
+                request.Variables.Add("UseAddendum", store.AddendumCheckoutDataEnabled ? "1" : "0");
+
                 // Online Status
                 request.Variables.Add("statusSource", GetOnlineStatusSource((MivaOnlineUpdateStrategy) store.OnlineUpdateStrategy));
 
