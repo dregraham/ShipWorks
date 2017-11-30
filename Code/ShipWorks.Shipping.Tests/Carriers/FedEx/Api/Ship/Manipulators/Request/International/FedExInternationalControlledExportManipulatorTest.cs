@@ -4,7 +4,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request.Internatio
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared.Carriers.FedEx;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.International
@@ -148,20 +147,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request.
         }
 
         [Theory]
-        [InlineData(FedExInternationalControlledExportType.Dea036, InternationalControlledExportType.DEA_036)]
-        [InlineData(FedExInternationalControlledExportType.Dea236, InternationalControlledExportType.DEA_236)]
-        [InlineData(FedExInternationalControlledExportType.Dea486, InternationalControlledExportType.DEA_486)]
-        [InlineData(FedExInternationalControlledExportType.Dsp05, InternationalControlledExportType.DSP_05)]
-        [InlineData(FedExInternationalControlledExportType.Dsp61, InternationalControlledExportType.DSP_61)]
-        [InlineData(FedExInternationalControlledExportType.Dsp73, InternationalControlledExportType.DSP_73)]
-        [InlineData(FedExInternationalControlledExportType.Dsp85, InternationalControlledExportType.DSP_85)]
-        [InlineData(FedExInternationalControlledExportType.Dsp94, InternationalControlledExportType.DSP_94)]
-        [InlineData(FedExInternationalControlledExportType.DspLicenseAgreement, InternationalControlledExportType.DSP_LICENSE_AGREEMENT)]
-        [InlineData(FedExInternationalControlledExportType.FromForeignTradeZone, InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE)]
-        [InlineData(FedExInternationalControlledExportType.WarehouseWithdrawal, InternationalControlledExportType.WAREHOUSE_WITHDRAWAL)]
-        public void Manipulate_AddsControlledExportOption_WhenExportIsValidType(FedExInternationalControlledExportType type, InternationalControlledExportType expected)
+        [InlineData(FedExInternationalControlledExportType.Dea036)]
+        [InlineData(FedExInternationalControlledExportType.Dea236)]
+        [InlineData(FedExInternationalControlledExportType.Dea486)]
+        [InlineData(FedExInternationalControlledExportType.Dsp05)]
+        [InlineData(FedExInternationalControlledExportType.Dsp61)]
+        [InlineData(FedExInternationalControlledExportType.Dsp73)]
+        [InlineData(FedExInternationalControlledExportType.Dsp85)]
+        [InlineData(FedExInternationalControlledExportType.Dsp94)]
+        [InlineData(FedExInternationalControlledExportType.DspLicenseAgreement)]
+        [InlineData(FedExInternationalControlledExportType.FromForeignTradeZone)]
+        [InlineData(FedExInternationalControlledExportType.WarehouseWithdrawal)]
+        public void Manipulate_AddsControlledExportOption_WhenExportIsValidType(FedExInternationalControlledExportType type)
         {
-            shipment.FedEx.IntlExportDetailType = (int) FedExInternationalControlledExportType.Dea236;
+            shipment.FedEx.IntlExportDetailType = (int) type;
             shipment.FedEx.IntlExportDetailLicenseOrPermitExpirationDate = DateTime.Parse("3/15/2015");
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);

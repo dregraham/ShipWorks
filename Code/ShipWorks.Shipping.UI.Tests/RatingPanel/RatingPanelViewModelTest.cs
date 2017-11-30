@@ -164,12 +164,12 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel
         [Fact]
         public void GetsFootnoteViewModels_WhenResultsHaveFootnotes()
         {
-            var viewModel1 = mock.Create<IRateFootnoteFactory>();
+            var viewModel1 = mock.Build<IRateFootnoteFactory>();
             var footnote1 = mock.CreateMock<IRateFootnoteFactory>();
             footnote1.Setup(x => x.CreateViewModel(It.IsAny<ICarrierShipmentAdapter>())).Returns(viewModel1);
             testRateGroup.AddFootnoteFactory(footnote1.Object);
 
-            var viewModel2 = mock.Create<IRateFootnoteFactory>();
+            var viewModel2 = mock.Build<IRateFootnoteFactory>();
             var footnote2 = mock.CreateMock<IRateFootnoteFactory>();
             footnote2.Setup(x => x.CreateViewModel(It.IsAny<ICarrierShipmentAdapter>())).Returns(viewModel2);
             testRateGroup.AddFootnoteFactory(footnote2.Object);

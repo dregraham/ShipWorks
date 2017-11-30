@@ -1,12 +1,14 @@
 ﻿using System.Data;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Integration.MSTest;
 using ShipWorks.Tests.Integration.Shared;
+using ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
+namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 {
     [Collection("Fedex Tests")]
     public class FedExEMEAIntegrationTests : DataDrivenIntegrationTestBase
@@ -17,17 +19,21 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
         private string SpainAccountNumber = "604824729";
         private string SwedenAccountNumber = "604849268";
         private string FranceAccountNumber = "602550940";
-        private bool justLabels = true;
         private readonly ITestOutputHelper output;
-
         private DataContext context;
 
         public FedExEMEAIntegrationTests(FedExDatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
 
-            context = db.GetFedExDataContext(x => ContainerInitializer.Initialize(x),
+            context = db.GetFedExDataContext((_mock, _builder) => { },
                 ShipWorksInitializer.GetShipWorksInstance());
+
+            justLabels = false;
+            justForPhysicalPrint = false;
+            physicalPrintType = ThermalLanguage.None;
+
+            SetupPhysicalPrints();
         }
 
         [ExcelData(@"DataSources\FedExAll\EMEA.xlsx", "EMEA")]
@@ -38,7 +44,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
             var testObject = new FedExEMEAFixture();
 
             if (PopulateTestObject(row, testObject, FedExEMEAFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                JustLabels(testObject.IsSaveLabel) &&
+                PhysicalPrint(testObject.CustomerTransactionId, testObject.CustomerReferenceValue))
             {
                 output.WriteLine($"Executing customer transaction ID {row[4]}");
 
@@ -50,7 +57,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.EMEA
                     testObject.CommercialInvoiceFileElectronically = true;
                 }
 
-                testObject.Ship(context.Order);
+                testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
 

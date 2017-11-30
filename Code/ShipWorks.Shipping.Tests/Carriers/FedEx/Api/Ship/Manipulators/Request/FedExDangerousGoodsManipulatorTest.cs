@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
     public class FedExDangerousGoodsManipulatorTest
     {
-        private readonly ShipmentEntity shipment;
-        private readonly FedExDangerousGoodsManipulator testObject;
+        private ShipmentEntity shipment;
+        private FedExDangerousGoodsManipulator testObject;
 
         readonly AutoMock mock;
 
@@ -207,13 +207,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             Assert.True(dangerousGoods.AccessibilitySpecified);
         }
 
+        [Fact]
+        public void Manipulate_AddsBatterySpecialServiceType_WhenShipmentHasBatteries()
+        {
+            var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.LithiumIon);
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.True(result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.BATTERY));
+        }
+        [Fact]
+        public void Manipulate_DoesNotAddBatterySpecialServiceType_WhenShipmentHasNoBatteries()
+        {
+            //var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.NotSpecified);
+            shipment.FedEx.Packages[0].DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+
+            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+
+            var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
+
+            Assert.False(result.Value.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.BATTERY));
+        }
+
         [Theory]
         [InlineData(FedExBatteryMaterialType.LithiumIon, BatteryMaterialType.LITHIUM_ION)]
         [InlineData(FedExBatteryMaterialType.LithiumMetal, BatteryMaterialType.LITHIUM_METAL)]
         public void Manipulate_SetsBatteryMaterial_WithCorrectValue(FedExBatteryMaterialType input, BatteryMaterialType expected)
         {
-            var shipment = GetShipment(x => x.BatteryMaterial = input);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryMaterial = input);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -227,8 +250,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_DoesNotSetBatteryMaterial_WhenMaterialIsNotSpecified()
         {
-            var shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.NotSpecified);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryMaterial = FedExBatteryMaterialType.NotSpecified);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -240,8 +263,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [InlineData(FedExBatteryPackingType.PackedWithEquipment, BatteryPackingType.PACKED_WITH_EQUIPMENT)]
         public void Manipulate_SetsBatteryPacking_WithCorrectValue(FedExBatteryPackingType input, BatteryPackingType expected)
         {
-            var shipment = GetShipment(x => x.BatteryPacking = input);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryPacking = input);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -252,8 +275,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_DoesNotSetBatteryPacking_WhenPackingIsNotSpecified()
         {
-            var shipment = GetShipment(x => x.BatteryPacking = FedExBatteryPackingType.NotSpecified);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryPacking = FedExBatteryPackingType.NotSpecified);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -264,8 +287,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [InlineData(FedExBatteryRegulatorySubType.IATASectionII, BatteryRegulatorySubType.IATA_SECTION_II)]
         public void Manipulate_SetsBatteryRegulatorySubtype_WithCorrectValue(FedExBatteryRegulatorySubType input, BatteryRegulatorySubType expected)
         {
-            var shipment = GetShipment(x => x.BatteryRegulatorySubtype = input);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryRegulatorySubtype = input);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 
@@ -276,8 +299,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [Fact]
         public void Manipulate_DoesNotSetBatteryRegulatorySubtype_WhenRegulatorySubtypeIsNotSpecified()
         {
-            var shipment = GetShipment(x => x.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified);
-            var testObject = mock.Create<FedExDangerousGoodsManipulator>();
+            shipment = GetShipment(x => x.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified);
+            testObject = mock.Create<FedExDangerousGoodsManipulator>();
 
             var result = testObject.Manipulate(shipment, new ProcessShipmentRequest(), 0);
 

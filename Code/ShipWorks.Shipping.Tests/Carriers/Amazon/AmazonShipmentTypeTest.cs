@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using Autofac.Core;
 using Autofac.Extras.Moq;
 using Moq;
-using Moq.Language.Flow;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -23,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public AmazonShipmentTypeTest()
         {
             mock = AutoMock.GetLoose();
-            trackedShipment = new ShipmentEntity {TrackingNumber = "foo"};
+            trackedShipment = new ShipmentEntity { TrackingNumber = "foo" };
         }
 
         [Fact]
@@ -54,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
-                .Returns(new EbayStoreEntity { TypeCode = (int)StoreTypeCode.Ebay });
+                .Returns(new EbayStoreEntity { TypeCode = (int) StoreTypeCode.Ebay });
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
 
@@ -71,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = new AmazonOrderEntity {IsPrime = (int) isPrime}
+                Order = new AmazonOrderEntity { IsPrime = (int) isPrime }
             };
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
@@ -94,12 +91,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = new ChannelAdvisorOrderEntity { IsPrime = (int)isPrime }
+                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) isPrime }
             };
 
             mock.Mock<IStoreManager>()
                 .Setup(m => m.GetStore(It.IsAny<long>()))
-                .Returns(new ChannelAdvisorStoreEntity { TypeCode = (int)StoreTypeCode.ChannelAdvisor });
+                .Returns(new ChannelAdvisorStoreEntity { TypeCode = (int) StoreTypeCode.ChannelAdvisor });
 
             MockShipmentTypeRestriction(EditionRestrictionLevel.None);
 
@@ -116,10 +113,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentEntity shipment = new ShipmentEntity
             {
-                Order = new ChannelAdvisorOrderEntity { IsPrime = (int)AmazonMwsIsPrime.Yes }
+                Order = new ChannelAdvisorOrderEntity { IsPrime = (int) AmazonMwsIsPrime.Yes }
             };
 
-            var store = new ChannelAdvisorStoreEntity { TypeCode = (int)StoreTypeCode.ChannelAdvisor };
+            var store = new ChannelAdvisorStoreEntity { TypeCode = (int) StoreTypeCode.ChannelAdvisor };
 
             mock.Mock<ILicenseService>()
                 .Setup(l => l.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<ShipmentTypeCode>()))
@@ -170,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Contains(linkShouldContain, testObject.TrackShipment(trackedShipment).Summary, StringComparison.OrdinalIgnoreCase);
         }
 
-        public void SetGetServiceUsedReturn(string serviceToReturn)
+        private void SetGetServiceUsedReturn(string serviceToReturn)
         {
             mock.Mock<IShippingManager>()
                 .Setup(s => s.GetOverriddenServiceUsed(It.IsAny<ShipmentEntity>()))

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.FedEx
 {
@@ -10,12 +11,15 @@ namespace ShipWorks.Shipping.FedEx
     public enum FedExBatteryMaterialType
     {
         [Description("Not specified")]
+        [ApiValue("None")]
         NotSpecified = 0,
 
         [Description("Lithium Ion")]
+        [ApiValue("LITHIUM_ION")]
         LithiumIon = 1,
 
         [Description("Lithium Metal")]
+        [ApiValue("LITHIUM_METAL")]
         LithiumMetal = 2,
     }
 }

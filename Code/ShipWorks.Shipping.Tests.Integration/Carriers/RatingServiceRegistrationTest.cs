@@ -23,8 +23,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public RatingServiceRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
+            container = ContainerInitializer.Build();
         }
 
         [Theory]

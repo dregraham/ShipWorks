@@ -43,8 +43,8 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// Constructor
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
-        public ThreeDCartSoapDownloader(ThreeDCartStoreEntity store)
-            : base(store)
+        public ThreeDCartSoapDownloader(ThreeDCartStoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
             threeDCartStore = store;
             totalCount = 0;
@@ -457,7 +457,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
             return Result.FromSuccess();
         }
-        
+
         /// <summary>
         /// Creates a 3dcart order identifier for the current order
         /// </summary>

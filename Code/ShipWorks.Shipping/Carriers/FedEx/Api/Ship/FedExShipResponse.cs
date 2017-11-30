@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
             {
                 return Result.FromError(new CarrierException("Invalid number of package details returned for a shipment request."));
             }
-            
+
             // This should never happen, but our users will let us know if it does
             if (FedExUtility.IsFreightLtlService(shipment.FedEx.Service) &&
                 reply.CompletedShipmentDetail.ShipmentDocuments?.Length == 0)

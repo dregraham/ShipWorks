@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 
         public WalmartWizardTest()
         {
-            container = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build());
+            container = ContainerInitializer.Build();
         }
 
         [STAFact]

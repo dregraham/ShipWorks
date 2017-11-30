@@ -101,9 +101,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request
         /// <summary>
         /// Initializes the request.
         /// </summary>
-        /// <param name="request">The request.</param>
-        /// <exception cref="System.ArgumentNullException">request</exception>
-        /// <exception cref="CarrierException">An unexpected request type was provided.</exception>
         private static void InitializeRequest(RateRequest request)
         {
             request.Ensure(x => x.RequestedShipment)

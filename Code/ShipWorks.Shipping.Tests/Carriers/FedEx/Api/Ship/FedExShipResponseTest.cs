@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
@@ -22,16 +21,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         private FedExShipResponse testObject;
         private readonly ProcessShipmentReply reply;
         private readonly AutoMock mock;
-        private Mock<IFedExShipResponseManipulator> manipulator;
 
         public FedExShipResponseTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            manipulator = mock.CreateMock<IFedExShipResponseManipulator>();
-            manipulator.Setup(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), It.IsAny<ProcessShipmentRequest>(), AnyShipment))
+            mock.Mock<IFedExShipResponseManipulator>()
+                .Setup(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), It.IsAny<ProcessShipmentRequest>(), AnyShipment))
                 .Returns(new ShipmentEntity());
-            mock.Provide<IEnumerable<IFedExShipResponseManipulator>>(new[] { manipulator.Object });
 
             reply = new ProcessShipmentReply { HighestSeverity = NotificationSeverityType.SUCCESS };
             reply.Ensure(x => x.CompletedShipmentDetail).EnsureAtLeastOne(x => x.CompletedPackageDetails);
@@ -64,7 +61,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         {
             testObject.ApplyManipulators(null);
 
-            manipulator.Verify(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), null, AnyShipment), Times.Once());
+            mock.Mock<IFedExShipResponseManipulator>()
+                .Verify(x => x.Manipulate(It.IsAny<ProcessShipmentReply>(), null, AnyShipment), Times.Once());
         }
 
         [Fact]

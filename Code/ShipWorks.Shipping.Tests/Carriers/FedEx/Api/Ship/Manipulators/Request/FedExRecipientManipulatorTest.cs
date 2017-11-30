@@ -1,12 +1,11 @@
 using Autofac.Extras.Moq;
-using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Carriers.FedEx;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
 {
@@ -107,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             shipment.ShipStreet2 = string.Empty;
             shipment.ShipStreet3 = string.Empty;
 
-            shipment.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipment.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -122,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             shipment.ShipStreet2 = "y";
             shipment.ShipStreet3 = string.Empty;
 
-            shipment.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipment.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -137,7 +136,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
             shipment.ShipStreet2 = string.Empty;
             shipment.ShipStreet3 = string.Empty;
 
-            shipment.FedEx.Service = (int)FedExServiceType.SmartPost;
+            shipment.FedEx.Service = (int) FedExServiceType.SmartPost;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 
@@ -152,8 +151,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship.Manipulators.Request
         [InlineData("GGG", "guam")]
         public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
         {
-            shipment.ShipStateProvCode = "GU";
-            shipment.ShipCountryCode = "US";
+            shipment.ShipStateProvCode = state;
+            shipment.ShipCountryCode = country;
 
             testObject.Manipulate(shipment, processShipmentRequest, 0);
 

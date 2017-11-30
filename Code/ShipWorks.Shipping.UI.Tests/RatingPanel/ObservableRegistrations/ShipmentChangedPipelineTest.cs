@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(this, mock.Build<ICarrierShipmentAdapter>()));
 
             viewModel.Verify(x => x.SelectRate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>(), "Foo"));
+            subject.OnNext(new ShipmentChangedMessage(this, mock.Build<ICarrierShipmentAdapter>(), "Foo"));
 
             viewModel.Verify(x => x.SelectRate(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var viewModel = mock.CreateMock<RatingPanelViewModel>();
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
-            var adapter = mock.Create<ICarrierShipmentAdapter>();
+            var adapter = mock.Build<ICarrierShipmentAdapter>();
 
             subject.OnNext(new ShipmentChangedMessage(this, adapter, "ServiceType"));
 

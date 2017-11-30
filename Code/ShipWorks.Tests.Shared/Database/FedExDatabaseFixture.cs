@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -11,9 +13,8 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users;
-using System;
-using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -31,33 +32,37 @@ namespace ShipWorks.Tests.Shared.Database
         /// <remarks>
         /// Returns an existing context. If one doesn't exist, it is created.
         /// </remarks>
-        public DataContext GetFedExDataContext(Action<IContainer> initializeContainer, Guid instance)
+        public DataContext GetFedExDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance)
         {
-            return context ?? (context = CreateFedExDataContext(initializeContainer, instance));
+            return context ?? (context = CreateFedExDataContext(addExtraRegistrations, instance));
         }
 
         /// <summary>
         /// Creates the new reusable data context.
         /// </summary>
-        private DataContext CreateFedExDataContext(Action<IContainer> initializeContainer, Guid instance)
+        private DataContext CreateFedExDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance)
         {
-            var newContext = base.CreateDataContext(initializeContainer);
+            var newContext = base.CreateDataContext((mock, builder) =>
+            {
+                builder.RegisterMock<ITangoWebClient>(mock);
+                builder.RegisterMock<IMessageHelper>(mock);
 
-            newContext.Mock.Provide<Control>(new Control());
-            newContext.Mock.Provide<Func<Control>>(() => new Control());
-            newContext.Mock.Override<ITangoWebClient>();
-            newContext.Mock.Override<IMessageHelper>();
+                addExtraRegistrations(mock, builder);
+            });
 
             ShipWorksSession.Initialize(instance);
             LogSession.Initialize();
             UserSession.InitializeForCurrentDatabase();
 
-            UpdateStore(newContext);
+            if (clearTestData)
+            {
+                UpdateStore(newContext);
 
-            Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
+                Create.Profile().AsPrimary().AsFedEx().Set(p => p.RequestedLabelFormat, (int)ThermalLanguage.None).Save();
 
-            GenerateAccounts();
-            UpdateSettings();
+                GenerateAccounts();
+                UpdateSettings();
+            }
 
             return newContext;
         }
@@ -68,12 +73,13 @@ namespace ShipWorks.Tests.Shared.Database
         private static void UpdateSettings()
         {
             var settings = ShippingSettings.Fetch();
+            settings.AutoCreateShipments = false;
             settings.ShipSenseEnabled = false;
             settings.ConfiguredTypes = new[] { ShipmentTypeCode.FedEx };
             settings.ActivatedTypes = new[] { ShipmentTypeCode.FedEx };
             settings.FedExUsername = "MFG2EvMKBLcxcCsk";
             settings.FedExPassword = "nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE=";
-            settings.FedExThermalDocTab = true;
+            settings.FedExThermalDocTab = false;
             settings.FedExThermalDocTabType = 0; // Leading
             ShippingSettings.Save(settings);
         }
@@ -101,7 +107,7 @@ namespace ShipWorks.Tests.Shared.Database
                     "<StatusCodes><StatusCode><Code>5</Code><Name>Blah</Name></StatusCode><StatusCode><Code>1</Code><Name>Shipped</Name></StatusCode></StatusCodes>")
                 .Set(x => x.ModuleDownloadPageSize, 50)
                 .Set(x => x.ModuleRequestTimeout, 60)
-                .Set(x => x.ModuleDownloadStrategy = (int)GenericStoreDownloadStrategy.ByModifiedTime)
+                .Set(x => x.ModuleDownloadStrategy = (int) GenericStoreDownloadStrategy.ByModifiedTime)
                 .Set(x => x.ModuleOnlineStatusSupport, 2)
                 .Set(x => x.ModuleOnlineStatusDataType, 0)
                 .Set(x => x.ModuleOnlineCustomerSupport, false)
@@ -118,6 +124,27 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         private static void GenerateAccounts()
         {
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "630151821 - Pickup SmartPost")
+                .Set(x => x.AccountNumber, "630151821")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118975717")
+                .Set(x => x.SmartPostHubList, "<Root><HubID>5531</HubID></Root>")
+                .Set(x => x.FirstName, "FedEx")
+                .Set(x => x.MiddleName, "")
+                .Set(x => x.LastName, "SmartPost")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "10 FedEx Pkwy")
+                .Set(x => x.Street2, "")
+                .Set(x => x.City, "Collierville")
+                .Set(x => x.StateProvCode, "TN")
+                .Set(x => x.PostalCode, "38017")
+                .Set(x => x.CountryCode, "US")
+                .Set(x => x.Phone, "3145551212")
+                .Set(x => x.Email, "me@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
+
             Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
                 .Set(x => x.Description, "630148367 - Pickup SmartPost")
                 .Set(x => x.AccountNumber, "630148367")
@@ -176,6 +203,27 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "MO")
                 .Set(x => x.PostalCode, "63102")
                 .Set(x => x.CountryCode, "US")
+                .Set(x => x.Phone, "3145551212")
+                .Set(x => x.Email, "me@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
+
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "604945186 - IPE Test Account")
+                .Set(x => x.AccountNumber, "604945186")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118975465")
+                .Set(x => x.SmartPostHubList, "<Root />")
+                .Set(x => x.FirstName, "IPE")
+                .Set(x => x.MiddleName, "Test")
+                .Set(x => x.LastName, "Account")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "MELEZHA STR")
+                .Set(x => x.Street2, "1-902")
+                .Set(x => x.City, "MINSK")
+                .Set(x => x.StateProvCode, "BY")
+                .Set(x => x.PostalCode, "220113")
+                .Set(x => x.CountryCode, "BY")
                 .Set(x => x.Phone, "3145551212")
                 .Set(x => x.Email, "me@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
@@ -386,6 +434,48 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "00630")
                 .Set(x => x.CountryCode, "FI")
+                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Email, "support@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
+
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "630081440 - US Freight Test Account")
+                .Set(x => x.AccountNumber, "630081440")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118978249")
+                .Set(x => x.SmartPostHubList, "<Root />")
+                .Set(x => x.FirstName, "USFreight")
+                .Set(x => x.MiddleName, "Test")
+                .Set(x => x.LastName, "Account")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "1202 Chalet Lane")
+                .Set(x => x.Street2, "")
+                .Set(x => x.City, "Harrison")
+                .Set(x => x.StateProvCode, "AR")
+                .Set(x => x.PostalCode, "72601")
+                .Set(x => x.CountryCode, "US")
+                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Email, "support@shipworks.com")
+                .Set(x => x.Website, "www.shipworks.com")
+                .Save();
+
+            Create.CarrierAccount<FedExAccountEntity, IFedExAccountEntity>()
+                .Set(x => x.Description, "602091147 - CA Freight Test Account")
+                .Set(x => x.AccountNumber, "602091147")
+                .Set(x => x.SignatureRelease, "")
+                .Set(x => x.MeterNumber, "118979178")
+                .Set(x => x.SmartPostHubList, "<Root />")
+                .Set(x => x.FirstName, "CAFreight")
+                .Set(x => x.MiddleName, "Test")
+                .Set(x => x.LastName, "Account")
+                .Set(x => x.Company, "ShipWorks")
+                .Set(x => x.Street1, "7075 ORDAN DR")
+                .Set(x => x.Street2, "")
+                .Set(x => x.City, "MISSISSAUGA")
+                .Set(x => x.StateProvCode, "ON")
+                .Set(x => x.PostalCode, "L5T1K6")
+                .Set(x => x.CountryCode, "CA")
                 .Set(x => x.Phone, "8009527784")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")

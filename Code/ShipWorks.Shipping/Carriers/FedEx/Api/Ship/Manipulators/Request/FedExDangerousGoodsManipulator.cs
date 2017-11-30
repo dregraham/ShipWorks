@@ -92,24 +92,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         private static GenericResult<DangerousGoodsDetail> ApplyHazardousMaterials(DangerousGoodsDetail dangerousGoods, IFedExPackageEntity package)
         {
-            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.HazardousMaterials)
-            {
-                return ConfigureHazardousMaterials(dangerousGoods, package);
-            }
-
-            // Accessibility options do not apply to hazardous materials
-            if (package.DangerousGoodsAccessibilityType == (int) FedExDangerousGoodsAccessibilityType.NotApplicable)
-            {
-                return dangerousGoods;
-            }
-
-            return GetApiDangerousGoodsAccessibilityType(package)
-                .Do(x =>
-                {
-                    dangerousGoods.Accessibility = x;
-                    dangerousGoods.AccessibilitySpecified = true;
-                })
-                .Map(x => dangerousGoods);
+            return ConfigureHazardousMaterials(dangerousGoods, package)
+                    .Bind(y => GetApiDangerousGoodsAccessibilityType(package))
+                    .Do(x =>
+                    {
+                        // Accessibility options do not apply to hazardous materials
+                        if (package.DangerousGoodsType != (int)FedExDangerousGoodsMaterialType.HazardousMaterials &&
+                            package.DangerousGoodsAccessibilityType != (int)FedExDangerousGoodsAccessibilityType.NotApplicable)
+                        {
+                            dangerousGoods.Accessibility = x;
+                            dangerousGoods.AccessibilitySpecified = true;
+                        }
+                    })
+                    .Map(x => dangerousGoods);
         }
 
         /// <summary>
@@ -138,10 +133,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
             // Make sure all of the properties we'll be accessing have been created
             InitializeRequest(shipment, request);
 
-            ConfigureShippingDocuments(request);
+            ConfigureShippingDocuments(request, shipment.FedEx.Packages.Count());
 
             // Add the service option to the request
-            ConfigureDangerousGoodsOption(request);
+            ConfigureDangerousGoodsOption(request, package);
 
             DangerousGoodsDetail dangerousGoods = new DangerousGoodsDetail();
 
@@ -198,24 +193,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// </summary>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="labelFormat">The format to print shipping documents</param>
-        private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest)
+        private static void ConfigureShippingDocuments(IFedExNativeShipmentRequest nativeRequest, int packageCount)
         {
             var documentTypes = nativeRequest.RequestedShipment
                 .Ensure(x => x.ShippingDocumentSpecification)
                 .Ensure(x => x.ShippingDocumentTypes)
                 .AsEnumerable();
 
-            documentTypes = documentTypes.Append(RequestedShippingDocumentType.OP_900);
-            nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
+            if (packageCount == 1)
             {
-                Format = new ShippingDocumentFormat
+                documentTypes = documentTypes.Append(RequestedShippingDocumentType.OP_900);
+                nativeRequest.RequestedShipment.ShippingDocumentSpecification.Op900Detail = new Op900Detail
                 {
-                    ImageType = ShippingDocumentImageType.PDF,
-                    ImageTypeSpecified = true,
-                    StockType = ShippingDocumentStockType.OP_900_LL_B,
-                    StockTypeSpecified = true
-                }
-            };
+                    Format = new ShippingDocumentFormat
+                    {
+                        ImageType = ShippingDocumentImageType.PDF,
+                        ImageTypeSpecified = true,
+                        StockType = ShippingDocumentStockType.OP_900_LL_B,
+                        StockTypeSpecified = true
+                    }
+                };
+            }
 
             documentTypes = documentTypes.Append(RequestedShippingDocumentType.DANGEROUS_GOODS_SHIPPERS_DECLARATION);
             nativeRequest.RequestedShipment.ShippingDocumentSpecification.DangerousGoodsShippersDeclarationDetail = new DangerousGoodsShippersDeclarationDetail
@@ -239,6 +237,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <param name="package">The package.</param>
         private static GenericResult<DangerousGoodsDetail> ConfigureHazardousMaterials(DangerousGoodsDetail dangerousGoods, IFedExPackageEntity package)
         {
+            if (package.DangerousGoodsType != (int)FedExDangerousGoodsMaterialType.HazardousMaterials)
+            {
+                return GenericResult.FromSuccess(dangerousGoods);
+            }
+
             // We  need to supply a description of the hazardous commodity when shipment contains hazardous materials
             dangerousGoods.Containers = new[]
             {
@@ -335,14 +338,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
         /// <summary>
         /// Adds the dangerous goods option to the request.
         /// </summary>
-        /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureDangerousGoodsOption(IFedExNativeShipmentRequest nativeRequest)
+        private void ConfigureDangerousGoodsOption(IFedExNativeShipmentRequest nativeRequest, IFedExPackageEntity package)
         {
             var servicesRequested = nativeRequest.RequestedShipment.RequestedPackageLineItems[0]
                 .Ensure(x => x.SpecialServicesRequested);
             servicesRequested.SpecialServiceTypes = servicesRequested.Ensure(x => x.SpecialServiceTypes)
                 .Append(PackageSpecialServiceType.DANGEROUS_GOODS)
                 .ToArray();
+
+            if (package.DangerousGoodsType == (int) FedExDangerousGoodsMaterialType.Batteries)
+            {
+                servicesRequested.SpecialServiceTypes = servicesRequested.Ensure(x => x.SpecialServiceTypes)
+                    .Append(PackageSpecialServiceType.BATTERY)
+                    .ToArray();
+            }
         }
 
         /// <summary>
@@ -399,7 +408,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship.Manipulators.Request
                 case FedExDangerousGoodsAccessibilityType.Inaccessible: return DangerousGoodsAccessibilityType.INACCESSIBLE;
             }
 
-            return new InvalidOperationException("An unrecognized dangerous goods accessibility type was provided.");
+            return DangerousGoodsAccessibilityType.ACCESSIBLE;
         }
 
         /// <summary>
