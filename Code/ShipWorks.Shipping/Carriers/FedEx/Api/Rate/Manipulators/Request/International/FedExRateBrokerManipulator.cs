@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 

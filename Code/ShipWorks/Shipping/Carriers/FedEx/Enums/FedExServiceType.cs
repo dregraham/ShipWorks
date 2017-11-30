@@ -75,6 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         SmartPost = 15,
 
         [Description("FedEx Europe First International Priority®")]
+        [ApiValue("EUROPE_FIRST_INTERNATIONAL_PRIORITY")]
         FedExEuropeFirstInternationalPriority = 17,
 
         [Description("FedEx 2Day® A.M.")]

@@ -1009,14 +1009,25 @@ namespace ShipWorks.Shipping
         /// shipping address and any store specific logic that may impact whether customs
         /// is required (i.e. eBay GSP).
         /// </summary>
-        public virtual bool IsCustomsRequired(ShipmentEntity shipment)
+        /// <remarks>
+        /// This override is only needed for BestRate since it loads data into the shipment.
+        /// No other shipment type needs this to be a concrete type.
+        /// </remarks>
+        public virtual bool IsCustomsRequired(ShipmentEntity shipment) =>
+            IsCustomsRequired(shipment as IShipmentEntity);
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        protected bool IsCustomsRequired(IShipmentEntity shipment)
         {
             // Some carts have an international shipping program in place that allow
             // sellers to ship international orders to a domestic facility meaning
             // customs is not required despite the international shipping address, so
             // let the store take a look at the shipment as well to determine if customs
             // are required in addition to the just looking at the shipping address.
-
             bool requiresCustoms = IsCustomsRequiredByShipment(shipment);
 
             if (requiresCustoms)
@@ -1038,7 +1049,7 @@ namespace ShipWorks.Shipping
         /// shipping address.
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
-        protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected virtual bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             bool requiresCustoms = !IsDomestic(shipment);
 

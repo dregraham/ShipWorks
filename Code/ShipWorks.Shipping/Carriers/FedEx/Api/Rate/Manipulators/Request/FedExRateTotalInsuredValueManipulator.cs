@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Manipulators.Request

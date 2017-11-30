@@ -66,8 +66,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         }
 
         [Theory]
-        [InlineData(ShipmentOriginSource.Account)]
-        [InlineData(ShipmentOriginSource.Other)]
+        [InlineData((long) ShipmentOriginSource.Account)]
+        [InlineData((long) ShipmentOriginSource.Other)]
         [InlineData(900)]
         public void Register_DoesNotCallSetAddress_WhenSourceIsNotStore(long source)
         {

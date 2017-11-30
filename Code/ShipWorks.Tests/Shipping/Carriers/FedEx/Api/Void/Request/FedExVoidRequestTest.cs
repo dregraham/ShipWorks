@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
         public FedExVoidRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
-            account = new FedExAccountEntity {AccountNumber = "1234", MeterNumber = "45453"};
+            account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.Void(It.IsAny<DeleteShipmentRequest>())).Returns(new ShipmentReply());

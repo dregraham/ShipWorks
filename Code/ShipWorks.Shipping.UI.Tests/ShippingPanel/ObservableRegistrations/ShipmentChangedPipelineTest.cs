@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(viewModel.Object, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object, mock.Build<ICarrierShipmentAdapter>()));
 
             viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel, mock.Build<ICarrierShipmentAdapter>()));
 
             viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel.InsuranceViewModel, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.ShipmentViewModel.InsuranceViewModel, mock.Build<ICarrierShipmentAdapter>()));
 
             viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -80,8 +80,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             var testObject = mock.Create<ShipmentChangedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Origin, mock.Create<ICarrierShipmentAdapter>()));
-            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Destination, mock.Create<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Origin, mock.Build<ICarrierShipmentAdapter>()));
+            subject.OnNext(new ShipmentChangedMessage(viewModel.Object.Destination, mock.Build<ICarrierShipmentAdapter>()));
 
             viewModel.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }

@@ -48,9 +48,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(), mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
-            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(shipment, null, mock.Create<IStoreManager>(), mock.Create<IAmazonServiceTypeRepository>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(null, mock.Build<IShipmentTypeManager>(), mock.Build<IStoreManager>(), mock.Build<IAmazonServiceTypeRepository>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(), mock.Build<IStoreManager>(), mock.Build<IAmazonServiceTypeRepository>()));
+            Assert.Throws<ArgumentNullException>(() => new AmazonShipmentAdapter(shipment, null, mock.Build<IStoreManager>(), mock.Build<IAmazonServiceTypeRepository>()));
         }
 
         [Fact]

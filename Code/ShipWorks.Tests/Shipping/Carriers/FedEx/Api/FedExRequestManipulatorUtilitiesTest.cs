@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
@@ -138,12 +138,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateShippingWebAuthenticationDetails_UsesCspCredentialKeyFromSettings()
         {
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> settingsRepository = new Mock<IFedExSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
+            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settingsRepository.Object);
 
             Assert.Equal(detail.ParentCredential.Key, settings.CspCredentialKey);
         }
@@ -151,12 +151,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateShippingWebAuthenticationDetails_UsesCspCredentialPasswordFromSettings()
         {
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> settingsRepository = new Mock<IFedExSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
+            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settingsRepository.Object);
 
             Assert.Equal(detail.ParentCredential.Password, settings.CspCredentialPassword);
         }
@@ -164,12 +164,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateShippingWebAuthenticationDetails_UsesUserCredentialKeyFromSettings()
         {
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> settingsRepository = new Mock<IFedExSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
+            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settingsRepository.Object);
 
             Assert.Equal(detail.UserCredential.Key, settings.UserCredentialsKey);
         }
@@ -177,12 +177,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void CreateShippingWebAuthenticationDetails_UsesUserCredentialPasswordFromSettings()
         {
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> settingsRepository = new Mock<IFedExSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" });
 
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settings);
+            WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateShippingWebAuthenticationDetail(settingsRepository.Object);
 
             Assert.Equal(detail.UserCredential.Password, settings.UserCredentialsPassword);
         }

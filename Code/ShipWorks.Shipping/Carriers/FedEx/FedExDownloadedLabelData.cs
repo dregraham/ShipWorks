@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -12,13 +13,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [Component(RegistrationType.Self)]
     public class FedExDownloadedLabelData : IDownloadedLabelData
     {
-        private readonly IEnumerable<ICarrierResponse> carrierResponses;
+        private readonly IEnumerable<IFedExShipResponse> carrierResponses;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExDownloadedLabelData(IEnumerable<ICarrierResponse> carrierResponses, Func<Type, ILog> getLogger)
+        public FedExDownloadedLabelData(IEnumerable<IFedExShipResponse> carrierResponses, Func<Type, ILog> getLogger)
         {
             this.carrierResponses = carrierResponses;
             log = getLogger(typeof(FedExDownloadedLabelData));
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                foreach (ICarrierResponse carrierResponse in carrierResponses)
+                foreach (IFedExShipResponse carrierResponse in carrierResponses)
                 {
                     carrierResponse.Process();
                 }

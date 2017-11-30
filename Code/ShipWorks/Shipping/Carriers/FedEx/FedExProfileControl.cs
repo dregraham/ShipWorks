@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             foreach (FedExProfilePackageControl control in panelPackageControls.Controls)
             {
-                // If its visible it means ite being edited
+                // If it's visible it means it's being edited
                 if (control.Visible)
                 {
                     control.SaveToEntity();

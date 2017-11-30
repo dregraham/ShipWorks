@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,10 +19,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
     public class FedExShippingClerk : IFedExShippingClerk
     {
         private static bool hasDoneVersionCapture;
-        private readonly ILabelRepository labelRepository;
+        private readonly IFedExLabelRepositoryFactory labelRepositoryFactory;
         private readonly IFedExRequestFactory requestFactory;
         private readonly IFedExSettingsRepository settingsRepository;
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
         public FedExShippingClerk(
-            ILabelRepository labelRepository,
+            IFedExLabelRepositoryFactory labelRepositoryFactory,
             IFedExRequestFactory requestFactory,
             IFedExSettingsRepository settingsRepository,
             IExcludedServiceTypeRepository excludedServiceTypeRepository,
@@ -61,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             this.settingsRepository = settingsRepository;
             this.requestFactory = requestFactory;
-            this.labelRepository = labelRepository;
+            this.labelRepositoryFactory = labelRepositoryFactory;
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
             log = createLog(GetType());
         }
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity)
+        public GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -105,24 +106,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 PerformVersionCapture(shipmentEntity);
 
-                int packageCount = shipmentEntity.FedEx.Packages.Count();
-
                 // Make sure package dimensions are valid.
                 ValidatePackageDimensions(shipmentEntity);
 
                 // Clear out any previously saved labels for this shipment (in case there was an error shipping the first time (MPS))
-                labelRepository.ClearReferences(shipmentEntity);
+                labelRepositoryFactory.Create(shipmentEntity).ClearReferences(shipmentEntity);
 
-                // Each package in the shipment must be submitted to FedEx in an individual request
+                var request = requestFactory.CreateShipRequest();
+
+                int packageCount = FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service) ? 1 : shipmentEntity.FedEx.Packages.Count;
+
                 return Enumerable.Range(0, packageCount)
-                    .Select(x =>
-                    {
-                        CarrierRequest shippingRequest = requestFactory.CreateShipRequest(shipmentEntity);
-                        shippingRequest.SequenceNumber = x;
-
-                        return shippingRequest.Submit();
-                    })
-                    .ToList();
+                    .Aggregate(
+                        Enumerable.Empty<IFedExShipResponse>(),
+                        (list, i) => request.Submit(shipmentEntity, i).Map(list.Append));
             }
             catch (Exception ex)
             {
@@ -345,6 +342,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipmentEntity">The shipment entity.</param>
         public void Void(ShipmentEntity shipmentEntity)
         {
+            if (FedExUtility.IsFreightLtlService(shipmentEntity.FedEx.Service))
+            {
+                var serviceDescription = EnumHelper.GetDescription((FedExServiceType) shipmentEntity.FedEx.Service);
+                throw new FedExException($"{serviceDescription} shipments cannot be voided through ShipWorks. Please contact FedEx to void this shipment.");
+            }
+
             try
             {
                 // Make sure the shipment has a valid account associated with it
@@ -521,18 +524,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Queries FedEx for HoldAtLocations near the destination address.
         /// </summary>
-        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment)
-        {
-            FedExAccountEntity account = (FedExAccountEntity) settingsRepository.GetAccount(shipment);
-
-            FedExGlobalShipAddressRequest searchLocationsRequest = (FedExGlobalShipAddressRequest) requestFactory.CreateSearchLocationsRequest(shipment, account);
-
-            FedExGlobalShipAddressResponse carrierResponse = (FedExGlobalShipAddressResponse) searchLocationsRequest.Submit();
-
-            carrierResponse.Process();
-
-            return carrierResponse.DistanceAndLocationDetails;
-        }
+        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment) =>
+            requestFactory.CreateSearchLocationsRequest()
+                .Submit(shipment)
+                .Bind(x => x.Process())
+                .Match(x => x, ex => { throw ex; });
 
         /// <summary>
         /// Validates the FedEx account associated with the shipment entity to make sure it is not null
@@ -670,7 +666,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return requestFactory.CreateRateRequest()
                 .Submit(shipment, options)
-                .Map(x => x.Process())
+                .Bind(x => x.Process())
                 .Map(x => BuildRateResults(shipment, x.RateReplyDetails));
         }
 

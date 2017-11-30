@@ -4,27 +4,32 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Tests.Integration.Shared;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Ship;
+using ShipWorks.Shipping.FedEx;
 using FedExLocationType = ShipWorks.Shipping.Carriers.FedEx.Api.Enums.FedExLocationType;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
@@ -36,7 +41,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         }
 
         public string FedExAccountNumber { get; set; }
-
         public string CustomerTransactionId { get; set; }
         public string ShipTimestamp { get; set; }
         public string DropoffType { get; set; }
@@ -73,6 +77,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         public string SpecialServiceType1 { get; set; }
         public string SpecialServiceType2 { get; set; }
         public string SpecialServiceType3 { get; set; }
+        public string SpecialServiceType4 { get; set; }
 
         public string CodCollectionCurrency { get; set; }
         public string CodCollectionAmount { get; set; }
@@ -162,6 +167,32 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
         public string SaveLabel { get; set; }
 
+        public string FreightClass { get; set; }
+        public string FreightClass2 { get; set; }
+        public string FreightPieces { get; set; }
+        public string FreightPieces2 { get; set; }
+        public string FreightPackaging { get; set; }
+        public string FreightPackaging2 { get; set; }
+        public string FreightItemLength { get; set; }
+        public string FreightItemLength2 { get; set; }
+        public string FreightItemWidth { get; set; }
+        public string FreightItemWidth2 { get; set; }
+        public string FreightItemHeight { get; set; }
+        public string FreightItemHeight2 { get; set; }
+        public int FreightTotalHandlingUnits { get; set; }
+        public string FreightItemWeightValue { get; set; }
+        public string FreightItemWeightValue2 { get; set; }
+        public string FreightItemWeightUnits { get; set; }
+        public string FreightItemWeightUnits2 { get; set; }
+        public string FreightItemDimensionUnits { get; set; }
+        public string FreightItemDimensionUnits2 { get; set; }
+        public string FreightCollectTermsType { get; set; }
+        public string FreightRole { get; set; }
+
+        public string BatteryMaterial { get; set; }
+        public string BatteryPacking { get; set; }
+        public string BatteryRegulatorySubType { get; set; }
+
         /// <summary>
         /// Gets a value indicating whether save label is "true"
         /// </summary>
@@ -203,7 +234,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
         /// Ships the shipment
         /// </summary>
         /// <returns></returns>
-        public virtual bool Ship(OrderEntity order)
+        public virtual bool Ship(OrderEntity order, bool printLabels = false)
         {
             try
             {
@@ -215,42 +246,62 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    var settingsRepository = new FedExSettingsRepository();
-                    var labelRepository = new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()));
-
-                    //TODO: See if we can use Autofac for this
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk(
-                        labelRepository,
-                        new FedExRequestFactory(
-                            new FedExServiceGatewayFactory(
-                                _ => new FedExServiceGateway(settingsRepository),
-                                _ => new FedExOpenShipGateway(settingsRepository)),
-                            settingsRepository,
-                            new FedExShipmentTokenProcessor(),
-                            new FedExResponseFactory(labelRepository),
-                            null),
-                        settingsRepository,
-                        new ExcludedServiceTypeRepository(),
-                        LogManager.GetLogger
-                    );
-
-                    var responses = shippingClerk.Ship(shipment);
-
-                    foreach (ICarrierResponse response in responses)
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        response.Process();
-                    }
+                        var settingsRepository = new FedExSettingsRepository();
+                        IFedExLabelRepositoryFactory labelRepositoryFactory =
+                            new FedExLabelRepositoryFactory(
+                                () => new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())),
+                                () => new FedExLTLFreightLabelRepository(new DataResourceManagerWrapper(new PdfDocumentFactory())));
 
-                    shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
-                    shipment.Processed = true;
-                    shipment.ProcessedDate = DateTime.UtcNow;
-                    shipment.Voided = false;
-                    shipment.CustomsGenerated = true;
+                        //TODO: See if we can use Autofac for this
+                        FedExShippingClerk shippingClerk = new FedExShippingClerk(
+                            labelRepositoryFactory,
+                            new FedExRequestFactory(
+                                new FedExServiceGatewayFactory(
+                                    _ => new FedExServiceGateway(settingsRepository),
+                                    _ => new FedExOpenShipGateway(settingsRepository)),
+                                settingsRepository,
+                                new FedExShipmentTokenProcessor(),
+                                new FedExResponseFactory(),
+                                scope
+                            ),
+                            settingsRepository,
+                            new ExcludedServiceTypeRepository(),
+                            LogManager.GetLogger
+                        );
+
+                        var result = shippingClerk.Ship(shipment)
+                            .Map(r => r.ForEach(x => x.Process()));
+
+                        if (result.Failure)
+                        {
+                            if (result.Exception != null)
+                            {
+                                throw result.Exception;
+                            }
+
+                            throw new Exception(result.Message);
+                        }
+
+                        shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
+                        shipment.Processed = true;
+                        shipment.ProcessedDate = DateTime.UtcNow;
+                        shipment.Voided = false;
+                        shipment.CustomsGenerated = true;
+                    }
                 }
 
                 shipment.CustomsGenerated = true;
 
                 ShippingManager.SaveShipment(shipment);
+
+                if (printLabels)
+                {
+                    // We want returns to print, but they won't due to action settings so fake being a return shipment to print.
+                    shipment.ReturnShipment = false;
+                    ActionDispatcher.DispatchShipmentProcessed(shipment, SqlAdapter.Default);
+                }
 
                 return true;
             }
@@ -357,6 +408,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             shipment.FedEx.ReferencePO = CustomerTransactionId;
             shipment.FedEx.Service = (int) GetServiceType();
 
+            shipment.FedEx.FreightTotalHandlinUnits = FreightTotalHandlingUnits;
+
             SetPaymentInfo(shipment);
 
             shipment.FedEx.DropoffType = GetDropoffType();
@@ -411,8 +464,23 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             shipment.FedEx.HomeDeliveryInstructions = string.Empty;
             shipment.FedEx.HomeDeliveryDate = DateTime.Today;
 
-            shipment.FedEx.Currency = (int?) GetCurrency();
+            if (FreightRole != null)
+            {
+                shipment.FedEx.FreightRole = EnumHelper.GetEnumByApiValue<FedExFreightShipmentRoleType>(FreightRole);
+            }
 
+            if (FreightClass != null)
+            {
+                shipment.FedEx.FreightClass = EnumHelper.GetEnumByApiValue<FedExFreightClassType>(FreightClass);
+            }
+
+            if (FreightCollectTermsType != null)
+            {
+                shipment.FedEx.FreightCollectTerms =
+                    EnumHelper.GetEnumByApiValue<FedExFreightCollectTermsType>(FreightCollectTermsType);
+            }
+
+            shipment.FedEx.Currency = (int?) GetCurrency();
             shipment.ResidentialResult = !string.IsNullOrEmpty(RecipientResidential) && RecipientResidential.ToLower() == "true";
             if (shipment.ResidentialResult)
             {
@@ -455,11 +523,13 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             SetLinearUnits(shipment);
             SetShipmentSpecialServiceType(shipment, SpecialServiceType1);
             SetShipmentSpecialServiceType(shipment, SpecialServiceType2);
+            SetShipmentSpecialServiceType(shipment, SpecialServiceType3);
 
             SetEmailOptions(shipment);
 
             SetCodData(shipment);
             SetPackageData(shipment);
+            SetFreightPackageData(shipment);
 
             AddCustomerReferences(shipment);
             SetSignatureOption(shipment);
@@ -505,7 +575,17 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
 
             if (!DateTime.TryParse(ShipTimestamp, out shipTimestamp))
             {
-                shipTimestamp = string.IsNullOrEmpty(ShipTimestamp) ? DateTime.Now : GetNext(DateTime.Now, (DayOfWeek) Enum.Parse(typeof(DayOfWeek), ShipTimestamp));
+                if (string.IsNullOrEmpty(ShipTimestamp))
+                {
+                    return DateTime.Now;
+                }
+
+                if (ShipTimestamp == "Next working day")
+                {
+                    return DateTime.Now.AddDays(1);
+                }
+
+                shipTimestamp = GetNext(DateTime.Now, (DayOfWeek) Enum.Parse(typeof(DayOfWeek), ShipTimestamp));
             }
 
             return shipTimestamp;
@@ -542,8 +622,13 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 shipment.FedEx.RmaNumber = ReturnRmaNumber;
             }
-        }
 
+            if (!string.IsNullOrWhiteSpace(EmailAllowedSpecialServices) &&
+                EmailAllowedSpecialServices.ToUpperInvariant() == "SATURDAY_PICKUP")
+            {
+                shipment.FedEx.ReturnSaturdayPickup = true;
+            }
+        }
 
         private void SwapAddressForReturns(ShipmentEntity shipment)
         {
@@ -606,7 +691,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             // Check all three locations because some of the tabs of the spreadsheet don't have a column for the hold at location type
             if ((!string.IsNullOrEmpty(SpecialServiceType1) && SpecialServiceType1.ToLower() == "hold_at_location")
                 || (!string.IsNullOrEmpty(SpecialServiceType2) && SpecialServiceType2.ToLower() == "hold_at_location")
-                || (!string.IsNullOrEmpty(HoldLocationType)))
+                || (!string.IsNullOrEmpty(PackageLineItemSpecialServiceType1) && PackageLineItemSpecialServiceType1.ToLower() == "hold_at_location")
+                || !string.IsNullOrEmpty(HoldLocationType))
             {
                 // Default to the FedEx Express Station if there isn't a location type pulled in from the spreadsheet
                 shipment.FedEx.HoldLocationType = string.IsNullOrEmpty(HoldLocationType) ? (int) FedExLocationType.FedExExpressStation : (int) GetLocationType();
@@ -698,6 +784,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             package.PackingDetailsCargoAircraftOnly = false;
             package.PackingDetailsPackingInstructions = string.Empty;
 
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.Bag;
+            package.FreightPieces = 0;
+            package.BatteryMaterial = FedExBatteryMaterialType.NotSpecified;
+            package.BatteryPacking = FedExBatteryPackingType.NotSpecified;
+            package.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified;
+
             package.AlcoholRecipientType = 0;
         }
 
@@ -762,7 +854,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
                                (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol") ||
                                (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "alcohol") ||
-                               (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "alcohol"));
+                               (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "alcohol") ||
+                               (SpecialServiceType3 != null && SpecialServiceType3.ToLower() == "alcohol"));
 
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
@@ -808,7 +901,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" ||
                 PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" ||
                 PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" ||
-                PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
+                PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS" ||
+                SpecialServiceType3 == "PRIORITY_ALERT")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
@@ -867,10 +961,28 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     package.DangerousGoodsAccessibilityType = (int) accessibility;
                     package.DangerousGoodsCargoAircraftOnly = cargoAircraftOnly;
 
-                    // default the material type to not applicable
-                    package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+                    if (IsDangerousGoodsBatteries())
+                    {
+                        package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
+                    }
+                    else
+                    {
+                        package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.NotApplicable;
+                    }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if any special service type (shipment or package level) is battery
+        /// </summary>
+        private bool IsDangerousGoodsBatteries()
+        {
+            return (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "battery") ||
+                   (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "battery") ||
+                   (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "battery");
         }
 
         /// <summary>
@@ -928,9 +1040,23 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     package.DimsWidth = double.Parse(PackageLineItemWidth);
                 }
 
+                if (!BatteryMaterial.IsNullOrWhiteSpace())
+                {
+                    package.BatteryMaterial = EnumHelper.GetEnumByApiValue<FedExBatteryMaterialType>(BatteryMaterial);
+                }
+
+                if (!BatteryPacking.IsNullOrWhiteSpace())
+                {
+                    package.BatteryPacking = EnumHelper.GetEnumByApiValue<FedExBatteryPackingType>(BatteryPacking);
+                }
+
+                if (!BatteryRegulatorySubType.IsNullOrWhiteSpace())
+                {
+                    package.BatteryRegulatorySubtype = EnumHelper.GetEnumByApiValue<FedExBatteryRegulatorySubType>(BatteryRegulatorySubType);
+                }
+
                 shipment.FedEx.Packages.Add(package);
             }
-
         }
 
         /// <summary>
@@ -1031,6 +1157,14 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                         break;
                     case "inside_delivery":
                         shipment.FedEx.FreightInsideDelivery = true;
+                        break;
+                    case "inside_pickup":
+                        shipment.FedEx.FreightInsidePickup = true;
+                        break;
+                    case "saturday_pickup":
+                        // We don't support this directly, so for certification, force it:
+                        shipment.FedEx.DropoffType = (int) FedExDropoffType.RegularPickup;
+                        shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Saturday);
                         break;
                     case "saturday_delivery":
                         shipment.FedEx.SaturdayDelivery = true;
@@ -1331,6 +1465,12 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     return FedExServiceType.FedExDistanceDeferred;
                 case "FEDEX_NEXT_DAY_FREIGHT":
                     return FedExServiceType.FedExNextDayFreight;
+                case "FEDEX_FREIGHT_ECONOMY":
+                    return FedExServiceType.FedExFreightEconomy;
+                case "FEDEX_FREIGHT_PRIORITY":
+                    return FedExServiceType.FedExFreightPriority;
+                case "EUROPE_FIRST_INTERNATIONAL_PRIORITY":
+                    return FedExServiceType.FedExEuropeFirstInternationalPriority;
             }
 
             throw new Exception($"Unrecognized service type. {ShipmentServiceType}");
@@ -1375,6 +1515,7 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                 case "third_party": return FedExPayorType.ThirdParty;
                 case "recipient": return FedExPayorType.Recipient;
                 case "collect": return FedExPayorType.Collect;
+                default: return FedExPayorType.Sender;
             }
 
             throw new Exception("Unrecognized payment type");
@@ -1394,6 +1535,11 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
                     shipment.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.FaultyItem;
                 }
 
+                if (string.IsNullOrWhiteSpace(customsOptionDescription))
+                {
+                    customsOptionDescription = "Outbound shipment";
+                }
+
                 shipment.FedEx.CustomsOptionsDesription = customsOptionDescription;
             }
             else
@@ -1411,6 +1557,150 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx
             {
                 shipment.FedEx.ReturnsClearance = true;
             }
+        }
+
+        /// <summary>
+        /// Sets the freight package data.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        public void SetFreightPackageData(ShipmentEntity shipment)
+        {
+            if (shipment.FedEx.Service == (int) FedExServiceType.FedExFreightEconomy ||
+                shipment.FedEx.Service == (int) FedExServiceType.FedExFreightPriority)
+            {
+                FedExPackageEntity package = shipment.FedEx.Packages[0];
+                InitializeFreightPackage(package);
+
+                if (!string.IsNullOrWhiteSpace(PackageLineItemInsuredValueAmount))
+                {
+                    decimal amount = decimal.Parse(PackageLineItemInsuredValueAmount);
+                    package.DeclaredValue = amount;
+                    package.Insurance = true;
+                }
+
+                package.Weight = string.IsNullOrEmpty(FreightItemWeightValue)
+                    ? 0
+                    : double.Parse(FreightItemWeightValue);
+
+                if (!string.IsNullOrEmpty(FreightItemLength))
+                {
+                    package.DimsLength = double.Parse(FreightItemLength);
+                }
+
+                if (!string.IsNullOrEmpty(FreightItemHeight))
+                {
+                    package.DimsHeight = double.Parse(FreightItemHeight);
+                }
+
+                if (!string.IsNullOrEmpty(FreightItemWidth))
+                {
+                    package.DimsWidth = double.Parse(FreightItemWidth);
+                }
+
+                if (!string.IsNullOrEmpty(FreightPieces))
+                {
+                    package.FreightPieces = int.Parse(FreightPieces);
+                }
+
+                if (PackageCount == 2)
+                {
+                    package = shipment.FedEx.Packages[1];
+                    InitializeFreightPackage(package);
+
+                    if (!string.IsNullOrWhiteSpace(PackageLineItemInsuredValueAmount))
+                    {
+                        decimal amount = decimal.Parse(PackageLineItemInsuredValueAmount);
+                        package.DeclaredValue = amount;
+                        package.Insurance = true;
+                    }
+
+                    package.Weight = string.IsNullOrEmpty(FreightItemWeightValue2)
+                        ? 0
+                        : double.Parse(FreightItemWeightValue2);
+
+                    if (!string.IsNullOrEmpty(FreightItemLength2))
+                    {
+                        package.DimsLength = double.Parse(FreightItemLength2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightItemHeight2))
+                    {
+                        package.DimsHeight = double.Parse(FreightItemHeight2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightItemWidth2))
+                    {
+                        package.DimsWidth = double.Parse(FreightItemWidth2);
+                    }
+
+                    if (!string.IsNullOrEmpty(FreightPieces2))
+                    {
+                        package.FreightPieces = int.Parse(FreightPieces2);
+                    }
+                }
+            }
+        }
+
+        private void InitializeFreightPackage(FedExPackageEntity package)
+        {
+            if (package.Weight <= 0)
+            {
+                package.Weight = package.DimsWeight;
+            }
+
+            package.DimsProfileID = 0;
+            package.SkidPieces = 0;
+            package.InsurancePennyOne = false;
+            package.TrackingNumber = string.Empty;
+
+            package.PriorityAlertEnhancementType = 0;
+            package.PriorityAlertDetailContent = string.Empty;
+            package.PriorityAlert = false;
+
+            package.DryIceWeight = 0;
+            package.DeclaredValue = 0M;
+
+            package.DimsLength = 2;
+            package.DimsHeight = 1;
+            package.DimsWidth = 1;
+            package.DimsWeight = 0;
+            package.DimsAddWeight = false;
+
+            package.Insurance = false;
+            package.InsuranceValue = 0M;
+
+            package.SignatoryContactName = string.Empty;
+            package.SignatoryTitle = string.Empty;
+            package.SignatoryPlace = string.Empty;
+            package.ContainerType = string.Empty;
+            package.NumberOfContainers = 0;
+
+            package.DangerousGoodsType = (int) FedExDangerousGoodsMaterialType.Batteries;
+            package.DangerousGoodsPackagingCount = 0;
+            package.DangerousGoodsOfferor = string.Empty;
+            package.DangerousGoodsEnabled = false;
+            package.DangerousGoodsEmergencyContactPhone = string.Empty;
+            package.DangerousGoodsCargoAircraftOnly = false;
+            package.DangerousGoodsAccessibilityType = (int) FedExDangerousGoodsAccessibilityType.Accessible;
+
+            package.HazardousMaterialClass = string.Empty;
+            package.HazardousMaterialNumber = string.Empty;
+            package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.Default;
+            package.HazardousMaterialProperName = string.Empty;
+            package.HazardousMaterialTechnicalName = string.Empty;
+            package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
+            package.HazardousMaterialQuantityValue = 0;
+            package.PackingDetailsCargoAircraftOnly = false;
+            package.PackingDetailsPackingInstructions = string.Empty;
+
+            package.FreightPackaging = FedExFreightPhysicalPackagingType.Bag;
+            package.FreightPieces = 0;
+
+            package.BatteryMaterial = FedExBatteryMaterialType.NotSpecified;
+            package.BatteryPacking = FedExBatteryPackingType.NotSpecified;
+            package.BatteryRegulatorySubtype = FedExBatteryRegulatorySubType.NotSpecified;
+
+            package.AlcoholRecipientType = 0;
         }
     }
 }

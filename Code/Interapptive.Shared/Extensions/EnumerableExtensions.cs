@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Extensions
@@ -46,5 +47,39 @@ namespace Interapptive.Shared.Extensions
                 throw createException(string.Join(Environment.NewLine, exceptions.Select(x => x.Message)), exceptions.First());
             }
         }
+
+        /// <summary>
+        /// Applies an accumulator function over a sequence 
+        /// </summary>
+        public static GenericResult<TResult> Aggregate<T, TResult>(this IEnumerable<T> source, TResult accumulator, Func<TResult, T, GenericResult<TResult>> aggregator) =>
+            Enumerable.Aggregate(source,
+                GenericResult.FromSuccess(accumulator),
+                (acc, item) => acc.Bind(v => aggregator(v, item)));
+
+        /// <summary>
+        /// Applies an accumulator function over a sequence 
+        /// </summary>
+        public static GenericResult<IEnumerable<T>> Flatten<T>(this IEnumerable<GenericResult<T>> source) =>
+            Enumerable.Aggregate(source,
+                GenericResult.FromSuccess(Enumerable.Empty<T>()),
+                (acc, item) => acc.Bind(v => item.Map(i => v.Append(i))));
+
+        /// <summary>
+        /// Match on a dictionary
+        /// </summary>
+        /// <returns>
+        /// Success response with the result of the onFound method, or else the value of the onMissing method
+        /// </returns>
+        public static GenericResult<T> Match<T, TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, T> onFound, Func<Exception> onMissing) =>
+            source.Match(key, x => onFound(x), () => GenericResult.FromError<T>(onMissing()));
+
+        /// <summary>
+        /// Match on a dictionary
+        /// </summary>
+        /// <returns>
+        /// Success response with the result of the onFound method, or else the value of the onMissing method
+        /// </returns>
+        public static T Match<T, TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, Func<TValue, T> onFound, Func<T> onMissing) =>
+            source.ContainsKey(key) ? onFound(source[key]) : onMissing();
     }
 }

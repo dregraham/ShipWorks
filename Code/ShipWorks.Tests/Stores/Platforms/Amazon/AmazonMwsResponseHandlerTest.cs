@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Amazon;
 using Xunit;
 using Autofac.Extras.Moq;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
@@ -27,7 +28,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             
             var mock = AutoMock.GetLoose();
 
-            IAmazonCredentials creds = mock.Create<IAmazonCredentials>();
+            IAmazonCredentials creds = mock.Build<IAmazonCredentials>();
 
             mwsSettings = new AmazonMwsWebClientSettings(creds);
 

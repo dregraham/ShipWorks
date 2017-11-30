@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            logFactory = mock.Create<ILogEntryFactory>();
+            logFactory = mock.Build<ILogEntryFactory>();
         }
 
         [Fact]

@@ -1,15 +1,10 @@
 using System.Linq;
-using Interapptive.Shared.Pdf;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.IntegrationTest
@@ -45,20 +40,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
                     _ => new FedExOpenShipGateway(MockSettingsRepository.Object)),
                 MockSettingsRepository.Object,
                 new FedExShipmentTokenProcessor(),
-                new FedExResponseFactory(new FedExLabelRepository(new DataResourceManagerWrapper(new PdfDocument()))),
+                new FedExResponseFactory(),
                 null);
-            CarrierRequest searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
-
-            ICarrierResponse carrierResponse = searchLocationsRequest.Submit();
-
-            FedExGlobalShipAddressResponse fedExGlobalShipAddressResponse = carrierResponse as FedExGlobalShipAddressResponse;
+            var searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest();
+            var carrierResponse = searchLocationsRequest.Submit(shipment);
 
             Assert.NotNull(carrierResponse);
-            carrierResponse.Process();
+            var result = carrierResponse.Value.Process();
 
-            Assert.NotNull(fedExGlobalShipAddressResponse);
-
-            Assert.Equal(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count());
+            Assert.Equal(1, result.Value.Count());
         }
     }
 }

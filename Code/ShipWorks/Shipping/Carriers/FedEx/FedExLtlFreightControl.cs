@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.FedEx;
 using ShipWorks.UI.Controls;
 
@@ -33,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             EnumHelper.BindComboBox<FedExFreightShipmentRoleType>(role);
             EnumHelper.BindComboBox<FedExFreightCollectTermsType>(collectTerms);
             EnumHelper.BindComboBox<FedExFreightClassType>(freightClass);
+            EnumHelper.BindComboBox<FedExFreightGuaranteeType>(freightGuaranteeType);
 
             specialServicesControls = ImmutableList.Create(
                 new FedExLtlSpecialServicesControlContainer(callBeforeDelivery, FedExFreightSpecialServicesType.CallBeforeDelivery),
@@ -76,13 +76,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     role.ApplyMultiValue(fedEx.FreightRole);
                     collectTerms.ApplyMultiValue(fedEx.FreightCollectTerms);
                     freightClass.ApplyMultiValue(fedEx.FreightClass);
+                    freightGuaranteeType.ApplyMultiValue(fedEx.FreightGuaranteeType);
+                    freightGuaranteeDate.ApplyMultiDate(fedEx.FreightGuaranteeDate);
 
-                    FedExFreightSpecialServicesType currentSpecialServicesType = (FedExFreightSpecialServicesType)fedEx.FreightSpecialServices;
+                    FedExFreightSpecialServicesType currentSpecialServicesType = (FedExFreightSpecialServicesType) fedEx.FreightSpecialServices;
                     foreach (var item in specialServicesControls)
                     {
                         item.Control.ApplyMultiCheck(currentSpecialServicesType.HasFlag(item.SpecialServicesType));
                     }
                 }
+
+                UpdateFreightGuaranteeUI();
             }
         }
 
@@ -99,6 +103,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 role.ReadMultiValue(c => shipment.FedEx.FreightRole = (FedExFreightShipmentRoleType) c);
                 collectTerms.ReadMultiValue(c => shipment.FedEx.FreightCollectTerms = (FedExFreightCollectTermsType) c);
                 freightClass.ReadMultiValue(c => shipment.FedEx.FreightClass = (FedExFreightClassType) c);
+                freightGuaranteeType.ReadMultiValue(x => shipment.FedEx.FreightGuaranteeType = (FedExFreightGuaranteeType) x);
+                freightGuaranteeDate.ReadMultiDate(x => shipment.FedEx.FreightGuaranteeDate = x);
 
                 fedEx.FreightSpecialServices = SaveSpecialServices((int) fedEx.FreightSpecialServices, specialServicesControls);
             }
@@ -125,8 +131,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private int ApplySpecialServicesType(bool enabled, int previous, FedExFreightSpecialServicesType specialServicesTypes) =>
             enabled ?
-                previous | (int)specialServicesTypes :
-                previous & ~(int)specialServicesTypes;
+                previous | (int) specialServicesTypes :
+                previous & ~(int) specialServicesTypes;
 
         /// <summary>
         /// Rate criteria changed
@@ -144,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             RateCriteriaChanged?.Invoke(this, EventArgs.Empty);
         }
-        
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
@@ -166,6 +172,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Handle the Freight Guarantee check changed
+        /// </summary>
+        private void OnFreightGuaranteeCheckedChanged(object sender, EventArgs e) =>
+            UpdateFreightGuaranteeUI();
+
+        /// <summary>
+        /// Update the freight guarantee UI
+        /// </summary>
+        private void UpdateFreightGuaranteeUI()
+        {
+            freightGuaranteePanel.Enabled = freightGuarantee.Checked;
         }
     }
 

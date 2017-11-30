@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.FedEx
@@ -55,9 +50,9 @@ namespace ShipWorks.Shipping.FedEx
         [ApiValue("CONTAINER")]
         Container = 10,
 
-        [Description("Create")]
+        [Description("Crate")]
         [ApiValue("CRATE")]
-        Create = 11,
+        Crate = 11,
 
         [Description("Cylinder")]
         [ApiValue("CYLINDER")]

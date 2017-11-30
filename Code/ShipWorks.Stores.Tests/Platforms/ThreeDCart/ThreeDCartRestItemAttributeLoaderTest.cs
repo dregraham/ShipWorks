@@ -19,9 +19,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             orderElementFactory = mock.Mock<IOrderElementFactory>();
         }
 
+        [Fact]
         public void LoadItemNameAndAttributes_LoadsItemName()
         {
-
             var item = new ThreeDCartOrderItemEntity();
             var itemDescription = "Cool hat<br><b>Size:</b>&nbsp;Large - $1.00";
             var testObject = mock.Create<ThreeDCartRestItemAttributeLoader>();

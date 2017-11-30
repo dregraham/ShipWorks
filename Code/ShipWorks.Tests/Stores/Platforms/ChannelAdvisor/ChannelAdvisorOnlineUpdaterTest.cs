@@ -379,6 +379,7 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
         }
+
         [Fact]
         public void GetShipmentClassCode_Throws_WhenAmazonShipmentIsnull()
         {
@@ -388,6 +389,42 @@ namespace ShipWorks.Tests.Stores.Platforms.ChannelAdvisor
 
             Assert.Throws<ArgumentNullException>(
                 () => ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity, storeEntity));
+        }
+
+        [Theory]
+        [InlineData(FedExServiceType.FedExGround, "GROUND")]
+        [InlineData(FedExServiceType.GroundHomeDelivery, "GROUND")]
+        [InlineData(FedExServiceType.FedExInternationalGround, "GROUND")]
+        [InlineData(FedExServiceType.FedEx2Day, "2Day")]
+        [InlineData(FedExServiceType.OneRate2Day, "2Day")]
+        [InlineData(FedExServiceType.PriorityOvernight, "PRIORITY")]
+        [InlineData(FedExServiceType.OneRatePriorityOvernight, "PRIORITY")]
+        [InlineData(FedExServiceType.FirstOvernight, "1STOVERNIGHT")]
+        [InlineData(FedExServiceType.OneRateFirstOvernight, "1STOVERNIGHT")]
+        [InlineData(FedExServiceType.StandardOvernight, "OVERNIGHT")]
+        [InlineData(FedExServiceType.OneRateStandardOvernight, "OVERNIGHT")]
+        [InlineData(FedExServiceType.FedExExpressSaver, "EXPSAVER")]
+        [InlineData(FedExServiceType.OneRateExpressSaver, "EXPSAVER")]
+        [InlineData(FedExServiceType.FirstFreight, "OVERNIGHTFREIGHT")]
+        [InlineData(FedExServiceType.FedEx1DayFreight, "OVERNIGHTFREIGHT")]
+        [InlineData(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT")]
+        [InlineData(FedExServiceType.InternationalPriority, "INTLPRIORITY")]
+        [InlineData(FedExServiceType.InternationalPriorityExpress, "INTLPRIORITY")]
+        [InlineData(FedExServiceType.InternationalEconomy, "INTLECONOMY")]
+        [InlineData(FedExServiceType.InternationalFirst, "INTLFIRST")]
+        [InlineData(FedExServiceType.InternationalPriorityFreight, "Internaional Priority Freight")]
+        [InlineData(FedExServiceType.InternationalEconomyFreight, "International Economy Freight")]
+        [InlineData(FedExServiceType.SmartPost, "SmartPost")]
+        [InlineData(FedExServiceType.FedExFreightEconomy, "Freight Economy")]
+        [InlineData(FedExServiceType.FedExFreightPriority, "Freight Priority")]
+        public void GetShipmentClassCode_ReturnsCorrectValue_ForFedExServices(FedExServiceType service, string expected)
+        {
+            SetupShipmentDefaults(ShipmentTypeCode.FedEx);
+            fedExEntity.Service = (int) service;
+
+            string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity, storeEntity);
+
+            Assert.Equal(expected, code);
         }
 
         private void SetupShipmentDefaults(ShipmentTypeCode shipmentTypeCode)

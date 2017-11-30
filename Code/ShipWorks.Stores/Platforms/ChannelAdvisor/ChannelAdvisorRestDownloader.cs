@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -14,7 +15,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
-using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -39,12 +39,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         [NDependIgnoreTooManyParams(Justification =
             "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
         public ChannelAdvisorRestDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
             IChannelAdvisorRestClient restClient,
             IEncryptionProviderFactory encryptionProviderFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory,
             Func<Type, ILog> createLogger) :
-            base(store)
+            base(store, storeTypeManager.GetType(store))
         {
             this.restClient = restClient;
             this.orderLoaderFactory = orderLoaderFactory;
@@ -145,13 +146,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             List<ChannelAdvisorDistributionCenter> refreshedDistributionCenters = new List<ChannelAdvisorDistributionCenter>();
 
             ChannelAdvisorDistributionCenterResponse response = restClient.GetDistributionCenters(refreshToken);
-            
-            while(response?.DistributionCenters?.Any() ?? false)
+
+            while (response?.DistributionCenters?.Any() ?? false)
             {
                 refreshedDistributionCenters.AddRange(response.DistributionCenters);
 
-                response = string.IsNullOrEmpty(response.OdataNextLink) 
-                    ? null 
+                response = string.IsNullOrEmpty(response.OdataNextLink)
+                    ? null
                     : restClient.GetDistributionCenters(response.OdataNextLink, refreshToken);
             }
 

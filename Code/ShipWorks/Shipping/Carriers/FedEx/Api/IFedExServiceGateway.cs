@@ -1,6 +1,5 @@
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
@@ -20,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Intended to interact with the FedEx API to process a shipment.
         /// </summary>
         /// <returns>The ProcessShipmentReply received from FedEx.</returns>
-        IFedExNativeShipmentReply Ship(IFedExNativeShipmentRequest nativeShipmentRequest);
+        GenericResult<ProcessShipmentReply> Ship(ProcessShipmentRequest nativeShipmentRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API to get locationID
@@ -38,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Makes GlobalShipAddressInquiry call to FedEx
         /// </summary>
         /// <returns>The SearchLocationsReply received from FedEx</returns>
-        SearchLocationsReply GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest);
+        GenericResult<SearchLocationsReply> GlobalShipAddressInquiry(SearchLocationsRequest searchLocationsRequest);
 
         /// <summary>
         /// Intended to interact with the FedEx API for performing an end of day ground close.

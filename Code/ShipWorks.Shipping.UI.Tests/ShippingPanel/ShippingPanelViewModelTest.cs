@@ -956,8 +956,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
         {
             var testObject = mock.Create<ShippingPanelViewModel>();
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] {
-                mock.Create<IOrderSelection>(),
-                mock.Create<IOrderSelection>()
+                mock.Build<IOrderSelection>(),
+                mock.Build<IOrderSelection>()
             }));
 
             testObject.OpenShippingDialogCommand.Execute(OpenShippingDialogType.SelectedOrders);
@@ -972,8 +972,8 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel
             var testObject = mock.Create<ShippingPanelViewModel>();
 
             testObject.LoadOrder(new OrderSelectionChangedMessage(this, new[] {
-                mock.Create<IOrderSelection>(),
-                mock.Create<IOrderSelection>()
+                mock.Build<IOrderSelection>(),
+                mock.Build<IOrderSelection>()
             }));
 
             Assert.Equal(ShipmentStatus.None, testObject.ShipmentStatus);

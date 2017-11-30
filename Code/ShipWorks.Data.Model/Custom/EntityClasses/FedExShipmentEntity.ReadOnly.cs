@@ -24,6 +24,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public PersonAdapter HoldPerson { get; private set; }
 
         /// <summary>
+        /// Get the Importer address
+        /// </summary>
+        public PersonAdapter ImporterPerson { get; private set; }
+
+        /// <summary>
         /// Copy custom data
         /// </summary>
         partial void CopyCustomFedExShipmentData(IFedExShipmentEntity source)
@@ -31,6 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BrokerPerson = source.BrokerPerson.CopyToNew();
             CodPerson = source.CodPerson.CopyToNew();
             HoldPerson = source.HoldPerson.CopyToNew();
+            ImporterPerson = source.ImporterPerson.CopyToNew();
         }
     }
 }

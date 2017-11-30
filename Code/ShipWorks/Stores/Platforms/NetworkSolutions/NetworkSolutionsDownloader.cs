@@ -32,8 +32,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// <summary>
         /// Constructor
         /// </summary>
-        public NetworkSolutionsDownloader(StoreEntity store)
-            : base(store)
+        public NetworkSolutionsDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
         }
 

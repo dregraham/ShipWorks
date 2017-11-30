@@ -5,7 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Divelements.SandGrid;
 using Interapptive.Shared;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Grid.DetailView;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
@@ -169,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             UpdateLayout();
-            
+
             suspendRateCriteriaEvent--;
             suspendShipSenseFieldEvent--;
         }
@@ -231,6 +233,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             foreach (ShipmentEntity shipment in loadedShipments)
             {
                 FedExShipmentEntity fedex = shipment.FedEx;
+                fedex.Packages.Ensure(x => x.RemovedEntitiesTracker, () => new FedExPackageCollection());
 
                 // Need more
                 while (fedex.Packages.Count < count)
@@ -257,10 +260,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             RaiseShipSenseFieldChanged();
 
             // Raise the package count changed event
-            if (PackageCountChanged != null)
-            {
-                PackageCountChanged(count);
-            }
+            PackageCountChanged?.Invoke(count);
         }
 
         /// <summary>

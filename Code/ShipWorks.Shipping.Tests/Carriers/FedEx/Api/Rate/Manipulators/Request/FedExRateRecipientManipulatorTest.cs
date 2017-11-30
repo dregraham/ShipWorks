@@ -93,8 +93,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Rate.Manipulators.Request
         [InlineData("GGG", "guam")]
         public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
         {
-            shipment.ShipStateProvCode = "GU";
-            shipment.ShipCountryCode = "US";
+            shipment.ShipStateProvCode = state;
+            shipment.ShipCountryCode = country;
 
             var result = testObject.Manipulate(shipment, new RateRequest());
 

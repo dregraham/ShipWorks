@@ -17,11 +17,11 @@ namespace ShipWorks.Core.Tests.Integration.Common
 
         public ApplyOrderedManipulatorsTest()
         {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
-            builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
-
-            container = ContainerInitializer.BuildRegistrations(builder.Build());
+            container = ContainerInitializer.Build(builder =>
+            {
+                builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
+                builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
+            });
         }
 
         [Fact]
@@ -46,11 +46,11 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [InlineData(1, 10)]
         public void Apply_WithManipulators_AppliesManipulatorsInCorrectOrderWhenReveresed(int input, int expected)
         {
-            var builder = new ContainerBuilder();
-            builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
-            builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
-
-            using (var container2 = ContainerInitializer.BuildRegistrations(builder.Build()))
+            using (var container2 = ContainerInitializer.Build(builder =>
+            {
+                builder.RegisterType<AddFive>().OrderBy(nameof(IThing), 2).AsImplementedInterfaces();
+                builder.RegisterType<MultiplyFive>().OrderBy(nameof(IThing), 1).AsImplementedInterfaces();
+            }))
             {
                 var applicator = container2.Resolve<IOrderedCompositeManipulator<IThing, int>>();
                 var result = applicator.Apply(input);
@@ -61,7 +61,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [Fact]
         public void Apply_ThrowsInvalidOperationException_WhenNoManipulatorsAreRegistered()
         {
-            using (var container2 = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build()))
+            using (var container2 = ContainerInitializer.Build())
             {
                 var applicator = container2.Resolve<IOrderedCompositeManipulator<IThing, int>>();
                 Assert.Throws<InvalidOperationException>(() => applicator.Apply(0));

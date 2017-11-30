@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void LoadStoreIntoViewModel_Throws_WhenStoreIsNull()
         {
-            var viewModel = mock.Create<IShopSiteAccountSettingsViewModel>();
+            var viewModel = mock.Build<IShopSiteAccountSettingsViewModel>();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
             Assert.Throws<ArgumentNullException>(() => testObject.LoadStoreIntoViewModel(null, viewModel));
         }
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void LoadStoreIntoViewModel_Throws_WhenViewModelIsNull()
         {
-            var store = mock.Create<IShopSiteStoreEntity>();
+            var store = mock.Build<IShopSiteStoreEntity>();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
             Assert.Throws<ArgumentNullException>(() => testObject.LoadStoreIntoViewModel(store, null));
         }
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.SetupGet(x => x.OauthSecretKey).Returns("EncryptedPassword");
             store.SetupGet(x => x.OauthAuthorizationCode).Returns("Code");
 
-            testObject.LoadStoreIntoViewModel(store.Object, mock.Create<IShopSiteAccountSettingsViewModel>());
+            testObject.LoadStoreIntoViewModel(store.Object, mock.Build<IShopSiteAccountSettingsViewModel>());
 
             mock.Mock<IDatabaseSpecificEncryptionProvider>().Verify(x => x.Decrypt("EncryptedPassword"));
         }
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         [Fact]
         public void SaveDataToStoreFromViewModel_Throws_WhenStoreIsNull()
         {
-            var viewModel = mock.Create<IShopSiteAccountSettingsViewModel>();
+            var viewModel = mock.Build<IShopSiteAccountSettingsViewModel>();
             var testObject = mock.Create<ShopSiteOauthAuthenticationPersisitenceStrategy>();
 
             Assert.Throws<ArgumentNullException>(() => testObject.SaveDataToStoreFromViewModel(null, viewModel));

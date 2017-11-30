@@ -37,7 +37,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Enable_DelegatesToMessageFilterRegistrar()
         {
-            var messageFilter = mock.Create<IScannerMessageFilter>();
+            var messageFilter = mock.Build<IScannerMessageFilter>();
             mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             var testObject = mock.Create<ScannerService>();
@@ -76,7 +76,7 @@ namespace ShipWorks.SingleScan.Tests
         [Fact]
         public void Disable_DelegatesToMessageFilterRegistrar()
         {
-            var messageFilter = mock.Create<IScannerMessageFilter>();
+            var messageFilter = mock.Build<IScannerMessageFilter>();
             mock.Mock<IScannerMessageFilterFactory>().Setup(x => x.CreateRegisteredScannerInputHandler()).Returns(messageFilter);
 
             var testObject = mock.Create<ScannerService>();

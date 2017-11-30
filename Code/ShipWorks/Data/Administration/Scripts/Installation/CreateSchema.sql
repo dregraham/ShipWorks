@@ -2061,7 +2061,9 @@ CREATE TABLE [dbo].[FedExShipment]
 [FreightCollectTerms] [int] NOT NULL,
 [FreightTotalHandlinUnits] [int] NOT NULL,
 [FreightClass] [int] NOT NULL,
-[FreightSpecialServices] [int] NOT NULL
+[FreightSpecialServices] [int] NOT NULL,
+[FreightGuaranteeType] [int] NOT NULL,
+[FreightGuaranteeDate] [datetime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'

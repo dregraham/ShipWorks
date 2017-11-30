@@ -32,9 +32,10 @@ namespace ShipWorks.Stores.Platforms.ShopSite
         /// Constructor
         /// </summary>
         public ShopSiteDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
             IShopSiteWebClientFactory webClientFactory,
             Func<Type, ILog> logFactory)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             IShopSiteStoreEntity shopSiteStore = store as IShopSiteStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(shopSiteStore, nameof(shopSiteStore));

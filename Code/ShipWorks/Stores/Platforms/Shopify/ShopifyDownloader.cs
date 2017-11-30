@@ -37,9 +37,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Constructor
         /// </summary>
         public ShopifyDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
             Func<ShopifyStoreEntity, IProgressReporter, IShopifyWebClient> webClientFactory,
             IDateTimeProvider dateTimeProvider)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.dateTimeProvider = dateTimeProvider;
             requestedShippingField = (ShopifyRequestedShippingField) ((ShopifyStoreEntity) store).ShopifyRequestedShippingOption;

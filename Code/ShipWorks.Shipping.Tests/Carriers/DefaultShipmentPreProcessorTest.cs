@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
                 shipment = Create.Shipment(new OrderEntity()).AsOther().Build();
 
                 var retriever = mock.CreateMock<ICarrierAccountRetriever>(m =>
-                    m.Setup(x => x.AccountsReadOnly).Returns(new[] { mock.Create<ICarrierAccount>() }));
+                    m.Setup(x => x.AccountsReadOnly).Returns(new[] { mock.Build<ICarrierAccount>() }));
                 mock.Mock<ICarrierAccountRetrieverFactory>()
                     .Setup(x => x.Create(ShipmentTypeCode.Other)).Returns(retriever.Object);
                 mock.Mock<IShippingSettings>()

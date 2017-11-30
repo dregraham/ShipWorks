@@ -43,8 +43,8 @@ namespace ShipWorks.Stores.Platforms.Infopia
         /// <summary>
         /// Constructor
         /// </summary>
-        public InfopiaDownloader(StoreEntity store)
-            : base(store)
+        public InfopiaDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
         }
 

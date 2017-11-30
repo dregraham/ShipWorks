@@ -38,14 +38,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.BestRate
         public void Constructor_ThrowsArgumentNullExcpetion_WhenParamsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new BestRateShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<ICustomsManager>(),
-                mock.Create<IStoreManager>()));
+                new BestRateShipmentAdapter(null, mock.Build<IShipmentTypeManager>(), mock.Build<ICustomsManager>(),
+                mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new BestRateShipmentAdapter(new ShipmentEntity(), null, mock.Create<ICustomsManager>(),
-                mock.Create<IStoreManager>()));
+                new BestRateShipmentAdapter(new ShipmentEntity(), null, mock.Build<ICustomsManager>(),
+                mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new BestRateShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(), null,
-                mock.Create<IStoreManager>()));
+                new BestRateShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(), null,
+                mock.Build<IStoreManager>()));
         }
 
         [Fact]

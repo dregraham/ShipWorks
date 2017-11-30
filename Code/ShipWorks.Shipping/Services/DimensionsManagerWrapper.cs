@@ -14,6 +14,9 @@ namespace ShipWorks.Shipping.Services
     {
         private List<DimensionsProfileEntity> enterDimensionsProfileList;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DimensionsManagerWrapper()
         {
             enterDimensionsProfileList = new List<DimensionsProfileEntity> {
@@ -24,8 +27,7 @@ namespace ShipWorks.Shipping.Services
                 }
             };
         }
-
-
+        
         /// <summary>
         /// Return all the dimensions profiles
         /// </summary>

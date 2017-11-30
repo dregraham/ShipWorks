@@ -136,9 +136,8 @@
       <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.93.0\lib\net46\Apitron.PDF.Rasterizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mef, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.Mef.4.0.0\lib\net45\Autofac.Integration.Mef.dll</HintPath>
@@ -155,6 +154,9 @@
     <Reference Include="Common.Logging.Log4Net1213, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -215,10 +217,6 @@
     </Reference>
     <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -344,8 +342,10 @@
     <Reference Include="System.IdentityModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -1220,6 +1220,9 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Environment\IFedExSettingsRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShippingClerk.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressRequestManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\IFedExGlobalShipAddressResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExOpenShipServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGatewayFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShippingClerkFactory.cs" />
@@ -1227,8 +1230,13 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateRequestManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\IFedExRateResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExLabelRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExLabelRepositoryFactory.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipRequest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipRequestManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExShipResponseManipulator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExLabelRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\IFedExResponseFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExEmailNotificationControlContainer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExLtlFreightControl.cs">
       <SubType>UserControl</SubType>
@@ -1461,15 +1469,10 @@
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsWebClient.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlReader.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExShipServiceWrapper.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExMaskedDataType.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
@@ -2508,13 +2511,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExShipmentTokenProcessor.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapCarrierException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExSoapException.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\FedExGlobalShipAddressRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressAddressManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressConstraintManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Request\Manipulators\FedExGlobalShipAddressWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\GlobalShipAddress\Response\FedExGlobalShipAddressResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExRequestFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExServiceGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExShipmentTokenProcessor.cs" />
@@ -2535,48 +2531,6 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExRegisterCspUserResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExSubscriptionResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Registration\Response\FedExVersionCaptureResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\FedExShipRequest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCertificationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExCodOptionsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDangerousGoodsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExDryIceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExEmailNotificationsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExFreightManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHoldAtLocationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExHomeDeliveryManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExLabelSpecificationManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExMasterTrackingManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageDetailsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackageSpecialServicesManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPackagingTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPickupManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExPriorityAlertManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRateTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExRecipientManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReferenceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExReturnsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExServiceTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipmentSpecialServiceTypeManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShipperManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingChargesManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingClientDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingRequestManipulatorBase.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingVersionManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExShippingWebAuthenticationDetailManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExSmartPostManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalInsuredValueManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExTotalWeightManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExAdmissibilityManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExBrokerManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCommercialInvoiceManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExCustomsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExInternationalControlledExportManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\International\FedExTrafficInArmsManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\FedExLabelRepository.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\FedExShipResponse.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCodManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentCostManipulator.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\Manipulators\FedExShipmentTrackingManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\FedExTrackRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingClientDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Tracking\Request\Manipulators\FedExTrackingPackageIdentifierManipulator.cs" />
@@ -2700,7 +2654,6 @@
     <Compile Include="Shipping\Api\ICarrierResponseFactory.cs" />
     <Compile Include="Shipping\Api\IShippingClerk.cs" />
     <Compile Include="Shipping\Api\ICarrierRequestManipulator.cs" />
-    <Compile Include="Shipping\Api\ILabelRepository.cs" />
     <Compile Include="Shipping\Api\ICarrierResponse.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Enums\FedExCustomsExportFilingOption.cs" />

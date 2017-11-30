@@ -4,11 +4,14 @@ using System.Linq;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Editing.Rating;
@@ -50,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <exception cref="FedExSoapCarrierException"></exception>
         /// <exception cref="FedExException"></exception>
-        public IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity)
+        public GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity)
         {
             try
             {
@@ -74,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 FimsShipRequest fimsShipRequest = new FimsShipRequest(shipmentEntity, settings.FedExFimsUsername, settings.FedExFimsPassword);
 
                 IFimsShipResponse fimsShipResponse = webClient.Ship(fimsShipRequest);
-                return new[] { new FimsCarrierResponse(shipmentEntity, fimsShipResponse, labelRepository) };
+                return GenericResult.FromSuccess<IEnumerable<IFedExShipResponse>>(new[] { new FimsCarrierResponse(shipmentEntity, fimsShipResponse, labelRepository) }.AsEnumerable());
             }
             catch (Exception ex)
             {
@@ -222,7 +225,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Not supported
         /// </summary>
-        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment)
+        public DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment)
         {
             throw new NotImplementedException();
         }

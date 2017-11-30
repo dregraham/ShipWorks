@@ -6,6 +6,7 @@ using System.IO;
 using Interapptive.Shared.Imaging;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Pdf;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -80,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 using (MemoryStream pdfBytes = new MemoryStream(labelBytes))
                 {
-                    resourceManager.CreateFromPdf(pdfBytes, shipmentID,
+                    resourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, shipmentID,
                         i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
                         SaveCroppedLabel);
                 }

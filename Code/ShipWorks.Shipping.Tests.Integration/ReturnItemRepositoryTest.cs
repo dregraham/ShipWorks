@@ -3,6 +3,7 @@ using System.Linq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
+using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Tests.Integration
         public ReturnItemRepositoryTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Create<ISqlAdapter>()));
+                mock => mock.Provide(mock.Build<ISqlAdapter>()));
         }
 
         [Fact]

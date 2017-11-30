@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 
@@ -22,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// entity accordingly.
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        IEnumerable<ICarrierResponse> Ship(ShipmentEntity shipmentEntity);
+        GenericResult<IEnumerable<IFedExShipResponse>> Ship(ShipmentEntity shipmentEntity);
 
         /// <summary>
         /// Void/Cancel/Delete a shipment

@@ -17,10 +17,8 @@ namespace ShipWorks.Data.Modal.Tests.Custom
             Assert.False(isSameDay);
         }
 
-        [Theory]
-        [InlineData("2016-08-15T08:30:00")]
-        [InlineData(null)]
-        public void IsSameDay_ReturnsTrue_WhenReqeusted(string deliveryDateValue)
+        [Fact]
+        public void IsSameDay_ReturnsTrue_WhenReqeusted()
         {
             var order = new AmazonOrderEntity { RequestedShipping = "SameDay" };
 

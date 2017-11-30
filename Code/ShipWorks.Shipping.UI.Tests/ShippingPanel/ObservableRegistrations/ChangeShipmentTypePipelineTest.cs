@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_ChangesShipmentAdapter_WhenShipmentTypeChangesAndShipmentIsNotProcessed()
         {
-            var newAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var newAdapter = mock.Build<ICarrierShipmentAdapter>();
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
                 .Returns(newAdapter);
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_SavesShipment_WhenShipmentTypeChangesAndShipmentIsNotProcessed()
         {
-            var newAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var newAdapter = mock.Build<ICarrierShipmentAdapter>();
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ChangeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentEntity>()))
                 .Returns(newAdapter);

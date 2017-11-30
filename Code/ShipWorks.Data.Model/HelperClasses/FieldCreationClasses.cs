@@ -8362,6 +8362,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightSpecialServices);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightGuaranteeType field instance</summary>
+		public static EntityField2 FreightGuaranteeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeType);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightGuaranteeDate field instance</summary>
+		public static EntityField2 FreightGuaranteeDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>
