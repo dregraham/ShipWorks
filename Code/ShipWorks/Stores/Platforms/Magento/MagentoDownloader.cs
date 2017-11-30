@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using System;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -50,7 +51,17 @@ namespace ShipWorks.Stores.Platforms.Magento
         protected override OrderIdentifier CreateOrderIdentifier(XPathNavigator orderXPath)
         {
             // pull out the order number
-            long orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
+            long orderNumber;
+            try
+            {
+                orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", 0L);
+            }
+            catch (FormatException)
+            {
+                string badOrderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", string.Empty);
+                throw new GenericStoreException($"An error occurred when downloading order number {badOrderNumber}.  The order number is not in the correct format.");
+            }
+            
             string orderPostfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
 
             // Look in the old location if can't find it in new location
