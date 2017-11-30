@@ -95,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             var integratorTxID = parameters.IntegratorTxID;
             var trackingNumber = parameters.TrackingNumber;
             var rate = parameters.Rate;
+            string outTrackingNumber = null;
 
             Guid stampsTxID;
             string url;
@@ -150,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.OrderId,
                 false, // BypassCleanseAddress
                 0, //image id,
-                out trackingNumber,
+                out outTrackingNumber,
                 out stampsTxID,
                 out url,
                 out postageBalance,
