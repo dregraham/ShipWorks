@@ -222,6 +222,7 @@
     <Compile Include="Actions\Tasks\TaskValidationErrorTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicyTest.cs" />
     <Compile Include="AddressValidation\AddressValidationResultTest.cs" />
     <Compile Include="AddressValidation\AddressValidatorTest.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicateTest.cs" />
