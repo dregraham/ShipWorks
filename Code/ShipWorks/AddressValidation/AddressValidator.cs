@@ -10,6 +10,7 @@ using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading.Tasks;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores;
 
 namespace ShipWorks.AddressValidation
 {
@@ -48,6 +49,17 @@ namespace ShipWorks.AddressValidation
         public Task ValidateAsync(IEntity2 addressEntity, StoreEntity store, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), store, canAdjustAddress, saveAction);
+        }
+
+        /// <summary>
+        /// Validates an address with no prefix on the specified entity
+        /// </summary>
+        /// <param name="addressAdapter">Address that should be validated</param>
+        /// <param name="entityId">The entityid that owns the order whose address is being validated</param>
+        /// <param name="canAdjustAddress"></param>
+        public Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, long entityId, bool canAdjustAddress)
+        {
+            return ValidateAsync(addressAdapter, StoreManager.GetRelatedStore(entityId), canAdjustAddress);
         }
 
         /// <summary>

@@ -293,7 +293,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             testObject.ValidateCommand.Execute(null);
 
             mock.Mock<IAddressValidator>()
-                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()), Times.Never);
+                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()), Times.Never);
         }
 
         [Fact]
@@ -306,7 +306,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             testObject.ValidateCommand.Execute(null);
 
             mock.Mock<IAddressValidator>()
-                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()), Times.Never);
+                .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()), Times.Never);
         }
 
         [Fact]
@@ -314,9 +314,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             AddressAdapter address = null;
             mock.Mock<IAddressValidator>()
-                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()))
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()))
                 .ReturnsAsync(ValidatedAddressData.Empty)
-                .Callback((AddressAdapter a, StoreEntity s, bool _) => address = a);
+                .Callback((AddressAdapter a, long s, bool _) => address = a);
 
             var testObject = mock.Create<AddressViewModel>();
             testObject.Load(new PersonAdapter(new ShipmentEntity(), string.Empty));
@@ -347,7 +347,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
                 .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
             mock.Mock<IAddressValidator>()
-                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()))
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()))
                 .ReturnsAsync(data);
 
             var testObject = mock.Create<AddressViewModel>();
@@ -364,14 +364,13 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             var data = new ValidatedAddressData(new ValidatedAddressEntity(),
                 new[] { new ValidatedAddressEntity(), new ValidatedAddressEntity() });
-            mock.Mock<IStoreManager>().Setup(s => s.GetRelatedStore(It.IsAny<long>())).Returns(new StoreEntity());
             mock.Mock<IAddressSelector>()
                 .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
                 .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
             mock.Mock<IAddressValidator>()
-                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()))
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()))
                 .ReturnsAsync(data)
-                .Callback((AddressAdapter a, StoreEntity s, bool _) =>
+                .Callback((AddressAdapter a, long s, bool _) =>
                 {
                     a.AddressValidationError = "Foo";
                     a.AddressValidationSuggestionCount = 6;
@@ -399,9 +398,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
                 .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
             mock.Mock<IAddressValidator>()
-                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()))
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()))
                 .ReturnsAsync(data)
-                .Callback((AddressAdapter a, StoreEntity s, bool _) =>
+                .Callback((AddressAdapter a, long s, bool _) =>
                 {
                     a.Street1 = "2 Main";
                     a.City = "Foo2";
@@ -435,9 +434,9 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
                 .Setup(x => x.FormatAddress(It.IsAny<ValidatedAddressEntity>()))
                 .Returns((ValidatedAddressEntity x) => x.GetHashCode().ToString());
             mock.Mock<IAddressValidator>()
-                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<StoreEntity>(), It.IsAny<bool>()))
+                .Setup(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), It.IsAny<long>(), It.IsAny<bool>()))
                 .ReturnsAsync(ValidatedAddressData.Empty)
-                .Callback((AddressAdapter a, StoreEntity s, bool _) =>
+                .Callback((AddressAdapter a, long s, bool _) =>
                 {
                     a.Street1 = "2 Main";
                     a.City = "Foo2";
