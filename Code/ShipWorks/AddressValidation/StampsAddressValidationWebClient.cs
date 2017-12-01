@@ -187,6 +187,11 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static string GetPostalCode(Address address)
         {
+            if (!string.IsNullOrEmpty(address.PostalCode))
+            {
+                return address.PostalCode;
+            }
+
             if (!string.IsNullOrEmpty(address.ZIPCodeAddOn) && address.ZIPCodeAddOn != "0000")
             {
                 return address.ZIPCode + "-" + address.ZIPCodeAddOn;
