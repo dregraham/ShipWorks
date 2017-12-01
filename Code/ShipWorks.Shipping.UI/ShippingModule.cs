@@ -151,9 +151,6 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<StampsAddressValidationWebClient>()
-                .AsImplementedInterfaces();
-
             builder.Register(
                 (container, parameters) =>
                 {

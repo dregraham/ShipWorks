@@ -1,15 +1,17 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using Autofac;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.AddressValidation
 {
@@ -39,11 +41,16 @@ namespace ShipWorks.AddressValidation
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                UspsWebClient uspsWebClient = new UspsWebClient(scope, UspsResellerType.None);
+                CertificateInspector certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
+                UspsWebClient uspsWebClient = new UspsWebClient(new UspsAccountRepository(),
+                	scope.Resolve<Owned<IUspsWebServiceFactory>>().Value,
+	                certificateInspector,
+    	            UspsResellerType.None);
+					
                 UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
                 try
                 {
-                    UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount);
+                    UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
                     validationResult.AddressType = ConvertAddressType(uspsResult);
 
                     if (uspsResult.IsSuccessfulMatch)

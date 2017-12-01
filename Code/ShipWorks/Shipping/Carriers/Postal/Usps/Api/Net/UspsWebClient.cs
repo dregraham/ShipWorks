@@ -628,6 +628,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             using (ISwsimV67 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
+                CheckCertificate(webService.Url);
+
                 using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                 {
                     TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
