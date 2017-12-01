@@ -14,14 +14,14 @@ namespace ShipWorks.Tests.AddressValidation
 {
     public class AddressValidatorTest
     {
-        private AddressValidationResult result1;
-        private AddressValidationResult result2;
-        private AddressValidationWebClientValidateAddressResult results;
-        private OrderEntity sampleOrder;
-        private Mock<IAddressValidationWebClient> webClient;
-        private AddressValidator testObject;
+        private readonly AddressValidationResult result1;
+        private readonly AddressValidationResult result2;
+        private readonly AddressValidationWebClientValidateAddressResult results;
+        private readonly OrderEntity sampleOrder;
+        private readonly Mock<IAddressValidationWebClient> webClient;
+        private readonly AddressValidator testObject;
         private string errorMessage;
-        private StoreEntity store;
+        private readonly StoreEntity store;
 
         public AddressValidatorTest()
         {

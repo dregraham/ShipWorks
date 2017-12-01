@@ -45,7 +45,7 @@ namespace ShipWorks.AddressValidation
                 return false;
             }
 
-            if (ShouldValidate((AddressValidationStatusType) address.AddressValidationStatus))
+            if (!ShouldValidate((AddressValidationStatusType) address.AddressValidationStatus))
             {
                 return false;
             }
