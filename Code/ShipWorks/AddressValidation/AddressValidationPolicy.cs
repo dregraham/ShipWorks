@@ -27,18 +27,32 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
+        /// Should the given store setting validate
+        /// </summary>
+        public static bool ShouldValidate(AddressValidationStoreSettingType storeSettingStatus)
+        {
+            return storeSettingStatus == AddressValidationStoreSettingType.ValidateAndApply || 
+                storeSettingStatus == AddressValidationStoreSettingType.ValidateAndNotify;
+        }
+
+        /// <summary>
         /// Should addresses from the given store be validated 
         /// </summary>
-        public static bool ShouldValidate(StoreEntity store)
+        public static bool ShouldValidate(StoreEntity store, AddressAdapter address)
         {
-            if (store == null)
+            if (store == null || address == null)
             {
                 return false;
             }
 
-            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType)store.DomesticAddressValidationSetting;
-            return setting == AddressValidationStoreSettingType.ValidateAndApply ||
-                   setting == AddressValidationStoreSettingType.ValidateAndNotify;
+            if (ShouldValidate((AddressValidationStatusType) address.AddressValidationStatus))
+            {
+                return false;
+            }
+            
+            return address.IsDomesticCountry() ? 
+                ShouldValidate(store.DomesticAddressValidationSetting) : 
+                ShouldValidate(store.InternationalAddressValidationSetting);
         }
         
         /// <summary>

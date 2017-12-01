@@ -55,13 +55,18 @@ namespace ShipWorks.Actions.Tasks.Common
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
                 // If the address has already been validated, don't bother validating it again
-                if (order == null || !AddressValidationPolicy.ShouldValidate((AddressValidationStatusType) new AddressAdapter(order, "Ship").AddressValidationStatus))
+                if (order == null)
                 {
                     continue;
                 }
 
                 StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
-                if (store == null || store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidationDisabled)
+                if (store == null)
+                {
+                    continue;
+                }
+
+                if (!AddressValidationPolicy.ShouldValidate(store, new AddressAdapter(order, "Ship")))
                 {
                     continue;
                 }
