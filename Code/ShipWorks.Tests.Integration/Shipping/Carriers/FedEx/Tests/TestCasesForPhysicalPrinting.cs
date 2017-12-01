@@ -71,6 +71,32 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             testCasesForLaser.Add("CAF1");
             testCasesForLaser.Add("CAF-413401");
 
+            // EMEA
+            testCasesForLaser.Add("EMEA-520");
+            testCasesForLaser.Add("EMEA-521");
+            testCasesForLaser.Add("EMEA-522");
+            testCasesForLaser.Add("EMEA-523");
+            testCasesForLaser.Add("EMEA-524");
+            testCasesForLaser.Add("EMEA-525");
+
+            // UK ETD
+            testCasesForLaser.Add("ETD 5");
+
+            // UK International
+            testCasesForLaser.Add("UK-441");
+            testCasesForLaser.Add("UK-442");
+            testCasesForLaser.Add("UK-443");
+            testCasesForLaser.Add("UK-444");
+            testCasesForLaser.Add("UK-445");
+
+            // UK Intra
+            testCasesForLaser.Add("UK-313");
+            testCasesForLaser.Add("UK-314");
+            testCasesForLaser.Add("UK-315");
+            testCasesForLaser.Add("UK-316");
+            testCasesForLaser.Add("UK-317");
+            testCasesForLaser.Add("UK-318");
+
             dangerousGoodsTestCases.Add("LB1");
             dangerousGoodsTestCases.Add("323405");
             dangerousGoodsTestCases.Add("LB2");
@@ -83,6 +109,8 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             dangerousGoodsTestCases.Add("605797");
             dangerousGoodsTestCases.Add("SO-1009");
             dangerousGoodsTestCases.Add("ES-1009");
+            dangerousGoodsTestCases.Add("UK-443");
+            dangerousGoodsTestCases.Add("EMEA-520");
 
             testCasesForThermal = testCasesForLaser.Except(dangerousGoodsTestCases).ToList();
         }
