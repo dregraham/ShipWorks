@@ -93,13 +93,13 @@ namespace ShipWorks.AddressValidation
         public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
-            if (!ShouldValidateAddress(addressAdapter))
+            if (!AddressValidationPolicy.ShouldValidate((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
             {
                 return;
             }
 
             // It is possible that existing international orders can be "Not Checked." This code updates the order.
-            if (!ValidatedAddressManager.EnsureAddressCanBeValidated(addressAdapter))
+            if (!AddressValidationPolicy.ShouldValidate(addressAdapter))
             {
                 saveAction(null, new List<ValidatedAddressEntity>());
                 return;
@@ -178,24 +178,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Can the given status be validated
         /// </summary>
-        public bool CanValidate(AddressValidationStatusType status) => ShouldValidateAddress(status);
-
-        /// <summary>
-        /// Should the specified address be validated
-        /// </summary>
-        public static bool ShouldValidateAddress(AddressAdapter adapter) =>
-            ShouldValidateAddress((AddressValidationStatusType)adapter.AddressValidationStatus);
-
-        /// <summary>
-        /// Can the given status be validated
-        /// </summary>
-        private static bool ShouldValidateAddress(AddressValidationStatusType status)
-        {
-            return status == AddressValidationStatusType.NotChecked ||
-                   status == AddressValidationStatusType.Pending ||
-                   status == AddressValidationStatusType.Error;
-        }
-
+        public bool CanValidate(AddressValidationStatusType status) 
+            => AddressValidationPolicy.ShouldValidate(status);
+        
         /// <summary>
         /// Set the validation status on the entity when we should only notify instead of update
         /// </summary>

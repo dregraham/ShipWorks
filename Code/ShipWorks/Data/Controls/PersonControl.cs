@@ -662,7 +662,7 @@ namespace ShipWorks.Data.Controls
 
                 if (originalAddress != newAddress)
                 {
-                    if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
+                    if (AddressValidationPolicy.ShouldValidate(newAddress))
                     {
                         newAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                         newAddress.AddressType = (int) AddressType.NotChecked;
@@ -1012,7 +1012,7 @@ namespace ShipWorks.Data.Controls
                 lastValidatedAddress.AddressValidationError = string.Empty;
                 lastValidatedAddress.AddressValidationSuggestionCount = 0;
 
-                if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+                if (AddressValidationPolicy.ShouldValidate(lastValidatedAddress))
                 {
                     lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
                     lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
@@ -1136,7 +1136,7 @@ namespace ShipWorks.Data.Controls
 
             addressValidationPanel.Visible = true;
 
-            validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
+            validateAddress.Visible = AddressValidationPolicy.ShouldValidate((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
 
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
                 validateAddress.Left - addressValidationSuggestionLink.Width - 6 :

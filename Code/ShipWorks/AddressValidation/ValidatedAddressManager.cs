@@ -257,42 +257,6 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Check whether the specified address can be validated
-        /// </summary>
-        public static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
-        {
-            if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
-
-                return false;
-            }
-
-            if (!currentShippingAddress.IsDomesticCountry() &&
-                !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WillNotValidate;
-                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
-
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(currentShippingAddress.Street1))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int) AddressType.PrimaryNotFound;
-
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Validate a single shipment
         /// </summary>
         public static Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator)
@@ -326,7 +290,7 @@ namespace ShipWorks.AddressValidation
             }
 
             StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-            if (store == null || !ShouldAutoValidate(store))
+            if (store == null || !AddressValidationPolicy.ShouldValidate(store))
             {
                 // If we can't find the store or if its not set up for auto-validation, we shouldn't do any validation
                 return;
@@ -475,21 +439,6 @@ namespace ShipWorks.AddressValidation
             }
 
             await ValidateShipmentAsync(shipment, validator, retryCount - 1);
-        }
-
-        /// <summary>
-        /// Gets whether the specified store is set up for auto-validation
-        /// </summary>
-        public static bool ShouldAutoValidate(StoreEntity store)
-        {
-            if (store == null)
-            {
-                return false;
-            }
-
-            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.DomesticAddressValidationSetting;
-            return setting == AddressValidationStoreSettingType.ValidateAndApply ||
-                   setting == AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }
