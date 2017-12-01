@@ -76,7 +76,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 try
                 {
-                    Task task = validator.ValidateAsync(order, "Ship", true, (originalAddress, suggestedAddresses) =>
+                    Task task = validator.ValidateAsync(order, store, "Ship", true, (originalAddress, suggestedAddresses) =>
                         ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)));
                     task.Wait();
                 }

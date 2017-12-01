@@ -16,6 +16,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
 {
@@ -219,7 +220,14 @@ namespace ShipWorks.AddressValidation
             if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
-                StoreManager.GetAllStores().All(store => store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply))
+                StoreManager.GetAllStores().All(store =>
+                {
+                    if (entityAdapter.IsDomesticCountry())
+                    {
+                        return store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
+                    }
+                    return store.InternationalAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
+                }))
             {
                 menuItems.Add(new MenuItem("Always Fix Addresses For All Stores",
                     async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
@@ -243,10 +251,16 @@ namespace ShipWorks.AddressValidation
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                List<StoreEntity> allStores = StoreManager.GetAllStores();
-                allStores.ForEach(store =>
+                StoreManager.GetAllStores().ForEach(store =>
                 {
-                    store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+                    if (entityAdapter.IsDomesticCountry())
+                    {
+                        store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+                    }
+                    else
+                    {
+                        store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+                    }
                     StoreManager.SaveStore(store, sqlAdapter);
                 });
 
@@ -297,7 +311,7 @@ namespace ShipWorks.AddressValidation
                 selectedAddress.POBox == (int) ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
-                return addressValidator.ValidateAsync(selectedAddress, string.Empty, true, (entity, entities) =>
+                return addressValidator.ValidateAsync(selectedAddress, StoreManager.GetRelatedStore(selectedAddress.ConsumerID), string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
                     if ((selectedAddress.ResidentialStatus != (int) ValidationDetailStatusType.Unknown ||

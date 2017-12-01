@@ -16,6 +16,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.AddressControl
 {
@@ -31,6 +32,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         private readonly IMessageHelper messageHelper;
         private readonly IValidatedAddressScope validatedAddressScope;
         private readonly IAddressSelector addressSelector;
+        private readonly IStoreManager storeManager;
         private IDisposable addressValidationSubscriptions;
         private long? entityId;
         private string prefix;
@@ -51,14 +53,14 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// Constructor
         /// </summary>
         public AddressViewModel(IShippingOriginManager shippingOriginManager, IMessageHelper messageHelper,
-            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector) : this()
+            IValidatedAddressScope validatedAddressScope, IAddressValidator validator, IAddressSelector addressSelector, IStoreManager storeManager) : this()
         {
             this.validator = validator;
             this.shippingOriginManager = shippingOriginManager;
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
-
+            this.storeManager = storeManager;
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
             ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
@@ -217,7 +219,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 SaveToEntity(personAdapter);
                 personAdapter.CopyTo(addressAdapter);
 
-                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, storeManager.GetRelatedStore(currentEntityId), true);
 
                 // See if the loaded address has changed since we started validating
                 if (currentEntityId != entityId)

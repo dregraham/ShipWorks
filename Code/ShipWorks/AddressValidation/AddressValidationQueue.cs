@@ -251,7 +251,7 @@ namespace ShipWorks.AddressValidation
                     StoreEntity store = StoreManager.GetRelatedStore((long) entityToValidate.Fields["OrderID"].CurrentValue);
                     bool shouldAutomaticallyAdjustAddress = store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    Task task = addressValidator.ValidateAsync(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
+                    Task task = addressValidator.ValidateAsync(entityToValidate, store, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))

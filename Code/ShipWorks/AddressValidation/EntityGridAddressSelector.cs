@@ -36,7 +36,7 @@ namespace ShipWorks.AddressValidation
             {
                 return;
             }
-
+            
             selectedEntity = entity;
 
             grid = sender as SandGrid;
