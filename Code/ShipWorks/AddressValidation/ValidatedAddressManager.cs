@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation.Enums;
@@ -332,7 +333,7 @@ namespace ShipWorks.AddressValidation
             }
 
             bool shouldRetry = false;
-            bool canApplyChanges = store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidateAndApply;
+            bool canApplyChanges = store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply;
 
             try
             {
@@ -486,7 +487,7 @@ namespace ShipWorks.AddressValidation
                 return false;
             }
 
-            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
+            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.DomesticAddressValidationSetting;
             return setting == AddressValidationStoreSettingType.ValidateAndApply ||
                    setting == AddressValidationStoreSettingType.ValidateAndNotify;
         }

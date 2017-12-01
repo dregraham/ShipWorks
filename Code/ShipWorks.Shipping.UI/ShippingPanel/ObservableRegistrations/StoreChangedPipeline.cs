@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive.Linq;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Threading;
 using ShipWorks.AddressValidation.Enums;
@@ -55,7 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
         {
             if (storeEntity.StoreID == viewModel.ShipmentAdapter.Store.StoreID)
             {
-                viewModel.Destination.IsAddressValidationEnabled = storeEntity.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
+                viewModel.Destination.IsAddressValidationEnabled = storeEntity.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
             }
         }
 

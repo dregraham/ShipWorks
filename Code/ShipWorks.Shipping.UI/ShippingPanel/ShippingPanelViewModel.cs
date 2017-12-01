@@ -10,6 +10,7 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -587,7 +588,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
             Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
-            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
+            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 

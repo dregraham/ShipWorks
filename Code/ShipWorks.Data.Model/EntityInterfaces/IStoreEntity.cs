@@ -159,12 +159,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean AutoDownloadOnlyAway { get; }
-        /// <summary> The AddressValidationSetting property of the Entity Store<br/><br/>
+        /// <summary> The DomesticAddressValidationSetting property of the Entity Store<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "Store"."AddressValidationSetting"<br/>
+        /// <remarks>Mapped on table field: "Store"."DomesticAddressValidationSetting"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Int32 AddressValidationSetting { get; }
+        Interapptive.Shared.Enums.AddressValidationStoreSettingType DomesticAddressValidationSetting { get; }
+        /// <summary> The InternationalAddressValidationSetting property of the Entity Store<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Store"."InternationalAddressValidationSetting"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        Interapptive.Shared.Enums.AddressValidationStoreSettingType InternationalAddressValidationSetting { get; }
         /// <summary> The ComputerDownloadPolicy property of the Entity Store<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Store"."ComputerDownloadPolicy"<br/>

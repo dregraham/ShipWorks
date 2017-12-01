@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
@@ -60,7 +61,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
 
                 StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
-                if (store == null || store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                if (store == null || store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidationDisabled)
                 {
                     continue;
                 }

@@ -2874,7 +2874,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "AutoDownload", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownload, 0, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "AutoDownloadMinutes", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadMinutes, 0, 0, 10);
 			this.AddElementFieldInfo("StoreEntity", "AutoDownloadOnlyAway", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadOnlyAway, 0, 0, 0);
-			this.AddElementFieldInfo("StoreEntity", "AddressValidationSetting", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AddressValidationSetting, 0, 0, 10);
+			this.AddElementFieldInfo("StoreEntity", "DomesticAddressValidationSetting", typeof(Interapptive.Shared.Enums.AddressValidationStoreSettingType), false, false, false, false,  (int)StoreFieldIndex.DomesticAddressValidationSetting, 0, 0, 10);
+			this.AddElementFieldInfo("StoreEntity", "InternationalAddressValidationSetting", typeof(Interapptive.Shared.Enums.AddressValidationStoreSettingType), false, false, false, false,  (int)StoreFieldIndex.InternationalAddressValidationSetting, 0, 0, 10);
 			this.AddElementFieldInfo("StoreEntity", "ComputerDownloadPolicy", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ComputerDownloadPolicy, 2147483647, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "DefaultEmailAccountID", typeof(System.Int64), false, false, false, false,  (int)StoreFieldIndex.DefaultEmailAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "ManualOrderPrefix", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ManualOrderPrefix, 10, 0, 0);

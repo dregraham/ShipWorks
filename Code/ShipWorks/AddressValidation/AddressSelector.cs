@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Enums;
@@ -218,7 +219,7 @@ namespace ShipWorks.AddressValidation
             if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
-                StoreManager.GetAllStores().All(store => store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndApply))
+                StoreManager.GetAllStores().All(store => store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply))
             {
                 menuItems.Add(new MenuItem("Always Fix Addresses For All Stores",
                     async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
@@ -245,7 +246,7 @@ namespace ShipWorks.AddressValidation
                 List<StoreEntity> allStores = StoreManager.GetAllStores();
                 allStores.ForEach(store =>
                 {
-                    store.AddressValidationSetting = (int) AddressValidationStoreSettingType.ValidateAndApply;
+                    store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
                     StoreManager.SaveStore(store, sqlAdapter);
                 });
 
