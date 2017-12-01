@@ -45,9 +45,9 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressPrefix"></param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public Task ValidateAsync(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public Task ValidateAsync(IEntity2 addressEntity, StoreEntity store, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
-            return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+            return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), store, canAdjustAddress, saveAction);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
         [NDependIgnoreLongMethod]
-        public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public async Task ValidateAsync(AddressAdapter addressAdapter, StoreEntity store, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
             if (!AddressValidationPolicy.ShouldValidate((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
@@ -99,7 +99,7 @@ namespace ShipWorks.AddressValidation
             }
 
             // It is possible that existing international orders can be "Not Checked." This code updates the order.
-            if (!AddressValidationPolicy.ShouldValidate(addressAdapter))
+            if (!AddressValidationPolicy.ShouldValidate(store, addressAdapter))
             {
                 saveAction(null, new List<ValidatedAddressEntity>());
                 return;
@@ -161,11 +161,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates an address with no prefix on the specified entity
         /// </summary>
-        public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress)
+        public async Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, StoreEntity store, bool canAdjustAddress)
         {
             ValidatedAddressData data = ValidatedAddressData.NotSet;
 
-            await ValidateAsync(addressAdapter, canAdjustAddress, (original, suggestions) =>
+            await ValidateAsync(addressAdapter, store, canAdjustAddress, (original, suggestions) =>
             {
                 data = original == null ?
                     ValidatedAddressData.Empty :
