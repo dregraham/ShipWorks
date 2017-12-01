@@ -1165,7 +1165,7 @@ namespace ShipWorks.Data.Controls
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
             AddressValidator validator = new AddressValidator();
-            Task task = validator.ValidateAsync(address, true, (addressEntity, entities) =>
+            Task task = validator.ValidateAsync(address, store, true, (addressEntity, entities) =>
             {
                 shouldSaveAddressSuggestions = true;
 

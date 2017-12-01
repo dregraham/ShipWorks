@@ -310,7 +310,7 @@ namespace ShipWorks.AddressValidation
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), store, canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -338,7 +338,7 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(),
+                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(), store,
                         canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
