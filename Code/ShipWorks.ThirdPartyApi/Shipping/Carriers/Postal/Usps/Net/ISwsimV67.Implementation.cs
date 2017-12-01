@@ -6,14 +6,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Mark the web service as implementing the interface
     /// </summary>
-    public partial class SwsimV55 : ISwsimV55
+    public partial class SwsimV67 : ISwsimV67
     {
         /// <summary>
         /// Get account info
         /// </summary>
         public AccountInfoResult GetAccountInfo(Credentials credentials)
         {
-            AccountInfo accountInfo;
+            AccountInfoV25 accountInfo;
             Address address;
             string email;
 
@@ -25,9 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Get rates
         /// </summary>
-        public RateV20[] GetRates(Credentials account, RateV20 rate)
+        public RateV24[] GetRates(Credentials account, RateV24 rate)
         {
-            RateV20[] rateResults;
+            RateV24[] rateResults;
 
             GetRates(account, rate, out rateResults);
 
@@ -62,6 +62,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.HideFIM,
                 parameters.RateToken,
                 parameters.OrderId,
+                "", // memo
+                false, // BypassCleanseAddress
+                0, // ImageId
+                0, // ImageId2
                 out trackingNumber,
                 out stampsTxID,
                 out url,
@@ -91,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             var integratorTxID = parameters.IntegratorTxID;
             var trackingNumber = parameters.TrackingNumber;
             var rate = parameters.Rate;
+            string outTrackingNumber = null;
 
             Guid stampsTxID;
             string url;
@@ -98,6 +103,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             string mac;
             string postageHash;
             byte[][] imageData;
+            HoldForPickUpFacility holdForPickup;
+            string formURL;
 
             string result = CreateIndicium(
                 parameters.Item,
@@ -142,12 +149,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.ImageDpi,
                 parameters.RateToken,
                 parameters.OrderId,
+                false, // BypassCleanseAddress
+                0, //image id,
+                out outTrackingNumber,
                 out stampsTxID,
                 out url,
                 out postageBalance,
                 out mac,
                 out postageHash,
-                out imageData);
+                out imageData,
+                out holdForPickup,
+                out formURL);
 
             return new CreateIndiciumResult
             {

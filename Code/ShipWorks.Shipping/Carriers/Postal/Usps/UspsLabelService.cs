@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Creates a label for the given Shipment
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             IDownloadedLabelData uspsDownloadedLabelData;
 
@@ -48,11 +49,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
                 {
-                    uspsDownloadedLabelData = ProcessShipmentWithRates(shipment);
+                    uspsDownloadedLabelData = await ProcessShipmentWithRates(shipment).ConfigureAwait(false);
                 }
                 else
                 {
-                    UspsLabelResponse uspsLabelResponse = uspsShipmentType.CreateWebClient().ProcessShipment(shipment);
+                    UspsLabelResponse uspsLabelResponse = await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
                     uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                 }
             }
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Process the shipment using the account with the cheapest rate for the requested service
         /// </summary>
-        private IDownloadedLabelData ProcessShipmentWithRates(ShipmentEntity shipment)
+        private async Task<IDownloadedLabelData> ProcessShipmentWithRates(ShipmentEntity shipment)
         {
             IDownloadedLabelData uspsDownloadedLabelData = null;
 
@@ -116,12 +117,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
                         express1UspsShipmentType().UpdateDynamicShipmentData(shipment);
-                        uspsDownloadedLabelData = express1UspsLabelService().Create(shipment);
+                        uspsDownloadedLabelData = await express1UspsLabelService().Create(shipment).ConfigureAwait(false);
                     }
                     else
                     {
                         uspsShipmentType.UseAccountForShipment(account, shipment);
-                        UspsLabelResponse uspsLabelResponse = client.ProcessShipment(shipment);
+                        UspsLabelResponse uspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
                         uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Create the label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonShipment labelResponse = createShipmentRequest.Submit(shipment);
 
-            return createDownloadedLabelData(shipment, labelResponse);
+            return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, labelResponse));
         }
 
         /// <summary>

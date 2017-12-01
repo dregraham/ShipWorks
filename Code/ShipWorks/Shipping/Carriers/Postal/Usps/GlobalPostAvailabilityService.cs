@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     return;
                 }
 
-                AccountInfo accountInfo = result as AccountInfo;
+                AccountInfoV25 accountInfo = result as AccountInfoV25;
 
                 if (accountInfo != null)
                 {

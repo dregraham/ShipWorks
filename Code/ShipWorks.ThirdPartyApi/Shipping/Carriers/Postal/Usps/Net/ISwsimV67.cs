@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Interface around the Stamps WebService
     /// </summary>
-    public interface ISwsimV55 : IDisposable
+    public interface ISwsimV67 : IDisposable
     {
         /// <summary>
         /// Url of the web service
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get account info
         /// </summary>
-        string GetAccountInfo(object Item, out AccountInfo AccountInfo, out Address Address, out string CustomerEmail);
+        string GetAccountInfo(object Item, out AccountInfoV25 AccountInfo, out Address Address, out string CustomerEmail);
 
         /// <summary>
         /// Get account info
@@ -43,14 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Purchase postage
         /// </summary>
         string PurchasePostage(object Item, decimal PurchaseAmount, decimal ControlTotal, MachineInfo MI,
-            string IntegratorTxID, bool? SendEmail, bool SendEmailSpecified, string Merchant,
+            string IntegratorTxID, bool? SendEmail, bool SendEmailSpecified,
             out PurchaseStatus PurchaseStatus, out int TransactionID, out PostageBalance PostageBalance,
             out string RejectionReason, out bool MIRequired, out PurchaseRejectionCode? RejectionCode);
 
         /// <summary>
         /// Get rates
         /// </summary>
-        RateV20[] GetRates(Credentials account, RateV20 rate);
+        RateV24[] GetRates(Credentials account, RateV24 rate);
 
         /// <summary>
         /// Cleanse the address

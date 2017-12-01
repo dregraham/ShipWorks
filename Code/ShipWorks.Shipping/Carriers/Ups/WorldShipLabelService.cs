@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -24,17 +25,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public override IDownloadedLabelData Create(ShipmentEntity shipment)
+        public override Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             try
             {
                 base.Create(shipment);
 
-                return createDownloadedLabelData(new UpsLabelResponse()
-                    {
-                        Shipment = shipment
-                    }
-                );
+                return Task.FromResult(createDownloadedLabelData(new UpsLabelResponse { Shipment = shipment }));
             }
             catch (CarrierException ex)
             {
