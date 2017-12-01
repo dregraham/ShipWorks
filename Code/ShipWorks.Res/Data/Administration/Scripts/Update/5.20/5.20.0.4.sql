@@ -338,3 +338,27 @@ PRINT N'Dropping constraints from [dbo].[Store]'
 GO
 ALTER TABLE [dbo].[Store] DROP CONSTRAINT [DF_Store_InternationalAddressValidationSetting]
 GO
+
+-- Mark the address validation status to pending for all orders in the past 5 days
+-- that have either no shipments or at least one unprocessed shipment
+-- and ShipAddressValidationStatus was set to 9 - WillNotValidate
+UPDATE [Order]
+SET ShipAddressValidationStatus = 1
+FROM [Order] 
+LEFT JOIN Shipment ON [Order].OrderId = Shipment.OrderID
+WHERE DATEDIFF(d, [Order].OrderDate, GETDATE()) <= 5 
+	AND (Shipment.ShipmentID IS NULL OR Shipment.Processed = 0)
+	AND ([Order].ShipAddressValidationStatus = 9)
+GO
+
+-- Mark the address validation status to pending for all shipments with 
+-- orders in the past 5 days that have not been processed 
+-- and ShipAddressValidationStatus was set to 9 - WillNotValidate
+UPDATE Shipment
+SET ShipAddressValidationStatus = 1
+FROM Shipment
+INNER JOIN [Order] ON [Order].OrderId = Shipment.OrderId
+WHERE  DATEDIFF(d, [Order].OrderDate, GETDATE()) <= 5 
+	AND Shipment.Processed = 0
+	AND Shipment.ShipAddressValidationStatus = 9
+GO
