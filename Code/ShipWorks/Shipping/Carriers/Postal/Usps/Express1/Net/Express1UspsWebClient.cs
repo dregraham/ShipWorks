@@ -1319,7 +1319,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Not implemented in Express1
         /// </summary>
-        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address)
+        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address, UspsAccountEntity account)
         {
             throw new NotImplementedException();
         }

@@ -7,6 +7,9 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using Autofac;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.AddressValidation
 {
@@ -34,34 +37,36 @@ namespace ShipWorks.AddressValidation
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
-
-            UspsWebClient session = new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, UspsResellerType.None);
-
-            try
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                UspsAddressValidationResults uspsResult = await session.ValidateAddressAsync(personAdapter);
-                validationResult.AddressType = ConvertAddressType(uspsResult);
+                UspsWebClient uspsWebClient = new UspsWebClient(scope, UspsResellerType.None);
+                UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
+                try
+                {
+                    UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount);
+                    validationResult.AddressType = ConvertAddressType(uspsResult);
 
-                if (uspsResult.IsSuccessfulMatch)
-                {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    if (uspsResult.IsSuccessfulMatch)
+                    {
+                        validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    }
+                    else
+                    {
+                        validationResult.AddressValidationError = uspsResult.BadAddressMessage;
+                    }
+
+                    foreach (Address address in uspsResult.Candidates)
+                    {
+                        validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
+                    }
                 }
-                else
+                catch (UspsException ex)
                 {
-                    validationResult.AddressValidationError = uspsResult.BadAddressMessage;
+                    validationResult.AddressValidationError = ex.Message;
                 }
 
-                foreach (Address address in uspsResult.Candidates)
-                {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
-                }
+                return validationResult;
             }
-            catch (UspsException ex)
-            {
-                validationResult.AddressValidationError = ex.Message;
-            }
-
-            return validationResult;
         }
 
         /// <summary>

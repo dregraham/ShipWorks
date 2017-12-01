@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (PhysicalAddress != null)
             {
                 // Call AV server
-                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(PhysicalAddress);
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(PhysicalAddress, null);
 
                 if (!uspsResult.IsSuccessfulMatch)
                 {

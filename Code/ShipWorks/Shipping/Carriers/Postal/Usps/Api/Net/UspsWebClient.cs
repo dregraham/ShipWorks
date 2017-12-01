@@ -554,17 +554,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Validates the address of the given person
-        /// </summary>
-        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person)
-        {
-            return ValidateAddressAsync(person, null);
-        }
-
-        /// <summary>
         /// Validates the address of the given person using the specified stamps account
         /// </summary>
-        private async Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person, UspsAccountEntity account)
+        public async Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person, UspsAccountEntity account)
         {
             Address address = CreateAddress(person);
 
