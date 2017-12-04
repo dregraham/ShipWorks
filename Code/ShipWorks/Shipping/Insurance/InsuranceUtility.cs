@@ -16,6 +16,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -243,7 +244,7 @@ namespace ShipWorks.Shipping.Insurance
                 log.WarnFormat("Couldn't check excluded country", ex);
             }
 
-            // Make sure there arent new rates we don't know about
+            // Make sure there aren't new rates we don't know about
             if (shipWorksRateCalculateVersion == shipWorksRateActualVersion)
             {
                 FillInShipWorksCost(cost, shipment, declaredValue);
@@ -304,7 +305,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.OnTrac:
                 case ShipmentTypeCode.iParcel:
                     {
-                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
+                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipment will have the same pennyone setting
                         bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
 
                         if (!pennyOne)
@@ -328,6 +329,11 @@ namespace ShipWorks.Shipping.Insurance
                         if (shipmentType == ShipmentTypeCode.iParcel)
                         {
                             rate = 0.75m;
+                        }
+                        else if (shipmentType == ShipmentTypeCode.FedEx &&
+                            FedExUtility.IsFreightLtlService(shipment.FedEx?.Service))
+                        {
+                            rate = 0.95m;
                         }
                         else
                         {
@@ -516,7 +522,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             // Get how many increments of $100
-            // This one is different from the other caclulations because the $100 increments
+            // This one is different from the other calculations because the $100 increments
             // start at $101 instead of $100
             int quantity = (int) Math.Floor((declaredValue - 101) / 100m) + 1;
 

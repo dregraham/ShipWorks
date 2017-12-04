@@ -1,16 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 {
     public class FedExUtilityTest
     {
-        Dictionary<FedExServiceType, List<FedExPackagingType>> expectedPackagingTypes;
+        private readonly ITestOutputHelper output;
+        private readonly Dictionary<FedExServiceType, List<FedExPackagingType>> expectedPackagingTypes;
 
-        public FedExUtilityTest()
+        public FedExUtilityTest(ITestOutputHelper output)
         {
+            this.output = output;
+
             var standardPackagingTypes = new List<FedExPackagingType>()
             {
                 FedExPackagingType.Envelope,
@@ -181,5 +187,95 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
                 Assert.Contains(packageType, testObject);
             }
         }
+
+        [Fact]
+        public void IsFreightLtlServiceInt_ReturnsTrue_ForFreightValues()
+        {
+            var invalidResults = LtlFreightServices
+                .Cast<int>()
+                .Select(x => new { Service = x, Result = FedExUtility.IsFreightLtlService(x) })
+                .Where(x => x.Result == false)
+                .ToList();
+
+            foreach (var value in invalidResults)
+            {
+                output.WriteLine("{0} returned false but should have returned true", value.Service);
+            }
+
+            Assert.Empty(invalidResults);
+        }
+
+        [Fact]
+        public void IsFreightLtlServiceInt_ReturnsFalse_ForNonFreightServices()
+        {
+            var invalidResults = AllServices.Except(LtlFreightServices)
+                .Cast<int>()
+                .Select(x => new { Service = x, Result = FedExUtility.IsFreightLtlService(x) })
+                .Where(x => x.Result == true)
+                .ToList();
+
+            foreach (var value in invalidResults)
+            {
+                output.WriteLine("{0} returned false but should have returned true", value.Service);
+            }
+
+            Assert.Empty(invalidResults);
+        }
+
+        [Theory]
+        [InlineData(int.MinValue)]
+        [InlineData(null)]
+        public void IsFreightLtlServiceInt_ReturnsFalse_ForInvalidValues(int? value) =>
+            Assert.False(FedExUtility.IsFreightLtlService(value));
+
+        [Fact]
+        public void IsFreightLtlService_ReturnsTrue_ForFreightValues()
+        {
+            var invalidResults = LtlFreightServices
+                .Select(x => new { Service = x, Result = FedExUtility.IsFreightLtlService(x) })
+                .Where(x => x.Result == false)
+                .ToList();
+
+            foreach (var value in invalidResults)
+            {
+                output.WriteLine("{0} returned false but should have returned true", value.Service);
+            }
+
+            Assert.Empty(invalidResults);
+        }
+
+        [Fact]
+        public void IsFreightLtlService_ReturnsFalse_ForNonFreightServices()
+        {
+            var invalidResults = AllServices.Except(LtlFreightServices)
+                .Select(x => new { Service = x, Result = FedExUtility.IsFreightLtlService(x) })
+                .Where(x => x.Result == true)
+                .ToList();
+
+            foreach (var value in invalidResults)
+            {
+                output.WriteLine("{0} returned false but should have returned true", value.Service);
+            }
+
+            Assert.Empty(invalidResults);
+        }
+
+        [Theory]
+        [InlineData((FedExServiceType) int.MinValue)]
+        [InlineData(null)]
+        public void IsFreightLtlService_ReturnsFalse_ForInvalidValues(FedExServiceType? value) =>
+            Assert.False(FedExUtility.IsFreightLtlService(value));
+
+        /// <summary>
+        /// Get all services
+        /// </summary>
+        private IEnumerable<FedExServiceType> AllServices =>
+            Enum.GetValues(typeof(FedExServiceType)).Cast<FedExServiceType>();
+
+        /// <summary>
+        /// Get LTL Freight services
+        /// </summary>
+        private IEnumerable<FedExServiceType> LtlFreightServices =>
+            new[] { FedExServiceType.FedExFreightPriority, FedExServiceType.FedExFreightEconomy };
     }
 }

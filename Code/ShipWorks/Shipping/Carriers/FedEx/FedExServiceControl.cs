@@ -335,7 +335,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<int> allDistinct = LoadedShipments.Select(s => s.FedEx.Service).Distinct().ToList();
 
-            sectionFreight.Visible = allDistinct.All(FedExUtility.IsFreightLtlService) ||
+            sectionFreight.Visible = allDistinct.All(x => FedExUtility.IsFreightLtlService(x)) ||
                                      allDistinct.All(FedExUtility.IsFreightExpressService);
 
             if (sectionFreight.Visible)
