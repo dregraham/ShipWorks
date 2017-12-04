@@ -176,6 +176,7 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
+    <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
@@ -528,6 +530,7 @@
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsQuickSearchSql.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
