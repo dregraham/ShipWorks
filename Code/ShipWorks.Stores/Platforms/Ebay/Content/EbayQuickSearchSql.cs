@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Filters.Content.SqlGeneration;
 using Interapptive.Shared.Extensions;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.QuickSearch;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Content
 {
@@ -14,21 +14,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
         /// <summary>
         /// Generate SQL lines for a quick search for given store.
         /// </summary>
-        public IEnumerable<string> GenerateSql(SqlGenerationContext context, string searchText)
+        public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)
         {
             bool isNumeric = searchText.Replace("%", string.Empty).IsNumeric();
 
-            context.ColumnsUsed.Add(EbayOrderFields.EbayBuyerID);
-            context.RegisterParameter(searchText);
-            string buyerIdParamName = $"@param{context.Parameters.Count}";
+            context.AddColumnUsed(EbayOrderFields.EbayBuyerID);
+            string buyerIdParamName = context.RegisterParameter(searchText);
 
-            context.ColumnsUsed.Add(EbayOrderFields.SellingManagerRecord);
-            context.RegisterParameter(searchText);
-            string orderSellingMgrRecordParamName = $"@param{context.Parameters.Count}";
+            context.AddColumnUsed(EbayOrderFields.SellingManagerRecord);
+            string orderSellingMgrRecordParamName = context.RegisterParameter(searchText);
 
-            context.ColumnsUsed.Add(OrderItemFields.Code);
-            context.RegisterParameter(searchText);
-            string orderItemCodeParamName = $"@param{context.Parameters.Count}";
+            context.AddColumnUsed(OrderItemFields.Code);
+            string orderItemCodeParamName = context.RegisterParameter(searchText);
 
             List<string> selectStatements = new List<string>()
             {
