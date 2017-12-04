@@ -309,5 +309,31 @@ namespace ShipWorks.AddressValidation
                 (int) ValidationDetailStatusType.Yes :
                 (int) ValidationDetailStatusType.No;
         }
+        
+        /// <summary>
+        /// Validate that the address is formatted correctly
+        /// </summary>
+        public static bool PreValidateAddress(AddressAdapter currentShippingAddress)
+        {
+            if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
+            {
+                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
+                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(currentShippingAddress.Street1))
+            {
+                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
+                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
+                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
+
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -1018,7 +1018,7 @@ namespace ShipWorks.Stores.Communication
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
             }
 
-            if (AddressValidationPolicy.ShouldValidate(address))
+            if (AddressValidator.PreValidateAddress(address))
             {
                 if ((AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
                      AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&

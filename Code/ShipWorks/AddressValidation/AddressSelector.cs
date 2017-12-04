@@ -220,7 +220,7 @@ namespace ShipWorks.AddressValidation
             if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
-                StoreManager.GetAllStores().All(store =>
+                StoreManager.GetAllStoresReadOnly().All(store =>
                 {
                     if (entityAdapter.IsDomesticCountry())
                     {

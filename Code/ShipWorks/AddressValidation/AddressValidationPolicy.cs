@@ -54,31 +54,5 @@ namespace ShipWorks.AddressValidation
                 ShouldValidate(store.DomesticAddressValidationSetting) : 
                 ShouldValidate(store.InternationalAddressValidationSetting);
         }
-        
-        /// <summary>
-        /// Should the specified address should be validated
-        /// </summary>
-        public static bool ShouldValidate(AddressAdapter currentShippingAddress)
-        {
-            if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
-                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int)AddressType.WillNotValidate;
-
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(currentShippingAddress.Street1))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
-                currentShippingAddress.AddressValidationStatus = (int)AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int)AddressType.PrimaryNotFound;
-
-                return false;
-            }
-
-            return true;
-        }
     }
 }

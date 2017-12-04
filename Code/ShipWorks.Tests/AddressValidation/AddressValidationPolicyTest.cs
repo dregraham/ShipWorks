@@ -112,38 +112,5 @@ namespace ShipWorks.Tests.AddressValidation
 
             Assert.True(AddressValidationPolicy.ShouldValidate(store, adapter));
         }
-
-        [Fact]
-        public void ShouldValidateWithAddressAdapter_ReturnsFalse_WhenCountryCodeIsBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "";
-            adapter.Street1 = "123 Main ST";
-
-            Assert.False(AddressValidationPolicy.ShouldValidate(adapter));
-        }
-
-        [Fact]
-        public void ShouldValidateWithAddressAdapter_ReturnsFalse_WhenStreet1IsBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "US";
-            adapter.Street1 = "";
-
-            Assert.False(AddressValidationPolicy.ShouldValidate(adapter));
-        }
-
-        [Fact]
-        public void ShouldValidateWithAddressAdapter_ReturnsTrue_WhenStreet1AndCountryAreNotBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "US";
-            adapter.Street1 = "123 Main St";
-
-            Assert.True(AddressValidationPolicy.ShouldValidate(adapter));
-        }
     }
 }
