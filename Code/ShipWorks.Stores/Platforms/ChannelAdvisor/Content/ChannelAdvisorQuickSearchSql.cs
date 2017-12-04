@@ -18,13 +18,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
         /// <summary>
         /// Generate SQL lines for a quick search for ChannelAdvisor
         /// </summary>
-        public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)
+        public IEnumerable<string> GenerateSql(ISqlGenerationBuilder context, string searchText)
         {
-            context.AddColumnUsed(ChannelAdvisorOrderFields.CustomOrderIdentifier);
-            var customOrderIdentifierParam = context.RegisterParameter(searchText);
-
-            context.AddColumnUsed(ChannelAdvisorOrderItemFields.MarketplaceBuyerID);
-            var marketplaceBuyerIDParam = context.RegisterParameter(searchText);
+            var customOrderIdentifierParam = context.RegisterParameter(ChannelAdvisorOrderFields.CustomOrderIdentifier, searchText);
+            var marketplaceBuyerIDParam = context.RegisterParameter(ChannelAdvisorOrderItemFields.MarketplaceBuyerID, searchText);
 
             return new[]
             {

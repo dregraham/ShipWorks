@@ -14,7 +14,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
     /// <summary>
     /// Class for generating the SQL that will be used to execute a filter definition
     /// </summary>
-    public class SqlGenerationContext : ISqlGenerationContext
+    public class SqlGenerationContext : ISqlGenerationBuilder
     {
         FilterTarget target;
         SqlGenerationScope topLevelScope;
@@ -118,12 +118,6 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 indentString = new string(' ', 3 + indentLevel * 3);
             }
         }
-
-        /// <summary>
-        /// Add a column to the ColumnsUsed collection
-        /// </summary>
-        public void AddColumnUsed(EntityField2 field) =>
-            ColumnsUsed.Add(field);
 
         /// <summary>
         /// For formatting
@@ -238,6 +232,18 @@ namespace ShipWorks.Filters.Content.SqlGeneration
             }
 
             return param;
+        }
+
+        /// <summary>
+        /// Register a parameter with a given value
+        /// </summary>
+        /// <param name="field">Field for which the parameter will apply</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <returns>Name of the created parameter</returns>
+        public string RegisterParameter(EntityField2 field, object value)
+        {
+            ColumnsUsed.Add(field);
+            return RegisterParameter(value);
         }
 
         /// <summary>

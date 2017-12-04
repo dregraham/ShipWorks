@@ -16,7 +16,7 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
         /// Generate SQL lines for a quick search for given store.
         /// The result of each line must ONLY be OrderId
         /// </summary>
-        IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText);
+        IEnumerable<string> GenerateSql(ISqlGenerationBuilder context, string searchText);
 
         /// <summary>
         /// Store type supported by this IQuickSearchStoreSql

@@ -19,10 +19,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
         /// Generate SQL lines for a quick search for given store.
         /// The result of each line must ONLY be OrderId
         /// </summary>
-        public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)
+        public IEnumerable<string> GenerateSql(ISqlGenerationBuilder context, string searchText)
         {
-            context.AddColumnUsed(AmazonOrderFields.AmazonOrderID);
-            string paramName = context.RegisterParameter(searchText);
+            string paramName = context.RegisterParameter(AmazonOrderFields.AmazonOrderID, searchText);
 
             return new[]
             {

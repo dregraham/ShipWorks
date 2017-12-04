@@ -18,10 +18,9 @@ namespace ShipWorks.Stores.Platforms.Sears.Content
         /// <summary>
         /// Generate SQL lines for a quick search for given store.
         /// </summary>
-        public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)
+        public IEnumerable<string> GenerateSql(ISqlGenerationBuilder context, string searchText)
         {
-            context.AddColumnUsed(SearsOrderFields.PoNumber);
-            string paramName = context.RegisterParameter(searchText);
+            string paramName = context.RegisterParameter(SearsOrderFields.PoNumber, searchText);
 
             return new[]
             {

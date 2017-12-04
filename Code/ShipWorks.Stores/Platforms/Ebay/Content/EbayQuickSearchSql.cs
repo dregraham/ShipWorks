@@ -19,18 +19,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
         /// <summary>
         /// Generate SQL lines for a quick search for given store.
         /// </summary>
-        public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)
+        public IEnumerable<string> GenerateSql(ISqlGenerationBuilder context, string searchText)
         {
             bool isNumeric = searchText.Replace("%", string.Empty).IsNumeric();
 
-            context.AddColumnUsed(EbayOrderFields.EbayBuyerID);
-            string buyerIdParamName = context.RegisterParameter(searchText);
-
-            context.AddColumnUsed(EbayOrderFields.SellingManagerRecord);
-            string orderSellingMgrRecordParamName = context.RegisterParameter(searchText);
-
-            context.AddColumnUsed(OrderItemFields.Code);
-            string orderItemCodeParamName = context.RegisterParameter(searchText);
+            string buyerIdParamName = context.RegisterParameter(EbayOrderFields.EbayBuyerID, searchText);
+            string orderSellingMgrRecordParamName = context.RegisterParameter(EbayOrderFields.SellingManagerRecord, searchText);
+            string orderItemCodeParamName = context.RegisterParameter(OrderItemFields.Code, searchText);
 
             List<string> selectStatements = new List<string>()
             {
