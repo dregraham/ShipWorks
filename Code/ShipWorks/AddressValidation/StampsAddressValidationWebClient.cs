@@ -18,13 +18,16 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
-        private readonly UspsWebServiceFactory uspsWebServiceFactory;
+        private readonly IUspsWebClient uspsWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient() 
-            : this(new UspsWebServiceFactory(new LogEntryFactory()))
+        public StampsAddressValidationWebClient()
+			: this(new UspsWebClient(new UspsAccountRepository(),
+	            new UspsWebServiceFactory(new LogEntryFactory()),
+    	        new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
+        	    UspsResellerType.None))
         {
             
         }
@@ -32,9 +35,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient(UspsWebServiceFactory uspsWebServiceFactory)
+        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient)
         {
-            this.uspsWebServiceFactory = uspsWebServiceFactory;
+            this.uspsWebClient = uspsWebClient;
         }
 
         /// <summary>
@@ -57,12 +60,6 @@ namespace ShipWorks.AddressValidation
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 
-            CertificateInspector certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
-            UspsWebClient uspsWebClient = new UspsWebClient(new UspsAccountRepository(),
-                uspsWebServiceFactory,
-	            certificateInspector,
-    	        UspsResellerType.None);
-					
             UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
             try
             {
