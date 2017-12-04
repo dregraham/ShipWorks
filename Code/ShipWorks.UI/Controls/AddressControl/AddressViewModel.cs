@@ -36,6 +36,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         private long? entityId;
         private string prefix;
         private AddressAdapter lastValidatedAddress;
+        private StoreEntity store;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -91,9 +92,10 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Load the person
         /// </summary>
-        public virtual void Load(PersonAdapter person)
+        public virtual void Load(PersonAdapter person, StoreEntity store)
         {
             addressValidationSubscriptions?.Dispose();
+            this.store = store;
 
             Populate(person);
 
@@ -186,12 +188,12 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Set the address from the specified origin address type
         /// </summary>
-        public virtual void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType)
+        public virtual void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType, StoreEntity store)
         {
             PersonAdapter address = shippingOriginManager.GetOriginAddress(addressId, orderId, accountId, shipmentType);
             if (address != null)
             {
-                Load(address);
+                Load(address, store);
             }
         }
 
@@ -217,7 +219,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 SaveToEntity(personAdapter);
                 personAdapter.CopyTo(addressAdapter);
 
-                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, currentEntityId, true);
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, store, true);
 
                 // See if the loaded address has changed since we started validating
                 if (currentEntityId != entityId)

@@ -52,17 +52,6 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Validates an address with no prefix on the specified entity
-        /// </summary>
-        /// <param name="addressAdapter">Address that should be validated</param>
-        /// <param name="entityId">The entityid that owns the order whose address is being validated</param>
-        /// <param name="canAdjustAddress"></param>
-        public Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, long entityId, bool canAdjustAddress)
-        {
-            return ValidateAsync(addressAdapter, StoreManager.GetRelatedStore(entityId), canAdjustAddress);
-        }
-
-        /// <summary>
         /// Can suggestions be shown for the given validation status
         /// </summary>
         public bool CanShowSuggestions(AddressValidationStatusType status)
