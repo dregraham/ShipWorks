@@ -58,7 +58,7 @@ namespace ShipWorks.Filters.Search
                     }
                     else
                     {
-                        quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider(storeManager);
+                        quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider();
                     }
                     break;
                 default:
