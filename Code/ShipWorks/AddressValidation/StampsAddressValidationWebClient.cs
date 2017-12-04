@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
-using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -20,6 +18,24 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
+        private readonly UspsWebServiceFactory uspsWebServiceFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsAddressValidationWebClient():this(new UspsWebServiceFactory(new LogEntryFactory()))
+        {
+            
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsAddressValidationWebClient(UspsWebServiceFactory uspsWebServiceFactory)
+        {
+            this.uspsWebServiceFactory = uspsWebServiceFactory;
+        }
+
         /// <summary>
         /// Validate the address
         /// </summary>
@@ -39,41 +55,39 @@ namespace ShipWorks.AddressValidation
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                CertificateInspector certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
-                UspsWebClient uspsWebClient = new UspsWebClient(new UspsAccountRepository(),
-                	scope.Resolve<Owned<IUspsWebServiceFactory>>().Value,
-	                certificateInspector,
-    	            UspsResellerType.None);
+
+            CertificateInspector certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
+            UspsWebClient uspsWebClient = new UspsWebClient(new UspsAccountRepository(),
+                uspsWebServiceFactory,
+	            certificateInspector,
+    	        UspsResellerType.None);
 					
-                UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
-                try
+            UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
+            try
+            {
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
+                validationResult.AddressType = ConvertAddressType(uspsResult);
+
+                if (uspsResult.IsSuccessfulMatch)
                 {
-                    UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
-                    validationResult.AddressType = ConvertAddressType(uspsResult);
-
-                    if (uspsResult.IsSuccessfulMatch)
-                    {
-                        validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
-                    }
-                    else
-                    {
-                        validationResult.AddressValidationError = uspsResult.BadAddressMessage;
-                    }
-
-                    foreach (Address address in uspsResult.Candidates)
-                    {
-                        validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
-                    }
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
                 }
-                catch (UspsException ex)
+                else
                 {
-                    validationResult.AddressValidationError = ex.Message;
+                    validationResult.AddressValidationError = uspsResult.BadAddressMessage;
                 }
 
-                return validationResult;
+                foreach (Address address in uspsResult.Candidates)
+                {
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
+                }
             }
+            catch (UspsException ex)
+            {
+                validationResult.AddressValidationError = ex.Message;
+            }
+
+            return validationResult;
         }
 
         /// <summary>
