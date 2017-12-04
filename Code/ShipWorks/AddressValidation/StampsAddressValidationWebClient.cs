@@ -23,7 +23,8 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient():this(new UspsWebServiceFactory(new LogEntryFactory()))
+        public StampsAddressValidationWebClient() 
+            : this(new UspsWebServiceFactory(new LogEntryFactory()))
         {
             
         }
