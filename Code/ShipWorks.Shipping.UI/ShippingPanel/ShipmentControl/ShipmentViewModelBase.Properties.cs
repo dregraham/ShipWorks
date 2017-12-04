@@ -120,6 +120,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
                 handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
                 RefreshPackageTypes();
+                RefreshInsurance();
             }
         }
 
