@@ -662,11 +662,7 @@ namespace ShipWorks.Data.Controls
 
                 if (originalAddress != newAddress)
                 {
-                    if (AddressValidator.PreValidateAddress(newAddress))
-                    {
-                        newAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                        newAddress.AddressType = (int) AddressType.NotChecked;
-                    }
+                    newAddress.UpdateValidationStatus();
 
                     newAddress.AddressValidationSuggestionCount = 0;
                     newAddress.AddressValidationError = string.Empty;
@@ -1012,11 +1008,7 @@ namespace ShipWorks.Data.Controls
                 lastValidatedAddress.AddressValidationError = string.Empty;
                 lastValidatedAddress.AddressValidationSuggestionCount = 0;
 
-                if (AddressValidator.PreValidateAddress(lastValidatedAddress))
-                {
-                    lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                    lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
-                }
+                lastValidatedAddress.UpdateValidationStatus();
 
                 validatedAddresses.Clear();
                 shouldSaveAddressSuggestions = true;

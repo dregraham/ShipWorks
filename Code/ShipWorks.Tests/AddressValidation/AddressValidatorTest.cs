@@ -501,39 +501,5 @@ namespace ShipWorks.Tests.AddressValidation
 
             Assert.Equal(string.Empty, sampleOrder.ShipAddressValidationError);
         }
-
-
-        [Fact]
-        public void PreValidateAddress_ReturnsFalse_WhenCountryCodeIsBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "";
-            adapter.Street1 = "123 Main ST";
-
-            Assert.False(AddressValidator.PreValidateAddress(adapter));
-        }
-
-        [Fact]
-        public void PreValidateAddress_ReturnsFalse_WhenStreet1IsBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "US";
-            adapter.Street1 = "";
-
-            Assert.False(AddressValidator.PreValidateAddress(adapter));
-        }
-
-        [Fact]
-        public void PreValidateAddress_ReturnsTrue_WhenStreet1AndCountryAreNotBlank()
-        {
-            AddressAdapter adapter = new AddressAdapter();
-            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
-            adapter.CountryCode = "US";
-            adapter.Street1 = "123 Main St";
-
-            Assert.True(AddressValidator.PreValidateAddress(adapter));
-        }
     }
 }

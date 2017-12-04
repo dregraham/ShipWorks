@@ -663,6 +663,7 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensions.cs" />
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
