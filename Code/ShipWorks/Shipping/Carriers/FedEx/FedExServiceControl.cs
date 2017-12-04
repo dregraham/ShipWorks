@@ -9,6 +9,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +20,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.UI.Controls;
-using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Load the package information
             packageControl.LoadShipments(LoadedShipments, enableEditing);
 
-            // Load the package details and resize package details section to accomodate.
+            // Load the package details and resize package details section to accommodate.
             packageDetailsControl.LoadShipments(LoadedShipments, enableEditing);
             ResizePackageDetails();
 
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             UpdatePackagingChoices(allServicesSame && serviceType.HasValue ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
 
-            // Make it visible if any of them have saturday dates
+            // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
 
             // Show freight if there are all freight
@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Update the description of the section basedon the configured options
+        /// Update the description of the section based on the configured options
         /// </summary>
         private void UpdateSectionDescription()
         {
@@ -421,8 +421,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
             else
             {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
-                sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
+                object selectedValue = service.SelectedValue;
+
+                if (selectedValue != null)
+                {
+                    FedExServiceType serviceType = (FedExServiceType) selectedValue;
+                    sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
+                }
             }
         }
 
@@ -449,7 +454,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Changing whether COD is selectecd
+        /// Changing whether COD is selected
         /// </summary>
         void OnChangeCodEnabled(object sender, EventArgs e)
         {
@@ -489,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
-                thirdPartyConsignee.ReadMultiCheck(v=>shipment.FedEx.ThirdPartyConsignee = v);
+                thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
                 shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
@@ -619,10 +624,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             bool isSmartPost = serviceType == FedExServiceType.SmartPost;
             bool isFims = FedExUtility.IsFimsService(serviceType);
 
-            // Only show smartpost if they are all smart post
+            // Only show SmartPost if they are all smart post
             sectionSmartPost.Visible = isSmartPost;
 
-            // Update the smartpost ui
+            // Update the SmartPost ui
             sectionPackageDetails.Visible = !isSmartPost && !isFims;
 
             // Hide Hold At Location if we are SmartPost
@@ -631,7 +636,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Only show freight if its a freight service
             sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
 
-            // Update the packges\skids ui
+            // Update the packages\skids ui
             packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
 
             // Show COD only if applicable
@@ -740,12 +745,23 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Called whent the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
         /// </summary>
         void OnRecipientDestinationChanged(object sender, EventArgs e)
         {
             SaveToShipments();
             LoadShipmentDetails();
+        }
+
+        /// <summary>
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// </summary>
+        protected override void OnOriginDestinationChanged(object sender, EventArgs e)
+        {
+            SaveToShipments();
+            LoadShipmentDetails();
+
+            base.OnOriginDestinationChanged(sender, e);
         }
 
         /// <summary>
@@ -789,7 +805,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Update the displayed availability of the saturday delivery option
+        /// Update the displayed availability of the Saturday delivery option
         /// </summary>
         private void UpdateSaturdayAvailability()
         {
@@ -839,6 +855,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             OnRateCriteriaChanged(sender, e);
         }
 
+        /// <summary>
+        /// The COD origin has changed
+        /// </summary>
         private void OnCodOriginChanged(object sender, EventArgs e)
         {
             EnableCodTaxId(codEnabled.Checked && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);
@@ -932,7 +951,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Changing the state of the saturday delivery flag
+        /// Changing the state of the Saturday delivery flag
         /// </summary>
         private void OnSaturdayDeliveryChanged(object sender, EventArgs e)
         {
