@@ -4,24 +4,24 @@ using Interapptive.Shared.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Platforms.ProStores.Content;
+using ShipWorks.Stores.Platforms.LemonStand.Content;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using static ShipWorks.Stores.Tests.Integration.Helpers.DbHelpers;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
+namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "QuickSearch")]
-    [Trait("Store", "ProStores")]
-    public class ProStoresQuickSearchTest : IDisposable
+    [Trait("Store", "LemonStand")]
+    public class LemonStandQuickSearchTest : IDisposable
     {
         private readonly DataContext context;
 
-        public ProStoresQuickSearchTest(DatabaseFixture db)
+        public LemonStandQuickSearchTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
         }
@@ -32,13 +32,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
             var builder = context.Mock.Mock<ISqlGenerationBuilder>();
             builder.Setup(x => x.RegisterParameter(AnyField, AnyString)).Returns("@p1");
 
-            var order = Create.Order<ProStoresOrderEntity>(context.Store, context.Customer)
-                .Set(x => x.ConfirmationNumber, "Foo")
+            var order = Create.Order<LemonStandOrderEntity>(context.Store, context.Customer)
+                .Set(x => x.LemonStandOrderID, "Foo")
                 .Save();
 
-            var searchSql = context.Mock.Create<ProStoresQuickSearchSql>()
+            var searchSql = context.Mock.Create<LemonStandQuickSearchSql>()
                 .GenerateSql(builder.Object, "Foo")
-                .Single(x => x.Contains("[ProStoresOrder]"));
+                .Single(x => x.Contains("[LemonStandOrder]"));
 
             TestQuery(searchSql,
                 command => command.AddParameterWithValue("p1", "Foo"),
@@ -59,16 +59,16 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
             var builder = context.Mock.Mock<ISqlGenerationBuilder>();
             builder.Setup(x => x.RegisterParameter(AnyField, AnyString)).Returns("@p1");
 
-            var order = Create.Order<ProStoresOrderEntity>(context.Store, context.Customer).Save();
+            var order = Create.Order<LemonStandOrderEntity>(context.Store, context.Customer).Save();
 
-            var orderSearch = Create.Entity<ProStoresOrderSearchEntity>()
+            var orderSearch = Create.Entity<LemonStandOrderSearchEntity>()
                 .Set(x => x.OrderID, order.OrderID)
-                .Set(x => x.ConfirmationNumber, "Foo")
+                .Set(x => x.LemonStandOrderID, "Foo")
                 .Save();
 
-            var searchSql = context.Mock.Create<ProStoresQuickSearchSql>()
+            var searchSql = context.Mock.Create<LemonStandQuickSearchSql>()
                 .GenerateSql(builder.Object, "Foo")
-                .Single(x => x.Contains("[ProStoresOrderSearch]"));
+                .Single(x => x.Contains("[LemonStandOrderSearch]"));
 
             TestQuery(searchSql,
                 command => command.AddParameterWithValue("p1", "Foo"),
