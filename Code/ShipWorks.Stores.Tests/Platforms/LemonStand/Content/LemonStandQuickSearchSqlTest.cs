@@ -12,6 +12,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.LemonStand.Content
 {
+    [Trait("Category", "QuickSearch")]
+    [Trait("Store", "LemonStand")]
     public class LemonStandQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;

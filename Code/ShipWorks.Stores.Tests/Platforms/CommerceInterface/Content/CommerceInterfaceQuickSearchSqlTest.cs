@@ -12,6 +12,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.CommerceInterface.Content
 {
+    [Trait("Category", "QuickSearch")]
+    [Trait("Store", "CommerceInterface")]
     public class CommerceInterfaceQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;

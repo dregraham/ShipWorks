@@ -12,6 +12,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.Groupon.Content
 {
+    [Trait("Category", "QuickSearch")]
+    [Trait("Store", "Groupon")]
     public class GrouponQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;

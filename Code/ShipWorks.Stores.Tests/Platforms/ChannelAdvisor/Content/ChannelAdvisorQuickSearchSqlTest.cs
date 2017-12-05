@@ -12,6 +12,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor.Content
 {
+    [Trait("Category", "QuickSearch")]
+    [Trait("Store", "ChannelAdvisor")]
     public class ChannelAdvisorQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;
@@ -52,7 +54,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor.Content
 
             Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrder] WHERE CustomOrderIdentifier LIKE p1", result);
             Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrderSearch] WHERE CustomOrderIdentifier LIKE p1", result);
-            Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrderItem] WHERE MarketplaceBuyerID LIKE p2", result);
+            Assert.Contains(@"SELECT oi.OrderID
+FROM   [ChannelAdvisorOrderItem] AS caoi INNER JOIN [OrderItem] AS oi ON caoi.OrderItemID = oi.OrderItemID
+WHERE  (caoi.MarketplaceBuyerID LIKE p2)", result);
         }
 
         public void Dispose()

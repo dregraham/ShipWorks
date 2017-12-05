@@ -12,6 +12,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.ProStores.Content
 {
+    [Trait("Category", "QuickSearch")]
+    [Trait("Store", "ProStores")]
     public class ProStoresQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;

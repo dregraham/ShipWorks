@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
                 $"SELECT OrderId FROM [ChannelAdvisorOrder] WHERE {ChannelAdvisorOrderFields.CustomOrderIdentifier.Name} LIKE {customOrderIdentifierParam}",
                 $"SELECT OrderId FROM [ChannelAdvisorOrderSearch] WHERE {ChannelAdvisorOrderSearchFields.CustomOrderIdentifier.Name} LIKE {customOrderIdentifierParam}",
                 $@"SELECT oi.OrderID
-FROM   ChannelAdvisorOrderItem AS caoi INNER JOIN OrderItem AS oi ON caoi.OrderItemID = oi.OrderItemID
+FROM   [ChannelAdvisorOrderItem] AS caoi INNER JOIN [OrderItem] AS oi ON caoi.OrderItemID = oi.OrderItemID
 WHERE  (caoi.{ChannelAdvisorOrderItemFields.MarketplaceBuyerID.Name} LIKE {marketplaceBuyerIDParam})"
             };
         }
