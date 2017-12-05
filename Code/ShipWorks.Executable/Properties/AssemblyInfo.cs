@@ -15,5 +15,5 @@ using Interapptive.Shared;
 [assembly: AssemblyDate("2000-01-01 12:00:00Z")]
 
 #pragma warning disable S103 // Lines should not be too long
-[assembly: ApitronPDFRasterizerLicense("eJyz8clMTs0rTrWzCSjKTylNLrFzLMgsKcrP0wtwcdMLSiwuSS3KrEotUjDWM1BwLCjIyUxOLMnMz4Nqs9GHabNxLi0uyc9NLbLzzAPqSSwoKMksSz20TkfBMy9Zz0YfLm2DZIpdcEZmQXh+UXaxjT6ysI1ncXFpqktiSaqdobm+gYm+kYGhmY0+QtRGH+buql3n9hdk+H1zVY7KzKx+v8Tnzfq0cMHvC1oflU+30tZ4y+p5+JsP04Z/1bX/Sq4ZTNrO1LShRLapYZJCslD3vCvGf0za0/nVNVV/a0z9O+3UnYAoe/7zRrYJjzj7ujTjZP8pX5m3z519wfEfz078MmrMWuNSEuNTU/2a5/WRqW+yo3/N9XABAKFRha4=")]
+[assembly: ApitronPDFRasterizerLicense("eJyz8clMTs0rTrWzCSjKTylNLrFzLMgsKcrP0wtwcdMLSiwuSS3KrEotUjDWM1BwLCjIyUxOLMnMz4Nqs9GHabNxLi0uyc9NLbLzzAPqSSwoKMksSz20TkfBMy9Zz0YfLm2DZIpdcEZmQXh+UXaxjT6ysI1ncXFpqktiSaqdobm+oZG+kYGhuY0+QtRGH+ZueYMqqR171LJ/VTps/xKr1z/9ukDg26TXG+bpvf246eGLz5nmzZdLkhY8vyd2T7l6gcqtllmyBQI5tSIbrL5+T4ze72uStJWXxUPmfZLf5tbbUok79K6UyjLOWPuG12MuU3vUj67JzK9OSD4xXnmCjflK/5y7dv4xW7f8ucV5IXHJ+unGfje7AesKhh0=")]
 #pragma warning restore S103 // Lines should not be too long
