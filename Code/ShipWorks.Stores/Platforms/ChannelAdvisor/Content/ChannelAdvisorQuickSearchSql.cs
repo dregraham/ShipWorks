@@ -11,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
     public class ChannelAdvisorQuickSearchSql : IQuickSearchStoreSql
     {
         /// <summary>
+        /// Store type supported by this IQuickSearchStoreSql
+        /// </summary>
+        public StoreTypeCode StoreType => StoreTypeCode.ChannelAdvisor;
+
+        /// <summary>
         /// Generate SQL lines for a quick search for ChannelAdvisor
         /// </summary>
         public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)

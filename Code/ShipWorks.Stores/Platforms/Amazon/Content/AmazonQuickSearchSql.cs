@@ -11,6 +11,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
     public class AmazonQuickSearchSql : IQuickSearchStoreSql
     {
         /// <summary>
+        /// Store type supported by this IQuickSearchStoreSql
+        /// </summary>
+        public StoreTypeCode StoreType => StoreTypeCode.Amazon;
+
+        /// <summary>
         /// Generate SQL lines for a quick search for given store.
         /// The result of each line must ONLY be OrderId
         /// </summary>

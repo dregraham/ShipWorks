@@ -12,6 +12,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
     public class EbayQuickSearchSql : IQuickSearchStoreSql
     {
         /// <summary>
+        /// Store type supported by this IQuickSearchStoreSql
+        /// </summary>
+        public StoreTypeCode StoreType => StoreTypeCode.Ebay;
+
+        /// <summary>
         /// Generate SQL lines for a quick search for given store.
         /// </summary>
         public IEnumerable<string> GenerateSql(ISqlGenerationContext context, string searchText)

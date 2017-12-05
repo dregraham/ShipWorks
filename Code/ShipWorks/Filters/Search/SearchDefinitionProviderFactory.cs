@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Filters.Content;
@@ -36,7 +37,9 @@ namespace ShipWorks.Filters.Search
             this.singleScanShortcut = singleScanShortcut;
             singleScanSettings = (SingleScanSettings) (userSession?.Settings?.SingleScanSettings ??
                                                        (int) SingleScanSettings.Disabled);
-            this.storeSqls = storeSqls;
+
+            IEnumerable<StoreTypeCode> enabledStores = storeManager.GetUniqueStoreTypes().Select(s => s.TypeCode);
+            this.storeSqls = storeSqls.Where(storeSql => enabledStores.Contains(storeSql.StoreType));
         }
 
         /// <summary>
