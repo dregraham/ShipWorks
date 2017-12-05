@@ -57,11 +57,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         StoreSettingsControlBase CreateStoreSettingsControl();
 
         /// <summary>
-        /// Create the condition group for searching on Channel Advisor Order ID
-        /// </summary>
-        ConditionGroup CreateBasicSearchOrderConditions(string search);
-
-        /// <summary>
         /// ChannelAdvisor does not have an Online Status
         /// </summary>
         bool GridOnlineColumnSupported(OnlineGridColumnSupport column);

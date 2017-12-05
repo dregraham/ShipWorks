@@ -68,9 +68,9 @@ namespace ShipWorks.Tests.Filters.Search
             SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
             string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
 
-            Assert.True(!sql.Contains("FirstName".ToLowerInvariant()));
-            Assert.True(!sql.Contains("LastName".ToLowerInvariant()));
-            Assert.True(!sql.Contains("Email".ToLowerInvariant()));
+            Assert.False(sql.Contains("FirstName".ToLowerInvariant()));
+            Assert.False(sql.Contains("LastName".ToLowerInvariant()));
+            Assert.False(sql.Contains("Email".ToLowerInvariant()));
 
             Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
         }
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Filters.Search
 
             Assert.True(sql.Contains("FirstName".ToLowerInvariant()));
             Assert.True(sql.Contains("LastName".ToLowerInvariant()));
-            Assert.True(!sql.Contains("Email".ToLowerInvariant()));
+            Assert.False(sql.Contains("Email".ToLowerInvariant()));
 
             Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
             Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains("First".ToLowerInvariant())));

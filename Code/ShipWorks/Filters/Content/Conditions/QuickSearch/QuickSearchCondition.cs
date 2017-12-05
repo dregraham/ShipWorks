@@ -35,9 +35,7 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
         {
             sqlGenerationContext = context;
 
-            context.ColumnsUsed.Add(OrderFields.OrderNumberComplete);
-            context.RegisterParameter(searchText);
-            string paramName = $"@param{context.Parameters.Count}";
+            string paramName = context.RegisterParameter(OrderFields.OrderNumberComplete, searchText);
 
             List<string> selectStatements = new List<string>()
             {
@@ -54,13 +52,8 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
                 {
                     PersonName name = PersonName.Parse(searchText);
 
-                    context.ColumnsUsed.Add(OrderFields.ShipFirstName);
-                    context.RegisterParameter($"{name.First}%");
-                    string firstNameParamName = $"@param{context.Parameters.Count}";
-
-                    context.ColumnsUsed.Add(OrderFields.ShipLastName);
-                    context.RegisterParameter(name.Last);
-                    string lastNameParamName = $"@param{context.Parameters.Count}";
+                    string firstNameParamName = context.RegisterParameter(OrderFields.ShipFirstName, $"{name.First}%");
+                    string lastNameParamName = context.RegisterParameter(OrderFields.ShipLastName, name.Last);
 
                     selectStatements.Add($"SELECT OrderId FROM [Order] WHERE BillFirstName LIKE {firstNameParamName} AND ShipFirstName LIKE {firstNameParamName} AND BillLastName LIKE {lastNameParamName} AND ShipLastName LIKE {lastNameParamName}");
                 }

@@ -307,32 +307,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             new ChannelAdvisorSettingsControl();
 
         /// <summary>
-        /// Create the condition group for searching on Channel Advisor Order ID
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            ChannelAdvisorOrderIDCondition orderIdConditon = new ChannelAdvisorOrderIDCondition();
-            orderIdConditon.TargetValue = search;
-            orderIdConditon.Operator = StringOperator.BeginsWith;
-
-            ChannelAdvisorMarketplaceBuyerCondition buyerCondition = new ChannelAdvisorMarketplaceBuyerCondition();
-            buyerCondition.TargetValue = search;
-            buyerCondition.Operator = StringOperator.BeginsWith;
-
-            ForAnyItemCondition anyItemCondition = new ForAnyItemCondition();
-            anyItemCondition.Container.FirstGroup.JoinType = ConditionJoinType.Any;
-            anyItemCondition.Container.FirstGroup.Conditions.Add(buyerCondition);
-
-            group.JoinType = ConditionJoinType.Any;
-            group.Conditions.Add(orderIdConditon);
-            group.Conditions.Add(anyItemCondition);
-
-            return group;
-        }
-
-        /// <summary>
         /// ChannelAdvisor does not have an Online Status
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
