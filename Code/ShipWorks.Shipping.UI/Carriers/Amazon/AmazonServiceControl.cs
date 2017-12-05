@@ -250,7 +250,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void UpdateSectionDescription()
         {
-            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : (service.SelectedItem as AmazonServiceTypeEntity).Description;
+            sectionShipment.ExtraText = service.MultiValued ? "(Multiple Services)" : (service.SelectedItem as AmazonServiceTypeEntity)?.Description ?? "";
         }
 
         /// <summary>
