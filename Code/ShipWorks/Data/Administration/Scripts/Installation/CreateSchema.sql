@@ -1381,6 +1381,11 @@ PRINT N'Creating index [IX_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisor
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
 GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID]
+	ON [dbo].[ChannelAdvisorOrder] ([CustomOrderIdentifier], [OrderID])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
@@ -6296,9 +6301,10 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderSearch] on [dbo].[ChannelAdv
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderSearch] ADD CONSTRAINT [PK_ChannelAdvisorOrderSearch] PRIMARY KEY CLUSTERED  ([ChannelAdvisorOrderSearchID])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier] on [dbo].[ChannelAdvisorOrderSearch]'
+PRINT N'Creating index [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier] ON [dbo].[ChannelAdvisorOrderSearch] ([CustomOrderIdentifier]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID]
+	ON [dbo].[ChannelAdvisorOrderSearch] ([CustomOrderIdentifier], [OrderID])
 GO
 PRINT N'Creating [dbo].[ClickCartProOrderSearch]'
 GO
