@@ -243,7 +243,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         public string RegisterParameter(EntityField2 field, object value)
         {
             ColumnsUsed.Add(field);
-            return RegisterParameter(value);
+            return "@" + RegisterParameter(value);
         }
 
         /// <summary>

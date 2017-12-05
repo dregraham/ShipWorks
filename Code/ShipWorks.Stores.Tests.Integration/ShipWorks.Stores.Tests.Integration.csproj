@@ -171,6 +171,7 @@
     <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
+    <Compile Include="Helpers\DbHelpers.cs" />
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresQuickSearchTest.cs" />
     <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Sears\SearsCombineOrderNumberCompleteSearchProviderTest.cs" />
