@@ -780,6 +780,8 @@ ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
 CREATE NONCLUSTERED INDEX [IX_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
 GO
+CREATE NONCLUSTERED INDEX [IX_OrderItem_Code_OrderId] ON [dbo].[OrderItem] ([Code], [OrderID])
+GO
 PRINT N'Creating [dbo].[AmazonOrderItem]'
 GO
 CREATE TABLE [dbo].[AmazonOrderItem]
