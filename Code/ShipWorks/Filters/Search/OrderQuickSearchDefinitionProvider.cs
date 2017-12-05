@@ -1,4 +1,5 @@
-﻿using ShipWorks.Filters.Content;
+﻿using System.Collections.Generic;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.QuickSearch;
 
 namespace ShipWorks.Filters.Search
@@ -8,6 +9,16 @@ namespace ShipWorks.Filters.Search
     /// </summary>
     public class OrderQuickSearchDefinitionProvider : ISearchDefinitionProvider
     {
+        private readonly IEnumerable<IQuickSearchStoreSql> storeSqls;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderQuickSearchDefinitionProvider(IEnumerable<IQuickSearchStoreSql> storeSqls)
+        {
+            this.storeSqls = storeSqls;
+        }
+
         /// <summary>
         /// Gets a filter definition based on the provided quick search string.
         /// </summary>
@@ -16,7 +27,7 @@ namespace ShipWorks.Filters.Search
             FilterDefinition definition = new FilterDefinition(FilterTarget.Orders, FilterDefinitionSourceType.Search);
             definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
 
-            QuickSearchCondition quickSearchCondition = new QuickSearchCondition(quickSearchString);
+            QuickSearchCondition quickSearchCondition = new QuickSearchCondition(quickSearchString, storeSqls);
             definition.RootContainer.FirstGroup.Conditions.Add(quickSearchCondition);
 
             return definition;

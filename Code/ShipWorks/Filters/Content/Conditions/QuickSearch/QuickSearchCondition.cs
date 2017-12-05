@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
 using Interapptive.Shared.Extensions;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Editors.ValueEditors;
 using ShipWorks.Filters.Content.SqlGeneration;
@@ -17,13 +15,15 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
     {
         private readonly string searchText;
         private readonly bool isNumeric;
+        private readonly IEnumerable<IQuickSearchStoreSql> storeSqls;
         private SqlGenerationContext sqlGenerationContext;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public QuickSearchCondition(string searchText)
+        public QuickSearchCondition(string searchText, IEnumerable<IQuickSearchStoreSql> storeSqls)
         {
+            this.storeSqls = storeSqls;
             isNumeric = searchText.IsNumeric();
             this.searchText = $"{searchText}%";
         }
@@ -48,7 +48,7 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
             // If the search text isn't numeric, don't add name/email fields.
             if (!isNumeric)
             {
-                // If there's a space in the searach text, we assume they are wanting a to do a 
+                // If there's a space in the search text, we assume they are wanting a to do a 
                 // first name/last name search, so build that AND'd.
                 if (searchText.Contains(" "))
                 {
@@ -71,13 +71,10 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
                 }
             }
 
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            // Get each store's quick search SQL
+            foreach (IQuickSearchStoreSql quickSearchStoreSql in storeSqls)
             {
-                // Get each store's quick search sql
-                foreach (IQuickSearchStoreSql quickSearchStoreSql in scope.Resolve<IEnumerable<IQuickSearchStoreSql>>())
-                {
-                    selectStatements.AddRange(quickSearchStoreSql.GenerateSql(sqlGenerationContext, searchText));
-                }
+                selectStatements.AddRange(quickSearchStoreSql.GenerateSql(sqlGenerationContext, searchText));
             }
 
             // Now create the SQL

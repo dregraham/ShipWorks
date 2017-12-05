@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions.QuickSearch;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 
@@ -16,6 +18,7 @@ namespace ShipWorks.Filters.Search
         private readonly IStoreManager storeManager;
         private readonly ISingleScanOrderShortcut singleScanShortcut;
         private readonly SingleScanSettings singleScanSettings;
+        private readonly IEnumerable<IQuickSearchStoreSql> storeSqls;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchDefinitionProviderFactory"/> class.
@@ -23,12 +26,17 @@ namespace ShipWorks.Filters.Search
         /// <param name="storeManager">The store manager.</param>
         /// <param name="userSession">The user session</param>
         /// <param name="singleScanShortcut">Prefix that identifies a scan result as a ShipWorks order</param>
-        public SearchDefinitionProviderFactory(IStoreManager storeManager, IUserSession userSession, ISingleScanOrderShortcut singleScanShortcut)
+        /// <param name="storeSqls">List of store specific quick search SQL generators</param>
+        public SearchDefinitionProviderFactory(IStoreManager storeManager, 
+            IUserSession userSession, 
+            ISingleScanOrderShortcut singleScanShortcut,
+            IEnumerable<IQuickSearchStoreSql> storeSqls)
         {
             this.storeManager = storeManager;
             this.singleScanShortcut = singleScanShortcut;
             singleScanSettings = (SingleScanSettings) (userSession?.Settings?.SingleScanSettings ??
                                                        (int) SingleScanSettings.Disabled);
+            this.storeSqls = storeSqls;
         }
 
         /// <summary>
@@ -58,7 +66,7 @@ namespace ShipWorks.Filters.Search
                     }
                     else
                     {
-                        quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider();
+                        quickSearchDefinitionProvider = new OrderQuickSearchDefinitionProvider(storeSqls);
                     }
                     break;
                 default:
