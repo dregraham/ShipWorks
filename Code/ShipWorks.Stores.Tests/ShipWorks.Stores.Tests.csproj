@@ -191,6 +191,7 @@
     <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
