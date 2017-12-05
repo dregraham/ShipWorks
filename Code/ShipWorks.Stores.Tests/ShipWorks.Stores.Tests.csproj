@@ -299,6 +299,7 @@
     <Compile Include="Platforms\Paypal\PayPalStoreTypeTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalXmlDeserializeTest.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Sears\SearsStoreTypeTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />

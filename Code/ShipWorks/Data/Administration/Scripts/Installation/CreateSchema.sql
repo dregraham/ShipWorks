@@ -3136,6 +3136,9 @@ PRINT N'Creating primary key [PK_ProStoresOrder] on [dbo].[ProStoresOrder]'
 GO
 ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [PK_ProStoresOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+CREATE NONCLUSTERED INDEX [IX_ProStoresOrder_ConfirmationNumber] 
+	ON [dbo].[ProStoresOrder] ( [ConfirmationNumber] ASC )
+GO
 PRINT N'Creating [dbo].[ProStoresStore]'
 GO
 CREATE TABLE [dbo].[ProStoresStore]
@@ -6498,6 +6501,9 @@ GO
 PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderSearch]'
 GO
 ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [PK_ProStoresOrderSearch] PRIMARY KEY CLUSTERED  ([ProStoresOrderSearchID])
+GO
+CREATE NONCLUSTERED INDEX [IX_ProStoresOrderSearch_ConfirmationNumber] 
+	ON [dbo].[ProStoresOrderSearch] ( [ConfirmationNumber] ASC )
 GO
 PRINT N'Creating [dbo].[SearsOrderSearch]'
 GO
