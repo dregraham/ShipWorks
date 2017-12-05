@@ -118,13 +118,11 @@ namespace ShipWorks.Tests.Filters.Search
             Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
             Assert.Equal(1, context.Parameters.Count(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
         }
-        
+
         [Fact]
         public void GetDefinition_IncludesStoreSpecificCriteria_WhenStoreHasCriteria()
         {
-            //mock.Provide<IEnumerable<IQuickSearchStoreSql>>(new IQuickSearchStoreSql[] { new AmazonQuickSearchSql() });
-
-            Mock<IQuickSearchStoreSql> storeSearchSql = new Mock<IQuickSearchStoreSql>();
+            Mock<IQuickSearchStoreSql> storeSearchSql = mock.Mock<IQuickSearchStoreSql>();
             storeSearchSql.Setup(s => s.GenerateSql(It.IsAny<SqlGenerationContext>(), It.IsAny<string>()))
                 .Returns(new string[]
                 {
