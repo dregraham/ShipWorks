@@ -4,32 +4,32 @@ using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.Content;
+using ShipWorks.Stores.Platforms.Groupon.Content;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor.Content
+namespace ShipWorks.Stores.Tests.Platforms.Groupon.Content
 {
-    public class ChannelAdvisorQuickSearchSqlTest : IDisposable
+    public class GrouponQuickSearchSqlTest : IDisposable
     {
         readonly AutoMock mock;
         private readonly Mock<ISqlGenerationBuilder> context;
-        private readonly ChannelAdvisorQuickSearchSql testObject;
+        private readonly GrouponQuickSearchSql testObject;
 
-        public ChannelAdvisorQuickSearchSqlTest()
+        public GrouponQuickSearchSqlTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             context = mock.Mock<ISqlGenerationBuilder>();
-            testObject = mock.Create<ChannelAdvisorQuickSearchSql>();
+            testObject = mock.Create<GrouponQuickSearchSql>();
         }
 
         [Fact]
-        public void StoreType_ReturnsChannelAdvisor()
+        public void StoreType_ReturnsGroupon()
         {
-            Assert.Equal(StoreTypeCode.ChannelAdvisor, testObject.StoreType);
+            Assert.Equal(StoreTypeCode.Groupon, testObject.StoreType);
         }
 
         [Fact]
@@ -37,8 +37,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor.Content
         {
             testObject.GenerateSql(context.Object, "Foo");
 
-            context.Verify(x => x.RegisterParameter(ItIs.Field(ChannelAdvisorOrderFields.CustomOrderIdentifier), "Foo"));
-            context.Verify(x => x.RegisterParameter(ItIs.Field(ChannelAdvisorOrderItemFields.MarketplaceBuyerID), "Foo"));
+            context.Verify(x => x.RegisterParameter(ItIs.Field(GrouponOrderFields.GrouponOrderID), "Foo"));
+            context.Verify(x => x.RegisterParameter(ItIs.Field(GrouponOrderFields.ParentOrderID), "Foo"));
         }
 
         [Fact]
@@ -50,9 +50,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor.Content
 
             var result = testObject.GenerateSql(context.Object, "Foo");
 
-            Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrder] WHERE CustomOrderIdentifier LIKE p1", result);
-            Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrderSearch] WHERE CustomOrderIdentifier LIKE p1", result);
-            Assert.Contains("SELECT OrderId FROM [ChannelAdvisorOrderItem] WHERE MarketplaceBuyerID LIKE p2", result);
+            Assert.Contains("SELECT OrderId FROM [GrouponOrder] WHERE GrouponOrderID LIKE p1 OR ParentOrderID LIKE p2", result);
+            Assert.Contains("SELECT OrderId FROM [GrouponOrderSearch] WHERE GrouponOrderID LIKE p1 OR ParentOrderID LIKE p2", result);
         }
 
         public void Dispose()
