@@ -80,7 +80,29 @@ namespace ShipWorks.Data.Administration.Retry
         /// and an exception is thrown, everything would be rolled back.
         /// </summary>
         /// <param name="method">Method to execute.  </param>
+        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<Exception, bool> exceptionCheck) =>
+            ExecuteWithRetry(method, () => SqlAdapter.Create(true), exceptionCheck);
+
+        /// <summary>
+        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
+        /// if TException is detected.
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
+        /// and an exception is thrown, everything would be rolled back.
+        /// </summary>
+        /// <param name="method">Method to execute.  </param>
         public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter) =>
+            ExecuteWithRetry(method, createSqlAdapter, ex => false);
+
+        /// <summary>
+        /// Executes the given method with a new sql adapter that is setup with SqlDeadlockPriorityScope, and automatic retries the command
+        /// if TException is detected.
+        ///
+        /// This cannot be called within a current transaction.  This method will create a new transacted SqlAdapter for each retry.  If we didn't do this,
+        /// and an exception is thrown, everything would be rolled back.
+        /// </summary>
+        /// <param name="method">Method to execute.  </param>
+        public void ExecuteWithRetry(Action<ISqlAdapter> method, Func<ISqlAdapter> createSqlAdapter, Func<Exception, bool> exceptionCheck) =>
             ExecuteWithRetry(() =>
             {
                 using (new SqlDeadlockPriorityScope(deadlockPriority))
@@ -96,14 +118,22 @@ namespace ShipWorks.Data.Administration.Retry
                         return;
                     }
                 }
-            });
+            }, exceptionCheck);
 
         /// <summary>
         /// Executes the given method and automatically retries the command if TException is detected.
         ///
         /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
         /// </summary>
-        public void ExecuteWithRetry(Action method)
+        public void ExecuteWithRetry(Action method) =>
+            ExecuteWithRetry(method, ex => false);
+
+        /// <summary>
+        /// Executes the given method and automatically retries the command if TException is detected.
+        ///
+        /// The SqlAdapter in method must be the top most transaction.  Do not use this method from within an existing transaction.
+        /// </summary>
+        public void ExecuteWithRetry(Action method, Func<Exception, bool> exceptionCheck)
         {
             int retryCounter = retries;
 
@@ -121,7 +151,7 @@ namespace ShipWorks.Data.Administration.Retry
                         }
                         catch (Exception ex)
                         {
-                            var result = HandleException(ex, retryCounter);
+                            var result = HandleException(ex, retryCounter, exceptionCheck);
 
                             if (result.Success)
                             {
@@ -249,9 +279,9 @@ namespace ShipWorks.Data.Administration.Retry
         /// <summary>
         /// Handle the exception, if possible
         /// </summary>
-        private GenericResult<int> HandleException(Exception ex, int retryCounter)
+        private GenericResult<int> HandleException(Exception ex, int retryCounter, Func<Exception, bool> exceptionCheck)
         {
-            if (ex is TException || (ex.InnerException is TException))
+            if (ex is TException || (ex.InnerException is TException) || exceptionCheck(ex))
             {
                 log.WarnFormat("{0} detected while trying to execute.  Retrying {1} more times.", typeof(TException).Name, retryCounter);
 

@@ -1578,6 +1578,10 @@ PRINT N'Creating index [IX_EbayOrderItem_OrderID] on [dbo].[EbayOrderItem]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_OrderID] ON [dbo].[EbayOrderItem] ([OrderID])
 GO
+CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EbayItemID_EbayTransactionID] ON [dbo].[EbayOrderItem] ([EbayItemID],[EbayTransactionID])
+GO
+CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EffectiveCheckoutStatus_EbayOrderItemID] ON [dbo].[EbayOrderItem] ([EffectiveCheckoutStatus], [OrderItemID])
+GO
 PRINT N'Creating [dbo].[EbayStore]'
 GO
 CREATE TABLE [dbo].[EbayStore]
@@ -4462,7 +4466,9 @@ PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeCon
 GO
 ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-
+CREATE INDEX [SW_FilterNodeContentDirty_FilterNodeContentDirtyID] 
+	ON [dbo].[FilterNodeContentDirty] (FilterNodeContentDirtyID)
+GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
 CREATE TABLE [dbo].[FilterNodeRootDirty]
