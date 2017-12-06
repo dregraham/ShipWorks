@@ -99,7 +99,7 @@ namespace ShipWorks.AddressValidation
                 Street2 = address.Address2 ?? string.Empty,
                 Street3 = address.Address3 ?? string.Empty,
                 City = address.City ?? string.Empty,
-                StateProvCode = address.State ?? string.Empty,
+                StateProvCode = address.State ?? address.Province ?? string.Empty,
                 PostalCode = GetPostalCode(address) ?? string.Empty,
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,

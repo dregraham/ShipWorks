@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
@@ -87,6 +85,45 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.Equal("bad address", result.AddressValidationError);
         }
 
+        [Fact]
+        public async Task ValidateAddressAsync_ProvinceIsReturnedWhenStateIsNull()
+        {
+            mock.Mock<IUspsWebClient>()
+                .Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), It.IsAny<UspsAccountEntity>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
+                {
+                    IsSuccessfulMatch = true,
+                    IsCityStateZipOk = true,
+                    ResidentialIndicator = ResidentialDeliveryIndicatorType.Yes,
+                    MatchedAddress = new Address { Address1 = "Add1", State = null, Province = "prov"},
+                    Candidates = new[] { new Address { Address1 = "Canidate1" } }
+                });
+
+            var testObject = mock.Create<StampsAddressValidationWebClient>();
+            var result = await testObject.ValidateAddressAsync(new AddressAdapter());
+            var matchedAddress = result.AddressValidationResults.Single(a => a.Street1 == "Add1");
+            Assert.Equal("prov", matchedAddress.StateProvCode); 
+        }
+
+        [Fact]
+        public async Task ValidateAddressAsync_StateIsReturnedWhenStateAndProvinceHaveValue()
+        {
+            mock.Mock<IUspsWebClient>()
+                .Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), It.IsAny<UspsAccountEntity>()))
+                .ReturnsAsync(new UspsAddressValidationResults()
+                {
+                    IsSuccessfulMatch = true,
+                    IsCityStateZipOk = true,
+                    ResidentialIndicator = ResidentialDeliveryIndicatorType.Yes,
+                    MatchedAddress = new Address { Address1 = "Add1", State = "state", Province = "prov" },
+                    Candidates = new[] { new Address { Address1 = "Canidate1" } }
+                });
+
+            var testObject = mock.Create<StampsAddressValidationWebClient>();
+            var result = await testObject.ValidateAddressAsync(new AddressAdapter());
+            var matchedAddress = result.AddressValidationResults.Single(a => a.Street1 == "Add1");
+            Assert.Equal("state", matchedAddress.StateProvCode);
+        }
 
         [Theory]
         [InlineData(AddressType.Invalid, true, false, "Y", "MO", true, ResidentialDeliveryIndicatorType.No)]
