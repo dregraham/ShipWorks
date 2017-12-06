@@ -184,7 +184,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             var testAddressSuggestion = new ValidatedAddressEntity();
             mock.Mock<IAddressSelector>()
-                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), testAddressSuggestion))
+                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), testAddressSuggestion, It.IsAny<StoreEntity>()))
                 .ReturnsAsync(new AddressAdapter())
                 .Verifiable();
 
@@ -199,7 +199,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         {
             AddressAdapter address = null;
             mock.Mock<IAddressSelector>()
-                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>()))
+                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>(), It.IsAny<StoreEntity>()))
                 .ReturnsAsync(new AddressAdapter())
                 .Callback((AddressAdapter a, ValidatedAddressEntity _) => address = a);
 
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             };
 
             mock.Mock<IAddressSelector>()
-                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>()))
+                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>(), It.IsAny<StoreEntity>()))
                 .ReturnsAsync(address);
 
             var testObject = mock.Create<AddressViewModel>();
@@ -263,7 +263,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             };
 
             mock.Mock<IAddressSelector>()
-                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>()))
+                .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>(), It.IsAny<StoreEntity>()))
                 .ReturnsAsync(address);
 
             var testObject = mock.Create<AddressViewModel>();

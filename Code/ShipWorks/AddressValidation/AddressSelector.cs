@@ -174,7 +174,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Display the list of available addresses
         /// </summary>
-        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses)
+        public void ShowAddressOptionMenu(Control owner, AddressAdapter entityAdapter, Point displayPosition, Func<List<ValidatedAddressEntity>> getValidatedAddresses, StoreEntity store)
         {
             // If we won't validate, an error occurred, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
@@ -189,7 +189,7 @@ namespace ShipWorks.AddressValidation
             ValidatedAddressEntity originalValidatedAddress = validatedAddresses.FirstOrDefault(x => x.IsOriginal);
             List<ValidatedAddressEntity> suggestedAddresses = validatedAddresses.Where(x => !x.IsOriginal).ToList();
 
-            ContextMenu menu = BuildMenu(owner, entityAdapter, originalValidatedAddress, suggestedAddresses);
+            ContextMenu menu = BuildMenu(owner, entityAdapter, originalValidatedAddress, suggestedAddresses, store);
 
             menu.Show(owner, displayPosition);
         }
@@ -197,13 +197,13 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Build the context menu
         /// </summary>
-        private ContextMenu BuildMenu(Control owner, AddressAdapter entityAdapter, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses)
+        private ContextMenu BuildMenu(Control owner, AddressAdapter entityAdapter, ValidatedAddressEntity originalValidatedAddress, List<ValidatedAddressEntity> suggestedAddresses, StoreEntity store)
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
             if (originalValidatedAddress != null)
             {
-                menuItems.Add(CreateMenuItem(originalValidatedAddress, entityAdapter));
+                menuItems.Add(CreateMenuItem(originalValidatedAddress, entityAdapter, store));
             }
 
             if (suggestedAddresses.Any())
@@ -213,24 +213,24 @@ namespace ShipWorks.AddressValidation
                     menuItems.Add(new MenuItem("-"));
                 }
 
-                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, entityAdapter)).OrderBy(x => x.Text));
+                menuItems.AddRange(suggestedAddresses.Select(x => CreateMenuItem(x, entityAdapter, store)).OrderBy(x => x.Text));
             }
 
             // If has a single suggestion and haven't set any store to ValidateAndApply, show this menu to set all stores to ValidateAndApply
             if (UserSession.Security.HasPermission(PermissionType.ManageStores) &&
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.HasSuggestions &&
                 suggestedAddresses.Count == 1 &&
-                StoreManager.GetAllStoresReadOnly().All(store =>
+                StoreManager.GetAllStoresReadOnly().All(s =>
                 {
                     if (entityAdapter.IsDomesticCountry())
                     {
-                        return store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
+                        return s.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
                     }
-                    return store.InternationalAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
+                    return s.InternationalAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndApply;
                 }))
             {
                 menuItems.Add(new MenuItem("Always Fix Addresses For All Stores",
-                    async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter)));
+                    async (sender, args) => await AlwaysFixAddressesSelected(owner, suggestedAddresses.First(), entityAdapter, store)));
             }
 
             return new ContextMenu(menuItems.ToArray());
@@ -239,7 +239,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select the address and set AutoFix to be default for all stores.
         /// </summary>
-        private async Task AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
+        private async Task AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter, StoreEntity store)
         {
             DialogResult isSureResult = MessageHelper.ShowQuestion(owner, "Are you sure you want to always fix addresses for all stores?");
             if (isSureResult != DialogResult.OK)
@@ -247,19 +247,19 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-            await SelectAddress(entityAdapter, validatedAddress);
+            await SelectAddress(entityAdapter, validatedAddress, store);
 
             using (SqlAdapter sqlAdapter = new SqlAdapter())
             {
-                StoreManager.GetAllStores().ForEach(store =>
+                StoreManager.GetAllStores().ForEach(s =>
                 {
                     if (entityAdapter.IsDomesticCountry())
                     {
-                        store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+                        s.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
                     }
                     else
                     {
-                        store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+                        s.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
                     }
                     StoreManager.SaveStore(store, sqlAdapter);
                 });
@@ -271,21 +271,21 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create a menu item from a validated address
         /// </summary>
-        private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
+        private MenuItem CreateMenuItem(ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter, StoreEntity store)
         {
             string title = FormatAddress(validatedAddress);
 
-            return new MenuItem(title, async (sender, args) => await SelectAddress(entityAdapter, validatedAddress));
+            return new MenuItem(title, async (sender, args) => await SelectAddress(entityAdapter, validatedAddress, store));
         }
 
         /// <summary>
         /// Select an address to copy into the entity's shipping address
         /// </summary>
-        public async Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress)
+        public async Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress, StoreEntity store)
         {
             OnAddressSelecting();
 
-            await UpdateSelectedAddressIfRequred(selectedAddress);
+            await UpdateSelectedAddressIfRequred(selectedAddress, store);
 
             AddressAdapter originalAddress = new AddressAdapter();
             addressToUpdate.CopyTo(originalAddress);
@@ -304,14 +304,14 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// When a suggested address is selected, it might not have a value for residential or PO Box
         /// </summary>
-        private static Task UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress)
+        private static Task UpdateSelectedAddressIfRequred(ValidatedAddressEntity selectedAddress, StoreEntity store)
         {
             if (!selectedAddress.IsOriginal &&
                 selectedAddress.ResidentialStatus == (int) ValidationDetailStatusType.Unknown &&
                 selectedAddress.POBox == (int) ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
-                return addressValidator.ValidateAsync(selectedAddress, StoreManager.GetRelatedStore(selectedAddress.ConsumerID), string.Empty, true, (entity, entities) =>
+                return addressValidator.ValidateAsync(selectedAddress, store, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
                     if ((selectedAddress.ResidentialStatus != (int) ValidationDetailStatusType.Unknown ||

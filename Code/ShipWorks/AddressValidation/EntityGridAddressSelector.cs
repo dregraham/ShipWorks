@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores;
 
 namespace ShipWorks.AddressValidation
 {
@@ -50,7 +51,7 @@ namespace ShipWorks.AddressValidation
                     {
                         return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(entity), AddressPrefix);
                     }
-                });
+                }, StoreManager.GetRelatedStore(EntityUtility.GetEntityId(selectedEntity)));
         }
 
         /// <summary>

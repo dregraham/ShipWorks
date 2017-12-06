@@ -249,7 +249,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             PersonAdapter person = new PersonAdapter();
             SaveToEntity(person);
 
-            AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
+            AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion, store);
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
             PopulateAddress(changedPerson);

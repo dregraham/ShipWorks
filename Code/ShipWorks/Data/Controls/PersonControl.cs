@@ -1037,7 +1037,7 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses);
+            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses, store);
         }
 
         /// <summary>
