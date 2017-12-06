@@ -63,6 +63,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             shipment.TrackingNumber = amazonShipment.TrackingId;
             shipment.ShipmentCost = amazonShipment.ShippingService.Rate.Amount;
             shipment.Amazon.AmazonUniqueShipmentID = amazonShipment.ShipmentId;
+            shipment.Amazon.CarrierName = amazonShipment.ShippingService?.CarrierName ?? string.Empty;
+            shipment.Amazon.ShippingServiceName = amazonShipment.ShippingService?.ShippingServiceName ?? string.Empty;
         }
 
         /// <summary>

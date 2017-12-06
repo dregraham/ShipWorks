@@ -428,8 +428,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
             else
             {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
-                sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
+                object selectedValue = service.SelectedValue;
+
+                if (selectedValue != null)
+                {
+                    FedExServiceType serviceType = (FedExServiceType) selectedValue;
+                    sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
+                }
             }
         }
 
@@ -631,10 +636,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             bool isSmartPost = serviceType == FedExServiceType.SmartPost;
             bool isFims = FedExUtility.IsFimsService(serviceType);
 
-            // Only show smartpost if they are all smart post
+            // Only show SmartPost if they are all smart post
             sectionSmartPost.Visible = isSmartPost;
 
-            // Update the smartpost ui
+            // Update the SmartPost ui
             sectionPackageDetails.Visible = !isSmartPost && !isFims;
 
             // Hide Hold At Location if we are SmartPost
@@ -761,6 +766,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Called when the recipient country has changed.  We may have to switch from an international to domestic UI
+        /// </summary>
+        protected override void OnOriginDestinationChanged(object sender, EventArgs e)
+        {
+            SaveToShipments();
+            LoadShipmentDetails();
+
+            base.OnOriginDestinationChanged(sender, e);
+        }
+
+        /// <summary>
         /// Refresh the weight box with the latest weight information from the loaded shipments
         /// </summary>
         public override void RefreshContentWeight()
@@ -851,6 +867,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             OnRateCriteriaChanged(sender, e);
         }
 
+        /// <summary>
+        /// The COD origin has changed
+        /// </summary>
         private void OnCodOriginChanged(object sender, EventArgs e)
         {
             EnableCodTaxId(codEnabled.Checked && codOrigin.SelectedOrigin == ShipmentOriginSource.Other);

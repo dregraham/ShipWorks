@@ -328,6 +328,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Walmart\DTO\CarrierTypeTest.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartShipmentDetailsUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />

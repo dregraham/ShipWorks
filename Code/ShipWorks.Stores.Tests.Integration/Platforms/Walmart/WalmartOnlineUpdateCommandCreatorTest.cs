@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public partial class WalmartOnlineUpdateCommandCreatorTest : IDisposable
+    public class WalmartOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
