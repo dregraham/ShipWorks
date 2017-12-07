@@ -539,7 +539,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 if (!results.IsCityStateZipOk)
                 {
-                    throw new UspsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
+                    throw new UspsException($"The address for '{new PersonName(person).FullName}' is not a valid address. {Environment.NewLine}{Environment.NewLine}" +
+                        $"Address validation returned the following error: {Environment.NewLine}" +
+                        $"{results.BadAddressMessage}");
                 }
 
                 if (requireFullMatch)

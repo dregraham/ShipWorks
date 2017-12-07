@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             mock.Mock<IAddressSelector>()
                 .Setup(x => x.SelectAddress(It.IsAny<AddressAdapter>(), It.IsAny<ValidatedAddressEntity>(), It.IsAny<StoreEntity>()))
                 .ReturnsAsync(new AddressAdapter())
-                .Callback((AddressAdapter a, ValidatedAddressEntity _) => address = a);
+                .Callback((AddressAdapter a, ValidatedAddressEntity _, StoreEntity s) => address = a);
 
             var testObject = mock.Create<AddressViewModel>();
             testObject.Street = "1 Main";
