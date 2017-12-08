@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -427,15 +428,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates if the given service is a freight LTL service
         /// </summary>
-        public static bool IsFreightLtlService(int serviceType)
-        {
-            return IsFreightLtlService((FedExServiceType) serviceType);
-        }
+        public static bool IsFreightLtlService(int? serviceType) =>
+            serviceType.Match(x => IsFreightLtlService((FedExServiceType) x), () => false);
 
         /// <summary>
         /// Indicates if the given service is a freight LTL service
         /// </summary>
-        public static bool IsFreightLtlService(FedExServiceType serviceType)
+        public static bool IsFreightLtlService(FedExServiceType? serviceType) =>
+            serviceType.Match(IsFreightLtlService, () => false);
+
+        /// <summary>
+        /// Indicates if the given service is a freight LTL service
+        /// </summary>
+        private static bool IsFreightLtlService(FedExServiceType serviceType)
         {
             switch (serviceType)
             {

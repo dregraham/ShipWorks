@@ -856,7 +856,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 package.InsurancePennyOne = settings.FedExInsurancePennyOne;
 
                 // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
-                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+                // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
+                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
+                    FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
                 {
                     package.InsurancePennyOne = true;
                 }

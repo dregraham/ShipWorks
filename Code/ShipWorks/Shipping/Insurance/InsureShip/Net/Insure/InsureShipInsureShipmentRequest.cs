@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("item_name", string.Join(",", Shipment.Order.OrderItems.Select(oi => oi.Name)));
             postData.Add("carrier", shipmentType.ShipmentTypeName);
-            postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment));
+            postData.Add("carrier_code", InsureShipCarrierCode.GetCarrierCode(Shipment, shipmentType.IsDomestic(Shipment)));
 
             return postData;
         }
