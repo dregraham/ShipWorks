@@ -54,13 +54,6 @@ namespace ShipWorks.Stores.Tests.Platforms.LemonStand
         }
 
         [Fact]
-        public void CreateBasicSearchOrderConditions_ReturnsConditionGroup_WhenCalled()
-        {
-            var testObject = new LemonStandStoreType(lemonStandStore.Object);
-            Assert.IsAssignableFrom<ConditionGroup>(testObject.CreateBasicSearchOrderConditions("1"));
-        }
-
-        [Fact]
         public void GetAuditDescription_ReturnsValueWhenOrderIsCorrectType()
         {
             var testObject = mock.Create<LemonStandStoreType>(TypedParameter.From<StoreEntity>(null));

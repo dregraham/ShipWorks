@@ -9,11 +9,9 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers;
-using ShipWorks.Stores.Platforms.MarketplaceAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
@@ -128,28 +126,6 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// Create a MarketplaceAdvisor specific order entity
         /// </summary>
         protected override OrderEntity CreateOrderInstance() => new MarketplaceAdvisorOrderEntity();
-
-        /// <summary>
-        /// Create additional conditions that can be used for basic search
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-            group.JoinType = ShipWorks.Filters.Content.ConditionJoinType.Any;
-
-            MarketplaceAdvisorInvoiceNumberCondition invoiceCondition = new MarketplaceAdvisorInvoiceNumberCondition();
-            invoiceCondition.Operator = StringOperator.BeginsWith;
-            invoiceCondition.TargetValue = search;
-            group.Conditions.Add(invoiceCondition);
-
-            MarketplaceAdvisorSellerOrderNumberCondition sellerCondition = new MarketplaceAdvisorSellerOrderNumberCondition();
-            sellerCondition.IsNumeric = false;
-            sellerCondition.StringOperator = StringOperator.BeginsWith;
-            sellerCondition.StringValue = search;
-            group.Conditions.Add(sellerCondition);
-
-            return group;
-        }
 
         /// <summary>
         /// Generate MA specific template order level elements
