@@ -55,7 +55,7 @@ namespace ShipWorks.Filters.Content.Conditions.QuickSearch
                     string firstNameParamName = context.RegisterParameter(OrderFields.ShipFirstName, $"{name.First}%");
                     string lastNameParamName = context.RegisterParameter(OrderFields.ShipLastName, name.Last);
 
-                    selectStatements.Add($"SELECT OrderId FROM [Order] WHERE BillFirstName LIKE {firstNameParamName} AND ShipFirstName LIKE {firstNameParamName} AND BillLastName LIKE {lastNameParamName} AND ShipLastName LIKE {lastNameParamName}");
+                    selectStatements.Add($"SELECT OrderId FROM [Order] WHERE (BillFirstName LIKE {firstNameParamName} OR ShipFirstName LIKE {firstNameParamName}) AND (BillLastName LIKE {lastNameParamName} OR ShipLastName LIKE {lastNameParamName})");
                 }
                 else
                 {
