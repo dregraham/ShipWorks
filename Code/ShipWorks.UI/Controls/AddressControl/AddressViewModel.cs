@@ -87,7 +87,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// Can a validation message be shown
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool CanShowValidationMessage => validator.CanShowMessage(ValidationStatus) && !string.IsNullOrEmpty(ValidationMessage);
+        public bool CanShowValidationMessage => !string.IsNullOrEmpty(ValidationMessage);
 
         /// <summary>
         /// Load the person
@@ -142,6 +142,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         private void PopulateValidationDetails(PersonAdapter person)
         {
+            ValidationMessageLabel = addressSelector.DisplayValidationSuggestionLabel(person);
             ValidationMessage = person.AddressValidationError;
             SuggestionCount = person.AddressValidationSuggestionCount;
             ValidationStatus = (AddressValidationStatusType) person.AddressValidationStatus;

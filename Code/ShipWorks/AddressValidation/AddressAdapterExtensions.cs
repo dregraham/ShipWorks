@@ -1,8 +1,10 @@
 ﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using System.Drawing;
 
 namespace ShipWorks.AddressValidation
 {
@@ -70,6 +72,22 @@ namespace ShipWorks.AddressValidation
                     address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
                 }
             }
+        }
+
+        /// <summary>
+        /// Icon that represents the ValidationStatus of the adapter
+        /// </summary>
+        public static Image GetAddressValidationStatusIcon(this IAddressAdapter address)
+        {
+            return EnumHelper.GetImage((AddressValidationStatusType)address.AddressValidationStatus);
+        }
+
+        /// <summary>
+        /// Text that descripes the ValidationStatus of the adapter
+        /// </summary>
+        public static string GetAddressValidationStatusText(this IAddressAdapter address)
+        {
+            return EnumHelper.GetDescription((AddressValidationStatusType)address.AddressValidationStatus);
         }
     }
 }

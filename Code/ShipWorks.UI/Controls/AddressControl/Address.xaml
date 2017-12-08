@@ -112,8 +112,7 @@
                     </Button>
                     <Button Margin="6,0,0,0"
                             Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
-                            Command="{Binding ShowValidationMessageCommand}">
-                        Details...
+                            Command="{Binding ShowValidationMessageCommand}" Content="{Binding ValidationMessageLabel}">
                     </Button>
                 </StackPanel>
             </controls:AlignmentWrapPanel>

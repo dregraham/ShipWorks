@@ -18,5 +18,10 @@ namespace ShipWorks.AddressValidation
         /// Format the address for display in the menu
         /// </summary>
         string FormatAddress(ValidatedAddressEntity x);
+
+        /// <summary>
+        /// Text to display as the ValidationSuggestion
+        /// </summary>
+        string DisplayValidationSuggestionLabel(object arg);
     }
 }

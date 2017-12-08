@@ -97,7 +97,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public bool IsValidationSuggestionLinkEnabled(object arg)
         {
-            AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
+            IAddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
             {
                 return true;
@@ -105,6 +105,12 @@ namespace ShipWorks.AddressValidation
 
             switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
+                case AddressValidationStatusType.Valid:
+                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError))
+                    {
+                        return false;
+                    }
+                    return true;
                 case AddressValidationStatusType.Fixed:
                 case AddressValidationStatusType.HasSuggestions:
                 case AddressValidationStatusType.SuggestionIgnored:
@@ -126,7 +132,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public string DisplayValidationSuggestionLabel(object arg)
         {
-            AddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
+            IAddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
             {
                 return string.Empty;
@@ -135,6 +141,11 @@ namespace ShipWorks.AddressValidation
             switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Valid:
+                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError))
+                    {
+                        return string.Empty;
+                    }
+                    return "(Limited Data)";
                 case AddressValidationStatusType.NotChecked:
                 case AddressValidationStatusType.Pending:
                     return string.Empty;
@@ -155,9 +166,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets an address adapter from an object, if possible.
         /// </summary>
-        private AddressAdapter GetAddressAdapterFromObject(object arg)
+        private IAddressAdapter GetAddressAdapterFromObject(object arg)
         {
-            AddressAdapter addressAdapter = arg as AddressAdapter;
+            IAddressAdapter addressAdapter = arg as IAddressAdapter;
 
             if (addressAdapter == null)
             {
@@ -179,7 +190,8 @@ namespace ShipWorks.AddressValidation
             // If we won't validate, an error occurred, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.BadAddress ||
-                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
+                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error ||
+                !string.IsNullOrWhiteSpace(entityAdapter.AddressValidationError))
             {
                 MessageHelper.ShowInformation(owner, entityAdapter.AddressValidationError);
                 return;

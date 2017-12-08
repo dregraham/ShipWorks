@@ -10,6 +10,8 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal;
+using System;
 
 namespace ShipWorks.AddressValidation
 {
@@ -64,11 +66,16 @@ namespace ShipWorks.AddressValidation
             try
             {
                 UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
-                validationResult.AddressType = ConvertAddressType(uspsResult);
+                validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
                     validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    
+                    if (validationResult.AddressType == AddressType.InternationalAmbiguous)
+                    {
+                        validationResult.AddressValidationError = TranslateValidationResultMessage(uspsResult);
+                    }
                 }
                 else
                 {
@@ -86,6 +93,28 @@ namespace ShipWorks.AddressValidation
             }
 
             return validationResult;
+        }
+
+        private string TranslateValidationResultMessage(UspsAddressValidationResults uspsResult)
+        {
+            string originalMessage = uspsResult?.AddressCleansingResult ?? string.Empty;
+
+            if (originalMessage == "Province and Postal Code are valid, but City and Street could not be verified.")
+            {
+                return "The address has been verified to the State level, which is the highest level possible for the destination country.";
+            }
+
+            if (originalMessage == "City, Province, and Postal Code are valid, but the Street could not be verified.")
+            {
+                return "The address has been verified to the City level, which is the highest level possible for the destination country.";
+            }
+
+            if (originalMessage == "Street, City, Province, and Postal Code are valid, but the Street Number could not be verified.")
+            {
+                return "The address has been verified to the Street level, which is the highest level possible for the destination country.";
+            }
+
+            return originalMessage;
         }
 
         /// <summary>
@@ -116,7 +145,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Analyzes the uspsResult and returns the appropriate AddressType
         /// </summary>
-        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
+        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult, AddressAdapter addressAdapter)
         {
             bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
             bool isSecondaryAddressProblem = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
@@ -161,8 +190,24 @@ namespace ShipWorks.AddressValidation
                 case ResidentialDeliveryIndicatorType.No:
                     return AddressType.Commercial;
                 default:
-                    return AddressType.Valid;
+                    if (addressAdapter.IsDomesticCountry())
+                    {
+                        return AddressType.Valid;
+                    }
+                    return DetermineInternationalCorectness(uspsResult);
             }
+        }
+
+        private static AddressType DetermineInternationalCorectness(UspsAddressValidationResults uspsResult)
+        {
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum && 
+                !string.IsNullOrWhiteSpace(uspsResult.AddressCleansingResult) &&
+                uspsResult.AddressCleansingResult != "Full Address Verified.")
+            {
+                return AddressType.InternationalAmbiguous;
+            }
+
+            return AddressType.Valid;
         }
 
         /// <summary>

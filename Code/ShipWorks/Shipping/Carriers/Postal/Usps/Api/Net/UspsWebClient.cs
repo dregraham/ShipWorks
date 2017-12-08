@@ -619,7 +619,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 MatchedAddress = result.Address,
                 Candidates = result.CandidateAddresses,
                 BadAddressMessage = badAddressMessage,
-                StatusCodes = result.StatusCodes
+                StatusCodes = result.StatusCodes,
+                VerificationLevel = result.VerificationLevel,
+                AddressCleansingResult = result.AddressCleansingResult
             };
         }
 
