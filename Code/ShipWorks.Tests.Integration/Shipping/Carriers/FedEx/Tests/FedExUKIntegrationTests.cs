@@ -67,6 +67,21 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = UKAccountNumber;
 
+                if (testObject.CustomerTransactionId == "UK-406")
+                {
+                    testObject.BrokerAccountNumber = string.Empty;
+                }
+
+                if (testObject.CustomerTransactionId == "UK-409")
+                {
+                    testObject.DangerousGoodsAccessibility = "ACCESSIBLE";
+                }
+
+                if (testObject.CustomerTransactionId == "UK-410")
+                {
+                    testObject.DangerousGoodsAccessibility = "INACCESSIBLE";
+                }
+
                 testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }

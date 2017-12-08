@@ -51,6 +51,16 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 
                 testObject.FedExAccountNumber = GetAccountForCountry(testObject.ShipperCountryCode);
 
+                if (testObject.CustomerTransactionId == "EMEA-511")
+                {
+                    testObject.CommercialInvoiceFileElectronically = true;
+                    testObject.ShipmentSignatureOptionType = "DIRECT";
+                }
+                if (testObject.CustomerTransactionId == "EMEA-512")
+                {
+                    testObject.BrokerAccountNumber = "123456";
+                }
+
                 testObject.Ship(context.Order, justForPhysicalPrint);
             }
         }
