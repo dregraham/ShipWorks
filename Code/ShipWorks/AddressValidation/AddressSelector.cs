@@ -138,7 +138,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Displays the validation suggestion link text
         /// </summary>
-        public string DisplayValidationSuggestionLabel(object arg, bool showLimitedData = true)
+        public string DisplayValidationSuggestionLabel(object arg, bool showLimitedData)
         {
             IAddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)

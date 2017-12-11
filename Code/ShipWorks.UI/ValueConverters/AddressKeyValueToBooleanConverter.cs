@@ -17,7 +17,7 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.GetType() == typeof(KeyValuePair<string, ValidatedAddressEntity>))
+            if (value is KeyValuePair<string, ValidatedAddressEntity>)
             {
                 KeyValuePair<string, ValidatedAddressEntity> data = (KeyValuePair<string, ValidatedAddressEntity>)value;
 
