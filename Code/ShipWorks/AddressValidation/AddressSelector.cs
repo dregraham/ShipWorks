@@ -132,6 +132,14 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public string DisplayValidationSuggestionLabel(object arg)
         {
+            return DisplayValidationSuggestionLabel(arg, true);
+        }
+
+        /// <summary>
+        /// Displays the validation suggestion link text
+        /// </summary>
+        public string DisplayValidationSuggestionLabel(object arg, bool showLimitedData = true)
+        {
             IAddressAdapter addressAdapter = GetAddressAdapterFromObject(arg);
             if (addressAdapter == null)
             {
@@ -141,7 +149,7 @@ namespace ShipWorks.AddressValidation
             switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
             {
                 case AddressValidationStatusType.Valid:
-                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError))
+                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) || !showLimitedData)
                     {
                         return string.Empty;
                     }
@@ -153,7 +161,12 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.HasSuggestions:
                 case AddressValidationStatusType.SuggestionIgnored:
                 case AddressValidationStatusType.SuggestionSelected:
-                    return string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                    string label = string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
+                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) || !showLimitedData)
+                    {
+                        return label;
+                    }
+                    return $"{label} (Limited Data)";
                 case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:
@@ -190,8 +203,7 @@ namespace ShipWorks.AddressValidation
             // If we won't validate, an error occurred, or the address isn't valid, let the user know why and don't show the address selection menu
             if (entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.WillNotValidate ||
                 entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.BadAddress ||
-                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error ||
-                !string.IsNullOrWhiteSpace(entityAdapter.AddressValidationError))
+                entityAdapter.AddressValidationStatus == (int) AddressValidationStatusType.Error)
             {
                 MessageHelper.ShowInformation(owner, entityAdapter.AddressValidationError);
                 return;
@@ -213,6 +225,13 @@ namespace ShipWorks.AddressValidation
         {
             List<MenuItem> menuItems = new List<MenuItem>();
 
+            if (!string.IsNullOrWhiteSpace(entityAdapter?.AddressValidationError))
+            {
+                MenuItem item = new MenuItem(entityAdapter.AddressValidationError);
+                item.Enabled = false;
+                menuItems.Add(item);
+            }
+            
             if (originalValidatedAddress != null)
             {
                 menuItems.Add(CreateMenuItem(originalValidatedAddress, entityAdapter, store));

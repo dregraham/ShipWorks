@@ -95,6 +95,9 @@ namespace ShipWorks.AddressValidation
             return validationResult;
         }
 
+        /// <summary>
+        /// Translate the error from stamps to a ShipWorks customer friendly error
+        /// </summary>
         private string TranslateValidationResultMessage(UspsAddressValidationResults uspsResult)
         {
             string originalMessage = uspsResult?.AddressCleansingResult ?? string.Empty;
@@ -198,6 +201,9 @@ namespace ShipWorks.AddressValidation
             }
         }
 
+        /// <summary>
+        /// Check to see if an international address has been verified but still ambiguous
+        /// </summary>
         private static AddressType DetermineInternationalCorectness(UspsAddressValidationResults uspsResult)
         {
             if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum && 

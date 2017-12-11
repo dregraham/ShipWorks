@@ -87,7 +87,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// Can a validation message be shown
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool CanShowValidationMessage => !string.IsNullOrEmpty(ValidationMessage);
+        public bool CanShowValidationMessage => validator.CanShowMessage(ValidationStatus) && !string.IsNullOrEmpty(ValidationMessage);
 
         /// <summary>
         /// Load the person
@@ -105,7 +105,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 prefix = person.FieldPrefix;
 
                 IEnumerable<ValidatedAddressEntity> validatedAddresses = validatedAddressScope.LoadValidatedAddresses(entityId.GetValueOrDefault(), prefix);
-                AddressSuggestions = BuildDictionary(validatedAddresses);
+                AddressSuggestions = BuildDictionary(validatedAddresses, person.AddressValidationError);
 
                 PopulateValidationDetails(person);
             }
@@ -231,7 +231,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 addressAdapter.CopyTo(personAdapter);
 
                 validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
-                AddressSuggestions = BuildDictionary(validationData.AllAddresses);
+                AddressSuggestions = BuildDictionary(validationData.AllAddresses, addressAdapter.AddressValidationError);
 
                 PopulateAddress(personAdapter);
                 PopulateValidationDetails(personAdapter);
@@ -262,11 +262,18 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Build a dictionary of addresses for use in the UI
         /// </summary>
-        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses)
+        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses, string message)
         {
             // Stamps has sent us duplicates, so we can't use a dictionary here
-            return validatedAddresses
-                .Select(x => new KeyValuePair<string, ValidatedAddressEntity>(addressSelector.FormatAddress(x), x));
+            List<KeyValuePair<string, ValidatedAddressEntity>> addresses = validatedAddresses
+                .Select(x => new KeyValuePair<string, ValidatedAddressEntity>(addressSelector.FormatAddress(x), x)).ToList();
+
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                addresses.Insert(0, new KeyValuePair<string, ValidatedAddressEntity>(message, null));
+            }
+
+            return addresses;
         }
 
         /// <summary>

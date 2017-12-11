@@ -23,6 +23,7 @@ using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -90,12 +91,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.RequestedShipping),
 
                     new GridColumnDefinition("{603A9AF5-94B0-4FCC-8832-CAC54BFCFDFD}", true,
-                        new GridEnumDisplayType<AddressType>(EnumSortMethod.Description),
-                            "S:Type", AddressType.Residential,
-                            OrderFields.ShipAddressType)
-                    {
-                        DefaultWidth = 24
-                    },
+                        new GridAddressTypeActionDisplayType("Ship", shippingAddressSelector),
+                        "S:Type", "Valid",
+                        new GridColumnFunctionValueProvider(x => x),
+                        new GridColumnSortProvider(OrderFields.ShipAddressType))
+                        { DefaultWidth = 24 },
 
                     new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
                         new GridCountryDisplayType() { ShowFlag = true, AbbreviationFormat = AbbreviationFormat.Abbreviated }, "S: Country", "US",
@@ -455,7 +455,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         { DefaultWidth = 100 },
 
                     new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}",
-                        new GridActionDisplayType(shippingAddressSelector.DisplayValidationSuggestionLabel,
+                        new GridActionDisplayType((obj) => { return shippingAddressSelector.DisplayValidationSuggestionLabel(obj, false); },
                             shippingAddressSelector.ShowAddressOptionMenu, shippingAddressSelector.IsValidationSuggestionLinkEnabled),
                         "S: Validation Suggestions", "2 Suggestions",
                         new GridColumnFunctionValueProvider(x => x),
@@ -554,7 +554,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         { DefaultWidth = 100 },
 
                     new GridColumnDefinition("{0DF6411F-884E-49D2-A8AC-7452EF2DC506}",
-                        new GridActionDisplayType(billingAddressSelector.DisplayValidationSuggestionLabel,
+                        new GridActionDisplayType((obj) => { return billingAddressSelector.DisplayValidationSuggestionLabel(obj, false); },
                             billingAddressSelector.ShowAddressOptionMenu, billingAddressSelector.IsValidationSuggestionLinkEnabled),
                         "B: Validation Suggestions", "2 Suggestions",
                         new GridColumnFunctionValueProvider(x => x),
