@@ -150,16 +150,12 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult, AddressAdapter addressAdapter)
         {
-            bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
-            bool isSecondaryAddressProblem = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
-            bool isUsTerritory = CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
-
             if (!uspsResult.IsCityStateZipOk)
             {
                 return AddressType.Invalid;
             }
-
-            if (isSecondaryAddressProblem)
+            
+            if (IsSecondaryAddressProblem(uspsResult))
             {
                 return AddressType.SecondaryNotFound;
             }
@@ -170,13 +166,12 @@ namespace ShipWorks.AddressValidation
             }
 
             // successful match!
-
-            if (isMilitary)
+            if (IsMilitary(uspsResult))
             {
                 return AddressType.Military;
             }
-
-            if (isUsTerritory)
+            
+            if (IsUsTerritory(uspsResult))
             {
                 return AddressType.UsTerritory;
             }
@@ -199,6 +194,30 @@ namespace ShipWorks.AddressValidation
                     }
                     return DetermineInternationalCorectness(uspsResult);
             }
+        }
+
+        /// <summary>
+        /// Does the Address Validation Result have a secondary address problem 
+        /// </summary>
+        private static bool IsSecondaryAddressProblem(UspsAddressValidationResults uspsResult)
+        {
+            return uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
+        }
+
+        /// <summary>
+        /// Is the Address Validation Result for a US Territory
+        /// </summary>
+        private static bool IsUsTerritory(UspsAddressValidationResults uspsResult)
+        {
+            return CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
+        }
+
+        /// <summary>
+        /// Is the Address Validation Result for a military address
+        /// </summary>
+        private static bool IsMilitary(UspsAddressValidationResults uspsResult)
+        {
+            return uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
         }
 
         /// <summary>
