@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Filters;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
-using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Filters.Content.Conditions.Orders.PersonName;
-using ShipWorks.Filters.Content.Conditions.Special;
+using ShipWorks.Filters.Content.Conditions.QuickSearch;
+using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Filters.Search;
-using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -24,10 +21,10 @@ namespace ShipWorks.Tests.Filters.Search
         private const string testTwoWordQuery = "First Last";
         OrderQuickSearchDefinitionProvider testObject;
 
-
         public OrderQuickSearchDefinitionProviderTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            
             testObject = mock.Create<OrderQuickSearchDefinitionProvider>();
         }
 
@@ -44,14 +41,18 @@ namespace ShipWorks.Tests.Filters.Search
         {
             var definition = testObject.GetDefinition(testNumericQuery);
 
-            IEnumerable<OrderNumberCondition> orderNumberConditions = definition.RootContainer.FirstGroup.Conditions.Cast<OrderNumberCondition>();
-            Assert.Equal(1, orderNumberConditions.Count());
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
 
-            OrderNumberCondition orderNumberCondition = orderNumberConditions.Single();
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
 
-            Assert.False(orderNumberCondition.IsNumeric);
-            Assert.Equal(StringOperator.BeginsWith, orderNumberCondition.StringOperator);
-            Assert.Equal(testNumericQuery, orderNumberCondition.StringValue);
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
         }
 
         [Fact]
@@ -59,9 +60,19 @@ namespace ShipWorks.Tests.Filters.Search
         {
             var definition = testObject.GetDefinition(testNumericQuery);
 
-            var numberOfOtherConditions = definition.RootContainer.FirstGroup.Conditions.Count(c => !(c is OrderNumberCondition));
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
 
-            Assert.Equal(0, numberOfOtherConditions);
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
+
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.False(sql.Contains("FirstName".ToLowerInvariant()));
+            Assert.False(sql.Contains("LastName".ToLowerInvariant()));
+            Assert.False(sql.Contains("Email".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
         }
 
         [Fact]
@@ -69,16 +80,21 @@ namespace ShipWorks.Tests.Filters.Search
         {
             var definition = testObject.GetDefinition(testTwoWordQuery);
 
-            var rootConditions = definition.RootContainer.FirstGroup.Conditions.ToList();
-            
-            Assert.Equal(2, rootConditions.Count);
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
 
-            var combinedResultCondition = rootConditions.OfType<CombinedResultCondition>().Single();
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
 
-            var nameConditions = combinedResultCondition.Container.FirstGroup.Conditions;
-            Assert.Equal(2, nameConditions.Count());
-            Assert.Equal("First", nameConditions.OfType<OrderFirstNameCondition>().Single().TargetValue);
-            Assert.Equal("Last", nameConditions.OfType<OrderLastNameCondition>().Single().TargetValue);
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("FirstName".ToLowerInvariant()));
+            Assert.True(sql.Contains("LastName".ToLowerInvariant()));
+            Assert.False(sql.Contains("Email".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains("First".ToLowerInvariant())));
+            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains("Last".ToLowerInvariant())));
         }
 
         [Fact]
@@ -86,38 +102,54 @@ namespace ShipWorks.Tests.Filters.Search
         {
             var definition = testObject.GetDefinition(testOneWordQuery);
 
-            var rootConditions = definition.RootContainer.FirstGroup.Conditions.ToList();
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
 
-            Assert.Equal(2, rootConditions.Count);
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
 
-            var combinedResultCondition = rootConditions.OfType<CombinedResultCondition>().Single();
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
 
-            var nameConditions = combinedResultCondition.Container.FirstGroup.Conditions;
-            Assert.Equal(3, nameConditions.Count());
-            Assert.Equal(testOneWordQuery, nameConditions.OfType<OrderFirstNameCondition>().Single().TargetValue);
-            Assert.Equal(testOneWordQuery, nameConditions.OfType<OrderLastNameCondition>().Single().TargetValue);
-            Assert.Equal(testOneWordQuery, nameConditions.OfType<OrderEmailAddressCondition>().Single().TargetValue);
+            Assert.True(sql.Contains("FirstName".ToLowerInvariant()));
+            Assert.True(sql.Contains("LastName".ToLowerInvariant()));
+            Assert.True(sql.Contains("Email".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+            Assert.True(context.Parameters.Any(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
+            Assert.Equal(1, context.Parameters.Count(p => p.Value.ToString().ToLowerInvariant().Contains(testOneWordQuery.ToLowerInvariant())));
         }
 
         [Fact]
         public void GetDefinition_IncludesStoreSpecificCriteria_WhenStoreHasCriteria()
         {
-            var storeType = mock.CreateMock<StoreType>();
-            ConditionGroup storeCondition = new ConditionGroup();
-            storeType.Setup(s => s.CreateBasicSearchOrderConditions(testOneWordQuery)).Returns(storeCondition);
+            Mock<IQuickSearchStoreSql> storeSearchSql = mock.Mock<IQuickSearchStoreSql>();
+            storeSearchSql.Setup(s => s.GenerateSql(It.IsAny<SqlGenerationContext>(), It.IsAny<string>()))
+                .Returns(new string[]
+                {
+                    "select OrderId from [SomeStore] where SomeField LIKE ",
+                    "select OrderId from [SomeOtherStore] where SomeOtherField LIKE "
+                });
 
-            mock.Mock<IStoreManager>()
-                .Setup(m => m.GetUniqueStoreTypes())
-                .Returns(new List<StoreType> {storeType.Object});
+            IEnumerable<IQuickSearchStoreSql> storeSqls = new IQuickSearchStoreSql[] { storeSearchSql.Object };
+            mock.Provide(storeSqls);
 
-            var definition = testObject.GetDefinition(testOneWordQuery);
-            
-            ConditionGroup condition =
-                definition.RootContainer.SecondGroup.FirstGroup.Conditions.Cast<CombinedResultCondition>()
-                    .Single()
-                    .Container.FirstGroup;
+            testObject = mock.Create<OrderQuickSearchDefinitionProvider>();
+            var definition = testObject.GetDefinition(testNumericQuery);
 
-            Assert.Equal(storeCondition, condition);
+            IEnumerable<QuickSearchCondition> quickSearchConditions = definition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
+
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
+
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
         }
 
         public void Dispose()

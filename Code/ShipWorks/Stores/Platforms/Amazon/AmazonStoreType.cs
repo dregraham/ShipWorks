@@ -359,21 +359,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Create the condition group for searching on Amazon Order ID
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            AmazonOrderNumberCondition condition = new AmazonOrderNumberCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(condition);
-
-            return group;
-        }
-
-        /// <summary>
         /// MWS has online status
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)

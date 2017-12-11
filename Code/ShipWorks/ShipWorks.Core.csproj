@@ -1035,7 +1035,10 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\QuickSearch\QuickSearchCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\QuickSearch\IQuickSearchStoreSql.cs" />
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
+    <Compile Include="Filters\Content\SqlGeneration\ISqlGenerationBuilder.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\ISingleScanOrderShortcut.cs" />
