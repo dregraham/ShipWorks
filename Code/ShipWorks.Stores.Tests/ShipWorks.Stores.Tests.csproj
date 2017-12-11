@@ -185,9 +185,13 @@
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
     <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
@@ -295,6 +299,7 @@
     <Compile Include="Platforms\Paypal\PayPalStoreTypeTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalXmlDeserializeTest.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Sears\SearsStoreTypeTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
@@ -324,6 +329,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Walmart\DTO\CarrierTypeTest.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartShipmentDetailsUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />

@@ -130,21 +130,6 @@ namespace ShipWorks.Stores.Platforms.Sears
         protected override string InternalLicenseIdentifier => ((SearsStoreEntity) Store).SearsEmail;
 
         /// <summary>
-        /// Create the condition group for searching on Amazon Order ID
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            SearsPoNumberCondition condition = new SearsPoNumberCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(condition);
-
-            return group;
-        }
-
-        /// <summary>
         /// Create the order elements for the order provided
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
