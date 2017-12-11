@@ -124,9 +124,6 @@ namespace ShipWorks.AddressValidation
             adapter.CountryCode = CountryCode;
             adapter.ResidentialStatus = (int) ResidentialStatus;
             adapter.POBox = (int) POBox;
-            adapter.AddressValidationStatus = AddressValidationStatus;
-            adapter.AddressValidationError = AddressValidationError;
-            adapter.AddressValidationSuggestionCount = AddressValidationSuggestionCount;
         }
 
         /// <summary>
