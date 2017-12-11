@@ -499,7 +499,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 // This is made up of two requests: perform the package movement and the next to perform the version capture
                 // based on the location ID received in the package movement request
-                foreach (FedExAccountEntity account in settingsRepository.AccountsReadOnly.OfType<FedExAccountEntity>())
+                foreach (FedExAccountEntity account in settingsRepository.GetAccounts().OfType<FedExAccountEntity>())
                 {
                     CarrierRequest packageMovementRequest = requestFactory.CreatePackageMovementRequest(shipmentEntity, account);
                     FedExPackageMovementResponse packageMovementResponse = packageMovementRequest.Submit() as FedExPackageMovementResponse;
