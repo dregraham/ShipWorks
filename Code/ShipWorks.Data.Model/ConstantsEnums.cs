@@ -5906,6 +5906,8 @@ namespace ShipWorks.Data.Model
 		OnlineUpdateStrategy,
 		///<summary>OnlineUpdateStatusChangeEmail. </summary>
 		OnlineUpdateStatusChangeEmail,
+		///<summary>AddendumCheckoutDataEnabled. </summary>
+		AddendumCheckoutDataEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10930,6 +10932,8 @@ namespace ShipWorks.Data.Model
 		PurchaseOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>CustomerOrderID. </summary>
+		CustomerOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}

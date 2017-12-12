@@ -1958,13 +1958,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits MivaStoreEntity's mappings</summary>
 		private void InitMivaStoreEntityMappings()
 		{
-			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 6, 0);
+			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 7, 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "EncryptionPassphrase", "EncryptionPassphrase", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("MivaStoreEntity", "LiveManualOrderNumbers", "LiveManualOrderNumbers", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("MivaStoreEntity", "SebenzaCheckoutDataEnabled", "SebenzaCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStrategy", "OnlineUpdateStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStatusChangeEmail", "OnlineUpdateStatusChangeEmail", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("MivaStoreEntity", "AddendumCheckoutDataEnabled", "AddendumCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 		}
 
 		/// <summary>Inits NetworkSolutionsOrderEntity's mappings</summary>
@@ -3634,11 +3635,12 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits WalmartOrderSearchEntity's mappings</summary>
 		private void InitWalmartOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 4, 0);
+			this.AddElementMapping("WalmartOrderSearchEntity", @"ShipWorksLocal", @"dbo", "WalmartOrderSearch", 5, 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "WalmartOrderSearchID", "WalmartOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "PurchaseOrderID", "PurchaseOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("WalmartOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("WalmartOrderSearchEntity", "CustomerOrderID", "CustomerOrderID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 4);
 		}
 
 		/// <summary>Inits WalmartStoreEntity's mappings</summary>
