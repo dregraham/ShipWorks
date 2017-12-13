@@ -37,19 +37,19 @@ namespace ShipWorks.Tests.AddressValidation
         [InlineData(AddressValidationStoreSettingType.ValidationDisabled, false)]
         public void ShouldValidate_WithAddressValidationStoreSettingType(AddressValidationStoreSettingType setting, bool expected)
         {
-            Assert.Equal(expected, AddressValidationPolicy.ShouldValidate(setting));
+            Assert.Equal(expected, AddressValidationPolicy.ShouldAutoValidate(setting));
         }
 
         [Fact]
         public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenStoreIsNull()
         {
-            Assert.False(AddressValidationPolicy.ShouldValidate(null, new AddressAdapter()));
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(null, new AddressAdapter()));
         }
 
         [Fact]
         public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterIsNull()
         {
-            Assert.False(AddressValidationPolicy.ShouldValidate(new StoreEntity(), null));
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(new StoreEntity(), null));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.AddressValidation
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
 
-            Assert.False(AddressValidationPolicy.ShouldValidate(new StoreEntity(), adapter));
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(new StoreEntity(), adapter));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.AddressValidation
             StoreEntity store = new StoreEntity();
             store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidationDisabled;
 
-            Assert.False(AddressValidationPolicy.ShouldValidate(store, adapter));
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.AddressValidation
             StoreEntity store = new StoreEntity();
             store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
 
-            Assert.True(AddressValidationPolicy.ShouldValidate(store, adapter));
+            Assert.True(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.AddressValidation
             StoreEntity store = new StoreEntity();
             store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidationDisabled;
 
-            Assert.False(AddressValidationPolicy.ShouldValidate(store, adapter));
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.AddressValidation
             StoreEntity store = new StoreEntity();
             store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
 
-            Assert.True(AddressValidationPolicy.ShouldValidate(store, adapter));
+            Assert.True(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
         }
     }
 }
