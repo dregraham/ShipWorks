@@ -290,7 +290,7 @@ namespace ShipWorks.AddressValidation
             }
 
             StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-            if (store == null || !AddressValidationPolicy.ShouldValidate(store, shipmentAdapter))
+            if (store == null || !AddressValidationPolicy.ShouldAutoValidate(store, shipmentAdapter))
             {
                 // If we can't find the store or if its not set up for auto-validation, we shouldn't do any validation
                 return;

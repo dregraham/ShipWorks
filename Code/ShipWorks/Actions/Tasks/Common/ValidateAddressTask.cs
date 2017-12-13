@@ -66,7 +66,7 @@ namespace ShipWorks.Actions.Tasks.Common
                     continue;
                 }
 
-                if (!AddressValidationPolicy.ShouldValidate(store, new AddressAdapter(order, "Ship")))
+                if (!AddressValidationPolicy.ShouldManualValidate(store, new AddressAdapter(order, "Ship")))
                 {
                     continue;
                 }
