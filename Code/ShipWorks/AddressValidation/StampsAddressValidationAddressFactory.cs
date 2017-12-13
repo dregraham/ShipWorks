@@ -31,7 +31,7 @@ namespace ShipWorks.AddressValidation
                 Street2 = address.Address2 ?? string.Empty,
                 Street3 = address.Address3 ?? string.Empty,
                 City = address.City ?? string.Empty,
-                StateProvCode = address.State ?? address.Province ?? string.Empty,
+                StateProvCode = GetStateProvCode(address),
                 PostalCode = GetPostalCode(address) ?? string.Empty,
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
@@ -43,6 +43,22 @@ namespace ShipWorks.AddressValidation
             addressValidationResult.ApplyAddressCasing();
 
             return addressValidationResult;
+        }
+
+        /// <summary>
+        /// Get the State/Provice code
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        private static string GetStateProvCode(Address address)
+        {
+            if (address.Country.Equals("GB", StringComparison.InvariantCultureIgnoreCase) ||
+                address.Country.Equals("DE", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return string.Empty;
+            }
+
+            return address.State ?? address.Province ?? string.Empty;
         }
 
         /// <summary>
