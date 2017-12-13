@@ -38,7 +38,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Should the given store setting validate when the user manually chooses to
         /// </summary>
-        private static bool ShouldManualValidate(AddressValidationStoreSettingType storeSettingStatus)
+        private static bool ShouldManuallyValidate(AddressValidationStoreSettingType storeSettingStatus)
         {
             return storeSettingStatus != AddressValidationStoreSettingType.ValidationDisabled;
         }
@@ -46,7 +46,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Check to see if the store and address can be validated
         /// </summary>
-        private static bool ShouldValidate(StoreEntity store, AddressAdapter address, Func<bool> settingFunc)
+        private static bool ShouldValidate(StoreEntity store, AddressAdapter address)
         {
             if (store == null || address == null)
             {
@@ -58,7 +58,7 @@ namespace ShipWorks.AddressValidation
                 return false;
             }
 
-            return settingFunc();
+            return true;
         }
 
         /// <summary>
@@ -66,25 +66,29 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool ShouldAutoValidate(StoreEntity store, AddressAdapter address)
         {
-            return ShouldValidate(store, address, () =>
+            if (ShouldValidate(store, address))
             {
                 return address.IsDomesticCountry() ?
                     ShouldAutoValidate(store.DomesticAddressValidationSetting) :
                     ShouldAutoValidate(store.InternationalAddressValidationSetting);
-            });
+            }
+
+            return false;
         }
 
         /// <summary>
         /// Should addresses from the given store be validated 
         /// </summary>
-        public static bool ShouldManualValidate(StoreEntity store, AddressAdapter address)
+        public static bool ShouldManuallyValidate(StoreEntity store, AddressAdapter address)
         {
-            return ShouldValidate(store, address, () =>
+            if(ShouldValidate(store, address))
             {
                 return address.IsDomesticCountry() ?
-                    ShouldManualValidate(store.DomesticAddressValidationSetting) :
-                    ShouldManualValidate(store.InternationalAddressValidationSetting);
-            });
+                    ShouldManuallyValidate(store.DomesticAddressValidationSetting) :
+                    ShouldManuallyValidate(store.InternationalAddressValidationSetting);
+            }
+
+            return false;
         }
     }
 }

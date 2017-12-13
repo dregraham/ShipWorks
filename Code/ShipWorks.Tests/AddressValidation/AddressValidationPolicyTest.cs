@@ -35,25 +35,25 @@ namespace ShipWorks.Tests.AddressValidation
         [InlineData(AddressValidationStoreSettingType.ValidateAndNotify, true)]
         [InlineData(AddressValidationStoreSettingType.ManualValidationOnly, false)]
         [InlineData(AddressValidationStoreSettingType.ValidationDisabled, false)]
-        public void ShouldValidate_WithAddressValidationStoreSettingType(AddressValidationStoreSettingType setting, bool expected)
+        public void ShouldAutoValidate_WithAddressValidationStoreSettingType(AddressValidationStoreSettingType setting, bool expected)
         {
             Assert.Equal(expected, AddressValidationPolicy.ShouldAutoValidate(setting));
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenStoreIsNull()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenStoreIsNull()
         {
             Assert.False(AddressValidationPolicy.ShouldAutoValidate(null, new AddressAdapter()));
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterIsNull()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterIsNull()
         {
             Assert.False(AddressValidationPolicy.ShouldAutoValidate(new StoreEntity(), null));
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressHasBeenValidated()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressHasBeenValidated()
         {
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsInternationalAndInternationalValidationIsDisabled()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsInternationalAndInternationalValidationIsDisabled()
         {
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsInternationalAndInternationalValidationIsEnabled()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsInternationalAndInternationalValidationIsEnabled()
         {
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
@@ -88,7 +88,20 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsDomesticAndDomesticValidationIsDisabled()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsInternationalAndInternationalValidationIsManualValidationOnly()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "CA";
+
+            StoreEntity store = new StoreEntity();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ManualValidationOnly;
+
+            Assert.False(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
+        }
+
+        [Fact]
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsDomesticAndDomesticValidationIsDisabled()
         {
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
@@ -101,7 +114,7 @@ namespace ShipWorks.Tests.AddressValidation
         }
 
         [Fact]
-        public void ShouldValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsDomesticAndDomesticValidationIsEnabled()
+        public void ShouldAutoValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsDomesticAndDomesticValidationIsEnabled()
         {
             AddressAdapter adapter = new AddressAdapter();
             adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
@@ -111,6 +124,92 @@ namespace ShipWorks.Tests.AddressValidation
             store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
 
             Assert.True(AddressValidationPolicy.ShouldAutoValidate(store, adapter));
+        }
+        
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsFalse_WhenStoreIsNull()
+        {
+            Assert.False(AddressValidationPolicy.ShouldManuallyValidate(null, new AddressAdapter()));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterIsNull()
+        {
+            Assert.False(AddressValidationPolicy.ShouldManuallyValidate(new StoreEntity(), null));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressHasBeenValidated()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Fixed;
+
+            Assert.False(AddressValidationPolicy.ShouldManuallyValidate(new StoreEntity(), adapter));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsInternationalAndInternationalValidationIsDisabled()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "CA";
+
+            StoreEntity store = new StoreEntity();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidationDisabled;
+
+            Assert.False(AddressValidationPolicy.ShouldManuallyValidate(store, adapter));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsInternationalAndInternationalValidationIsEnabled()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "CA";
+
+            StoreEntity store = new StoreEntity();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+
+            Assert.True(AddressValidationPolicy.ShouldManuallyValidate(store, adapter));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsFalse_WhenAdapterAddressIsDomesticAndDomesticValidationIsDisabled()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "US";
+
+            StoreEntity store = new StoreEntity();
+            store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidationDisabled;
+
+            Assert.False(AddressValidationPolicy.ShouldManuallyValidate(store, adapter));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsDomesticAndDomesticValidationIsEnabled()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "US";
+
+            StoreEntity store = new StoreEntity();
+            store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply;
+
+            Assert.True(AddressValidationPolicy.ShouldManuallyValidate(store, adapter));
+        }
+
+        [Fact]
+        public void ShouldManuallyValidateWithStoreAndAdapter_ReturnsTrue_WhenAdapterAddressIsDomesticAndDomesticValidationIsManualValidationOnly()
+        {
+            AddressAdapter adapter = new AddressAdapter();
+            adapter.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+            adapter.CountryCode = "US";
+
+            StoreEntity store = new StoreEntity();
+            store.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ManualValidationOnly;
+
+            Assert.True(AddressValidationPolicy.ShouldManuallyValidate(store, adapter));
         }
     }
 }

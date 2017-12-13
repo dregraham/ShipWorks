@@ -146,14 +146,49 @@ namespace ShipWorks.AddressValidation
                 return string.Empty;
             }
 
-            switch ((AddressValidationStatusType) addressAdapter.AddressValidationStatus)
+            string label = GetSuggestionLabelForValidationStatus(addressAdapter);
+
+            if (showLimitedData && SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
+            {
+                if (string.IsNullOrWhiteSpace(label))
+                {
+                    return "(Limited Data)";
+                }
+
+                return $"{label} (Limited Data)";
+            }
+
+            return label;
+        }
+
+        /// <summary>
+        /// Does the status support the Limited Data label
+        /// </summary>
+        private static bool SupportsLimitedData(AddressValidationStatusType status)
+        {
+            switch (status)
             {
                 case AddressValidationStatusType.Valid:
-                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) || !showLimitedData)
-                    {
-                        return string.Empty;
-                    }
-                    return "(Limited Data)";
+                case AddressValidationStatusType.NotChecked:
+                case AddressValidationStatusType.Pending:
+                case AddressValidationStatusType.Fixed:
+                case AddressValidationStatusType.HasSuggestions:
+                case AddressValidationStatusType.SuggestionIgnored:
+                case AddressValidationStatusType.SuggestionSelected:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Get the Suggestion Labed based on the adatpers AddressValidationStatus
+        /// </summary>
+        private static string GetSuggestionLabelForValidationStatus(IAddressAdapter addressAdapter)
+        {
+            switch ((AddressValidationStatusType)addressAdapter.AddressValidationStatus)
+            {
+                case AddressValidationStatusType.Valid:
                 case AddressValidationStatusType.NotChecked:
                 case AddressValidationStatusType.Pending:
                     return string.Empty;
@@ -161,12 +196,7 @@ namespace ShipWorks.AddressValidation
                 case AddressValidationStatusType.HasSuggestions:
                 case AddressValidationStatusType.SuggestionIgnored:
                 case AddressValidationStatusType.SuggestionSelected:
-                    string label = string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
-                    if (string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) || !showLimitedData)
-                    {
-                        return label;
-                    }
-                    return $"{label} (Limited Data)";
+                    return string.Format("{0} Suggestion{1}", addressAdapter.AddressValidationSuggestionCount, addressAdapter.AddressValidationSuggestionCount != 1 ? "s" : string.Empty);
                 case AddressValidationStatusType.BadAddress:
                 case AddressValidationStatusType.WillNotValidate:
                 case AddressValidationStatusType.Error:

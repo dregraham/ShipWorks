@@ -100,7 +100,7 @@ namespace ShipWorks.AddressValidation
             }
 
             // It is possible that existing international orders can be "Not Checked." This code updates the order.
-            if (!AddressValidationPolicy.ShouldManualValidate(store, addressAdapter))
+            if (!AddressValidationPolicy.ShouldManuallyValidate(store, addressAdapter))
             {
                 saveAction(null, new List<ValidatedAddressEntity>());
                 return;
