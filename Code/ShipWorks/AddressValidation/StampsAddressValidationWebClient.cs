@@ -21,6 +21,7 @@ namespace ShipWorks.AddressValidation
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
         private readonly IUspsWebClient uspsWebClient;
+        private readonly IAddressValidationResultFactory addressValidationAddressFactory;
 
         /// <summary>
         /// Constructor
@@ -29,7 +30,7 @@ namespace ShipWorks.AddressValidation
 			: this(new UspsWebClient(new UspsAccountRepository(),
 	            new UspsWebServiceFactory(new LogEntryFactory()),
     	        new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
-        	    UspsResellerType.None))
+        	    UspsResellerType.None), new StampsAddressValidationResultFactory())
         {
             
         }
@@ -37,9 +38,10 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient)
+        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient, IAddressValidationResultFactory addressValidationAddressFactory)
         {
             this.uspsWebClient = uspsWebClient;
+            this.addressValidationAddressFactory = addressValidationAddressFactory;
         }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace ShipWorks.AddressValidation
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationAddressFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
                     
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
@@ -84,7 +86,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationAddressFactory.CreateAddressValidationResult(address, false, uspsResult));
                 }
             }
             catch (UspsException ex)
@@ -118,31 +120,6 @@ namespace ShipWorks.AddressValidation
             }
 
             return originalMessage;
-        }
-
-        /// <summary>
-        /// Create an AddressValidationResult from a Stamps.com address
-        /// </summary>
-        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
-        {
-            AddressValidationResult addressValidationResult = new AddressValidationResult
-            {
-                Street1 = address.Address1 ?? string.Empty,
-                Street2 = address.Address2 ?? string.Empty,
-                Street3 = address.Address3 ?? string.Empty,
-                City = address.City ?? string.Empty,
-                StateProvCode = address.State ?? address.Province ?? string.Empty,
-                PostalCode = GetPostalCode(address) ?? string.Empty,
-                CountryCode = address.Country ?? string.Empty,
-                IsValid = isValid,
-                POBox = ConvertPoBox(uspsResult.IsPoBox),
-                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator)
-            };
-
-            addressValidationResult.ParseStreet1();
-            addressValidationResult.ApplyAddressCasing();
-
-            return addressValidationResult;
         }
 
         /// <summary>
@@ -233,53 +210,6 @@ namespace ShipWorks.AddressValidation
             }
 
             return AddressType.Valid;
-        }
-
-        /// <summary>
-        /// Converts the po box indicator into a ShipWorks ValidationDetailStatus
-        /// </summary>
-        private static ValidationDetailStatusType ConvertPoBox(bool? isPoBox)
-        {
-            if (!isPoBox.HasValue)
-            {
-                return ValidationDetailStatusType.Unknown;
-            }
-
-            return isPoBox.Value ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No;
-        }
-
-        /// <summary>
-        /// Convert Stamps.com residential status into ShipWorks residential status
-        /// </summary>
-        private static ValidationDetailStatusType ConvertResidentialStatus(ResidentialDeliveryIndicatorType residentialStatus)
-        {
-            switch (residentialStatus)
-            {
-                case ResidentialDeliveryIndicatorType.No:
-                    return ValidationDetailStatusType.No;
-                case ResidentialDeliveryIndicatorType.Yes:
-                    return ValidationDetailStatusType.Yes;
-                default:
-                    return ValidationDetailStatusType.Unknown;
-            }
-        }
-
-        /// <summary>
-        /// Get a full postal code from an address
-        /// </summary>
-        private static string GetPostalCode(Address address)
-        {
-            if (!string.IsNullOrEmpty(address.PostalCode))
-            {
-                return address.PostalCode;
-            }
-
-            if (!string.IsNullOrEmpty(address.ZIPCodeAddOn) && address.ZIPCodeAddOn != "0000")
-            {
-                return address.ZIPCode + "-" + address.ZIPCodeAddOn;
-            }
-
-            return address.ZIPCode;
         }
     }
 }
