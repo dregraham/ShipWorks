@@ -1,16 +1,6 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Net;
-using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers;
+﻿using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal;
 using System;
 
 namespace ShipWorks.AddressValidation

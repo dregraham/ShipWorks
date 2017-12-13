@@ -21,7 +21,7 @@ namespace ShipWorks.AddressValidation
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
         private readonly IUspsWebClient uspsWebClient;
-        private readonly IAddressValidationResultFactory addressValidationAddressFactory;
+        private readonly IAddressValidationResultFactory addressValidationResultFactory;
 
         /// <summary>
         /// Constructor
@@ -38,10 +38,10 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient, IAddressValidationResultFactory addressValidationAddressFactory)
+        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient, IAddressValidationResultFactory addressValidationResultFactory)
         {
             this.uspsWebClient = uspsWebClient;
-            this.addressValidationAddressFactory = addressValidationAddressFactory;
+            this.addressValidationResultFactory = addressValidationResultFactory;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ShipWorks.AddressValidation
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationAddressFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
                     
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
@@ -86,7 +86,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationAddressFactory.CreateAddressValidationResult(address, false, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult));
                 }
             }
             catch (UspsException ex)
