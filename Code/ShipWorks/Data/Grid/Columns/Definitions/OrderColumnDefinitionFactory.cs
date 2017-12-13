@@ -91,7 +91,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         OrderFields.RequestedShipping),
 
                     new GridColumnDefinition("{603A9AF5-94B0-4FCC-8832-CAC54BFCFDFD}", true,
-                        new GridAddressTypeActionDisplayType("Ship", shippingAddressSelector),
+                        new AddressTypeActionDisplayType("Ship", shippingAddressSelector),
                         "S:Type", "Valid",
                         new GridColumnFunctionValueProvider(x => x),
                         new GridColumnSortProvider(OrderFields.ShipAddressType))

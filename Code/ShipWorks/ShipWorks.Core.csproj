@@ -1010,7 +1010,7 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
-    <Compile Include="Data\Grid\Columns\DisplayTypes\GridAddressTypeActionDisplayType.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\AddressTypeActionDisplayType.cs" />
     <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />

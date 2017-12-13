@@ -15,7 +15,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
     /// <summary>
     /// Reprsents a column that allows a user to take an action on a row.
     /// </summary>
-    public class GridAddressTypeActionDisplayType : GridColumnDisplayType
+    public class AddressTypeActionDisplayType : GridColumnDisplayType
     {
         private readonly string addressPrefix;
         private readonly EntityGridAddressSelector addressSelector;
@@ -23,7 +23,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         /// <summary>
         /// Common constructor
         /// </summary>
-        public GridAddressTypeActionDisplayType(string addressPrefix, EntityGridAddressSelector addressSelector)
+        public AddressTypeActionDisplayType(string addressPrefix, EntityGridAddressSelector addressSelector)
         {
             this.addressPrefix = addressPrefix;
             this.addressSelector = addressSelector;
@@ -75,10 +75,10 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 return "";
             }
                         
-            string status = EnumHelper.GetDescription((AddressType)address.AddressType);
+            string status = EnumHelper.GetDescription((AddressType) address.AddressType);
 
             return !string.IsNullOrWhiteSpace(address.AddressValidationError) && 
-                (AddressType)address.AddressType == AddressType.InternationalAmbiguous ? 
+                (AddressType) address.AddressType == AddressType.InternationalAmbiguous ? 
                 status + " (Limited Data)" : status;
         }
         
@@ -100,7 +100,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                 return null;
             }
 
-            return EnumHelper.GetImage((AddressType)address.AddressType);
+            return EnumHelper.GetImage((AddressType) address.AddressType);
         }
     }
 }
