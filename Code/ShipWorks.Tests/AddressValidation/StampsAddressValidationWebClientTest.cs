@@ -49,9 +49,9 @@ namespace ShipWorks.Tests.AddressValidation
             var testObject = mock.Create<StampsAddressValidationWebClient>();
             await testObject.ValidateAddressAsync(new AddressAdapter());
 
-            resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult));
-            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult));
-            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult, It.IsAny<int>()));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>()));
+            resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult, It.IsAny<int>()));
         }
         
         [Fact]
