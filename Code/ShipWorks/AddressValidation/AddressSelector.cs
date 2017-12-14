@@ -148,9 +148,8 @@ namespace ShipWorks.AddressValidation
 
             string label = GetSuggestionLabelForValidationStatus(addressAdapter);
 
-            if (showLimitedData && 
-                addressAdapter.AddressType == (int) AddressType.InternationalAmbiguous && 
-                SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
+            if (showLimitedData &&
+                ShowLimitedDataLabelForAdapter(addressAdapter))
             {
                 if (string.IsNullOrWhiteSpace(label))
                 {
@@ -161,6 +160,27 @@ namespace ShipWorks.AddressValidation
             }
 
             return label;
+        }
+
+        /// <summary>
+        /// Should we show the limited data label for the adapter
+        /// </summary>
+        private static bool ShowLimitedDataLabelForAdapter(IAddressAdapter addressAdapter)
+        {
+            if (addressAdapter.AddressType == (int) AddressType.InternationalAmbiguous &&
+                SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus))
+            {
+                return true;
+            }
+
+            if (addressAdapter.AddressType == (int) AddressType.NotChecked &&
+                SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus) &&
+                !addressAdapter.IsDomesticCountry())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
