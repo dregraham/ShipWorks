@@ -49,9 +49,16 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
 
             IAddressAdapter address = new AddressAdapter(entity, addressPrefix);
-            return !string.IsNullOrWhiteSpace(address.AddressValidationError) && !address.IsDomesticCountry();
+            return SupportsLimitedData(address);
         }
 
+        /// <summary>
+        /// Does the adapter support limited data
+        /// </summary>
+        private static bool SupportsLimitedData(IAddressAdapter adapter) => 
+            !string.IsNullOrWhiteSpace(adapter.AddressValidationError) && 
+            adapter.AddressType == (int)AddressType.InternationalAmbiguous;
+        
         /// <summary>
         /// Get the address adapter
         /// </summary>
@@ -76,10 +83,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             }
                         
             string status = EnumHelper.GetDescription((AddressType) address.AddressType);
-
-            return !string.IsNullOrWhiteSpace(address.AddressValidationError) && 
-                (AddressType) address.AddressType == AddressType.InternationalAmbiguous ? 
-                status + " (Limited Data)" : status;
+            return SupportsLimitedData(address) ? status + " (Limited Data)" : status;
         }
         
         private void LinkClicked(object sender, GridHyperlinkClickEventArgs e)
