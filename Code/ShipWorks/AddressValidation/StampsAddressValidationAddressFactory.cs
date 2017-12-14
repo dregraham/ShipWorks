@@ -13,7 +13,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Create the AddressValidationResult
         /// </summary>
-        public AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
+        public AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult, int addressType)
         {
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
@@ -26,7 +26,8 @@ namespace ShipWorks.AddressValidation
                 CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
                 POBox = ConvertPoBox(uspsResult.IsPoBox),
-                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator)
+                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator),
+                AddressType = addressType
             };
 
             addressValidationResult.ParseStreet1();

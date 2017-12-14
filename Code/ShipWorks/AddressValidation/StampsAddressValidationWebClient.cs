@@ -72,7 +72,7 @@ namespace ShipWorks.AddressValidation
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int) validationResult.AddressType));
                     
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
@@ -86,7 +86,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType));
                 }
             }
             catch (UspsException ex)

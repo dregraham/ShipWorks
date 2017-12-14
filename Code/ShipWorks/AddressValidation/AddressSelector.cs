@@ -148,7 +148,9 @@ namespace ShipWorks.AddressValidation
 
             string label = GetSuggestionLabelForValidationStatus(addressAdapter);
 
-            if (showLimitedData && SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
+            if (showLimitedData && 
+                addressAdapter.AddressType == (int) AddressType.InternationalAmbiguous && 
+                SupportsLimitedData((AddressValidationStatusType) addressAdapter.AddressValidationStatus))
             {
                 if (string.IsNullOrWhiteSpace(label))
                 {

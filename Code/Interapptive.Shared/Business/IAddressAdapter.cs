@@ -41,6 +41,11 @@ namespace Interapptive.Shared.Business
         string PostalCode { get; set; }
 
         /// <summary>
+        /// The AddressType
+        /// </summary>
+        int AddressType { get; set; }
+
+        /// <summary>
         /// The AddressValidationStatus
         /// </summary>
         int AddressValidationStatus { get; set; }
