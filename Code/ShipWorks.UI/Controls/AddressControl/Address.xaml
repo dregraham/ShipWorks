@@ -36,6 +36,7 @@
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
             <valueConverters:EnumImageConverter x:Key="EnumImage" />
             <valueConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+            <valueConverters:AddressKeyValueToBooleanConverter x:Key="AddressKeyValueToBooleanConverter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <valueConverters:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" />
         </ResourceDictionary>
@@ -104,7 +105,7 @@
                     <Button Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}"
                             props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}">
                         <StackPanel Margin="0" Orientation="Horizontal">
-                            <TextBlock Margin="0"><Run Text="{Binding SuggestionCount}" /> Suggestion</TextBlock>
+                            <TextBlock Margin="0" Text="{Binding ValidationMessageLabel}"></TextBlock>
                             <TextBlock Margin="0"
                                        Visibility="{Binding SuggestionCount, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={StaticResource One}}"
                                        Text="s" />
@@ -112,8 +113,7 @@
                     </Button>
                     <Button Margin="6,0,0,0"
                             Visibility="{Binding CanShowValidationMessage, Converter={StaticResource BooleanToVisibility}}"
-                            Command="{Binding ShowValidationMessageCommand}">
-                        Details...
+                            Command="{Binding ShowValidationMessageCommand}" Content="{Binding ValidationMessageLabel}">
                     </Button>
                 </StackPanel>
             </controls:AlignmentWrapPanel>
@@ -219,7 +219,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Border Style="{StaticResource AddressBorderStyle}"
+                                <Border Style="{StaticResource AddressBorderStyle}" IsEnabled="{Binding Converter={StaticResource AddressKeyValueToBooleanConverter}}"
                                         props:PopupClickManager.ClosePopup="{Binding ElementName=AddressPopup}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseUp" >

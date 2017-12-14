@@ -45,6 +45,8 @@ namespace ShipWorks.Stores.Management
             this.filterDescription = new System.Windows.Forms.Label();
             this.filterSectionTitle = new ShipWorks.UI.Controls.SectionTitle();
             this.panelAddressValidation = new System.Windows.Forms.Panel();
+            this.internationalAddressValidationHelpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.domesticAddressValidationHelpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.internationalAddressValidationSetting = new System.Windows.Forms.ComboBox();
             this.labelDomesticAddressValidationSetting = new System.Windows.Forms.Label();
             this.labelInternationalAddressValidationSetting = new System.Windows.Forms.Label();
@@ -235,7 +237,8 @@ namespace ShipWorks.Stores.Management
             this.filtersInfoTip.Location = new System.Drawing.Point(506, 39);
             this.filtersInfoTip.Name = "filtersInfoTip";
             this.filtersInfoTip.Size = new System.Drawing.Size(12, 12);
-            this.filtersInfoTip.TabIndex = 31;
+            this.filtersInfoTip.TabIndex = 0;
+            this.filtersInfoTip.TabStop = false;
             this.filtersInfoTip.Title = "Filters";
             // 
             // createFiltersButton
@@ -243,7 +246,7 @@ namespace ShipWorks.Stores.Management
             this.createFiltersButton.Location = new System.Drawing.Point(413, 34);
             this.createFiltersButton.Name = "createFiltersButton";
             this.createFiltersButton.Size = new System.Drawing.Size(87, 23);
-            this.createFiltersButton.TabIndex = 30;
+            this.createFiltersButton.TabIndex = 6;
             this.createFiltersButton.Text = "Create filters";
             this.createFiltersButton.UseVisualStyleBackColor = true;
             this.createFiltersButton.Click += new System.EventHandler(this.OnCreateFiltersClick);
@@ -254,7 +257,7 @@ namespace ShipWorks.Stores.Management
             this.filterDescription.Location = new System.Drawing.Point(17, 32);
             this.filterDescription.Name = "filterDescription";
             this.filterDescription.Size = new System.Drawing.Size(379, 26);
-            this.filterDescription.TabIndex = 29;
+            this.filterDescription.TabIndex = 0;
             this.filterDescription.Text = "ShipWorks can help organize this store\'s orders by creating filters for each of \r" +
     "\nthe online statuses. This will not impact any of your existing filters.";
             // 
@@ -270,6 +273,8 @@ namespace ShipWorks.Stores.Management
             // 
             // panelAddressValidation
             // 
+            this.panelAddressValidation.Controls.Add(this.internationalAddressValidationHelpLink);
+            this.panelAddressValidation.Controls.Add(this.domesticAddressValidationHelpLink);
             this.panelAddressValidation.Controls.Add(this.internationalAddressValidationSetting);
             this.panelAddressValidation.Controls.Add(this.labelDomesticAddressValidationSetting);
             this.panelAddressValidation.Controls.Add(this.labelInternationalAddressValidationSetting);
@@ -281,6 +286,34 @@ namespace ShipWorks.Stores.Management
             this.panelAddressValidation.Size = new System.Drawing.Size(564, 107);
             this.panelAddressValidation.TabIndex = 33;
             // 
+            // internationalAddressValidationHelpLink
+            // 
+            this.internationalAddressValidationHelpLink.AutoSize = true;
+            this.internationalAddressValidationHelpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.internationalAddressValidationHelpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.internationalAddressValidationHelpLink.ForeColor = System.Drawing.Color.Blue;
+            this.internationalAddressValidationHelpLink.Location = new System.Drawing.Point(328, 89);
+            this.internationalAddressValidationHelpLink.Name = "internationalAddressValidationHelpLink";
+            this.internationalAddressValidationHelpLink.Size = new System.Drawing.Size(73, 13);
+            this.internationalAddressValidationHelpLink.TabIndex = 7;
+            this.internationalAddressValidationHelpLink.Text = "Learn more...";
+            this.internationalAddressValidationHelpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000113490-international-" +
+    "address-validation";
+            // 
+            // domesticAddressValidationHelpLink
+            // 
+            this.domesticAddressValidationHelpLink.AutoSize = true;
+            this.domesticAddressValidationHelpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.domesticAddressValidationHelpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.domesticAddressValidationHelpLink.ForeColor = System.Drawing.Color.Blue;
+            this.domesticAddressValidationHelpLink.Location = new System.Drawing.Point(328, 58);
+            this.domesticAddressValidationHelpLink.Name = "domesticAddressValidationHelpLink";
+            this.domesticAddressValidationHelpLink.Size = new System.Drawing.Size(73, 13);
+            this.domesticAddressValidationHelpLink.TabIndex = 5;
+            this.domesticAddressValidationHelpLink.Text = "Learn more...";
+            this.domesticAddressValidationHelpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000051969-using-address-" +
+    "validation";
+            // 
             // internationalAddressValidationSetting
             // 
             this.internationalAddressValidationSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -288,7 +321,7 @@ namespace ShipWorks.Stores.Management
             this.internationalAddressValidationSetting.Location = new System.Drawing.Point(163, 86);
             this.internationalAddressValidationSetting.Name = "internationalAddressValidationSetting";
             this.internationalAddressValidationSetting.Size = new System.Drawing.Size(158, 21);
-            this.internationalAddressValidationSetting.TabIndex = 36;
+            this.internationalAddressValidationSetting.TabIndex = 5;
             // 
             // labelDomesticAddressValidationSetting
             // 
@@ -296,7 +329,7 @@ namespace ShipWorks.Stores.Management
             this.labelDomesticAddressValidationSetting.Location = new System.Drawing.Point(51, 58);
             this.labelDomesticAddressValidationSetting.Name = "labelDomesticAddressValidationSetting";
             this.labelDomesticAddressValidationSetting.Size = new System.Drawing.Size(106, 13);
-            this.labelDomesticAddressValidationSetting.TabIndex = 35;
+            this.labelDomesticAddressValidationSetting.TabIndex = 0;
             this.labelDomesticAddressValidationSetting.Text = "Domestic addresses:";
             // 
             // labelInternationalAddressValidationSetting
@@ -305,7 +338,7 @@ namespace ShipWorks.Stores.Management
             this.labelInternationalAddressValidationSetting.Location = new System.Drawing.Point(32, 89);
             this.labelInternationalAddressValidationSetting.Name = "labelInternationalAddressValidationSetting";
             this.labelInternationalAddressValidationSetting.Size = new System.Drawing.Size(125, 13);
-            this.labelInternationalAddressValidationSetting.TabIndex = 34;
+            this.labelInternationalAddressValidationSetting.TabIndex = 0;
             this.labelInternationalAddressValidationSetting.Text = "International addresses:";
             // 
             // domesticAddressValidationSetting
@@ -315,7 +348,7 @@ namespace ShipWorks.Stores.Management
             this.domesticAddressValidationSetting.Location = new System.Drawing.Point(163, 55);
             this.domesticAddressValidationSetting.Name = "domesticAddressValidationSetting";
             this.domesticAddressValidationSetting.Size = new System.Drawing.Size(158, 21);
-            this.domesticAddressValidationSetting.TabIndex = 33;
+            this.domesticAddressValidationSetting.TabIndex = 4;
             // 
             // labelAddressValidationSetting
             // 
@@ -323,7 +356,7 @@ namespace ShipWorks.Stores.Management
             this.labelAddressValidationSetting.Location = new System.Drawing.Point(17, 32);
             this.labelAddressValidationSetting.Name = "labelAddressValidationSetting";
             this.labelAddressValidationSetting.Size = new System.Drawing.Size(235, 13);
-            this.labelAddressValidationSetting.TabIndex = 32;
+            this.labelAddressValidationSetting.TabIndex = 0;
             this.labelAddressValidationSetting.Text = "Tell us how you want to use address validation:";
             // 
             // sectionAddressValidation
@@ -342,7 +375,7 @@ namespace ShipWorks.Stores.Management
             this.labelAllowDownload.Location = new System.Drawing.Point(32, 50);
             this.labelAllowDownload.Name = "labelAllowDownload";
             this.labelAllowDownload.Size = new System.Drawing.Size(231, 13);
-            this.labelAllowDownload.TabIndex = 31;
+            this.labelAllowDownload.TabIndex = 0;
             this.labelAllowDownload.Text = "Allow this computer to download for this store:";
             // 
             // comboAllowDownload
@@ -352,7 +385,7 @@ namespace ShipWorks.Stores.Management
             this.comboAllowDownload.Location = new System.Drawing.Point(266, 47);
             this.comboAllowDownload.Name = "comboAllowDownload";
             this.comboAllowDownload.Size = new System.Drawing.Size(121, 21);
-            this.comboAllowDownload.TabIndex = 30;
+            this.comboAllowDownload.TabIndex = 1;
             // 
             // panelStoreStatus
             // 
@@ -371,7 +404,8 @@ namespace ShipWorks.Stores.Management
             this.infotipStoreEnabled.Location = new System.Drawing.Point(281, 34);
             this.infotipStoreEnabled.Name = "infotipStoreEnabled";
             this.infotipStoreEnabled.Size = new System.Drawing.Size(12, 12);
-            this.infotipStoreEnabled.TabIndex = 26;
+            this.infotipStoreEnabled.TabIndex = 0;
+            this.infotipStoreEnabled.TabStop = false;
             this.infotipStoreEnabled.Title = "Store Status";
             // 
             // sectionStatus
@@ -391,7 +425,7 @@ namespace ShipWorks.Stores.Management
             this.label4.Location = new System.Drawing.Point(32, 54);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(319, 13);
-            this.label4.TabIndex = 27;
+            this.label4.TabIndex = 0;
             this.label4.Text = "(This does not affect your Interapptive account or billing status.)";
             // 
             // storeDisabled
@@ -400,7 +434,7 @@ namespace ShipWorks.Stores.Management
             this.storeDisabled.Location = new System.Drawing.Point(20, 32);
             this.storeDisabled.Name = "storeDisabled";
             this.storeDisabled.Size = new System.Drawing.Size(263, 17);
-            this.storeDisabled.TabIndex = 25;
+            this.storeDisabled.TabIndex = 3;
             this.storeDisabled.Text = "I do not actively ship or download with this store.";
             this.storeDisabled.UseVisualStyleBackColor = true;
             this.storeDisabled.CheckedChanged += new System.EventHandler(this.OnChangeEnabledState);
@@ -414,7 +448,7 @@ namespace ShipWorks.Stores.Management
             this.configureDownloadComputers.Location = new System.Drawing.Point(394, 50);
             this.configureDownloadComputers.Name = "configureDownloadComputers";
             this.configureDownloadComputers.Size = new System.Drawing.Size(148, 13);
-            this.configureDownloadComputers.TabIndex = 5;
+            this.configureDownloadComputers.TabIndex = 0;
             this.configureDownloadComputers.Text = "Configure other computers...";
             this.configureDownloadComputers.Click += new System.EventHandler(this.OnConfigureDownloadPolicy);
             // 
@@ -440,7 +474,7 @@ namespace ShipWorks.Stores.Management
             this.automaticDownloadControl.Location = new System.Drawing.Point(32, 74);
             this.automaticDownloadControl.Name = "automaticDownloadControl";
             this.automaticDownloadControl.Size = new System.Drawing.Size(292, 51);
-            this.automaticDownloadControl.TabIndex = 1;
+            this.automaticDownloadControl.TabIndex = 2;
             // 
             // optionPageOnlineAccount
             // 
@@ -756,5 +790,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.ComboBox internationalAddressValidationSetting;
         private System.Windows.Forms.Label labelDomesticAddressValidationSetting;
         private System.Windows.Forms.Label labelInternationalAddressValidationSetting;
+        private ApplicationCore.Interaction.HelpLink internationalAddressValidationHelpLink;
+        private ApplicationCore.Interaction.HelpLink domesticAddressValidationHelpLink;
     }
 }

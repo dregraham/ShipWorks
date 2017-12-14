@@ -28,6 +28,8 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
                     new Address[] { },
                     new StatusCodes(),
                     new RateV24[] { },
+                    "",
+                    0
                 }, null, false, null));
         }
     }

@@ -31,16 +31,18 @@ namespace ShipWorks.AddressValidation
         /// Validates an address with no prefix on the specified entity
         /// </summary>
         /// <param name="addressAdapter">Address that should be validated</param>
+        /// <param name="store">The store that owns the order whose address is being validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction);
+        Task ValidateAsync(AddressAdapter addressAdapter, StoreEntity store, bool canAdjustAddress,  Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction);
 
         /// <summary>
         /// Validates an address with no prefix on the specified entity
         /// </summary>
         /// <param name="addressAdapter">Address that should be validated</param>
+        /// <param name="store">The store that owns the order whose address is being validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress);
+        Task<ValidatedAddressData> ValidateAsync(AddressAdapter addressAdapter, StoreEntity store, bool canAdjustAddress);
     }
 }

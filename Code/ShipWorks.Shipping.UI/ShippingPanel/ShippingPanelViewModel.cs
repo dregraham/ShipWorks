@@ -586,15 +586,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             ShipmentViewModel.Load(fromShipmentAdapter);
 
-            Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
-            Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
+            Origin.Load(fromShipmentAdapter.Shipment.OriginPerson, fromShipmentAdapter.Store);
+            Destination.Load(fromShipmentAdapter.Shipment.ShipPerson, fromShipmentAdapter.Store);
             Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 
             DestinationAddressEditableState = loadedOrderSelection.IsDestinationAddressEditableFor(fromShipmentAdapter.Shipment.ShipmentID);
 
-            Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+            Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType, fromShipmentAdapter.Store);
 
             SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
             TrackingNumber = fromShipmentAdapter.Shipment.TrackingNumber;

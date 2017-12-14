@@ -30,12 +30,15 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_UpdatesOriginAddress_WhenOriginAddressTypeChanges()
         {
+            var store = new StoreEntity();
+
             var viewModelMock = mock.CreateMock<ShippingPanelViewModel>(v =>
             {
                 v.Setup(x => x.OriginAddressType).Returns((long) ShipmentOriginSource.Store);
                 v.Setup(x => x.OrderID).Returns(92);
                 v.Setup(x => x.AccountId).Returns(102);
                 v.Setup(x => x.ShipmentType).Returns(ShipmentTypeCode.Usps);
+                v.Setup(x => x.ShipmentAdapter.Store).Returns(store);
             });
             var viewModel = viewModelMock.Object;
 
@@ -44,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
 
             testSubject.OnNext(new StoreChangedMessage(new object(), new StoreEntity { StoreID = 23 }));
 
-            viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin((long) ShipmentOriginSource.Store, 92, 102, ShipmentTypeCode.Usps));
+            viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin((long) ShipmentOriginSource.Store, 92, 102, ShipmentTypeCode.Usps, store));
         }
 
         [Theory]
@@ -62,7 +65,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testSubject.OnNext(new StoreChangedMessage(new object(), new StoreEntity()));
 
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(),
-                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never());
+                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<StoreEntity>()), Times.Never());
         }
 
         [Theory]
@@ -80,7 +83,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             testSubject.OnNext(new StoreChangedMessage(new object(), new StoreEntity()));
 
             viewModelMock.Verify(x => x.Origin.SetAddressFromOrigin(It.IsAny<long>(), It.IsAny<long>(),
-                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>()), Times.Never);
+                It.IsAny<long>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<StoreEntity>()), Times.Never);
         }
 
         public void Dispose()

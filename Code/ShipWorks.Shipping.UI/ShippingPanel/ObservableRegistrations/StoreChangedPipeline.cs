@@ -78,7 +78,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
                 viewModel.OriginAddressType,
                 viewModel.OrderID ?? 0,
                 viewModel.AccountId,
-                viewModel.ShipmentType);
+                viewModel.ShipmentType,
+                viewModel.ShipmentAdapter.Store);
         }
 
         /// <summary>

@@ -663,10 +663,13 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensions.cs" />
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicy.cs" />
     <Compile Include="AddressValidation\IAddressSelector.cs" />
+    <Compile Include="AddressValidation\IAddressValidationResultFactory.cs" />
     <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
@@ -690,6 +693,7 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedErrorShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationAddressFactory.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedAddressData.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
@@ -1008,6 +1012,7 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\AddressTypeActionDisplayType.cs" />
     <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />

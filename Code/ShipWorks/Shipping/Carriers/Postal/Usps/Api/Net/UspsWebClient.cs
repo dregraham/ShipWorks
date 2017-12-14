@@ -539,7 +539,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 if (!results.IsCityStateZipOk)
                 {
-                    throw new UspsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
+                    throw new UspsException($"The address for '{new PersonName(person).FullName}' is not a valid address. {Environment.NewLine}{Environment.NewLine}" +
+                        $"Address validation returned the following error: {Environment.NewLine}" +
+                        $"{results.BadAddressMessage}");
                 }
 
                 if (requireFullMatch)
@@ -554,17 +556,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Validates the address of the given person
-        /// </summary>
-        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person)
-        {
-            return ValidateAddressAsync(person, null);
-        }
-
-        /// <summary>
         /// Validates the address of the given person using the specified stamps account
         /// </summary>
-        private async Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person, UspsAccountEntity account)
+        public async Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person, UspsAccountEntity account)
         {
             Address address = CreateAddress(person);
 
@@ -625,7 +619,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 MatchedAddress = result.Address,
                 Candidates = result.CandidateAddresses,
                 BadAddressMessage = badAddressMessage,
-                StatusCodes = result.StatusCodes
+                StatusCodes = result.StatusCodes,
+                VerificationLevel = result.VerificationLevel,
+                AddressCleansingResult = result.AddressCleansingResult
             };
         }
 
@@ -636,6 +632,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             using (ISwsimV67 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
+                CheckCertificate(webService.Url);
+
                 using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                 {
                     TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();

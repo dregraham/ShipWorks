@@ -33,6 +33,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -1018,18 +1019,9 @@ namespace ShipWorks.Stores.Communication
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
             }
 
-            if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
+            if (prefix == "Ship")
             {
-                if ((AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                     AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
-                    prefix == "Ship")
-                {
-                    address.AddressValidationStatus = (int) AddressValidationStatusType.Pending;
-                }
-                else
-                {
-                    address.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                }
+                address.UpdateValidationStatus(Store);
             }
         }
 

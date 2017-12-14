@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address.
         /// </summary>
-        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress);
+        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress, UspsAccountEntity account);
 
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.
