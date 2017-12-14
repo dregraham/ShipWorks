@@ -1,8 +1,8 @@
 ﻿PRINT N'Updating [dbo].[ShippingSettings]'
 GO
 UPDATE ShippingSettings
-SET	FedExUsername = 'MFG2EvMKBLcxcCsk',
-	FedExPassword = 'nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE='
+SET	FedExUsername = 'bHUvxLnP6tCSYYdX',
+	FedExPassword = 'QQ8YrYjqw7X/ES6teoiW2a7ziL0YY4hy2cfDxbi9ozg='
 	WHERE ISNULL(FedExUsername,'') != ''
 GO
 
