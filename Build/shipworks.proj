@@ -14,9 +14,6 @@
     <!-- Local or Automated (when CCNet is used it changes to Automated -->
     <BuildType>Local</BuildType>
 
-    <!-- Can be overridden for local builds -->
-    <PackageModules Condition=" $(PackageModules) == '' ">False</PackageModules>
-
     <!-- Can be true or false to initiate the installer -->
     <CreateInstaller Condition=" $(CreateInstaller) == '' ">False</CreateInstaller>
 
@@ -32,7 +29,6 @@
   <!-- Properties to set if  being called from CC.NET-->
   <PropertyGroup Condition=" '$(CCNetProject)' != '' ">
     <BuildType>Automated</BuildType>
-    <PackageModules Condition=" $(ReleaseType) != 'None' ">True</PackageModules>
     <CreateInstaller Condition=" $(ReleaseType) != 'None' ">True</CreateInstaller>
   </PropertyGroup>
 
@@ -41,7 +37,6 @@
     <LogDirectory>$(ArtifactDirectory)\Logs</LogDirectory>
     <AppDirectory>$(ArtifactDirectory)\Application</AppDirectory>
     <InstallerDirectory>$(ArtifactDirectory)\Distribute</InstallerDirectory>
-    <ModulesDirectory>$(InstallerDirectory)\Modules</ModulesDirectory>
     <SupportObfuscationLogDirectory>\\INTFS01\Support\ObfuscationReports</SupportObfuscationLogDirectory>
   </PropertyGroup>
 
@@ -54,7 +49,6 @@
       Compile;
       CopyToLatest;
       RunTests;
-      PackageModules;
       CreateInstaller;
       PackageResults;
     </BuildDependsOn>
@@ -211,35 +205,6 @@
 
   </Target>
 
-  <!-- Package up all the modules for distribution -->
-  <Target Name="PackageModules" Condition=" $(PackageModules) == 'True' ">
-
-    <CreateItem Include="..\Code\**\shipworks3.php" >
-      <Output TaskParameter="Include" ItemName="PhpModules"/>
-    </CreateItem>
-
-    <PackagePhpModule ModuleFile="%(PhpModules.FullPath)" OutputDirectory="$(ModulesDirectory)">
-      <Output TaskParameter="PackagedFile" PropertyName="PackagedPhpFiles" />
-    </PackagePhpModule>
-
-    <CreateItem Include="..\Code\**\shipworks3.mv" >
-      <Output TaskParameter="Include" ItemName="Miva4Module"/>
-    </CreateItem>
-
-    <CreateItem Include="..\Code\**\shipworks3Miva5.mv" >
-      <Output TaskParameter="Include" ItemName="Miva5Module"/>
-    </CreateItem>
-
-    <CreateItem Include="..\Code\**\shipworks3Miva9.mv" >
-      <Output TaskParameter="Include" ItemName="Miva9Module"/>
-    </CreateItem>
-
-    <PackageMivaModules ModuleFileMiva4="@(Miva4Module)" ModuleFileMiva5="@(Miva5Module)" ModuleFileMiva9="@(Miva9Module)" OutputDirectory="$(ModulesDirectory)">
-      <Output TaskParameter="PackagedFiles" PropertyName="PackagedMivaFiles" />
-    </PackageMivaModules>
-
-  </Target>
-
   <!-- Drives the process of creating the installer -->
   <PropertyGroup>
     <CreateInstallerDependsOn>
@@ -335,32 +300,7 @@
     <Message Text="Starting obfuscation..." />
 
     <Exec Command='$(ObfuscationCommand) ' />
-    <!--<Obfuscate
-			RootAssembly="$(AppDirectory)\ShipWorks.exe"
-			All="true"
-			CompilerControlled="false"
-			EncryptStrings="true"
-			EntireApplication="true"
-			ForceParameters="false"
-			Verbose="true"
-			Names="alpha"
-			DestinationFolder="$(AppDirectory)\Obfuscated"
-			Exclude=""
-			ExcludeRegEx="@(ObfuscationExcludedRegEx)"
-			ExcludedAssemblies="@(ObfuscationExcludedAssemblies)"
-			Report="$(LogDirectory)\ObfuscationReport.xml"
-			NoEnumerations="false"
-			NoEvents="false"
-			NoFields="false"
-			NoLogo="false"
-			NoMethods="false"
-			NoParameters="false"
-			NoProperties="false"
-			NoResources="false"
-			NoSerializable="false"
-			NoTypes="false">
-    </Obfuscate>-->
-
+    
     <CreateItem Include="$(AppDirectory)\Obfuscated\*.*">
       <Output TaskParameter="Include" ItemName="ObfuscatedAssemblies" />
     </CreateItem>
@@ -468,7 +408,6 @@
   <!-- Packages up and archives the results of the build -->
   <PropertyGroup>
     <PackageResultsDependsOn>
-      ZipResults;
       CopyToArchive;
       UpdateRevisionNumber;
     </PackageResultsDependsOn>
@@ -476,22 +415,6 @@
   <Target Name="PackageResults"
 		 Condition=" $(BuildType) == 'Automated' "
 		 DependsOnTargets="$(PackageResultsDependsOn)">
-  </Target>
-
-  <!-- Zip the results of the build -->
-  <Target Name="ZipResults" >
-
-    <!--<CreateItem Include="$(AppDirectory)\**\*">
-      <Output TaskParameter="Include" ItemName="FilesToZip"/>
-    </CreateItem>
-
-    <Zip Files="@(FilesToZip)"
-				WorkingDirectory="$(AppDirectory)\"
-				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
-
-    --><!-- Delete all the files that went into the zip --><!--
-    <Delete Files="@(FilesToZip)" />-->
-
   </Target>
 
   <!-- Copy everything to a directory for archival purposes -->
