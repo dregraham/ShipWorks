@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -30,14 +31,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Creates the label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             try
             {
                 return shippingClerkFactory.Create(shipment)
                     .Ship(shipment)
                     .Map(createDownloadedLabelData)
-                    .Match(x => x, ex => { throw ex; });
+                    .Match(Task.FromResult<IDownloadedLabelData>, ex => { throw ex; });
             }
             catch (FedExException ex)
             {

@@ -659,17 +659,19 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensions.cs" />
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicy.cs" />
     <Compile Include="AddressValidation\IAddressSelector.cs" />
+    <Compile Include="AddressValidation\IAddressValidationResultFactory.cs" />
     <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
     <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Enums\AddressType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
@@ -687,6 +689,7 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedErrorShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationAddressFactory.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedAddressData.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
@@ -1005,6 +1008,7 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\AddressTypeActionDisplayType.cs" />
     <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />
@@ -8781,7 +8785,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
-    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv55.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv67.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>

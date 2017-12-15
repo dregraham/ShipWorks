@@ -26,15 +26,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static string ServiceUrl =>
             UspsWebClient.UseTestServer ?
-                "https://swsim.testing.stamps.com/swsim/SwsimV55.asmx" :
-                "https://swsim.stamps.com/swsim/SwsimV55.asmx";
+                "https://swsim.testing.stamps.com/swsim/SwsimV67.asmx" :
+                "https://swsim.stamps.com/swsim/SwsimV67.asmx";
 
         /// <summary>
         /// Create the web service
         /// </summary>
-        public ISwsimV55 Create(string logName, LogActionType logActionType)
+        public ISwsimV67 Create(string logName, LogActionType logActionType)
         {
-            return new SwsimV55(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
+            return new SwsimV67(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
             {
                 Url = ServiceUrl
             };

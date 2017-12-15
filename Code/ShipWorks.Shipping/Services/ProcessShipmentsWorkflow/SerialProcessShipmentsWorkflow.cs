@@ -63,11 +63,21 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
             IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
-                ProcessShipmentsWorkflowResult result = input.Where(_ => !cancellationSource.IsCancellationRequested)
-                    .Select(x => ProcessShipment(x, workProgress, shipments.Count()))
+                List<ILabelResultLogResult> results = new List<ILabelResultLogResult>();
+                foreach (ProcessShipmentState processShipmentState in input)
+                {
+                    if (cancellationSource.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    results.Add(await ProcessShipment(processShipmentState, workProgress, shipments.Count()).ConfigureAwait(false));
+                }
+
+                ProcessShipmentsWorkflowResult result = results
                     .Where(x => x != null)
                     .Aggregate(workflowResult, AggregateResults);
 
@@ -122,7 +132,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// <summary>
         /// Process a single shipment
         /// </summary>
-        private ILabelResultLogResult ProcessShipment(ProcessShipmentState initial, IProgressReporter workProgress, int shipmentCount)
+        private async Task<ILabelResultLogResult> ProcessShipment(ProcessShipmentState initial, IProgressReporter workProgress, int shipmentCount)
         {
             workProgress.Detail = $"Shipment {initial.Index + 1} of {shipmentCount}";
 
@@ -136,7 +146,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     return null;
                 }
 
-                ILabelRetrievalResult getLabelResult = getLabelTask.GetLabel(prepareShipmentResult);
+                ILabelRetrievalResult getLabelResult = await getLabelTask.GetLabel(prepareShipmentResult).ConfigureAwait(false);
                 ILabelPersistenceResult saveLabelResult = saveLabelTask.SaveLabel(getLabelResult);
                 return completeLabelTask.Complete(saveLabelResult);
             }

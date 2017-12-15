@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
@@ -27,80 +28,80 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        public void ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull()
+        public async Task ProcessShipment_ThrowsArgumentNullException_WhenShipmentEntityIsNull()
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            Assert.Throws<ArgumentNullException>(() => labelService.Create(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => labelService.Create(null));
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL()
+        public async Task ProcessShipment_ThermalTypeIsZPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsZPL()
         {
             shipment.RequestedLabelFormat = (int) ThermalLanguage.ZPL;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Equal((int) ThermalLanguage.ZPL, shipment.ActualLabelFormat);
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL()
+        public async Task ProcessShipment_ThermalTypeIsEPL_WhenThermalTypeSettingIsTrue_AndThermalTypeIsEPL()
         {
             shipment.RequestedLabelFormat = (int) ThermalLanguage.EPL;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Equal((int) ThermalLanguage.EPL, shipment.ActualLabelFormat);
         }
 
         [Fact]
-        public void ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse()
+        public async Task ProcessShipment_ThermalTypeIsNull_WhenThermalTypeSettingIsFalse()
         {
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             Assert.Null(shipment.ActualLabelFormat);
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryForAccount()
+        public async Task ProcessShipment_DelegatesToRepositoryForAccount()
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
                 .Verify(x => x.GetAccountReadOnly(shipment.IParcel.IParcelAccountID), Times.Once);
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToRepositoryForOrderDetails()
+        public async Task ProcessShipment_DelegatesToRepositoryForOrderDetails()
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<IOrderManager>().Verify(x => x.PopulateOrderDetails(shipment), Times.Once);
         }
 
         [Fact]
-        public void ProcessShipment_DelegatesToServiceGateway()
+        public async Task ProcessShipment_DelegatesToServiceGateway()
         {
             var labelService = mock.Create<iParcelLabelService>();
 
-            labelService.Create(shipment);
+            await labelService.Create(shipment);
 
             mock.Mock<IiParcelServiceGateway>()
                 .Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once);
         }
 
         [Fact]
-        public void ProcessShipment_CreatesValidDownloadedLabelData()
+        public async Task ProcessShipment_CreatesValidDownloadedLabelData()
         {
             DataSet dataSet = new DataSet();
 
@@ -114,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             var labelService = mock.Create<iParcelLabelService>();
 
-            var downloadedLabel = labelService.Create(shipment);
+            var downloadedLabel = await labelService.Create(shipment);
 
             Assert.Equal(response, downloadedLabel);
         }

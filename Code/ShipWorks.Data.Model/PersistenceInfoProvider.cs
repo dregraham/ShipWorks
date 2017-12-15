@@ -3025,7 +3025,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 30, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 31, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3049,13 +3049,14 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "AutoDownload", "AutoDownload", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 20);
 			this.AddElementFieldMapping("StoreEntity", "AutoDownloadMinutes", "AutoDownloadMinutes", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 21);
 			this.AddElementFieldMapping("StoreEntity", "AutoDownloadOnlyAway", "AutoDownloadOnlyAway", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
-			this.AddElementFieldMapping("StoreEntity", "AddressValidationSetting", "AddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
-			this.AddElementFieldMapping("StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 24);
-			this.AddElementFieldMapping("StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 25);
-			this.AddElementFieldMapping("StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 26);
-			this.AddElementFieldMapping("StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 27);
-			this.AddElementFieldMapping("StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 28);
-			this.AddElementFieldMapping("StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 29);
+			this.AddElementFieldMapping("StoreEntity", "DomesticAddressValidationSetting", "DomesticAddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
+			this.AddElementFieldMapping("StoreEntity", "InternationalAddressValidationSetting", "InternationalAddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 24);
+			this.AddElementFieldMapping("StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 26);
+			this.AddElementFieldMapping("StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 27);
+			this.AddElementFieldMapping("StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 28);
+			this.AddElementFieldMapping("StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 29);
+			this.AddElementFieldMapping("StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 30);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>

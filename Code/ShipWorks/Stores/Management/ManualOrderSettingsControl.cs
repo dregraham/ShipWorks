@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -58,6 +52,5 @@ namespace ShipWorks.Stores.Management
         {
             example.Text = string.Format("{0}1045{1}", prefix.Text, postfix.Text);
         }
-
     }
 }

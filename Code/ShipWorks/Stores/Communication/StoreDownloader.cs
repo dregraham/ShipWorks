@@ -32,6 +32,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -116,7 +117,7 @@ namespace ShipWorks.Stores.Communication
         /// Gets the address validation setting.
         /// </summary>
         private AddressValidationStoreSettingType AddressValidationSetting =>
-            (AddressValidationStoreSettingType) Store.AddressValidationSetting;
+            (AddressValidationStoreSettingType) Store.DomesticAddressValidationSetting;
 
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.
@@ -1009,18 +1010,9 @@ namespace ShipWorks.Stores.Communication
                 ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
             }
 
-            if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
+            if (prefix == "Ship")
             {
-                if ((AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
-                     AddressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
-                    prefix == "Ship")
-                {
-                    address.AddressValidationStatus = (int) AddressValidationStatusType.Pending;
-                }
-                else
-                {
-                    address.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                }
+                address.UpdateValidationStatus(Store);
             }
         }
 

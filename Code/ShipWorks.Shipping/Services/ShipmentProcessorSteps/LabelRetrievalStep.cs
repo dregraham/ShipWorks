@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
@@ -50,7 +51,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Get a label for a shipment
         /// </summary>
-        public LabelRetrievalResult GetLabel(IShipmentPreparationResult result)
+        public async Task<ILabelRetrievalResult> GetLabel(IShipmentPreparationResult result)
         {
             if (!result.Success)
             {
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 try
                 {
-                    return GetLabelForShipment(result, shipment);
+                    return await GetLabelForShipment(result, shipment).ConfigureAwait(false);
                 }
                 catch (Exception ex) when (CanHandleException(ex))
                 {
@@ -90,7 +91,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Try to get a label for the specific shipment entity
         /// </summary>
-        private LabelRetrievalResult GetLabelForShipment(IShipmentPreparationResult result, ShipmentEntity shipment)
+        private async Task<LabelRetrievalResult> GetLabelForShipment(IShipmentPreparationResult result, ShipmentEntity shipment)
         {
             ShipmentEntity modifiedShipment = shipmentManipulator.Apply(shipment);
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             ILabelService labelService = labelServiceFactory.Create(modifiedShipment.ShipmentTypeCode);
             Debug.Assert(Transaction.Current == null, "No transaction should exist at this point.");
 
-            IDownloadedLabelData labelData = labelService.Create(modifiedShipment);
+            IDownloadedLabelData labelData = await labelService.Create(modifiedShipment).ConfigureAwait(false);
 
             return new LabelRetrievalResult(result, labelData, modifiedShipment, clone, fieldsToRestore);
         }

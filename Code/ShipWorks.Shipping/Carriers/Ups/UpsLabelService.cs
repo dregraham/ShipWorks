@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Creates the label
         /// </summary>
-        public virtual IDownloadedLabelData Create(ShipmentEntity shipment)
+        public virtual Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             UpsShipmentEntity upsShipmentEntity = shipment.Ups;
             UpsServiceType upsServiceType = (UpsServiceType) upsShipmentEntity.Service;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
-            return new NullDownloadedLabelData();
+            return Task.FromResult<IDownloadedLabelData>(new NullDownloadedLabelData());
         }
 
         /// <summary>

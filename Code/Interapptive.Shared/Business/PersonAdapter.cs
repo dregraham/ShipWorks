@@ -636,5 +636,14 @@ namespace Interapptive.Shared.Business
             get { return GetField<int>("MilitaryAddress"); }
             set { SetField("MilitaryAddress", value); }
         }
+
+        /// <summary>
+        /// Gets or sets the type of the address.
+        /// </summary>
+        public int AddressType
+        {
+            get { return GetField<int>("AddressType"); }
+            set { SetField("AddressType", value); }
+        }
     }
 }

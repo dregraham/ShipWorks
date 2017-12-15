@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -31,28 +32,29 @@ namespace ShipWorks.Stores.Management
     [NDependIgnoreLongTypes]
     public partial class StoreSettingsDlg : Form
     {
-        StoreEntity store;
-        StoreType storeType;
+        private StoreEntity store;
+        private StoreType storeType;
 
-        bool licenseTabInitialized = false;
+        private bool licenseTabInitialized = false;
 
         // License info
-        ShipWorksLicense license;
-        TrialDetail trialDetail;
-        ILicenseAccountDetail accountDetail;
+        private ShipWorksLicense license;
+        private TrialDetail trialDetail;
+        private ILicenseAccountDetail accountDetail;
 
         // Download policy
-        ComputerDownloadPolicy downloadPolicy;
+        private ComputerDownloadPolicy downloadPolicy;
 
         // The account settings control
-        AccountSettingsControlBase accountControl;
+        private AccountSettingsControlBase accountControl;
 
         // The control for manual order settings
-        ManualOrderSettingsControl manualOrderSettingsControl;
+        private ManualOrderSettingsControl manualOrderSettingsControl;
 
         // the control for store-specific settings
-        StoreSettingsControlBase storeSettingsControl;
+        private StoreSettingsControlBase storeSettingsControl;
         private bool resetPendingValidations;
+        private const int VerticalSpaceBetweenSections = 10;
 
         public enum Section
         {
@@ -280,10 +282,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void LoadSettingsTab()
         {
-            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(domesticAddressValidationSetting);
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(internationalAddressValidationSetting);
 
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
-            manualOrderSettingsControl.Location = new Point(23, sectionTitleManualOrders.Bottom + 8);
+            manualOrderSettingsControl.Location = new Point(32, sectionTitleManualOrders.Bottom + VerticalSpaceBetweenSections);
             manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
             manualOrderSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
             optionPageSettings.Controls.Add(manualOrderSettingsControl);
@@ -294,7 +297,7 @@ namespace ShipWorks.Stores.Management
             {
                 // Settings control gets location and width of the section title, so that each settings control can simply
                 // set its titles to go all the way across with anchors.
-                storeSettingsControl.Location = new Point(sectionTitleManualOrders.Left, manualOrderSettingsControl.Bottom + 8);
+                storeSettingsControl.Location = new Point(sectionTitleManualOrders.Left, manualOrderSettingsControl.Bottom + VerticalSpaceBetweenSections);
                 storeSettingsControl.Width = sectionTitleManualOrders.Width;
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(storeSettingsControl);
@@ -308,10 +311,13 @@ namespace ShipWorks.Stores.Management
                 UpdateControlPositionBelowControl(manualOrderSettingsControl);
             }
 
-            panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
-            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType) store.AddressValidationSetting;
+            panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
+            
+            // Validation Settings
+            domesticAddressValidationSetting.SelectedValue = store.DomesticAddressValidationSetting;
+            internationalAddressValidationSetting.SelectedValue = store.InternationalAddressValidationSetting;
 
-            panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
+            panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
 
             // Download on\off
             comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
@@ -337,9 +343,9 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void UpdateControlPositionBelowControl(Control control)
         {
-            panelStoreStatus.Top = control.Bottom + 8;
-            panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
-            panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
+            panelStoreStatus.Top = control.Bottom + VerticalSpaceBetweenSections;
+            panelAddressValidation.Top = panelStoreStatus.Bottom + VerticalSpaceBetweenSections;
+            panelDefaultFilters.Top = panelAddressValidation.Bottom + VerticalSpaceBetweenSections;
         }
 
         /// <summary>
@@ -360,15 +366,16 @@ namespace ShipWorks.Stores.Management
             }
 
             // Check whether we should reset any pending address validations
-            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
-            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType) addressValidationSetting.SelectedValue;
+            AddressValidationStoreSettingType currentSetting = store.DomesticAddressValidationSetting;
+            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType) domesticAddressValidationSetting.SelectedValue;
 
             resetPendingValidations = (currentSetting == AddressValidationStoreSettingType.ValidateAndApply ||
                                        currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
                                       && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
                                           newSetting == AddressValidationStoreSettingType.ValidationDisabled);
 
-            store.AddressValidationSetting = (int) addressValidationSetting.SelectedValue;
+            store.DomesticAddressValidationSetting = (AddressValidationStoreSettingType) domesticAddressValidationSetting.SelectedValue;
+            store.InternationalAddressValidationSetting = (AddressValidationStoreSettingType) internationalAddressValidationSetting.SelectedValue;
 
             return result;
         }
