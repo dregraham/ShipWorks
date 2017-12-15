@@ -27,6 +27,7 @@ namespace ShipWorks.Shipping.Editing
         readonly ShipmentTypeCode shipmentTypeCode;
 
         bool enableEditing;
+        bool isLoading;
 
         // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
@@ -185,6 +186,8 @@ namespace ShipWorks.Shipping.Editing
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
+            isLoading = true;
+
             LoadedShipments = shipments.ToList();
 
             EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
@@ -221,6 +224,8 @@ namespace ShipWorks.Shipping.Editing
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+
+            isLoading = false;
         }
 
         /// <summary>
@@ -629,9 +634,12 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
         {
-            returnsPanel.Enabled = returnShipment.Checked;
-            SaveReturnsToShipments();
-            ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+            if (!isLoading)
+            {
+                returnsPanel.Enabled = returnShipment.Checked;
+                SaveReturnsToShipments();
+                ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
