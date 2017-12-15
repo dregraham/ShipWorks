@@ -401,44 +401,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Create the condition group for searching
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            EbayBuyerIDCondition buyerCondition = new EbayBuyerIDCondition();
-            buyerCondition.TargetValue = search;
-            buyerCondition.Operator = StringOperator.BeginsWith;
-
-            EbayOrderSellingManagerRecordCondition orderRecordCondition = new EbayOrderSellingManagerRecordCondition();
-            orderRecordCondition.IsNumeric = false;
-            orderRecordCondition.StringOperator = StringOperator.BeginsWith;
-            orderRecordCondition.StringValue = search;
-
-            OrderItemCodeCondition codeCondition = new OrderItemCodeCondition();
-            codeCondition.Operator = StringOperator.BeginsWith;
-            codeCondition.TargetValue = search;
-
-            EbayItemSellingManagerRecordCondition recordCondition = new EbayItemSellingManagerRecordCondition();
-            recordCondition.IsNumeric = false;
-            recordCondition.StringOperator = StringOperator.BeginsWith;
-            recordCondition.StringValue = search;
-
-            ForAnyItemCondition anyItemCondition = new ForAnyItemCondition();
-            anyItemCondition.Container.FirstGroup.JoinType = ConditionJoinType.Any;
-            anyItemCondition.Container.FirstGroup.Conditions.Add(codeCondition);
-            anyItemCondition.Container.FirstGroup.Conditions.Add(recordCondition);
-
-            group.JoinType = ConditionJoinType.Any;
-            group.Conditions.Add(buyerCondition);
-            group.Conditions.Add(orderRecordCondition);
-            group.Conditions.Add(anyItemCondition);
-
-            return group;
-        }
-
-        /// <summary>
         /// Indicates what basic grid fields we support hyperlinking for
         /// </summary>
         public override bool GridHyperlinkSupported(IStoreEntity store, EntityBase2 entity, EntityField2 field)

@@ -1,9 +1,4 @@
-﻿PRINT N'Altering [dbo].[MivaStore]'
+﻿PRINT N'Altering [dbo].[OrderItem].[[IX_OrderItem_Code_OrderId]]'
 GO
-ALTER TABLE [dbo].[MivaStore] ADD
-[AddendumCheckoutDataEnabled] [bit] NOT NULL CONSTRAINT [DF_MivaStore_AddendumCheckoutDataEnabled] DEFAULT ((1))
-GO
-PRINT N'Dropping constraints from [dbo].[MivaStore]'
-GO
-ALTER TABLE [dbo].[MivaStore] DROP CONSTRAINT [DF_MivaStore_AddendumCheckoutDataEnabled]
+CREATE NONCLUSTERED INDEX [IX_OrderItem_Code_OrderId] ON [dbo].[OrderItem] ([Code], [OrderID])
 GO

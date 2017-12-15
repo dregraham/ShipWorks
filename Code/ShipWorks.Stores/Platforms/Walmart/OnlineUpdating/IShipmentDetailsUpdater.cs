@@ -10,11 +10,6 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
     public interface IShipmentDetailsUpdater
     {
         /// <summary>
-        /// Upload carrier and tracking information for the given orders
-        /// </summary>
-        Task UpdateShipmentDetails(IWalmartStoreEntity store, long orderID);
-
-        /// <summary>
         /// Upload carrier and tracking information for the given shipment
         /// </summary>
         /// <remarks>
