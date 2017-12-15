@@ -4,7 +4,5 @@
     <UsingTask AssemblyFile="Interapptive.MSBuild.Tasks.dll" TaskName="Interapptive.MSBuild.Tasks.ReadAssemblyInfoVersion"/>
     <UsingTask AssemblyFile="Interapptive.MSBuild.Tasks.dll" TaskName="Interapptive.MSBuild.Tasks.StripDivelementsFromLicenseFile"/>
     <UsingTask AssemblyFile="Interapptive.MSBuild.Tasks.dll" TaskName="Interapptive.MSBuild.Tasks.EnsureActiproInLicenseFile"/>
-    <UsingTask AssemblyFile="Interapptive.MSBuild.Tasks.dll" TaskName="Interapptive.MSBuild.Tasks.PackagePhpModule"/>
-    <UsingTask AssemblyFile="Interapptive.MSBuild.Tasks.dll" TaskName="Interapptive.MSBuild.Tasks.PackageMivaModules"/>
   
 </Project>
