@@ -179,6 +179,7 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSql.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
@@ -260,8 +262,10 @@
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSql.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
+    <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
@@ -317,6 +321,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />
     <Compile Include="Platforms\Jet\Content\JetCombineOrderAction.cs" />
     <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
     <Compile Include="Platforms\Jet\DTO\JetShipResponse.cs" />
@@ -370,6 +375,7 @@
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdater.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSql.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandCombineOrderAction.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
@@ -528,11 +534,13 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresQuickSearchSql.cs" />
     <Compile Include="Platforms\ProStores\Content\ProStoresCombineOrderAction.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsQuickSearchSql.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />

@@ -139,22 +139,6 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface
         }
 
         /// <summary>
-        /// Create the condition group for searching
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            CommerceInterfaceNumberCondition numberCondition = new CommerceInterfaceNumberCondition();
-            numberCondition.TargetValue = search;
-            numberCondition.Operator = StringOperator.BeginsWith;
-
-            group.Conditions.Add(numberCondition);
-
-            return group;
-        }
-
-        /// <summary>
         /// Output Template XML for Orders
         /// </summary>
         public override void GenerateTemplateOrderElements(Templates.Processing.TemplateXml.ElementOutlines.ElementOutline container, Func<OrderEntity> orderSource)

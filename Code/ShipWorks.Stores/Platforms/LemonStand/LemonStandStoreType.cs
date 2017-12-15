@@ -16,7 +16,6 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -254,6 +253,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             };
         }
 
+        /// <summary>
+        /// Create order status filter
+        /// </summary>
         private FilterEntity CreateOrderStatusFilter(string orderStatus)
         {
             // [All]
@@ -293,22 +295,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Create the search conditions for searching on LemonStand Order ID
+        /// Get online status choices
         /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            LemonStandOrderIdCondition condition = new LemonStandOrderIdCondition
-            {
-                TargetValue = search,
-                Operator = StringOperator.BeginsWith
-            };
-            group.Conditions.Add(condition);
-
-            return group;
-        }
-
         public override ICollection<string> GetOnlineStatusChoices()
         {
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity) Store);
