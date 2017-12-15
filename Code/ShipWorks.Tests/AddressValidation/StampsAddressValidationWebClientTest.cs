@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.AddressValidation
             resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>()));
             resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult, It.IsAny<int>()));
         }
-        
+
         [Fact]
         public async Task ValidateAddressAsync_ReturnsValidationError_WhenNotIsSuccessfulMatch()
         {
@@ -71,10 +70,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
             var result = await testObject.ValidateAddressAsync(new AddressAdapter());
-            
+
             Assert.Equal("bad address", result.AddressValidationError);
         }
-    
+
         [Theory]
         [InlineData(AddressType.Invalid, true, false, "Y", "MO", true, ResidentialDeliveryIndicatorType.No)]
         [InlineData(AddressType.SecondaryNotFound, true, true, "H", "MO", true, ResidentialDeliveryIndicatorType.No)]
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.Equal(expectedAddressType, result.AddressType);
         }
 
-        public void SetupUpspsAddressValidationResults(
+        private void SetupUpspsAddressValidationResults(
             bool isSuccessfulMatch,
             bool isCityStateZipOk,
             string footNoteValue,
