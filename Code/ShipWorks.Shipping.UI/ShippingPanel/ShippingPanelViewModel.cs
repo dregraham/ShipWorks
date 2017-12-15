@@ -10,6 +10,7 @@ using Autofac;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -585,15 +586,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
 
             ShipmentViewModel.Load(fromShipmentAdapter);
 
-            Origin.Load(fromShipmentAdapter.Shipment.OriginPerson);
-            Destination.Load(fromShipmentAdapter.Shipment.ShipPerson);
-            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidationDisabled;
+            Origin.Load(fromShipmentAdapter.Shipment.OriginPerson, fromShipmentAdapter.Store);
+            Destination.Load(fromShipmentAdapter.Shipment.ShipPerson, fromShipmentAdapter.Store);
+            Destination.IsAddressValidationEnabled = fromShipmentAdapter.Store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidationDisabled;
 
             AllowEditing = !fromShipmentAdapter.Shipment.Processed;
 
             DestinationAddressEditableState = loadedOrderSelection.IsDestinationAddressEditableFor(fromShipmentAdapter.Shipment.ShipmentID);
 
-            Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType);
+            Origin.SetAddressFromOrigin(OriginAddressType, fromShipmentAdapter.Shipment?.OrderID ?? 0, AccountId, ShipmentType, fromShipmentAdapter.Store);
 
             SupportsMultiplePackages = fromShipmentAdapter.SupportsMultiplePackages;
             TrackingNumber = fromShipmentAdapter.Shipment.TrackingNumber;

@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 
                 iParcelLabelService iParcelLabelService = labelService as iParcelLabelService;
 
-                DataSet response = (iParcelLabelService.Create(shipment) as iParcelDownloadedLabelData).Response;
+                DataSet response = (iParcelLabelService.Create(shipment).Result as iParcelDownloadedLabelData).Response;
 
                 decimal responseInsuranceValue = 0m;
 

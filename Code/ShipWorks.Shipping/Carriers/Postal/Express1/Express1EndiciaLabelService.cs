@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -31,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Creates the Endicia Express1 label
         /// </summary>
         /// <param name="shipment"></param>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             express1EndiciaShipmentType.ValidateShipment(shipment);
 
@@ -41,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                     express1EndiciaShipmentType.LogEntryFactory,
                     express1EndiciaShipmentType.CertificateInspector);
                 LabelRequestResponse response = client.ProcessShipment(shipment, express1EndiciaShipmentType);
-                return createDownloadedLabelData(shipment, response);
+                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, response));
             }
             catch (EndiciaException ex)
             {

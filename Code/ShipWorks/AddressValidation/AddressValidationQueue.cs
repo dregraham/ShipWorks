@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -248,9 +249,9 @@ namespace ShipWorks.AddressValidation
                 if (entityToValidate != null && validatableStatuses.Contains((int) entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
                 {
                     StoreEntity store = StoreManager.GetRelatedStore((long) entityToValidate.Fields["OrderID"].CurrentValue);
-                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
+                    bool shouldAutomaticallyAdjustAddress = store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    Task task = addressValidator.ValidateAsync(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
+                    Task task = addressValidator.ValidateAsync(entityToValidate, store, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))

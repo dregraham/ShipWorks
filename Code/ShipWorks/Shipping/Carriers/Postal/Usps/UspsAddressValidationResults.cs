@@ -48,5 +48,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Gets or sets the status codes.
         /// </summary>
         public StatusCodes StatusCodes { get; set; }
+
+        /// <summary>
+        /// VerificationLevel of the result
+        /// </summary>
+        public AddressVerificationLevel VerificationLevel { get; set; }
+
+        /// <summary>
+        /// Text for the cleansing result
+        /// </summary>
+        public string AddressCleansingResult { get; set; }
     }
 }

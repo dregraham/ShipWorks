@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
 {
@@ -10,7 +11,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create a label
         /// </summary>
-        IDownloadedLabelData Create(ShipmentEntity shipment);
+        Task<IDownloadedLabelData> Create(ShipmentEntity shipment);
 
         /// <summary>
         /// Voids the shipment

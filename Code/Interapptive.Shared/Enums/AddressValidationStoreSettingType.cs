@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace ShipWorks.AddressValidation.Enums
+namespace Interapptive.Shared.Enums
 {
     /// <summary>
     /// Determines how address validation should be performed for a store
