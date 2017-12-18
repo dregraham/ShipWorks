@@ -18,9 +18,6 @@ Albacore.configure do |config|
 		unless File.exists? msbuild.command
 			msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe"
 		end
-		unless File.exists? msbuild.command
-			msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
-		end
 		#msbuild.properties = { TreatWarningsAsErrors: true }
 	end
 end
