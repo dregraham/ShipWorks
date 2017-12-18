@@ -28,6 +28,7 @@
     <submoduleCfg class="list" />
     <extensions />
   </scm>
+  <assignedNode>windows</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
@@ -36,8 +37,8 @@
   <customWorkspace>c:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake build:public_installer[0.0.0]</command>
-    </hudson.tasks.Shell>    
+      <command>bundle exec rake build:public_installer[0.0.0]</command>
+    </hudson.tasks.Shell>
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
@@ -51,7 +52,7 @@
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
       <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
-    </hudson.plugins.logparser.LogParserPublisher>    
+    </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.15">
       <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com j.winchester@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>

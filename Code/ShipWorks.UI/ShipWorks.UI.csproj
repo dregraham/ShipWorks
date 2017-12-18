@@ -279,8 +279,8 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">

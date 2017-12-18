@@ -16,6 +16,7 @@
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>windows</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -40,7 +41,7 @@
           <wrapperName>htmlpublisher-wrapper.html</wrapperName>
         </htmlpublisher.HtmlPublisherTarget>
       </reportTargets>
-    </htmlpublisher.HtmlPublisher>    
+    </htmlpublisher.HtmlPublisher>
 	<hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.39">
       <recipientList>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com j.winchester@shipworks.com</recipientList>
       <configuredTriggers>

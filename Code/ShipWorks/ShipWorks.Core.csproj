@@ -11001,8 +11001,8 @@
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">

@@ -16,6 +16,7 @@
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>windows</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -25,10 +26,10 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake test:integration[ContinuousIntegration]</command>
+      <command>bundle exec rake test:integration[ContinuousIntegration]</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>    
+  <publishers>
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
