@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -82,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 freightBookingNumber.ReadMultiText(t => shipment.FedEx.FreightBookingNumber = t);
                 freightInsideDelivery.ReadMultiCheck(c => shipment.FedEx.FreightInsideDelivery = c);
                 freightInsidePickup.ReadMultiCheck(c => shipment.FedEx.FreightInsidePickup = c);
-                freightLoadAndCount.ReadMultiText(t => { int count; if (int.TryParse(t, out count)) shipment.FedEx.FreightLoadAndCount = count; });
+                freightLoadAndCount.ReadMultiText(t => { if (int.TryParse(t, out int count)) shipment.FedEx.FreightLoadAndCount = count; });
             }
         }
     }
