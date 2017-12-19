@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Startup;
@@ -64,14 +65,16 @@ namespace ShipWorks.Tests.Integration.Shared
                     service.InitializeForCurrentDatabase(executionMode);
                 }
 
-                foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+                UserManager.InitializeForCurrentUser();
+                LogSession.Initialize();
+                UserSession.InitializeForCurrentDatabase(executionMode);
+                UspsAccountManager.InitializeForCurrentSession();
+
+                IEnumerable<IInitializeForCurrentSession> sessionInitializers = IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>();
+                foreach (IInitializeForCurrentSession service in sessionInitializers)
                 {
                     service.InitializeForCurrentSession();
                 }
-
-                UserManager.InitializeForCurrentUser();
-
-                UserSession.InitializeForCurrentDatabase(executionMode);
 
                 if (additionalInitialization != null)
                 {

@@ -113,18 +113,25 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
                     await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
                 }
 
-                var childOrder1 = await GetOrderWithItems("GG-ABCD-WSTB-337S-VKMY");
-                var childOrder2 = await GetOrderWithItems("GG-WXYZ-WSTB-337S-VKMY");
-
-                Assert.Null(childOrder1);
-                Assert.Null(childOrder2);
-
-                var mergedOrder = await GetOrderWithItems("GG-ZPKZ-WSTB-337S-VKMY");
+                var mergedOrder = await GetOrderWithItemsByParentOrderId("12345");
                 var itemNames = mergedOrder.OrderItems.Select(x => x.Name).ToList();
 
                 Assert.Contains("Widget A", itemNames);
                 Assert.Contains("Widget B", itemNames);
-                Assert.Contains("Widget C", itemNames);
+            }
+        }
+
+        /// <summary>
+        /// Get the max order id for the given store
+        /// </summary>
+        private static async Task<GrouponOrderEntity> GetOrderWithItemsByParentOrderId(string parentOrderID)
+        {
+            using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
+            {
+                var query = new QueryFactory().GrouponOrder
+                        .Where(GrouponOrderFields.ParentOrderID == parentOrderID)
+                        .WithPath(OrderEntity.PrefetchPathOrderItems);
+                return await sqlAdapter.FetchFirstAsync(query) as GrouponOrderEntity;
             }
         }
 

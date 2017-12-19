@@ -20,6 +20,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Data.Controls
 {
@@ -660,11 +661,7 @@ namespace ShipWorks.Data.Controls
 
                 if (originalAddress != newAddress)
                 {
-                    if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
-                    {
-                        newAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                        newAddress.AddressType = (int) AddressType.NotChecked;
-                    }
+                    newAddress.UpdateValidationStatus();
 
                     newAddress.AddressValidationSuggestionCount = 0;
                     newAddress.AddressValidationError = string.Empty;
@@ -1010,11 +1007,7 @@ namespace ShipWorks.Data.Controls
                 lastValidatedAddress.AddressValidationError = string.Empty;
                 lastValidatedAddress.AddressValidationSuggestionCount = 0;
 
-                if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
-                {
-                    lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
-                    lastValidatedAddress.AddressType = (int) AddressType.NotChecked;
-                }
+                lastValidatedAddress.UpdateValidationStatus();
 
                 validatedAddresses.Clear();
                 shouldSaveAddressSuggestions = true;
@@ -1043,7 +1036,7 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses);
+            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses, store);
         }
 
         /// <summary>
@@ -1106,7 +1099,7 @@ namespace ShipWorks.Data.Controls
             }
             else
             {
-                if (store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                if (store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidationDisabled)
                 {
                     addressValidationPanel.Visible = false;
                 }
@@ -1126,15 +1119,15 @@ namespace ShipWorks.Data.Controls
             dummyAddress.CountryCode = CountryCode;
             dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
 
-            addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
-            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+            addressValidationStatusIcon.Image = dummyAddress.GetAddressValidationStatusIcon();
+            addressValidationStatusText.Text = dummyAddress.GetAddressValidationStatusText();
 
             addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
             addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
 
             addressValidationPanel.Visible = true;
 
-            validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
+            validateAddress.Visible = AddressValidationPolicy.ShouldValidate((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
 
             addressValidationSuggestionLink.Left = validateAddress.Visible ?
                 validateAddress.Left - addressValidationSuggestionLink.Width - 6 :
@@ -1163,7 +1156,7 @@ namespace ShipWorks.Data.Controls
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
             AddressValidator validator = new AddressValidator();
-            Task task = validator.ValidateAsync(address, true, (addressEntity, entities) =>
+            Task task = validator.ValidateAsync(address, store, true, (addressEntity, entities) =>
             {
                 shouldSaveAddressSuggestions = true;
 

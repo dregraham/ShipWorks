@@ -134,6 +134,9 @@
       <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -176,6 +179,7 @@
     <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
@@ -202,6 +206,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSql.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorDistributionCenter.cs" />
@@ -257,8 +262,10 @@
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSql.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
+    <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
@@ -314,6 +321,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />
     <Compile Include="Platforms\Jet\Content\JetCombineOrderAction.cs" />
     <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
     <Compile Include="Platforms\Jet\DTO\JetShipResponse.cs" />
@@ -367,6 +375,7 @@
     <Compile Include="Platforms\Jet\JetWebClient.cs" />
     <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Infopia\OnlineUpdating\InfopiaOnlineUpdater.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSql.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandCombineOrderAction.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandOrderUpdateTask.cs" />
     <Compile Include="Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
@@ -523,11 +532,13 @@
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\OrderMotionOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\PayPal\Content\PayPalCombineOrderAction.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresQuickSearchSql.cs" />
     <Compile Include="Platforms\ProStores\Content\ProStoresCombineOrderAction.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsQuickSearchSql.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
@@ -651,8 +662,8 @@
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">

@@ -24,6 +24,11 @@ namespace ShipWorks.AddressValidation.Enums
         [ImageResource("earth16")]
         WillNotValidate = 1,
 
+        [Description("International")]
+        [Details("We have limited data for this address only the city, state, and ZIP Code fields have been validated")]
+        [ImageResource("check16")]
+        InternationalAmbiguous = 12,
+
         [Description("Invalid")]
         [Details("The address matching system was unable to find an exact match for the city, state, and ZIP Code.\r\nWe suggest correcting this before creating your label.")]
         [ImageResource("error16")]

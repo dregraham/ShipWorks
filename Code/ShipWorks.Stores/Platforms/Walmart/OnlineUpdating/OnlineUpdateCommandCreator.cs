@@ -10,6 +10,7 @@ using log4net;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
@@ -22,19 +23,22 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
     {
         private readonly IShipmentDetailsUpdater onlineUpdater;
         private readonly IMessageHelper messageHelper;
+        private readonly IShippingManager shippingManager;
+        private readonly IOrderManager orderManager;
         private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WalmartOnlineUpdateInstanceCommands"/> class.
         /// </summary>
-        /// <param name="store">The store.</param>
-        /// <param name="onlineUpdaterFactory">The online updater.</param>
-        /// <param name="logFactory">The log factory.</param>
         public WalmartOnlineUpdateInstanceCommands(IShipmentDetailsUpdater onlineUpdater,
             IMessageHelper messageHelper,
-            Func<Type, ILog> logFactory)
+            Func<Type, ILog> logFactory,
+            IShippingManager shippingManager,
+            IOrderManager orderManager)
         {
             this.messageHelper = messageHelper;
+            this.shippingManager = shippingManager;
+            this.orderManager = orderManager;
             this.onlineUpdater = onlineUpdater;
             log = logFactory(GetType());
         }
@@ -70,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         ///  </summary>
         public async Task OnUploadShipmentDetails(IWalmartStoreEntity store, IMenuCommandExecutionContext context)
         {
-            var results = await context.SelectedKeys
+            IEnumerable<IResult> results = await context.SelectedKeys
                 .SelectWithProgress(messageHelper,
                     "Upload Shipment Details",
                     "ShipWorks is uploading shipment information.",
@@ -78,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                     x => Task.Run(() => UploadShipmentDetailsCallback(store, x)))
                 .ConfigureAwait(true);
 
-            var exceptions = results.Select(x => x.Exception).Where(x => x != null);
+            IEnumerable<Exception> exceptions = results.Select(x => x.Exception).Where(x => x != null);
             context.Complete(exceptions, MenuCommandResult.Error);
         }
 
@@ -89,7 +93,13 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         {
             try
             {
-                await onlineUpdater.UpdateShipmentDetails(store, orderID).ConfigureAwait(false);
+                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+                if (shipment != null)
+                {
+                    await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
+                    await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
+                }
+                
                 return Result.FromSuccess();
             }
             catch (WalmartException ex)

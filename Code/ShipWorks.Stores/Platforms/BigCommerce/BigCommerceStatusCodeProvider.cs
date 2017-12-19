@@ -6,6 +6,7 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.BigCommerce
 {
@@ -33,34 +34,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         protected override Dictionary<int, string> GetCodeMapFromOnline()
         {
-            try
-            {
-                Dictionary<int, string> codeMap = GetCodeMap(Store as IBigCommerceStoreEntity);
-
-                // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
-                if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
-                {
-                    codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
-                }
-
-                return codeMap;
-            }
-            catch (BigCommerceException ex)
-            {
-                log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex);
-
-                return null;
-            }
+            return Task.Run(() => 
+            Result.Handle<BigCommerceException>()
+                .LogError(ex => log.ErrorFormat("Failed to fetch online status codes from BigCommerce: {0}", ex))
+                .ExecuteAsync(() => GetCodeMapAsync(Store as BigCommerceStoreEntity))
+            ).Result.Value;
         }
-
-        /// <summary>
-        /// Get the code map from the given store
-        /// </summary>
-        /// <remarks>
-        /// This needs to be run in a new task so that we can block on it without deadlock
-        /// </remarks>
-        private Dictionary<int, string> GetCodeMap(IBigCommerceStoreEntity store) =>
-            Task.Run(() => GetCodeMapAsync(store)).Result;
 
         /// <summary>
         /// Get the code map from the given store
@@ -68,8 +47,16 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         private async Task<Dictionary<int, string>> GetCodeMapAsync(IBigCommerceStoreEntity store)
         {
             IBigCommerceWebClient client = webClientFactory.Create(store);
-            var codes = await client.FetchOrderStatuses().ConfigureAwait(false);
-            return codes.ToDictionary(x => x.StatusID, x => x.StatusText);
+            IEnumerable<BigCommerceOrderStatus> codes = await client.FetchOrderStatuses().ConfigureAwait(false);
+            Dictionary<int, string> codeMap = codes.ToDictionary(x => x.StatusID, x => x.StatusText);
+
+            // BigCommerce has "Deleted" status, but does not return it via the api.  So manually add it here.
+            if (!codeMap.Keys.Contains(BigCommerceConstants.OnlineStatusDeletedCode))
+            {
+                codeMap.Add(BigCommerceConstants.OnlineStatusDeletedCode, BigCommerceConstants.OnlineStatusDeletedName);
+            }
+
+            return codeMap;
         }
     }
 }

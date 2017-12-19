@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Other
@@ -12,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Creates an Other label
         /// </summary>
         /// <param name="shipment"></param>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
             {
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                 throw new ShippingException("No service is specified.");
             }
 
-            return new NullDownloadedLabelData();
+            return Task.FromResult<IDownloadedLabelData>(new NullDownloadedLabelData());
         }
 
         /// <summary>

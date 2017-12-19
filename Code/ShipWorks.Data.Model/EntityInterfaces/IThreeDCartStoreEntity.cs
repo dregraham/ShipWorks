@@ -57,6 +57,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean RestUser { get; }
+        /// <summary> The OrderIDUpgradeFixDate property of the Entity ThreeDCartStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ThreeDCartStore"."OrderIDUpgradeFixDate"<br/>
+        /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.DateTime> OrderIDUpgradeFixDate { get; }
         
         
         

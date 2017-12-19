@@ -16,6 +16,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Stores;
 
 namespace ShipWorks.UI.Controls.AddressControl
 {
@@ -35,6 +36,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         private long? entityId;
         private string prefix;
         private AddressAdapter lastValidatedAddress;
+        private StoreEntity store;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -58,7 +60,6 @@ namespace ShipWorks.UI.Controls.AddressControl
             this.messageHelper = messageHelper;
             this.validatedAddressScope = validatedAddressScope;
             this.addressSelector = addressSelector;
-
             AddressSuggestions = Enumerable.Empty<KeyValuePair<string, ValidatedAddressEntity>>();
             ValidateCommand = new RelayCommand(ValidateAddress);
             ShowValidationMessageCommand = new RelayCommand(ShowValidationMessage);
@@ -91,9 +92,10 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Load the person
         /// </summary>
-        public virtual void Load(PersonAdapter person)
+        public virtual void Load(PersonAdapter person, StoreEntity store)
         {
             addressValidationSubscriptions?.Dispose();
+            this.store = store;
 
             Populate(person);
 
@@ -103,7 +105,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 prefix = person.FieldPrefix;
 
                 IEnumerable<ValidatedAddressEntity> validatedAddresses = validatedAddressScope.LoadValidatedAddresses(entityId.GetValueOrDefault(), prefix);
-                AddressSuggestions = BuildDictionary(validatedAddresses);
+                AddressSuggestions = BuildDictionary(validatedAddresses, person.AddressValidationError);
 
                 PopulateValidationDetails(person);
             }
@@ -140,6 +142,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// </summary>
         private void PopulateValidationDetails(PersonAdapter person)
         {
+            ValidationMessageLabel = addressSelector.DisplayValidationSuggestionLabel(person);
             ValidationMessage = person.AddressValidationError;
             SuggestionCount = person.AddressValidationSuggestionCount;
             ValidationStatus = (AddressValidationStatusType) person.AddressValidationStatus;
@@ -186,12 +189,12 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Set the address from the specified origin address type
         /// </summary>
-        public virtual void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType)
+        public virtual void SetAddressFromOrigin(long addressId, long orderId, long accountId, ShipmentTypeCode shipmentType, StoreEntity store)
         {
             PersonAdapter address = shippingOriginManager.GetOriginAddress(addressId, orderId, accountId, shipmentType);
             if (address != null)
             {
-                Load(address);
+                Load(address, store);
             }
         }
 
@@ -217,7 +220,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 SaveToEntity(personAdapter);
                 personAdapter.CopyTo(addressAdapter);
 
-                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, true);
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, store, true);
 
                 // See if the loaded address has changed since we started validating
                 if (currentEntityId != entityId)
@@ -228,7 +231,7 @@ namespace ShipWorks.UI.Controls.AddressControl
                 addressAdapter.CopyTo(personAdapter);
 
                 validatedAddressScope.StoreAddresses(entityId.Value, validationData.AllAddresses, prefix);
-                AddressSuggestions = BuildDictionary(validationData.AllAddresses);
+                AddressSuggestions = BuildDictionary(validationData.AllAddresses, addressAdapter.AddressValidationError);
 
                 PopulateAddress(personAdapter);
                 PopulateValidationDetails(personAdapter);
@@ -247,7 +250,7 @@ namespace ShipWorks.UI.Controls.AddressControl
             PersonAdapter person = new PersonAdapter();
             SaveToEntity(person);
 
-            AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion);
+            AddressAdapter changedAddress = await addressSelector.SelectAddress(person.ConvertTo<AddressAdapter>(), addressSuggestion, store);
             PersonAdapter changedPerson = changedAddress.ConvertTo<PersonAdapter>();
 
             PopulateAddress(changedPerson);
@@ -259,11 +262,18 @@ namespace ShipWorks.UI.Controls.AddressControl
         /// <summary>
         /// Build a dictionary of addresses for use in the UI
         /// </summary>
-        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses)
+        private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> BuildDictionary(IEnumerable<ValidatedAddressEntity> validatedAddresses, string message)
         {
             // Stamps has sent us duplicates, so we can't use a dictionary here
-            return validatedAddresses
-                .Select(x => new KeyValuePair<string, ValidatedAddressEntity>(addressSelector.FormatAddress(x), x));
+            List<KeyValuePair<string, ValidatedAddressEntity>> addresses = validatedAddresses
+                .Select(x => new KeyValuePair<string, ValidatedAddressEntity>(addressSelector.FormatAddress(x), x)).ToList();
+
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                addresses.Insert(0, new KeyValuePair<string, ValidatedAddressEntity>(message, null));
+            }
+
+            return addresses;
         }
 
         /// <summary>

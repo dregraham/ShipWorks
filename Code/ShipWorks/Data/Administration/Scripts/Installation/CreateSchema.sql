@@ -780,6 +780,8 @@ ALTER TABLE [dbo].[OrderItem] ENABLE CHANGE_TRACKING
 GO
 CREATE NONCLUSTERED INDEX [IX_OrderItem_OriginalOrderID] ON [dbo].[OrderItem] ([OriginalOrderID] ASC)
 GO
+CREATE NONCLUSTERED INDEX [IX_OrderItem_Code_OrderId] ON [dbo].[OrderItem] ([Code], [OrderID])
+GO
 PRINT N'Creating [dbo].[AmazonOrderItem]'
 GO
 CREATE TABLE [dbo].[AmazonOrderItem]
@@ -931,7 +933,8 @@ CREATE TABLE [dbo].[Store]
 [AutoDownload] [bit] NOT NULL,
 [AutoDownloadMinutes] [int] NOT NULL,
 [AutoDownloadOnlyAway] [bit] NOT NULL,
-[AddressValidationSetting] [int] NOT NULL,
+[DomesticAddressValidationSetting] [int] NOT NULL,
+[InternationalAddressValidationSetting] [int] NOT NULL,
 [ComputerDownloadPolicy] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultEmailAccountID] [bigint] NOT NULL,
 [ManualOrderPrefix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1379,6 +1382,11 @@ PRINT N'Creating index [IX_ChannelAdvisorOrder_IsPrime] on [dbo].[ChannelAdvisor
 GO
 CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_IsPrime] ON [dbo].[ChannelAdvisorOrder]([IsPrime])
 GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_CustomerOrderIdentifier_OrderID]
+	ON [dbo].[ChannelAdvisorOrder] ([CustomOrderIdentifier], [OrderID])
+GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
@@ -1426,7 +1434,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1576,6 +1585,13 @@ GO
 PRINT N'Creating index [IX_EbayOrderItem_OrderID] on [dbo].[EbayOrderItem]'
 GO
 CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_OrderID] ON [dbo].[EbayOrderItem] ([OrderID])
+GO
+CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EbayItemID_EbayTransactionID] ON [dbo].[EbayOrderItem] ([EbayItemID],[EbayTransactionID])
+GO
+CREATE NONCLUSTERED INDEX [SW_EbayOrderItem_EffectiveCheckoutStatus_EbayOrderItemID] ON [dbo].[EbayOrderItem] ([EffectiveCheckoutStatus], [OrderItemID])
+GO
+CREATE NONCLUSTERED INDEX [IX_EbayOrderItem_SellingManagerRecord_OrderID] ON [dbo].[EbayOrderItem]
+	([SellingManagerRecord] ASC, [OrderID] ASC)
 GO
 PRINT N'Creating [dbo].[EbayStore]'
 GO
@@ -2630,7 +2646,8 @@ CREATE TABLE [dbo].[MivaStore]
 [LiveManualOrderNumbers] [bit] NOT NULL,
 [SebenzaCheckoutDataEnabled] [bit] NOT NULL,
 [OnlineUpdateStrategy] [int] NOT NULL,
-[OnlineUpdateStatusChangeEmail] [bit] NOT NULL
+[OnlineUpdateStatusChangeEmail] [bit] NOT NULL,
+[AddendumCheckoutDataEnabled] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MivaStore] on [dbo].[MivaStore]'
@@ -3247,6 +3264,9 @@ PRINT N'Creating primary key [PK_ProStoresOrder] on [dbo].[ProStoresOrder]'
 GO
 ALTER TABLE [dbo].[ProStoresOrder] ADD CONSTRAINT [PK_ProStoresOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+CREATE NONCLUSTERED INDEX [IX_ProStoresOrder_ConfirmationNumber] 
+	ON [dbo].[ProStoresOrder] ( [ConfirmationNumber] ASC )
+GO
 PRINT N'Creating [dbo].[ProStoresStore]'
 GO
 CREATE TABLE [dbo].[ProStoresStore]
@@ -3438,6 +3458,10 @@ GO
 PRINT N'Creating primary key [PK_SearsOrder] on [dbo].[SearsOrder]'
 GO
 ALTER TABLE [dbo].[SearsOrder] ADD CONSTRAINT [PK_SearsOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_SearsOrder_PoNumber_OrderID] on [dbo].[SearsOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SearsOrder_PoNumber_OrderID] ON [dbo].[SearsOrder] ([PoNumber], [OrderID])
 GO
 PRINT N'Creating [dbo].[SearsOrderItem]'
 GO
@@ -3902,7 +3926,8 @@ CREATE TABLE [dbo].[ThreeDCartStore]
 [TimeZoneID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [StatusCodes] [xml] NULL,
 [DownloadModifiedNumberOfDaysBack] [int] NOT NULL,
-[RestUser] [bit] NOT NULL
+[RestUser] [bit] NOT NULL,
+[OrderIDUpgradeFixDate] [datetime] NULL 
 )
 GO
 PRINT N'Creating primary key [PK_ThreeDCartStore] on [dbo].[ThreeDCartStore]'
@@ -4575,7 +4600,9 @@ PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeCon
 GO
 ALTER TABLE [dbo].[FilterNodeContentDirty] ADD CONSTRAINT [PK_FilterNodeContentDirty] PRIMARY KEY CLUSTERED  ([ObjectID], [ColumnsUpdated], [ComputerID]) WITH (IGNORE_DUP_KEY=ON)
 GO
-
+CREATE INDEX [SW_FilterNodeContentDirty_FilterNodeContentDirtyID] 
+	ON [dbo].[FilterNodeContentDirty] (FilterNodeContentDirtyID)
+GO
 PRINT N'Creating [dbo].[FilterNodeRootDirty]'
 GO
 CREATE TABLE [dbo].[FilterNodeRootDirty]
@@ -6410,9 +6437,9 @@ PRINT N'Creating primary key [PK_AmazonOrderSearch] on [dbo].[AmazonOrderSearch]
 GO
 ALTER TABLE [dbo].[AmazonOrderSearch] ADD CONSTRAINT [PK_AmazonOrderSearch] PRIMARY KEY CLUSTERED  ([AmazonOrderSearchID])
 GO
-PRINT N'Creating index [IX_AmazonOrderSearch_AmazonOrderID] on [dbo].[AmazonOrderSearch]'
+PRINT N'Creating index [IX_AmazonOrderSearch_AmazonOrderID_OrderID] on [dbo].[AmazonOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_AmazonOrderSearch_AmazonOrderID] ON [dbo].[AmazonOrderSearch] ([AmazonOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_AmazonOrderSearch_AmazonOrderID_OrderID] ON [dbo].[AmazonOrderSearch] ([AmazonOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderSearch]'
 GO
@@ -6428,9 +6455,10 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrderSearch] on [dbo].[ChannelAdv
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrderSearch] ADD CONSTRAINT [PK_ChannelAdvisorOrderSearch] PRIMARY KEY CLUSTERED  ([ChannelAdvisorOrderSearchID])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier] on [dbo].[ChannelAdvisorOrderSearch]'
+PRINT N'Creating index [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID] on [dbo].[ChannelAdvisorOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier] ON [dbo].[ChannelAdvisorOrderSearch] ([CustomOrderIdentifier]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrderSearch_CustomOrderIdentifier_OrderID]
+	ON [dbo].[ChannelAdvisorOrderSearch] ([CustomOrderIdentifier], [OrderID])
 GO
 PRINT N'Creating [dbo].[ClickCartProOrderSearch]'
 GO
@@ -6484,9 +6512,9 @@ PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
 GO
 ALTER TABLE [dbo].[EbayOrderSearch] ADD CONSTRAINT [PK_EbayOrderSearch] PRIMARY KEY CLUSTERED  ([EbayOrderSearchID])
 GO
-PRINT N'Creating index [IX_EbayOrderSearch_EbayBuyerID] on [dbo].[EbayOrderSearch]'
+PRINT N'Creating index [IX_EbayOrderSearch_EbayBuyerID_OrderID] on [dbo].[EbayOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_EbayOrderSearch_EbayBuyerID] ON [dbo].[EbayOrderSearch] ([EbayBuyerID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_EbayOrderSearch_EbayBuyerID_OrderID] ON [dbo].[EbayOrderSearch] ([EbayBuyerID], [OrderID])
 GO
 PRINT N'Creating [dbo].[GrouponOrderSearch]'
 GO
@@ -6503,13 +6531,13 @@ PRINT N'Creating primary key [PK_GrouponOrderSearch] on [dbo].[GrouponOrderSearc
 GO
 ALTER TABLE [dbo].[GrouponOrderSearch] ADD CONSTRAINT [PK_GrouponOrderSearch] PRIMARY KEY CLUSTERED  ([GrouponOrderSearchID])
 GO
-PRINT N'Creating index [IX_GrouponOrderSearch_GrouponOrderID] on [dbo].[GrouponOrderSearch]'
+PRINT N'Creating index [IX_GrouponOrderSearch_GrouponOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_GrouponOrderID] ON [dbo].[GrouponOrderSearch] ([GrouponOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_GrouponOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([GrouponOrderID], [OrderID])
 GO
-PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID] on [dbo].[GrouponOrderSearch]'
+PRINT N'Creating index [IX_GrouponOrderSearch_ParentOrderID_OrderID] on [dbo].[GrouponOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_GrouponOrderSearch_ParentOrderID_OrderID] ON [dbo].[GrouponOrderSearch] ([ParentOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[JetOrderSearch]'
 GO
@@ -6543,9 +6571,9 @@ PRINT N'Creating primary key [PK_LemonStandOrderSearch] on [dbo].[LemonStandOrde
 GO
 ALTER TABLE [dbo].[LemonStandOrderSearch] ADD CONSTRAINT [PK_LemonStandOrderSearch] PRIMARY KEY CLUSTERED  ([LemonStandOrderSearchID])
 GO
-PRINT N'Creating index [IX_LemonStandOrderSearch_LemonStandOrderID] on [dbo].[LemonStandOrderSearch]'
+PRINT N'Creating index [IX_LemonStandOrderSearch_LemonStandOrderID_OrderID] on [dbo].[LemonStandOrderSearch]'
 GO
-CREATE NONCLUSTERED INDEX [IX_LemonStandOrderSearch_LemonStandOrderID] ON [dbo].[LemonStandOrderSearch] ([LemonStandOrderID]) INCLUDE ([OrderID])
+CREATE NONCLUSTERED INDEX [IX_LemonStandOrderSearch_LemonStandOrderID_OrderID] ON [dbo].[LemonStandOrderSearch] ([LemonStandOrderID], [OrderID])
 GO
 PRINT N'Creating [dbo].[MagentoOrderSearch]'
 GO
@@ -6636,6 +6664,9 @@ PRINT N'Creating primary key [PK_ProStoresOrderSearch] on [dbo].[ProStoresOrderS
 GO
 ALTER TABLE [dbo].[ProStoresOrderSearch] ADD CONSTRAINT [PK_ProStoresOrderSearch] PRIMARY KEY CLUSTERED  ([ProStoresOrderSearchID])
 GO
+CREATE NONCLUSTERED INDEX [IX_ProStoresOrderSearch_ConfirmationNumber] 
+	ON [dbo].[ProStoresOrderSearch] ( [ConfirmationNumber] ASC )
+GO
 PRINT N'Creating [dbo].[SearsOrderSearch]'
 GO
 CREATE TABLE [dbo].[SearsOrderSearch]
@@ -6649,6 +6680,10 @@ GO
 PRINT N'Creating primary key [PK_SearsOrderSearch] on [dbo].[SearsOrderSearch]'
 GO
 ALTER TABLE [dbo].[SearsOrderSearch] ADD CONSTRAINT [PK_SearsOrderSearch] PRIMARY KEY CLUSTERED  ([SearsOrderSearchID])
+GO
+PRINT N'Creating index [IX_SearsOrderSearch_PoNumber_OrderID] on [dbo].[SearsOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SearsOrderSearch_PoNumber_OrderID] ON [dbo].[SearsOrderSearch] ([PoNumber], [OrderID])
 GO
 PRINT N'Creating [dbo].[ShopifyOrderSearch]'
 GO

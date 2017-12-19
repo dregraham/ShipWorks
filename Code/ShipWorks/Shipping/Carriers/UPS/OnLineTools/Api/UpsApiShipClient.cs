@@ -570,7 +570,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         xmlWriter.WriteElementString("CommodityCode", product.HarmonizedCode);
                     }
 
-                    xmlWriter.WriteElementString("OriginCountryCode", product.CountryOfOrigin);
+                    // Need to translate UK to GB for customs country of origin
+                    string productCountryOfOrigin = product.CountryOfOrigin != "UK" ? product.CountryOfOrigin : "GB";
+                    
+                    xmlWriter.WriteElementString("OriginCountryCode", productCountryOfOrigin);
 
                     xmlWriter.WriteEndElement();
                 }

@@ -66,7 +66,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         }
 
         /// <summary>
-        /// Adding a certificate to the sytem cert store
+        /// Adding a certificate to the system cert store
         /// </summary>
         [Fact]
         public void InstallCertificate()
