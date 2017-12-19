@@ -172,8 +172,10 @@ namespace ShipWorks.AddressValidation
             {
                 return true;
             }
-
-            if (addressAdapter.AddressType == (int) AddressType.NotChecked &&
+            
+            // If there is an error stored in the adapter and the address is international and its status is not bad address
+            // we assume that it is a limited data address
+            if (!string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) &&
                 SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus) &&
                 !addressAdapter.IsDomesticCountry())
             {
