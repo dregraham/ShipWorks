@@ -11,8 +11,6 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping
 {
@@ -31,19 +29,19 @@ namespace ShipWorks.Shipping
                 .OrderBy(GetSortValue);
 
         public static List<ShipmentType> ShipmentTypes =>
-            ShipmentTypeCodes.Select(x => GetType(x)).ToList();
+            ShipmentTypeCodes.Select(GetType).ToList();
 
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
         public static List<ShipmentType> EnabledShipmentTypes =>
-            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s)).Select(x => GetType(x)).ToList();
+            ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled).Select(GetType).ToList();
 
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes =>
-            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s));
+            ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled);
 
         /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
