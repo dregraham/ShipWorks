@@ -25,10 +25,10 @@ namespace ShipWorks.Shipping
         /// Returns all shipment types in ShipWorks
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> ShipmentTypeCodes =>
-            Enum.GetValues(typeof(ShipmentTypeCode))
-                .OfType<ShipmentTypeCode>()
+            EnumHelper.GetEnumList<ShipmentTypeCode>(s => s != ShipmentTypeCode.Asendia && s != ShipmentTypeCode.DhlExpress)
+                .Select(s => s.Value)
                 .Where(IsCarrierAllowed)
-                .OrderBy(x => GetSortValue(x));
+                .OrderBy(GetSortValue);
 
         public static List<ShipmentType> ShipmentTypes =>
             ShipmentTypeCodes.Select(x => GetType(x)).ToList();
