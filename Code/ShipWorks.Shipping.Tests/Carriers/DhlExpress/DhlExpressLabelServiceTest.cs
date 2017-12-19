@@ -35,46 +35,46 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void Create_ThrowsArgumentNullException_WithNullShipment()
+        public async Task Create_ThrowsArgumentNullException_WithNullShipment()
         {
             var testObject = mock.Create<DhlExpressLabelService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.Create(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => testObject.Create(null));
         }
 
         [Fact]
-        public void Create_DelegatesToCarrierShipmentRequestFactory()
+        public async Task Create_DelegatesToCarrierShipmentRequestFactory()
         {
             var testObject = mock.Create<DhlExpressLabelService>();
-            testObject.Create(shipment);
+            await testObject.Create(shipment);
             
             shipmentRequestFactory.Verify(f => f.CreatePurchaseLabelRequest(shipment), Times.Once);
         }
 
         [Fact]
-        public void Create_DelegatesToShipEngineWebClient()
+        public async Task Create_DelegatesToShipEngineWebClient()
         {
             DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
 
-            testObject.Create(shipment);
+            await testObject.Create(shipment);
 
             mock.Mock<IShipEngineWebClient>().Verify(r => r.PurchaseLabel(request, ApiLogSource.DHLExpress));
         }
 
         [Fact]
-        public void Create_ThrowsShippingException_WhenPurchaseLabelFails()
+        public async Task Create_ThrowsShippingException_WhenPurchaseLabelFails()
         {
             mock.Mock<IShipEngineWebClient>().Setup(w => w.PurchaseLabel(It.IsAny<PurchaseLabelRequest>(), ApiLogSource.DHLExpress))
                 .Throws(new Exception("Something broke"));
 
             DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
             
-            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
             Assert.Equal("Something broke", ex.Message);
         }
 
         [Fact]
-        public void Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorIsCryptic()
+        public async Task Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorIsCryptic()
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
@@ -83,12 +83,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
 
-            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
             Assert.Equal("There was a problem creating the label while communicating with the DHL Express API", ex.Message);
         }
 
         [Fact]
-        public void Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorHasTooMuchText()
+        public async Task Create_ThrowsShippingExceptionWithPrettyError_WhenShipEngineErrorHasTooMuchText()
         {
             mock.Mock<IDhlExpressAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new DhlExpressAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
@@ -97,12 +97,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             DhlExpressLabelService testObject = mock.Create<DhlExpressLabelService>();
 
-            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
             Assert.Equal("SOMETHING WENT WRONG OMG", ex.Message);
         }
 
         [Fact]
-        public void Create_CreatesDownloadedLabelData_WithShipmentAndLabel()
+        public async Task Create_CreatesDownloadedLabelData_WithShipmentAndLabel()
         {
             var labelData = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment));
             var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData>>();
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressLabelService>();
 
-            testObject.Create(shipment);
+            await testObject.Create(shipment);
 
             labelDataFactory.Verify(f => f(shipment, label));
         }

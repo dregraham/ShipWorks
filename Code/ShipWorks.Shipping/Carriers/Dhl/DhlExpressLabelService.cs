@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create the label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -51,10 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             try
             {
-                Label label = Task.Run(() =>
-                {
-                    return shipEngineWebClient.PurchaseLabel(request, ApiLogSource.DHLExpress);
-                }).Result;
+                Label label = await shipEngineWebClient.PurchaseLabel(request, ApiLogSource.DHLExpress).ConfigureAwait(false);
 
                 return createDownloadedLabelData(shipment, label);
             }
@@ -63,6 +60,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 string seAccountId = accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;
                 throw new ShippingException(GetExceptionMessage(ex.GetBaseException(), seAccountId));
             }
+        }
+
+
+        Task<IDownloadedLabelData> ILabelService.Create(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
