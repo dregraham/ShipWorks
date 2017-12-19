@@ -1,17 +1,13 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-
   <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
   <Import Project="Interapptive.MSBuild.Tasks.Targets"/>
 
   <PropertyGroup>
-    <SnExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\sn.exe</SnExe>
-    <SignToolExe>C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe</SignToolExe>
+    <SnExe>C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools\sn.exe</SnExe>
+    <SignToolExe>C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe</SignToolExe>
     <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.globalsign.com/scripts/timstamp.dll"</SignCommand>
     <InnoSetupExe>C:\Program Files (x86)\Inno Setup 5\ISCC.EXE</InnoSetupExe>
-    <SourceMonitorExe>C:\Program Files (x86)\SourceMonitor\SourceMonitor.exe</SourceMonitorExe>
-    <VaultExe>C:\Program Files (x86)\SourceGear\Vault Client\vault.exe</VaultExe>
-    <MsTestExe>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\MSTest.exe</MsTestExe>
     <ObfuscationCommand>"C:\Program Files (x86)\PreEmptive Solutions\Dotfuscator Professional Edition 4.25.0\dotfuscator.exe" "..\ShipWorksDotfuscator.xml"</ObfuscationCommand>
   </PropertyGroup>
 
@@ -59,37 +55,6 @@
 
   </Target>
 
-  <!-- Run SourceMonitor analysis -->
-  <ItemGroup>
-    <SourceMonitorReplacement Include="{LogDirectory}">
-      <Value>$(LogDirectory)\</Value>
-    </SourceMonitorReplacement>
-    <SourceMonitorReplacement Include="{SrcDirectory}">
-      <Value>..\Code\</Value>
-    </SourceMonitorReplacement>
-    <SourceMonitorReplacement Include="{BuildLabel}">
-      <Value Condition=" $(CCNetLabel) != '' ">$(CCNetLabel)</Value>
-      <Value Condition=" $(CCNetLabel) == '' ">Local</Value>
-    </SourceMonitorReplacement>
-  </ItemGroup>
-  <Target Name="SourceMonitor"  Condition=" '$(BuildType)' == 'Automated' " >
-
-    <CreateItem Include="$(LogDirectory)\sourcemonitor.input.xml">
-      <Output TaskParameter="Include" ItemName="SourceMonitorXml" />
-    </CreateItem>
-
-    <!-- We are going to make changes to the file, so make a copy of it-->
-    <Copy SourceFiles="sourcemonitor.xml" DestinationFiles="@(SourceMonitorXml)" />
-
-    <!-- Update the properties in the source mon file -->
-    <FileUpdate Files="@(SourceMonitorXml)"
-			Regex="%(SourceMonitorReplacement.Identity)"
-			ReplacementText="%(SourceMonitorReplacement.Value)" />
-
-    <Exec Command='"$(SourceMonitorExe)" /C "@(SourceMonitorXml)" ' />
-
-  </Target>
-
   <!-- Update the label state files for CC.NET so we can sync the build numbers -->
   <Target Name="UpdateRevisionNumber" >
 
@@ -108,8 +73,5 @@
         Lines="$(NewRevision)"
         Overwrite="true"
         />
-
   </Target>
-
-
 </Project>
