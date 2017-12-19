@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create the label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -53,11 +53,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                Label label = Task.Run(() =>
-                {
-                    return shipEngineWebClient.PurchaseLabel(request, ApiLogSource);
-                }).Result;
-
+                Label label = await shipEngineWebClient.PurchaseLabel(request, ApiLogSource).ConfigureAwait(false);
                 return createDownloadedLabelData(shipment, label);
             }
             catch (Exception ex) when (ex.GetType() != typeof(ShippingException))

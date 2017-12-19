@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using log4net;
 using Moq;
@@ -118,9 +119,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
-        public void ProcessShipment_ThrowsInvalidOperationException()
+        public async Task ProcessShipment_ThrowsInvalidOperationException()
         {
-            Assert.Throws<InvalidOperationException>(() => labelService.Create(new ShipmentEntity()));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => labelService.Create(new ShipmentEntity()));
         }
 
         [Fact]

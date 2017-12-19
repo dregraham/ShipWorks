@@ -228,7 +228,9 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool DoAnyStoresHaveAutomaticValidationEnabled()
         {
-            return GetEnabledStores().Any(ValidatedAddressManager.ShouldAutoValidate);
+            return GetEnabledStores().Any(s => 
+            AddressValidationPolicy.ShouldAutoValidate(s.DomesticAddressValidationSetting) || 
+            AddressValidationPolicy.ShouldAutoValidate(s.InternationalAddressValidationSetting));
         }
 
         /// <summary>

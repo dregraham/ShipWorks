@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Groupon API endpoint
         /// </summary>
-        public string Endpoint => "https://scm.commerceinterface.com/api/v2";
+        public string Endpoint => "https://scm.commerceinterface.com/api/v4";
     }
 }

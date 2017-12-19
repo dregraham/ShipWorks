@@ -387,6 +387,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
@@ -663,17 +666,19 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensions.cs" />
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicy.cs" />
     <Compile Include="AddressValidation\IAddressSelector.cs" />
+    <Compile Include="AddressValidation\IAddressValidationResultFactory.cs" />
     <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
     <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Enums\AddressType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
@@ -691,6 +696,7 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedErrorShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationAddressFactory.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedAddressData.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
@@ -1009,6 +1015,7 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\AddressTypeActionDisplayType.cs" />
     <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />
@@ -1035,7 +1042,10 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\CombinedOrderNumberCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderCombinedCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\QuickSearch\QuickSearchCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\QuickSearch\IQuickSearchStoreSql.cs" />
     <Compile Include="Filters\Content\FilterDefinitionSourceType.cs" />
+    <Compile Include="Filters\Content\SqlGeneration\ISqlGenerationBuilder.cs" />
     <Compile Include="Filters\Search\AdvancedSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\CustomerQuickSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\ISingleScanOrderShortcut.cs" />
@@ -1797,6 +1807,9 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadModifiedDaysBackControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1838,6 +1851,7 @@
     <Compile Include="Stores\Platforms\GenericModule\IGenericStoreWebClient.cs" />
     <Compile Include="Stores\Platforms\GenericModule\OnlineUpdating\GenericModuleOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponParentOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClientConfiguration.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\IGrouponWebClient.cs" />
@@ -4097,6 +4111,12 @@
     <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
     <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.Designer.cs">
+      <DependentUpon>DownloadModifiedDaysBackControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\TextBoxWithDeleteButtonControl.cs">
       <SubType>UserControl</SubType>
@@ -8472,6 +8492,9 @@
     <EmbeddedResource Include="UI\Controls\InfoTip.resx">
       <DependentUpon>InfoTip.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Controls\StoreSettings\DownloadModifiedDaysBackControl.resx">
+      <DependentUpon>DownloadModifiedDaysBackControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\TextBoxWithDeleteButtonControl.resx">
       <DependentUpon>TextBoxWithDeleteButtonControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8814,7 +8837,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
-    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv55.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv67.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -8869,6 +8892,9 @@
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.3.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.4.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\composer.json" />
+    <None Include="Stores\Platforms\Miva\shipworks3Miva9.mv">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\Modules\OpenCart1\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
@@ -11028,8 +11054,8 @@
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">

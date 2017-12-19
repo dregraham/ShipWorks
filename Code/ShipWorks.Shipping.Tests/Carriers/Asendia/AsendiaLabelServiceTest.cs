@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         }
 
         [Fact]
-        public void Create_ThrowsShippingExceptionWithPrettyError_WhenAsendiaErrorHasSeOrderIdAboutPostalCode()
+        public async Task Create_ThrowsShippingExceptionWithPrettyError_WhenAsendiaErrorHasSeOrderIdAboutPostalCode()
         {
             mock.Mock<IAsendiaAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new AsendiaAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
@@ -45,12 +45,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             AsendiaLabelService testObject = mock.Create<AsendiaLabelService>();
 
-            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
             Assert.Equal("\"K1A 0G9\" is an invalid postal code for the country \"US\".", ex.Message);
         }
 
         [Fact]
-        public void Create_ThrowsShippingExceptionWithPrettyError_WhenAsendiaErrorHasSeOrderIdAboutCustoms()
+        public async Task Create_ThrowsShippingExceptionWithPrettyError_WhenAsendiaErrorHasSeOrderIdAboutCustoms()
         {
             mock.Mock<IAsendiaAccountRepository>().Setup(r => r.GetAccount(shipment)).Returns(new AsendiaAccountEntity() { ShipEngineCarrierId = "se-182974" });
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             AsendiaLabelService testObject = mock.Create<AsendiaLabelService>();
 
-            var ex = Assert.Throws<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
             Assert.Equal("Asendia requires a value for all customs items.", ex.Message);
         }
     }

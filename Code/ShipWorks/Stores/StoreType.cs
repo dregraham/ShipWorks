@@ -87,13 +87,14 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AddressValidationSetting = (int) GetDefaultValidationSetting();
+            store.DomesticAddressValidationSetting = GetDefaultDomesticValidationSetting();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify;
         }
 
         /// <summary>
-        /// Gets the default validation setting.
+        /// Gets the default domestic validation setting.
         /// </summary>
-        protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected virtual AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndApply;
         }
@@ -361,14 +362,6 @@ namespace ShipWorks.Stores
                 return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<StoreSettingsControlBase>(TypeCode);
             }
 
-            return null;
-        }
-
-        /// <summary>
-        /// Create the search conditions that are specific to this store type that should be applied when user is doing a Basic Search.
-        /// </summary>
-        public virtual ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
             return null;
         }
 

@@ -39,5 +39,25 @@ namespace Interapptive.Shared.Business
         /// The postal code
         /// </summary>
         string PostalCode { get; set; }
+
+        /// <summary>
+        /// The AddressType
+        /// </summary>
+        int AddressType { get; set; }
+
+        /// <summary>
+        /// The AddressValidationStatus
+        /// </summary>
+        int AddressValidationStatus { get; set; }
+
+        /// <summary>
+        /// The AddressValidationError
+        /// </summary>
+        string AddressValidationError { get; set; }
+
+        /// <summary>
+        /// The AddressValidationSuggestionCount
+        /// </summary>
+        int AddressValidationSuggestionCount { get; set; }
     }
 }

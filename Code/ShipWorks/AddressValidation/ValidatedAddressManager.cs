@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
 using ShipWorks.AddressValidation.Enums;
@@ -256,42 +257,6 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Check whether the specified address can be validated
-        /// </summary>
-        public static bool EnsureAddressCanBeValidated(AddressAdapter currentShippingAddress)
-        {
-            if (string.IsNullOrEmpty(currentShippingAddress.CountryCode))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a country.";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
-
-                return false;
-            }
-
-            if (!currentShippingAddress.IsDomesticCountry() &&
-                !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.WillNotValidate;
-                currentShippingAddress.AddressType = (int) AddressType.WillNotValidate;
-
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(currentShippingAddress.Street1))
-            {
-                currentShippingAddress.AddressValidationError = "ShipWorks cannot validate an address without a first line.";
-                currentShippingAddress.AddressValidationStatus = (int) AddressValidationStatusType.BadAddress;
-                currentShippingAddress.AddressType = (int) AddressType.PrimaryNotFound;
-
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Validate a single shipment
         /// </summary>
         public static Task ValidateShipmentAsync(ShipmentEntity shipment, IAddressValidator validator)
@@ -325,14 +290,14 @@ namespace ShipWorks.AddressValidation
             }
 
             StoreEntity store = DataProvider.GetEntity(order.StoreID) as StoreEntity;
-            if (store == null || !ShouldAutoValidate(store))
+            if (store == null || !AddressValidationPolicy.ShouldAutoValidate(store, shipmentAdapter))
             {
                 // If we can't find the store or if its not set up for auto-validation, we shouldn't do any validation
                 return;
             }
 
             bool shouldRetry = false;
-            bool canApplyChanges = store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidateAndApply;
+            bool canApplyChanges = store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply;
 
             try
             {
@@ -345,7 +310,7 @@ namespace ShipWorks.AddressValidation
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(order.ShipPerson.ConvertTo<AddressAdapter>(), store, canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -373,7 +338,7 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(),
+                    await validator.ValidateAsync(shipment.ShipPerson.ConvertTo<AddressAdapter>(), store,
                         canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
@@ -474,21 +439,6 @@ namespace ShipWorks.AddressValidation
             }
 
             await ValidateShipmentAsync(shipment, validator, retryCount - 1);
-        }
-
-        /// <summary>
-        /// Gets whether the specified store is set up for auto-validation
-        /// </summary>
-        public static bool ShouldAutoValidate(StoreEntity store)
-        {
-            if (store == null)
-            {
-                return false;
-            }
-
-            AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
-            return setting == AddressValidationStoreSettingType.ValidateAndApply ||
-                   setting == AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }

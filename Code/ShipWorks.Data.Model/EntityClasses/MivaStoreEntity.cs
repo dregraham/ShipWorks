@@ -341,6 +341,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OnlineUpdateStrategy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OnlineUpdateStatusChangeEmail", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AddendumCheckoutDataEnabled", fieldHashtable);
 		}
 		#endregion
 
@@ -442,6 +444,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail, true); }
 			set	{ SetValue((int)MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail, value); }
+		}
+
+		/// <summary> The AddendumCheckoutDataEnabled property of the Entity MivaStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "MivaStore"."AddendumCheckoutDataEnabled"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AddendumCheckoutDataEnabled
+		{
+			get { return (System.Boolean)GetValue((int)MivaStoreFieldIndex.AddendumCheckoutDataEnabled, true); }
+			set	{ SetValue((int)MivaStoreFieldIndex.AddendumCheckoutDataEnabled, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

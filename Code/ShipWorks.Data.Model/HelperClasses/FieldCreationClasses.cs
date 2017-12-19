@@ -1227,10 +1227,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new AmazonStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new AmazonStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new AmazonStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new AmazonStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -1477,10 +1482,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new AmeriCommerceStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new AmeriCommerceStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new AmeriCommerceStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new AmeriCommerceStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -2277,10 +2287,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new BigCommerceStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new BigCommerceStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new BigCommerceStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new BigCommerceStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -2627,10 +2642,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new BuyDotComStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new BuyDotComStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new BuyDotComStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new BuyDotComStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -3417,10 +3437,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new ChannelAdvisorStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -3496,6 +3521,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RefreshToken
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.RefreshToken);}
+		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.DownloadModifiedNumberOfDaysBack field instance</summary>
+		public static EntityField2 DownloadModifiedNumberOfDaysBack
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack);}
 		}
 	}
 
@@ -5947,10 +5977,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new EbayStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new EbayStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new EbayStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new EbayStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -7232,10 +7267,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new EtsyStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new EtsyStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new EtsyStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new EtsyStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -9237,10 +9277,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new GenericFileStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new GenericFileStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new GenericFileStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new GenericFileStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -9492,10 +9537,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new GenericModuleStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new GenericModuleStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new GenericModuleStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -10407,10 +10457,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new GrouponStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new GrouponStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new GrouponStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new GrouponStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -10702,10 +10757,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new InfopiaStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new InfopiaStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new InfopiaStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new InfopiaStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -11777,10 +11837,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new JetStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new JetStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new JetStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new JetStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -12557,10 +12622,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new LemonStandStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new LemonStandStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new LemonStandStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new LemonStandStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -13147,10 +13217,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new MagentoStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new MagentoStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new MagentoStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -13852,10 +13927,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -14092,10 +14172,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new MivaStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new MivaStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -14256,6 +14341,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OnlineUpdateStatusChangeEmail
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.AddendumCheckoutDataEnabled field instance</summary>
+		public static EntityField2 AddendumCheckoutDataEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AddendumCheckoutDataEnabled);}
 		}
 	}
 
@@ -14792,10 +14882,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new NetworkSolutionsStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new NetworkSolutionsStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -15512,10 +15607,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new NeweggStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new NeweggStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new NeweggStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new NeweggStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -15802,10 +15902,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new OdbcStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new OdbcStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -17292,10 +17397,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new OrderMotionStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new OrderMotionStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new OrderMotionStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new OrderMotionStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -18007,10 +18117,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new PayPalStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new PayPalStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new PayPalStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new PayPalStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -19002,10 +19117,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new ProStoresStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new ProStoresStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new ProStoresStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new ProStoresStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -19902,10 +20022,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new SearsStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new SearsStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -21837,10 +21962,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new ShopifyStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new ShopifyStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new ShopifyStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new ShopifyStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -22027,10 +22157,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new ShopSiteStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new ShopSiteStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new ShopSiteStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -22242,10 +22377,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new SparkPayStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new SparkPayStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new SparkPayStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new SparkPayStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -22452,10 +22592,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new StoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new StoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new StoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new StoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -23432,10 +23577,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new ThreeDCartStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new ThreeDCartStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new ThreeDCartStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -23501,6 +23651,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RestUser
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.RestUser);}
+		}
+		/// <summary>Creates a new ThreeDCartStoreEntity.OrderIDUpgradeFixDate field instance</summary>
+		public static EntityField2 OrderIDUpgradeFixDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate);}
 		}
 	}
 
@@ -25187,10 +25342,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new VolusionStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new VolusionStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new VolusionStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new VolusionStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -25952,10 +26112,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new WalmartStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new WalmartStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new WalmartStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new WalmartStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy
@@ -27392,10 +27557,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.AutoDownloadOnlyAway);}
 		}
-		/// <summary>Creates a new YahooStoreEntity.AddressValidationSetting field instance</summary>
-		public static EntityField2 AddressValidationSetting
+		/// <summary>Creates a new YahooStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.AddressValidationSetting);}
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new YahooStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.InternationalAddressValidationSetting);}
 		}
 		/// <summary>Creates a new YahooStoreEntity.ComputerDownloadPolicy field instance</summary>
 		public static EntityField2 ComputerDownloadPolicy

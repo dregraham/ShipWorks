@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Editing
         readonly ShipmentTypeCode shipmentTypeCode;
 
         bool enableEditing;
+        bool isLoading;
 
         // Counter for rate criteria change event suspension
         int suspendRateEvent = 0;
@@ -186,6 +187,8 @@ namespace ShipWorks.Shipping.Editing
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
+            isLoading = true;
+
             LoadedShipments = shipments.ToList();
 
             EnumHelper.BindComboBox<ThermalLanguage>(labelFormat, ShouldIncludeLabelFormatInList);
@@ -194,6 +197,7 @@ namespace ShipWorks.Shipping.Editing
 
             personControl.DestinationChanged -= this.OnRecipientDestinationChanged;
             personControl.ContentChanged -= this.OnPersonContentChanged;
+
 
             EnableContentPanels(enableEditing, enableShippingAddress);
 
@@ -221,6 +225,8 @@ namespace ShipWorks.Shipping.Editing
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
+
+            isLoading = false;
         }
 
         /// <summary>
@@ -508,7 +514,7 @@ namespace ShipWorks.Shipping.Editing
         {
             suspendRateEvent--;
         }
-        
+
         /// <summary>
         /// One of the values that affects rates has changed
         /// </summary>
@@ -595,7 +601,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// User has changed the recipient state\country
         /// </summary>
-        protected void OnOriginDestinationChanged(object sender, EventArgs e) =>
+        protected virtual void OnOriginDestinationChanged(object sender, EventArgs e) =>
             OriginDestinationChanged?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
@@ -629,9 +635,12 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
         {
-            returnsPanel.Enabled = returnShipment.Checked;
-            SaveReturnsToShipments();
-            ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+            if (!isLoading)
+            {
+                returnsPanel.Enabled = returnShipment.Checked;
+                SaveReturnsToShipments();
+                ReturnServiceChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

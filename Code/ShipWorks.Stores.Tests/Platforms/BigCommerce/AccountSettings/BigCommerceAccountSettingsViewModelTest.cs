@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 {
@@ -77,14 +78,14 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [InlineData("", "Please enter the API Path of your BigCommerce store.")]
         [InlineData("  ", "Please enter the API Path of your BigCommerce store.")]
         [InlineData("http://www.contoso.com/path???/file name", "The specified API Path is not a valid address.")]
-        public void SaveToEntity_WithInvalidApiUrl_CausesError(string apiUrl, string errorMessage)
+        public async void SaveToEntity_WithInvalidApiUrl_CausesError(string apiUrl, string errorMessage)
         {
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
             testObject.ApiUrl = apiUrl;
             testObject.BasicUsername = "foo";
             testObject.BasicToken = "bar";
 
-            var result = testObject.SaveToEntity(new BigCommerceStoreEntity());
+            var result = await testObject.SaveToEntity(new BigCommerceStoreEntity());
             Assert.False(result);
             mock.Mock<IMessageHelper>()
                 .Verify(x => x.ShowError(errorMessage));
@@ -108,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         }
 
         [Fact]
-        public void SaveToEntity_CausesError_WhenPersistenceStrategyFails()
+        public async void SaveToEntity_CausesError_WhenPersistenceStrategyFails()
         {
             mock.CreateKeyedMockOf<IBigCommerceAuthenticationPersistenceStrategy>()
                 .For(BigCommerceAuthenticationType.Basic)
@@ -120,7 +121,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
             testObject.LoadStore(new BigCommerceStoreEntity());
             testObject.ApiUrl = "http://www.example.com";
 
-            var result = testObject.SaveToEntity(new BigCommerceStoreEntity());
+            var result = await testObject.SaveToEntity(new BigCommerceStoreEntity());
 
             Assert.False(result);
             mock.Mock<IMessageHelper>().Verify(x => x.ShowError("Foo"));
@@ -147,7 +148,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void SaveToEntity_DelegatesToConnectionVerifier_AndReturnsResult(bool verifierResult)
+        public async void SaveToEntity_DelegatesToConnectionVerifier_AndReturnsResult(bool verifierResult)
         {
             var store = new BigCommerceStoreEntity();
 
@@ -155,14 +156,14 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(store, strategy.Object))
-                .Returns(verifierResult ? GenericResult.FromSuccess(Unit.Default) : GenericResult.FromError<Unit>("Foo"));
+                .ReturnsAsync(verifierResult ? GenericResult.FromSuccess(Unit.Default) : GenericResult.FromError<Unit>("Foo"));
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
             testObject.LoadStore(store);
             testObject.ApiUrl = "http://www.example.com";
 
-            var result = testObject.SaveToEntity(store);
+            var result = await testObject.SaveToEntity(store);
 
             Assert.Equal(verifierResult, result);
         }
@@ -176,7 +177,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
-                .Returns(GenericResult.FromError<Unit>("Foo"));
+                .ReturnsAsync(GenericResult.FromError<string>("Foo"));
 
             var testObject = mock.Create<BigCommerceAccountSettingsViewModel>();
 
@@ -195,8 +196,8 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             mock.Mock<IBigCommerceConnectionVerifier>()
                 .Setup(x => x.Verify(It.IsAny<BigCommerceStoreEntity>(), It.IsAny<IBigCommerceAuthenticationPersistenceStrategy>()))
-                .Returns(GenericResult.FromSuccess(Unit.Default));
-
+                .ReturnsAsync(GenericResult.FromSuccess(""));
+            
             var disposable = mock.CreateMock<IDisposable>();
             mock.Mock<IMessageHelper>().Setup(x => x.SetCursor(Cursors.WaitCursor))
                 .Returns(disposable);

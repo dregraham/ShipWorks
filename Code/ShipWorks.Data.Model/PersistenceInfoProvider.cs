@@ -729,7 +729,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>
 		private void InitChannelAdvisorStoreEntityMappings()
 		{
-			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 9, 0);
+			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 10, 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -739,6 +739,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonAuthToken", "AmazonAuthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "RefreshToken", "RefreshToken", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 		}
 
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
@@ -2112,13 +2113,14 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits MivaStoreEntity's mappings</summary>
 		private void InitMivaStoreEntityMappings()
 		{
-			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 6, 0);
+			this.AddElementMapping("MivaStoreEntity", @"ShipWorksLocal", @"dbo", "MivaStore", 7, 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("MivaStoreEntity", "EncryptionPassphrase", "EncryptionPassphrase", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("MivaStoreEntity", "LiveManualOrderNumbers", "LiveManualOrderNumbers", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("MivaStoreEntity", "SebenzaCheckoutDataEnabled", "SebenzaCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 3);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStrategy", "OnlineUpdateStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("MivaStoreEntity", "OnlineUpdateStatusChangeEmail", "OnlineUpdateStatusChangeEmail", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
+			this.AddElementFieldMapping("MivaStoreEntity", "AddendumCheckoutDataEnabled", "AddendumCheckoutDataEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
 		}
 
 		/// <summary>Inits NetworkSolutionsOrderEntity's mappings</summary>
@@ -3164,7 +3166,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits StoreEntity's mappings</summary>
 		private void InitStoreEntityMappings()
 		{
-			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 30, 0);
+			this.AddElementMapping("StoreEntity", @"ShipWorksLocal", @"dbo", "Store", 31, 0);
 			this.AddElementFieldMapping("StoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("StoreEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("StoreEntity", "License", "License", false, "NVarChar", 150, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3188,13 +3190,14 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "AutoDownload", "AutoDownload", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 20);
 			this.AddElementFieldMapping("StoreEntity", "AutoDownloadMinutes", "AutoDownloadMinutes", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 21);
 			this.AddElementFieldMapping("StoreEntity", "AutoDownloadOnlyAway", "AutoDownloadOnlyAway", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
-			this.AddElementFieldMapping("StoreEntity", "AddressValidationSetting", "AddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
-			this.AddElementFieldMapping("StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 24);
-			this.AddElementFieldMapping("StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 25);
-			this.AddElementFieldMapping("StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 26);
-			this.AddElementFieldMapping("StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 27);
-			this.AddElementFieldMapping("StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 28);
-			this.AddElementFieldMapping("StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 29);
+			this.AddElementFieldMapping("StoreEntity", "DomesticAddressValidationSetting", "DomesticAddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
+			this.AddElementFieldMapping("StoreEntity", "InternationalAddressValidationSetting", "InternationalAddressValidationSetting", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 24);
+			this.AddElementFieldMapping("StoreEntity", "ComputerDownloadPolicy", "ComputerDownloadPolicy", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("StoreEntity", "DefaultEmailAccountID", "DefaultEmailAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 26);
+			this.AddElementFieldMapping("StoreEntity", "ManualOrderPrefix", "ManualOrderPrefix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 27);
+			this.AddElementFieldMapping("StoreEntity", "ManualOrderPostfix", "ManualOrderPostfix", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 28);
+			this.AddElementFieldMapping("StoreEntity", "InitialDownloadDays", "InitialDownloadDays", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 29);
+			this.AddElementFieldMapping("StoreEntity", "InitialDownloadOrder", "InitialDownloadOrder", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 30);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>
@@ -3315,7 +3318,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ThreeDCartStoreEntity's mappings</summary>
 		private void InitThreeDCartStoreEntityMappings()
 		{
-			this.AddElementMapping("ThreeDCartStoreEntity", @"ShipWorksLocal", @"dbo", "ThreeDCartStore", 7, 0);
+			this.AddElementMapping("ThreeDCartStoreEntity", @"ShipWorksLocal", @"dbo", "ThreeDCartStore", 8, 0);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StoreUrl", "StoreUrl", false, "NVarChar", 110, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "ApiUserKey", "ApiUserKey", false, "NVarChar", 65, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3323,6 +3326,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "StatusCodes", "StatusCodes", true, "Xml", 2147483647, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", "DownloadModifiedNumberOfDaysBack", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 5);
 			this.AddElementFieldMapping("ThreeDCartStoreEntity", "RestUser", "RestUser", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 6);
+			this.AddElementFieldMapping("ThreeDCartStoreEntity", "OrderIDUpgradeFixDate", "OrderIDUpgradeFixDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 7);
 		}
 
 		/// <summary>Inits UpsAccountEntity's mappings</summary>

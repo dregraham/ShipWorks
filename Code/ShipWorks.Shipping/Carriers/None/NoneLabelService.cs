@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -10,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// <summary>
         /// Creates a none label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             throw new ShippingException("No carrier is selected for the shipment.");
         }

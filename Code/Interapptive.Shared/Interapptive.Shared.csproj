@@ -147,6 +147,9 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
@@ -180,6 +183,7 @@
     <Compile Include="ComponentRegistration\RegistrationType.cs" />
     <Compile Include="ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
+    <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AsendiaServiceType.cs" />
     <Compile Include="Enums\BigCommerceAuthenticationType.cs" />
     <Compile Include="Enums\CombineSplitStatusType.cs" />

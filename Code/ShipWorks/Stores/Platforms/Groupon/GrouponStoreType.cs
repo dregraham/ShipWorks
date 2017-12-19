@@ -18,7 +18,6 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions;
-using ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.Groupon.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
@@ -148,6 +147,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             ElementOutline outline = container.AddElement("Groupon");
             outline.AddElement("GrouponOrderID", () => order.Value.GrouponOrderID);
+            outline.AddElement("GrouponParentOrderID", () => order.Value.ParentOrderID);
         }
 
         /// <summary>
@@ -287,21 +287,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 IsFolder = false,
                 FilterTarget = (int) FilterTarget.Orders
             };
-        }
-
-        /// <summary>
-        /// Create the search conditions for searching on Amazon Order ID
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            GrouponOrderIdCondition condition = new GrouponOrderIdCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(condition);
-
-            return group;
         }
     }
 }

@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
-            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
@@ -314,13 +314,13 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
-            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV20(),
+                        Rate = new RateV24(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
             });
@@ -350,7 +350,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenServerReturns500()
         {
-            Mock<ISwsimV55> webService = context.Mock.CreateMock<ISwsimV55>(w =>
+            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
             {
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");

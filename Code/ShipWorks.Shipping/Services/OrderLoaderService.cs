@@ -124,17 +124,12 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Get whether the destination address is editable
         /// </summary>
-        private ShippingAddressEditStateType GetDestinationAddressEditable(OrderEntity order)
+        private IDictionary<long, ShippingAddressEditStateType> GetDestinationAddressEditable(OrderEntity order)
         {
-            ShipmentEntity firstShipment = order?.Shipments.FirstOrDefault();
+            var storeType = storeTypeManager.GetType(order.Store);
 
-            if (firstShipment != null)
-            {
-                return storeTypeManager.GetType(order.Store)
-                    .ShippingAddressEditableState(order, firstShipment);
-            }
-
-            return ShippingAddressEditStateType.Editable;
+            return (order?.Shipments ?? Enumerable.Empty<ShipmentEntity>())
+                .ToDictionary(x => x.ShipmentID, x => storeType.ShippingAddressEditableState(order, x));
         }
     }
 }

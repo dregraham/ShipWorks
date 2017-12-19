@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Process the shipment for iParcel
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             try
             {
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 orderManager.PopulateOrderDetails(shipment);
 
                 DataSet dataSet = serviceGateway.SubmitShipment(credentials, shipment);
-                return createDownloadedLabelData(shipment, dataSet);
+                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, dataSet));
             }
             catch (iParcelException ex)
             {

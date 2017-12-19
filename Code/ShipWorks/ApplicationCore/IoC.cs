@@ -126,10 +126,6 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<SqlServerInstaller>()
                 .AsSelf();
 
-            builder.RegisterType<StampsAddressValidationWebClient>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();

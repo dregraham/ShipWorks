@@ -79,6 +79,14 @@ namespace ShipWorks.AddressValidation
         public bool IsValid { get; set; }
 
         /// <summary>
+        /// The AddressValidationStatus
+        /// </summary>
+        public int AddressValidationStatus { get; set; }
+        public string AddressValidationError { get; set; }
+        public int AddressValidationSuggestionCount { get; set; }
+        public int AddressType { get; set; }
+
+        /// <summary>
         /// Checks whether this result is equal to the address in the adapter
         /// </summary>
         public bool IsEqualTo(AddressAdapter adapter)
