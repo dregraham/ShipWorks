@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -359,21 +360,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
-        /// Create the condition group for searching on Amazon Order ID
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ConditionGroup group = new ConditionGroup();
-
-            AmazonOrderNumberCondition condition = new AmazonOrderNumberCondition();
-            condition.TargetValue = search;
-            condition.Operator = StringOperator.BeginsWith;
-            group.Conditions.Add(condition);
-
-            return group;
-        }
-
-        /// <summary>
         /// MWS has online status
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
@@ -534,7 +520,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Gets the default validation setting.
         /// </summary>
-        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected override AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }

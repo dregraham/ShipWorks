@@ -714,6 +714,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -2014,6 +2015,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("MivaStoreEntity", "SebenzaCheckoutDataEnabled", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.SebenzaCheckoutDataEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("MivaStoreEntity", "OnlineUpdateStrategy", typeof(System.Int32), false, false, false, false,  (int)MivaStoreFieldIndex.OnlineUpdateStrategy, 0, 0, 10);
 			this.AddElementFieldInfo("MivaStoreEntity", "OnlineUpdateStatusChangeEmail", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.OnlineUpdateStatusChangeEmail, 0, 0, 0);
+			this.AddElementFieldInfo("MivaStoreEntity", "AddendumCheckoutDataEnabled", typeof(System.Boolean), false, false, false, false,  (int)MivaStoreFieldIndex.AddendumCheckoutDataEnabled, 0, 0, 0);
 		}
 		/// <summary>Inits NetworkSolutionsOrderEntity's FieldInfo objects</summary>
 		private void InitNetworkSolutionsOrderEntityInfos()
@@ -3020,7 +3022,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "AutoDownload", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownload, 0, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "AutoDownloadMinutes", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadMinutes, 0, 0, 10);
 			this.AddElementFieldInfo("StoreEntity", "AutoDownloadOnlyAway", typeof(System.Boolean), false, false, false, false,  (int)StoreFieldIndex.AutoDownloadOnlyAway, 0, 0, 0);
-			this.AddElementFieldInfo("StoreEntity", "AddressValidationSetting", typeof(System.Int32), false, false, false, false,  (int)StoreFieldIndex.AddressValidationSetting, 0, 0, 10);
+			this.AddElementFieldInfo("StoreEntity", "DomesticAddressValidationSetting", typeof(Interapptive.Shared.Enums.AddressValidationStoreSettingType), false, false, false, false,  (int)StoreFieldIndex.DomesticAddressValidationSetting, 0, 0, 10);
+			this.AddElementFieldInfo("StoreEntity", "InternationalAddressValidationSetting", typeof(Interapptive.Shared.Enums.AddressValidationStoreSettingType), false, false, false, false,  (int)StoreFieldIndex.InternationalAddressValidationSetting, 0, 0, 10);
 			this.AddElementFieldInfo("StoreEntity", "ComputerDownloadPolicy", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ComputerDownloadPolicy, 2147483647, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "DefaultEmailAccountID", typeof(System.Int64), false, false, false, false,  (int)StoreFieldIndex.DefaultEmailAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "ManualOrderPrefix", typeof(System.String), false, false, false, false,  (int)StoreFieldIndex.ManualOrderPrefix, 10, 0, 0);
@@ -3145,6 +3148,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "StatusCodes", typeof(System.String), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.StatusCodes, 2147483647, 0, 0);
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
 			this.AddElementFieldInfo("ThreeDCartStoreEntity", "RestUser", typeof(System.Boolean), false, false, false, false,  (int)ThreeDCartStoreFieldIndex.RestUser, 0, 0, 0);
+			this.AddElementFieldInfo("ThreeDCartStoreEntity", "OrderIDUpgradeFixDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate, 0, 0, 0);
 		}
 		/// <summary>Inits UpsAccountEntity's FieldInfo objects</summary>
 		private void InitUpsAccountEntityInfos()

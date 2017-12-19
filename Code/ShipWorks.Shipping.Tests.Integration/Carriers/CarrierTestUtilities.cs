@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging.Messages.Shipping;
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
             var viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             viewModel.LoadOrder(new OrderSelectionChangedMessage(sender, new IOrderSelection[] {
-                new LoadedOrderSelection(shipment.Order, new[] { adapter }, ShippingAddressEditStateType.Editable)
+                new LoadedOrderSelection(shipment.Order, new[] { adapter }, new Dictionary<long, ShippingAddressEditStateType>())
             }));
 
             viewModel.SaveToDatabase();

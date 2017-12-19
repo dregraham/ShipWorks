@@ -34,6 +34,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
 
             order.GspEligible = orders.Where(o => o is EbayOrderEntity).Cast<EbayOrderEntity>()
                 .Any(o => o.GspEligible);
+            order.RollupEffectiveCheckoutStatus = orders
+                .OfType<EbayOrderEntity>()
+                .First().RollupEffectiveCheckoutStatus;
 
             var recordCreator = new SearchRecordMerger<IEbayOrderEntity>(combinedOrder, orders, sqlAdapter);
 

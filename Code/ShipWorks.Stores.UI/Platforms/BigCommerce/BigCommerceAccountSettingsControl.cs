@@ -1,19 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-using Autofac;
-using Autofac.Features.OwnedInstances;
-using Interapptive.Shared;
-using Interapptive.Shared.UI;
-using log4net;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Stores.Platforms.BigCommerce.AccountSettings;
-using ShipWorks.UI.Controls.Design;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.UI.Platforms.BigCommerce
 {
@@ -42,6 +32,11 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         }
 
         /// <summary>
+        /// Saving is async
+        /// </summary>
+        public override bool IsSaveAsync => true;
+
+        /// <summary>
         /// Set the view model on the control
         /// </summary>
         public void SetViewModel(BigCommerceAccountSettingsViewModel viewModel)
@@ -66,7 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce
         /// </summary>
         /// <param name="store"></param>
         /// <returns>True if the entered settings can successfully connect to the store.</returns>
-        public override bool SaveToEntity(StoreEntity store) =>
+        public override Task<bool> SaveToEntityAsync(StoreEntity store) =>
             viewModel.SaveToEntity(store as BigCommerceStoreEntity);
     }
 }

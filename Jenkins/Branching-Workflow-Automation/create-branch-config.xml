@@ -44,14 +44,6 @@
   <customWorkspace>C:\jenkins-builds\create-branch-workflow</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command># Build the name of the registry key based on the workspace directory and the feature name
-KEY=$(echo C:\\jenkins-builds\\@@BRANCH_NAME@@\\Artifacts\\Application | sed  -e &apos;s/@@BRANCH_NAME@@/&apos;$BRANCH_NAME&apos;/&apos;)
-
-# Use the rake task to add the registry key with a randomly generated GUID value
-# and write out the SQL session file to point to the seed database
-rake setup:registry[$KEY] &quot;setup:sqlSession[$KEY,ShipWorks_SeedData]&quot;</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
       <command># Create View
 echo Feature name: $FEATURE_NAME
 

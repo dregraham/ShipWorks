@@ -25,7 +25,6 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         private readonly IWalmartWebClient webClient;
         private readonly IOrderRepository orderRepository;
         private readonly IWalmartOrderLoader orderLoader;
-        private readonly IOrderManager orderManager;
         readonly IWalmartCombineOrderSearchProvider combineOrderSearchProvider;
 
         /// <summary>
@@ -39,23 +38,8 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         {
             this.combineOrderSearchProvider = combineOrderSearchProvider;
             this.webClient = webClient;
-            this.orderManager = orderManager;
             this.orderRepository = orderRepository;
             this.orderLoader = orderLoader;
-        }
-
-        /// <summary>
-        /// Upload carrier and tracking information for the given orders
-        /// </summary>
-        public async Task UpdateShipmentDetails(IWalmartStoreEntity store, long orderID)
-        {
-            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderID);
-
-            // Check to see if shipment exists and order has shippable line item
-            if (shipment != null)
-            {
-                await UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
-            }
         }
 
         /// <summary>
@@ -199,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                         {
                             methodCode = methodCode,
                             shipDateTime = DateTime.UtcNow,
-                            carrierName = GetCarrierName(shipment.ShipmentTypeCode),
+                            carrierName = GetCarrierName(shipment),
                             trackingNumber = shipment.TrackingNumber
                         }
                     }
@@ -210,11 +194,11 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         /// <summary>
         /// Gets the name of the carrier used for the shipment
         /// </summary>
-        private carrierNameType GetCarrierName(ShipmentTypeCode shipmentTypeCode)
+        private carrierNameType GetCarrierName(IShipmentEntity shipment)
         {
             carrierNameType carrierName = new carrierNameType();
 
-            switch (shipmentTypeCode)
+            switch (shipment.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
@@ -233,8 +217,12 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                 case ShipmentTypeCode.OnTrac:
                     carrierName.Item = carrierType.OnTrac;
                     break;
+                case ShipmentTypeCode.Other:
+                    carrierName.Item = EnumHelper.TryParseEnum<carrierType>(shipment.Other.Carrier, true) ?? 
+                        (object) EnumHelper.GetDescription(shipment.ShipmentTypeCode);
+                    break;
                 default:
-                    carrierName.Item = EnumHelper.GetDescription(shipmentTypeCode);
+                    carrierName.Item = EnumHelper.GetDescription(shipment.ShipmentTypeCode);
                     break;
             }
 

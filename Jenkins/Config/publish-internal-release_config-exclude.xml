@@ -16,6 +16,7 @@
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>windows</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -27,12 +28,12 @@
     <hudson.tasks.Shell>
       <command># Copy the debug installer to the pre-alpha testing directory for @@FEATURE_NAME@@
 if [ ! -d &quot;//intfs01/support/Testing/InternalReleases/&quot; ];
-then 
+then
      mkdir //intfs01/support/Testing/InternalReleases/
 fi
 
 if [ ! -d &quot;//intfs01/support/Testing/InternalReleases/@@FEATURE_NAME@@/&quot; ];
-then 
+then
      mkdir //intfs01/support/Testing/InternalReleases/@@FEATURE_NAME@@/
 fi
 

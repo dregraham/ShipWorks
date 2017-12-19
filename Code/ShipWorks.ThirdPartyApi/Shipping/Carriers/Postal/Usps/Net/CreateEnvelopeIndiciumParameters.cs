@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     {
         public object Item { get; set; }
         public string IntegratorTxID { get; set; }
-        public RateV20 Rate { get; set; }
+        public RateV24 Rate { get; set; }
         public Address From { get; set; }
         public Address To { get; set; }
         public string CustomerID { get; set; }

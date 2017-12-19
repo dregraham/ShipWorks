@@ -16,6 +16,7 @@
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
+  <assignedNode>windows</assignedNode>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -25,7 +26,7 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake build:internal_installer</command>
+      <command>bundle exec rake build:internal_installer</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

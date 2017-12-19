@@ -343,6 +343,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DownloadModifiedNumberOfDaysBack", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RestUser", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OrderIDUpgradeFixDate", fieldHashtable);
 		}
 		#endregion
 
@@ -454,6 +456,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ThreeDCartStoreFieldIndex.RestUser, true); }
 			set	{ SetValue((int)ThreeDCartStoreFieldIndex.RestUser, value); }
+		}
+
+		/// <summary> The OrderIDUpgradeFixDate property of the Entity ThreeDCartStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ThreeDCartStore"."OrderIDUpgradeFixDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> OrderIDUpgradeFixDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate, false); }
+			set	{ SetValue((int)ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

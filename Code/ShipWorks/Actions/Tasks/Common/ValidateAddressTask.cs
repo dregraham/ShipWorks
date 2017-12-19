@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.AddressValidation;
@@ -54,13 +55,18 @@ namespace ShipWorks.Actions.Tasks.Common
                 OrderEntity order = DataProvider.GetEntity(orderID) as OrderEntity;
 
                 // If the address has already been validated, don't bother validating it again
-                if (order == null || !AddressValidator.ShouldValidateAddress(new AddressAdapter(order, "Ship")))
+                if (order == null)
                 {
                     continue;
                 }
 
                 StoreEntity store = StoreManager.GetRelatedStore(order.OrderID);
-                if (store == null || store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                if (store == null)
+                {
+                    continue;
+                }
+
+                if (!AddressValidationPolicy.ShouldManuallyValidate(store, new AddressAdapter(order, "Ship")))
                 {
                     continue;
                 }
@@ -70,7 +76,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 try
                 {
-                    Task task = validator.ValidateAsync(order, "Ship", true, (originalAddress, suggestedAddresses) =>
+                    Task task = validator.ValidateAsync(order, store, "Ship", true, (originalAddress, suggestedAddresses) =>
                         ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)));
                     task.Wait();
                 }

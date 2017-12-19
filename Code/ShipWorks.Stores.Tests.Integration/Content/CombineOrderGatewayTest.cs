@@ -120,6 +120,26 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             Assert.Equal(expected, result);
         }
 
+        [Fact]
+        public void CanCombine_ReturnsFalse_WhenEbayOrdersHaveDifferentPaymentMethods()
+        {
+            var testObject = context.Mock.Create<CombineOrderGateway>();
+
+            var store = Create.Store<EbayStoreEntity>(StoreTypeCode.Ebay).Save();
+
+            var order = Create.Order<EbayOrderEntity>(store, context.Customer)
+                .Set(x => x.RollupEffectiveCheckoutStatus, 1)
+                .Save();
+
+            var order2 = Create.Order<EbayOrderEntity>(store, context.Customer)
+                .Set(x => x.RollupEffectiveCheckoutStatus, 2)
+                .Save();
+
+            var result = testObject.CanCombine(store, new[] { order.OrderID, order2.OrderID });
+
+            Assert.False(result);
+        }
+
         [Theory]
         [InlineData(AmazonMwsIsPrime.Yes, false)]
         [InlineData(AmazonMwsIsPrime.No, true)]

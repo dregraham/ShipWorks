@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -23,8 +24,8 @@ namespace ShipWorks.Stores.Content
     [Component]
     public class CombineOrderGateway : ICombineOrderGateway
     {
-        private readonly Dictionary<StoreTypeCode, Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>> storeSpecificSearches =
-            new Dictionary<StoreTypeCode, Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>>
+        private readonly Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>> storeSpecificSearches =
+            new Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>>
             {
                 { StoreTypeCode.Amazon, GetAmazonSearch },
                 { StoreTypeCode.Ebay, GetEbaySearch },
@@ -97,6 +98,7 @@ namespace ShipWorks.Stores.Content
             }
         }
 
+
         /// <summary>
         /// Create the CanCombine query
         /// </summary>
@@ -106,10 +108,10 @@ namespace ShipWorks.Stores.Content
             IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
             IPredicate andWherePredicate = ShipmentFields.Processed == true;
 
-            Func<IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>> getStoreSpecificSearch;
+            Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>> getStoreSpecificSearch;
             if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
             {
-                Tuple<IJoinOperand, IPredicate> searchDetails = getStoreSpecificSearch(shipmentsJoin, orPredicate);
+                Tuple<IJoinOperand, IPredicate> searchDetails = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
 
                 shipmentsJoin = searchDetails.Item1;
                 orPredicate = searchDetails.Item2;
@@ -118,15 +120,14 @@ namespace ShipWorks.Stores.Content
             return queryFactory.Create()
                 .From(shipmentsJoin)
                 .Select(OrderFields.OrderID.Count())
-                .Where(new FieldCompareRangePredicate(OrderFields.OrderID, null, orderIDs.ToArray()))
-                .AndWhere(andWherePredicate
-                    .Or(orPredicate));
+                .Where(OrderFields.OrderID.In(orderIDs)
+                    .And(andWherePredicate.Or(orPredicate)));
         }
 
         /// <summary>
         /// Get Amazon search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetAmazonSearch(IJoinOperand joins, IPredicate predicate)
+        private static Tuple<IJoinOperand, IPredicate> GetAmazonSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.AmazonOrderEntity);
 
@@ -141,12 +142,18 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Get Ebay search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetEbaySearch(IJoinOperand joins, IPredicate predicate)
+        private static Tuple<IJoinOperand, IPredicate> GetEbaySearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderEntity);
 
             IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
-            IPredicate newPredicate = predicate.Or(EbayOrderFields.GspEligible == true);
+            IPredicate newPredicate = predicate
+                .Or(EbayOrderFields.GspEligible == true)
+                .OrNot(factory.EbayOrder.As("Inner")
+                    .Where(EbayOrderFields.OrderID.Source("Inner") == orderIDs.First())
+                    .Select(EbayOrderFields.RollupEffectiveCheckoutStatus.Source("Inner"))
+                    .Limit(1)
+                    .Contains(EbayOrderFields.RollupEffectiveCheckoutStatus));
 
             return Tuple.Create(newJoin, newPredicate);
         }
@@ -154,7 +161,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Get ChannelAdvisor search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetChannelAdvisorSearch(IJoinOperand joins, IPredicate predicate)
+        private static Tuple<IJoinOperand, IPredicate> GetChannelAdvisorSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderEntity);
             string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderItemEntity);

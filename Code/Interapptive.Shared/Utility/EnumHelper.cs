@@ -196,8 +196,16 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static T? TryParseEnum<T>(string value) where T : struct
         {
+            return TryParseEnum<T>(value, false);
+        }
+
+        /// <summary>
+        /// Given a string value, try to parse the enum.
+        /// </summary>
+        public static T? TryParseEnum<T>(string value, bool ignoreCase) where T : struct
+        {
             T result;
-            return Enum.TryParse<T>(value, out result) ? result : default(T?);
+            return Enum.TryParse<T>(value, ignoreCase, out result) ? result : default(T?);
         }
 
         /// <summary>

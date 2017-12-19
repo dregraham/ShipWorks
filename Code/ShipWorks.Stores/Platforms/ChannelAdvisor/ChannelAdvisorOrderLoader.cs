@@ -416,9 +416,30 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="downloadedOrder">The downloaded order.</param>
         private void LoadOrderFlag(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder)
         {
-            orderToSave.FlagStyle = EnumHelper.GetDescription((ChannelAdvisorFlagType) downloadedOrder.FlagID);
+            ChannelAdvisorFlagType flag = GetFlag(downloadedOrder);
+
+            orderToSave.FlagStyle = EnumHelper.GetDescription(flag);
+            orderToSave.FlagType = (int) flag;
             orderToSave.FlagDescription = downloadedOrder.FlagDescription;
-            orderToSave.FlagType = downloadedOrder.FlagID;
+        }
+
+        /// <summary>
+        /// Given a ChannelAdvisorOrder, get the flag
+        /// </summary>
+        private static ChannelAdvisorFlagType GetFlag(ChannelAdvisorOrder downloadedOrder)
+        {
+            // If an unknown flag is downloaded, use NoFlag
+            ChannelAdvisorFlagType flag;
+            if (Enum.IsDefined(typeof(ChannelAdvisorFlagType), downloadedOrder.FlagID))
+            {
+                flag = (ChannelAdvisorFlagType) downloadedOrder.FlagID;
+            }
+            else
+            {
+                flag = ChannelAdvisorFlagType.NoFlag;
+            }
+
+            return flag;
         }
 
         /// <summary>

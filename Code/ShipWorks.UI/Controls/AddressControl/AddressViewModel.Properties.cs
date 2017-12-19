@@ -22,6 +22,7 @@ namespace ShipWorks.UI.Controls.AddressControl
         private string company;
         private AddressValidationStatusType validationStatus;
         private string validationMessage;
+        private string validationMessageLabel;
         private IEnumerable<KeyValuePair<string, ValidatedAddressEntity>> addressSuggestions;
         private int suggestionCount;
         private bool isAddressValidationEnabled;
@@ -152,6 +153,16 @@ namespace ShipWorks.UI.Controls.AddressControl
         {
             get { return validationMessage; }
             set { handler.Set(nameof(ValidationMessage), ref validationMessage, value); }
+        }
+
+        /// <summary>
+        /// Link text to display for viewing the ValidationMessage
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ValidationMessageLabel
+        {
+            get { return validationMessageLabel; }
+            set { handler.Set(nameof(ValidationMessageLabel), ref validationMessageLabel, value); }
         }
 
         /// <summary>

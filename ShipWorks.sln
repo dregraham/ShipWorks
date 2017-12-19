@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 14.0.23107.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Build\AnalysisDictionary.xml = Build\AnalysisDictionary.xml
 		Obfuscate.ps1 = Obfuscate.ps1
 		rakefile.rb = rakefile.rb
-		SeedData.sql = SeedData.sql
 		Build\shared.targets = Build\shared.targets
 		Installer\ShipWorks.iss = Installer\ShipWorks.iss
 		LLBLGen\ShipWorks.lgp = LLBLGen\ShipWorks.lgp
@@ -21,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Core", "Code\ShipWorks\ShipWorks.Core.csproj", "{02653371-C0DC-4D70-949D-60D37C69F781}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ShipWorks.SqlServer", "Code\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj", "{D9FBA556-68E0-4961-A400-636A9A6BC7BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.SqlServer", "Code\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj", "{D9FBA556-68E0-4961-A400-636A9A6BC7BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Data.Model", "Code\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj", "{6F05267C-1883-4526-8D83-E46B7B2D2FAF}"
 EndProject
@@ -141,18 +140,14 @@ Global
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|Win32.ActiveCfg = Release|Any CPU
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|x86.ActiveCfg = Release|x86
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|x86.Build.0 = Release|x86
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Any CPU.Build.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Any CPU.Deploy.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Mixed Platforms.Deploy.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Win32.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Win32.Build.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Win32.Deploy.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|x86.ActiveCfg = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|x86.Build.0 = Debug (No Analyzers)|Any CPU
-		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|x86.Deploy.0 = Debug (No Analyzers)|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Any CPU.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Win32.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|Win32.Build.0 = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|x86.ActiveCfg = Debug|Any CPU
+		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (No Analyzers)|x86.Build.0 = Debug|Any CPU
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Deploy.0 = Debug|Any CPU
@@ -1169,5 +1164,8 @@ Global
 		{883E56D4-6EBE-4538-978F-CB2BCCB97929} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
 		{CDB5CFF5-BD9D-4AEB-9A1B-D3DE83962C99} = {08F267EF-3888-428F-B52D-6AECF17550A1}
 		{41528BDA-8C69-4CA9-B358-BC4E6A62D6F2} = {08F267EF-3888-428F-B52D-6AECF17550A1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA9D5847-243D-4778-BE03-6909765E2C21}
 	EndGlobalSection
 EndGlobal

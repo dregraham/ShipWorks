@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Interapptive.Shared.StackTraceHelper
 {
@@ -44,7 +43,6 @@ namespace Interapptive.Shared.StackTraceHelper
         }
 
         private List<EventSource> _delayedSubscriptions;
-        private TaskCompletionSource<object> _initializedTcs;
 
         /// <summary>
         /// Delayed subscriptions
@@ -116,11 +114,6 @@ namespace Interapptive.Shared.StackTraceHelper
                 }
             }
         }
-
-        /// <summary>
-        /// Set Initialized task as complete if subscribed to both sources
-        /// </summary>
-        private int initializationCount;
 
         /// <summary>
         /// Handling events

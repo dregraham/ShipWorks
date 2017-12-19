@@ -137,21 +137,6 @@ namespace ShipWorks.Stores.Platforms.ProStores
             ((ProStoresStoreEntity) Store).ShortName.ToLower();
 
         /// <summary>
-        /// Create store specific conditions to use for ProStores for basic search
-        /// </summary>
-        public override ConditionGroup CreateBasicSearchOrderConditions(string search)
-        {
-            ProStoresConfirmationCondition condition = new ProStoresConfirmationCondition();
-            condition.Operator = StringOperator.BeginsWith;
-            condition.TargetValue = search;
-
-            ConditionGroup group = new ConditionGroup();
-            group.Conditions.Add(condition);
-
-            return group;
-        }
-
-        /// <summary>
         /// Create messages to be displayed in the dashboard
         /// </summary>
         public override IEnumerable<DashboardStoreItem> CreateDashboardMessages()

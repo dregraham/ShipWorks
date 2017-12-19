@@ -46,12 +46,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                     return;
                 }
 
-                type = type.GenericTypeArguments[0];
+                type = Nullable.GetUnderlyingType(type);
             }
 
             if (defaultValues.ContainsKey(type))
             {
                 field.CurrentValue = defaultValues[type];
+                return;
+            }
+
+            if (type.IsEnum)
+            {
+                field.CurrentValue = Enum.ToObject(type, 0);
             }
         }
     }
