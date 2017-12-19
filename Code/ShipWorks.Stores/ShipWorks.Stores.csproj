@@ -134,6 +134,9 @@
       <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -659,8 +662,8 @@
       <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">

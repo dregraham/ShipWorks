@@ -98,10 +98,6 @@
       <HintPath>..\..\packages\Syncfusion.XlsIO.Base46.15.1.0.41\lib\net46\Syncfusion.XlsIO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -126,6 +122,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -231,8 +230,8 @@
       <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
       <Name>ShipWorks.Shipping</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
-      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
+      <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Stores.UI\ShipWorks.Stores.UI.csproj">
@@ -285,10 +284,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
-    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
