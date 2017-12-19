@@ -105,10 +105,7 @@
                     <Button Visibility="{Binding CanShowSuggestions, Converter={StaticResource BooleanToVisibility}}"
                             props:PopupClickManager.OpenPopup="{Binding ElementName=AddressPopup}">
                         <StackPanel Margin="0" Orientation="Horizontal">
-                            <TextBlock Margin="0" Text="{Binding ValidationMessageLabel}"></TextBlock>
-                            <TextBlock Margin="0"
-                                       Visibility="{Binding SuggestionCount, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={StaticResource One}}"
-                                       Text="s" />
+                            <TextBlock Margin="0" Text="{Binding ValidationMessageLabel}"/>
                         </StackPanel>
                     </Button>
                     <Button Margin="6,0,0,0"

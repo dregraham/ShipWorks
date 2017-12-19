@@ -18,9 +18,6 @@ Albacore.configure do |config|
 		unless File.exists? msbuild.command
 			msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe"
 		end
-		unless File.exists? msbuild.command
-			msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
-		end
 		#msbuild.properties = { TreatWarningsAsErrors: true }
 	end
 end
@@ -271,10 +268,10 @@ namespace :db do
 	task :blank,  [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :switch, :deploy]
 
 	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
-	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy]
+	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :switch, :deploy]
 
 	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
-	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed]
+	task :populate, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema]
 
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create, [:instance, :targetDatabase] do |t, args|

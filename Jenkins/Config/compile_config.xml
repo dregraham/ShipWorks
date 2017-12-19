@@ -2,20 +2,25 @@
 <project>
   <actions/>
   <description></description>
-  <logRotator class="hudson.tasks.LogRotator">
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
     <daysToKeep>21</daysToKeep>
     <numToKeep>5</numToKeep>
     <artifactDaysToKeep>-1</artifactDaysToKeep>
     <artifactNumToKeep>-1</artifactNumToKeep>
-  </logRotator>
-  <keepDependencies>false</keepDependencies>
-  <properties>
-    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.7.4">
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty plugin="gitlab-plugin@1.5.2">
+      <gitLabConnection>Gitlab Server</gitLabConnection>
+    </com.dabsquared.gitlabjenkins.connection.GitLabConnectionProperty>
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@1.1.0">
       <taskName>Compile the solution</taskName>
       <stageName>Stage 1: Build</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
   </properties>
-  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.0.1">
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@3.6.4">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
@@ -35,7 +40,7 @@
     </extensions>
   </scm>
   <assignedNode>windows</assignedNode>
-  <canRoam>true</canRoam>
+  <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -53,15 +58,27 @@
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.test.AggregatedTestResultPublisher>
+    <hudson.tasks.test.AggregatedTestResultPublisher plugin="junit@1.23">
       <includeFailedBuilds>true</includeFailedBuilds>
     </hudson.tasks.test.AggregatedTestResultPublisher>
-    <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
+    <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@2.0">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
+      <showGraphs>false</showGraphs>
       <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.8">
+    <join.JoinTrigger plugin="join@1.21">
+      <joinProjects>@@FEATURE_NAME@@-integration-test</joinProjects>
+      <joinPublishers/>
+      <resultThreshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </resultThreshold>
+    </join.JoinTrigger>
+    <hudson.tasks.Mailer plugin="mailer@1.20">
       <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com c.hicks@shipworks.com j.winchester@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
@@ -80,11 +97,10 @@
     </hudson.tasks.BuildTrigger>
     <hudson.tasks.Fingerprinter>
       <targets>Artifacts/Application/*.*</targets>
-      <recordBuildArtifacts>false</recordBuildArtifacts>
     </hudson.tasks.Fingerprinter>
   </publishers>
   <buildWrappers>
-    <se.diabol.jenkins.pipeline.PipelineVersionContributor plugin="delivery-pipeline-plugin@0.7.4">
+    <se.diabol.jenkins.pipeline.PipelineVersionContributor plugin="delivery-pipeline-plugin@1.1.0">
       <versionTemplate>0.0.0.${BUILD_NUMBER}</versionTemplate>
       <updateDisplayName>true</updateDisplayName>
     </se.diabol.jenkins.pipeline.PipelineVersionContributor>
