@@ -69,7 +69,7 @@
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <join.JoinTrigger plugin="join@1.21">
-      <joinProjects>@@BRANCH_NAME@@-integration-test</joinProjects>
+      <joinProjects>@@FEATURE_NAME@@-integration-test</joinProjects>
       <joinPublishers/>
       <resultThreshold>
         <name>SUCCESS</name>
