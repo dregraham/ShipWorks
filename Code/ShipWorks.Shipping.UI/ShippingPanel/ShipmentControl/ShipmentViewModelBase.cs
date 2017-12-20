@@ -372,7 +372,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void ManageDimensionsProfiles(DimensionsProfilesChangedMessage message)
         {
-            // For "Enter Dimensions" we need to capture entered values so that we can re-add them later.
             long originalDimensionsProfileID = SelectedDimensionsProfile?.DimensionsProfileID ?? 0;
 
             // Refresh the dimensions profiles.
