@@ -72,8 +72,12 @@ namespace ShipWorks.AddressValidation
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int) validationResult.AddressType));
-                    
+                    // Only add the origin to the validation results if it was fully matched
+                    if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum)
+                    {
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType));
+                    }
+                                        
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
                         validationResult.AddressValidationError = TranslateValidationResultMessage(uspsResult);
@@ -207,6 +211,12 @@ namespace ShipWorks.AddressValidation
                 uspsResult.AddressCleansingResult != "Full Address Verified.")
             {
                 return AddressType.InternationalAmbiguous;
+            }
+
+            // If the address is matched partially consider it a bad address
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Partial)
+            {
+                return AddressType.PrimaryNotFound;
             }
 
             return AddressType.Valid;
