@@ -2967,7 +2967,7 @@ namespace ShipWorks
             }
 
             // TODO: Do the split here in an upcoming story.
-            GenericResult<long> result = new GenericResult<long>();
+            GenericResult<long> result = await Task.FromResult(new GenericResult<long>());
 
             if (result.Success)
             {
