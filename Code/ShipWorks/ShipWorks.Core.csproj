@@ -1381,6 +1381,7 @@
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\ICombineOrderSearchProvider.cs" />
     <Compile Include="Stores\Content\IOnlineUpdateCommandCreator.cs" />
     <Compile Include="Stores\Content\IOrderCombineValidator.cs" />
+    <Compile Include="Stores\Content\ISplitOrderValidator.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\IStoreSpecificCombineOrder.cs" />
     <Compile Include="Stores\Content\CombineOrderValidator.cs" />
