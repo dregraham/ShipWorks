@@ -22,16 +22,14 @@ namespace ShipWorks.Stores.Content.SplitOrder
     [Component]
     public class SplitOrderValidator : ISplitOrderValidator
     {
-        private readonly ICombineOrderGateway gateway;
         private readonly ISecurityContext securityContext;
         private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SplitOrderValidator(ICombineOrderGateway gateway, ISecurityContext securityContext, IOrderManager orderManager)
+        public SplitOrderValidator(ISecurityContext securityContext, IOrderManager orderManager)
         {
-            this.gateway = gateway;
             this.securityContext = securityContext;
             this.orderManager = orderManager;
         }
@@ -64,8 +62,8 @@ namespace ShipWorks.Stores.Content.SplitOrder
 
             bool canCombine = processedShipment == null;
 
-            return canCombine == false ? 
-                Result.FromError("Selected order cannot be split as it has a processed shipment") : 
+            return canCombine == false ?
+                Result.FromError("Selected order cannot be split as it has a processed shipment") :
                 Result.FromSuccess();
         }
     }
