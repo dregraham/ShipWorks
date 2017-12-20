@@ -174,9 +174,17 @@ namespace ShipWorks
                 SelectionDependentType.AppliesFunction,
                 ShouldCombineOrderBeEnabled);
 
+            selectionDependentEnabler.SetEnabledWhen(buttonSplit,
+                SelectionDependentType.AppliesFunction,
+                ShouldSplitOrderBeEnabled);
+
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder,
                 SelectionDependentType.AppliesFunction,
                 ShouldCombineOrderBeEnabled);
+
+            selectionDependentEnabler.SetEnabledWhen(contextOrderSplitOrder,
+                SelectionDependentType.AppliesFunction,
+                ShouldSplitOrderBeEnabled);
         }
 
         /// <summary>
@@ -185,8 +193,10 @@ namespace ShipWorks
         private IDisposable DisableCustomEnablerComponents()
         {
             selectionDependentEnabler.SetEnabledWhen(buttonCombine, SelectionDependentType.Ignore);
+            selectionDependentEnabler.SetEnabledWhen(buttonSplit, SelectionDependentType.Ignore);
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder, SelectionDependentType.Ignore);
-
+            selectionDependentEnabler.SetEnabledWhen(contextOrderSplitOrder, SelectionDependentType.Ignore);
+            
             return Disposable.Create(InitializeCustomEnablerComponents);
         }
 
@@ -1433,6 +1443,23 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Allow the combine button to be enabled
+        /// </summary>
+        private bool ShouldSplitOrderBeEnabled(IEnumerable<long> keys)
+        {
+            if (!keys.IsCountEqualTo(1))
+            {
+                return false;
+            }
+
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ISplitOrderValidator orderSplitValidator = scope.Resolve<ISplitOrderValidator>();
+                return orderSplitValidator.Validate(keys).Success;
+            }
+        }
+        
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
@@ -2917,6 +2944,30 @@ namespace ShipWorks
             }
 
             GenericResult<long> result = await CombineOrders().ConfigureAwait(true);
+
+            if (result.Success)
+            {
+                LookupOrder(result.Value);
+            }
+            else
+            {
+                UpdateCommandState();
+            }
+        }
+
+        /// <summary>
+        /// Split an order
+        /// </summary>
+        private async void OnSplitOrder(object sender, EventArgs e)
+        {
+            if (!ShouldSplitOrderBeEnabled(gridControl.Selection.OrderedKeys))
+            {
+                UpdateCommandState();
+                return;
+            }
+
+            // TODO: Do the split here in an upcoming story.
+            GenericResult<long> result = new GenericResult<long>();
 
             if (result.Success)
             {
