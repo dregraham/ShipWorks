@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users.Security;

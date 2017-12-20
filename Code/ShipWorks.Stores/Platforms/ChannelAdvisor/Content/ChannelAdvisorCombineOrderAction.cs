@@ -6,7 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
             ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) combinedOrder;
 
             order.IsPrime =
-                orders.Where(o => o is ChannelAdvisorOrderEntity).Cast<ChannelAdvisorOrderEntity>().All(o => o.IsPrime == (int) ChannelAdvisorIsAmazonPrime.No) ? 
+                orders.Where(o => o is ChannelAdvisorOrderEntity).Cast<ChannelAdvisorOrderEntity>().All(o => o.IsPrime == (int) ChannelAdvisorIsAmazonPrime.No) ?
                     (int) ChannelAdvisorIsAmazonPrime.No :
                     (int) ChannelAdvisorIsAmazonPrime.Unknown;
 

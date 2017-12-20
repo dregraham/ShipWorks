@@ -4,7 +4,7 @@ using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using Xunit.Abstractions;

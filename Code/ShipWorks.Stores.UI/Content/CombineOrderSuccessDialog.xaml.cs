@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 
 namespace ShipWorks.Stores.UI.Content
 {
@@ -12,6 +12,9 @@ namespace ShipWorks.Stores.UI.Content
     [Component]
     public partial class OrderCombinationSuccessDialog : Window, ICombineOrderSuccessDialog
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderCombinationSuccessDialog()
         {
             InitializeComponent();

@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 
 namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 {

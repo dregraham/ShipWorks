@@ -7,7 +7,7 @@ using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating;

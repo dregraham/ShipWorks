@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;

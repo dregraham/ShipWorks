@@ -5,7 +5,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Ebay;
 using ShipWorks.Tests.Shared;

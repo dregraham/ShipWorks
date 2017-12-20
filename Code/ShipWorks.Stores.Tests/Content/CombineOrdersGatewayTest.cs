@@ -8,6 +8,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;

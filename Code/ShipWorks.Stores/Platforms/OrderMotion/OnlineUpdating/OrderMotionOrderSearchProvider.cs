@@ -7,7 +7,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombinedOrderSearchProviders;
+using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
 namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
 {

@@ -635,7 +635,6 @@
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorHelperTest.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
     <Compile Include="Stores\Content\Panels\MapPanelTest.cs" />
-    <Compile Include="Stores\Platforms\eBay\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\Platforms\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />

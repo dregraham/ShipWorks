@@ -6,7 +6,7 @@ using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using Xunit;
 

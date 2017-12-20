@@ -6,7 +6,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content.CombineOrderActions;
+using ShipWorks.Stores.Orders.Combine.Actions;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Content
@@ -25,12 +25,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
             AmazonOrderEntity order = (AmazonOrderEntity) combinedOrder;
 
             order.IsPrime =
-                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonMwsIsPrime.No) ? 
-                    (int) AmazonMwsIsPrime.No : 
+                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonMwsIsPrime.No) ?
+                    (int) AmazonMwsIsPrime.No :
                     (int) AmazonMwsIsPrime.Unknown;
 
-            order.FulfillmentChannel = 
-                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.MFN) ? 
+            order.FulfillmentChannel =
+                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.MFN) ?
                     (int) AmazonMwsFulfillmentChannel.MFN :
                     (int) AmazonMwsFulfillmentChannel.Unknown;
 

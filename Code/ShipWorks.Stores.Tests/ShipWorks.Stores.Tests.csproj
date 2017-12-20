@@ -192,6 +192,7 @@
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />

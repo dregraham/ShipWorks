@@ -137,6 +137,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -155,34 +156,41 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderMergeChargesAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderMoveValidatedAddressesAction.cs" />
-    <Compile Include="Content\CombineOrderAudit.cs" />
-    <Compile Include="Content\CombineOrderGateway.cs" />
-    <Compile Include="Content\CombineOrderViewModel.cs" />
-    <Compile Include="Content\DefaultOnlineUpdateCommandCreator.cs" />
-    <Compile Include="Content\ICombineOrderAudit.cs" />
-    <Compile Include="Content\ICombineOrderDialog.cs" />
-    <Compile Include="Content\ICombineOrderSuccessDialog.cs" />
-    <Compile Include="Content\ICombineOrderSuccessViewModel.cs" />
-    <Compile Include="Content\ICombineOrderAddressComparer.cs" />
-    <Compile Include="Content\CombineOrderOrchestrator.cs" />
-    <Compile Include="Content\CombineOrderSuccessViewModel.cs" />
-    <Compile Include="Content\CombineOrderUserInteraction.cs" />
-    <Compile Include="Content\CombineOrderAddressComparer.cs" />
-    <Compile Include="Content\CombineOrder.cs" />
-    <Compile Include="Content\CombineOrderActions\ICombineOrderAction.cs" />
-    <Compile Include="Content\CombineOrderActions\IStoreSpecificCombineOrderAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderMoveItemsAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderMoveNotesAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderMovePaymentDetailsAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderPlatformSpecificAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordCreationAction.cs" />
-    <Compile Include="Content\CombineOrderActions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Orders\Combine\SearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Orders\Combine\SearchProviders\CombineOrderNumberSearchProvider.cs" />
+    <Compile Include="Orders\Combine\SearchProviders\CombineOrderSearchBaseProvider.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderMergeChargesAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderMoveValidatedAddressesAction.cs" />
+    <Compile Include="Orders\Combine\CombineOrderAudit.cs" />
+    <Compile Include="Orders\Combine\CombineOrderGateway.cs" />
+    <Compile Include="Orders\Combine\CombineOrderValidator.cs" />
+    <Compile Include="Orders\Combine\CombineOrderViewModel.cs" />
+    <Compile Include="Orders\Combine\DefaultOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Orders\Combine\ICombineOrderAudit.cs" />
+    <Compile Include="Orders\Combine\ICombineOrderDialog.cs" />
+    <Compile Include="Orders\Combine\ICombineOrderSuccessDialog.cs" />
+    <Compile Include="Orders\Combine\ICombineOrderSuccessViewModel.cs" />
+    <Compile Include="Orders\Combine\ICombineOrderAddressComparer.cs" />
+    <Compile Include="Orders\Combine\CombineOrderOrchestrator.cs" />
+    <Compile Include="Orders\Combine\CombineOrderSuccessViewModel.cs" />
+    <Compile Include="Orders\Combine\CombineOrderUserInteraction.cs" />
+    <Compile Include="Orders\Combine\CombineOrderAddressComparer.cs" />
+    <Compile Include="Orders\Combine\CombineOrder.cs" />
+    <Compile Include="Orders\Combine\Actions\ICombineOrderAction.cs" />
+    <Compile Include="Orders\Combine\Actions\IStoreSpecificCombineOrderAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderMoveItemsAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderMoveNotesAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderMovePaymentDetailsAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderPlatformSpecificAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordCreationAction.cs" />
+    <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Orders\Split\SplitOrderValidator.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />
+    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
+    <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceOnlineItems.cs" />
     <Compile Include="Platforms\BigCommerce\OnlineUpdating\BigCommerceItemLoader.cs" />
@@ -266,8 +274,10 @@
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayCombineOrderAction.cs" />
     <Compile Include="Platforms\Ebay\Content\EbayQuickSearchSql.cs" />
+    <Compile Include="Platforms\Ebay\EbayCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineAction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdater.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\UserInteraction.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
@@ -435,6 +445,7 @@
     <Compile Include="Platforms\NetworkSolutions\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Newegg\OnlineUpdating\DataAccess.cs" />
     <Compile Include="Platforms\Newegg\OnlineUpdating\IDataAccess.cs" />
+    <Compile Include="Platforms\Newegg\OnlineUpdating\NeweggCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Newegg\OnlineUpdating\NeweggOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Newegg\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
@@ -539,6 +550,7 @@
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
     <Compile Include="Platforms\Sears\Content\SearsQuickSearchSql.cs" />
+    <Compile Include="Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
@@ -606,6 +618,9 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingDataAccess.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartDownloaderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoader.cs" />
     <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartCombineOrderAction.cs" />

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 
 namespace ShipWorks.Stores.UI.Content
 {
