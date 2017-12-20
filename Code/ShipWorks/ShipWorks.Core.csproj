@@ -1391,6 +1391,7 @@
     <Compile Include="Stores\Content\Panels\Selectors\FirstEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\IEntityGridRowSelector.cs" />
     <Compile Include="Stores\Content\Panels\Selectors\SpecificEntityGridRowSelector.cs" />
+    <Compile Include="Stores\Content\SplitOrder\SplitOrderValidator.cs" />
     <Compile Include="Stores\IStoreSettingsTrackedDurationEvent.cs" />
     <Compile Include="Stores\IStoreUpgrade.cs" />
     <Compile Include="Stores\Management\ActivationErrorWizardPage.cs">
