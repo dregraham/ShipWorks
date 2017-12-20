@@ -17,6 +17,7 @@ using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Shipping.Carriers.Postal;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.AddressValidation
 {
@@ -172,8 +173,10 @@ namespace ShipWorks.AddressValidation
             {
                 return true;
             }
-
-            if (addressAdapter.AddressType == (int) AddressType.NotChecked &&
+            
+            // If there is an error stored in the adapter and the address is international and its status is not bad address
+            // we assume that it is a limited data address
+            if (!string.IsNullOrWhiteSpace(addressAdapter.AddressValidationError) &&
                 SupportsLimitedData((AddressValidationStatusType)addressAdapter.AddressValidationStatus) &&
                 !addressAdapter.IsDomesticCountry())
             {
@@ -280,7 +283,7 @@ namespace ShipWorks.AddressValidation
             if (!string.IsNullOrWhiteSpace(entityAdapter?.AddressValidationError))
             {
                 MenuItem item = new MenuItem(entityAdapter.AddressValidationError);
-                item.Enabled = false;
+                item.Click += (obj, args) => OnValidationErrorMenuClick(entityAdapter);
                 menuItems.Add(item);
             }
             
@@ -317,6 +320,21 @@ namespace ShipWorks.AddressValidation
             }
 
             return new ContextMenu(menuItems.ToArray());
+        }
+
+        /// <summary>
+        /// User clicked the Error menu item, show then an article
+        /// </summary>
+        private void OnValidationErrorMenuClick(AddressAdapter entityAdapter)
+        {
+            if (entityAdapter.IsDomesticCountry())
+            {
+                WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000051969-using-address-validation", null);
+            }
+            else
+            {
+                WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000113490-international-address-validation", null);
+            }
         }
 
         /// <summary>

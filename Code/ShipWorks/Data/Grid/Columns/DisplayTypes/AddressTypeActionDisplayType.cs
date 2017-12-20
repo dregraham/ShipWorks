@@ -88,8 +88,6 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
         
         private void LinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
-            WebHelper.OpenUrl("http://support.shipworks.com/support/solutions/articles/4000113490-international-address-validation", null);
-
             addressSelector.ShowAddressOptionMenu(e.Row.Grid.SandGrid, e);
         }
 
