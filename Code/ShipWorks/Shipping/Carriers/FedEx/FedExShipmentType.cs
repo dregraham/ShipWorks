@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -378,7 +379,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.ImporterCountryCode = "US";
             shipment.FedEx.ImporterPhone = "";
 
-            // If we couldn't apply the COD origin address here (then the FedEx account must have been deleted), fallback to blank
+            // If we couldn't apply the COD origin address here (then the FedEx account must have been deleted), fall back to blank
             if (!UpdatePersonAddress(shipment, new PersonAdapter(shipment.FedEx, "Cod"), shipment.FedEx.CodOriginID))
             {
                 PersonAdapter.ApplyDefaults(shipment.FedEx, "Cod");
@@ -838,7 +839,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
             // We're setting this once to avoid marking the entity as dirty
-            shipment.InsuranceProvider = shipment.FedEx.Packages.Count > 1 ?
+            shipment.InsuranceProvider = IsDeclaredValueRequired(shipment) ?
                 (int) InsuranceProvider.Carrier :
                 settings.FedExInsuranceProvider;
 
@@ -886,6 +887,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
         }
+
+        /// <summary>
+        /// Does the shipment require FedEx declared value
+        /// </summary>
+        private static bool IsDeclaredValueRequired(IShipmentEntity shipment) =>
+            shipment.FedEx.Packages.IsCountGreaterThan(1) || FedExUtility.IsFreightAnyService(shipment.FedEx.Service);
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
