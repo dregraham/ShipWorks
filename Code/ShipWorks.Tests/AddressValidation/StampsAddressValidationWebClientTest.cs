@@ -37,7 +37,8 @@ namespace ShipWorks.Tests.AddressValidation
                 IsCityStateZipOk = true,
                 ResidentialIndicator = ResidentialDeliveryIndicatorType.Yes,
                 MatchedAddress = matchedAddress,
-                Candidates = new[] { candidateOne, candidateTwo }
+                Candidates = new[] { candidateOne, candidateTwo },
+                VerificationLevel = AddressVerificationLevel.Maximum
             };
 
             mock.Mock<IUspsWebClient>()
@@ -47,7 +48,7 @@ namespace ShipWorks.Tests.AddressValidation
             var resultFactory = mock.Mock<IAddressValidationResultFactory>();
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
-            await testObject.ValidateAddressAsync(new AddressAdapter());
+            await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US" });
 
             resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult, It.IsAny<int>()));
             resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>()));
@@ -99,7 +100,7 @@ namespace ShipWorks.Tests.AddressValidation
                 residentialIndicator);
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
-            var result = await testObject.ValidateAddressAsync(new AddressAdapter());
+            var result = await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US"});
 
             Assert.Equal(expectedAddressType, result.AddressType);
         }
