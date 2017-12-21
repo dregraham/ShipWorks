@@ -16,7 +16,6 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -329,11 +328,6 @@ namespace ShipWorks.Shipping.Insurance
                         if (shipmentType == ShipmentTypeCode.iParcel)
                         {
                             rate = 0.75m;
-                        }
-                        else if (shipmentType == ShipmentTypeCode.FedEx &&
-                            FedExUtility.IsFreightLtlService(shipment.FedEx?.Service))
-                        {
-                            rate = 0.95m;
                         }
                         else
                         {
