@@ -31,7 +31,6 @@ namespace ShipWorks.Templates.Controls
     /// <summary>
     /// Control for displaying the preview of a single ShipWorks template
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class TemplatePreviewControl : UserControl
     {
         // Logger

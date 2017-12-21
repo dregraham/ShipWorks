@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping
                     }
 
                     // This is for the "Commercial Invoice" group
-                    if (shipmentType == ShipmentTypeCode.FedEx || shipmentType == ShipmentTypeCode.UpsOnLineTools)
+                    if (ShouldPrintCommercialInvoice(shipmentType))
                     {
                         if (!reinstallMissing || GroupMissing(existingGroups, "Commercial Invoice"))
                         {
@@ -180,6 +180,22 @@ namespace ShipWorks.Shipping
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns true if shipmentType should default to having a Commercial Invoice
+        /// </summary>
+        private static bool ShouldPrintCommercialInvoice(ShipmentTypeCode shipmentTypeCode)
+        {
+            List<ShipmentTypeCode> shipmentTypesWithCommercialInvoices = new List<ShipmentTypeCode>
+            {
+                ShipmentTypeCode.FedEx,
+                ShipmentTypeCode.UpsOnLineTools,
+                ShipmentTypeCode.DhlExpress,
+                ShipmentTypeCode.Asendia
+            };
+
+            return shipmentTypesWithCommercialInvoices.Contains(shipmentTypeCode);
         }
 
         /// <summary>

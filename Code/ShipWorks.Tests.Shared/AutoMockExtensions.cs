@@ -249,7 +249,7 @@ namespace ShipWorks.Tests.Shared
         /// <summary>
         /// Get a mock from a given factory method
         /// </summary>
-        public static IMockFactory<T> FromFactory<T>(this AutoMock mock) where T : class =>
-            new MockFactory<T>(mock);
+        public static IMockFactory<TFactory> FromFactory<TFactory>(this AutoMock mock) where TFactory : class =>
+            new MockFactory<TFactory>(mock);
     }
 }

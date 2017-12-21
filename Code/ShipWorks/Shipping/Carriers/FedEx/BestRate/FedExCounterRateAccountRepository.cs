@@ -39,6 +39,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         public IEnumerable<IFedExAccountEntity> AccountsReadOnly => lazyAccounts.Value;
 
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        /// v
+        public void Save<T>(T account) => Save(account as FedExAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount<T>(T account) => DeleteAccount(account as FedExAccountEntity);
+
         /// <summary>
         /// Force a check for changes
         /// </summary>
@@ -142,6 +158,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             // Nothing to save. This is a counter rate account.
         }
 
+        public void DeleteAccount(FedExAccountEntity account)
+        {
+            // Nothing to save for counter rate account.
+        }
+
         /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
@@ -159,5 +180,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Returns a list of FedEx accounts.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts;
     }
 }

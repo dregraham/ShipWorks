@@ -60,6 +60,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         public IEnumerable<IUspsAccountEntity> AccountsReadOnly => Accounts;
 
         /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        /// v
+        public void Save<T>(T account) => Save(account as UspsAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount<T>(T account) => DeleteAccount(account as UspsAccountEntity);
+
+        /// <summary>
         /// Force a check for changes
         /// </summary>
         public void CheckForChangesNeeded()
@@ -107,6 +122,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount(UspsAccountEntity account)
+        {
+            //Nothing to delete for counter rate account.
+        }
+        
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
@@ -123,5 +148,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Gets the accounts for the carrier.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts;
     }
 }

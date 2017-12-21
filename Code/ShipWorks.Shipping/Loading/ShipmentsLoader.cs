@@ -210,9 +210,14 @@ namespace ShipWorks.Shipping.Loading
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
 
+            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAsendia);
+
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
+
+            IPrefetchPathElement2 dhlShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathDhlExpress);
+            dhlShipmentPath.SubPath.Add(DhlExpressShipmentEntity.PrefetchPathPackages);
 
             IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
             fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);

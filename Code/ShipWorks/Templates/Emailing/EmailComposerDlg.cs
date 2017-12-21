@@ -34,7 +34,6 @@ namespace ShipWorks.Templates.Emailing
     /// <summary>
     /// Window for composing a new email message
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class EmailComposerDlg : Form
     {
         TemplateEntity initialTemplate;
