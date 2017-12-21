@@ -2,7 +2,6 @@
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -110,11 +109,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 fedExServiceType == FedExServiceType.SmartPost)
             {
                 return isDomestic ? "E-FEDEX" : "E-FEDEX-I";
-            }
-
-            if (FedExUtility.IsFreightLtlService(fedExServiceType))
-            {
-                return "FEDEX-F";
             }
 
             if (isDomestic)
