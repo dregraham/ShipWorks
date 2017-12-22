@@ -35,9 +35,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
-            ConfirmSplit = new RelayCommand(
-                () => ConfirmSplitAction());
-
+            ConfirmSplit = new RelayCommand(() => ConfirmSplitAction());
             CancelSplit = new RelayCommand(() => CancelSplitAction());
         }
 
@@ -103,7 +101,6 @@ namespace ShipWorks.Stores.Orders.Split
         private void Load(IOrderEntity order)
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
-
             SelectedOrderNumber = order.OrderNumberComplete;
             OrderNumberPostfix = "-1";
         }

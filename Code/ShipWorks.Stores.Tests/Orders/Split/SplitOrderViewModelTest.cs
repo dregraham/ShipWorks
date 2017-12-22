@@ -13,7 +13,6 @@ namespace ShipWorks.Stores.Tests.Orders.Split
     {
         private readonly AutoMock mock;
         private readonly SplitOrderViewModel testObject;
-        
 
         public SplitOrderViewModelTest()
         {
@@ -59,6 +58,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public void GetSplitDetailFromUser_ReturnsFailure_WhenDialogIsCancelled()
         {
             var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
+
             Assert.True(details.Failure);
         }
 
@@ -67,6 +67,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<ISplitOrderDialog>())).Returns(true);
             var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
+
             Assert.True(details.Success);
         }
 
