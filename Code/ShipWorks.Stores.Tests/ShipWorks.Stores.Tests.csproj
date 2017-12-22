@@ -186,6 +186,7 @@
     <Compile Include="Content\CombineOrdersViewModelTest.cs" />
     <Compile Include="Content\CombineOrderOrchestratorTest.cs" />
     <Compile Include="OrderNoteTest.cs" />
+    <Compile Include="Orders\Split\SplitOrderViewModelTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
     <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSqlTest.cs" />

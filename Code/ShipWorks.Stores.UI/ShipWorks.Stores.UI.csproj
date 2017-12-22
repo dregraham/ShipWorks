@@ -136,6 +136,9 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Content\SplitOrderDialog.xaml.cs">
+      <DependentUpon>SplitOrderDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Content\CombineOrderDialog.xaml.cs">
       <DependentUpon>CombineOrderDialog.xaml</DependentUpon>
     </Compile>
@@ -650,6 +653,10 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Content\SplitOrderDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Content\CombineOrderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
