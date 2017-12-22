@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -17,14 +18,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FedExRatingService));
 
-        private readonly FedExAccountRepository fedExAccountRepository;
+        private readonly ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> fedExAccountRepository;
         private readonly FedExShipmentType fedExShipmentType;
         private readonly IFedExShippingClerkFactory shippingClerkFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExRatingService(FedExAccountRepository fedExAccountRepository,
+        public FedExRatingService(ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> fedExAccountRepository,
             FedExShipmentType fedExShipmentType,
             IFedExShippingClerkFactory shippingClerkFactory)
         {

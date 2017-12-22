@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Tracking
 {
@@ -10,33 +7,22 @@ namespace ShipWorks.Shipping.Tracking
     /// </summary>
     public class TrackingResult
     {
-        string summary = "";
-
-        List<TrackingResultDetail> details = new List<TrackingResultDetail>();
-
         /// <summary>
         /// Constructor
         /// </summary>
         public TrackingResult()
         {
-
+            Details = new List<TrackingResultDetail>();
         }
 
         /// <summary>
         /// The summary of the tracking infomration
         /// </summary>
-        public string Summary
-        {
-            get { return summary; }
-            set { summary = value; }
-        }
+        public string Summary { get; set; }
 
         /// <summary>
         /// All the date\time and activity details
         /// </summary>
-        public List<TrackingResultDetail> Details
-        {
-            get { return details; }
-        }
+        public List<TrackingResultDetail> Details { get; private set; }
     }
 }

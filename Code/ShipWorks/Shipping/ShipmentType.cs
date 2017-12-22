@@ -310,13 +310,23 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Creates the UserControl that is used to edit customs options
+        /// </summary>
+        public virtual CustomsControlBase CreateCustomsControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<CustomsControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<CustomsControlBase>(ShipmentTypeCode) :
+                CreateCustomsControl();
+        }
+
+        /// <summary>
         /// Creates the UserControl that is used to edit return shipments
         /// </summary>
         public virtual ReturnsControlBase CreateReturnsControl()
         {
             return new ReturnsControlBase();
         }
-
+        
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
@@ -758,49 +768,22 @@ namespace ShipWorks.Shipping
         /// Update the person address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
         /// </summary>
-        public virtual bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
+        public bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            if (shipment.Processed)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return true;
-            }
+                IShippingOriginManager shippingOriginManager = lifetimeScope.Resolve<IShippingOriginManager>();
 
-            // Copy from the store
-            if (originID == (int) ShipmentOriginSource.Store)
-            {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                PersonAdapter originAddress = shippingOriginManager.GetOriginAddress(originID, shipment);
+
+                if (originAddress != null)
                 {
-                    // We need to use a temporary address so that we only do a single update on the destination address
-                    // This is necessary because the source has a null parsed name which causes the destination to
-                    // look dirty even if we end up setting the ParsedName to what it originally was.
-                    StoreEntity store = shipment.Order?.Store ?? lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment.OrderID);
-
-                    PersonAdapter storeCopy = new PersonAdapter();
-                    PersonAdapter.Copy(store, string.Empty, storeCopy);
-                    storeCopy.ParsedName = PersonName.Parse(store.StoreName);
-
-                    PersonAdapter.Copy(storeCopy, person);
+                    originAddress.CopyTo(person);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            // Other - no change.
-            if (originID == (int) ShipmentOriginSource.Other)
-            {
-                return true;
-            }
-
-            // Try looking it up as ShippingOriginID
-            IShippingOriginEntity origin = ShippingOriginManager.GetOriginReadOnly(originID);
-            if (origin != null)
-            {
-                PersonAdapter.Copy(origin.AsPersonAdapter(), person);
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -1155,6 +1138,6 @@ namespace ShipWorks.Shipping
         public virtual void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
             // Default will have nothing to update
-        }
+        }        
     }
 }

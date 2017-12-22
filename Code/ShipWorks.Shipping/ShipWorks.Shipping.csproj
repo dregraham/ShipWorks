@@ -101,6 +101,9 @@
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.4\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.15.1.0.41\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
       <Private>True</Private>
@@ -176,12 +179,31 @@
     <Compile Include="Carriers\Amazon\IAmazonSameDayNotAvailableFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\IAmazonServiceTypeRepository.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaAccountRepository.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaException.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaAccountManager.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaAccountDescription.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaPrefetchProvider.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\BestRatePrefetchProvider.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessor.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapter.cs" />
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountManager.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
@@ -275,6 +297,15 @@
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExOpenShipXmlWriter.cs" />
     <Compile Include="Carriers\FedEx\Api\Ship\OpenShip\FedExShipServiceWrapper.cs" />
     <Compile Include="Carriers\FedEx\FedExPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressException.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressInsuranceChoice.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressLabelService.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressPackageAdapter.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressRateHashingService.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentAdapter.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipmentType.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressRatingService.cs" />
     <Compile Include="Carriers\FedEx\FedExDownloadedLabelData.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
@@ -341,6 +372,22 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsPrefetchProvider.cs" />
     <Compile Include="Carriers\Ups\UpsPrefetchProvider.cs" />
+    <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
+    <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
+    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
+    <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
+    <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
+    <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
@@ -481,6 +528,12 @@
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\IShipEngineWebClient.cs" />
+    <Compile Include="ShipEngine\IShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\ShipEngineException.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">

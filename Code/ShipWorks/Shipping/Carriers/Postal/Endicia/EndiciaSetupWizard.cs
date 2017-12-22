@@ -30,7 +30,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// Wizard Form for setting up shipping with endicia
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.Endicia)]
-    [NDependIgnoreLongTypes]
     public partial class EndiciaSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         EndiciaAccountEntity account;

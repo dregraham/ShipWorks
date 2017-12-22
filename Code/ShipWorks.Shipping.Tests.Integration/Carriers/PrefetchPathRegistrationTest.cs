@@ -15,6 +15,8 @@ using ShipWorks.Shipping.Carriers.Usps;
 using ShipWorks.Shipping.Carriers.WebTools;
 using ShipWorks.Startup;
 using Xunit;
+using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Asendia;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -30,7 +32,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         [Theory]
         [InlineData(ShipmentTypeCode.Amazon, typeof(AmazonPrefetchProvider))]
+        [InlineData(ShipmentTypeCode.Asendia, typeof(AsendiaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.BestRate, typeof(BestRatePrefetchProvider))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(EndiciaPrefetchProvider))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(UspsPrefetchProvider))]

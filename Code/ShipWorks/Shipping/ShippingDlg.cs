@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
         private readonly Dictionary<int, ServiceControlBase> serviceControlCache = new Dictionary<int, ServiceControlBase>();
-        private CustomsControlCache customsControlCache = new CustomsControlCache();
+        private CustomsControlCache customsControlCache;
 
         private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
@@ -157,6 +157,7 @@ namespace ShipWorks.Shipping
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             uspsAccountConvertedToken = Messenger.Current.OfType<UspsAutomaticExpeditedChangedMessage>().Subscribe(OnStampsUspsAutomaticExpeditedChanged);
+            customsControlCache = new CustomsControlCache(lifetimeScope);
         }
 
         /// <summary>
@@ -2382,7 +2383,7 @@ namespace ShipWorks.Shipping
 
             serviceControlCache.Clear();
             customsControlCache.Dispose();
-            customsControlCache = new CustomsControlCache();
+            customsControlCache = new CustomsControlCache(lifetimeScope);
         }
     }
 }

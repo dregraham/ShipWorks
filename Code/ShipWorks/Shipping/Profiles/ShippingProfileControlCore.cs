@@ -343,7 +343,7 @@ namespace ShipWorks.Shipping.Profiles
 
                 if (value is Enum)
                 {
-                    value = (int) value;
+                    value = (int)value;
                 }
             }
 
@@ -387,10 +387,10 @@ namespace ShipWorks.Shipping.Profiles
             InsuranceProfileControl insuranceControl = control as InsuranceProfileControl;
             if (insuranceControl != null)
             {
-                ShippingProfileEntity profile = (ShippingProfileEntity) entity;
+                ShippingProfileEntity profile = (ShippingProfileEntity)entity;
 
                 profile.Insurance = insuranceControl.UseInsurance;
-                profile.InsuranceInitialValueSource = (int) insuranceControl.Source;
+                profile.InsuranceInitialValueSource = (int)insuranceControl.Source;
                 profile.InsuranceInitialValueAmount = insuranceControl.OtherAmount;
 
                 return;

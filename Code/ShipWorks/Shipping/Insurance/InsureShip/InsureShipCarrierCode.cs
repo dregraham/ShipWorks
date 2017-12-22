@@ -59,6 +59,14 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     carrierCode = "OTHER";
                     break;
 
+                case ShipmentTypeCode.DhlExpress:
+                    carrierCode = "DHL-E-I-P1";
+                    break;
+
+                case ShipmentTypeCode.Asendia:
+                    carrierCode = ShipmentTypeManager.GetType(shipment.ShipmentTypeCode).IsDomestic(shipment) ? "ASE-DOM" : "ASE-INTL";
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipment.ShipmentTypeCode)));
             }

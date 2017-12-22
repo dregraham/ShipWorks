@@ -168,6 +168,7 @@
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\PdfTests.cs" />
     <Compile Include="Shipping\Settings\ShippingProviderRuleManagerRegistrationTest.cs" />
+    <Compile Include="Shipping\Settings\ShippingSettingsTest.cs" />
     <Compile Include="SingleScan\ScannerConfigurationRepositoryTest.cs" />
     <Compile Include="Stores\Content\OrderManagerTest.cs" />
     <Compile Include="Stores\Content\OrderUtilityTest.cs" />
