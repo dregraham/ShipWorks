@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.Stores.Content;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content.Controls;
+using ICombineOrdersViewModel = ShipWorks.Stores.Orders.Split.ISplitOrdersViewModel;
 
 namespace ShipWorks.Stores.Orders.Combine
 {

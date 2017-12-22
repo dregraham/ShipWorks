@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Stores.Orders.Combine;
+using ShipWorks.Stores.Orders.Split;
 
 namespace ShipWorks.Stores.UI.Content
 {
@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.UI.Content
     /// Interaction logic for CombineOrdersDialog.xaml
     /// </summary>
     [Component]
-    public partial class CombineOrdersDialog : ICombineOrderDialog
+    public partial class SplitOrdersDialog : ISplitOrderDialog
     {
         /// <summary>
         /// Set the owner of this window

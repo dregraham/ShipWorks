@@ -184,6 +184,9 @@
     <Compile Include="Orders\Combine\Actions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Orders\Split\ISplitOrdersViewModel.cs" />
+    <Compile Include="Orders\Split\SplitOrderViewModel.cs" />
+    <Compile Include="Orders\Split\ISplitOrderDialog.cs" />
     <Compile Include="Orders\Split\SplitOrderValidator.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
