@@ -6,13 +6,13 @@ using ShipWorks.Data.Model.EntityInterfaces;
 namespace ShipWorks.Stores.Orders.Split
 {
     /// <summary>
-    /// View Model for the combine orders dialog
+    /// View Model for the split orders dialog
     /// </summary>
     public interface ISplitOrdersViewModel
     {
         /// <summary>
-        /// Get order combination details from user
+        /// Get order split details from user
         /// </summary>
-        GenericResult<Tuple<long, string>> GetSplitDetailsFromUser(IEnumerable<IOrderEntity> orders);
+        GenericResult<SplitOrderDefinition> GetSplitDetailsFromUser(IOrderEntity order);
     }
 }
