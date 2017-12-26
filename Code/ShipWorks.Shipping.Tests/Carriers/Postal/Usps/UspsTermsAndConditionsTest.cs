@@ -122,27 +122,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         {
             testObject.Show();
         }
-     
-        [Fact]
-        public void Show_GetsUrlFromWebClient_WhenTermsAreNotAccepted()
-        {
-            var shipment = new ShipmentEntity()
-            {
-                Postal = new PostalShipmentEntity()
-                {
-                    Usps = new UspsShipmentEntity()
-                    {
-                        UspsAccountID = 123
-                    }
-                }
-            };
-
-            accountInfo.Terms.TermsAR = false;
-            Assert.Throws<UspsTermsAndConditionsException>(() => testObject.Validate(shipment));
-
-            testObject.Show();
-
-            webClient.Verify(w => w.GetUrl(uspsAccount, UrlType.SetTermsGeneral));
-        }
     }
 }
