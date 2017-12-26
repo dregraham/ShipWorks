@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Orders.Split
             splitOrdersDialog.DataContext = this;
 
             return messageHelper.ShowDialog(splitOrdersDialog) == true ?
-                GenericResult.FromSuccess(new OrderSplitDefinition(null, null, SelectedOrderNumber + OrderNumberPostfix)) :
+                GenericResult.FromSuccess(new OrderSplitDefinition(null, null, null, SelectedOrderNumber + OrderNumberPostfix)) :
                 GenericResult.FromError<OrderSplitDefinition>("Canceled");
         }
 

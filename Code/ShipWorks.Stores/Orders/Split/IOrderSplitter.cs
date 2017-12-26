@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -12,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        Task<IEnumerable<string>> Split(OrderEntity order, OrderSplitDefinition definition);
+        Task<IDictionary<long, string>> Split(OrderSplitDefinition definition);
     }
 }

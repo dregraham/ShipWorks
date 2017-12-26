@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Users.Security
+﻿using Interapptive.Shared.Utility;
+
+namespace ShipWorks.Users.Security
 {
     /// <summary>
     /// Encapsulates user permission settings and their modifications.
@@ -13,6 +15,15 @@
         /// to a StoreID, such as an OrderItemID would be translated to its order's StoreID.
         /// </remarks>
         void DemandPermission(PermissionType permission, long? objectID);
+
+        /// <summary>
+        /// Determines if the current user has the specified permission
+        /// </summary>
+        /// <remarks>
+        /// If the PermissionType is related to orders, then the ObjectID will be automatically translated
+        /// to a StoreID, such as an OrderItemID would be translated to its order's StoreID.
+        /// </remarks>
+        Result RequestPermission(PermissionType permission, long? objectID);
 
         /// <summary>
         /// Checks whether the current user has the specified permission

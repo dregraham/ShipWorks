@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -14,17 +11,23 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitDefinition(IDictionary<long, float> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
+        public OrderSplitDefinition(OrderEntity order, IDictionary<long, double> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
         {
+            Order = order;
             ItemQuantities = itemQuanities;
             ChargeAmounts = chargeAmounts;
             NewOrderNumber = newOrderNumber;
         }
 
         /// <summary>
+        /// Order to be split
+        /// </summary>
+        public OrderEntity Order { get; }
+
+        /// <summary>
         /// List of item quantities for splitting orders
         /// </summary>
-        public IDictionary<long, float> ItemQuantities { get; }
+        public IDictionary<long, double> ItemQuantities { get; }
 
         /// <summary>
         /// List of charge amounts for splitting orders
