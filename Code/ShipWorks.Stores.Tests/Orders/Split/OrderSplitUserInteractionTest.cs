@@ -3,7 +3,6 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -39,7 +38,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             var viewModelResult = GenericResult.FromSuccess<OrderSplitDefinition>(null);
 
             mock.Mock<IOrderSplitViewModel>()
-                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<IOrderEntity>(), AnyString))
+                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
                 .Returns(viewModelResult);
 
             var result = testObject.GetSplitDetailsFromUser(new OrderEntity(), "Foo");

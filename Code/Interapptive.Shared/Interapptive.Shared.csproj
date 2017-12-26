@@ -326,6 +326,7 @@
     <Compile Include="UI\ShipWorksSaveFileDialogException.cs" />
     <Compile Include="UI\UserConditionalNotificationType.cs" />
     <Compile Include="Utility\ClrHelper.cs" />
+    <Compile Include="Utility\DecimalExtensions.cs" />
     <Compile Include="Utility\DetailsAttribute.cs" />
     <Compile Include="Utility\EnumResult.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />

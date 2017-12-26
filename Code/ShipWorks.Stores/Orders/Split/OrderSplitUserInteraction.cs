@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -11,8 +11,8 @@ namespace ShipWorks.Stores.Orders.Split
     [Component]
     public class OrderSplitUserInteraction : IOrderSplitUserInteraction
     {
-        readonly IOrderSplitViewModel splitViewModel;
-        readonly IOrderSplitSuccessViewModel successViewModel;
+        private readonly IOrderSplitViewModel splitViewModel;
+        private readonly IOrderSplitSuccessViewModel successViewModel;
 
         /// <summary>
         /// Constructor
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get details about splitting an order from a user
         /// </summary>
-        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order, string newOrderNumber) =>
+        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string newOrderNumber) =>
             splitViewModel.GetSplitDetailsFromUser(order, newOrderNumber);
 
         /// <summary>

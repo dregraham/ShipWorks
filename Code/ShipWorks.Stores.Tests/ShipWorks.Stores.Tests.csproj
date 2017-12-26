@@ -23,6 +23,8 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Orders\Split\OrderSplitChargeViewModelTest.cs" />
+    <None Remove="Orders\Split\OrderSplitItemViewModelTest.cs" />
     <None Remove="Orders\Split\OrderSplitOrchestratorTest.cs" />
     <None Remove="Orders\Split\OrderSplitUserInteractionTest.cs" />
   </ItemGroup>

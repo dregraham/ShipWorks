@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
@@ -8,7 +9,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
@@ -17,6 +17,8 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Orders.Split
 {
+    [SuppressMessage("SonarLint", "S112: Code should not throw base Exception",
+        Justification = "We're testing that any exception causes expected behavior")]
     public class OrderSplitOrchestratorTest : IDisposable
     {
         private readonly AutoMock mock;
@@ -39,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 .Setup(x => x.RequestPermission(It.IsAny<PermissionType>(), AnyLong))
                 .Returns(Result.FromSuccess());
             mock.Mock<IOrderSplitUserInteraction>()
-                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<IOrderEntity>(), AnyString))
+                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
                 .Returns(orderSplitDefinition);
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
@@ -120,7 +122,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             await testObject.Split(1006).Recover(ex => null);
 
             mock.Mock<IOrderSplitUserInteraction>()
-                .Verify(x => x.GetSplitDetailsFromUser(It.IsAny<IOrderEntity>(), AnyString), Times.Never);
+                .Verify(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString), Times.Never);
         }
 
         [Fact]
@@ -136,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public async Task Split_DoesNotCallSplitOnOrderSplitter_WhenUserCancelsDialog()
         {
             mock.Mock<IOrderSplitUserInteraction>()
-                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<IOrderEntity>(), AnyString))
+                .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
                 .Returns(new Exception("Foo"));
 
             await testObject.Split(1006).Recover(ex => null);

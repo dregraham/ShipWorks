@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order split details from user
         /// </summary>
-        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order, string suggestedOrderNumber);
+        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string suggestedOrderNumber);
     }
 }
