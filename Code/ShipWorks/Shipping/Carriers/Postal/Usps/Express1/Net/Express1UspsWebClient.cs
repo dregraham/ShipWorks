@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -39,6 +40,7 @@ using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps
 using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ServiceType;
 using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.StatusCodes;
 using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.UrlType;
+using PaperSizeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PaperSizeV1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -1320,6 +1322,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Not implemented in Express1
         /// </summary>
         public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address, UspsAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Not implemented in Express1
+        /// </summary>
+        public string GetUrl(UspsAccountEntity account, WebServices.UrlType urlType)
         {
             throw new NotImplementedException();
         }

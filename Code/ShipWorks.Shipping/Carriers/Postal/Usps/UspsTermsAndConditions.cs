@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
@@ -20,22 +21,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(SingleInstance = true)]
     public class UspsTermsAndConditions : IUspsTermsAndConditions
     {
-        private readonly UspsWebClient webClient;
+        private readonly IUspsWebClient webClient;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
         private readonly IMessageHelper messageHelper;
         private readonly Dictionary<long, bool> accountAcceptanceCache;
 
         private readonly Object obj = new Object();
 
-        public UspsTermsAndConditions(
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, 
-            UspsShipmentType uspsShipmentType,
+        public UspsTermsAndConditions(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
+            IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
             IMessageHelper messageHelper)
         {
             accountAcceptanceCache = new Dictionary<long, bool>();
             this.accountRepository = accountRepository;
             this.messageHelper = messageHelper;
-            webClient = (UspsWebClient) uspsShipmentType.CreateWebClient();
+            webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private bool AreTermsAccepted(UspsAccountEntity uspsAccount)
         {
             AccountInfoV25 accountInfo = (AccountInfoV25) webClient.GetAccountInfo(uspsAccount);
-            return false && accountInfo.Terms.TermsAR && accountInfo.Terms.TermsSL && accountInfo.Terms.TermsGP;
+            return accountInfo.Terms.TermsAR && accountInfo.Terms.TermsSL && accountInfo.Terms.TermsGP;
         }
     }
 }

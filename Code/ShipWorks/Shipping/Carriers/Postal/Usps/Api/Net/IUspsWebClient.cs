@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -69,5 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="account">The account.</param>
         void PopulateUspsAccountEntity(UspsAccountEntity account);
+
+        string GetUrl(UspsAccountEntity account, UrlType urlType);
     }
 }
