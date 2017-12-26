@@ -15,6 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create a dialog that will allow a customer to accept the terms and conditions for USPS
         /// </summary>
-        void Open();
+        void Show();
     }
 }

@@ -249,7 +249,7 @@ namespace ShipWorks.Shipping.Services
             {
                 messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
                 ITermsAndConditionsException termsAndConditionsException = workflowResult.TermsAndConditionsException;
-                termsAndConditionsException.TermsAndConditions.Open();
+                termsAndConditionsException.TermsAndConditions.Show();
             }
             else
             {

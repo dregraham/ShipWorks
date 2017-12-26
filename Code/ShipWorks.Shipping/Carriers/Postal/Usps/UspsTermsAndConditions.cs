@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create a dialog that will allow a customer to accept the terms and conditions for USPS
         /// </summary>
-        public void Open()
+        public void Show()
         {
             UspsAccountEntity account = accountAcceptanceCache
                 .Where(kv => !kv.Value)?
