@@ -1,6 +1,10 @@
-﻿using Autofac;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Autofac;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -9,11 +13,6 @@ using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Tests.Shared;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
@@ -194,7 +193,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
             streamReader.Setup(r => r.ReadToEnd()).Throws(new ArgumentNullException());
             var testObject = mock.Create<FakeOdbcSettingsFile>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.Open(streamReader.Object));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.Open(streamReader.Object));
         }
 
         private Mock<IOdbcFieldMap> MockFieldMap()

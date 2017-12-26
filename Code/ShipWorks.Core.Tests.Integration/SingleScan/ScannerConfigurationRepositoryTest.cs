@@ -46,9 +46,8 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
         [Fact]
         public void Save_ThrowsArgumentNullException_WhenNameIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.SaveScannerName(null));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.SaveScannerName(null));
         }
-
 
         [Fact]
         public void Save_SavesScannerName()

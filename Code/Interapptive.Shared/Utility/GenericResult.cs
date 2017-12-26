@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Interapptive.Shared.Utility
 {
@@ -55,23 +56,30 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GenericResult(bool success, T value, string message)
+        private GenericResult(bool success, T value, string message, Exception exception)
         {
             Success = success;
             Message = message;
             Value = value;
-            Exception = null;
+            Exception = exception;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GenericResult(bool success, T value, Exception exception)
+        internal GenericResult(bool success, T value, string message) :
+            this(success, value, message, string.IsNullOrEmpty(message) ? null : new Exception(message))
         {
-            Success = success;
-            Message = exception?.Message;
-            Exception = exception;
-            Value = value;
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        internal GenericResult(bool success, T value, Exception exception) :
+            this(success, value, exception?.Message, exception)
+        {
+
         }
 
         /// <summary>
@@ -99,5 +107,91 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         /// <remarks>This is so that we can test for failure instead of not success</remarks>
         public bool Failure => !Success;
+
+        /// <summary>
+        /// Bind the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value or its error, or the original error
+        /// </returns>
+        public GenericResult<TResult> Bind<TResult>(Func<T, GenericResult<TResult>> map) =>
+            Match(map, ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Bind the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the original value or an error from the map action, or the original error
+        /// </returns>
+        public GenericResult<T> Bind(Func<T, Result> map) =>
+            Match(x => map(x).Match(() => GenericResult.FromSuccess(x), ex => ex),
+                ex => GenericResult.FromError<T>(ex));
+
+        /// <summary>
+        /// Map the value of the result
+        /// </summary>
+        /// <returns>
+        /// A result containing the mapped value, or the original error
+        /// </returns>
+        public GenericResult<TResult> Map<TResult>(Func<T, TResult> map) =>
+            Match(x => GenericResult.FromSuccess(map(x)),
+                ex => GenericResult.FromError<TResult>(ex));
+
+        /// <summary>
+        /// Perform an operation on the value
+        /// </summary>
+        /// <returns>
+        /// A result containing the original value, or the original error
+        /// </returns>
+        public GenericResult<T> Do(Action<T> map) =>
+            Match(x => { map(x); return x; },
+                ex => GenericResult.FromError<T>(ex));
+
+        /// <summary>
+        /// Perform an operation on the value
+        /// </summary>
+        /// <returns>
+        /// A result containing the original value, or the original error
+        /// </returns>
+        public GenericResult<T> Do(Func<T, Result> map) =>
+            Bind(x => map(x).Match(() => x, ex => GenericResult.FromError<T>(ex)));
+
+        /// <summary>
+        /// Match on the result, calling the first method on success and the second on failure
+        /// </summary>
+        /// <returns>
+        /// The result of the called function
+        /// </returns>
+        public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<Exception, TResult> onError) =>
+            Success ?
+                onSuccess(Value) :
+                onError(Exception);
+
+        /// <summary>
+        /// Convert from a Result to a GenericResult
+        /// </summary>
+        public static implicit operator Result(GenericResult<T> result) =>
+            result.Match(x => Result.FromSuccess(), ex => Result.FromError(ex));
+
+        /// <summary>
+        /// Convert from a value of the result type to a successful result
+        /// </summary>
+        public static implicit operator GenericResult<T>(T value) =>
+            GenericResult.FromSuccess(value);
+
+        /// <summary>
+        /// Convert from an exception to an error result
+        /// </summary>
+        public static implicit operator GenericResult<T>(Exception exception) =>
+            GenericResult.FromError<T>(exception);
+
+        /// <summary>
+        /// Convert from a GenericResult(Of T) to Task(Of T)
+        /// </summary>
+        /// <returns>
+        /// Returns a successful task if the GenericResult was successful, otherwise a failed task
+        /// </returns>
+        public static implicit operator Task<T>(GenericResult<T> result) =>
+            result.Match(Task.FromResult, ex => Task.FromException<T>(ex));
     }
 }

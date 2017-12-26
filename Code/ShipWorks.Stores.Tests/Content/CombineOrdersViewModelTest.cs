@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Content
         {
             var testObject = mock.Create<CombineOrderViewModel>();
 
-            Assert.Throws<ArgumentException>(() => testObject.GetCombinationDetailsFromUser(null));
+            Assert.Throws<ArgumentException>(() => (object) testObject.GetCombinationDetailsFromUser(null));
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Tests.Content
         {
             var testObject = mock.Create<CombineOrderViewModel>();
 
-            Assert.Throws<ArgumentException>(() => testObject.GetCombinationDetailsFromUser(Enumerable.Empty<IOrderEntity>()));
+            Assert.Throws<ArgumentException>(() => (object) testObject.GetCombinationDetailsFromUser(Enumerable.Empty<IOrderEntity>()));
         }
 
         [Fact]

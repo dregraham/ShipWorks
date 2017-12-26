@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public void GetSplitDetailsFromUser_Throws_WhenOrderIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => testObject.GetSplitDetailsFromUser(null));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.GetSplitDetailsFromUser(null));
         }
 
         [Theory]
