@@ -35,13 +35,13 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksBackup));
 
         // File the backup will be written to \ restored from
-        IProgressProvider progress;
+        readonly IProgressProvider progress;
 
         // The user that is doing the backup
-        long userID = -1;
+        readonly long userID = -1;
 
         // The SqlSession that holds the connection information for the database to backup\restore
-        SqlSession sqlSession;
+        readonly SqlSession sqlSession;
 
         // Static (global) event that can notify any time a restore is starting.
         public static event EventHandler RestoreStarting;
@@ -582,8 +582,10 @@ namespace ShipWorks.Data.Administration
                     throw new InvalidOperationException("The logical file groups could not be located in the SQL Server backup.");
                 }
 
-                ExecuteSqlRestore(con, database.DatabaseName, database.BackupFile, sourceLogicalDb, sourceLogicalLog, targetPhysDb, targetPhysLog, progress);
-
+                DbCommand cmdRestore = CreateRestoreCommand(sourceLogicalDb, sourceLogicalLog, targetPhysDb, targetPhysLog, con);
+                SetupRestoreParameters(database, cmdRestore);
+                ExecuteSqlRestore(con, cmdRestore, database.DatabaseName, database.BackupFile, progress);
+  
                 progress.Detail = "Done";
                 progress.Completed();
             }
@@ -626,8 +628,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Execute the restore operation
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        private void ExecuteSqlRestore(DbConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
+        private void ExecuteSqlRestore(DbConnection con, DbCommand cmdRestore, string databaseName, string backupFilePath, ProgressItem progress)
         {
             RestoreStarting?.Invoke(this, EventArgs.Empty);
 
@@ -641,18 +642,6 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                // Determine physical names of the backup target
-                DbCommand cmdRestore = DbCommandProvider.Create(con);
-                cmdRestore.CommandText =
-                    "RESTORE DATABASE @Database  " +
-                    " FROM DISK = @FilePath      " +
-                    " WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE, " +
-                    "  MOVE '" + sourceLogicalDb + "' TO '" + targetPhysDb + "', " +
-                    "  MOVE '" + sourceLogicalLog + "' TO '" + targetPhysLog + "'";
-
-                cmdRestore.AddParameterWithValue("@FilePath", backupFilePath);
-                cmdRestore.AddParameterWithValue("@Database", databaseName);
-
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
@@ -673,7 +662,6 @@ namespace ShipWorks.Data.Administration
                 progress.Detail = "Initiating restore";
 
                 // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                cmdRestore.CommandTimeout = 1800;
                 DbCommandProvider.ExecuteScalar(cmdRestore);
             }
             finally
@@ -692,6 +680,33 @@ namespace ShipWorks.Data.Administration
 
                 SqlConnection.ClearAllPools();
             }
+        }
+
+        /// <summary>
+        /// Creates the Restore DbCommand
+        /// </summary>
+        private static DbCommand CreateRestoreCommand(string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, DbConnection con)
+        {
+            DbCommand cmdRestore = DbCommandProvider.Create(con);
+            cmdRestore.CommandText =
+                "RESTORE DATABASE @Database  " +
+                " FROM DISK = @FilePath      " +
+                " WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE, " +
+                "  MOVE '" + sourceLogicalDb + "' TO '" + targetPhysDb + "', " +
+                "  MOVE '" + sourceLogicalLog + "' TO '" + targetPhysLog + "'";
+
+            cmdRestore.CommandTimeout = 1800;
+
+            return cmdRestore;
+        }
+
+        /// <summary>
+        /// Sets the FilePath and Database parameters
+        /// </summary>
+        private static void SetupRestoreParameters(BackupDatabase database, DbCommand cmdRestore)
+        {
+            cmdRestore.AddParameterWithValue("@FilePath", database.BackupFile);
+            cmdRestore.AddParameterWithValue("@Database", database.DatabaseName);
         }
 
         #endregion
