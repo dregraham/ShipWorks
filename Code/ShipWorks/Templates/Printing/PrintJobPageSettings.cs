@@ -21,7 +21,7 @@ namespace ShipWorks.Templates.Printing
         double marginBottom = 1;
         double marginLeft = 1;
         double marginRight = 1;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -47,18 +47,17 @@ namespace ShipWorks.Templates.Printing
         }
 
         /// <summary>
-        /// Contructor for manually creating the page settings values instead of pulling then from a template
+        /// Contructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        public PrintJobPageSettings(double pageHeight, double pageWidth, double marginTop, double marginRight, double marginBottom, double marginLeft)
+        public PrintJobPageSettings(PrintResultEntity printResult)
         {
-            this.pageHeight = pageHeight;
-            this.pageWidth = pageWidth;
+            pageHeight = printResult.PageHeight;
+            pageWidth = printResult.PageWidth;
 
-            this.marginTop = marginTop;
-            this.marginBottom = marginBottom;
-            this.marginLeft = marginLeft;
-            this.marginRight = marginRight;
+            marginTop = printResult.PageMarginTop;
+            marginBottom = printResult.PageMarginBottom;
+            marginLeft = printResult.PageMarginLeft;
+            marginRight = printResult.PageMarginRight;
         }
 
         /// <summary>
