@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -14,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsLabelService : ILabelService
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
         private readonly Func<Express1UspsLabelService> express1UspsLabelService;
         private readonly UspsRatingService uspsRatingService;
         private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
@@ -23,13 +24,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsLabelService(IShipmentTypeManager shipmentTypeManager,
-            Func<Express1UspsLabelService> express1UspsLabelService, 
+        public UspsLabelService(IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
+            Func<Express1UspsLabelService> express1UspsLabelService,
             UspsRatingService uspsRatingService,
             Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData,
             IUspsTermsAndConditions termsAndConditions)
         {
-            this.shipmentTypeManager = shipmentTypeManager;
+            this.uspsShipmentTypes = uspsShipmentTypes;
             this.express1UspsLabelService = express1UspsLabelService;
             this.uspsRatingService = uspsRatingService;
             this.createDownloadedLabelData = createDownloadedLabelData;
@@ -43,8 +44,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IDownloadedLabelData uspsDownloadedLabelData;
 
-            UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
+            IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
             uspsShipmentType.ValidateShipment(shipment);
+
             try
             {
                 if (uspsShipmentType.ShouldRateShop(shipment) || uspsShipmentType.ShouldTestExpress1Rates(shipment))
@@ -78,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
-                UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
+                IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
                 uspsShipmentType.CreateWebClient().VoidShipment(shipment);
             }
@@ -95,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IDownloadedLabelData uspsDownloadedLabelData = null;
 
-            UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
+            IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
             IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
@@ -121,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
-                        ShipmentType express1UspsShipmentType = shipmentTypeManager.Get(ShipmentTypeCode.Express1Usps);
+                        IUspsShipmentType express1UspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Express1Usps];
                         express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
 
                         uspsDownloadedLabelData = await express1UspsLabelService().Create(shipment).ConfigureAwait(false);

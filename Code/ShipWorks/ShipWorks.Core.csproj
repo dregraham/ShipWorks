@@ -1260,6 +1260,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IUspsTermsAndConditions.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />

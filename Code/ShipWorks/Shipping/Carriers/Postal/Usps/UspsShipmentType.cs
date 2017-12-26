@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -35,7 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// A shipment type for the USPS shipment type in ShipWorks.
     /// </summary>
-    public class UspsShipmentType : PostalShipmentType
+    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Usps)]
+    public class UspsShipmentType : PostalShipmentType, IUspsShipmentType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentType"/> class.
