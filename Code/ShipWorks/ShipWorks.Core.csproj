@@ -1260,6 +1260,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsTermsAndConditions.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
@@ -1274,7 +1275,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsGlobalPostTermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />

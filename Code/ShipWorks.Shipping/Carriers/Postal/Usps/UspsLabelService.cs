@@ -6,7 +6,6 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -15,26 +14,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsLabelService : ILabelService
     {
-        private readonly UspsShipmentType uspsShipmentType;
-        private readonly Func<Express1UspsShipmentType> express1UspsShipmentType;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly Func<Express1UspsLabelService> express1UspsLabelService;
         private readonly UspsRatingService uspsRatingService;
         private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
-         
+        private readonly IUspsTermsAndConditions termsAndConditions;
+
         /// <summary>
-        ///     Constructor
+        /// Constructor
         /// </summary>
-        public UspsLabelService(UspsShipmentType uspsShipmentType,
-            Func<Express1UspsShipmentType> express1UspsShipmentType,
+        public UspsLabelService(IShipmentTypeManager shipmentTypeManager,
             Func<Express1UspsLabelService> express1UspsLabelService, 
             UspsRatingService uspsRatingService,
-            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData)
+            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData,
+            IUspsTermsAndConditions termsAndConditions)
         {
-            this.uspsShipmentType = uspsShipmentType;
-            this.express1UspsShipmentType = express1UspsShipmentType;
+            this.shipmentTypeManager = shipmentTypeManager;
             this.express1UspsLabelService = express1UspsLabelService;
             this.uspsRatingService = uspsRatingService;
             this.createDownloadedLabelData = createDownloadedLabelData;
+            this.termsAndConditions = termsAndConditions;
         }
 
         /// <summary>
@@ -44,6 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IDownloadedLabelData uspsDownloadedLabelData;
 
+            UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
             uspsShipmentType.ValidateShipment(shipment);
             try
             {
@@ -53,6 +53,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 else
                 {
+                    termsAndConditions.Validate(shipment);
+
                     UspsLabelResponse uspsLabelResponse = await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
                     uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                 }
@@ -76,6 +78,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
+                UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
+
                 uspsShipmentType.CreateWebClient().VoidShipment(shipment);
             }
             catch (UspsException ex)
@@ -91,7 +95,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IDownloadedLabelData uspsDownloadedLabelData = null;
 
-            IUspsWebClient client = uspsShipmentType.CreateWebClient();
+            UspsShipmentType uspsShipmentType = (UspsShipmentType) shipmentTypeManager.Get(ShipmentTypeCode.Usps);
+
             IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
@@ -116,13 +121,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
                         uspsShipmentType.UseAccountForShipment(account, shipment);
 
-                        express1UspsShipmentType().UpdateDynamicShipmentData(shipment);
+                        ShipmentType express1UspsShipmentType = shipmentTypeManager.Get(ShipmentTypeCode.Express1Usps);
+                        express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
+
                         uspsDownloadedLabelData = await express1UspsLabelService().Create(shipment).ConfigureAwait(false);
                     }
                     else
                     {
+                        termsAndConditions.Validate(shipment);
+
                         uspsShipmentType.UseAccountForShipment(account, shipment);
+
+                        IUspsWebClient client = uspsShipmentType.CreateWebClient();
                         UspsLabelResponse uspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
+
                         uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
                     }
 

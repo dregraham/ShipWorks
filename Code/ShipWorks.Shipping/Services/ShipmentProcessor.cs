@@ -248,7 +248,8 @@ namespace ShipWorks.Shipping.Services
             else if (workflowResult.TermsAndConditionsException != null)
             {
                 messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
-                workflowResult.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
+                ITermsAndConditionsException termsAndConditionsException = workflowResult.TermsAndConditionsException;
+                termsAndConditionsException.TermsAndConditions.Open();
             }
             else
             {
