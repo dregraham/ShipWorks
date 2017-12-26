@@ -12,12 +12,12 @@ namespace ShipWorks.Stores.Tests.Orders.Split
     public class SplitOrderViewModelTest
     {
         private readonly AutoMock mock;
-        private readonly SplitOrderViewModel testObject;
+        private readonly OrderSplitViewModel testObject;
 
         public SplitOrderViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            testObject = mock.Create<SplitOrderViewModel>();
+            testObject = mock.Create<OrderSplitViewModel>();
         }
 
         [Fact]
@@ -43,14 +43,14 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public void GetSplitDetailsFromUser_DataContext_IsSetToViewModel()
         {
             testObject.GetSplitDetailsFromUser(new OrderEntity());
-            mock.Mock<ISplitOrderDialog>().VerifySet(x => x.DataContext = testObject);
+            mock.Mock<IOrderSplitDialog>().VerifySet(x => x.DataContext = testObject);
         }
 
         [Fact]
         public void GetSplitDetailsFromUser_CallShowDialog_OnMessageHelper()
         {
             testObject.GetSplitDetailsFromUser(new OrderEntity());
-            var dialog = mock.Mock<ISplitOrderDialog>();
+            var dialog = mock.Mock<IOrderSplitDialog>();
             mock.Mock<IMessageHelper>().Verify(x => x.ShowDialog(dialog.Object));
         }
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public void GetSplitDetailFromUser_ReturnsSuccess_WhenDialogIsNotCancelled()
         {
-            mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<ISplitOrderDialog>())).Returns(true);
+            mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<IOrderSplitDialog>())).Returns(true);
             var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
 
             Assert.True(details.Success);
@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public void GetSplitDetailFromUser_ReturnsCorrectOrderNumber_WhenDialogIsNotCancelled()
         {
             mock.Mock<IMessageHelper>()
-                .Setup(x => x.ShowDialog(It.IsAny<ISplitOrderDialog>()))
+                .Setup(x => x.ShowDialog(It.IsAny<IOrderSplitDialog>()))
                 .Callback(() =>
                 {
                     testObject.SelectedOrderNumber = "123456";
@@ -91,21 +91,21 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public void CancelSplitAction_CallsClose_OnSplitOrderDialog()
         {
             testObject.CancelSplit.Execute(null);
-            mock.Mock<ISplitOrderDialog>().Verify(x => x.Close());
+            mock.Mock<IOrderSplitDialog>().Verify(x => x.Close());
         }
 
         [Fact]
         public void ConfirmSplitAction_CallsClose_OnSplitOrderDialog()
         {
             testObject.ConfirmSplit.Execute(null);
-            mock.Mock<ISplitOrderDialog>().Verify(x => x.Close());
+            mock.Mock<IOrderSplitDialog>().Verify(x => x.Close());
         }
 
         [Fact]
         public void ConfirmSplitAction_SetsDialogResultToTrue_OnSplitOrderDialog()
         {
             testObject.ConfirmSplit.Execute(null);
-            mock.Mock<ISplitOrderDialog>().VerifySet(x => x.DialogResult = true);
+            mock.Mock<IOrderSplitDialog>().VerifySet(x => x.DialogResult = true);
         }
     }
 }

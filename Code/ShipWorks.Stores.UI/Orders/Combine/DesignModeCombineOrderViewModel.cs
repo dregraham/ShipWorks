@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content;
 
-namespace ShipWorks.Stores.UI.Content
+namespace ShipWorks.Stores.UI.Orders.Combine
 {
     /// <summary>
     /// View model to aid in developing the combine orders window

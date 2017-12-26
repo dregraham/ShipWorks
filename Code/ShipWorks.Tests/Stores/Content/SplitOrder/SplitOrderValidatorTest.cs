@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
         [Fact]
         public void Validate_ReturnSuccess_WhenOrderCountIsOne()
         {
-            var testObject = mock.Create<SplitOrderValidator>();
+            var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { 1006 });
             Assert.True(result.Success);
         }
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
         [Fact]
         public void Validate_ReturnFailure_WhenOrderCountNone()
         {
-            var testObject = mock.Create<SplitOrderValidator>();
+            var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { });
             Assert.False(result.Success);
         }
@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
         [Fact]
         public void Validate_ReturnFailure_WhenOrderCountIsGreaterThanOne()
         {
-            var testObject = mock.Create<SplitOrderValidator>();
+            var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { 1006, 206 });
             Assert.False(result.Success);
         }
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
                 .Returns(false);
 
-            var testObject = mock.Create<SplitOrderValidator>();
+            var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { 1006 });
 
             Assert.True(result.Failure);
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
                 .Setup(x => x.GetLatestActiveShipment(It.IsAny<long>()))
                 .Returns(new ShipmentEntity());
 
-            var testObject = mock.Create<SplitOrderValidator>();
+            var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { 1006 });
 
             Assert.False(result.Success);

@@ -3,9 +3,9 @@
 namespace ShipWorks.Stores.Orders.Split
 {
     /// <summary>
-    /// Get order split details from user
+    /// Dialog for reporting a successful order split
     /// </summary>
-    public interface ISplitOrderDialog : IDialog
+    public interface IOrderSplitSuccessDialog : IDialog
     {
     }
 }

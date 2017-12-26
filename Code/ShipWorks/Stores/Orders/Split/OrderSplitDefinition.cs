@@ -9,12 +9,12 @@ namespace ShipWorks.Stores.Orders.Split
     /// <summary>
     /// Data for splitting orders
     /// </summary>
-    public class SplitOrderDefinition
+    public class OrderSplitDefinition
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public SplitOrderDefinition(IDictionary<long, float> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
+        public OrderSplitDefinition(IDictionary<long, float> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
         {
             ItemQuantities = itemQuanities;
             ChargeAmounts = chargeAmounts;

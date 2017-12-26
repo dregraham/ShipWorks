@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Content.SplitOrder
     /// No processed shipments
     /// </remarks>
     [Component]
-    public class SplitOrderValidator : ISplitOrderValidator
+    public class OrderSplitValidator : ISplitOrderValidator
     {
         private readonly ISecurityContext securityContext;
         private readonly IOrderManager orderManager;
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Content.SplitOrder
         /// <summary>
         /// Constructor
         /// </summary>
-        public SplitOrderValidator(ISecurityContext securityContext, IOrderManager orderManager)
+        public OrderSplitValidator(ISecurityContext securityContext, IOrderManager orderManager)
         {
             this.securityContext = securityContext;
             this.orderManager = orderManager;

@@ -13,11 +13,11 @@ namespace ShipWorks.Stores.Orders.Split
     /// <summary>
     /// View Model for the split orders dialog
     /// </summary>
-    [Component(Service = typeof(ISplitOrdersViewModel))]
-    public class SplitOrderViewModel : ISplitOrdersViewModel, INotifyPropertyChanged
+    [Component(Service = typeof(IOrderSplitViewModel))]
+    public class OrderSplitViewModel : IOrderSplitViewModel, INotifyPropertyChanged
     {
         private readonly IMessageHelper messageHelper;
-        private readonly ISplitOrderDialog splitOrdersDialog;
+        private readonly IOrderSplitDialog splitOrdersDialog;
         private readonly PropertyChangedHandler handler;
 
         private string selectedOrderNumber;
@@ -26,9 +26,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public SplitOrderViewModel(IMessageHelper messageHelper,
-            ISplitOrderDialog splitOrdersDialog
-            )
+        public OrderSplitViewModel(IMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog)
         {
             this.splitOrdersDialog = splitOrdersDialog;
             this.messageHelper = messageHelper;
@@ -85,14 +83,14 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order split details from user
         /// </summary>
-        public GenericResult<SplitOrderDefinition> GetSplitDetailsFromUser(IOrderEntity order)
+        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order)
         {
             Load(order);
             splitOrdersDialog.DataContext = this;
 
             return messageHelper.ShowDialog(splitOrdersDialog) == true ?
-                GenericResult.FromSuccess(new SplitOrderDefinition(null, null, SelectedOrderNumber + OrderNumberPostfix)) :
-                GenericResult.FromError<SplitOrderDefinition>("Canceled");
+                GenericResult.FromSuccess(new OrderSplitDefinition(null, null, SelectedOrderNumber + OrderNumberPostfix)) :
+                GenericResult.FromError<OrderSplitDefinition>("Canceled");
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ShipWorks.Stores.UI.Content
+namespace ShipWorks.Stores.UI.Orders.Combine
 {
     /// <summary>
     /// Design mode version of the order combination success view model

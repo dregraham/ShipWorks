@@ -4,14 +4,22 @@ using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Orders.Combine;
 
-namespace ShipWorks.Stores.UI.Content
+namespace ShipWorks.Stores.UI.Orders.Combine
 {
     /// <summary>
-    /// Interaction logic for CombineOrdersDialog.xaml
+    /// Interaction logic for OrderCombinationSuccessDialog.xaml
     /// </summary>
     [Component]
-    public partial class CombineOrdersDialog : ICombineOrderDialog
+    public partial class OrderCombinationSuccessDialog : Window, ICombineOrderSuccessDialog
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderCombinationSuccessDialog()
+        {
+            InitializeComponent();
+        }
+
         /// <summary>
         /// Set the owner of this window
         /// </summary>
