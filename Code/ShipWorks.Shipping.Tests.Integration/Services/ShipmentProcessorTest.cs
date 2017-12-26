@@ -58,6 +58,7 @@ namespace ShipWorks.Shipping.Tests.Services
         private readonly DataContext context;
         private ShipmentEntity shipment;
         private Mock<IUspsWebServiceFactory> webServiceFactory;
+        private readonly Mock<IUspsTermsAndConditions> termsAndConditionsMock;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
@@ -80,6 +81,7 @@ namespace ShipWorks.Shipping.Tests.Services
             context.Mock.Override<ITangoWebClient>();
             context.Mock.Override<IMessageHelper>();
             context.Mock.Override<IMessenger>();
+            termsAndConditionsMock = context.Mock.Override<IUspsTermsAndConditions>();
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -312,6 +314,42 @@ namespace ShipWorks.Shipping.Tests.Services
         }
 
         [Fact]
+        public async Task Process_ShowsErrorMessage_WhenTermsAndConditionsNotAgreedTo()
+        {
+            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            {
+                UspsTestHelpers.SetupAddressValidationResponse(w);
+            });
+
+            termsAndConditionsMock.Setup(tc => tc.Validate(shipment))
+                .Throws(new UspsTermsAndConditionsException("T&C", termsAndConditionsMock.Object));
+
+            string errorMessage = string.Empty;
+            context.Mock.Mock<IMessageHelper>()
+                .Setup(x => x.ShowError(It.IsAny<string>()))
+                .Callback((string x) => errorMessage = x);
+
+            webServiceFactory
+                .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Mock.Create<ShipmentProcessor>();
+
+            await ProcessShipment();
+
+            Assert.Contains("T&C", errorMessage);
+            termsAndConditionsMock.Verify(t=>t.Show(), Times.Once);
+        }
+
+
+        [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
             Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
@@ -339,6 +377,8 @@ namespace ShipWorks.Shipping.Tests.Services
             var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
             shipment.Postal.Usps.UspsAccountID = account.AccountId;
             shipment.TotalWeight = 3;
+
+
 
             testObject = context.Mock.Create<ShipmentProcessor>();
 

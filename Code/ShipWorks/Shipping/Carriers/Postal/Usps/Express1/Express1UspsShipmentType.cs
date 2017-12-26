@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
     /// Shipment type for Express 1 for USPS shipments.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = false)]
-    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Usps)]
+    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Express1Usps)]
     public class Express1UspsShipmentType : UspsShipmentType
     {
         /// <summary>

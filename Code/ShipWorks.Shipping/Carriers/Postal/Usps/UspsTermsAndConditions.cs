@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (!accepted)
                 {
-                    throw new UspsTermsAndConditionsException(uspsAccount, "Terms and conditions must be accepted.", this);
+                    throw new UspsTermsAndConditionsException("Terms and conditions must be accepted.", this);
                 }
             }
         }
