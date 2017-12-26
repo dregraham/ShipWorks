@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps

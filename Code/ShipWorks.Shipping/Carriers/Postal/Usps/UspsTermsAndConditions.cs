@@ -21,8 +21,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(SingleInstance = true)]
     public class UspsTermsAndConditions : IUspsTermsAndConditions
     {
-        private readonly IUspsWebClient webClient;
+
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
+        private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
         private readonly IMessageHelper messageHelper;
         private readonly Dictionary<long, bool> accountAcceptanceCache;
 
@@ -34,8 +35,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             accountAcceptanceCache = new Dictionary<long, bool>();
             this.accountRepository = accountRepository;
+            this.uspsShipmentTypes = uspsShipmentTypes;
             this.messageHelper = messageHelper;
-            webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
         }
 
         /// <summary>
@@ -95,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             ClearNotAccepted();
 
+            IUspsWebClient webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
             string url = webClient.GetUrl(account, UrlType.SetTermsGeneral);
 
             try
@@ -137,6 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private bool AreTermsAccepted(UspsAccountEntity uspsAccount)
         {
+            IUspsWebClient webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
             AccountInfoV25 accountInfo = (AccountInfoV25) webClient.GetAccountInfo(uspsAccount);
             return accountInfo.Terms.TermsAR && accountInfo.Terms.TermsSL && accountInfo.Terms.TermsGP;
         }
