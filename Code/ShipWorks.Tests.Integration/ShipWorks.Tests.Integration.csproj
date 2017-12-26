@@ -235,7 +235,7 @@
     <Compile Include="Utilities\SystemTimeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+    <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
       <Project>{41528BDA-8C69-4CA9-B358-BC4E6A62D6F2}</Project>
       <Name>ShipWorks.Tests.Integration.Shared</Name>
     </ProjectReference>

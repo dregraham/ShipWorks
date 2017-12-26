@@ -12,7 +12,7 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Audit;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Content
+namespace ShipWorks.Stores.Tests.Orders.Combine
 {
     public class CombineOrderAuditTest : IDisposable
     {

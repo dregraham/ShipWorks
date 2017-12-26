@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Integration.Shared
         /// </summary>
         /// <param name="executionMode">The instance of execution mode to use when initializing dependencies.</param>
         /// <param name="additionalInitialization">If any additional calls need to be made for initialization, pass them through this Action.</param>
-        /// <exception cref="System.Exception">A 'shipworks' account with password 'shipworks' needs to be created.</exception>
+        /// <exception cref="System.Exception">A 'ShipWorks' account with password 'ShipWorks' needs to be created.</exception>
         public ShipWorksInitializer(ExecutionMode executionMode, Action additionalInitialization)
         {
             Guid swInstance = GetShipWorksInstance();

@@ -10,7 +10,7 @@ using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Content
+namespace ShipWorks.Stores.Tests.Orders.Combine
 {
     /// <summary>
     /// Tests for CombineOrdersViewModel

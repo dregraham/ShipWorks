@@ -18,7 +18,7 @@ using ShipWorks.Tests.Shared.ExtensionMethods;
 using ShipWorks.Users.Security;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Content
+namespace ShipWorks.Stores.Tests.Orders.Combine
 {
     public class CombineOrderOrchestratorTest : IDisposable
     {

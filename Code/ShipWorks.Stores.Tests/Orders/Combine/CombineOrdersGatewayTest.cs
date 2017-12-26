@@ -13,7 +13,7 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 
-namespace ShipWorks.Stores.Tests.Content
+namespace ShipWorks.Stores.Tests.Orders.Combine
 {
     public class CombineOrdersGatewayTest : IDisposable
     {

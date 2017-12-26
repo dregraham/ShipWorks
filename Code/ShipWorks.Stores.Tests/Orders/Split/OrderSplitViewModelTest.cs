@@ -9,12 +9,12 @@ using Xunit;
 
 namespace ShipWorks.Stores.Tests.Orders.Split
 {
-    public class SplitOrderViewModelTest
+    public class OrderSplitViewModelTest
     {
         private readonly AutoMock mock;
         private readonly OrderSplitViewModel testObject;
 
-        public SplitOrderViewModelTest()
+        public OrderSplitViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<OrderSplitViewModel>();

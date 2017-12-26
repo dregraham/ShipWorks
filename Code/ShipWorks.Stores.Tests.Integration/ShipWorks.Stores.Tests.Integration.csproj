@@ -267,7 +267,7 @@
     <Compile Include="Services\StoreManagerWrapperRegistrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
+    <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj">
       <Project>{41528bda-8c69-4ca9-b358-bc4e6a62d6f2}</Project>
       <Name>ShipWorks.Tests.Integration.Shared</Name>
     </ProjectReference>
