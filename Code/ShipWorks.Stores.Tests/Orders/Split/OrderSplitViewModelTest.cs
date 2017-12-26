@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public void GetSplitDetailsFromUser_Throws_WhenOrderIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => (object) testObject.GetSplitDetailsFromUser(null));
+            Assert.Throws<ArgumentNullException>(() => (object) testObject.GetSplitDetailsFromUser(null, "foo"));
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             OrderEntity order = new OrderEntity();
             order.ChangeOrderNumber(orderNumber);
-            testObject.GetSplitDetailsFromUser(order);
+            testObject.GetSplitDetailsFromUser(order, "foo");
 
             Assert.Equal(orderNumber, testObject.SelectedOrderNumber);
             Assert.Equal("-1", testObject.OrderNumberPostfix);
@@ -42,14 +42,14 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public void GetSplitDetailsFromUser_DataContext_IsSetToViewModel()
         {
-            testObject.GetSplitDetailsFromUser(new OrderEntity());
+            testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
             mock.Mock<IOrderSplitDialog>().VerifySet(x => x.DataContext = testObject);
         }
 
         [Fact]
         public void GetSplitDetailsFromUser_CallShowDialog_OnMessageHelper()
         {
-            testObject.GetSplitDetailsFromUser(new OrderEntity());
+            testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
             var dialog = mock.Mock<IOrderSplitDialog>();
             mock.Mock<IMessageHelper>().Verify(x => x.ShowDialog(dialog.Object));
         }
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public void GetSplitDetailFromUser_ReturnsFailure_WhenDialogIsCancelled()
         {
-            var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
+            var details = testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
 
             Assert.True(details.Failure);
         }
@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public void GetSplitDetailFromUser_ReturnsSuccess_WhenDialogIsNotCancelled()
         {
             mock.Mock<IMessageHelper>().Setup(x => x.ShowDialog(It.IsAny<IOrderSplitDialog>())).Returns(true);
-            var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
+            var details = testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
 
             Assert.True(details.Success);
         }
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                     testObject.OrderNumberPostfix = "-2";
                 })
                 .Returns(true);
-            var details = testObject.GetSplitDetailsFromUser(new OrderEntity());
+            var details = testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
 
             Assert.Equal("123456-2", details.Value.NewOrderNumber);
         }

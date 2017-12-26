@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Orders\Split\OrderSplitOrchestratorTest.cs" />
+    <None Remove="Orders\Split\OrderSplitUserInteractionTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.3.0" />

@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order split details from user
         /// </summary>
-        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order);
+        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order, string suggestedOrderNumber);
     }
 }

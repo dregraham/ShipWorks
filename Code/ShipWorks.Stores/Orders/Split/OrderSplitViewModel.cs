@@ -83,9 +83,9 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order split details from user
         /// </summary>
-        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order)
+        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(IOrderEntity order, string suggestedOrderNumber)
         {
-            Load(order);
+            Load(order, suggestedOrderNumber);
             splitOrdersDialog.DataContext = this;
 
             return messageHelper.ShowDialog(splitOrdersDialog) == true ?
@@ -96,11 +96,12 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Load the orders into the view model
         /// </summary>
-        private void Load(IOrderEntity order)
+        private void Load(IOrderEntity order, string suggestedOrderNumber)
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
+
             SelectedOrderNumber = order.OrderNumberComplete;
-            OrderNumberPostfix = "-1";
+            OrderNumberPostfix = suggestedOrderNumber;
         }
 
         /// <summary>
