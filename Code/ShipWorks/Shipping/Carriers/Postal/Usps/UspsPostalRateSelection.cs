@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Postal rate selection that is aware of accounts
     /// </summary>
-    public class UspsPostalRateSelection : PostalRateSelection
+    public class UspsPostalRateSelection : PostalRateSelection, IUspsPostalRateSelection
     {
         public UspsPostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType, UspsAccountEntity account)
             : base(serviceType, confirmationType)

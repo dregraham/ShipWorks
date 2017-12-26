@@ -215,7 +215,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
-        /// <param name="shipment"></param>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);

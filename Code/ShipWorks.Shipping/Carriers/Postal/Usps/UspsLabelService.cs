@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public class UspsLabelService : ILabelService
     {
         private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
-        private readonly Func<Express1UspsLabelService> express1UspsLabelService;
-        private readonly UspsRatingService uspsRatingService;
+        private readonly IIndex<ShipmentTypeCode, ILabelService> labelServices;
+        private readonly IUspsRatingService uspsRatingService;
         private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
         private readonly IUspsTermsAndConditions termsAndConditions;
 
@@ -25,13 +25,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Constructor
         /// </summary>
         public UspsLabelService(IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
-            Func<Express1UspsLabelService> express1UspsLabelService,
-            UspsRatingService uspsRatingService,
+            IIndex<ShipmentTypeCode, ILabelService> labelServices,
+            IUspsRatingService uspsRatingService,
             Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData,
             IUspsTermsAndConditions termsAndConditions)
         {
             this.uspsShipmentTypes = uspsShipmentTypes;
-            this.express1UspsLabelService = express1UspsLabelService;
+            this.labelServices = labelServices;
+
             this.uspsRatingService = uspsRatingService;
             this.createDownloadedLabelData = createDownloadedLabelData;
             this.termsAndConditions = termsAndConditions;
@@ -102,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
-                    .OfType<UspsPostalRateSelection>()
+                    .OfType<IUspsPostalRateSelection>()
                     .Where(x => x.IsRateFor(shipment))
                     .Select(x => x.Accounts)
                     .FirstOrDefault();
@@ -126,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         IUspsShipmentType express1UspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Express1Usps];
                         express1UspsShipmentType.UpdateDynamicShipmentData(shipment);
 
-                        uspsDownloadedLabelData = await express1UspsLabelService().Create(shipment).ConfigureAwait(false);
+                        uspsDownloadedLabelData = await labelServices[ShipmentTypeCode.Express1Usps].Create(shipment).ConfigureAwait(false);
                     }
                     else
                     {
