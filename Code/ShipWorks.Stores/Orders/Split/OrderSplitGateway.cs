@@ -97,26 +97,7 @@ namespace ShipWorks.Stores.Orders.Split
             prefetchPath.Add(OrderEntity.PrefetchPathNotes);
             prefetchPath.Add(OrderEntity.PrefetchPathOrderPaymentDetails);
 
-            prefetchPath.Add(OrderEntity.PrefetchPathOrderSearch);
-            prefetchPath.Add(AmazonOrderEntity.PrefetchPathAmazonOrderSearch);
-            prefetchPath.Add(ChannelAdvisorOrderEntity.PrefetchPathChannelAdvisorOrderSearch);
-            prefetchPath.Add(ClickCartProOrderEntity.PrefetchPathClickCartProOrderSearch);
-            prefetchPath.Add(CommerceInterfaceOrderEntity.PrefetchPathCommerceInterfaceOrderSearch);
-            prefetchPath.Add(EbayOrderEntity.PrefetchPathEbayOrderSearch);
-            prefetchPath.Add(GrouponOrderEntity.PrefetchPathGrouponOrderSearch);
-            prefetchPath.Add(JetOrderEntity.PrefetchPathJetOrderSearch);
-            prefetchPath.Add(LemonStandOrderEntity.PrefetchPathLemonStandOrderSearch);
-            prefetchPath.Add(MagentoOrderEntity.PrefetchPathMagentoOrderSearch);
-            prefetchPath.Add(MarketplaceAdvisorOrderEntity.PrefetchPathMarketplaceAdvisorOrderSearch);
-            prefetchPath.Add(NetworkSolutionsOrderEntity.PrefetchPathNetworkSolutionsOrderSearch);
-            prefetchPath.Add(OrderMotionOrderEntity.PrefetchPathOrderMotionOrderSearch);
-            prefetchPath.Add(PayPalOrderEntity.PrefetchPathPayPalOrderSearch);
-            prefetchPath.Add(ProStoresOrderEntity.PrefetchPathProStoresOrderSearch);
-            prefetchPath.Add(SearsOrderEntity.PrefetchPathSearsOrderSearch);
-            prefetchPath.Add(ShopifyOrderEntity.PrefetchPathShopifyOrderSearch);
-            prefetchPath.Add(ThreeDCartOrderEntity.PrefetchPathThreeDCartOrderSearch);
-            prefetchPath.Add(WalmartOrderEntity.PrefetchPathWalmartOrderSearch);
-            prefetchPath.Add(YahooOrderEntity.PrefetchPathYahooOrderSearch);
+            AddOrderSearchPrefetchPaths(prefetchPath);
 
             IPrefetchPathElement2 itemsPath = OrderEntity.PrefetchPathOrderItems;
             itemsPath.SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
@@ -153,5 +134,32 @@ namespace ShipWorks.Stores.Orders.Split
 
             return prefetchPath;
         });
+
+        /// <summary>
+        /// Add OrderSearch prefetch paths
+        /// </summary>
+        private static void AddOrderSearchPrefetchPaths(List<IPrefetchPathElement2> prefetchPath)
+        {
+            prefetchPath.Add(OrderEntity.PrefetchPathOrderSearch);
+            prefetchPath.Add(AmazonOrderEntity.PrefetchPathAmazonOrderSearch);
+            prefetchPath.Add(ChannelAdvisorOrderEntity.PrefetchPathChannelAdvisorOrderSearch);
+            prefetchPath.Add(ClickCartProOrderEntity.PrefetchPathClickCartProOrderSearch);
+            prefetchPath.Add(CommerceInterfaceOrderEntity.PrefetchPathCommerceInterfaceOrderSearch);
+            prefetchPath.Add(EbayOrderEntity.PrefetchPathEbayOrderSearch);
+            prefetchPath.Add(GrouponOrderEntity.PrefetchPathGrouponOrderSearch);
+            prefetchPath.Add(JetOrderEntity.PrefetchPathJetOrderSearch);
+            prefetchPath.Add(LemonStandOrderEntity.PrefetchPathLemonStandOrderSearch);
+            prefetchPath.Add(MagentoOrderEntity.PrefetchPathMagentoOrderSearch);
+            prefetchPath.Add(MarketplaceAdvisorOrderEntity.PrefetchPathMarketplaceAdvisorOrderSearch);
+            prefetchPath.Add(NetworkSolutionsOrderEntity.PrefetchPathNetworkSolutionsOrderSearch);
+            prefetchPath.Add(OrderMotionOrderEntity.PrefetchPathOrderMotionOrderSearch);
+            prefetchPath.Add(PayPalOrderEntity.PrefetchPathPayPalOrderSearch);
+            prefetchPath.Add(ProStoresOrderEntity.PrefetchPathProStoresOrderSearch);
+            prefetchPath.Add(SearsOrderEntity.PrefetchPathSearsOrderSearch);
+            prefetchPath.Add(ShopifyOrderEntity.PrefetchPathShopifyOrderSearch);
+            prefetchPath.Add(ThreeDCartOrderEntity.PrefetchPathThreeDCartOrderSearch);
+            prefetchPath.Add(WalmartOrderEntity.PrefetchPathWalmartOrderSearch);
+            prefetchPath.Add(YahooOrderEntity.PrefetchPathYahooOrderSearch);
+        }
     }
 }
