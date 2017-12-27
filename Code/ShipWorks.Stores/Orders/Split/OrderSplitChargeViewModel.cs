@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitChargeViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
-        private decimal totalAmount;
+        private readonly decimal totalAmount;
         private decimal splitAmount;
 
         /// <summary>

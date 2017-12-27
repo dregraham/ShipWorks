@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitItemViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
-        private double totalQuantity;
+        private readonly double totalQuantity;
         private double splitQuantity;
 
         /// <summary>
