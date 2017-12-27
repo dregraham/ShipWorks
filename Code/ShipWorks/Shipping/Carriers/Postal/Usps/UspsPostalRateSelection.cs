@@ -14,13 +14,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsPostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType, UspsAccountEntity account)
             : base(serviceType, confirmationType)
         {
-            Accounts = new List<IUspsAccountEntity> { account };
+            Accounts = new List<UspsAccountEntity> { account };
         }
 
         /// <summary>
         /// Accounts associated with this rate
         /// </summary>
-        public List<IUspsAccountEntity> Accounts { get; }
+        public List<UspsAccountEntity> Accounts { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.

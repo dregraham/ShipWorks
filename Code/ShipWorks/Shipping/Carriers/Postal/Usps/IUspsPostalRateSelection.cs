@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Accounts associated with this rate
         /// </summary>
-        List<IUspsAccountEntity> Accounts { get; }
+        List<UspsAccountEntity> Accounts { get; }
 
         /// <summary>
         /// Is the rate compatible with the specified shipment
