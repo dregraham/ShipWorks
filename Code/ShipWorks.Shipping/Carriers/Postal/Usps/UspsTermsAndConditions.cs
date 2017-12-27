@@ -21,14 +21,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(SingleInstance = true)]
     public class UspsTermsAndConditions : IUspsTermsAndConditions
     {
-
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
         private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
         private readonly IMessageHelper messageHelper;
         private readonly Dictionary<long, bool> accountAcceptanceCache;
-
         private readonly Object obj = new Object();
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UspsTermsAndConditions(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
             IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
             IMessageHelper messageHelper)

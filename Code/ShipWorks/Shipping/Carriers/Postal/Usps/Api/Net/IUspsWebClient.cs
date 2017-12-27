@@ -71,6 +71,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="account">The account.</param>
         void PopulateUspsAccountEntity(UspsAccountEntity account);
 
+        /// <summary>
+        /// Get the USPS URL of the given urlType
+        /// </summary>
         string GetUrl(UspsAccountEntity account, UrlType urlType);
     }
 }

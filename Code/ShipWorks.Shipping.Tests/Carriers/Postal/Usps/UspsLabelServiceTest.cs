@@ -131,6 +131,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
             mock.Mock<IUspsTermsAndConditions>().Verify(tc => tc.Validate(shipment), Times.Never);
         }
-
     }
 }

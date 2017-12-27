@@ -5,8 +5,6 @@
     /// </summary>
     public class UspsTermsAndConditionsException : UspsException, ITermsAndConditionsException
     {
-        public IUspsTermsAndConditions TermsAndConditions { get; }
-        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -15,5 +13,10 @@
         {
             TermsAndConditions = termsAndConditions;
         }
+
+        /// <summary>
+        /// Associated Usps TermsAndConditions
+        /// </summary>
+        public IUspsTermsAndConditions TermsAndConditions { get; }
     }
 }
