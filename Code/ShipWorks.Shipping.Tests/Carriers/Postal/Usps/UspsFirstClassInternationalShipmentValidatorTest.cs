@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             accountOne = new UspsAccountEntity() { AcceptedFCMILetterWarning = false, UspsAccountID = 1 };
             accountTwo = new UspsAccountEntity() { AcceptedFCMILetterWarning = false, UspsAccountID = 2 };
             accountRepository.SetupGet(a => a.AccountsReadOnly).Returns(new[] { accountOne, accountTwo });
+            accountRepository.SetupGet(a => a.Accounts).Returns(new[] { accountOne, accountTwo });
             accountRepository.Setup(a => a.GetAccount(It.IsAny<ShipmentEntity>())).Returns(accountOne);
 
             testObject = mock.Create<UspsFirstClassInternationalShipmentValidator>();
@@ -107,6 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             accountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
+        [Fact]
         public void ValidateShipment_ThrowsShippingException_WhenShowDialogReturnsFalse()
         {
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(false);
@@ -129,7 +131,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             Assert.Equal("Please change the customs content type to something other than Documents or the packaging type to something other than letter.", ex.Message);
         }
 
-        public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForAllAccounts_WhenUserAcceptsWarningAndRateShoppingIsDisabled()
+        [Fact]
+        public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForAllAccounts_WhenUserAcceptsWarningAndRateShoppingIsEnabled()
         {
             accountOne.AcceptedFCMILetterWarning = false;
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(true);
@@ -143,16 +146,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                     PackagingType = (int)PostalPackagingType.Envelope,
                     Usps = new UspsShipmentEntity()
                     {
-                        RateShop = false
+                        RateShop = true
                     }
                 },
             };
 
             testObject.ValidateShipment(shipment);
-            accountRepository.VerifyGet(r => r.AccountsReadOnly);
+            accountRepository.VerifyGet(r => r.Accounts);
             Assert.True(accountOne.AcceptedFCMILetterWarning);
         }
 
+        [Fact]
         public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForShipmentsAccount_WhenUserAcceptsWarningAndRateShoppingIsDisabled()
         {
             accountOne.AcceptedFCMILetterWarning = false;
