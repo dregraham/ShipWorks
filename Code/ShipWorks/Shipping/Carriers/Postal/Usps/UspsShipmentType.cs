@@ -414,7 +414,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (shipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account.Address, new PersonAdapter(shipment, "Origin"));
+                account.Address.CopyTo(shipment, "Origin");
             }
         }
 
