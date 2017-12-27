@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -17,15 +18,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     {
         private readonly IDefaultShipmentPreProcessor defaultPreProcessor;
         private readonly IUspsFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator;
+        private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public UspsShipmentPreProcessor(IDefaultShipmentPreProcessor defaultPreProcessor, 
-            IUspsFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator)
+            IUspsFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator, 
+            IDateTimeProvider dateTimeProvider)
         {
             this.defaultPreProcessor = defaultPreProcessor;
             this.firstClassInternationalShipmentValidator = firstClassInternationalShipmentValidator;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
             // do this check after 1/21/218
-            if (DateTime.Now >= new DateTime(2018, 01, 21))
+            if (dateTimeProvider.Now >= new DateTime(2018, 01, 21))
             {
                 firstClassInternationalShipmentValidator.ValidateShipment(shipment);
             }
