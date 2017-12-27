@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
-            IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
+            IEnumerable<IUspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
                     .OfType<IUspsPostalRateSelection>()
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new UspsException("Could not get rates for the specified service type");
             }
 
-            foreach (UspsAccountEntity account in accounts.ToList())
+            foreach (IUspsAccountEntity account in accounts.ToList())
             {
                 try
                 {

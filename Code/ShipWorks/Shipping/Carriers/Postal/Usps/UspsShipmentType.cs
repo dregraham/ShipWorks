@@ -408,13 +408,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        public void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
+        public void UseAccountForShipment(IUspsAccountEntity account, ShipmentEntity shipment)
         {
             shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
             if (shipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account, string.Empty, shipment, "Origin");
+                PersonAdapter.Copy(account.Address, new PersonAdapter(shipment, "Origin"));
             }
         }
 

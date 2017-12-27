@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment);
+        void UseAccountForShipment(IUspsAccountEntity account, ShipmentEntity shipment);
 
         /// <summary>
         /// Update the dynamic data of the shipment
