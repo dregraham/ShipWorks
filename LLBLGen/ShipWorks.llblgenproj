@@ -3074,6 +3074,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UspsAccount" ObjectID="942b6875-502d-46af-8aa9-59f014378ab9">
         <Fields>
+          <Field Name="AcceptedFCMILetterWarning" Type="bool" FieldIndex="25" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="12" />
           <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="ContractType" Type="int" FieldIndex="21" />
@@ -4225,7 +4226,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-28T15:17:44.6734339Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-12-27T19:28:53.6164645Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8161,7 +8162,7 @@
                     <Field Name="AutoDownloadMinutes" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="AutoDownloadOnlyAway" Ordinal="23" DbType="2" />
                     <Field Name="DomesticAddressValidationSetting" Ordinal="24" DbType="8" Precision="10" />
-                    <Field Name="InternationalAddressValidationSetting" Ordinal="25" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10" />
+                    <Field Name="InternationalAddressValidationSetting" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="ComputerDownloadPolicy" Ordinal="26" DbType="12" Length="2147483647" />
                     <Field Name="DefaultEmailAccountID" Ordinal="27" DbType="0" Precision="19" />
                     <Field Name="ManualOrderPrefix" Ordinal="28" DbType="12" Length="10" />
@@ -8745,6 +8746,7 @@
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
+                    <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -13165,6 +13167,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UspsAccount" TargetName="ShipWorksLocal:dbo:UspsAccount">
           <FieldMappings>
+            <FieldMapping FieldName="AcceptedFCMILetterWarning" TargetFieldName="AcceptedFCMILetterWarning" />
             <FieldMapping FieldName="City" TargetFieldName="City" />
             <FieldMapping FieldName="Company" TargetFieldName="Company" />
             <FieldMapping FieldName="ContractType" TargetFieldName="ContractType" />
