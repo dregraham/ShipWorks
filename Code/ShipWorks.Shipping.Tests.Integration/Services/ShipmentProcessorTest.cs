@@ -345,7 +345,7 @@ namespace ShipWorks.Shipping.Tests.Services
             await ProcessShipment();
 
             Assert.Contains("T&C", errorMessage);
-            termsAndConditionsMock.Verify(t=>t.Show(), Times.Once);
+            termsAndConditionsMock.Verify(t => t.Show(), Times.Once);
         }
 
 
@@ -377,9 +377,7 @@ namespace ShipWorks.Shipping.Tests.Services
             var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
             shipment.Postal.Usps.UspsAccountID = account.AccountId;
             shipment.TotalWeight = 3;
-
-
-
+            
             testObject = context.Mock.Create<ShipmentProcessor>();
 
             await ProcessShipment();

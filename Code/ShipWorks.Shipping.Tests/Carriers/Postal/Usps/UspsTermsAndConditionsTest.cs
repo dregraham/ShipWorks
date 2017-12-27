@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly AccountInfoV25 accountInfo;
         private readonly Mock<IUspsWebClient> webClient;
         private readonly Mock<IUspsShipmentType> uspsShipmentType;
-        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepo;
+        private readonly Mock<ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity>> accountRepo;
         private readonly UspsAccountEntity uspsAccount;
 
         public UspsTermsAndConditionsTest()
@@ -29,8 +29,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
             uspsAccount = new UspsAccountEntity() { UspsAccountID = 123 };
 
-            accountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
-            accountRepo.Setup(r => r.GetAccount(123)).Returns(uspsAccount);
+            accountRepo = mock.Mock<ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity>>();
+            accountRepo.Setup(r => r.GetAccountReadOnly(It.IsAny<ShipmentEntity>())).Returns(uspsAccount);
 
             accountInfo = new AccountInfoV25()
             {
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             };
 
             webClient = mock.Mock<IUspsWebClient>();
-            webClient.Setup(w => w.GetAccountInfo(It.IsAny<UspsAccountEntity>()))
+            webClient.Setup(w => w.GetAccountInfo(It.IsAny<IUspsAccountEntity>()))
                 .Returns(accountInfo);
 
             uspsShipmentType = mock.Mock<IUspsShipmentType>();
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             };
 
             testObject.Validate(shipment);
-            accountRepo.Verify(r => r.GetAccount(123));
+            accountRepo.Verify(r => r.GetAccountReadOnly(shipment));
         }
 
         [Fact]
@@ -112,9 +112,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Show_DoesNothing_NoTermsAndConditionsRequiredAccountsExist()
+        public void Show_DoesNotGetUrlFromWebClient_WhenNoTermsAndConditionsRequiredAccountsExist()
         {
             testObject.Show();
+            webClient.Verify(w => w.GetUrl(It.IsAny<UspsAccountEntity>(), It.IsAny<UrlType>()), Times.Never);
         }
     }
 }

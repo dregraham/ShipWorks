@@ -184,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
-        public object GetAccountInfo(UspsAccountEntity account)
+        public object GetAccountInfo(IUspsAccountEntity account)
         {
             return ExceptionWrapper(() => { return GetAccountInfoInternal(account); }, account);
         }
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private AccountInfoV25 GetAccountInfoInternal(UspsAccountEntity account)
+        private AccountInfoV25 GetAccountInfoInternal(IUspsAccountEntity account)
         {
             AccountInfoV25 accountInfo;
 
@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the USPS URL of the given urlType
         /// </summary>
-        public string GetUrl(UspsAccountEntity account, UrlType urlType)
+        public string GetUrl(IUspsAccountEntity account, UrlType urlType)
         {
             return ExceptionWrapper(() => { return GetUrlInternal(account, urlType); }, account);
         }
@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetUrl implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private string GetUrlInternal(UspsAccountEntity account, UrlType urlType)
+        private string GetUrlInternal(IUspsAccountEntity account, UrlType urlType)
         {
             string url;
 
@@ -1538,7 +1538,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Handles exceptions when making calls to the USPS API
         /// </summary>
-        private T ExceptionWrapper<T>(Func<T> executor, UspsAccountEntity account)
+        private T ExceptionWrapper<T>(Func<T> executor, IUspsAccountEntity account)
         {
             try
             {
@@ -1588,12 +1588,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the Credentials for the given account
         /// </summary>
-        private static Credentials GetCredentials(UspsAccountEntity account) => GetCredentials(account, false);
+        private static Credentials GetCredentials(IUspsAccountEntity account) => GetCredentials(account, false);
 
         /// <summary>
         /// Get the Credentials for the given account
         /// </summary>
-        private static Credentials GetCredentials(UspsAccountEntity account, bool emptyCredentialsIfAccountNull)
+        private static Credentials GetCredentials(IUspsAccountEntity account, bool emptyCredentialsIfAccountNull)
         {
             if (account == null && !emptyCredentialsIfAccountNull)
             {

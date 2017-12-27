@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
-        public object GetAccountInfo(UspsAccountEntity account)
+        public object GetAccountInfo(IUspsAccountEntity account)
         {
             return AuthenticationWrapper(() => GetAccountInfoInternal(account), account);
         }
@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
-        private AccountInfo GetAccountInfoInternal(UspsAccountEntity account)
+        private AccountInfo GetAccountInfoInternal(IUspsAccountEntity account)
         {
             AccountInfo accountInfo;
 
@@ -1091,7 +1091,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Wraps the given executor in methods that ensure the appropriate authentication for the account
         /// </summary>
-        private T AuthenticationWrapper<T>(Func<T> executor, UspsAccountEntity account)
+        private T AuthenticationWrapper<T>(Func<T> executor, IUspsAccountEntity account)
         {
             object authenticationLock;
 
@@ -1142,7 +1142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the authenticator for the given account
         /// </summary>
-        private string GetAuthenticator(UspsAccountEntity account)
+        private string GetAuthenticator(IUspsAccountEntity account)
         {
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
@@ -1329,7 +1329,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Not implemented in Express1
         /// </summary>
-        public string GetUrl(UspsAccountEntity account, WebServices.UrlType urlType)
+        public string GetUrl(IUspsAccountEntity account, WebServices.UrlType urlType)
         {
             throw new NotImplementedException();
         }

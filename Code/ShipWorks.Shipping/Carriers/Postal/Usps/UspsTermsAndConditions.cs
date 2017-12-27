@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Component(SingleInstance = true)]
     public class UspsTermsAndConditions : IUspsTermsAndConditions
     {
-        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity> accountRetriever;
         private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
         private readonly IMessageHelper messageHelper;
         private readonly Dictionary<long, bool> accountAcceptanceCache;
@@ -30,12 +30,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsTermsAndConditions(ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
+        public UspsTermsAndConditions(ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity> accountRetriever,
             IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
             IMessageHelper messageHelper)
         {
             accountAcceptanceCache = new Dictionary<long, bool>();
-            this.accountRepository = accountRepository;
+            this.accountRetriever = accountRetriever;
             this.uspsShipmentTypes = uspsShipmentTypes;
             this.messageHelper = messageHelper;
         }
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             lock (obj)
             {
-                UspsAccountEntity uspsAccount = accountRepository.GetAccount(accountID);
+                IUspsAccountEntity uspsAccount = accountRetriever.GetAccountReadOnly(shipment);
 
                 if (!accountAcceptanceCache.TryGetValue(accountID, out bool accepted))
                 {
@@ -82,16 +82,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void Show()
         {
-            UspsAccountEntity account = accountAcceptanceCache
+            IUspsAccountEntity account = accountAcceptanceCache
                 .Where(kv => !kv.Value)?
                 .Take(1)
                 .Select(kv=>kv.Key)
-                .Select(accountRepository.GetAccount)
+                .Select(accountRetriever.GetAccountReadOnly)
                 .SingleOrDefault();
 
             if (account == null)
             {
-                // Maybe throw???
                 return;
             }
 
@@ -117,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void ClearNotAccepted()
         {
-            foreach (long accountID in accountAcceptanceCache.Where(kv=>!kv.Value).Select(kv=>kv.Key).ToList())
+            foreach (long accountID in accountAcceptanceCache.Where(kv => !kv.Value).Select(kv => kv.Key).ToList())
             {
                 accountAcceptanceCache.Remove(accountID);
             }
@@ -128,17 +127,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static void OpenKioskBrowser(string url)
         {
-            using (WebBrowser wb = new WebBrowser())
+            using (WebBrowser webBrowser = new WebBrowser())
             {
-                wb.Url = new Uri("about:blank");
-                wb.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
+                webBrowser.Url = new Uri("about:blank");
+                webBrowser.Document?.Window?.OpenNew(url, "location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,resizable=yes");
             }
         }
 
         /// <summary>
         /// Returns true if Terms are accepted
         /// </summary>
-        private bool AreTermsAccepted(UspsAccountEntity uspsAccount)
+        private bool AreTermsAccepted(IUspsAccountEntity uspsAccount)
         {
             IUspsWebClient webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
             AccountInfoV25 accountInfo = (AccountInfoV25) webClient.GetAccountInfo(uspsAccount);
