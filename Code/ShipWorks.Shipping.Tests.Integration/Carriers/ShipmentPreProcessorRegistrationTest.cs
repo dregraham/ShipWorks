@@ -28,9 +28,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Fact]
+        public void EnsureUspsUsesUspsShipmentPreProcessor()
+        {
+            IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(ShipmentTypeCode.Usps);
+            Assert.IsType<UspsShipmentPreProcessor>(service);
+        }
+
+        [Fact]
         public void EnsureAllCarriersExceptBestRateUseGenericShipmentPreProcessor()
         {
-            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => x != ShipmentTypeCode.BestRate))
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => x != ShipmentTypeCode.BestRate && x != ShipmentTypeCode.Usps))
             {
                 IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(value);
                 Assert.IsType<DefaultShipmentPreProcessor>(service);
