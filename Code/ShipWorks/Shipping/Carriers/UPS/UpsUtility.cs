@@ -272,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Get the total weight of the package including the dimensional weight
         /// </summary>
-        public static double GetPackageTotalWeight(UpsPackageEntity package)
+        public static double GetPackageTotalWeight(IUpsPackageEntity package)
         {
             double weight = package.Weight;
 

@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using System;
 using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -181,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <exception cref="ShippingException" />
         [NDependIgnoreComplexMethodAttribute]
-        private static void Validate(UpsServiceType upsServiceType, UpsPackageEntity package, int numberOfPackages)
+        private static void Validate(UpsServiceType upsServiceType, IUpsPackageEntity package, int numberOfPackages)
         {
             UpsPackagingType upsPackageType = (UpsPackagingType) package.PackagingType;
             float weightInPounds = (float) UpsUtility.GetPackageTotalWeight(package);

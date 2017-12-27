@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Templates.Media;
-using System.Runtime.InteropServices;
-using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Templates.Printing
 {
@@ -49,7 +44,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Contructor
         /// </summary>
-        public PrintJobPageSettings(PrintResultEntity printResult)
+        public PrintJobPageSettings(IPrintResultEntity printResult)
         {
             pageHeight = printResult.PageHeight;
             pageWidth = printResult.PageWidth;
