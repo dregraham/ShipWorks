@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
-            IEnumerable<IUspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
+            IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
                     .OfType<IUspsPostalRateSelection>()
