@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 .Returns(Result.FromSuccess());
             mock.Mock<IOrderSplitUserInteraction>()
                 .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
-                .Returns(orderSplitDefinition);
+                .ReturnsAsync(orderSplitDefinition);
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
                 .ReturnsAsync(new Dictionary<long, string>());
@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IOrderSplitUserInteraction>()
                 .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
-                .Returns(new Exception("Foo"));
+                .Returns(Task.FromException<OrderSplitDefinition>(new Exception("Foo")));
 
             await testObject.Split(1006).Recover(ex => null);
 
@@ -165,11 +165,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
-                .Returns(Task.FromException<GenericResult<IDictionary<long, string>>>(new Exception("Error!")));
+                .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
 
             await testObject.Split(1006).Recover(ex => null);
 
-            mock.Mock<IMessageHelper>()
+            mock.Mock<IAsyncMessageHelper>()
                 .Verify(x => x.ShowError("Error!"));
         }
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
-                .Returns(Task.FromException< GenericResult<IDictionary<long, string>>>(new Exception("Error!")));
+                .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
 
             await Assert.ThrowsAsync<Exception>(() => testObject.Split(1006));
         }

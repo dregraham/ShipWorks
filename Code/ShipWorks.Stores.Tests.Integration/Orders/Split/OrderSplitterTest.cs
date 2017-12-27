@@ -51,13 +51,12 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
             var result = await testObject.Split(orderSplitDefinition);
-            long newOrderID = result.Value.First(o => o.Key != originalOrder.OrderID).Key;
+            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
-            Assert.True(result.Success);
             Assert.Equal(originalOrder.OrderNumber, 1234);
             Assert.Equal(originalOrder.OrderNumberComplete, "1234");
             Assert.Equal(0, originalOrder.OrderItems.Count);
@@ -91,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
             var result = await testObject.Split(orderSplitDefinition);
-            long newOrderID = result.Value.First(o => o.Key != originalOrder.OrderID).Key;
+            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
@@ -100,7 +99,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1, 2, 3, "", false, false);
             OrderUtility.CalculateTotal(originalOrderForCheckingValues, true);
 
-            Assert.True(result.Success);
             Assert.Equal(originalOrderForCheckingValues.OrderItems.Count, originalOrder.OrderItems.Count);
             Assert.Equal(originalOrderForCheckingValues.OrderCharges.Count, originalOrder.OrderCharges.Count);
             Assert.Equal(originalOrder.OrderTotal, originalOrder.OrderTotal);
@@ -113,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(0, newOrder.OrderCharges.Sum(oc => oc.Amount));
             Assert.Equal(0, newOrder.OrderItems.Sum(oi => oi.Quantity));
         }
-        
+
         [Fact]
         public async Task Split_MovesSomeItemsAndChargesToNewOrder_WhenSomeRequested()
         {
@@ -134,7 +132,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
             var result = await testObject.Split(orderSplitDefinition);
-            long newOrderID = result.Value.First(o => o.Key != originalOrder.OrderID).Key;
+            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
@@ -145,7 +143,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             originalOrderForCheckingValues.OrderCharges.Remove(originalOrderForCheckingValues.OrderCharges.FirstOrDefault());
             decimal originalOrderTotal = OrderUtility.CalculateTotal(originalOrderForCheckingValues, true);
 
-            Assert.True(result.Success);
             Assert.Equal(1234, originalOrder.OrderNumber);
             Assert.Equal("1234", originalOrder.OrderNumberComplete);
             Assert.Equal(originalOrderForCheckingValues.OrderItems.Count, originalOrder.OrderItems.Count);
@@ -168,7 +165,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(newOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), newOrder.OrderCharges.Sum(oc => oc.Amount));
             Assert.Equal(newOrderForCheckingValues.OrderItems.Sum(oi => oi.Quantity), newOrder.OrderItems.Sum(oi => oi.Quantity));
         }
-        
+
         private ThreeDCartStoreEntity CreateThreeDCartStore()
         {
             return Create.Store<ThreeDCartStoreEntity>(StoreTypeCode.ThreeDCart)

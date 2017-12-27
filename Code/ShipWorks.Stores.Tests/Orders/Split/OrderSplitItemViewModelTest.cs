@@ -35,8 +35,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Assert.Equal("Foo", testObject.Name);
             Assert.Equal(3, testObject.OriginalQuantity);
             Assert.Equal(0, testObject.SplitQuantity);
-            Assert.Contains("Bar", testObject.Attributes);
-            Assert.Contains("Baz", testObject.Attributes);
+            Assert.Contains("Bar: This is bar", testObject.Attributes);
+            Assert.Contains("Baz: This is baz", testObject.Attributes);
         }
 
         [Theory]

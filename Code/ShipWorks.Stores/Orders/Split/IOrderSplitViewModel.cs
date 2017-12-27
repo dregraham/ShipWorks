@@ -1,4 +1,4 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -11,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order split details from user
         /// </summary>
-        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string suggestedOrderNumber);
+        Task<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string suggestedOrderNumber);
     }
 }

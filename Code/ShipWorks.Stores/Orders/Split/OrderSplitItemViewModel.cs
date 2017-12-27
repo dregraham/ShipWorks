@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitItemViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
-        private readonly double totalQuantity;
+        private double originalQuantity;
         private double splitQuantity;
 
         /// <summary>
@@ -29,10 +29,11 @@ namespace ShipWorks.Stores.Orders.Split
 
             OrderItemID = item.OrderItemID;
             Name = item.Name;
-            totalQuantity = item.Quantity;
+            TotalQuantity = item.Quantity;
             OriginalQuantity = item.Quantity;
             SplitQuantity = 0;
-            Attributes = item.OrderItemAttributes?.Select(x => x.Name).ToImmutableList() ?? Enumerable.Empty<string>();
+            Attributes = item.OrderItemAttributes?.Select(x => $"{x.Name}: {x.Description}").ToImmutableList() ??
+                ImmutableList.Create(" ");
         }
 
         /// <summary>
@@ -52,10 +53,20 @@ namespace ShipWorks.Stores.Orders.Split
         public string Name { get; set; }
 
         /// <summary>
+        /// Total quantity of the item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public double TotalQuantity { get; set; }
+
+        /// <summary>
         /// Quantity of the item on the original order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double OriginalQuantity { get; set; }
+        public double OriginalQuantity
+        {
+            get => originalQuantity;
+            set => handler.Set(nameof(OriginalQuantity), ref originalQuantity, value);
+        }
 
         /// <summary>
         /// Quantity of the item on the split order
@@ -66,11 +77,11 @@ namespace ShipWorks.Stores.Orders.Split
             get => splitQuantity;
             set
             {
-                var clampedValue = value.Clamp(0, totalQuantity);
+                var clampedValue = value.Clamp(0, TotalQuantity);
 
                 if (handler.Set(nameof(SplitQuantity), ref splitQuantity, clampedValue))
                 {
-                    OriginalQuantity = totalQuantity - splitQuantity;
+                    OriginalQuantity = TotalQuantity - splitQuantity;
                 }
             }
         }

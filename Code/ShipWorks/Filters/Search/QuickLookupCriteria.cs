@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Filters.Content;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Customers;
 using ShipWorks.Filters.Content.Conditions.Orders;
@@ -11,7 +8,7 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 namespace ShipWorks.Filters.Search
 {
     /// <summary>
-    /// Loads the search critiera for quick-lookups
+    /// Loads the search criteria for quick-lookups
     /// </summary>
     public static class QuickLookupCriteria
     {
@@ -54,6 +51,23 @@ namespace ShipWorks.Filters.Search
             ConditionGroup group = definition.RootContainer.FirstGroup;
 
             group.Conditions.Add(new OrderIDCondition { Operator = NumericOperator.Equal, Value1 = orderID });
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the definition needed to lookup the specific orders
+        /// </summary>
+        public static FilterDefinition CreateOrderLookupDefinition(IEnumerable<long> orderIDs)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            ConditionGroup group = definition.RootContainer.FirstGroup;
+            group.JoinType = ConditionJoinType.Any;
+
+            foreach (long orderID in orderIDs)
+            {
+                group.Conditions.Add(new OrderIDCondition { Operator = NumericOperator.Equal, Value1 = orderID });
+            }
 
             return definition;
         }

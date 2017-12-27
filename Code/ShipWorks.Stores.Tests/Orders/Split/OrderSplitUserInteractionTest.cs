@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -22,18 +23,18 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         }
 
         [Fact]
-        public void GetSplitDetailsFromUser_DelegatesToOrderSplitViewModel()
+        public async Task GetSplitDetailsFromUser_DelegatesToOrderSplitViewModel()
         {
             var order = new OrderEntity();
 
-            testObject.GetSplitDetailsFromUser(order, "Foo");
+            await testObject.GetSplitDetailsFromUser(order, "Foo");
 
             mock.Mock<IOrderSplitViewModel>()
                 .Verify(x => x.GetSplitDetailsFromUser(order, "Foo"));
         }
 
         [Fact]
-        public void GetSplitDetailsFromUser_ReturnsValue_FromViewModel()
+        public async Task GetSplitDetailsFromUser_ReturnsValue_FromViewModel()
         {
             var viewModelResult = GenericResult.FromSuccess<OrderSplitDefinition>(null);
 
@@ -41,17 +42,17 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
                 .Returns(viewModelResult);
 
-            var result = testObject.GetSplitDetailsFromUser(new OrderEntity(), "Foo");
+            var result = await testObject.GetSplitDetailsFromUser(new OrderEntity(), "Foo");
 
             Assert.Equal(viewModelResult, result);
         }
 
         [Fact]
-        public void ShowSuccessConfirmation_DelegatesToOrderSplitSuccessViewModel()
+        public async Task ShowSuccessConfirmation_DelegatesToOrderSplitSuccessViewModel()
         {
             var result = new[] { "Foo", "Bar" };
 
-            testObject.ShowSuccessConfirmation(result);
+            await testObject.ShowSuccessConfirmation(result);
 
             mock.Mock<IOrderSplitSuccessViewModel>()
                 .Verify(x => x.ShowSuccessConfirmation(result));

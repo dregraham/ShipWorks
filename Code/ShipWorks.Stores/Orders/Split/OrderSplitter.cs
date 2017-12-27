@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -28,7 +29,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitter(ISqlAdapterFactory sqlAdapterFactory, IOrderItemSplitter orderItemSplitter, 
+        public OrderSplitter(ISqlAdapterFactory sqlAdapterFactory, IOrderItemSplitter orderItemSplitter,
             IOrderChargeSplitter orderChargeSplitter, IOrderSplitGateway orderSplitGateway)
         {
             this.orderSplitGateway = orderSplitGateway;
@@ -40,16 +41,13 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public async Task<GenericResult<IDictionary<long, string>>> Split(OrderSplitDefinition definition)
+        public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition)
         {
-            Dictionary<long, string> resultOrderInfo = new Dictionary<long, string>();
-            resultOrderInfo.Add(definition.Order.OrderID, definition.Order.OrderNumberComplete);
-
             OrderEntity originalOrder = await orderSplitGateway.LoadOrder(definition.Order.OrderID);
 
             if (originalOrder == null)
             {
-                return GenericResult.FromError<IDictionary<long, string>>("Could not find surviving order");
+                throw new Exception("Could not find surviving order");
             }
 
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
@@ -68,24 +66,38 @@ namespace ShipWorks.Stores.Orders.Split
                 field.IsChanged = true;
             }
 
+            return await SaveOrders(originalOrder, newOrderEntity)
+                .Map(_ => new Dictionary<long, string>
+                {
+                    { definition.Order.OrderID, definition.Order.OrderNumberComplete },
+                    { newOrderEntity.OrderID, newOrderEntity.OrderNumberComplete}
+                });
+        }
+
+        private async Task<Result> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity)
+        {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
-                bool saveResult = true;
-                saveResult &= await SaveOrder(newOrderEntity, sqlAdapter);
-                saveResult &= await SaveOrder(originalOrder, sqlAdapter);
+                return await SaveOrder(newOrderEntity, sqlAdapter)
+                    .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
+                    .Map(x => CompleteTransaction(x, sqlAdapter))
+                    .ConfigureAwait(false);
+            }
+        }
 
-                if (!saveResult)
-                {
-                    sqlAdapter.Rollback();
-                    return GenericResult.FromError<IDictionary<long, string>>("Saving split order failed");
-                }
-
-                sqlAdapter.Commit();
+        /// <summary>
+        /// Complete the transaction
+        /// </summary>
+        private Result CompleteTransaction(bool saveResult, ISqlAdapter sqlAdapter)
+        {
+            if (!saveResult)
+            {
+                sqlAdapter.Rollback();
+                return new Exception("Saving split order failed");
             }
 
-            resultOrderInfo.Add(newOrderEntity.OrderID, newOrderEntity.OrderNumberComplete);
-
-            return GenericResult.FromSuccess<IDictionary<long, string>>(resultOrderInfo);
+            sqlAdapter.Commit();
+            return Result.FromSuccess();
         }
 
         /// <summary>
@@ -116,15 +128,15 @@ namespace ShipWorks.Stores.Orders.Split
                 // delete each attribute entity so derived entities are also deleted
                 foreach (OrderItemAttributeEntity attrib in orderItem.OrderItemAttributes)
                 {
-                    saveResult &= await sqlAdapter.DeleteEntityAsync(attrib);
+                    saveResult &= await sqlAdapter.DeleteEntityAsync(attrib).ConfigureAwait(false);
                 }
 
-                saveResult &= await sqlAdapter.DeleteEntityAsync(orderItem);
+                saveResult &= await sqlAdapter.DeleteEntityAsync(orderItem).ConfigureAwait(false);
             }
 
             foreach (OrderChargeEntity orderCharge in order.OrderCharges.Where(oc => oc.Amount == 0))
             {
-                saveResult &= await sqlAdapter.DeleteEntityAsync(orderCharge);
+                saveResult &= await sqlAdapter.DeleteEntityAsync(orderCharge).ConfigureAwait(false);
             }
 
             return saveResult;

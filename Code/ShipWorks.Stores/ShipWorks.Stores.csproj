@@ -187,6 +187,7 @@
     <Compile Include="Orders\Combine\Actions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordMerger.cs" />
+    <Compile Include="Orders\Split\Errors.cs" />
     <Compile Include="Orders\Split\IOrderChargeSplitter.cs" />
     <Compile Include="Orders\Split\IOrderItemSplitter.cs" />
     <Compile Include="Orders\Split\IOrderSplitGateway.cs" />
@@ -195,8 +196,8 @@
     <Compile Include="Orders\Split\IOrderSplitter.cs" />
     <Compile Include="Orders\Split\IOrderSplitViewModel.cs" />
     <Compile Include="Orders\Split\IOrderSplitUserInteraction.cs" />
-    <Compile Include="Orders\Split\OrderItemSplitter.cs" />
     <Compile Include="Orders\Split\OrderChargeSplitter.cs" />
+    <Compile Include="Orders\Split\OrderItemSplitter.cs" />
     <Compile Include="Orders\Split\OrderSplitChargeViewModel.cs" />
     <Compile Include="Orders\Split\OrderSplitGateway.cs" />
     <Compile Include="Orders\Split\OrderSplitItemViewModel.cs" />

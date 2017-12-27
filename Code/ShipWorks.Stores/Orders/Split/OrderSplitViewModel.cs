@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
@@ -20,17 +24,19 @@ namespace ShipWorks.Stores.Orders.Split
     [Component(Service = typeof(IOrderSplitViewModel))]
     public class OrderSplitViewModel : IOrderSplitViewModel, INotifyPropertyChanged
     {
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
         private readonly IOrderSplitDialog splitOrdersDialog;
         private readonly PropertyChangedHandler handler;
 
         private string selectedOrderNumber;
         private string orderNumberPostfix;
+        private decimal originalTotalCharge;
+        private decimal splitTotalCharge;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitViewModel(IMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog)
+        public OrderSplitViewModel(IAsyncMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog)
         {
             this.splitOrdersDialog = splitOrdersDialog;
             this.messageHelper = messageHelper;
@@ -74,15 +80,9 @@ namespace ShipWorks.Stores.Orders.Split
         [Obfuscation(Exclude = true)]
         public string OrderNumberPostfix
         {
-            get { return orderNumberPostfix; }
-            set { handler.Set(nameof(OrderNumberPostfix), ref orderNumberPostfix, value); }
+            get => orderNumberPostfix;
+            set => handler.Set(nameof(OrderNumberPostfix), ref orderNumberPostfix, value);
         }
-
-        /// <summary>
-        /// Order number with postfix to use for the new order
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string NewOrderNumber => $"{SelectedOrderNumber}{OrderNumberPostfix}";
 
         /// <summary>
         /// Order items
@@ -97,16 +97,58 @@ namespace ShipWorks.Stores.Orders.Split
         public IEnumerable<OrderSplitChargeViewModel> Charges { get; set; }
 
         /// <summary>
+        /// Are there any items
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AnyItems => Items.Any();
+
+        /// <summary>
+        /// Are there any charges
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AnyCharges => Charges.Any();
+
+        /// <summary>
+        /// Original total charge
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal OriginalTotalCharge
+        {
+            get => originalTotalCharge;
+            set => handler.Set(nameof(OriginalTotalCharge), ref originalTotalCharge, value);
+        }
+
+        /// <summary>
+        /// Split total charge
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal SplitTotalCharge
+        {
+            get => splitTotalCharge;
+            set => handler.Set(nameof(SplitTotalCharge), ref splitTotalCharge, value);
+        }
+
+        /// <summary>
         /// Get order split details from user
         /// </summary>
-        public GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string suggestedOrderNumber)
+        public Task<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string suggestedOrderNumber)
         {
             Load(order, suggestedOrderNumber);
-            splitOrdersDialog.DataContext = this;
 
-            return messageHelper.ShowDialog(splitOrdersDialog) == true ?
-                new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix) :
-                GenericResult.FromError<OrderSplitDefinition>("Canceled");
+            return messageHelper
+                .ShowDialog(SetupDialog)
+                .Bind(x => x == true ?
+                    Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix)) :
+                    Task.FromException<OrderSplitDefinition>(Errors.Canceled));
+        }
+
+        /// <summary>
+        /// Setup the split orders dialog
+        /// </summary>
+        private IDialog SetupDialog()
+        {
+            splitOrdersDialog.DataContext = this;
+            return splitOrdersDialog;
         }
 
         /// <summary>
@@ -121,8 +163,34 @@ namespace ShipWorks.Stores.Orders.Split
 
             Items = order.OrderItems?.Select(x => new OrderSplitItemViewModel(x)).ToImmutableList() ??
                 Enumerable.Empty<OrderSplitItemViewModel>();
-            Charges = order.OrderCharges?.Select(x => new OrderSplitChargeViewModel(x)).ToImmutableList() ??
+            Charges = order.OrderCharges?.Select(CreateChargeViewModel).ToImmutableList() ??
                 Enumerable.Empty<OrderSplitChargeViewModel>();
+
+            UpdateTotalCharges(string.Empty);
+        }
+
+        /// <summary>
+        /// Create a view model for an order charge
+        /// </summary>
+        private OrderSplitChargeViewModel CreateChargeViewModel(IOrderChargeEntity charge)
+        {
+            var viewModel = new OrderSplitChargeViewModel(charge);
+
+            viewModel.PropertyChangedStream
+                .Where(x => x == nameof(OrderSplitChargeViewModel.OriginalAmount))
+                .Do(UpdateTotalCharges)
+                .Subscribe();
+
+            return viewModel;
+        }
+
+        /// <summary>
+        /// Update the total charges when an original amount has changed
+        /// </summary>
+        private void UpdateTotalCharges(string _propertyName)
+        {
+            OriginalTotalCharge = Charges.Select(x => x.OriginalAmount).Sum();
+            SplitTotalCharge = Charges.Select(x => x.SplitAmount).Sum();
         }
 
         /// <summary>
@@ -149,9 +217,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Cancel combining orders
         /// </summary>
-        private void CancelSplitAction()
-        {
+        private void CancelSplitAction() =>
             splitOrdersDialog.Close();
-        }
     }
 }

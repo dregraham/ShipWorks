@@ -233,6 +233,7 @@
       <DependentUpon>UserConditionalNotificationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotificationViewModel.cs" />
+    <Compile Include="AsyncMessageHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AttachedProperties\ExpanderState.cs" />
     <Compile Include="Services\MessageHelperWrapper.cs" />

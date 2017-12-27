@@ -12,6 +12,11 @@ namespace ShipWorks.Stores.UI.Orders.Combine
     public partial class CombineOrdersDialog : ICombineOrderDialog
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public CombineOrdersDialog() => InitializeComponent();
+
+        /// <summary>
         /// Set the owner of this window
         /// </summary>
         [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used",

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
@@ -20,7 +19,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IOrderSplitUserInteraction userInteraction;
         private readonly ISecurityContext securityContext;
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
@@ -30,7 +29,7 @@ namespace ShipWorks.Stores.Orders.Split
             IOrderSplitGateway orderSplitGateway,
             IOrderSplitUserInteraction userInteraction,
             ISecurityContext securityContext,
-            IMessageHelper messageHelper)
+            IAsyncMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
             this.securityContext = securityContext;
@@ -59,8 +58,8 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private Task<OrderEntity> RequestPermission(OrderEntity order) =>
             securityContext
-                    .RequestPermission(PermissionType.OrdersModify, order.StoreID)
-                    .Map(() => order);
+                .RequestPermission(PermissionType.OrdersModify, order.StoreID)
+                .Map(() => order);
 
         /// <summary>
         /// Get suggested order number for the split order
@@ -79,19 +78,19 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Show a success dialog
         /// </summary>
-        private void DisplaySuccessDialog(GenericResult<IDictionary<long, string>> result) =>
-            userInteraction.ShowSuccessConfirmation(result.Value.Values);
+        private Task DisplaySuccessDialog(IDictionary<long, string> results) =>
+            userInteraction.ShowSuccessConfirmation(results.Values);
 
         /// <summary>
         /// Show an error message
         /// </summary>
-        private void DisplayErrorMessage(Exception ex) =>
-            messageHelper.ShowError(ex.Message);
+        private Task DisplayErrorMessage(Exception ex) =>
+            ex == Errors.Canceled ? Task.CompletedTask : messageHelper.ShowError(ex.Message);
 
         /// <summary>
         /// Get order IDs from the split results
         /// </summary>
-        private IEnumerable<long> GetOrderIDs(GenericResult<IDictionary<long, string>> result) =>
-            result.Value.Keys;
+        private IEnumerable<long> GetOrderIDs(IDictionary<long, string> result) =>
+            result.Keys;
     }
 }

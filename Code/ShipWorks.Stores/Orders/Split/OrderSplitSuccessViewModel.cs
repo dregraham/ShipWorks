@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
@@ -20,7 +21,7 @@ namespace ShipWorks.Stores.Orders.Split
         private const UserConditionalNotificationType notificationType = UserConditionalNotificationType.SplitOrders;
         private readonly IOrderSplitSuccessDialog dialog;
         private readonly ICurrentUserSettings currentUserSettings;
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
         private readonly PropertyChangedHandler handler;
 
         private IEnumerable<string> combinedOrders;
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitSuccessViewModel(IOrderSplitSuccessDialog dialog, ICurrentUserSettings currentUserSettings, IMessageHelper messageHelper)
+        public OrderSplitSuccessViewModel(IOrderSplitSuccessDialog dialog, ICurrentUserSettings currentUserSettings, IAsyncMessageHelper messageHelper)
         {
             this.messageHelper = messageHelper;
             this.dialog = dialog;
@@ -74,7 +75,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Show a success dialog after an order has been split
         /// </summary>
-        public void ShowSuccessConfirmation(IEnumerable<string> orderNumbers)
+        public async Task ShowSuccessConfirmation(IEnumerable<string> orderNumbers)
         {
             if (!currentUserSettings.ShouldShowNotification(notificationType))
             {
@@ -83,8 +84,16 @@ namespace ShipWorks.Stores.Orders.Split
 
             SplitOrders = orderNumbers.ToImmutableList();
 
+            await messageHelper.ShowDialog(SetupDialog);
+        }
+
+        /// <summary>
+        /// Setup the success dialog
+        /// </summary>
+        private IDialog SetupDialog()
+        {
             dialog.DataContext = this;
-            messageHelper.ShowDialog(dialog);
+            return dialog;
         }
 
         /// <summary>

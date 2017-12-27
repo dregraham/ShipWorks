@@ -3,7 +3,7 @@ using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Stores.Orders.Split;
 
-namespace ShipWorks.Stores.UI.Content
+namespace ShipWorks.Stores.UI.Orders.Split
 {
     /// <summary>
     /// Interaction logic for CombineOrdersDialog.xaml
@@ -11,6 +11,11 @@ namespace ShipWorks.Stores.UI.Content
     [Component]
     public partial class OrderSplitDialog : IOrderSplitDialog
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSplitDialog() => InitializeComponent();
+
         /// <summary>
         /// Set the owner of this window
         /// </summary>

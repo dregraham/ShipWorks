@@ -188,8 +188,10 @@
     <Compile Include="Enums\CombineSplitStatusType.cs" />
     <Compile Include="Enums\ShopSiteAuthenticationType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
+    <Compile Include="Extensions\ContinueOn.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\FuncExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
@@ -312,6 +314,7 @@
     <Compile Include="UI\FileDialogFactory.cs" />
     <Compile Include="UI\IFileDialogFactory.cs" />
     <Compile Include="UI\IForm.cs" />
+    <Compile Include="UI\IAsyncMessageHelper.cs" />
     <Compile Include="UI\InteropWindow.cs" />
     <Compile Include="UI\ISaveFileDialog.cs" />
     <Compile Include="UI\IUserConditionalDialog.cs" />

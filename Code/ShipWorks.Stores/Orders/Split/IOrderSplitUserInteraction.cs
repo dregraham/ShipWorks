@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Interapptive.Shared.Utility;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -12,11 +12,11 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get details about splitting an order from a user
         /// </summary>
-        GenericResult<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string newOrderNumber);
+        Task<OrderSplitDefinition> GetSplitDetailsFromUser(OrderEntity order, string newOrderNumber);
 
         /// <summary>
         /// Show a success dialog after an order has been split
         /// </summary>
-        void ShowSuccessConfirmation(IEnumerable<string> orderNumbers);
+        Task ShowSuccessConfirmation(IEnumerable<string> orderNumbers);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Show a success dialog after an order has been split
         /// </summary>
-        void ShowSuccessConfirmation(IEnumerable<string> orderNumbers);
+        Task ShowSuccessConfirmation(IEnumerable<string> orderNumbers);
     }
 }

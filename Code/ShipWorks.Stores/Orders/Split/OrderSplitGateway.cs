@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -60,7 +59,7 @@ namespace ShipWorks.Stores.Orders.Split
             var from = factory.Order
                                 .LeftJoin(factory.OrderSearch)
                                 .On(OrderFields.OrderID == OrderSearchFields.OrderID);
-            
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 int index = 1;
@@ -76,14 +75,14 @@ namespace ShipWorks.Stores.Orders.Split
 
                     if (await sqlAdapter.FetchScalarAsync<int>(factory.Create().Select(q.CountRow())).ConfigureAwait(false) == 0)
                     {
-                        return nextOrderNumber;
+                        return $"-{index}";
                     }
 
                     index++;
                 }
             }
 
-            return existingOrderNumber;
+            return "-S";
         }
 
         /// <summary>

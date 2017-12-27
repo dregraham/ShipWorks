@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
@@ -12,7 +13,7 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitChargeViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
-        private readonly decimal totalAmount;
+        private decimal originalAmount;
         private decimal splitAmount;
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             OrderChargeID = item.OrderChargeID;
             Type = item.Type;
-            totalAmount = item.Amount;
+            TotalAmount = item.Amount;
             OriginalAmount = item.Amount;
             SplitAmount = 0;
         }
@@ -35,6 +36,11 @@ namespace ShipWorks.Stores.Orders.Split
         /// A property value has changed
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Stream of property changes
+        /// </summary>
+        public IObservable<string> PropertyChangedStream => handler;
 
         /// <summary>
         /// ID of the order charge
@@ -48,10 +54,20 @@ namespace ShipWorks.Stores.Orders.Split
         public string Type { get; set; }
 
         /// <summary>
+        /// Total amount of the item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal TotalAmount { get; set; }
+
+        /// <summary>
         /// Amount of the item on the original order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public decimal OriginalAmount { get; set; }
+        public decimal OriginalAmount
+        {
+            get => originalAmount;
+            set => handler.Set(nameof(OriginalAmount), ref originalAmount, value);
+        }
 
         /// <summary>
         /// Amount of the item on the split order
@@ -62,11 +78,11 @@ namespace ShipWorks.Stores.Orders.Split
             get => splitAmount;
             set
             {
-                var clampedValue = value.Clamp(0, totalAmount);
+                var clampedValue = value.Clamp(0, TotalAmount);
 
                 if (handler.Set(nameof(SplitAmount), ref splitAmount, clampedValue))
                 {
-                    OriginalAmount = totalAmount - splitAmount;
+                    OriginalAmount = TotalAmount - splitAmount;
                 }
             }
         }

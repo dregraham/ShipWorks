@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
@@ -28,33 +29,36 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Theory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
-        public void ShowSuccessConfirmation_OnlyShowsDialog_WhenRequested(bool showDialog, int expectedInvocations)
+        public async Task ShowSuccessConfirmation_OnlyShowsDialog_WhenRequested(bool showDialog, int expectedInvocations)
         {
-            var dialog = mock.Mock<IOrderSplitSuccessDialog>().Object;
-
             mock.Mock<ICurrentUserSettings>()
                 .Setup(x => x.ShouldShowNotification(UserConditionalNotificationType.SplitOrders))
                 .Returns(showDialog);
 
-            testObject.ShowSuccessConfirmation(Enumerable.Empty<string>());
+            await testObject.ShowSuccessConfirmation(Enumerable.Empty<string>());
 
-            mock.Mock<IMessageHelper>()
-                .Verify(x => x.ShowDialog(dialog), Times.Exactly(expectedInvocations));
+            mock.Mock<IAsyncMessageHelper>()
+                .Verify(x => x.ShowDialog(It.IsAny<Func<IDialog>>()), Times.Exactly(expectedInvocations));
         }
 
         [Fact]
-        public void ShowSuccessConfirmation_SetsViewModelProperties_WhenDialogShouldBeShown()
+        public async Task ShowSuccessConfirmation_SetsViewModelProperties_WhenDialogShouldBeShown()
         {
-            testObject.ShowSuccessConfirmation(new[] { "foo", "bar" });
+            await testObject.ShowSuccessConfirmation(new[] { "foo", "bar" });
 
             Assert.Contains("foo", testObject.SplitOrders);
             Assert.Contains("bar", testObject.SplitOrders);
         }
 
         [Fact]
-        public void ShowSuccessConfirmation_SetsDataContext_OnDialog()
+        public async Task ShowSuccessConfirmation_SetsDataContext_OnDialog()
         {
-            testObject.ShowSuccessConfirmation(Enumerable.Empty<string>());
+            mock.Mock<IAsyncMessageHelper>()
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
+                .Callback((Func<IDialog> func) => func())
+                .ReturnsAsync(true);
+
+            await testObject.ShowSuccessConfirmation(Enumerable.Empty<string>());
 
             mock.Mock<IOrderSplitSuccessDialog>()
                 .VerifySet(x => x.DataContext = testObject);

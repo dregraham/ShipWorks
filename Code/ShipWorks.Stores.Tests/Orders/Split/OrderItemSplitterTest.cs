@@ -58,9 +58,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Quantity = 1 });
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
-            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>();
-            newOrderItemQuantities.Add(1, 1);
-            newOrderItemQuantities.Add(2, 3);
+            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>
+            {
+                { 1, 1 },
+                { 2, 3 }
+            };
 
             OrderItemSplitter testObject = new OrderItemSplitter();
             testObject.Split(newOrderItemQuantities, originalOrder, splitOrder);
@@ -136,7 +138,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             Assert.Equal(0, splitOrder.OrderItems.Sum(oi => oi.Quantity));
             Assert.Equal(4, originalOrder.OrderItems.Sum(oi => oi.Quantity));
-            
+
             Assert.Equal(1, originalOrder.OrderItems.First(oc => oc.OrderItemID == 1).Quantity);
             Assert.Equal(3, originalOrder.OrderItems.First(oc => oc.OrderItemID == 2).Quantity);
         }
