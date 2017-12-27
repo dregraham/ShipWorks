@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -8,15 +9,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public interface IUspsPostalRateSelection
     {
-
         /// <summary>
         /// Accounts associated with this rate
         /// </summary>
-        List<UspsAccountEntity> Accounts { get; }
+        List<IUspsAccountEntity> Accounts { get; }
 
         /// <summary>
         /// Is the rate compatible with the specified shipment
         /// </summary>
-        bool IsRateFor(ShipmentEntity shipment);
+        bool IsRateFor(IShipmentEntity shipment);
     }
 }

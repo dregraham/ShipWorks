@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Business.Geography;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Editing.Rating;
@@ -22,7 +18,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly AutoMock mock;
         private readonly Mock<IUspsShipmentType> uspsShipmentTypeMock;
         private readonly ShipmentEntity shipment;
-
 
         public UspsLabelServiceTest()
         {
@@ -73,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(true);
             postalRateSelectionMock
                 .Setup(s => s.Accounts)
-                .Returns(new List<UspsAccountEntity>
+                .Returns(new List<IUspsAccountEntity>
                 {
                     new UspsAccountEntity
                     {
@@ -105,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(true);
             postalRateSelectionMock
                 .Setup(s => s.Accounts)
-                .Returns(new List<UspsAccountEntity>
+                .Returns(new List<IUspsAccountEntity>
                 {
                     new UspsAccountEntity
                     {

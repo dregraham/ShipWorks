@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -99,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 
-            IEnumerable<UspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
+            IEnumerable<IUspsAccountEntity> accounts = uspsRatingService.GetRates(shipment).Rates
                     .OrderBy(x => x.AmountOrDefault)
                     .Select(x => x.OriginalTag)
                     .OfType<IUspsPostalRateSelection>()

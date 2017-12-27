@@ -1,4 +1,4 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Validates that user has accepted the terms and conditions
         /// </summary>
-        void Validate(ShipmentEntity shipment);
+        void Validate(IShipmentEntity shipment);
 
         /// <summary>
         /// Create a dialog that will allow a customer to accept the terms and conditions for USPS

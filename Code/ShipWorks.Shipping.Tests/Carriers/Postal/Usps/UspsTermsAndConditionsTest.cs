@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,11 +8,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps

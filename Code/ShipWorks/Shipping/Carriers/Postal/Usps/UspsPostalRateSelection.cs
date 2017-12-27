@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -13,13 +14,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsPostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType, UspsAccountEntity account)
             : base(serviceType, confirmationType)
         {
-            Accounts = new List<UspsAccountEntity> { account };
+            Accounts = new List<IUspsAccountEntity> { account };
         }
 
         /// <summary>
         /// Accounts associated with this rate
         /// </summary>
-        public List<UspsAccountEntity> Accounts { get; private set; }
+        public List<IUspsAccountEntity> Accounts { get; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.
@@ -49,9 +50,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Is the rate compatible with the specified shipment
         /// </summary>
-        public bool IsRateFor(ShipmentEntity shipment)
+        public bool IsRateFor(IShipmentEntity shipment)
         {
-            if (shipment == null || shipment.Postal == null)
+            if (shipment?.Postal == null)
             {
                 throw new ArgumentNullException("shipment");
             }

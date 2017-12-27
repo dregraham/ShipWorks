@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// has needs to accept the Terms and Conditions and cache the result.
         /// Then, throw an error if the user needs to accept the TermsAndConditions.
         /// </remarks>
-        public void Validate(ShipmentEntity shipment)
+        public void Validate(IShipmentEntity shipment)
         {
             long accountID = shipment.Postal.Usps.UspsAccountID;
 
