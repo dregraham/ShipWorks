@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Orders\Split\OrderChargeSplitterTest.cs" />
+    <None Remove="Orders\Split\OrderItemSplitterTest.cs" />
     <None Remove="Orders\Split\OrderSplitChargeViewModelTest.cs" />
     <None Remove="Orders\Split\OrderSplitItemViewModelTest.cs" />
     <None Remove="Orders\Split\OrderSplitOrchestratorTest.cs" />

@@ -195,6 +195,7 @@
     <Compile Include="Orders\Split\IOrderSplitter.cs" />
     <Compile Include="Orders\Split\IOrderSplitViewModel.cs" />
     <Compile Include="Orders\Split\IOrderSplitUserInteraction.cs" />
+    <Compile Include="Orders\Split\OrderItemSplitter.cs" />
     <Compile Include="Orders\Split\OrderChargeSplitter.cs" />
     <Compile Include="Orders\Split\OrderSplitChargeViewModel.cs" />
     <Compile Include="Orders\Split\OrderSplitGateway.cs" />
