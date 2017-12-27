@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 bool? result = messageHelper.ShowDialog(() => warningFactory("FirstClassInternationalWarningDlg"));
                 
-                if (!result.Value)
+                if (!result.HasValue || !result.Value)
                 {
                     throw new ShippingException("Please change the customs content type to something other than Documents or the packaging type to something other than letter.");
                 }
