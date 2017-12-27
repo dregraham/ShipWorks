@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Stores.Content.SplitOrder
+namespace ShipWorks.Stores.Orders.Split
 {
     /// <summary>
     /// Validate the splitting of an order
@@ -23,15 +26,15 @@ namespace ShipWorks.Stores.Content.SplitOrder
     public class OrderSplitValidator : ISplitOrderValidator
     {
         private readonly ISecurityContext securityContext;
-        private readonly IOrderManager orderManager;
+        private readonly IOrderSplitGateway orderSplitGateway;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitValidator(ISecurityContext securityContext, IOrderManager orderManager)
+        public OrderSplitValidator(ISecurityContext securityContext, IOrderSplitGateway orderSplitGateway)
         {
             this.securityContext = securityContext;
-            this.orderManager = orderManager;
+            this.orderSplitGateway = orderSplitGateway;
         }
 
         /// <summary>
@@ -58,11 +61,7 @@ namespace ShipWorks.Stores.Content.SplitOrder
                 return Result.FromError("The current user does not have permission to modify orders");
             }
 
-            ShipmentEntity processedShipment = orderManager.GetLatestActiveShipment(firstId);
-
-            bool canCombine = processedShipment == null;
-
-            return canCombine == false ?
+            return orderSplitGateway.CanSplit(firstId) == false ?
                 Result.FromError("Selected order cannot be split as it has a processed shipment") :
                 Result.FromSuccess();
         }

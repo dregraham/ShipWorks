@@ -17,5 +17,10 @@ namespace ShipWorks.Stores.Orders.Split
         /// Get the next order ID that should be used for a split order
         /// </summary>
         Task<string> GetNextOrderNumber(long orderID, string existingOrderNumber);
+
+        /// <summary>
+        /// Is this order allowed to be split
+        /// </summary>
+        bool CanSplit(long orderID);
     }
 }
