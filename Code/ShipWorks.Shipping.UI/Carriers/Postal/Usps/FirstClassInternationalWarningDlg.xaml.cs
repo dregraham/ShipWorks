@@ -27,8 +27,17 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// <summary>
         /// Called when [click close].
         /// </summary>
-        private void OnClickClose(object sender, RoutedEventArgs e)
+        private void CancelAndClose(object sender, RoutedEventArgs e)
+        {            
+            Close();
+        }
+
+        /// <summary>
+        /// Called when [click close].
+        /// </summary>
+        private void AgreeAndClose(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
         }
 

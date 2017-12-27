@@ -51,6 +51,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     throw new ShippingException("Please change the customs content type to something other than Documents or the packaging type to something other than letter.");
                 }
+
+                MarkWarningAsAccepted(shipment);
             }
         }
         
