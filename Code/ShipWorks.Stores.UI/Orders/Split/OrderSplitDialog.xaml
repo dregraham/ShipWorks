@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:DesignModeOrderSplitViewModel, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterOwner"
-        WindowStyle="ToolWindow"
+        WindowStyle="ThreeDBorderWindow"
         ShowInTaskbar="False"
 
         FontFamily="Tahoma"
@@ -17,7 +17,7 @@
         FontStretch="Normal"
         FontWeight="Normal"
 
-        Title="Split Orders"
+        Title="Split Order"
         Height="400" Width="520"
         MinHeight="400" MinWidth="400">
     <Window.Resources>
@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBlock TextWrapping="Wrap" Text="ShipWorks will split these orders into a new order."/>
+            <TextBlock TextWrapping="Wrap" Text="ShipWorks will split the selected order into a new order."/>
 
             <StackPanel Orientation="Horizontal"
                         Margin="0, 8, 0, 0">
@@ -56,7 +56,7 @@
             </StackPanel>
 
             <TextBlock TextWrapping="Wrap"
-                       Margin="0, 8, 0, 0"><Run Text="All order items be added to the new split order, but other order details will be copied from the selected order below: "/><Hyperlink FontStyle="Italic" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106629-combining-orders-in-shipworks" ui:Link.OpenInBrowser="True"><Run Text="more info..."/></Hyperlink></TextBlock>
+                       Margin="0, 8, 0, 0"><Run Text="You may select the item quantities and order charges for the new order.  Other order details will be copied from the selected order. "/><Hyperlink FontStyle="Italic" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106629-combining-orders-in-shipworks" ui:Link.OpenInBrowser="True"><Run Text="more info..."/></Hyperlink></TextBlock>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" 
@@ -90,7 +90,7 @@
                            Margin="4,0,0,0">New Order</TextBlock>
                         </Grid>
                     </Border>
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" IsTabStop="False">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <local:OrderSplitItem DataContext="{Binding .}" />
@@ -126,7 +126,7 @@
                            Margin="4,0,0,0">New Order</TextBlock>
                         </Grid>
                     </Border>
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Charges}">
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Charges}" IsTabStop="False">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <local:OrderSplitCharge DataContext="{Binding .}" />

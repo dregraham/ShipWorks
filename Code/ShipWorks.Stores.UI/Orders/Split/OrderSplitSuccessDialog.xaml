@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Split"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:DesignModeOrderSplitSuccessViewModel, IsDesignTimeCreatable=True}"
-        Title="Split Orders"
+        Title="Split Order"
 
         WindowStartupLocation="CenterOwner"
-        WindowStyle="ToolWindow"
+        WindowStyle="ThreeDBorderWindow"
         ShowInTaskbar="False"
 
         FontFamily="Tahoma"

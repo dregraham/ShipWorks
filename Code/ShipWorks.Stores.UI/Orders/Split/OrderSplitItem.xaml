@@ -33,7 +33,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{Binding Name}" />
-                <ItemsControl Grid.Row="1" 
+                <ItemsControl Grid.Row="1" IsTabStop="False"
                           ItemsSource="{Binding Attributes}"
                           Margin="20,4,0,0"
                           Foreground="Gray">
