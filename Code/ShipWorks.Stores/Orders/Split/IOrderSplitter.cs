@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Threading;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        Task<IDictionary<long, string>> Split(OrderSplitDefinition definition);
+        Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider);
     }
 }

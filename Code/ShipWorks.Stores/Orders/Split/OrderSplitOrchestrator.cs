@@ -6,6 +6,7 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -48,7 +49,7 @@ namespace ShipWorks.Stores.Orders.Split
                 .Bind(RequestPermission)
                 .Bind(GetSuggestedOrderNumber)
                 .Bind(GetSplitDetailsFromUser)
-                .Bind(orderSplitter.Split)
+                .Bind(SplitOrder)
                 .Do(DisplaySuccessDialog, DisplayErrorMessage)
                 .Map(GetOrderIDs);
         }
@@ -74,6 +75,14 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private Task<OrderSplitDefinition> GetSplitDetailsFromUser((OrderEntity order, string suggestedOrderNumber) details) =>
             userInteraction.GetSplitDetailsFromUser(details.order, details.suggestedOrderNumber);
+
+        /// <summary>
+        /// Split the order based on the definition
+        /// </summary>
+        private Task<IDictionary<long, string>> SplitOrder(OrderSplitDefinition definition) =>
+            UsingAsync(
+                messageHelper.ShowProgressDialog("Split Order", "Splitting order..."),
+                progress => orderSplitter.Split(definition, progress.ProgressItem));
 
         /// <summary>
         /// Show a success dialog

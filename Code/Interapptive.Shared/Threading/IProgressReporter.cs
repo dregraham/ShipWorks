@@ -38,7 +38,7 @@ namespace Interapptive.Shared.Threading
         void Failed(Exception ex);
 
         /// <summary>
-        /// The current status of the progres
+        /// The current status of the progress
         /// </summary>
         ProgressItemStatus Status { get; }
 

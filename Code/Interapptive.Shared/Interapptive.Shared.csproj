@@ -337,6 +337,7 @@
     <Compile Include="Utility\EnvironmentWrapper.cs" />
     <Compile Include="Utility\ExceptionExtensions.cs" />
     <Compile Include="Utility\ExceptionResultHandler.cs" />
+    <Compile Include="Utility\Functional.cs" />
     <Compile Include="Utility\GenericPropertyEqualityComparer.cs" />
     <Compile Include="Collections\LruCache.cs" />
     <Compile Include="Collections\LruCacheItemRemovedEvent.cs" />

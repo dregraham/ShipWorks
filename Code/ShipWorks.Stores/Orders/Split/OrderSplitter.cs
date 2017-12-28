@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
@@ -41,7 +43,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition)
+        public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
         {
             OrderEntity originalOrder = await orderSplitGateway.LoadOrder(definition.Order.OrderID);
 
@@ -66,7 +68,7 @@ namespace ShipWorks.Stores.Orders.Split
                 field.IsChanged = true;
             }
 
-            return await SaveOrders(originalOrder, newOrderEntity)
+            return await SaveOrders(originalOrder, newOrderEntity, progressProvider)
                 .Map(_ => new Dictionary<long, string>
                 {
                     { definition.Order.OrderID, definition.Order.OrderNumberComplete },
@@ -74,13 +76,16 @@ namespace ShipWorks.Stores.Orders.Split
                 });
         }
 
-        private async Task<Result> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity)
+        /// <summary>
+        /// Save the orders
+        /// </summary>
+        private async Task<Unit> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 return await SaveOrder(newOrderEntity, sqlAdapter)
                     .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
-                    .Map(x => CompleteTransaction(x, sqlAdapter))
+                    .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
                     .ConfigureAwait(false);
             }
         }
@@ -88,13 +93,18 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Complete the transaction
         /// </summary>
-        private Result CompleteTransaction(bool saveResult, ISqlAdapter sqlAdapter)
+        private Task<Unit> CompleteTransaction(bool saveSucceeded, ISqlAdapter sqlAdapter, IProgressReporter progressProvider)
         {
-            if (!saveResult)
+            var cancelRequested = progressProvider.IsCancelRequested;
+            progressProvider.CanCancel = false;
+
+            if (!saveSucceeded || cancelRequested)
             {
                 sqlAdapter.Rollback();
-                return new Exception("Saving split order failed");
+                return Result.FromError(cancelRequested ? Errors.Canceled : new Exception("Saving split order failed"));
             }
+
+            progressProvider.PercentComplete = 50;
 
             sqlAdapter.Commit();
             return Result.FromSuccess();

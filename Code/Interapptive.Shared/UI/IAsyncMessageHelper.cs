@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Threading;
 
 namespace Interapptive.Shared.UI
 {
@@ -37,5 +38,10 @@ namespace Interapptive.Shared.UI
         /// <returns>Returns the result of the dialog</returns>
         /// <remarks>The createDialog func will be called on the UI thread</remarks>
         Task<bool?> ShowDialog(Func<IDialog> createDialog);
+
+        /// <summary>
+        /// Show a new progress dialog
+        /// </summary>
+        Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description);
     }
 }

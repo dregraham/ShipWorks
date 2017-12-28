@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.UI
@@ -64,6 +65,12 @@ namespace ShipWorks.UI
         /// </returns>
         public Task<IDisposable> SetCursor(Cursor cursor) =>
             ownerFactory().InvokeAsync(() => messageHelper.SetCursor(cursor));
+
+        /// <summary>
+        /// Show a new progress dialog
+        /// </summary>
+        public Task<ISingleItemProgressDialog> ShowProgressDialog(string title, string description) =>
+            ownerFactory().InvokeAsync(() => messageHelper.ShowProgressDialog(title, description));
 
         /// <summary>
         /// Show a dialog
