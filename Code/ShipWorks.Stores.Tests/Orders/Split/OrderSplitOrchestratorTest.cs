@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -44,8 +45,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 .Setup(x => x.GetSplitDetailsFromUser(It.IsAny<OrderEntity>(), AnyString))
                 .ReturnsAsync(orderSplitDefinition);
             mock.Mock<IOrderSplitter>()
-                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
+                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(new Dictionary<long, string>());
+            mock.Mock<IAsyncMessageHelper>()
+                .Setup(x => x.ShowProgressDialog(AnyString, AnyString))
+                .ReturnsAsync(mock.CreateMock<ISingleItemProgressDialog>().Object);
         }
 
         [Fact]
@@ -131,7 +135,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             await testObject.Split(1006).Recover(ex => null);
 
             mock.Mock<IOrderSplitter>()
-                .Verify(x => x.Split(orderSplitDefinition));
+                .Verify(x => x.Split(orderSplitDefinition, It.IsAny<IProgressReporter>()));
         }
 
         [Fact]
@@ -144,14 +148,14 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             await testObject.Split(1006).Recover(ex => null);
 
             mock.Mock<IOrderSplitter>()
-                .Verify(x => x.Split(It.IsAny<OrderSplitDefinition>()), Times.Never);
+                .Verify(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()), Times.Never);
         }
 
         [Fact]
         public async Task Split_ShowsSuccessDialog_WhenSplitSucceeds()
         {
             mock.Mock<IOrderSplitter>()
-                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
+                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(new Dictionary<long, string> { { 1, "Foo" }, { 2, "Bar" } });
 
             await testObject.Split(1006).Recover(ex => null);
@@ -164,7 +168,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public async Task Split_ShowsErrorMessage_WhenSplitFails()
         {
             mock.Mock<IOrderSplitter>()
-                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
+                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
 
             await testObject.Split(1006).Recover(ex => null);
@@ -177,7 +181,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public async Task Split_ReturnsSplitOrderIDs_WhenSuccessful()
         {
             mock.Mock<IOrderSplitter>()
-                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
+                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(new Dictionary<long, string> { { 1, "Foo" }, { 2, "Bar" } });
 
             var result = await testObject.Split(1006).Recover(ex => null);
@@ -191,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public async Task Split_ReturnsFailure_WhenSplitFails()
         {
             mock.Mock<IOrderSplitter>()
-                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
+                .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
 
             await Assert.ThrowsAsync<Exception>(() => testObject.Split(1006));

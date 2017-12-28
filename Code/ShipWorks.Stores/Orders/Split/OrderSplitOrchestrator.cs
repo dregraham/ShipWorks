@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Split.Errors;
 using ShipWorks.Users.Security;
 using static Interapptive.Shared.Utility.Functional;
 
@@ -94,7 +95,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// Show an error message
         /// </summary>
         private Task DisplayErrorMessage(Exception ex) =>
-            ex == Errors.Canceled ? Task.CompletedTask : messageHelper.ShowError(ex.Message);
+            ex == Error.Canceled ? Task.CompletedTask : messageHelper.ShowError(ex.Message);
 
         /// <summary>
         /// Get order IDs from the split results

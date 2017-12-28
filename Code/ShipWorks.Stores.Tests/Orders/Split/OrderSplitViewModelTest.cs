@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Orders.Split.Errors;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -91,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsFailure_WhenDialogIsCancelled()
         {
-            await Assert.ThrowsAsync<Exception>(() => testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo"));
+            await Assert.ThrowsAsync<CanceledException>(() => testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo"));
         }
 
         [Fact]

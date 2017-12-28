@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
@@ -50,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
-            var result = await testObject.Split(orderSplitDefinition);
+            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
@@ -89,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
-            var result = await testObject.Split(orderSplitDefinition);
+            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
@@ -131,7 +132,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
 
-            var result = await testObject.Split(orderSplitDefinition);
+            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();

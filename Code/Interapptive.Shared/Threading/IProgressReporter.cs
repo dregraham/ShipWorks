@@ -18,7 +18,7 @@ namespace Interapptive.Shared.Threading
         int PercentComplete { get; set; }
 
         /// <summary>
-        /// Indicates if the user has requested cancelation
+        /// Indicates if the user has requested cancellation
         /// </summary>
         bool IsCancelRequested { get; }
 

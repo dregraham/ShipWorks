@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Orders.Split.Errors;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -139,7 +140,7 @@ namespace ShipWorks.Stores.Orders.Split
                 .ShowDialog(SetupDialog)
                 .Bind(x => x == true ?
                     Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix)) :
-                    Task.FromException<OrderSplitDefinition>(Errors.Canceled));
+                    Task.FromException<OrderSplitDefinition>(Error.Canceled));
         }
 
         /// <summary>

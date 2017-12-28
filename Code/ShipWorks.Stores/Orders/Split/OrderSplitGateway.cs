@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
@@ -10,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Split.Errors;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -38,7 +40,12 @@ namespace ShipWorks.Stores.Orders.Split
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                return await orderManager.LoadOrderAsync(orderID, sqlAdapter, FullOrderPrefetchPath.Value).ConfigureAwait(false);
+                return await orderManager
+                    .LoadOrderAsync(orderID, sqlAdapter, FullOrderPrefetchPath.Value)
+                    .Bind(x => x == null ?
+                        Task.FromException<OrderEntity>(Error.LoadSurvivingOrderFailed) :
+                        Task.FromResult(x))
+                    .ConfigureAwait(false);
             }
         }
 

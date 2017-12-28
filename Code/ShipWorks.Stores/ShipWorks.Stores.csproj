@@ -187,7 +187,9 @@
     <Compile Include="Orders\Combine\Actions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordMerger.cs" />
-    <Compile Include="Orders\Split\Errors.cs" />
+    <Compile Include="Orders\Split\Errors\CanceledException.cs" />
+    <Compile Include="Orders\Split\Errors\Errors.cs" />
+    <Compile Include="Orders\Split\Errors\OrderSplitException.cs" />
     <Compile Include="Orders\Split\IOrderChargeSplitter.cs" />
     <Compile Include="Orders\Split\IOrderItemSplitter.cs" />
     <Compile Include="Orders\Split\IOrderSplitGateway.cs" />

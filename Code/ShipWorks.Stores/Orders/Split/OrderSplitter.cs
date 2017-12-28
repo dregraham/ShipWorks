@@ -14,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Split.Errors;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -45,13 +46,23 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
         {
-            OrderEntity originalOrder = await orderSplitGateway.LoadOrder(definition.Order.OrderID);
+            return await orderSplitGateway
+                .LoadOrder(definition.Order.OrderID)
+                .Map(order => PerformSplit(order, definition))
+                .Bind(x => SaveOrders(x.original, x.split, progressProvider))
+                .Map(newOrder => new Dictionary<long, string>
+                {
+                    { definition.Order.OrderID, definition.Order.OrderNumberComplete },
+                    { newOrder.OrderID, newOrder.OrderNumberComplete}
+                })
+                .ConfigureAwait(false);
+        }
 
-            if (originalOrder == null)
-            {
-                throw new Exception("Could not find surviving order");
-            }
-
+        /// <summary>
+        /// Perform the split
+        /// </summary>
+        private (OrderEntity original, OrderEntity split) PerformSplit(OrderEntity originalOrder, OrderSplitDefinition definition)
+        {
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             originalOrder.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
@@ -68,24 +79,20 @@ namespace ShipWorks.Stores.Orders.Split
                 field.IsChanged = true;
             }
 
-            return await SaveOrders(originalOrder, newOrderEntity, progressProvider)
-                .Map(_ => new Dictionary<long, string>
-                {
-                    { definition.Order.OrderID, definition.Order.OrderNumberComplete },
-                    { newOrderEntity.OrderID, newOrderEntity.OrderNumberComplete}
-                });
+            return (originalOrder, newOrderEntity);
         }
 
         /// <summary>
         /// Save the orders
         /// </summary>
-        private async Task<Unit> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
+        private async Task<OrderEntity> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 return await SaveOrder(newOrderEntity, sqlAdapter)
                     .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
                     .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
+                    .Map(_ => newOrderEntity)
                     .ConfigureAwait(false);
             }
         }
@@ -101,7 +108,7 @@ namespace ShipWorks.Stores.Orders.Split
             if (!saveSucceeded || cancelRequested)
             {
                 sqlAdapter.Rollback();
-                return Result.FromError(cancelRequested ? Errors.Canceled : new Exception("Saving split order failed"));
+                return Result.FromError(cancelRequested ? Error.Canceled : Error.SaveFailed);
             }
 
             progressProvider.PercentComplete = 50;
