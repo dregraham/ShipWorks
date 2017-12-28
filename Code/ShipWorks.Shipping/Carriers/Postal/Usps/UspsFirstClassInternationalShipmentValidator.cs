@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 
                 if (!result.HasValue || !result.Value)
                 {
-                    throw new ShippingException("Please change the customs content type to something other than Documents or the packaging type to something other than letter.");
+                    throw new ShippingException("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.");
                 }
 
                 MarkWarningAsAccepted(shipment);

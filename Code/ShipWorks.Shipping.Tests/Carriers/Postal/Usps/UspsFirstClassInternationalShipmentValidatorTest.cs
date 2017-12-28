@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly AutoMock mock;
         private readonly Mock<IMessageHelper> messageHelper;
         private readonly Mock<IDialog> dialog;
-        private readonly Mock<Func<string, IDialog>> warningFactory;
         private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
         private readonly UspsFirstClassInternationalShipmentValidator testObject;
         private readonly UspsAccountEntity accountOne;
@@ -33,8 +32,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             messageHelper = mock.Mock<IMessageHelper>();
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(true);
             dialog = mock.Mock<IDialog>();
-            warningFactory = mock.MockFunc<string, IDialog>();
-            warningFactory.Setup(f => f("FirstClassInternationalWarningDlg")).Returns(dialog);
             accountRepository = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             accountOne = new UspsAccountEntity() { AcceptedFCMILetterWarning = false, UspsAccountID = 1 };
             accountTwo = new UspsAccountEntity() { AcceptedFCMILetterWarning = false, UspsAccountID = 2 };
@@ -128,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             };
 
             ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ValidateShipment(shipment));
-            Assert.Equal("Please change the customs content type to something other than Documents or the packaging type to something other than letter.", ex.Message);
+            Assert.Equal("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.", ex.Message);
         }
 
         [Fact]
