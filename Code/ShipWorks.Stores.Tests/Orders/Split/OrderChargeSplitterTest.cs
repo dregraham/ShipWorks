@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
     public class OrderChargeSplitterTest
     {
         [Fact]
-        public void Split_SplitOrder_HasNoCharges_WhenNoChargesRequested()
+        public void Split_SplitOrder_HasNoChargeAmounts_WhenNoChargesRequested()
         {
             OrderEntity originalOrder = new OrderEntity()
             {
@@ -35,15 +35,15 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             OrderChargeSplitter testObject = new OrderChargeSplitter();
             testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
 
-            Assert.Equal(0, splitOrder.OrderCharges.Count);
-            Assert.Equal(2, originalOrder.OrderCharges.Count);
+            Assert.Equal(0, splitOrder.OrderCharges.Sum(oi => oi.Amount));
+            Assert.Equal(4, originalOrder.OrderCharges.Sum(oi => oi.Amount));
 
             Assert.Equal(1M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 1).Amount);
             Assert.Equal(3M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 2).Amount);
         }
 
         [Fact]
-        public void Split_SplitOrder_HasAllCharges_WhenAllChargesRequested()
+        public void Split_SplitOrder_HasAllChargeAmounts_WhenAllChargesRequested()
         {
             OrderEntity originalOrder = new OrderEntity()
             {
@@ -68,8 +68,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             OrderChargeSplitter testObject = new OrderChargeSplitter();
             testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
 
-            Assert.Equal(2, splitOrder.OrderCharges.Count);
-            Assert.Equal(0, originalOrder.OrderCharges.Count);
+            Assert.Equal(4, splitOrder.OrderCharges.Sum(oi => oi.Amount));
+            Assert.Equal(0, originalOrder.OrderCharges.Sum(oi => oi.Amount));
 
             Assert.Equal(1M, splitOrder.OrderCharges.First(oc => oc.OrderChargeID == 1).Amount);
             Assert.Equal(3M, splitOrder.OrderCharges.First(oc => oc.OrderChargeID == 2).Amount);
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         }
 
         [Fact]
-        public void Split_SplitOrder_HasCorrectChargeCounts_ForZeroAmounts()
+        public void Split_SplitOrder_HasCorrectChargeAmounts_ForZeroAmounts()
         {
             OrderEntity originalOrder = new OrderEntity()
             {
@@ -137,8 +137,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             OrderChargeSplitter testObject = new OrderChargeSplitter();
             testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
 
-            Assert.Equal(0, splitOrder.OrderCharges.Count);
-            Assert.Equal(2, originalOrder.OrderCharges.Count);
+            Assert.Equal(0, splitOrder.OrderCharges.Sum(oi => oi.Amount));
+            Assert.Equal(4, originalOrder.OrderCharges.Sum(oi => oi.Amount));
             
             Assert.Equal(1M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 1).Amount);
             Assert.Equal(3M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 2).Amount);
