@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// Creates the Usps(stamps.com) Express1 label
         /// </summary>
         /// <param name="shipment"></param>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public async Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             IDownloadedLabelData uspsDownloadedLabelData;
 
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 // Express1 for USPS requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
-                UspsLabelResponse uspsLabelResponse = new Express1UspsWebClient().ProcessShipment(shipment);
+                UspsLabelResponse uspsLabelResponse = await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
                 uspsDownloadedLabelData = createDownloadedLabelData(uspsLabelResponse);
             }
             catch (UspsException ex)

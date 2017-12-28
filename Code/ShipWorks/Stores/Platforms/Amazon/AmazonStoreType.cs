@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -519,7 +520,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Gets the default validation setting.
         /// </summary>
-        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected override AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }

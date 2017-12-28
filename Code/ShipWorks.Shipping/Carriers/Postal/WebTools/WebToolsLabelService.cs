@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -22,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Creates a WebTools label for the given Shipment
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
             {
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             // Process the shipment
-            return createDownloadedLabelData(PostalWebClientShipping.ProcessShipment(shipment.Postal));
+            return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(PostalWebClientShipping.ProcessShipment(shipment.Postal)));
         }
 
         /// <summary>

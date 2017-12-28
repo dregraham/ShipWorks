@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -18,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
-        object GetAccountInfo(UspsAccountEntity account);
+        object GetAccountInfo(IUspsAccountEntity account);
 
         /// <summary>
         /// Changes the contract associated with the given account based on the contract type provided.
@@ -33,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address.
         /// </summary>
-        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress);
+        Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter physicalAddress, UspsAccountEntity account);
 
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.
@@ -62,12 +64,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        UspsLabelResponse ProcessShipment(ShipmentEntity shipment);
+        Task<UspsLabelResponse> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Populates a usps account entity.
         /// </summary>
         /// <param name="account">The account.</param>
         void PopulateUspsAccountEntity(UspsAccountEntity account);
+
+        /// <summary>
+        /// Get the USPS URL of the given urlType
+        /// </summary>
+        string GetUrl(IUspsAccountEntity account, UrlType urlType);
     }
 }

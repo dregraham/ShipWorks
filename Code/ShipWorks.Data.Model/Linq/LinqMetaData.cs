@@ -107,6 +107,15 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AmeriCommerceStoreEntity:
 					toReturn = this.AmeriCommerceStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaAccountEntity:
+					toReturn = this.AsendiaAccount;
+					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaProfileEntity:
+					toReturn = this.AsendiaProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity:
+					toReturn = this.AsendiaShipment;
+					break;
 				case ShipWorks.Data.Model.EntityType.AuditEntity:
 					toReturn = this.Audit;
 					break;
@@ -166,6 +175,21 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					toReturn = this.Customer;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
+					toReturn = this.DhlExpressAccount;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity:
+					toReturn = this.DhlExpressPackage;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity:
+					toReturn = this.DhlExpressProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity:
+					toReturn = this.DhlExpressProfilePackage;
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity:
+					toReturn = this.DhlExpressShipment;
 					break;
 				case ShipWorks.Data.Model.EntityType.DimensionsProfileEntity:
 					toReturn = this.DimensionsProfile;
@@ -804,6 +828,24 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<AmeriCommerceStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
+		/// <summary>returns the datasource to use in a Linq query when targeting AsendiaAccountEntity instances in the database.</summary>
+		public DataSource2<AsendiaAccountEntity> AsendiaAccount
+		{
+			get { return new DataSource2<AsendiaAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AsendiaProfileEntity instances in the database.</summary>
+		public DataSource2<AsendiaProfileEntity> AsendiaProfile
+		{
+			get { return new DataSource2<AsendiaProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting AsendiaShipmentEntity instances in the database.</summary>
+		public DataSource2<AsendiaShipmentEntity> AsendiaShipment
+		{
+			get { return new DataSource2<AsendiaShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
 		/// <summary>returns the datasource to use in a Linq query when targeting AuditEntity instances in the database.</summary>
 		public DataSource2<AuditEntity> Audit
 		{
@@ -922,6 +964,36 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<CustomerEntity> Customer
 		{
 			get { return new DataSource2<CustomerEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressAccountEntity instances in the database.</summary>
+		public DataSource2<DhlExpressAccountEntity> DhlExpressAccount
+		{
+			get { return new DataSource2<DhlExpressAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressPackageEntity instances in the database.</summary>
+		public DataSource2<DhlExpressPackageEntity> DhlExpressPackage
+		{
+			get { return new DataSource2<DhlExpressPackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressProfileEntity instances in the database.</summary>
+		public DataSource2<DhlExpressProfileEntity> DhlExpressProfile
+		{
+			get { return new DataSource2<DhlExpressProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressProfilePackageEntity instances in the database.</summary>
+		public DataSource2<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
+		{
+			get { return new DataSource2<DhlExpressProfilePackageEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting DhlExpressShipmentEntity instances in the database.</summary>
+		public DataSource2<DhlExpressShipmentEntity> DhlExpressShipment
+		{
+			get { return new DataSource2<DhlExpressShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting DimensionsProfileEntity instances in the database.</summary>

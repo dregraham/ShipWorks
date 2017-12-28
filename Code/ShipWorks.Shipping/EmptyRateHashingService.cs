@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
@@ -6,6 +7,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Empty RateHashingService
     /// </summary>
+    [KeyedComponent(typeof(IRateHashingService), ShipmentTypeCode.Asendia)]
     public class EmptyRateHashingService : IRateHashingService
     {
         /// <summary>

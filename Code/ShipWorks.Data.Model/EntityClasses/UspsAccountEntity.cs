@@ -346,6 +346,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("PendingInitialAccount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GlobalPostAvailability", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AcceptedFCMILetterWarning", fieldHashtable);
 		}
 		#endregion
 
@@ -652,6 +654,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)UspsAccountFieldIndex.GlobalPostAvailability, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.GlobalPostAvailability, value); }
+		}
+
+		/// <summary> The AcceptedFCMILetterWarning property of the Entity UspsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."AcceptedFCMILetterWarning"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AcceptedFCMILetterWarning
+		{
+			get { return (System.Boolean)GetValue((int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

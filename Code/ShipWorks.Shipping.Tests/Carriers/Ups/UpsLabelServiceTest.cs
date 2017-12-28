@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -38,17 +39,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         }
 
         [Fact]
-        public void UpsLabelServiceCreate_ThrowsCarrierException_WithSurePostDeclaredValue()
+        public async Task UpsLabelServiceCreate_ThrowsCarrierException_WithSurePostDeclaredValue()
         {
-            CarrierException ex = Assert.Throws<CarrierException>(() => testObject.Create(shipment));
+            CarrierException ex = await Assert.ThrowsAsync<CarrierException>(() => testObject.Create(shipment));
             Assert.Equal("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.", ex.Message);
         }
 
         [Fact]
-        public void UpsLabelServiceCreate_ThrowsInvalidPackageDimensionsException_WithZeroDimensions()
+        public async Task UpsLabelServiceCreate_ThrowsInvalidPackageDimensionsException_WithZeroDimensions()
         {
             shipment.Ups.Packages.Select(p => p.InsuranceValue = 0).ToList();
-            InvalidPackageDimensionsException ex = Assert.Throws<InvalidPackageDimensionsException>(() => testObject.Create(shipment));
+            InvalidPackageDimensionsException ex = await Assert.ThrowsAsync<InvalidPackageDimensionsException>(() => testObject.Create(shipment));
             Assert.Equal("Package 1 has invalid dimensions.\r\nPackage dimensions must be greater than 0 and not 1x1x1.  ", ex.Message);
         }
 

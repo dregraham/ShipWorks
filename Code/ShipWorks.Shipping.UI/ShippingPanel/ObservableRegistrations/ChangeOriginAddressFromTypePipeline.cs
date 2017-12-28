@@ -29,7 +29,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ObservableRegistrations
             viewModel.Origin.SetAddressFromOrigin(viewModel.OriginAddressType,
                 viewModel.OrderID ?? 0,
                 viewModel.AccountId,
-                viewModel.ShipmentType);
+                viewModel.ShipmentType,
+                viewModel.ShipmentAdapter.Store);
         }
 
         /// <summary>

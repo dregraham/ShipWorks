@@ -12,11 +12,16 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Select the specified address into an existing address
         /// </summary>
-        Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress);
+        Task<AddressAdapter> SelectAddress(AddressAdapter addressToUpdate, ValidatedAddressEntity selectedAddress, StoreEntity store);
         
         /// <summary>
         /// Format the address for display in the menu
         /// </summary>
         string FormatAddress(ValidatedAddressEntity x);
+
+        /// <summary>
+        /// Text to display as the ValidationSuggestion
+        /// </summary>
+        string DisplayValidationSuggestionLabel(object arg);
     }
 }

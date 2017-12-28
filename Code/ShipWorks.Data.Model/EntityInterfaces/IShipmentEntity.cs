@@ -461,7 +461,9 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         System.Double BilledWeight { get; }
         
         IAmazonShipmentEntity Amazon { get; }
+        IAsendiaShipmentEntity Asendia { get; }
         IBestRateShipmentEntity BestRate { get; }
+        IDhlExpressShipmentEntity DhlExpress { get; }
         IFedExShipmentEntity FedEx { get; }
         IInsurancePolicyEntity InsurancePolicy { get; }
         IIParcelShipmentEntity IParcel { get; }
@@ -502,7 +504,9 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class ShipmentEntity : IShipmentEntity
     {
         IAmazonShipmentEntity IShipmentEntity.Amazon => Amazon;
+        IAsendiaShipmentEntity IShipmentEntity.Asendia => Asendia;
         IBestRateShipmentEntity IShipmentEntity.BestRate => BestRate;
+        IDhlExpressShipmentEntity IShipmentEntity.DhlExpress => DhlExpress;
         IFedExShipmentEntity IShipmentEntity.FedEx => FedEx;
         IInsurancePolicyEntity IShipmentEntity.InsurancePolicy => InsurancePolicy;
         IIParcelShipmentEntity IShipmentEntity.IParcel => IParcel;

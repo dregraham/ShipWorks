@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -35,7 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// A shipment type for the USPS shipment type in ShipWorks.
     /// </summary>
-    public class UspsShipmentType : PostalShipmentType
+    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Usps)]
+    public class UspsShipmentType : PostalShipmentType, IUspsShipmentType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentType"/> class.
@@ -127,41 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsProfileControl();
         }
-
-        /// <summary>
-        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
-        /// the originID is no longer valid and the address could not be updated, false is returned.
-        /// </summary>
-        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
-        {
-            if (shipment.Processed)
-            {
-                return true;
-            }
-
-            // The USPS or Postal objects may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int) ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Usps != null)
-            {
-                IUspsAccountEntity account = AccountRepository.GetAccountReadOnly(shipment.Postal.Usps.UspsAccountID);
-                if (account == null)
-                {
-                    account = AccountRepository.AccountsReadOnly.FirstOrDefault();
-                }
-
-                if (account != null)
-                {
-                    account.Address.CopyTo(person);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return base.UpdatePersonAddress(shipment, person, originID);
-        }
-
+                
         /// <summary>
         /// Ensure that all USPS accounts have up to date contract information
         /// </summary>
@@ -247,7 +215,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
-        /// <param name="shipment"></param>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);

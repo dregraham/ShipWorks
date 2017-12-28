@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Business
 {
@@ -12,7 +12,7 @@ namespace Interapptive.Shared.Business
     /// </summary>
     public class RequiredFieldChecker
     {
-        List<string> missingFields = new List<string>();
+        private List<string> missingFields = new List<string>();
 
         /// <summary>
         /// Check that the given field has a value
@@ -26,11 +26,34 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
-        /// Validate that there were no missing required fields
+        /// Validate that there were no missing required fields and displays message to user
         /// </summary>
         public bool Validate(IWin32Window owner)
         {
-            if (missingFields.Count > 0)
+            GenericResult<string> result = Validate();
+
+            if (result.Success)
+            {
+                return true;
+            }
+            else
+            {
+                MessageHelper.ShowMessage(owner, result.Message.ToString());
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Validate that there were no missing required fields
+        /// </summary>
+        public GenericResult<string> Validate()
+        {
+            if (!missingFields.Any())
+            {
+                return GenericResult.FromSuccess(string.Empty);
+            }
+            else
             {
                 StringBuilder message = new StringBuilder("The following fields are required:\n");
 
@@ -39,13 +62,7 @@ namespace Interapptive.Shared.Business
                     message.AppendLine("    " + field);
                 }
 
-                MessageHelper.ShowMessage(owner, message.ToString());
-
-                return false;
-            }
-            else
-            {
-                return true;
+                return GenericResult.FromError<string>(message.ToString());
             }
         }
     }

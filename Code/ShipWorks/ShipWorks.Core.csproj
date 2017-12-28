@@ -666,17 +666,19 @@
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensions.cs" />
     <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
     <Compile Include="AddressValidation\AddressSelector.cs" />
     <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicy.cs" />
     <Compile Include="AddressValidation\IAddressSelector.cs" />
+    <Compile Include="AddressValidation\IAddressValidationResultFactory.cs" />
     <Compile Include="AddressValidation\IAddressValidator.cs" />
     <Compile Include="AddressValidation\IValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\IValidatedAddressScope.cs" />
     <Compile Include="AddressValidation\PersonAdapterExtensions.cs" />
     <Compile Include="AddressValidation\Enums\AddressType.cs" />
     <Compile Include="AddressValidation\Enums\AddressValidationStatusType.cs" />
-    <Compile Include="AddressValidation\Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="AddressValidation\Enums\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
     <Compile Include="AddressValidation\AddressValidationQueue.cs" />
@@ -694,6 +696,7 @@
     <Compile Include="AddressValidation\Predicates\UnprocessedErrorShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationAddressFactory.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedAddressData.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerWrapper.cs" />
@@ -1012,6 +1015,7 @@
     <Compile Include="Data\DataResourceManagerWrapper.cs" />
     <Compile Include="Data\DbConnectionExtensions.cs" />
     <Compile Include="Data\DeletionServiceWrapper.cs" />
+    <Compile Include="Data\Grid\Columns\DisplayTypes\AddressTypeActionDisplayType.cs" />
     <Compile Include="Data\IConfigurationData.cs" />
     <Compile Include="Data\IDatabaseIdentifier.cs" />
     <Compile Include="Data\IDataProvider.cs" />
@@ -1213,6 +1217,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
       <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Asendia\IAsendiaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IShippingAccountRequiredForRatingFootnoteViewModel.cs" />
@@ -1224,11 +1229,21 @@
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\IBestRateBrokerRatingService.cs" />
+    <Compile Include="Shipping\Carriers\CarrierAccountManagerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\CarrierAccountManagerControl.Designer.cs">
+      <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Shipping\Carriers\Dhl\DhlExpressServiceType.cs" />
+    <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsCarrierResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\IFedExLabelRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Response\IFedExResponseFactory.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountDescription.cs" />
+    <Compile Include="Shipping\Carriers\ICarrierAccountEditorDlg.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
@@ -1245,6 +1260,9 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostAvailabilityService.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\IGlobalPostLabelNotification.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\ITermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsPostalRateSelection.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IUspsTermsAndConditions.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\IUspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\IUspsRatePromotionFootnoteViewModel.cs" />
@@ -1259,7 +1277,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsGlobalPostTermsAndConditionsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
@@ -7892,6 +7910,9 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.resx">
       <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\CarrierAccountManagerControl.resx">
+      <DependentUpon>CarrierAccountManagerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExDangerousGoodsControl.resx">
       <DependentUpon>FedExDangerousGoodsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8819,7 +8840,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
-    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv55.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv67.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -8874,6 +8895,9 @@
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.3.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\ShipWorks_Multi_Carrier_Shipping_Software-4.0.4.tgz" />
     <None Include="Stores\Platforms\Magento\Modules\MagentoTwo\Module\composer.json" />
+    <None Include="Stores\Platforms\Miva\shipworks3Miva9.mv">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\Modules\OpenCart1\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
@@ -10667,6 +10691,7 @@
     <Resource Include="Resources\document_gear_32_32.png" />
     <None Include="Resources\amosoft.png" />
     <None Include="Resources\infiplex.png" />
+    <None Include="Resources\asendia.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />

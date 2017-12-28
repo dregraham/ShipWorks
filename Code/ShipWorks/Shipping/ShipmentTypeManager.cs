@@ -11,8 +11,6 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping
 {
@@ -25,25 +23,25 @@ namespace ShipWorks.Shipping
         /// Returns all shipment types in ShipWorks
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> ShipmentTypeCodes =>
-            Enum.GetValues(typeof(ShipmentTypeCode))
-                .OfType<ShipmentTypeCode>()
+            EnumHelper.GetEnumList<ShipmentTypeCode>(s => s != ShipmentTypeCode.Asendia && s != ShipmentTypeCode.DhlExpress)
+                .Select(s => s.Value)
                 .Where(IsCarrierAllowed)
-                .OrderBy(x => GetSortValue(x));
+                .OrderBy(GetSortValue);
 
         public static List<ShipmentType> ShipmentTypes =>
-            ShipmentTypeCodes.Select(x => GetType(x)).ToList();
+            ShipmentTypeCodes.Select(GetType).ToList();
 
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
         public static List<ShipmentType> EnabledShipmentTypes =>
-            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s)).Select(x => GetType(x)).ToList();
+            ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled).Select(GetType).ToList();
 
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> EnabledShipmentTypeCodes =>
-            ShipmentTypeCodes.Where(s => ShippingManager.IsShipmentTypeEnabled(s));
+            ShipmentTypeCodes.Where(ShippingManager.IsShipmentTypeEnabled);
 
         /// <summary>
         /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
@@ -96,9 +94,11 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.Express1Endicia: return 9;
                 case ShipmentTypeCode.OnTrac: return 10;
                 case ShipmentTypeCode.iParcel: return 11;
-                case ShipmentTypeCode.Amazon: return 12;
-                case ShipmentTypeCode.Other: return 13;
-                case ShipmentTypeCode.None: return 14;
+                case ShipmentTypeCode.DhlExpress: return 12;
+                case ShipmentTypeCode.Amazon: return 13;
+                case ShipmentTypeCode.Asendia: return 14;
+                case ShipmentTypeCode.Other: return 15;
+                case ShipmentTypeCode.None: return 16;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");

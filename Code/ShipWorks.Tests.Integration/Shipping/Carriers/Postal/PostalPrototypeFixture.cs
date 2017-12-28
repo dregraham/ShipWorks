@@ -13,6 +13,7 @@ using ShipWorks.Data;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Integration.Shared;

@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Control for editing fedex profiles
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class FedExProfileControl : ShippingProfileControlBase
     {
         /// <summary>

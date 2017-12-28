@@ -16,7 +16,7 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public IHttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData) =>
             new HttpBinaryPostRequestSubmitter(postData);
-
+        
         /// <summary>
         /// Gets an HttpTextPostRequestSubmitter
         /// </summary>

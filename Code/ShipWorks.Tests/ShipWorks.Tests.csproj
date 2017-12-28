@@ -225,12 +225,16 @@
     <Compile Include="Actions\Tasks\TaskValidationErrorTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
+    <Compile Include="AddressValidation\AddressAdapterExtensionsTest.cs" />
+    <Compile Include="AddressValidation\AddressValidationPolicyTest.cs" />
     <Compile Include="AddressValidation\AddressValidationResultTest.cs" />
     <Compile Include="AddressValidation\AddressValidatorTest.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicateTest.cs" />
     <Compile Include="AddressValidation\Predicates\FakePredicateExpression.cs" />
     <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicateTest.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicateTest.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationResultFactoryTest.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationWebClientTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressDataTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
@@ -510,6 +514,7 @@
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiExceptionTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsExceptionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaCbpRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotionTest.cs" />

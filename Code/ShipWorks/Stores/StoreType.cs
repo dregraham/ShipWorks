@@ -87,13 +87,14 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AddressValidationSetting = (int) GetDefaultValidationSetting();
+            store.DomesticAddressValidationSetting = GetDefaultDomesticValidationSetting();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify;
         }
 
         /// <summary>
-        /// Gets the default validation setting.
+        /// Gets the default domestic validation setting.
         /// </summary>
-        protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected virtual AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndApply;
         }
