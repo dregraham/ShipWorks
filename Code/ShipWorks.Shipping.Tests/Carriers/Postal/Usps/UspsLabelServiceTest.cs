@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(true);
             postalRateSelectionMock
                 .Setup(s => s.Accounts)
-                .Returns(new List<UspsAccountEntity>
+                .Returns(new List<IUspsAccountEntity>
                 {
                     new UspsAccountEntity
                     {
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Returns(true);
             postalRateSelectionMock
                 .Setup(s => s.Accounts)
-                .Returns(new List<UspsAccountEntity>
+                .Returns(new List<IUspsAccountEntity>
                 {
                     new UspsAccountEntity
                     {

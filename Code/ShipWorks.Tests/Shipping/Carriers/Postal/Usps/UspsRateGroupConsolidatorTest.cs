@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult resultToTest = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.MediaMail, PostalConfirmationType.Delivery);
 
-            List<UspsAccountEntity> accounts = GetTag(resultToTest).Accounts;
+            List<IUspsAccountEntity> accounts = GetTag(resultToTest).Accounts;
 
             Assert.Equal(2, accounts.Count);
             Assert.True(accounts.Contains(account1));
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult includedRate = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.Signature);
 
-            List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
+            List<IUspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.Equal(account1, includedAccounts.Single(a => true));
             Assert.Equal(10, includedRate.AmountOrDefault);
@@ -167,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult includedRate = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.Delivery);
 
-            List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
+            List<IUspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.Equal(account2, includedAccounts.Single(a => true));
             Assert.Equal(19, includedRate.AmountOrDefault);
