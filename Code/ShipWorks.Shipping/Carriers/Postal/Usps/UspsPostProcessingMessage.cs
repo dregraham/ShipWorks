@@ -29,12 +29,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             bool hasGlobalPost = processedShipments.Any(IsProcessedGlobalPost);
 
-            if (hasGlobalPost)
+            if (hasGlobalPost && globalPostNotification.AppliesToCurrentUser())
             {
-                if (globalPostNotification.AppliesToCurrentUser())
-                {
-                    globalPostNotification.Show();
-                }
+                globalPostNotification.Show();
             }
         }
 
