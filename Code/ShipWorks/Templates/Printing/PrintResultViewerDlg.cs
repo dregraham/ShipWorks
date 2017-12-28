@@ -134,13 +134,7 @@ namespace ShipWorks.Templates.Printing
             }
             else
             {
-                PrintJobPageSettings pageSettings = new PrintJobPageSettings(
-                    printResult.PageHeight,
-                    printResult.PageWidth,
-                    printResult.PageMarginTop,
-                    printResult.PageMarginRight,
-                    printResult.PageMarginBottom,
-                    printResult.PageMarginLeft);
+                PrintJobPageSettings pageSettings = new PrintJobPageSettings(printResult);
 
                 settings = new PrintJobSettings(pageSettings, printResult.TemplateType == (int) TemplateType.Thermal);
             }
