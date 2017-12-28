@@ -28,17 +28,23 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IOrderItemSplitter orderItemSplitter;
         private readonly IOrderChargeSplitter orderChargeSplitter;
+        private readonly IOrderChargeCalculator orderChargeCalculator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitter(ISqlAdapterFactory sqlAdapterFactory, IOrderItemSplitter orderItemSplitter,
-            IOrderChargeSplitter orderChargeSplitter, IOrderSplitGateway orderSplitGateway)
+        public OrderSplitter(
+            ISqlAdapterFactory sqlAdapterFactory, 
+            IOrderItemSplitter orderItemSplitter,
+            IOrderChargeSplitter orderChargeSplitter, 
+            IOrderSplitGateway orderSplitGateway,
+            IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderSplitGateway = orderSplitGateway;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderItemSplitter = orderItemSplitter;
             this.orderChargeSplitter = orderChargeSplitter;
+            this.orderChargeCalculator = orderChargeCalculator;
         }
 
         /// <summary>
@@ -134,9 +140,9 @@ namespace ShipWorks.Stores.Orders.Split
         /// Save the values for the order to the database, including OrderItems 
         /// and OrderCharges (that may have been deleted)
         /// </summary>
-        private static async Task<bool> SaveOrder(OrderEntity order, ISqlAdapter sqlAdapter)
+        private async Task<bool> SaveOrder(OrderEntity order, ISqlAdapter sqlAdapter)
         {
-            order.OrderTotal = OrderUtility.CalculateTotal(order);
+            order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
 

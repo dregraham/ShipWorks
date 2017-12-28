@@ -37,11 +37,10 @@ namespace ShipWorks.Stores.Orders.Split
 
             // Set any order items from the split order that were not in the newOrderItemQuantities
             // to have a Quantity of 0
-            IList<long> notPresentOrderItemIDs = splitOrder.OrderItems
+            IEnumerable<long> notPresentOrderItemIDs = splitOrder.OrderItems
                 .Select(oi => oi.OrderItemID)
                 .Except(newOrderItemQuantities.Keys)
-                .Distinct()
-                .ToList();
+                .Distinct();
 
             foreach (long orderItemID in notPresentOrderItemIDs)
             {

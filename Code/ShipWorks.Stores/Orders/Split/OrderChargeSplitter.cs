@@ -37,11 +37,10 @@ namespace ShipWorks.Stores.Orders.Split
 
             // Set any charges from the split order that were not in the newOrderChargeAmounts to
             // have an Amount of 0
-            IList<long> notPresentOrderChargeIDs = splitOrder.OrderCharges
+            IEnumerable<long> notPresentOrderChargeIDs = splitOrder.OrderCharges
                 .Select(oi => oi.OrderChargeID)
                 .Except(newOrderChargeAmounts.Keys)
-                .Distinct()
-                .ToList();
+                .Distinct();
 
             foreach (long orderChargeID in notPresentOrderChargeIDs)
             {
