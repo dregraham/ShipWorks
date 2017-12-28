@@ -178,6 +178,7 @@
     <Compile Include="Helpers\Response.cs" />
     <Compile Include="Content\CombineOrderGatewayTest.cs" />
     <Compile Include="Orders\Split\OrderSplitGatewayTest.cs" />
+    <Compile Include="Orders\Split\OrderSplitterTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonMwsDownloaderTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />

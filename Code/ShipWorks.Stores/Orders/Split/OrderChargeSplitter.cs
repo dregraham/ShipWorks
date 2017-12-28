@@ -35,29 +35,17 @@ namespace ShipWorks.Stores.Orders.Split
                 originalOrderChargeEntity.Amount = originalOrderChargeEntity.Amount - newOrderChargeEntity.Amount;
             }
 
-            // Remove any charges from the split order that were not in the newOrderChargeAmounts
-            // or had 0 Amounts
+            // Set any charges from the split order that were not in the newOrderChargeAmounts to
+            // have an Amount of 0
             IList<long> notPresentOrderChargeIDs = splitOrder.OrderCharges
                 .Select(oi => oi.OrderChargeID)
                 .Except(newOrderChargeAmounts.Keys)
-                .Concat(splitOrder.OrderCharges.Where(oc => oc.Amount == 0).Select(oc => oc.OrderChargeID))
                 .Distinct()
                 .ToList();
 
             foreach (long orderChargeID in notPresentOrderChargeIDs)
             {
-                splitOrder.OrderCharges.Remove(splitOrder.OrderCharges.First(oi => oi.OrderChargeID == orderChargeID));
-            }
-
-            // Remove any charges from the original order that have an Amount of 0
-            IList<long> originalChargesToRemove = originalOrder.OrderCharges
-                .Where(oc => oc.Amount == 0)
-                .Select(oc => oc.OrderChargeID)
-                .ToList();
-
-            foreach (long orderChargeID in originalChargesToRemove)
-            {
-                originalOrder.OrderCharges.Remove(originalOrder.OrderCharges.First(oi => oi.OrderChargeID == orderChargeID));
+                splitOrder.OrderCharges.First(oi => oi.OrderChargeID == orderChargeID).Amount = 0;
             }
         }
     }

@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
-                .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
+                .Returns(Task.FromException<GenericResult<IDictionary<long, string>>>(new Exception("Error!")));
 
             await testObject.Split(1006).Recover(ex => null);
 
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         {
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>()))
-                .Returns(Task.FromException<IDictionary<long, string>>(new Exception("Error!")));
+                .Returns(Task.FromException< GenericResult<IDictionary<long, string>>>(new Exception("Error!")));
 
             await Assert.ThrowsAsync<Exception>(() => testObject.Split(1006));
         }

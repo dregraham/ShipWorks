@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
@@ -78,8 +79,8 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Show a success dialog
         /// </summary>
-        private void DisplaySuccessDialog(IDictionary<long, string> results) =>
-            userInteraction.ShowSuccessConfirmation(results.Values);
+        private void DisplaySuccessDialog(GenericResult<IDictionary<long, string>> result) =>
+            userInteraction.ShowSuccessConfirmation(result.Value.Values);
 
         /// <summary>
         /// Show an error message
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Get order IDs from the split results
         /// </summary>
-        private IEnumerable<long> GetOrderIDs(IDictionary<long, string> results) =>
-            results.Keys;
+        private IEnumerable<long> GetOrderIDs(GenericResult<IDictionary<long, string>> result) =>
+            result.Value.Keys;
     }
 }

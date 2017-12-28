@@ -35,29 +35,17 @@ namespace ShipWorks.Stores.Orders.Split
                 originalOrderItemEntity.Quantity = originalOrderItemEntity.Quantity - newOrderItemEntity.Quantity;
             }
 
-            // Remove any order items from the split order that were not in the newOrderItemQuantities
-            // or had 0 Quantity
+            // Set any order items from the split order that were not in the newOrderItemQuantities
+            // to have a Quantity of 0
             IList<long> notPresentOrderItemIDs = splitOrder.OrderItems
                 .Select(oi => oi.OrderItemID)
                 .Except(newOrderItemQuantities.Keys)
-                .Concat(splitOrder.OrderItems.Where(oc => oc.Quantity == 0).Select(oc => oc.OrderItemID))
                 .Distinct()
                 .ToList();
 
             foreach (long orderItemID in notPresentOrderItemIDs)
             {
-                splitOrder.OrderItems.Remove(splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemID));
-            }
-
-            // Remove any order items from the original order that have a Quantity of 0
-            IList<long> originalOrderItemsToRemove = originalOrder.OrderItems
-                .Where(oc => oc.Quantity == 0)
-                .Select(oc => oc.OrderItemID)
-                .ToList();
-
-            foreach (long orderItemID in originalOrderItemsToRemove)
-            {
-                originalOrder.OrderItems.Remove(originalOrder.OrderItems.First(oi => oi.OrderItemID == orderItemID));
+                splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemID).Quantity = 0;
             }
         }
     }

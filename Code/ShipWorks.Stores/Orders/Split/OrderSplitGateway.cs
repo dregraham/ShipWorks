@@ -95,6 +95,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             prefetchPath.Add(OrderEntity.PrefetchPathStore);
             prefetchPath.Add(OrderEntity.PrefetchPathNotes);
+            prefetchPath.Add(OrderEntity.PrefetchPathOrderCharges);
             prefetchPath.Add(OrderEntity.PrefetchPathOrderPaymentDetails);
 
             AddOrderSearchPrefetchPaths(prefetchPath);
@@ -128,6 +129,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathInsurancePolicy);
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathCustomsItems);
+            prefetchPath.Add(OrderEntity.PrefetchPathShipmentCollectionViaValidatedAddress);
             shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathValidatedAddress);
 
             prefetchPath.Add(shipmentsPath);
