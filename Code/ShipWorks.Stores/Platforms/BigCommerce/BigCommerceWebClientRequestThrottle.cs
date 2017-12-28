@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 {
                     // These retry intervals are not the specific BigCommerce quota intervals.  Just some rough guesses based on the BigCommerce intervals on how quickly to retry if we are throttled
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrders),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrderCount),
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(5), BigCommerceWebClientApiCall.GetOrderCount),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrder),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetCoupons),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrderStatuses),
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             logger.LogRequest(requestText, "txt");
 
             // Ask the base throttler to start making the call
-            TWebClientReturnType restResponse = await base.ExecuteRequest(requestThrottleParams, webClientMethod).ConfigureAwait(false);
+            TWebClientReturnType restResponse = await base.ExecuteRequestAsync(requestThrottleParams, webClientMethod).ConfigureAwait(false);
 
             // Serialize the response and log it
             string responseText = JsonConvert.SerializeObject(restResponse);
