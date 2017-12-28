@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
-            // do this check after 1/21/218
+            // do this check after 1/21/218 because thats when the USPS starts these new rules
             if (dateTimeProvider.Now >= new DateTime(2018, 01, 21))
             {
                 firstClassInternationalShipmentValidator.ValidateShipment(shipment);

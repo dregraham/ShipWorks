@@ -33,6 +33,7 @@ namespace ShipWorks.Shipping.Carriers
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.PostalWebTools)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.UpsWorldShip)]
+    [Component(Service = typeof(IDefaultShipmentPreProcessor))]
     public class DefaultShipmentPreProcessor : IShipmentPreProcessor, IDefaultShipmentPreProcessor
     {
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;

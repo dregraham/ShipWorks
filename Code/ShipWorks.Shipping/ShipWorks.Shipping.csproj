@@ -266,6 +266,7 @@
     <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsRegistration.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Usps\IFirstClassInternationalWarningDialog.cs" />
     <Compile Include="Carriers\Postal\Usps\IUspsFirstClassInternationalShipmentValidator.cs" />
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsFirstClassInternationalShipmentValidator.cs" />

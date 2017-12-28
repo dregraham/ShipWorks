@@ -4,6 +4,7 @@ using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
@@ -11,10 +12,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    [KeyedComponent(typeof(IDialog), "FirstClassInternationalWarningDlg")]
-    public partial class FirstClassInternationalWarningDlg : Window, IDialog
+    [Component(Service = typeof(IFirstClassInternationalWarningDialog))]
+    public partial class FirstClassInternationalWarningDialog : Window, IFirstClassInternationalWarningDialog
     {
-        public FirstClassInternationalWarningDlg()
+        public FirstClassInternationalWarningDialog()
         {
             InitializeComponent();
         }

@@ -9,7 +9,6 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Represents the default shipment pre processor
     /// </summary>
-    [Service]
     public interface IDefaultShipmentPreProcessor
     {
         /// <summary>

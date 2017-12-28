@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             ShipmentEntity shipment = new ShipmentEntity();
 
             testObject.Run(shipment, null, null);
-            internationalValidator.Verify(i => i.ValidateShipment(shipment));
+            defaultPreProcessor.Verify(v => v.Run(shipment, null, null));
         }
     }
 }
