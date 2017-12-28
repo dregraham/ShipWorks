@@ -56,7 +56,7 @@
             </StackPanel>
 
             <TextBlock TextWrapping="Wrap"
-                       Margin="0, 8, 0, 0"><Run Text="You may select the item quantities and order charges for the new order.  Other order details will be copied from the selected order. "/><Hyperlink FontStyle="Italic" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000106629-combining-orders-in-shipworks" ui:Link.OpenInBrowser="True"><Run Text="more info..."/></Hyperlink></TextBlock>
+                       Margin="0, 8, 0, 0"><Run Text="You may select the item quantities and order charges for the new order.  Other order details will be copied from the selected order. "/><Hyperlink FontStyle="Italic" NavigateUri="http://support.shipworks.com/support/solutions/articles/4000114647-splitting-orders-in-shipworks" ui:Link.OpenInBrowser="True"><Run Text="more info..."/></Hyperlink></TextBlock>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" 
