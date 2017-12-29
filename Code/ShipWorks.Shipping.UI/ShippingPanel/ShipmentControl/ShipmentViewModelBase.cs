@@ -372,18 +372,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// </summary>
         private void ManageDimensionsProfiles(DimensionsProfilesChangedMessage message)
         {
-            // For "Enter Dimensions" we need to capture entered values so that we can re-add them later.
             long originalDimensionsProfileID = SelectedDimensionsProfile?.DimensionsProfileID ?? 0;
-            double originalLength = DimsLength;
-            double originalWidth = DimsWidth;
-            double originalHeight = DimsHeight;
-            double originalWeight = DimsWeight;
 
             // Refresh the dimensions profiles.
             RefreshDimensionsProfiles();
 
             // Update the Dimensions combo box selected text.
-            UpdateDimensionsSelectedText(originalDimensionsProfileID, originalLength, originalWidth, originalHeight, originalWeight);
+            UpdateDimensionsSelectedText(originalDimensionsProfileID);
         }
 
         /// <summary>
@@ -406,7 +401,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         ///  The hack to get it updated is to switch the selected item, SelectedDimensionsProfile, and then switch it back to the
         ///  real selected item.
         ///  </summary>
-        private void UpdateDimensionsSelectedText(long originalDimensionsProfileID, double originalLength, double originalWidth, double originalHeight, double originalWeight)
+        private void UpdateDimensionsSelectedText(long originalDimensionsProfileID)
         {
             // First change to a different selected profile
             SelectedDimensionsProfile = originalDimensionsProfileID != 0 ?
@@ -417,15 +412,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
             SelectedDimensionsProfile = DimensionsProfiles.Any(dp => dp.DimensionsProfileID == originalDimensionsProfileID) ?
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == originalDimensionsProfileID) :
                 DimensionsProfiles.FirstOrDefault(dp => dp.DimensionsProfileID == 0);
-
-            // For "Enter Dimensions" we need to reset to the original entered values.
-            if (originalDimensionsProfileID == 0)
-            {
-                DimsLength = originalLength;
-                DimsWidth = originalWidth;
-                DimsHeight = originalHeight;
-                DimsWeight = originalWeight;
-            }
         }
 
         #endregion Dimensions

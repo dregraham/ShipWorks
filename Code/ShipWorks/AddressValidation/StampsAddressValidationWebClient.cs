@@ -11,7 +11,8 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal;
-using System;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.AddressValidation
 {
@@ -22,15 +23,18 @@ namespace ShipWorks.AddressValidation
     {
         private readonly IUspsWebClient uspsWebClient;
         private readonly IAddressValidationResultFactory addressValidationResultFactory;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public StampsAddressValidationWebClient()
 			: this(new UspsWebClient(new UspsAccountRepository(),
-	            new UspsWebServiceFactory(new LogEntryFactory()),
-    	        new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
-        	    UspsResellerType.None), new StampsAddressValidationResultFactory())
+	                new UspsWebServiceFactory(new LogEntryFactory()),
+    	            new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
+        	        UspsResellerType.None), 
+                  new StampsAddressValidationResultFactory(), 
+                  new UspsCounterRateAccountRepository(TangoCredentialStore.Instance))
         {
             
         }
@@ -38,10 +42,14 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient, IAddressValidationResultFactory addressValidationResultFactory)
+        public StampsAddressValidationWebClient(
+            IUspsWebClient uspsWebClient, 
+            IAddressValidationResultFactory addressValidationResultFactory,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
         {
             this.uspsWebClient = uspsWebClient;
             this.addressValidationResultFactory = addressValidationResultFactory;
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -63,17 +71,19 @@ namespace ShipWorks.AddressValidation
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
-
-            UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
             try
             {
-                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepository.DefaultProfileAccount).ConfigureAwait(false);
                 validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int) validationResult.AddressType));
-                    
+                    // Only add the origin to the validation results if it was fully matched
+                    if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum)
+                    {
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType));
+                    }
+                                        
                     if (validationResult.AddressType == AddressType.InternationalAmbiguous)
                     {
                         validationResult.AddressValidationError = TranslateValidationResultMessage(uspsResult);
@@ -207,6 +217,12 @@ namespace ShipWorks.AddressValidation
                 uspsResult.AddressCleansingResult != "Full Address Verified.")
             {
                 return AddressType.InternationalAmbiguous;
+            }
+
+            // If the address is matched partially consider it a bad address
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Partial)
+            {
+                return AddressType.PrimaryNotFound;
             }
 
             return AddressType.Valid;
