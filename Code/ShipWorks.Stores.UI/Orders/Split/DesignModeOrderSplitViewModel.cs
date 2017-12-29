@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShipWorks.Stores.UI.Orders.Split
 {
@@ -43,6 +43,16 @@ namespace ShipWorks.Stores.UI.Orders.Split
         /// Order number postfix to use for the new order
         /// </summary>
         public string OrderNumberPostfix { get; set; }
+
+        /// <summary>
+        /// Total of the original order's charges
+        /// </summary>
+        public decimal OriginalTotalCharge => Charges.Sum(x => x.OriginalAmount);
+
+        /// <summary>
+        /// Total of the split order's charges
+        /// </summary>
+        public decimal SplitTotalCharge => Charges.Sum(x => x.SplitAmount);
 
         /// <summary>
         /// Order items

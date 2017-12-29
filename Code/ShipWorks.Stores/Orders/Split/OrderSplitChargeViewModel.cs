@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Reflection;
-using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityInterfaces;
+using System;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             OrderChargeID = item.OrderChargeID;
             Type = item.Type;
+            Description = item.Description;
             TotalAmount = item.Amount;
             OriginalAmount = item.Amount;
             SplitAmount = 0;
@@ -52,6 +53,12 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string Type { get; set; }
+
+        /// <summary>
+        /// Description of the item
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Description { get; set; }
 
         /// <summary>
         /// Total amount of the item

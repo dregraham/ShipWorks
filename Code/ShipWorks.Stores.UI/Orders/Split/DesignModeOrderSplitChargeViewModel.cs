@@ -10,7 +10,8 @@
         /// </summary>
         public DesignModeOrderSplitChargeViewModel()
         {
-            Type = "Sales Tax";
+            Type = "TAX";
+            Description = "Sales Tax";
             OriginalAmount = 3;
             SplitAmount = 1;
         }
@@ -19,6 +20,11 @@
         /// Type of the charge
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Description of the charge
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Amount of the charge on the original order

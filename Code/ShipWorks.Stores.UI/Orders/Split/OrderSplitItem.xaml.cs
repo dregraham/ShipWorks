@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ShipWorks.Stores.UI.Orders.Split
 {
@@ -20,9 +10,27 @@ namespace ShipWorks.Stores.UI.Orders.Split
     /// </summary>
     public partial class OrderSplitItem : UserControl
     {
+        public static readonly DependencyProperty ShowDecimalsProperty =
+            DependencyProperty.Register("ShowDecimals", typeof(bool), typeof(OrderSplitItem),
+                new FrameworkPropertyMetadata(false));
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderSplitItem()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Weight in fractional lbs
+        /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
+        public bool ShowDecimals
+        {
+            get => (bool)GetValue(ShowDecimalsProperty);
+            set => SetValue(ShowDecimalsProperty, value);
         }
     }
 }

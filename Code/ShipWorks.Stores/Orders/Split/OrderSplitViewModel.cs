@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
@@ -16,6 +7,15 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split.Errors;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -128,6 +128,9 @@ namespace ShipWorks.Stores.Orders.Split
             get => splitTotalCharge;
             set => handler.Set(nameof(SplitTotalCharge), ref splitTotalCharge, value);
         }
+
+        [Obfuscation(Exclude = true)]
+        public bool ShowItemQuantityDecimals => !Items.All(x => x.TotalQuantity.IsInt());
 
         /// <summary>
         /// Get order split details from user
