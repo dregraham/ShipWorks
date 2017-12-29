@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (!accepted)
                 {
-                    throw new UspsTermsAndConditionsException("Terms and conditions must be accepted.", this);
+                    throw new UspsTermsAndConditionsException($"Please accept the terms and conditions for your Stamps.com account {uspsAccount.Username}.", this);
                 }
             }
         }
