@@ -57,13 +57,13 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
         }
 
         [Theory]
-        [InlineData("1234-1", 0, "")]
-        [InlineData("1234-2", 1, "")]
-        [InlineData("1234-4", 3, "")]
-        [InlineData("1234", 101, "")]
-        [InlineData("1234-1-1", 0, "-1")]
-        [InlineData("1234-2-2", 1, "-2")]
-        [InlineData("1234-2-3", 2, "-2")]
+        [InlineData("-1", 0, "")]
+        [InlineData("-2", 1, "")]
+        [InlineData("-4", 3, "")]
+        [InlineData("-S", 101, "")]
+        [InlineData("-1", 0, "-1")]
+        [InlineData("-2", 1, "-2")]
+        [InlineData("-3", 2, "-2")]
         public async Task GetNextOrderNumber_ReturnsCorrectValue(string expectedNextOrderNumberComplete, int numberOfExistingOrdersToCreate, string existingOrderPostfix)
         {
             Modify.Order(context.Order)
