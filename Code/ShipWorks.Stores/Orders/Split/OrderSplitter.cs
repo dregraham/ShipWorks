@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
@@ -13,8 +8,12 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split.Errors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -34,9 +33,9 @@ namespace ShipWorks.Stores.Orders.Split
         /// Constructor
         /// </summary>
         public OrderSplitter(
-            ISqlAdapterFactory sqlAdapterFactory, 
+            ISqlAdapterFactory sqlAdapterFactory,
             IOrderItemSplitter orderItemSplitter,
-            IOrderChargeSplitter orderChargeSplitter, 
+            IOrderChargeSplitter orderChargeSplitter,
             IOrderSplitGateway orderSplitGateway,
             IOrderChargeCalculator orderChargeCalculator)
         {
@@ -170,6 +169,8 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private void SplitValues(OrderSplitDefinition definition, OrderEntity newOrderEntity, string newOrderNumber, OrderEntity originalOrder)
         {
+            originalOrder.CombineSplitStatus = CombineSplitStatusType.Split;
+
             newOrderEntity.IsNew = true;
             newOrderEntity.OrderID = 0;
             newOrderEntity.ChangeOrderNumber(newOrderNumber, "", "", newOrderEntity.OrderNumber);
