@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.Weight, 1.23);
+            Assert.Equal(1.23, testObject.Weight);
         }
 
         [Fact]
@@ -62,9 +62,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.PackageDimensions.Height, 7);
-            Assert.Equal(testObject.PackageDimensions.Length, 8);
-            Assert.Equal(testObject.PackageDimensions.Width, 9);
+            Assert.Equal(7, testObject.PackageDimensions.Height);
+            Assert.Equal(8, testObject.PackageDimensions.Length);
+            Assert.Equal(9, testObject.PackageDimensions.Width);
         }
 
         [Fact]
@@ -72,9 +72,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.ShipFromAddress.AddressLine1, "123");
-            Assert.Equal(testObject.ShipFromAddress.AddressLine2, "456");
-            Assert.Equal(testObject.ShipFromAddress.AddressLine3, "789");
+            Assert.Equal("123", testObject.ShipFromAddress.AddressLine1);
+            Assert.Equal("456", testObject.ShipFromAddress.AddressLine2);
+            Assert.Equal("789", testObject.ShipFromAddress.AddressLine3);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.ShipFromAddress.Name, "Foo Bar");
+            Assert.Equal("Foo Bar", testObject.ShipFromAddress.Name);
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             ShipmentRequestDetails testObject = amazonShipmentRequestDetailsFactory.Create(shipmentEntity, order);
 
-            Assert.Equal(testObject.ShipFromAddress.Name, "Foo Bar");
+            Assert.Equal("Foo Bar", testObject.ShipFromAddress.Name);
         }
 
         [Fact]

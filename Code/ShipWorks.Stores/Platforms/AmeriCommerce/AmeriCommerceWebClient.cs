@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Services.Protocols;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -15,6 +10,11 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web.Services.Protocols;
 using InterapptiveResult = Interapptive.Shared.Utility.Result;
 
 namespace ShipWorks.Stores.Platforms.AmeriCommerce
@@ -289,7 +289,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         }
 
         /// <summary>
-        /// Gets the country code for the americommerce country id
+        /// Gets the country code for the AmeriCommerce country id
         /// </summary>
         public string GetCountryCode(int countryId)
         {
@@ -388,7 +388,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 using (AmeriCommerceDatabaseIO service = CreateWebService("UpdateOrderStatus"))
                 {
                     // find the order to be edited
-                    OrderTrans orderTrans = service.Order_GetByKey((int) orderNumber);
+                    OrderTrans orderTrans = service.Order_GetByKey((int)orderNumber);
 
                     // update the status id
                     orderTrans.orderStatusID = new DataInt32();
@@ -404,7 +404,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                     // save the order with its changes
                     if (!service.Order_Save(orderTrans))
                     {
-                        throw new AmeriCommerceException(string.Format("An unknown error occurred while saving order status."));
+                        throw new AmeriCommerceException("An unknown error occurred while saving order status.");
                     }
                 }
 
@@ -426,14 +426,14 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
                 using (AmeriCommerceDatabaseIO service = CreateWebService("UploadShipmentDetails"))
                 {
                     // retrieve the order
-                    OrderTrans orderTrans = service.Order_GetByKey((int) orderNumber);
+                    OrderTrans orderTrans = service.Order_GetByKey((int)orderNumber);
                     orderTrans = service.Order_FillOrderShippingCollection(orderTrans);
 
                     // get the existing shipment records
                     List<OrderShippingTrans> shipmentRecords = orderTrans.OrderShippingColTrans.ToList();
 
                     // create and populate the OrderShipping record
-                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans((int) orderNumber, shipment);
+                    OrderShippingTrans shippingTrans = CreateOrderShippingTrans((int)orderNumber, shipment);
                     shipmentRecords.Add(shippingTrans);
                     orderTrans.OrderShippingColTrans = shipmentRecords.ToArray();
 
@@ -496,7 +496,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             shippingTrans.ShippingDate = new DataDateTime();
             shippingTrans.ShippingDate.Value = shipment.ShipDate;
 
-            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
+            shippingTrans.ShippingMethod = ShippingManager.GetCarrierName((ShipmentTypeCode)shipment.ShipmentType) + " " + ShippingManager.GetOverriddenServiceUsed(shipment);
             shippingTrans.TrackingNumbers = shipment.TrackingNumber;
 
             return shippingTrans;
@@ -509,7 +509,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         {
             try
             {
-                ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+                ShipmentTypeCode shipmentType = (ShipmentTypeCode)shipment.ShipmentType;
                 if (shipmentType == ShipmentTypeCode.UpsOnLineTools ||
                     shipmentType == ShipmentTypeCode.UpsWorldShip)
                 {

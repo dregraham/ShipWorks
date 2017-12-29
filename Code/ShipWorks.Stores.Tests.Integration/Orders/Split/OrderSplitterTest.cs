@@ -58,8 +58,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
-            Assert.Equal(originalOrder.OrderNumber, 1234);
-            Assert.Equal(originalOrder.OrderNumberComplete, "1234");
+            Assert.Equal(1234, originalOrder.OrderNumber);
+            Assert.Equal("1234", originalOrder.OrderNumberComplete);
             Assert.Equal(0, originalOrder.OrderItems.Count);
             Assert.Equal(0, originalOrder.OrderCharges.Count);
             Assert.Equal(0, originalOrder.OrderTotal);

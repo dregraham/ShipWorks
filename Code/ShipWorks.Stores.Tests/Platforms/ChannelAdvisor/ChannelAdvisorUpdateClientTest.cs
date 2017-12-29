@@ -152,24 +152,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public async Task UploadShipmentDetails_DoesDelegateToSoapClientOnce_WhenNonCombinedOrderAndNoCombinedOrderSearchEntities()
-        {
-            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
-            await testObject.UploadShipmentDetails(store, shipment, order);
-
-            soapClient.Verify(c => c.UploadShipmentDetails(1234, shipment.ShippedDateUtc, "carrier", "class", "track this!"), Times.Once);
-        }
-
-        [Fact]
-        public async Task UploadShipmentDetails_DelegatesToSoapClient_WhenCombinedOrderAndStoreHasEmptyRefreshToken()
-        {
-            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
-            await testObject.UploadShipmentDetails(store, shipment, combinedOrder);
-
-            soapClient.Verify(c => c.UploadShipmentDetails(1234, shipment.ShippedDateUtc, "carrier", "class", "track this!"), Times.Once);
-        }
-
-        [Fact]
         public async Task UploadShipmentDetails_DoesNotDelegateToSoapClient_WhenCombinedOrderAndStoreHasRefreshToken()
         {
             store.RefreshToken = "ha";
@@ -202,18 +184,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public async Task UploadShipmentDetails_DelegatesToRestClient_WhenCombinedOrderAndStoreHasRefreshToken()
-        {
-            store.RefreshToken = "ha";
-
-            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
-            await testObject.UploadShipmentDetails(store, shipment, order).ConfigureAwait(false);
-
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.UploadShipmentDetails(shipment, "EncryptedText", "1234"),
-                Times.Once);
-        }
-
-        [Fact]
         public async Task UploadShipmentDetails_DoesNotDelegateToRestClient_WhenCombinedOrderAndStoreHasEmptyRefreshToken()
         {
             var testObject = mock.Create<ChannelAdvisorUpdateClient>();
@@ -222,19 +192,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.UploadShipmentDetails(
                 It.IsAny<ChannelAdvisorShipment>(),
                 It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-        }
-
-        [Fact]
-        public async Task UploadShipmentDetails_DoesDelegateToRestClientOnce_WhenCombinedOrderAndNoCombinedOrderSearchEntities()
-        {
-            store.RefreshToken = "ha";
-
-            var testObject = mock.Create<ChannelAdvisorUpdateClient>();
-            await testObject.UploadShipmentDetails(store, shipment, order).ConfigureAwait(false);
-
-            mock.Mock<IChannelAdvisorRestClient>().Verify(c => c.UploadShipmentDetails(
-                It.IsAny<ChannelAdvisorShipment>(),
-                It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]

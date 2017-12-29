@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.FedEx;
+﻿using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Rating
 {
@@ -32,19 +28,19 @@ namespace ShipWorks.Shipping.Rating
             {
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    rateSelection.ServiceType = (int)(UpsServiceType) rateResult.OriginalTag;
+                    rateSelection.ServiceType = (int) (UpsServiceType) rateResult.OriginalTag;
                     break;
                 case ShipmentTypeCode.FedEx:
                     FedExRateSelection fedExRateSelection = rateResult.OriginalTag as FedExRateSelection;
-                    rateSelection.ServiceType = (int)fedExRateSelection.ServiceType;
+                    rateSelection.ServiceType = (int) fedExRateSelection.ServiceType;
                     break;
                 case ShipmentTypeCode.OnTrac:
-                    OnTracServiceType onTracServiceType = (OnTracServiceType)rateResult.OriginalTag;
-                    rateSelection.ServiceType = (int)onTracServiceType;
+                    OnTracServiceType onTracServiceType = (OnTracServiceType) rateResult.OriginalTag;
+                    rateSelection.ServiceType = (int) onTracServiceType;
                     break;
                 case ShipmentTypeCode.iParcel:
-                    iParcelRateSelection ipRateSelection = (iParcelRateSelection)rateResult.OriginalTag;
-                    rateSelection.ServiceType = (int)ipRateSelection.ServiceType;
+                    iParcelRateSelection ipRateSelection = (iParcelRateSelection) rateResult.OriginalTag;
+                    rateSelection.ServiceType = (int) ipRateSelection.ServiceType;
                     break;
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
@@ -62,7 +58,7 @@ namespace ShipWorks.Shipping.Rating
                     // None and Other don't have rates, so just continue.
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException("rateResult.ShipmentType");
             }
 
             return rateSelection;

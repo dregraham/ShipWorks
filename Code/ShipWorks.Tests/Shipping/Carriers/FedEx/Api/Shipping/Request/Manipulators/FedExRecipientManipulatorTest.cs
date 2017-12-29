@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -7,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
@@ -61,12 +61,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipmentEntity))
             {
                 Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, shipmentEntity.ResidentialResult);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
+                Assert.True(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
             else
             {
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, false);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
+                Assert.False(nativeRequest.RequestedShipment.Recipient.Address.Residential);
+                Assert.False(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
         }
 
@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.ShipStreet2 = string.Empty;
             shipmentEntity.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
 
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.ShipStreet2 = "y";
             shipmentEntity.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedEx1DayFreight;
 
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -143,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.ShipStreet2 = string.Empty;
             shipmentEntity.ShipStreet3 = string.Empty;
 
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.SmartPost;
+            shipmentEntity.FedEx.Service = (int) FedExServiceType.SmartPost;
 
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -161,8 +161,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [InlineData("GGG", "guam")]
         public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
         {
-            shipmentEntity.ShipStateProvCode = "GU";
-            shipmentEntity.ShipCountryCode = "US";
+            shipmentEntity.ShipStateProvCode = state;
+            shipmentEntity.ShipCountryCode = country;
 
             nativeRequest = new ProcessShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);

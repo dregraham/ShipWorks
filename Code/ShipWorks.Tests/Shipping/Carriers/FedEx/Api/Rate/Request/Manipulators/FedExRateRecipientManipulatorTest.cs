@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -7,6 +6,7 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         public void Manipulate_FedExShipperManipulator_ReturnsValidStreetLines()
         {
             testObject.Manipulate(carrierRequest.Object);
-            
+
             // Make sure Address fields match
             string[] addressLines = nativeRequest.RequestedShipment.Recipient.Address.StreetLines;
 
@@ -72,17 +72,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.CountryCode, shipmentEntity.ShipCountryCode);
             Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.PostalCode, shipmentEntity.ShipPostalCode);
             Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode, shipmentEntity.ShipStateProvCode);
-            
+
             // Make sure residential info matches
             if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipmentEntity))
             {
                 Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, shipmentEntity.ResidentialResult);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
+                Assert.True(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
             else
             {
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, false);
-                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
+                Assert.False(nativeRequest.RequestedShipment.Recipient.Address.Residential);
+                Assert.False(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified);
             }
         }
 
@@ -93,8 +93,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         [InlineData("GGG", "guam")]
         public void Manipulate_SendingToGuamSetsStateToBlankAndCountryToGU(string state, string country)
         {
-            shipmentEntity.ShipStateProvCode = "GU";
-            shipmentEntity.ShipCountryCode = "US";
+            shipmentEntity.ShipStateProvCode = state;
+            shipmentEntity.ShipCountryCode = country;
 
             testObject.Manipulate(carrierRequest.Object);
 

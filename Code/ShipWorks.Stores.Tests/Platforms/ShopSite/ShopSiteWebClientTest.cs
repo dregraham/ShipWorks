@@ -1,17 +1,15 @@
-﻿using System;
+﻿using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.ShopSite;
+using ShipWorks.Stores.Tests.Platforms.ShopSite.Responses;
 using ShipWorks.Tests.Shared;
 using Xunit;
-using Autofac;
-using Interapptive.Shared.Security;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Tests.Platforms.ShopSite.Responses;
 
 
 namespace ShipWorks.Stores.Tests.Platforms.ShopSite
@@ -42,9 +40,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
         }
 
         [Theory]
-        [InlineData("",        "username", "password", "CGI Path")]
-        [InlineData("www.com", "",         "password", "Merchant ID")]
-        [InlineData("www.com", "username", "",         "Password")]
+        [InlineData("", "username", "password", "CGI Path")]
+        [InlineData("www.com", "", "password", "Merchant ID")]
+        [InlineData("www.com", "username", "", "Password")]
         public void Constructor_ReturnsException_WhenBasicAuthAndMissingInfo(string url, string username, string pwd, string expectedValue)
         {
             ShopSiteStoreEntity store = new ShopSiteStoreEntity(1);
@@ -108,8 +106,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
                 .Returns(responseReader.Object);
 
             int callOrder = 0;
-            submitter.Setup(x => x.Variables.Add("maxorder", "1")).Callback(() => Assert.Equal(callOrder++, 0));
-            submitter.Setup(x => x.Variables.Add("version", "12.0")).Callback(() => Assert.Equal(callOrder++, 1));
+            submitter.Setup(x => x.Variables.Add("maxorder", "1")).Callback(() => Assert.Equal(0, callOrder++));
+            submitter.Setup(x => x.Variables.Add("version", "12.0")).Callback(() => Assert.Equal(1, callOrder++));
 
             IShopSiteWebClient webClient = mock.Create<ShopSiteWebClient>(TypedParameter.From(store as IShopSiteStoreEntity));
 

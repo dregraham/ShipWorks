@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             var result = storeType.CreateAddStoreWizardPages(container);
 
             Assert.IsType<MagentoStoreSetupPage>(result.ElementAt(0));
-            Assert.Equal(result.Count, 1);
+            Assert.Equal(1, result.Count);
         }
 
         public void Dispose() => container.Dispose();

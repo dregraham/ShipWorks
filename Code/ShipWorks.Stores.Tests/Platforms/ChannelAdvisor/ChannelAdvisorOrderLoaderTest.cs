@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
@@ -13,6 +12,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             new ChannelAdvisorDistributionCenter()
             {
                 ID = 1,
-                Code = "DC1", 
+                Code = "DC1",
                 Name = "DC 1"
             }
         };
@@ -126,16 +126,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void LoadOrder_CustomOrderIdentifierIsSet()
-        {
-            downloadedOrder.ID = 123;
-
-            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
-
-            Assert.Equal(123, orderToSave.OrderNumber);
-        }
-
-        [Fact]
         public void LoadOrder_PaymentStatusIsSet()
         {
             downloadedOrder.PaymentStatus = EnumHelper.GetDescription(ChannelAdvisorPaymentStatus.Submitted);
@@ -152,7 +142,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorCheckoutStatus.Completed, orderToSave.OnlineCheckoutStatus);
+            Assert.Equal((int) ChannelAdvisorCheckoutStatus.Completed, orderToSave.OnlineCheckoutStatus);
         }
 
         [Fact]
@@ -162,7 +152,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorShippingStatus.Shipped, orderToSave.OnlineShippingStatus);
+            Assert.Equal((int) ChannelAdvisorShippingStatus.Shipped, orderToSave.OnlineShippingStatus);
         }
 
         [Fact]
@@ -210,7 +200,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void LoadOrder_TotalCalculated_WhenOrderIsNew()
         {
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
-            mock.Mock<IOrderChargeCalculator>().Verify(c=>c.CalculateTotal(orderToSave), Times.Once);
+            mock.Mock<IOrderChargeCalculator>().Verify(c => c.CalculateTotal(orderToSave), Times.Once);
         }
 
         [Fact]
@@ -601,22 +591,12 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             Assert.Equal("123-456-7890", orderToSave.BillPhone);
         }
 
-        [Fact]
-        public void LoadOrder_BillEmailIsSet()
-        {
-            downloadedOrder.BuyerEmailAddress = "support@Billworks.com";
-
-            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
-
-            Assert.Equal("support@Billworks.com", orderToSave.BillEmail);
-        }
-
         #endregion
 
         [Fact]
         public void LoadOrder_RequestedShippingIsSet()
         {
-            downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() {new ChannelAdvisorFulfillment() {ShippingCarrier = "UPS", ShippingClass = "Ground"} };
+            downloadedOrder.Fulfillments = new List<ChannelAdvisorFulfillment>() { new ChannelAdvisorFulfillment() { ShippingCarrier = "UPS", ShippingClass = "Ground" } };
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
@@ -640,7 +620,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.No, orderToSave.IsPrime);
+            Assert.Equal((int) ChannelAdvisorIsAmazonPrime.No, orderToSave.IsPrime);
         }
 
         [Fact]
@@ -648,7 +628,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.Unknown, orderToSave.IsPrime);
+            Assert.Equal((int) ChannelAdvisorIsAmazonPrime.Unknown, orderToSave.IsPrime);
         }
 
         [Fact]
@@ -896,7 +876,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemQuantityIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
                 Quantity = 42,
                 FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
             });
@@ -937,7 +918,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         [Fact]
         public void LoadOrder_OrderItemSkuIsSet()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() { Sku = "sku!",
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                Sku = "sku!",
                 FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
             });
 
@@ -959,16 +942,16 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
             Assert.Equal("site name",
-                ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems[0]).MarketplaceName);
+                ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems[0]).MarketplaceName);
         }
 
         [Fact]
         public void LoadOrder_BuyerUserIDIsSet()
         {
             downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
-                {
-                    FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
-                });
+            {
+                FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
+            });
             downloadedOrder.BuyerUserID = "Foo";
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
@@ -987,13 +970,15 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            orderElementFactory.Verify(f=>f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Never);
+            orderElementFactory.Verify(f => f.CreateItemAttribute(It.IsAny<OrderItemEntity>()), Times.Never);
         }
 
         [Fact]
         public void LoadOrder_OrderItemAttributeCreated_WhenGiftNote()
         {
-            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem() {GiftNotes = "For You!",
+            downloadedOrder.Items.Add(new ChannelAdvisorOrderItem()
+            {
+                GiftNotes = "For You!",
                 FulfillmentItems = new List<ChannelAdvisorFulfillmentItem>()
             });
 
@@ -1183,7 +1168,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
                 Name = "attributeName",
                 Value = "the value"
             };
-            downloadedProduct.Attributes = new[] {downloadedAttribute};
+            downloadedProduct.Attributes = new[] { downloadedAttribute };
 
             store.AttributesToDownload = "<Attributes><Attribute>attributeName</Attribute></Attributes>";
 
@@ -1336,7 +1321,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            string distributionCenterID = ((ChannelAdvisorOrderItemEntity)orderToSave.OrderItems.Single()).DistributionCenter;
+            string distributionCenterID = ((ChannelAdvisorOrderItemEntity) orderToSave.OrderItems.Single()).DistributionCenter;
 
             Assert.Equal("DC1", distributionCenterID);
         }

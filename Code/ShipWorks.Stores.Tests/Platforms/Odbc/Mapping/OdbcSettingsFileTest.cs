@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -187,6 +188,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Mapping
         }
 
         [Fact]
+        [SuppressMessage("SonarLint", "S3928: Parameter names used into ArgumentException constructors should match an existing one",
+            Justification = "We don't care which parameter is null")]
         public void Open_ThrowsException_WhenUnhandledExceptionIsThrown()
         {
             var streamReader = mock.Mock<TextReader>();
