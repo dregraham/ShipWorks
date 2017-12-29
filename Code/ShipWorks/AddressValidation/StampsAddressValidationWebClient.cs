@@ -11,7 +11,8 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal;
-using System;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.AddressValidation
 {
@@ -22,15 +23,18 @@ namespace ShipWorks.AddressValidation
     {
         private readonly IUspsWebClient uspsWebClient;
         private readonly IAddressValidationResultFactory addressValidationResultFactory;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public StampsAddressValidationWebClient()
 			: this(new UspsWebClient(new UspsAccountRepository(),
-	            new UspsWebServiceFactory(new LogEntryFactory()),
-    	        new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
-        	    UspsResellerType.None), new StampsAddressValidationResultFactory())
+	                new UspsWebServiceFactory(new LogEntryFactory()),
+    	            new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
+        	        UspsResellerType.None), 
+                  new StampsAddressValidationResultFactory(), 
+                  new UspsCounterRateAccountRepository(TangoCredentialStore.Instance))
         {
             
         }
@@ -38,10 +42,14 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAddressValidationWebClient(IUspsWebClient uspsWebClient, IAddressValidationResultFactory addressValidationResultFactory)
+        public StampsAddressValidationWebClient(
+            IUspsWebClient uspsWebClient, 
+            IAddressValidationResultFactory addressValidationResultFactory,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
         {
             this.uspsWebClient = uspsWebClient;
             this.addressValidationResultFactory = addressValidationResultFactory;
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -63,11 +71,9 @@ namespace ShipWorks.AddressValidation
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
-
-            UspsCounterRateAccountRepository accountRepo = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
             try
             {
-                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepo.DefaultProfileAccount).ConfigureAwait(false);
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepository.DefaultProfileAccount).ConfigureAwait(false);
                 validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 if (uspsResult.IsSuccessfulMatch)
