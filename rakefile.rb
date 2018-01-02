@@ -12,7 +12,7 @@ end
 Albacore.configure do |config|
 	ENV["MSBuildSDKsPath"] = "C:/Program Files/dotnet/sdk/2.1.2/Sdks/"
 	config.msbuild do |msbuild|
-		msbuild.parameters = "/m:3"
+		msbuild.parameters = "/m"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe"
 		unless File.exists? msbuild.command
@@ -106,7 +106,6 @@ namespace :build do
 		print "Building solution with the Debug (No Analyzers) config...\r\n\r\n"
 
 		msb.properties :configuration => "Debug\ (No\ Analyzers)", TreatWarningsAsErrors: false
-		msb.verbosity = 'minimal'
 		msb.targets :Build
 	end
 

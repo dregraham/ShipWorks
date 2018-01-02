@@ -194,3 +194,4 @@ Build/ShipWorks*.*.*.*
 /Installer/InnoSetup.iss
 test.bat
 ShipWorks.sln.vsext
+build-times*.txt
