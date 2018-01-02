@@ -46,10 +46,18 @@ namespace :build do
 	desc "no-op"
 	task :analyze
 
-	desc "Cleans the ShipWorks solution"
-	msbuild :clean do |msb|
-		print "Cleaning solution...\r\n\r\n"
+	msbuild :clean_internal do |msb|
 		msb.targets :Clean
+	end
+
+	desc "Cleans the ShipWorks solution"
+	task :clean => ["build:clean_internal"] do |msb|
+		print "Cleaning solution...\r\n\r\n"
+
+		Dir["Code/**/bin", "Code/**/obj"].map do |d|
+			puts "Deleting " + d + "\r\n"
+			FileUtils.rm_rf d
+		end
 	end
 
 	desc "Zip the layout files"
