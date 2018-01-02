@@ -3,6 +3,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using System;
@@ -14,23 +15,23 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 {
-    public class UspsShipmentPreProcessorTest
+    public class PostalShipmentPreProcessorTest
     {
         private readonly AutoMock mock;
-        private readonly UspsShipmentPreProcessor testObject;
+        private readonly PostalShipmentPreProcessor testObject;
         private readonly Mock<IDateTimeProvider> dateTimeProvider;
-        private readonly Mock<IUspsFirstClassInternationalShipmentValidator> internationalValidator;
+        private readonly Mock<IPostalFirstClassInternationalShipmentValidator> internationalValidator;
         private readonly Mock<IDefaultShipmentPreProcessor> defaultPreProcessor;
 
-        public UspsShipmentPreProcessorTest()
+        public PostalShipmentPreProcessorTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             dateTimeProvider = mock.Mock<IDateTimeProvider>();
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2018, 2, 1));
-            internationalValidator = mock.Mock<IUspsFirstClassInternationalShipmentValidator>();
+            internationalValidator = mock.Mock<IPostalFirstClassInternationalShipmentValidator>();
             defaultPreProcessor = mock.Mock<IDefaultShipmentPreProcessor>();
             
-            testObject = mock.Create<UspsShipmentPreProcessor>();
+            testObject = mock.Create<PostalShipmentPreProcessor>();
         }
         
         [Fact]

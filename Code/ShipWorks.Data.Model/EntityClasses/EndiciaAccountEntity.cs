@@ -348,6 +348,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MailingPostalCode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ScanFormAddressSource", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AcceptedFCMILetterWarning", fieldHashtable);
 		}
 		#endregion
 
@@ -664,6 +666,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)EndiciaAccountFieldIndex.ScanFormAddressSource, true); }
 			set	{ SetValue((int)EndiciaAccountFieldIndex.ScanFormAddressSource, value); }
+		}
+
+		/// <summary> The AcceptedFCMILetterWarning property of the Entity EndiciaAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaAccount"."AcceptedFCMILetterWarning"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AcceptedFCMILetterWarning
+		{
+			get { return (System.Boolean)GetValue((int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, true); }
+			set	{ SetValue((int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

@@ -13,27 +13,30 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Validate First Class International shipments, ensure the user has accepted to not commit mail fraud
     /// </summary>
     [Component]
-    public class UspsFirstClassInternationalShipmentValidator : IUspsFirstClassInternationalShipmentValidator
+    public class PostalFirstClassInternationalShipmentValidator : IPostalFirstClassInternationalShipmentValidator
     {
-        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
         private readonly Func<IFirstClassInternationalWarningDialog> warningFactory;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsFirstClassInternationalShipmentValidator(
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository,
+        public PostalFirstClassInternationalShipmentValidator(
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
             Func<IFirstClassInternationalWarningDialog> warningFactory,
             IMessageHelper messageHelper)
         {
-            this.accountRepository = accountRepository;
+            this.uspsAccountRepository = uspsAccountRepository;
+            this.endiciaAccountRepository = endiciaAccountRepository;
             this.warningFactory = warningFactory;
             this.messageHelper = messageHelper;
         }
@@ -64,21 +67,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private bool ShouldShowWarningForShipmentsAccount(IShipmentEntity shipment)
         {
-            // If rate shopping is enabled and there is at least one account that hasnt accepted the FCMI Letter warning
-            if (shipment.Postal.Usps.RateShop && accountRepository.AccountsReadOnly.Any(a => a.AcceptedFCMILetterWarning == false))
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
             {
-                return true;
+                // If rate shopping is enabled and there is at least one account that hasnt accepted the FCMI Letter warning
+                if (shipment.Postal.Usps.RateShop && uspsAccountRepository.AccountsReadOnly.Any(a => a.AcceptedFCMILetterWarning == false))
+                {
+                    return true;
+                }
+
+                // Rate shopping is not enabled, check to see if the shipments account has accepted
+                if (!uspsAccountRepository.GetAccountReadOnly(shipment).AcceptedFCMILetterWarning)
+                {
+                    return true;
+                }
             }
 
-            // Rate shopping is not enabled, check to see if the shipments account has accepted
-            if (!accountRepository.GetAccountReadOnly(shipment).AcceptedFCMILetterWarning)
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
             {
-                return true;
+                // If rate shopping is enabled and there is at least one account that hasnt accepted the FCMI Letter warning
+                if (shipment.Postal.Usps.RateShop && endiciaAccountRepository.AccountsReadOnly.Any(a => a.AcceptedFCMILetterWarning == false))
+                {
+                    return true;
+                }
+
+                // Rate shopping is not enabled, check to see if the shipments account has accepted
+                if (!endiciaAccountRepository.GetAccountReadOnly(shipment).AcceptedFCMILetterWarning)
+                {
+                    return true;
+                }
             }
 
             return false;
         }
-
+        
         /// <summary>
         /// Mark the account for the shipment as accepted
         /// </summary>
@@ -88,18 +109,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 if (shipment.Postal.Usps.RateShop)
                 {
-                    accountRepository.Accounts.ForEach(MarkWarningAsAccepted);
+                    uspsAccountRepository.Accounts.ForEach(MarkWarningAsAcceptedForUspsAccount);
                 }
                 else
                 {
-                    UspsAccountEntity account = accountRepository.GetAccount(shipment);
-                    MarkWarningAsAccepted(account);
+                    UspsAccountEntity account = uspsAccountRepository.GetAccount(shipment);
+                    MarkWarningAsAcceptedForUspsAccount(account);
                 }
             }
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
             {
-
+                EndiciaAccountEntity account = endiciaAccountRepository.GetAccount(shipment);
+                MarkWarningAsAcceptedForEndiciaAccount(account);
             }
         }
 
@@ -107,10 +129,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Mark the account as accepting the letter/content type warning
         /// </summary>
         /// <param name="account"></param>
-        private void MarkWarningAsAccepted(UspsAccountEntity account)
+        private void MarkWarningAsAcceptedForUspsAccount(UspsAccountEntity account)
         {
             account.AcceptedFCMILetterWarning = true;
-            accountRepository.Save(account);
+            uspsAccountRepository.Save(account);
+        }
+
+        /// <summary>
+        /// Mark the account as accepting the letter/content type warning
+        /// </summary>
+        /// <param name="account"></param>
+        private void MarkWarningAsAcceptedForEndiciaAccount(EndiciaAccountEntity account)
+        {
+            account.AcceptedFCMILetterWarning = true;
+            endiciaAccountRepository.Save(account);
         }
 
         /// <summary>

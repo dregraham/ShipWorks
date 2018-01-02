@@ -2826,6 +2826,8 @@ namespace ShipWorks.Data.Model
 		MailingPostalCode,
 		///<summary>ScanFormAddressSource. </summary>
 		ScanFormAddressSource,
+		///<summary>AcceptedFCMILetterWarning. </summary>
+		AcceptedFCMILetterWarning,
 		/// <summary></summary>
 		AmountOfFields
 	}

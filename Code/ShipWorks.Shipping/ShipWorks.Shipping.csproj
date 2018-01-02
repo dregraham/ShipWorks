@@ -264,12 +264,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Carriers\Postal\Express1\Usps\Express1UspsRegistration.cs" />
+    <Compile Include="Carriers\Postal\IPostalFirstClassInternationalShipmentValidator.cs" />
+    <Compile Include="Carriers\Postal\PostalFirstClassInternationalShipmentValidator.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\IFirstClassInternationalWarningDialog.cs" />
-    <Compile Include="Carriers\Postal\Usps\IUspsFirstClassInternationalShipmentValidator.cs" />
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsFirstClassInternationalShipmentValidator.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
@@ -279,7 +279,7 @@
     <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsShipmentPreProcessor.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentPreProcessor.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditions.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShipmentAdapter.cs" />

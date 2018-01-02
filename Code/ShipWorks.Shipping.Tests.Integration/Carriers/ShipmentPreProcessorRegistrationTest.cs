@@ -3,7 +3,7 @@ using System.Linq;
 using Autofac;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Startup;
 using Xunit;
 
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         public void EnsureUspsUsesUspsShipmentPreProcessor()
         {
             IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(ShipmentTypeCode.Usps);
-            Assert.IsType<UspsShipmentPreProcessor>(service);
+            Assert.IsType<PostalShipmentPreProcessor>(service);
         }
 
         [Fact]

@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly Mock<IMessageHelper> messageHelper;
         private readonly Mock<IDialog> dialog;
         private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
-        private readonly UspsFirstClassInternationalShipmentValidator testObject;
+        private readonly PostalFirstClassInternationalShipmentValidator testObject;
         private readonly UspsAccountEntity accountOne;
         private readonly UspsAccountEntity accountTwo;
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             accountRepository.SetupGet(a => a.Accounts).Returns(new[] { accountOne, accountTwo });
             accountRepository.Setup(a => a.GetAccount(It.IsAny<ShipmentEntity>())).Returns(accountOne);
 
-            testObject = mock.Create<UspsFirstClassInternationalShipmentValidator>();
+            testObject = mock.Create<PostalFirstClassInternationalShipmentValidator>();
         }
 
         [Fact]
