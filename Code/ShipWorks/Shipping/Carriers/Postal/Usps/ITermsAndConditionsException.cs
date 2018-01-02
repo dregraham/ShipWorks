@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -8,8 +9,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public interface ITermsAndConditionsException
     {
         /// <summary>
-        /// Opens a dialog for the user to agree to terms and conditions
+        /// Associated TermsAndConditions
         /// </summary>
-        void OpenTermsAndConditionsDlg(ILifetimeScope lifetimeScope);
+        IUspsTermsAndConditions TermsAndConditions { get; }
     }
 }

@@ -89,6 +89,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         [Fact]
         public async Task Process_WithUspsShipment_SavesTrackingNumber()
         {
+            AccountInfoV25 accountInfo = new AccountInfoV25()
+            {
+                Terms = new Terms()
+                {
+                    TermsAR = true,
+                    TermsSL = true,
+                    TermsGP = true
+                }
+            };
+            Address address = new Address();
+            string customerEmail = "customer@email.com";
+
             Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
@@ -99,6 +111,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                         Rate = new RateV24(),
                         ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
                     });
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out customerEmail));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -134,6 +147,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 { "third", Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Set(x => x.Username, "third").Save().AccountId },
             };
 
+            AccountInfoV25 accountInfo = new AccountInfoV25()
+            {
+                Terms = new Terms()
+                {
+                    TermsAR = true,
+                    TermsSL = true,
+                    TermsGP = true
+                }
+            };
+            Address address = new Address();
+            string customerEmail = "customer@email.com";
+            
             Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
@@ -149,6 +174,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     .Returns(createRate(second));
                 w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV24>()))
                     .Returns(createRate(third));
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out customerEmail));
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);
