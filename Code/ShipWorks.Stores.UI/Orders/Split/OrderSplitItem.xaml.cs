@@ -10,6 +10,7 @@ namespace ShipWorks.Stores.UI.Orders.Split
     /// </summary>
     public partial class OrderSplitItem : UserControl
     {
+        [Obfuscation(Exclude = true)]
         public static readonly DependencyProperty ShowDecimalsProperty =
             DependencyProperty.Register("ShowDecimals", typeof(bool), typeof(OrderSplitItem),
                 new FrameworkPropertyMetadata(false));
@@ -29,7 +30,7 @@ namespace ShipWorks.Stores.UI.Orders.Split
         [Obfuscation(Exclude = true)]
         public bool ShowDecimals
         {
-            get => (bool)GetValue(ShowDecimalsProperty);
+            get => (bool) GetValue(ShowDecimalsProperty);
             set => SetValue(ShowDecimalsProperty, value);
         }
     }

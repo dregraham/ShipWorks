@@ -49,7 +49,6 @@
                 </ItemsControl>
             </Grid>
 
-
             <DockPanel Grid.Column="1"
                        Margin="8,0">
                 <TextBlock DockPanel.Dock="Left"
