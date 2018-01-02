@@ -20,8 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsPostProcessingMessage(IGlobalPostLabelNotification globalPostNotification, 
-            IDateTimeProvider dateTimeProvider)
+        public UspsPostProcessingMessage(IGlobalPostLabelNotification globalPostNotification, IDateTimeProvider dateTimeProvider)
         {
             this.globalPostNotification = globalPostNotification;
             this.dateTimeProvider = dateTimeProvider;

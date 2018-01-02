@@ -108,6 +108,38 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2017, 1, 1));
 
             testObject.Show(new[] { gapShipment });
+            
+            globalPostNotification.Verify(g => g.Show(), Times.Never);
+        }
+
+        [Fact]
+        public void Show_DoesNotShowsNotificationForGapLabel_WhenLabelIsNotInternationalFirst()
+        {
+            gapShipment.Postal.Service = (int)PostalServiceType.FirstClass;
+
+            testObject.Show(new[] { gapShipment });
+            
+            globalPostNotification.Verify(g => g.Show(), Times.Never);
+        }
+
+        [Fact]
+        public void Show_DoesNotShowsNotificationForGapLabel_WhenLabelCustomsIsDocuments()
+        {
+            gapShipment.Postal.CustomsContentType = (int) PostalCustomsContentType.Documents;
+
+            testObject.Show(new[] { gapShipment });
+
+            globalPostNotification.Verify(g => g.Show(), Times.Never);
+        }
+
+        [Fact]
+        public void Show_DoesNotShowsNotificationForGapLabel_WhenLabelPackageIsNotEnvelope()
+        {
+            gapShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
+
+            testObject.Show(new[] { gapShipment });
+
+            globalPostNotification.Verify(g => g.Show(), Times.Never);
         }
     }
 }
