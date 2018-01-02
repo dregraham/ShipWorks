@@ -44,9 +44,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [InlineData(10, 10, 0)]
         [InlineData(10, 0, 10)]
         [InlineData(10, 3.3, 6.7)]
-        public void SplitQuantity_UpdatesOriginalQuantity_WhenChanged(double total, double split, double expected)
+        public void SplitQuantity_UpdatesOriginalQuantity_WhenChanged(decimal total, decimal split, decimal expected)
         {
-            var order = new OrderItemEntity { Quantity = total };
+            var order = new OrderItemEntity { Quantity = (double) total };
             var testObject = new OrderSplitItemViewModel(order);
 
             testObject.SplitQuantity = split;
@@ -59,9 +59,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [InlineData(10, 10.01, 10)]
         [InlineData(10, -1, 0)]
         [InlineData(10, -0.01, 0)]
-        public void SplitQuantity_ClampsSplitQuantity_WhenEnteredValueIsNotValid(double total, double split, double expected)
+        public void SplitQuantity_ClampsSplitQuantity_WhenEnteredValueIsNotValid(decimal total, decimal split, decimal expected)
         {
-            var order = new OrderItemEntity { Quantity = total };
+            var order = new OrderItemEntity { Quantity = (double) total };
             var testObject = new OrderSplitItemViewModel(order);
 
             testObject.SplitQuantity = split;

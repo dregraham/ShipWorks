@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public OrderSplitOrchestratorTest()
         {
             order = new OrderEntity { OrderID = 1006, StoreID = 1005, OrderNumber = 1234 };
-            orderSplitDefinition = new OrderSplitDefinition(order, new Dictionary<long, double>(), new Dictionary<long, decimal>(), "Foo");
+            orderSplitDefinition = new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "Foo");
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 

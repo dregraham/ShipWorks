@@ -25,8 +25,7 @@ namespace ShipWorks.Stores.Orders.Split
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderSplitGateway orderSplitGateway;
-        private readonly IOrderItemSplitter orderItemSplitter;
-        private readonly IOrderChargeSplitter orderChargeSplitter;
+        private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
         private readonly IOrderChargeCalculator orderChargeCalculator;
 
         /// <summary>
@@ -34,15 +33,13 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public OrderSplitter(
             ISqlAdapterFactory sqlAdapterFactory,
-            IOrderItemSplitter orderItemSplitter,
-            IOrderChargeSplitter orderChargeSplitter,
+            IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
             IOrderChargeCalculator orderChargeCalculator)
         {
             this.orderSplitGateway = orderSplitGateway;
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.orderItemSplitter = orderItemSplitter;
-            this.orderChargeSplitter = orderChargeSplitter;
+            this.orderDetailSplitters = orderDetailSplitters;
             this.orderChargeCalculator = orderChargeCalculator;
         }
 
@@ -177,9 +174,10 @@ namespace ShipWorks.Stores.Orders.Split
             newOrderEntity.CombineSplitStatus = CombineSplitStatusType.Split;
             newOrderEntity.OnlineLastModified = originalOrder.OnlineLastModified;
 
-            orderItemSplitter.Split(definition.ItemQuantities, originalOrder, newOrderEntity);
-
-            orderChargeSplitter.Split(definition.ChargeAmounts, originalOrder, newOrderEntity);
+            foreach (IOrderDetailSplitter orderDetailSplitter in orderDetailSplitters)
+            {
+                orderDetailSplitter.Split(definition, originalOrder, newOrderEntity);
+            }
 
             newOrderEntity.RollupItemCount = 0;
             newOrderEntity.RollupItemTotalWeight = 0;

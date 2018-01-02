@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Build the list of item quantities
         /// </summary>
-        private IDictionary<long, double> BuildItemQuantities() =>
+        private IDictionary<long, decimal> BuildItemQuantities() =>
             Items.ToImmutableDictionary(x => x.OrderItemID, x => x.SplitQuantity);
 
         /// <summary>

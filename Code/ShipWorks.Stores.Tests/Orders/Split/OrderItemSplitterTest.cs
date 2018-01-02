@@ -27,10 +27,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Quantity = 1 });
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
-            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>();
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
 
             OrderItemSplitter testObject = new OrderItemSplitter();
-            testObject.Split(newOrderItemQuantities, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderItems.Sum(oi => oi.Quantity));
             Assert.Equal(4, originalOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -58,14 +59,15 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Quantity = 1 });
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
-            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>
             {
                 { 1, 1 },
                 { 2, 3 }
             };
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
 
             OrderItemSplitter testObject = new OrderItemSplitter();
-            testObject.Split(newOrderItemQuantities, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(4, splitOrder.OrderItems.Sum(oi => oi.Quantity));
             Assert.Equal(0, originalOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -93,12 +95,13 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Quantity = 1 });
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
-            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>();
-            newOrderItemQuantities.Add(1, 0.5);
-            newOrderItemQuantities.Add(2, 1.5);
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
+            newOrderItemQuantities.Add(1, 0.5M);
+            newOrderItemQuantities.Add(2, 1.5M);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
 
             OrderItemSplitter testObject = new OrderItemSplitter();
-            testObject.Split(newOrderItemQuantities, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(2, splitOrder.OrderItems.Sum(oi => oi.Quantity));
             Assert.Equal(2, originalOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -129,12 +132,13 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Quantity = 1 });
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
-            Dictionary<long, double> newOrderItemQuantities = new Dictionary<long, double>();
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
             newOrderItemQuantities.Add(1, 0);
             newOrderItemQuantities.Add(2, 0);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
 
             OrderItemSplitter testObject = new OrderItemSplitter();
-            testObject.Split(newOrderItemQuantities, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderItems.Sum(oi => oi.Quantity));
             Assert.Equal(4, originalOrder.OrderItems.Sum(oi => oi.Quantity));

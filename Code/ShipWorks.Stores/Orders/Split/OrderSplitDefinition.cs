@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitDefinition(OrderEntity order, IDictionary<long, double> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
+        public OrderSplitDefinition(OrderEntity order, IDictionary<long, decimal> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
         {
             Order = order;
             ItemQuantities = itemQuanities;
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// List of item quantities for splitting orders
         /// </summary>
-        public IDictionary<long, double> ItemQuantities { get; }
+        public IDictionary<long, decimal> ItemQuantities { get; }
 
         /// <summary>
         /// List of charge amounts for splitting orders

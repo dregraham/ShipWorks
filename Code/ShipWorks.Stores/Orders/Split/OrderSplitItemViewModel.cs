@@ -15,8 +15,8 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitItemViewModel : INotifyPropertyChanged
     {
         private readonly PropertyChangedHandler handler;
-        private double originalQuantity;
-        private double splitQuantity;
+        private decimal originalQuantity;
+        private decimal splitQuantity;
 
         /// <summary>
         /// Constructor
@@ -29,8 +29,8 @@ namespace ShipWorks.Stores.Orders.Split
 
             OrderItemID = item.OrderItemID;
             Name = item.Name;
-            TotalQuantity = item.Quantity;
-            OriginalQuantity = item.Quantity;
+            TotalQuantity = (decimal) item.Quantity;
+            OriginalQuantity = (decimal) item.Quantity;
             SplitQuantity = 0;
             Attributes = item.OrderItemAttributes?.Select(x => $"{x.Name}: {x.Description}").ToImmutableList() ??
                 ImmutableList.Create(" ");
@@ -56,13 +56,13 @@ namespace ShipWorks.Stores.Orders.Split
         /// Total quantity of the item
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double TotalQuantity { get; set; }
+        public decimal TotalQuantity { get; set; }
 
         /// <summary>
         /// Quantity of the item on the original order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double OriginalQuantity
+        public decimal OriginalQuantity
         {
             get => originalQuantity;
             set => handler.Set(nameof(OriginalQuantity), ref originalQuantity, value);
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// Quantity of the item on the split order
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double SplitQuantity
+        public decimal SplitQuantity
         {
             get => splitQuantity;
             set

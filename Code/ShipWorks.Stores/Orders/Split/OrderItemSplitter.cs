@@ -9,18 +9,18 @@ namespace ShipWorks.Stores.Orders.Split
     /// Class for splitting order items between two orders
     /// </summary>
     [Component]
-    public class OrderItemSplitter : IOrderItemSplitter
+    public class OrderItemSplitter : IOrderDetailSplitter
     {
         /// <summary>
         /// Split the order items
         /// </summary>
-        /// <param name="newOrderItemQuantities">Dictionary<OrderItemID, Quantity></param>
+        /// <param name="orderSplitDefinition">OrderSplitDefinition</param>
         /// <param name="originalOrder">The source order that is being split in two</param>
         /// <param name="splitOrder">The new order created from originalOrder</param>
-        public void Split(IDictionary<long, double> newOrderItemQuantities, OrderEntity originalOrder, OrderEntity splitOrder)
+        public void Split(OrderSplitDefinition orderSplitDefinition, OrderEntity originalOrder, OrderEntity splitOrder)
         {
             // Go through each new order item quantities 
-            foreach (KeyValuePair<long, double> orderItemQuantityDefinition in newOrderItemQuantities)
+            foreach (KeyValuePair<long, decimal> orderItemQuantityDefinition in orderSplitDefinition.ItemQuantities)
             {
                 // Find the new order item based on OrderItemID
                 OrderItemEntity newOrderItemEntity = splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemQuantityDefinition.Key);
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Orders.Split
                 OrderItemEntity originalOrderItemEntity = originalOrder.OrderItems.First(oi => oi.OrderItemID == orderItemQuantityDefinition.Key);
 
                 // Update the new Quantity to be the split order defined Quantity
-                newOrderItemEntity.Quantity = orderItemQuantityDefinition.Value;
+                newOrderItemEntity.Quantity = (double) orderItemQuantityDefinition.Value;
 
                 // Update the original item quantity to be the difference of the two
                 originalOrderItemEntity.Quantity = originalOrderItemEntity.Quantity - newOrderItemEntity.Quantity;
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Orders.Split
             // to have a Quantity of 0
             IEnumerable<long> notPresentOrderItemIDs = splitOrder.OrderItems
                 .Select(oi => oi.OrderItemID)
-                .Except(newOrderItemQuantities.Keys)
+                .Except(orderSplitDefinition.ItemQuantities.Keys)
                 .Distinct();
 
             foreach (long orderItemID in notPresentOrderItemIDs)

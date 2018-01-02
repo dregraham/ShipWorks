@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Dictionary<long, decimal> newOrderChargeAmounts = new Dictionary<long, decimal>();
 
             OrderChargeSplitter testObject = new OrderChargeSplitter();
-            testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
+            testObject.Split(new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, ""), originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderCharges.Sum(oi => oi.Amount));
             Assert.Equal(4, originalOrder.OrderCharges.Sum(oi => oi.Amount));
@@ -65,8 +65,10 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             newOrderChargeAmounts.Add(1, 1);
             newOrderChargeAmounts.Add(2, 3);
 
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
             OrderChargeSplitter testObject = new OrderChargeSplitter();
-            testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(4, splitOrder.OrderCharges.Sum(oi => oi.Amount));
             Assert.Equal(0, originalOrder.OrderCharges.Sum(oi => oi.Amount));
@@ -98,8 +100,10 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             newOrderChargeAmounts.Add(1, 0.5M);
             newOrderChargeAmounts.Add(2, 1.5M);
 
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
             OrderChargeSplitter testObject = new OrderChargeSplitter();
-            testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(2, splitOrder.OrderCharges.Count);
             Assert.Equal(2, originalOrder.OrderCharges.Count);
@@ -134,8 +138,10 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             newOrderChargeAmounts.Add(1, 0M);
             newOrderChargeAmounts.Add(2, 0M);
 
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
             OrderChargeSplitter testObject = new OrderChargeSplitter();
-            testObject.Split(newOrderChargeAmounts, originalOrder, splitOrder);
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderCharges.Sum(oi => oi.Amount));
             Assert.Equal(4, originalOrder.OrderCharges.Sum(oi => oi.Amount));

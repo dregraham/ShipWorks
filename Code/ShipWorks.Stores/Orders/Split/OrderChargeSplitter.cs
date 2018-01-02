@@ -9,18 +9,18 @@ namespace ShipWorks.Stores.Orders.Split
     /// Class for splitting order charges between two orders
     /// </summary>
     [Component]
-    public class OrderChargeSplitter : IOrderChargeSplitter
+    public class OrderChargeSplitter : IOrderDetailSplitter
     {
         /// <summary>
         /// Split the charges
         /// </summary>
-        /// <param name="newOrderChargeAmounts">Dictionary<OrderChargeID, Amount></OrderChargeID></param>
+        /// <param name="orderSplitDefinition">OrderSplitDefinition</param>
         /// <param name="originalOrder">The source order that is being split in two</param>
         /// <param name="splitOrder">The new order created from originalOrder</param>
-        public void Split(IDictionary<long, decimal> newOrderChargeAmounts, OrderEntity originalOrder, OrderEntity splitOrder)
+        public void Split(OrderSplitDefinition orderSplitDefinition, OrderEntity originalOrder, OrderEntity splitOrder)
         {
             // Go through each new order charges 
-            foreach (KeyValuePair<long, decimal> orderChargesDefinition in newOrderChargeAmounts)
+            foreach (KeyValuePair<long, decimal> orderChargesDefinition in orderSplitDefinition.ChargeAmounts)
             {
                 // Find the new order charge based on OrderChargeID
                 OrderChargeEntity newOrderChargeEntity = splitOrder.OrderCharges.First(oi => oi.OrderChargeID == orderChargesDefinition.Key);
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Orders.Split
             // have an Amount of 0
             IEnumerable<long> notPresentOrderChargeIDs = splitOrder.OrderCharges
                 .Select(oi => oi.OrderChargeID)
-                .Except(newOrderChargeAmounts.Keys)
+                .Except(orderSplitDefinition.ChargeAmounts.Keys)
                 .Distinct();
 
             foreach (long orderChargeID in notPresentOrderChargeIDs)

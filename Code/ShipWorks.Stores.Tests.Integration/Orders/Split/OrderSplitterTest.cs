@@ -35,10 +35,10 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
 
-            Dictionary<long, double> itemQuanities = new Dictionary<long, double>();
+            Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             foreach (var orderItem in originalOrder.OrderItems)
             {
-                itemQuanities.Add(orderItem.OrderItemID, orderItem.Quantity);
+                itemQuanities.Add(orderItem.OrderItemID, (decimal) orderItem.Quantity);
             }
 
             Dictionary<long, decimal> chargeAmounts = new Dictionary<long, decimal>();
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
 
-            Dictionary<long, double> itemQuanities = new Dictionary<long, double>();
+            Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             Dictionary<long, decimal> chargeAmounts = new Dictionary<long, decimal>();
 
             string newOrderNumber = $"1234-1";
@@ -120,9 +120,9 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
 
-            Dictionary<long, double> itemQuanities = new Dictionary<long, double>();
+            Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             OrderItemEntity orderItem = originalOrder.OrderItems.First();
-            itemQuanities.Add(orderItem.OrderItemID, orderItem.Quantity);
+            itemQuanities.Add(orderItem.OrderItemID, (decimal) orderItem.Quantity);
 
             Dictionary<long, decimal> chargeAmounts = new Dictionary<long, decimal>();
             OrderChargeEntity orderCharge = originalOrder.OrderCharges.First();
