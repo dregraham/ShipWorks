@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool IsEndiciaReseller(IShipmentEntity shipment)
         {
-            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller == (int)EndiciaReseller.Express1;
+            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller == (int)EndiciaReseller.None;
         }
 
         /// <summary>

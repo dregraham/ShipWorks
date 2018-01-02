@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using System;
 using System.Collections.Generic;
@@ -84,14 +85,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
             {
-                // If rate shopping is enabled and there is at least one account that hasnt accepted the FCMI Letter warning
-                if (shipment.Postal.Usps.RateShop && endiciaAccountRepository.AccountsReadOnly.Any(a => a.AcceptedFCMILetterWarning == false))
-                {
-                    return true;
-                }
-
-                // Rate shopping is not enabled, check to see if the shipments account has accepted
-                if (!endiciaAccountRepository.GetAccountReadOnly(shipment).AcceptedFCMILetterWarning)
+                IEndiciaAccountEntity account = endiciaAccountRepository.GetAccountReadOnly(shipment);
+                if (!account.AcceptedFCMILetterWarning && account.EndiciaReseller == (int) EndiciaReseller.None)
                 {
                     return true;
                 }
