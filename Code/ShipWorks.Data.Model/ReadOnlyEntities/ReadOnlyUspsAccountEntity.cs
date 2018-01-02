@@ -61,6 +61,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CreatedDate = source.CreatedDate;
             PendingInitialAccount = source.PendingInitialAccount;
             GlobalPostAvailability = source.GlobalPostAvailability;
+            AcceptedFCMILetterWarning = source.AcceptedFCMILetterWarning;
             
             
             
@@ -219,6 +220,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 GlobalPostAvailability { get; }
+        /// <summary> The AcceptedFCMILetterWarning property of the Entity UspsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UspsAccount"."AcceptedFCMILetterWarning"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AcceptedFCMILetterWarning { get; }
         
         
         

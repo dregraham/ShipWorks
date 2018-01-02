@@ -3653,7 +3653,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
 		{
-			this.AddElementMapping("UspsAccountEntity", @"ShipWorksLocal", @"dbo", "UspsAccount", 25, 0);
+			this.AddElementMapping("UspsAccountEntity", @"ShipWorksLocal", @"dbo", "UspsAccount", 26, 0);
 			this.AddElementFieldMapping("UspsAccountEntity", "UspsAccountID", "UspsAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UspsAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("UspsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3679,6 +3679,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UspsAccountEntity", "CreatedDate", "CreatedDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 22);
 			this.AddElementFieldMapping("UspsAccountEntity", "PendingInitialAccount", "PendingInitialAccount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
 			this.AddElementFieldMapping("UspsAccountEntity", "GlobalPostAvailability", "GlobalPostAvailability", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 24);
+			this.AddElementFieldMapping("UspsAccountEntity", "AcceptedFCMILetterWarning", "AcceptedFCMILetterWarning", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 25);
 		}
 
 		/// <summary>Inits UspsProfileEntity's mappings</summary>

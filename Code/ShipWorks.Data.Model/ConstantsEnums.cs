@@ -10804,6 +10804,8 @@ namespace ShipWorks.Data.Model
 		PendingInitialAccount,
 		///<summary>GlobalPostAvailability. </summary>
 		GlobalPostAvailability,
+		///<summary>AcceptedFCMILetterWarning. </summary>
+		AcceptedFCMILetterWarning,
 		/// <summary></summary>
 		AmountOfFields
 	}

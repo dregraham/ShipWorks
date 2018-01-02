@@ -199,7 +199,9 @@
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsFirstClassInternationalShipmentValidatorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
