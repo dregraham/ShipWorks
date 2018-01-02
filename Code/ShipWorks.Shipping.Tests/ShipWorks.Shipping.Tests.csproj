@@ -201,6 +201,7 @@
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsFirstClassInternationalShipmentValidatorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsPostProcessingMessageTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />

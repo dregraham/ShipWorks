@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private static bool ShowNotifiactionForShipment(IPostalShipmentEntity shipment)
         {
             return IsdGapLabel(shipment) || 
-                PostalUtility.IsGlobalPost((PostalServiceType)shipment.Service);
+                PostalUtility.IsGlobalPost((PostalServiceType) shipment.Service);
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static bool IsdGapLabel(IPostalShipmentEntity shipment)
         {
-            if (shipment.Service == (int)PostalServiceType.InternationalFirst &&
-                shipment.CustomsContentType != (int)PostalCustomsContentType.Documents &&
-                (shipment.PackagingType == (int)PostalPackagingType.Envelope ||
-                    shipment.PackagingType == (int)PostalPackagingType.LargeEnvelope))
+            if (shipment.Service == (int) PostalServiceType.InternationalFirst &&
+                shipment.CustomsContentType != (int) PostalCustomsContentType.Documents &&
+                (shipment.PackagingType == (int) PostalPackagingType.Envelope ||
+                    shipment.PackagingType == (int) PostalPackagingType.LargeEnvelope))
             { 
                 return true;
             }
