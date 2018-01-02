@@ -114,10 +114,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(expectedOrder.OrderItems.Count, loadedOrder.OrderItems.Count);
             Assert.Equal(expectedOrder.OrderItems.First().OrderItemAttributes.Count, loadedOrder.OrderItems.First().OrderItemAttributes.Count);
 
-            Assert.Equal(expectedOrder.Shipments.Count, loadedOrder.Shipments.Count);
-            Assert.Equal(expectedOrder.Shipments.First().Ups.Packages.Count, loadedOrder.Shipments.First().Ups.Packages.Count);
-            Assert.Equal(expectedOrder.Shipments.First().CustomsItems.Count, loadedOrder.Shipments.First().CustomsItems.Count);
-            Assert.Equal(expectedOrder.Shipments.First().ValidatedAddress.Count, loadedOrder.Shipments.First().ValidatedAddress.Count);
+            Assert.Equal(0, loadedOrder.Shipments.Count);
 
             Assert.Equal(expectedOrder.Notes.Count, loadedOrder.Notes.Count);
             Assert.Equal(expectedOrder.OrderPaymentDetails.Count, loadedOrder.OrderPaymentDetails.Count);

@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Orders.Split
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 return await orderManager
-                    .LoadOrderAsync(orderID, sqlAdapter, FullOrderPrefetchPath.Value)
+                    .LoadOrderAsync(orderID, sqlAdapter, OrderSplitPrefetchPath.Value)
                     .Bind(x => x == null ?
                         Task.FromException<OrderEntity>(Error.LoadSurvivingOrderFailed) :
                         Task.FromResult(x))
@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Create the pre-fetch path used to load an order
         /// </summary>
-        private static readonly Lazy<IEnumerable<IPrefetchPathElement2>> FullOrderPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
+        private static readonly Lazy<IEnumerable<IPrefetchPathElement2>> OrderSplitPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
         {
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>();
 
@@ -110,35 +110,7 @@ namespace ShipWorks.Stores.Orders.Split
             itemsPath.SubPath.Add(OrderItemEntity.PrefetchPathOrderItemAttributes);
             prefetchPath.Add(itemsPath);
 
-            IPrefetchPathElement2 shipmentsPath = OrderEntity.PrefetchPathShipments;
-
-            IPrefetchPathElement2 upsShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathUps);
-            upsShipmentPath.SubPath.Add(UpsShipmentEntity.PrefetchPathPackages);
-
-            IPrefetchPathElement2 postalShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathPostal);
-            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathUsps);
-            postalShipmentPath.SubPath.Add(PostalShipmentEntity.PrefetchPathEndicia);
-
-            IPrefetchPathElement2 iParcelShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathIParcel);
-            iParcelShipmentPath.SubPath.Add(IParcelShipmentEntity.PrefetchPathPackages);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOnTrac);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathAmazon);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathBestRate);
-
-            IPrefetchPathElement2 fedexShipmentPath = shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathFedEx);
-            fedexShipmentPath.SubPath.Add(FedExShipmentEntity.PrefetchPathPackages);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathOther);
-
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathInsurancePolicy);
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathCustomsItems);
             prefetchPath.Add(OrderEntity.PrefetchPathShipmentCollectionViaValidatedAddress);
-            shipmentsPath.SubPath.Add(ShipmentEntity.PrefetchPathValidatedAddress);
-
-            prefetchPath.Add(shipmentsPath);
 
             return prefetchPath;
         });
