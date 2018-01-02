@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -20,14 +21,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly ShipmentEntity globalPostShipment;
         private readonly ShipmentEntity gapShipment;
         private readonly UspsPostProcessingMessage testObject;
+        private readonly Mock<IDateTimeProvider> dateTimeProvider;
 
         public UspsPostProcessingMessageTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             globalPostNotification = mock.Mock<IGlobalPostLabelNotification>();
-
             globalPostNotification.Setup(g => g.AppliesToCurrentUser()).Returns(true);
+            
+            dateTimeProvider = mock.Mock<IDateTimeProvider>();
+            dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2019, 01, 01));
 
             globalPostShipment = new ShipmentEntity()
             {
@@ -96,6 +100,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 });
 
             globalPostNotification.Verify(g => g.Show(), Times.Never);
+        }
+
+        [Fact]
+        public void Show_DoesNotShowNotification_WhenGapLabelAndDateIsBeforeJan212018()
+        {
+            dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2017, 1, 1));
+
+            testObject.Show(new[] { gapShipment });
         }
     }
 }
