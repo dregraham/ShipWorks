@@ -84,14 +84,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void MarkWarningAsAccepted(IShipmentEntity shipment)
         {
-            if (shipment.Postal.Usps.RateShop)
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
             {
-                accountRepository.Accounts.ForEach(MarkWarningAsAccepted);
+                if (shipment.Postal.Usps.RateShop)
+                {
+                    accountRepository.Accounts.ForEach(MarkWarningAsAccepted);
+                }
+                else
+                {
+                    UspsAccountEntity account = accountRepository.GetAccount(shipment);
+                    MarkWarningAsAccepted(account);
+                }
             }
-            else
+
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
             {
-                UspsAccountEntity account = accountRepository.GetAccount(shipment);
-                MarkWarningAsAccepted(account);
+
             }
         }
 
