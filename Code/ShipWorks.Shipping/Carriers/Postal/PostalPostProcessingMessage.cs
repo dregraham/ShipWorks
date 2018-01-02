@@ -1,29 +1,38 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
-    /// Show message for Usps Shipments after processing
+    /// Show message for Postal Shipments after processing
     /// </summary>
     [KeyedComponent(typeof(ICarrierPostProcessingMessage), ShipmentTypeCode.Usps)]
-    public class UspsPostProcessingMessage : ICarrierPostProcessingMessage
+    [KeyedComponent(typeof(ICarrierPostProcessingMessage), ShipmentTypeCode.Endicia)]
+    public class PostalPostProcessingMessage : ICarrierPostProcessingMessage
     {
         private readonly IGlobalPostLabelNotification globalPostNotification;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsPostProcessingMessage(IGlobalPostLabelNotification globalPostNotification, IDateTimeProvider dateTimeProvider)
+        public PostalPostProcessingMessage(
+            IGlobalPostLabelNotification globalPostNotification, 
+            IDateTimeProvider dateTimeProvider, 
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository)
         {
             this.globalPostNotification = globalPostNotification;
             this.dateTimeProvider = dateTimeProvider;
+            this.endiciaAccountRepository = endiciaAccountRepository;
         }
 
         /// <summary>
@@ -31,9 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            bool showNotificationForShipment = processedShipments.Any(s => ShowNotifiactionForShipment(s.Postal));
-
-            if (showNotificationForShipment && globalPostNotification.AppliesToCurrentUser())
+            if (processedShipments.Any(ShowNotifiactionForShipment) && globalPostNotification.AppliesToCurrentUser())
             {
                 globalPostNotification.Show();
             }
@@ -42,10 +49,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Should we show the notification
         /// </summary>
-        private bool ShowNotifiactionForShipment(IPostalShipmentEntity shipment)
+        private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
         {
-            return IsdGapLabel(shipment) || 
-                PostalUtility.IsGlobalPost((PostalServiceType) shipment.Service);
+            bool showNotifiaction = IsdGapLabel(shipment.Postal) || 
+                PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
+
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
+            {
+                return !IsEndiciaReseller(shipment) && showNotifiaction;
+            }
+
+            return showNotifiaction;
+        }
+
+        /// <summary>
+        /// Is this shipment an Endicia Express 1 shipment
+        /// </summary>
+        private bool IsEndiciaReseller(IShipmentEntity shipment)
+        {
+            return endiciaAccountRepository.GetAccountReadOnly(shipment)?.EndiciaReseller == (int)EndiciaReseller.Express1;
         }
 
         /// <summary>
@@ -62,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.CustomsContentType != (int) PostalCustomsContentType.Documents &&
                 (shipment.PackagingType == (int) PostalPackagingType.Envelope ||
                     shipment.PackagingType == (int) PostalPackagingType.LargeEnvelope))
-            { 
+            {
                 return true;
             }
 

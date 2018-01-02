@@ -271,7 +271,7 @@
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsFirstClassInternationalShipmentValidator.cs" />
     <Compile Include="Services\ICarrierPostProcessingMessage.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsPostProcessingMessage.cs" />
+    <Compile Include="Carriers\Postal\PostalPostProcessingMessage.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />

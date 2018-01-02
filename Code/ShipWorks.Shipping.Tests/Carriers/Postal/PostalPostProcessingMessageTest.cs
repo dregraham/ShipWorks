@@ -6,24 +6,20 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Tests.Carriers.Postal
 {
-    public class UspsPostProcessingMessageTest
+    public class PostalPostProcessingMessageTest
     {
         private readonly AutoMock mock;
         private readonly Mock<IGlobalPostLabelNotification> globalPostNotification;
         private readonly ShipmentEntity globalPostShipment;
         private readonly ShipmentEntity gapShipment;
-        private readonly UspsPostProcessingMessage testObject;
+        private readonly PostalPostProcessingMessage testObject;
         private readonly Mock<IDateTimeProvider> dateTimeProvider;
 
-        public UspsPostProcessingMessageTest()
+        public PostalPostProcessingMessageTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -51,7 +47,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 }
             };
             
-            testObject = mock.Create<UspsPostProcessingMessage>();
+            testObject = mock.Create<PostalPostProcessingMessage>();
         }
 
         [Fact]
