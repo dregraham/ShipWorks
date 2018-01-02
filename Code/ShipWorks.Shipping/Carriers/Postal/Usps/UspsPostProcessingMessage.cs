@@ -27,25 +27,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            bool hasGlobalPost = processedShipments.Any(IsProcessedGlobalPost);
+            bool showNotificationForShipment = processedShipments.Any(s => ShowNotifiactionForShipment(s.Postal));
 
-            if (hasGlobalPost && globalPostNotification.AppliesToCurrentUser())
+            if (showNotificationForShipment && globalPostNotification.AppliesToCurrentUser())
             {
                 globalPostNotification.Show();
             }
         }
 
         /// <summary>
-        /// Determines whether the shipment is a Processed GlobalPost shipment.
+        /// Should we show the notification
         /// </summary>
-        private static bool IsProcessedGlobalPost(IShipmentEntity shipment)
+        private static bool ShowNotifiactionForShipment(IPostalShipmentEntity shipment)
         {
-            if (shipment.Processed &&
-                shipment.ShipmentType == (int)ShipmentTypeCode.Usps &&
-                shipment.Postal != null)
-            {
-                // We have a processed USPS shipment. Now check for the GlobalPost service type
-                return PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
+            return IsdGapLabel(shipment) || 
+                PostalUtility.IsGlobalPost((PostalServiceType)shipment.Service);
+        }
+
+        /// <summary>
+        /// Determines whether the shipment is a Gap shipment.
+        /// </summary>
+        private static bool IsdGapLabel(IPostalShipmentEntity shipment)
+        {
+            if (shipment.Service == (int)PostalServiceType.InternationalFirst &&
+                shipment.CustomsContentType != (int)PostalCustomsContentType.Documents &&
+                (shipment.PackagingType == (int)PostalPackagingType.Envelope ||
+                    shipment.PackagingType == (int)PostalPackagingType.LargeEnvelope))
+            { 
+                return true;
             }
 
             return false;
