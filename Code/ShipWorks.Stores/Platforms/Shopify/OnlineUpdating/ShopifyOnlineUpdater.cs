@@ -194,6 +194,19 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
                 }
             }
 
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+                string carrier = shipment.Other.Carrier;
+
+                if (string.IsNullOrWhiteSpace(carrier))
+                {
+                    return "Other";
+                }
+
+                return carrier;
+            }
+
             return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
     }

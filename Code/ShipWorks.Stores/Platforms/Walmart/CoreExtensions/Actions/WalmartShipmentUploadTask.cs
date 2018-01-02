@@ -110,6 +110,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.CoreExtensions.Actions
                 {
                     ShipmentEntity shipment = shippingManager.GetShipment(shipmentKey).Shipment;
 
+                    await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                     await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
                 }
             }

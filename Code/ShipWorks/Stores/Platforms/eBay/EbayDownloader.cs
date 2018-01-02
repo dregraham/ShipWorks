@@ -1674,7 +1674,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
 
                 adapter.SaveEntity(item);
-            });
+            }, ex => ex is SqlDeadlockException);
         }
 
         /// <summary>

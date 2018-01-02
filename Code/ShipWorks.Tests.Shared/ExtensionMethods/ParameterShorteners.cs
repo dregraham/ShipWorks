@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Shared.ExtensionMethods
@@ -42,9 +43,14 @@ namespace ShipWorks.Tests.Shared.ExtensionMethods
         public static object AnyObject => It.IsAny<object>();
 
         /// <summary>
-        /// Checks a parameter for a shipment with given tracking number
+        /// Any ShipmentEntity
         /// </summary>
         public static ShipmentEntity AnyShipment => It.IsAny<ShipmentEntity>();
+
+        /// <summary>
+        /// Any EntityField2
+        /// </summary>
+        public static EntityField2 AnyField => It.IsAny<EntityField2>();
 
         /// <summary>
         /// Checks a parameter for a shipment with given tracking number

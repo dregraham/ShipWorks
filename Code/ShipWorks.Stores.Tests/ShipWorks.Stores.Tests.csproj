@@ -146,6 +146,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -185,9 +188,13 @@
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
     <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
+    <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Ebay\EbayStoreTypeTest.cs" />
+    <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
+    <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
@@ -295,6 +302,7 @@
     <Compile Include="Platforms\Paypal\PayPalStoreTypeTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Paypal\PayPalXmlDeserializeTest.cs" />
+    <Compile Include="Platforms\ProStores\Content\ProStoresQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Sears\SearsStoreTypeTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Sears\SearsCredentialsTest.cs" />
@@ -324,6 +332,7 @@
     <Compile Include="Platforms\ThreeDCart\ThreeDCartRestItemAttributeLoaderTest.cs" />
     <Compile Include="Platforms\ThreeDCart\ThreeDCartStoreTypeTest.cs" />
     <Compile Include="Platforms\Walmart\DTO\CarrierTypeTest.cs" />
+    <Compile Include="Platforms\Walmart\OnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartShipmentDetailsUpdaterTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartOrderLoaderTest.cs" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Options;
@@ -6,7 +8,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions.QuickSearch;
+using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Filters.Search;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using Xunit;
@@ -137,6 +142,88 @@ namespace ShipWorks.Tests.Filters.Search
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
 
             Assert.Throws<IndexOutOfRangeException>(() => testObject.Create(target, isScan));
+        }
+
+        [Fact]
+        public void OrderQuickSearch_FiltersStoreSqlToStoresThatAreEnabled()
+        {
+            userSettings = new UserSettingsEntity(3)
+            {
+                SingleScanSettings = 0
+            };
+            userSession.Setup(u => u.Settings).Returns(userSettings);
+
+            Mock<IQuickSearchStoreSql> storeSearchSql = mock.Mock<IQuickSearchStoreSql>();
+            storeSearchSql.Setup(s => s.StoreType).Returns(StoreTypeCode.Amazon);
+            storeSearchSql.Setup(s => s.GenerateSql(It.IsAny<SqlGenerationContext>(), It.IsAny<string>()))
+                .Returns(new string[]
+                {
+                    "select OrderId from [SomeStore] where SomeField LIKE ",
+                    "select OrderId from [SomeOtherStore] where SomeOtherField LIKE "
+                });
+
+            var amazonStoreType = mock.Mock<StoreType>();
+            amazonStoreType.Setup(s => s.TypeCode).Returns(StoreTypeCode.Amazon);
+            mock.Mock<IStoreManager>().Setup(m => m.GetUniqueStoreTypes()).Returns(new[] { amazonStoreType.Object });
+
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
+            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false);
+            var filterDefinition = filterDefinitionProvider.GetDefinition("hi");
+
+            IEnumerable<QuickSearchCondition> quickSearchConditions = filterDefinition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
+
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
+
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
+        }
+
+        [Fact]
+        public void OrderQuickSearch_FiltersOutStoreSqlStoresThatAreDisabled()
+        {
+            userSettings = new UserSettingsEntity(3)
+            {
+                SingleScanSettings = 0
+            };
+            userSession.Setup(u => u.Settings).Returns(userSettings);
+
+            Mock<IQuickSearchStoreSql> storeSearchSql = new Mock<IQuickSearchStoreSql>();
+            storeSearchSql.Setup(s => s.StoreType).Returns(StoreTypeCode.Amazon);
+            storeSearchSql.Setup(s => s.GenerateSql(It.IsAny<SqlGenerationContext>(), It.IsAny<string>()))
+                .Returns(new string[]
+                {
+                    "select OrderId from [SomeStore] where SomeField LIKE ",
+                    "select OrderId from [SomeOtherStore] where SomeOtherField LIKE "
+                });
+
+            mock.Mock<IStoreManager>().Setup(m => m.GetUniqueStoreTypes()).Returns(new[] { mock.Mock<StoreType>().Object });
+
+            var testObject = mock.Create<SearchDefinitionProviderFactory>();
+            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false);
+            var filterDefinition = filterDefinitionProvider.GetDefinition("hi");
+
+            IEnumerable<QuickSearchCondition> quickSearchConditions = filterDefinition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
+            Assert.Equal(1, quickSearchConditions.Count());
+
+            QuickSearchCondition quickSearchCondition = quickSearchConditions.Single();
+
+            SqlGenerationContext context = new SqlGenerationContext(FilterTarget.Orders);
+            string sql = quickSearchCondition.GenerateSql(context).ToLowerInvariant();
+
+            Assert.True(sql.Contains("SELECT OrderId FROM [Order] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.True(sql.Contains("SELECT OrderId FROM [OrderSearch] WHERE OrderNumberComplete LIKE".ToLowerInvariant()));
+            Assert.False(sql.Contains("select OrderId from [SomeStore] where SomeField LIKE".ToLowerInvariant()));
+            Assert.False(sql.Contains("select OrderId from [SomeOtherStore] where SomeOtherField LIKE".ToLowerInvariant()));
+
+            Assert.True(context.Parameters.All(p => p.Value.ToString().ToLowerInvariant().EndsWith("%")));
         }
 
         public void Dispose()

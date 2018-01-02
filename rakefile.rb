@@ -10,10 +10,14 @@ def program_files
 end
 
 Albacore.configure do |config|
+	ENV["MSBuildSDKsPath"] = "C:/Program Files/dotnet/sdk/2.1.2/Sdks/"
 	config.msbuild do |msbuild|
 		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
-		msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
+		msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/BuildTools/MSBuild/15.0/Bin/MSBuild.exe"
+		unless File.exists? msbuild.command
+			msbuild.command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe"
+		end
 		#msbuild.properties = { TreatWarningsAsErrors: true }
 	end
 end
@@ -36,6 +40,7 @@ namespace :build do
 	desc "Restore nuget packages"
 	task :restore do
 		`build/nuget.exe restore ShipWorks.sln`
+		`dotnet restore ShipWorks.sln`
 	end
 
 	desc "no-op"
@@ -263,10 +268,10 @@ namespace :db do
 	task :blank,  [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :switch, :deploy]
 
 	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
-	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy]
+	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :switch, :deploy]
 
 	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
-	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed]
+	task :populate, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema]
 
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create, [:instance, :targetDatabase] do |t, args|
@@ -325,25 +330,6 @@ namespace :db do
 		")
 
 		execute_sql full_instance, sqlText, "Create seed schema"
-	end
-
-	desc "Populate the ShipWorks_SeedData database with order, shipment, and carrier account data"
-	task :seed, [:instance, :targetDatabase] do |t, args|
-		full_instance = get_instance_from_arguments args
-		database_name = get_database_name_from_arguments args
-
-		# We're going to write the static seed data to a temporary file, so we can tell prefix the script
-		# to use our seed database
-		sqlText = "
-		USE {DBNAME}
-		GO
-		"
-		sqlText = sqlText.sub(/{DBNAME}/, database_name)
-
-		# Concatenate the script containing our seed data to the string
-		sqlText.concat(File.read("./SeedData.sql"))
-
-		execute_sql full_instance, sqlText, "Seed data"
 	end
 
 	desc "Switch the ShipWorks settings to point to a given database"
