@@ -26,8 +26,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public CarrierAccountRepositoryRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Theory]

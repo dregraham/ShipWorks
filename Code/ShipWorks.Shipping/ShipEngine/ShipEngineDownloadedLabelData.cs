@@ -1,11 +1,12 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using System;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.Data;
-using static ShipEngine.ApiClient.Model.Label;
+﻿using System;
 using System.IO;
-using ShipWorks.Common.IO.Hardware.Printers;
+using Interapptive.Shared.Pdf;
 using Interapptive.Shared.Utility;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using static ShipEngine.ApiClient.Model.Label;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Shipping.ShipEngine
             this.resourceManager = resourceManager;
             this.resourceDownloader = resourceDownloader;
         }
-        
+
         /// <summary>
         /// Save the label data
         /// </summary>
@@ -40,9 +41,9 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             SaveLabelInfoToEntity(shipment, label);
             byte[] labelResource;
-            
+
             labelResource = resourceDownloader.Download(new Uri(label.LabelDownload.Href));
-                
+
             switch (label.LabelFormat)
             {
                 case LabelFormatEnum.Pdf:
@@ -54,8 +55,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     break;
                 default:
                     throw new ShipEngineException($"{EnumHelper.GetDescription(shipment.ShipmentTypeCode)} returned an unsupported label format.");
-            }            
-        }        
+            }
+        }
 
         /// <summary>
         /// Save the ZPL label
@@ -72,7 +73,8 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             using (MemoryStream pdfData = new MemoryStream(labelResource))
             {
-                resourceManager.CreateFromPdf(pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray());
+                resourceManager.CreateFromPdf(
+                    PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray());
             }
         }
 

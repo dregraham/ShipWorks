@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Concurrency;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -26,6 +24,17 @@ namespace ShipWorks.Tests.Shared
         /// </summary>
         /// <returns></returns>
         public static AutoMock GetLooseThatReturnsMocks() => AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
+
+        /// <summary>
+        /// Build an object for the given type
+        /// </summary>
+        /// <returns>
+        /// This is meant to be used where we want to get an instance of a type or interface, but don't
+        /// care to have it be part of the mock system. This is to replace usages of mock.Create for
+        /// objects that are NOT the system under test.
+        /// </returns>
+        public static T Build<T>(this AutoMock mock) where T : class =>
+            mock.CreateMock<T>().Object;
 
         /// <summary>
         /// Override the specified type's registration
@@ -169,9 +178,11 @@ namespace ShipWorks.Tests.Shared
         /// First, create the object you want as the result. (var blah = mock.MockRepository.Create&lt;IBlah&gt;();)
         /// Then call mock.MockFunc&lt;string, IBlah&gt;(blah);
         /// </remarks>
-        public static void MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
+        public static Mock<Func<TInput, TOutput>> MockFunc<TInput, TOutput>(this AutoMock mock, Mock<TOutput> functionOutput) where TOutput : class
         {
-            mock.MockFunc<TInput, TOutput>().Setup(func => func(It.IsAny<TInput>())).Returns(functionOutput.Object);
+            var func = mock.MockFunc<TInput, TOutput>();
+            func.Setup(f => f(It.IsAny<TInput>())).Returns(functionOutput.Object);
+            return func;
         }
 
         /// <summary>
@@ -222,22 +233,6 @@ namespace ShipWorks.Tests.Shared
             schedulerProvider.Setup(sp => sp.WindowsFormsEventLoop).Returns(ImmediateScheduler.Instance);
 
             return schedulerProvider;
-        }
-
-        /// <summary>
-        /// Allow setup for default mocks created when resolving an enumerable
-        /// </summary>
-        /// <remarks>Unfortunately, AutoMock seems to create a default mock when creating an enumerable, even
-        /// if concrete types are registered with Autofac. This lets you configure them to not get in the way.</remarks>
-        public static void SetupDefaultMocksForEnumerable<T>(this AutoMock mock, Action<Mock<T>> action) where T : class
-        {
-            foreach (var item in mock.Container
-                .Resolve<IEnumerable<T>>()
-                .Where(x => x.GetType().Namespace.Contains("Castle"))
-                .Select(x => Mock.Get(x)))
-            {
-                action(item);
-            }
         }
 
         /// <summary>

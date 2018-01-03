@@ -3354,6 +3354,16 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
+		///<summary>FreightPackaging. </summary>
+		FreightPackaging,
+		///<summary>FreightPieces. </summary>
+		FreightPieces,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3508,6 +3518,12 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3826,6 +3842,20 @@ namespace ShipWorks.Data.Model
 		Currency,
 		///<summary>InternationalTrafficInArmsService. </summary>
 		InternationalTrafficInArmsService,
+		///<summary>FreightRole. </summary>
+		FreightRole,
+		///<summary>FreightCollectTerms. </summary>
+		FreightCollectTerms,
+		///<summary>FreightTotalHandlinUnits. </summary>
+		FreightTotalHandlinUnits,
+		///<summary>FreightClass. </summary>
+		FreightClass,
+		///<summary>FreightSpecialServices. </summary>
+		FreightSpecialServices,
+		///<summary>FreightGuaranteeType. </summary>
+		FreightGuaranteeType,
+		///<summary>FreightGuaranteeDate. </summary>
+		FreightGuaranteeDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

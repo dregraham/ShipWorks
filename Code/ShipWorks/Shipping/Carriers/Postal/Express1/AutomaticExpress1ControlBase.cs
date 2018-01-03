@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Settings;
@@ -32,10 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         /// </summary>
         public void LoadSettings(IExpress1SettingsFacade settings)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException("settings");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(settings, nameof(settings));
 
             express1Settings = settings;
 

@@ -181,7 +181,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         {
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
-            Assert.Equal("A Test Store", shipment.OriginUnparsedName);
+            Assert.Equal(context.Store.StoreName, shipment.OriginUnparsedName);
             Assert.Equal("123 Main St.", shipment.OriginStreet1);
             Assert.Equal("Suite 456", shipment.OriginStreet2);
             Assert.Equal("St. Louis", shipment.OriginCity);

@@ -9,7 +9,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -238,6 +237,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             Assert.Equal(upsShipment, testShipment.Ups);
         }
+
+        [Fact]
         public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown()
         {
             testObject.GetRatesAction = (shipment, type) => { throw new ShippingException(); };

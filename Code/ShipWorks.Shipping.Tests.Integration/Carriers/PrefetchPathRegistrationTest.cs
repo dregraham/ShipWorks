@@ -27,8 +27,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public PrefetchProviderRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
+            container = ContainerInitializer.Build();
         }
 
         [Theory]

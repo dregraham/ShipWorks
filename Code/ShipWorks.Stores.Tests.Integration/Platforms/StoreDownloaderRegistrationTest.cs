@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -19,6 +18,7 @@ using ShipWorks.Stores.Platforms.GenericFile;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Stores.Platforms.Infopia;
+using ShipWorks.Stores.Platforms.Jet;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
@@ -38,7 +38,6 @@ using ShipWorks.Stores.Platforms.Volusion;
 using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Yahoo;
 using Xunit;
-using ShipWorks.Stores.Platforms.Jet;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms
 {
@@ -49,9 +48,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         public StoreDownloaderRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
-            IoC.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         /// <summary>

@@ -1,4 +1,7 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -8,9 +11,6 @@ using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -212,14 +212,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
         [Theory]
         [InlineData(AsendiaServiceType.AsendiaEPacket)]
         [InlineData(AsendiaServiceType.AsendiaInternationalExpress)]
-        [InlineData(AsendiaServiceType.AsendiaInternationalExpress)]
         [InlineData(AsendiaServiceType.AsendiaIPA)]
         [InlineData(AsendiaServiceType.AsendiaISAL)]
         [InlineData(AsendiaServiceType.AsendiaOther)]
         [InlineData(AsendiaServiceType.AsendiaPMEI)]
         [InlineData(AsendiaServiceType.AsendiaPMI)]
         [InlineData(AsendiaServiceType.AsendiaPriorityTracked)]
-
         public void CreatePurchaseLabelRequest_SetsServiceCorrectly(AsendiaServiceType serviceType)
         {
             shipment.Asendia = new AsendiaShipmentEntity()

@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services.ShipmentProcessorSteps.G
 
         public GetLabelManipulatorRegistrationTest()
         {
-            container = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build());
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

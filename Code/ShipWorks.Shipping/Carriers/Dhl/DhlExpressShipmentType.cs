@@ -1,32 +1,32 @@
-﻿using System.Collections.Generic;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Services;
-using ShipWorks.Data.Model.Custom;
-using System.Linq;
-using System;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Data;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System.Drawing.Imaging;
-using ShipWorks.Shipping.Tracking;
-using ShipWorks.ApplicationCore.Logging;
+using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.Tracking;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -92,8 +92,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.NonMachinable = false;
             dhlExpressShipmentEntity.SaturdayDelivery = false;
             dhlExpressShipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
-            dhlExpressShipmentEntity.Contents = (int)ShipEngineContentsType.Merchandise;
-            dhlExpressShipmentEntity.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
+            dhlExpressShipmentEntity.Contents = (int) ShipEngineContentsType.Merchandise;
+            dhlExpressShipmentEntity.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
             dhlExpressShipmentEntity.ShipEngineLabelID = string.Empty;
 
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 TrackingNumber = string.Empty,
             };
         }
-        
+
         /// <summary>
         /// Configures the shipment for ShipSense. This is useful for carriers that support
         /// multiple package shipments, allowing the shipment type a chance to add new packages
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             base.UpdateDynamicShipmentData(shipment);
 
             RedistributeContentWeight(shipment);
-            
+
             shipment.Insurance = shipment.DhlExpress.Packages.Any(p => p.Insurance);
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
@@ -254,7 +254,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
             DhlExpressAccountEntity account = accountRepository.GetAccount(dhlExpressShipmentEntity.DhlExpressAccountID);
-            
+
             commonDetail.OriginAccount = (account == null) ? "" : account.Description;
             commonDetail.ServiceType = dhlExpressShipmentEntity.Service;
 
@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     adapter.FetchEntityCollection(dhlExpressShipmentEntity.Packages,
                                                   new RelationPredicateBucket(DhlExpressPackageFields.ShipmentID == shipment.ShipmentID));
 
-                    dhlExpressShipmentEntity.Packages.Sort((int)DhlExpressPackageFieldIndex.DhlExpressPackageID, ListSortDirection.Ascending);
+                    dhlExpressShipmentEntity.Packages.Sort((int) DhlExpressPackageFieldIndex.DhlExpressPackageID, ListSortDirection.Ascending);
                 }
 
                 // We reloaded the packages, so reset the tracker
@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            return EnumHelper.GetDescription((DhlExpressServiceType)shipment.DhlExpress.Service);
+            return EnumHelper.GetDescription((DhlExpressServiceType) shipment.DhlExpress.Service);
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     adapter.FetchEntityCollection(dhlExpressProfileEntityParcel.Packages,
                                                   new RelationPredicateBucket(DhlExpressProfilePackageFields.ShippingProfileID == profile.ShippingProfileID));
 
-                    dhlExpressProfileEntityParcel.Packages.Sort((int)DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, ListSortDirection.Ascending);
+                    dhlExpressProfileEntityParcel.Packages.Sort((int) DhlExpressProfilePackageFieldIndex.DhlExpressProfilePackageID, ListSortDirection.Ascending);
                 }
             }
         }
@@ -441,7 +441,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public override void ApplyProfile(ShipmentEntity shipment, IShippingProfileEntity profile)
         {
             DhlExpressShipmentEntity dhlShipment = shipment.DhlExpress;
-            
+
             bool changedPackageWeights = ApplyDhlExpressPackageProfile(dhlShipment, profile);
             int profilePackageCount = profile.DhlExpress.Packages.Count();
 
@@ -534,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         private void ApplyDhlExpressProfile(DhlExpressShipmentEntity dhlShipment, IShippingProfileEntity profile)
         {
             IDhlExpressProfileEntity source = profile.DhlExpress;
-            
+
             long? accountID = (source.DhlExpressAccountID == 0 && accountRepository.Accounts.Any())
                                   ? accountRepository.Accounts.First().DhlExpressAccountID
                                   : source.DhlExpressAccountID;
@@ -555,7 +555,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment) => true;
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Gets a ShippingBroker
@@ -614,7 +614,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
-        {           
+        {
             return EnumHelper.GetEnumList<DhlExpressServiceType>()
                 .Select(x => x.Value)
                 .Cast<int>()

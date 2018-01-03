@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Management
         {
             if (createTask.Checked)
             {
-                return new List<ActionTask> { new ActionTaskDescriptorBinding(taskType, store).CreateInstance(lifetimeScope) };
+                return new List<ActionTask> { new ActionTaskDescriptorBinding(taskType, store, lifetimeScope).CreateInstance(lifetimeScope) };
             }
             else
             {

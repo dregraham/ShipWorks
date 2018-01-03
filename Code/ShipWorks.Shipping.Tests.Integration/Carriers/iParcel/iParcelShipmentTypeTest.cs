@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.iParcel
         public iParcelShipmentTypeTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock => mock.Provide(mock.Create<ISqlAdapter>()));
+                mock => mock.Provide(mock.Build<ISqlAdapter>()));
             context.Mock.Provide<ISchedulerProvider>(new ImmediateSchedulerProvider());
             context.UpdateShippingSetting(x => x.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks);
         }

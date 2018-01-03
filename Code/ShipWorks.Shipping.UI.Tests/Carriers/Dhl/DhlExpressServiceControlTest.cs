@@ -1,7 +1,9 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
 
 namespace ShipWorks.Shipping.UI.Tests.Carriers.Dhl
@@ -23,7 +25,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Dhl
             var accounts = new[] { new DhlExpressAccountEntity() };
             repo.SetupGet(r => r.AccountsReadOnly).Returns(accounts);
 
-            DhlExpressServiceControl testObject = mock.Create<DhlExpressServiceControl>();
+            DhlExpressServiceControl testObject = mock.Create<DhlExpressServiceControl>(TypedParameter.From(new RateControl()));
 
             testObject.LoadAccounts();
 

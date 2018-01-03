@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.UI.Controls;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Templates.Tokens;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Profiles
 {

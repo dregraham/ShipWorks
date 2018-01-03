@@ -5,7 +5,7 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Types of user conditional notifications
     /// </summary>
-    [Obfuscation(ApplyToMembers = true)]
+    [Obfuscation(ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum UserConditionalNotificationType
     {
         /// <summary>

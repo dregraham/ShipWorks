@@ -256,7 +256,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         {
             Dictionary<FedExServiceType, string> fedExServiceTypeClassCode = new Dictionary<FedExServiceType, string>();
 
-
             fedExServiceTypeClassCode.Add(FedExServiceType.FedExGround, "GROUND");
             fedExServiceTypeClassCode.Add(FedExServiceType.GroundHomeDelivery, "GROUND");
             fedExServiceTypeClassCode.Add(FedExServiceType.FedExInternationalGround, "GROUND");
@@ -281,7 +280,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             fedExServiceTypeClassCode.Add(FedExServiceType.FedEx2DayFreight, "2DAYFREIGHT");
 
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightEconomy, "Freight Economy");
+            fedExServiceTypeClassCode.Add(FedExServiceType.FedExFreightPriority, "Freight Priority");
+
             fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriority, "INTLPRIORITY");
+            fedExServiceTypeClassCode.Add(FedExServiceType.InternationalPriorityExpress, "INTLPRIORITY");
 
             fedExServiceTypeClassCode.Add(FedExServiceType.InternationalEconomy, "INTLECONOMY");
 
@@ -311,7 +314,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         {
             UpsServiceType upsServiceType = (UpsServiceType) shipment.Ups.Service;
 
-            // Sears has a special value we have to send for surepost
+            // Sears has a special value we have to send for SurePost
             if (UpsUtility.IsUpsSurePostService(upsServiceType) && IsSearsMarketplaceOrder(shipment))
             {
                 return "SurePost";
@@ -417,7 +420,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                 case PostalServiceType.PriorityMail:
                     return "PRIORITY";
 
-                // CA doesnt have a default code for Critical right now (10-21-2011) so fallback
+                // CA doesn't have a default code for Critical right now (10-21-2011) so fall back
                 case PostalServiceType.CriticalMail:
                     return "PRIORITY";
             }
@@ -456,7 +459,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         }
 
         /// <summary>
-        /// Gets the ontrac shipment class code.
+        /// Gets the OnTrac shipment class code.
         /// </summary>
         private static string GetOntracShipmentClassCode(ShipmentEntity shipment) =>
             EnumHelper.GetDescription((OnTracServiceType) shipment.OnTrac.Service);
@@ -617,7 +620,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <returns></returns>
         private static string GetAmazonShipmentClassCodeUsps(string amazonShippingServiceName)
         {
-            // There are a lot of combinataions of USPS Express/Priority/FirstClass shipments for Amazon shipping
+            // There are a lot of combinations of USPS Express/Priority/FirstClass shipments for Amazon shipping
             // assume that if the service contains USPS and Express that its an express shipment
             // if the shipment contains USPS and Priority its a priority shipment and so on
             if (amazonShippingServiceName.Contains("usps", StringComparison.InvariantCultureIgnoreCase))
@@ -637,7 +640,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                     return "FIRSTCLASS";
                 }
             }
-            
+
             switch (amazonShippingServiceName)
             {
                 case "USPS Parcel Select":

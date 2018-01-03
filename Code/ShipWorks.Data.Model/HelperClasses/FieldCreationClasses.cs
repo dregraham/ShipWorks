@@ -7717,6 +7717,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.PackingDetailsPackingInstructions);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryMaterial field instance</summary>
+		public static EntityField2 BatteryMaterial
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryMaterial);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryPacking field instance</summary>
+		public static EntityField2 BatteryPacking
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryPacking);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.BatteryRegulatorySubtype field instance</summary>
+		public static EntityField2 BatteryRegulatorySubtype
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.BatteryRegulatorySubtype);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.FreightPackaging field instance</summary>
+		public static EntityField2 FreightPackaging
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.FreightPackaging);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.FreightPieces field instance</summary>
+		public static EntityField2 FreightPieces
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.FreightPieces);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
@@ -8081,6 +8106,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 PackingDetailsPackingInstructions
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.PackingDetailsPackingInstructions);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryMaterial field instance</summary>
+		public static EntityField2 BatteryMaterial
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryMaterial);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryPacking field instance</summary>
+		public static EntityField2 BatteryPacking
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryPacking);}
+		}
+		/// <summary>Creates a new FedExProfilePackageEntity.BatteryRegulatorySubtype field instance</summary>
+		public static EntityField2 BatteryRegulatorySubtype
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfilePackageFieldIndex.BatteryRegulatorySubtype);}
 		}
 	}
 
@@ -8866,6 +8906,41 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InternationalTrafficInArmsService
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.InternationalTrafficInArmsService);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightRole field instance</summary>
+		public static EntityField2 FreightRole
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightRole);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightCollectTerms field instance</summary>
+		public static EntityField2 FreightCollectTerms
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightCollectTerms);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightTotalHandlinUnits field instance</summary>
+		public static EntityField2 FreightTotalHandlinUnits
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightTotalHandlinUnits);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightClass field instance</summary>
+		public static EntityField2 FreightClass
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightClass);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightSpecialServices field instance</summary>
+		public static EntityField2 FreightSpecialServices
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightSpecialServices);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightGuaranteeType field instance</summary>
+		public static EntityField2 FreightGuaranteeType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeType);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.FreightGuaranteeDate field instance</summary>
+		public static EntityField2 FreightGuaranteeDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FreightGuaranteeDate);}
 		}
 	}
 

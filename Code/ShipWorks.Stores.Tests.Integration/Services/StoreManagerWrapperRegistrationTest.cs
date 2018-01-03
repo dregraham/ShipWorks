@@ -15,8 +15,7 @@ namespace ShipWorks.Stores.Tests.Integration.Services
 
         public StoreManagerWrapperRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

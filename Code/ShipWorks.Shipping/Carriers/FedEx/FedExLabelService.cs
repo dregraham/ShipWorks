@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -16,19 +15,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.FedEx)]
     public class FedExLabelService : ILabelService
     {
-        private readonly FedExShippingClerkFactory shippingClerkFactory;
-        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
-        private readonly Func<IEnumerable<ICarrierResponse>, FedExDownloadedLabelData> createDownloadedLabelData;
+        private readonly IFedExShippingClerkFactory shippingClerkFactory;
+        private readonly Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public FedExLabelService(FedExShippingClerkFactory shippingClerkFactory,
-            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository,
-            Func<IEnumerable<ICarrierResponse>, FedExDownloadedLabelData> createDownloadedLabelData)
+        public FedExLabelService(IFedExShippingClerkFactory shippingClerkFactory,
+            Func<IEnumerable<IFedExShipResponse>, FedExDownloadedLabelData> createDownloadedLabelData)
         {
             this.shippingClerkFactory = shippingClerkFactory;
-            this.settingsRepository = settingsRepository;
             this.createDownloadedLabelData = createDownloadedLabelData;
         }
 
@@ -37,12 +33,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory.CreateShippingClerk(shipment, settingsRepository[ShipmentTypeCode.FedEx]);
-
             try
             {
-                IEnumerable<ICarrierResponse> carrierResponses = shippingClerk.Ship(shipment);
-                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(carrierResponses));
+                return shippingClerkFactory.Create(shipment)
+                    .Ship(shipment)
+                    .Map(createDownloadedLabelData)
+                    .Match(Task.FromResult<IDownloadedLabelData>, ex => { throw ex; });
             }
             catch (FedExException ex)
             {
@@ -55,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public void Void(ShipmentEntity shipment)
         {
-            IShippingClerk shippingClerk = shippingClerkFactory.CreateShippingClerk(shipment, settingsRepository[ShipmentTypeCode.FedEx]);
+            IShippingClerk shippingClerk = shippingClerkFactory.Create(shipment);
 
             try
             {

@@ -36,8 +36,8 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmeriCommerceDownloader(StoreEntity store)
-            : base(store)
+        public AmeriCommerceDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
 
         }

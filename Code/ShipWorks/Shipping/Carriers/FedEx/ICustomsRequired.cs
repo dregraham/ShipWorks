@@ -1,4 +1,4 @@
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -10,6 +10,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment
         /// </summary>
-        bool IsCustomsRequired(ShipmentEntity shipment);
+        bool IsCustomsRequired(IShipmentEntity shipment);
     }
 }

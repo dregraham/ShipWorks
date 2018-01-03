@@ -13,16 +13,16 @@ using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
-using ShipWorks.Data.Model.FactoryClasses;
-using SD.LLBLGen.Pro.QuerySpec;
-using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -42,11 +42,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// Constructor
         /// </summary>
         [NDependIgnoreTooManyParams]
-        public GrouponDownloader(StoreEntity store, IGrouponWebClient webClient,
-            ICombineOrder orderCombiner, IDataProvider dataProvider,
-            IDateTimeProvider dateTimeProvider, Func<Type, ILog> createLogger, 
+        public GrouponDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IGrouponWebClient webClient,
+            ICombineOrder orderCombiner,
+            IDataProvider dataProvider,
+            IDateTimeProvider dateTimeProvider,
+            Func<Type, ILog> createLogger,
             ISqlAdapterFactory sqlAdapterFactory)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.dateTimeProvider = dateTimeProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
@@ -191,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 return GenericResult.FromError<long>("No parent order found.");
             }
-            
+
             GrouponOrderEntity parentOrder;
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
@@ -201,12 +205,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                 parentOrder = await adapter.FetchFirstAsync(parentOrderQuery).ConfigureAwait(false);
             }
-            
+
             if (parentOrder == null)
             {
                 return GenericResult.FromError<long>("No parent order found.");
             }
-            
+
             return await orderCombiner.Combine(parentOrder.OrderID, new[] { childOrder, parentOrder }, parentOrder.OrderNumberComplete).ConfigureAwait(false);
         }
 

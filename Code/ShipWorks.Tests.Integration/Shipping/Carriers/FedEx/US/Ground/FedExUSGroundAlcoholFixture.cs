@@ -42,11 +42,22 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
         {
             if (!string.IsNullOrWhiteSpace(HomeDeliveryPremiumType))
             {
+                if (!string.IsNullOrWhiteSpace(HomeDeliveryPhoneNumber))
+                {
+                    shipment.FedEx.HomeDeliveryPhone = HomeDeliveryPhoneNumber;
+                }
+
                 shipment.FedEx.HomeDeliveryType = GetHomeDeliveryType();
 
                 // Can't deliver on Sunday or Monday
                 if (!string.IsNullOrWhiteSpace(HomeDeliveryDate))
                 {
+                    if (HomeDeliveryDate == "Expected a date one week ahead of the ship date.")
+                    {
+                        shipment.FedEx.HomeDeliveryDate = DateTime.Today.AddDays(8);
+                        return;
+                    }
+
                     switch (DateTime.Today.DayOfWeek)
                     {
                         case DayOfWeek.Sunday:
@@ -59,11 +70,6 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
                             shipment.FedEx.HomeDeliveryDate = DateTime.Today.AddDays(7);
                             break;
                     }
-                }
-
-                if (!string.IsNullOrWhiteSpace(HomeDeliveryPhoneNumber))
-                {
-                    shipment.FedEx.HomeDeliveryPhone = HomeDeliveryPhoneNumber;
                 }
             }
         }
@@ -231,9 +237,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.US.Ground
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.ShipTimestamp", PropertyName = "ShipTimestamp", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.Date", PropertyName = "HomeDeliveryDate", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.HomeDeliveryPremiumType", PropertyName = "HomeDeliveryPremiumType", SpreadsheetColumnIndex = -1 });
-                    mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.PhoneNumber", PropertyName = "HomeDeliveryPhoneNumber", SpreadsheetColumnIndex = -1 });
-                    mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested1.SpecialServiceTypes", PropertyName = "SpecialServiceType1", SpreadsheetColumnIndex = -1 });
+                    mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.HomeDeliveryPremiumDetail.Phone Number", PropertyName = "HomeDeliveryPhoneNumber", SpreadsheetColumnIndex = -1 });
+                    mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes", PropertyName = "SpecialServiceType1", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested2.SpecialServiceTypes", PropertyName = "SpecialServiceType2", SpreadsheetColumnIndex = -1 });
+                    mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested3.SpecialServiceTypes", PropertyName = "SpecialServiceType3", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalWeight.Units", PropertyName = "ShipmentWeightUnits", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.TotalWeight.Value", PropertyName = "ShipmentTotalWeightValue", SpreadsheetColumnIndex = -1 });
                     mapping.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.TransactionDetail.CustomerTransactionId", PropertyName = "CustomerTransactionId", SpreadsheetColumnIndex = -1 });

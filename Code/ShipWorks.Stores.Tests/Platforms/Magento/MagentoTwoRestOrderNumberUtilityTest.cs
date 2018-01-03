@@ -12,7 +12,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [InlineData("123445-5234", 123445)]
         [InlineData("12341234", 12341234)]
         [InlineData("234234-1", 234234)]
-        [InlineData("2", 2)]
         [InlineData("22", 22)]
         [InlineData("2222", 2222)]
         [InlineData("222", 222)]
@@ -31,10 +30,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [InlineData("!@#$")]
         [InlineData("--345")]
         [InlineData("-")]
-        
+
         public void GetOrderNumber_ThrowsMagentoExcpetion_WhenIncrementIdIsInUnexpectedFormat(string incrementId)
         {
-            MagentoException ex = Assert.Throws<MagentoException>(() =>  MagentoTwoRestOrderNumberUtility.GetOrderNumber(incrementId));
+            MagentoException ex = Assert.Throws<MagentoException>(() => MagentoTwoRestOrderNumberUtility.GetOrderNumber(incrementId));
             Assert.Equal($"Order number {incrementId} is in an unknown format.", ex.Message);
         }
 
@@ -45,7 +44,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [InlineData("123445-5234", "-5234")]
         [InlineData("12341234", "")]
         [InlineData("234234-1", "-1")]
-        [InlineData("2", "")]
         [InlineData("22", "")]
         [InlineData("2222", "")]
         [InlineData("222", "")]

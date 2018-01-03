@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 
         public MagentoWizardTest()
         {
-            container = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build());
+            container = ContainerInitializer.Build();
         }
 
         [STAFact]

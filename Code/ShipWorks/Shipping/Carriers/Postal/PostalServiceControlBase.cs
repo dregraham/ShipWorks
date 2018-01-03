@@ -544,5 +544,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
             dimensionsControl.FlushChanges();
             weight.FlushChanges();
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

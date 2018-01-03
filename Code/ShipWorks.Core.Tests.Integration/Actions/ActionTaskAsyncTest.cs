@@ -4,7 +4,6 @@ using System.Reflection;
 using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -22,8 +21,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         public ActionTaskAsyncTest(ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]
@@ -116,7 +114,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         {
             try
             {
-                var instance = IoC.UnsafeGlobalLifetimeScope.Resolve(x);
+                var instance = container.Resolve(x);
                 var typedInstance = instance as ActionTask;
 
                 return typedInstance == null ?

@@ -693,6 +693,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Currency", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("InternationalTrafficInArmsService", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightRole", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightCollectTerms", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightTotalHandlinUnits", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightClass", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightSpecialServices", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightGuaranteeType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FreightGuaranteeDate", fieldHashtable);
 		}
 		#endregion
 
@@ -2356,6 +2370,76 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExShipmentFieldIndex.InternationalTrafficInArmsService, false); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.InternationalTrafficInArmsService, value); }
+		}
+
+		/// <summary> The FreightRole property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightRole"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType FreightRole
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType)GetValue((int)FedExShipmentFieldIndex.FreightRole, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightRole, value); }
+		}
+
+		/// <summary> The FreightCollectTerms property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightCollectTerms"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType FreightCollectTerms
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType)GetValue((int)FedExShipmentFieldIndex.FreightCollectTerms, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightCollectTerms, value); }
+		}
+
+		/// <summary> The FreightTotalHandlinUnits property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightTotalHandlinUnits"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 FreightTotalHandlinUnits
+		{
+			get { return (System.Int32)GetValue((int)FedExShipmentFieldIndex.FreightTotalHandlinUnits, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightTotalHandlinUnits, value); }
+		}
+
+		/// <summary> The FreightClass property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightClass"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExFreightClassType FreightClass
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExFreightClassType)GetValue((int)FedExShipmentFieldIndex.FreightClass, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightClass, value); }
+		}
+
+		/// <summary> The FreightSpecialServices property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightSpecialServices"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 FreightSpecialServices
+		{
+			get { return (System.Int32)GetValue((int)FedExShipmentFieldIndex.FreightSpecialServices, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightSpecialServices, value); }
+		}
+
+		/// <summary> The FreightGuaranteeType property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightGuaranteeType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType FreightGuaranteeType
+		{
+			get { return (ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType)GetValue((int)FedExShipmentFieldIndex.FreightGuaranteeType, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightGuaranteeType, value); }
+		}
+
+		/// <summary> The FreightGuaranteeDate property of the Entity FedExShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."FreightGuaranteeDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DateTime FreightGuaranteeDate
+		{
+			get { return (System.DateTime)GetValue((int)FedExShipmentFieldIndex.FreightGuaranteeDate, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.FreightGuaranteeDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.RateGroupFilters
         [Fact]
         public void Filter_DoesNotAffectOtherFootnotes()
         {
-            IRateFootnoteFactory factory = mock.Create<IRateFootnoteFactory>();
+            IRateFootnoteFactory factory = mock.Build<IRateFootnoteFactory>();
             RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
             rateGroup.AddFootnoteFactory(factory);
 

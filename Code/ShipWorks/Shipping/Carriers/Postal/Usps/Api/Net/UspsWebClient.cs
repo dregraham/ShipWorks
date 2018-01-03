@@ -526,14 +526,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private async Task<Address> CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
         {
-            Address address;
-            if (cleansedAddressMap.TryGetValue(person, out address))
+            if (cleansedAddressMap.TryGetValue(person, out Address address))
             {
                 return address;
             }
 
             UspsAddressValidationResults results = await ValidateAddressAsync(person, account).ConfigureAwait(false);
-            
 
             if (!results.IsSuccessfulMatch)
             {
@@ -649,7 +647,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             taskCompletion.SetResult(e);
                         }
                     };
-                    
+
                     webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
                     return taskCompletion.Task;
                 }
@@ -896,12 +894,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private async Task<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            Address fromAddress;
-            Address toAddress;
-
-            Tuple<Address, Address> addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
-            toAddress = addresses.Item1;
-            fromAddress = addresses.Item2;
+            var (toAddress, fromAddress) = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
 
             RateV24 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
@@ -1027,7 +1020,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Updates addresses based on shipment properties like ReturnShipment, etc
         /// </summary>
-        private async Task<Tuple<Address,Address>> FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment)
+        private async Task<(Address to, Address from)> FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment)
         {
             Address toAddress;
             Address fromAddress;
@@ -1060,7 +1053,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
             }
 
-            return Tuple.Create(toAddress, fromAddress);
+            return (toAddress, fromAddress);
         }
 
         /// <summary>

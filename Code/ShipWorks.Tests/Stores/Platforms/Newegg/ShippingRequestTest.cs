@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Stores.Newegg
       </PackageList>
     </Shipment>
   </Result>
-</UpdateOrderStatusInfo>", orderNumber, sellerId); ;
+</UpdateOrderStatusInfo>", orderNumber, sellerId);
 
             string allFailuresResponse = string.Format(@"<?xml version=""1.0"" encoding=""utf-8""?>
 <UpdateOrderStatusInfo>
@@ -161,7 +161,7 @@ namespace ShipWorks.Tests.Stores.Newegg
       </PackageList>
     </Shipment>
   </Result>
-</UpdateOrderStatusInfo>", orderNumber, sellerId); ;
+</UpdateOrderStatusInfo>", orderNumber, sellerId);
 
             errorRequest = new Mocked.MockedNeweggRequest(errorResponse);
             allSuccessRequest = new Mocked.MockedNeweggRequest(allSuccessfulResponse);
@@ -171,12 +171,12 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private void InitializeShipment()
         {
-            this.shipment = new Shipment();
-            shipment.Header = new ShipmentHeader { OrderNumber = this.orderNumber, SellerId = this.sellerId };
+            shipment = new Shipment();
+            shipment.Header = new ShipmentHeader { OrderNumber = orderNumber, SellerId = sellerId };
 
             ShipmentPackage package = new ShipmentPackage();
             package.ShipCarrier = "UPS";
-            package.ShipDateInPacificStandardTime = System.TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+            package.ShipDateInPacificStandardTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
             package.ShipFromAddress1 = "123 Main Street";
             package.ShipFromCity = "St.Louis";
             package.ShipFromCountry = "USA";
@@ -272,13 +272,13 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_FormatsUrlWithOrderNumberAndSellerId()
+        public async Task Ship_FormatsUrlWithOrderNumberAndSellerId()
         {
             string expectedUrl = string.Format("https://api.newegg.com/marketplace/ordermgmt/orderstatus/orders/{0}?sellerid={1}", shipment.Header.OrderNumber, sellerId);
 
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            testObject.Ship(shipment);
+            await testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request
@@ -286,12 +286,12 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_BuildsRequestBody_WithActionValueOfTwo()
+        public async Task Ship_BuildsRequestBody_WithActionValueOfTwo()
         {
             const int expectedActionValue = 2;
             testObject = new ShippingRequest(credentials, allSuccessRequest);
 
-            testObject.Ship(shipment);
+            await testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request
@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_BuildsRequestBody_WithSerializedShipmentXml()
+        public async Task Ship_BuildsRequestBody_WithSerializedShipmentXml()
         {
             string expectedValue = SerializationUtility.SerializeToXml(shipment);
             expectedValue = expectedValue.Replace("<ItemDes>", "<Item>");
@@ -325,7 +325,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             expectedValue = document.OuterXml;
 
             testObject = new ShippingRequest(credentials, allSuccessRequest);
-            testObject.Ship(shipment);
+            await testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request
@@ -337,34 +337,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        public void Ship_UsesPutRequestMethod()
+        public async Task Ship_UsesPutRequestMethod()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
-            testObject.Ship(shipment);
+            await testObject.Ship(shipment);
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request
             Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest) allSuccessRequest).Method);
-        }
-
-
-        public void Ship_ReturnsShippingResults_WhenShippingAnOrderWithNeweggAPI_IntegrationTest()
-        {
-            //    // We're going to try to bounce the request off of the Newegg API, so setup
-            //    // the test object to use a "live" NeweggHttpRequest and an order setup in
-            //    // our sandbox seller account, and use the sandbox seller account credentials
-
-            //    // TODO: Plug in an unshipped order number and build the appropriate item list to test
-            //    Shipment shipment = new Shipment { ... };
-            //    Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-            //    testObject = new ShippingRequest(credentials, new NeweggHttpRequest());
-
-            //    ShippingResult shippingResult = testObject.Ship(shipment);
-
-            //    Assert.True(shippingResult.IsSuccessful);
-            //    Assert.Equal(shipment.Header.OrderNumber, shippingResult.Detail.OrderNumber);
-            //    Assert.Equal(shipment.Header.SellerId, shippingResult.Detail.SellerId);
-            //Assert.Inconclusive("Need an unshipped order to run this integration test.");
         }
     }
 }

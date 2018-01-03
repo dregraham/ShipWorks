@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Services;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.ShipEngine;
-using Interapptive.Shared.Enums;
-using ShipWorks.Shipping.Insurance;
+using System.Drawing.Imaging;
 using System.Linq;
-using ShipWorks.Data.Model.EntityInterfaces;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using System.Drawing.Imaging;
-using ShipWorks.Data;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
-using ShipEngine.ApiClient.Model;
-using System.Threading.Tasks;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
-            
+
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             shipment.RequestedLabelFormat = shipment.Asendia.RequestedLabelFormat;
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <remarks>
         /// Asendia only supports international shipments, so customs is always required
         /// </remarks>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment) => true;
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Ensures that the carrier specific data for the shipment, such as the Asendia data, are loaded for the shipment.  If the data
@@ -234,8 +234,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShipmentTypeDataService.LoadShipmentData(
                             this, shipment, shipment, "Asendia", typeof(AsendiaShipmentEntity), refreshIfPresent);
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
@@ -260,17 +260,17 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
         {
             base.ConfigurePrimaryProfile(profile);
-            profile.OriginID = (int)ShipmentOriginSource.Account;
-            
+            profile.OriginID = (int) ShipmentOriginSource.Account;
+
             AsendiaProfileEntity asendia = profile.Asendia;
 
             asendia.AsendiaAccountID = accountRepository.AccountsReadOnly.Any()
                 ? accountRepository.AccountsReadOnly.First().AsendiaAccountID
                 : 0;
 
-            asendia.Service = (int)AsendiaServiceType.AsendiaPriorityTracked;
-            asendia.Contents = (int)ShipEngineContentsType.Merchandise;
-            asendia.NonDelivery = (int)ShipEngineNonDeliveryType.ReturnToSender;
+            asendia.Service = (int) AsendiaServiceType.AsendiaPriorityTracked;
+            asendia.Contents = (int) ShipEngineContentsType.Merchandise;
+            asendia.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             asendia.NonMachinable = false;
 
             asendia.Weight = 0;
@@ -279,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             asendia.DimsWidth = 0;
             asendia.DimsHeight = 0;
             asendia.DimsWeight = 0;
-            asendia.DimsAddWeight = true;            
+            asendia.DimsAddWeight = true;
         }
 
         /// <summary>
@@ -298,12 +298,12 @@ namespace ShipWorks.Shipping.Carriers.Asendia
 
             ShippingProfileUtility.ApplyProfileValue(accountID, asendiaShipment, AsendiaShipmentFields.AsendiaAccountID);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Service, asendiaShipment, AsendiaShipmentFields.Service);
-            
+
             if (asendiaProfile.Weight.HasValue && !asendiaProfile.Weight.Value.IsEquivalentTo(0))
             {
                 ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
-            
+
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonMachinable, asendiaShipment, AsendiaShipmentFields.NonMachinable);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.NonDelivery, asendiaShipment, AsendiaShipmentFields.NonDelivery);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.Contents, asendiaShipment, AsendiaShipmentFields.Contents);
@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsHeight, asendiaShipment, AsendiaShipmentFields.DimsHeight);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsWidth, asendiaShipment, AsendiaShipmentFields.DimsWidth);
             ShippingProfileUtility.ApplyProfileValue(asendiaProfile.DimsAddWeight, asendiaShipment, AsendiaShipmentFields.DimsAddWeight);
-            
+
             UpdateTotalWeight(shipment);
 
             UpdateDynamicShipmentData(shipment);
@@ -347,7 +347,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                     TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
                 .ToList();
         }
-		
+
         /// <summary>
         /// Saves the requested label format to the child shipment
         /// </summary>
@@ -355,7 +355,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             if (shipment.Asendia != null)
             {
-                shipment.Asendia.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.Asendia.RequestedLabelFormat = (int) requestedLabelFormat;
             }
         }
 

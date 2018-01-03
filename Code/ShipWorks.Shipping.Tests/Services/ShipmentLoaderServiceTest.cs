@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Load_DelegatesToShipmentAdapterFactory_WhenShipmentsLoaded()
         {
-            LoadedOrderSelection handlededOrderSelectionLoaded = (await testObject.Load(new[] { 1L }, false))
+            (await testObject.Load(new[] { 1L }, false))
                 .OfType<LoadedOrderSelection>().Single();
 
             mock.Mock<ICarrierShipmentAdapterFactory>()
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Load_ReturnsOrderAndCarrierAdapter_WhenShipmentsLoaded()
         {
-            var adapter = mock.Create<ICarrierShipmentAdapter>();
+            var adapter = mock.Build<ICarrierShipmentAdapter>();
 
             mock.Mock<ICarrierShipmentAdapterFactory>()
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))

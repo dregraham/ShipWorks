@@ -16,8 +16,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public ShipmentPreProcessorRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]
