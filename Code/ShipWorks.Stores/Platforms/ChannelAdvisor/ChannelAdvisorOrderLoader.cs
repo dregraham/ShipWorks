@@ -74,8 +74,25 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // payments
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
 
-                // Update the total
-                orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
+                SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
+            }
+        }
+
+        /// <summary>
+        /// Set the order total
+        /// </summary>
+        private void SetOrderTotal(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
+        {
+            orderToSave.OrderTotal = downloadedOrder.TotalPrice;
+
+            decimal calculatedTotal = orderChargeCalculator.CalculateTotal(orderToSave);
+
+            // Sometimes ChannelAdvisor doesnt give us all of the discounts for the order, if the order total is different than what we calculate
+            // we need to figure out the difference so that the user can see that there was an aditional discount or cost
+            if (downloadedOrder.TotalPrice != calculatedTotal)
+            {
+                orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount",
+                        (downloadedOrder.TotalPrice - calculatedTotal));
             }
         }
 
