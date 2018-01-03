@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -23,7 +24,6 @@ using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
-using Interapptive.Shared.UI;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -733,7 +733,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         WalmartOrderFields.EstimatedShipDate)
                         {
                             StoreTypeCode = StoreTypeCode.Walmart
-                        }
+                        },
+
+                    new GridColumnDefinition("{8AE72261-8FDB-4412-871A-789F1EB9A841}", false,
+                        new GridEnumDisplayType<CombineSplitStatusType>(EnumSortMethod.Description), 
+                        "Combine/Split", CombineSplitStatusType.Both, OrderFields.CombineSplitStatus)
                 };
 
             return definitions;
