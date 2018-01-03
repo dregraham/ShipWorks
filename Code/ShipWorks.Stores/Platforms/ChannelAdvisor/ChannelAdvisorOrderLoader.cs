@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -21,16 +22,20 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorOrderLoader"/> class.
         /// </summary>
         /// <param name="orderChargeCalculator">The order charge calculator.</param>
         /// <param name="distributionCenters"></param>
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters)
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, 
+            IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters, 
+            Func<Type, ILog> loggerFactory)
         {
             this.orderChargeCalculator = orderChargeCalculator;
             this.distributionCenters = distributionCenters;
+            log = loggerFactory(typeof(ChannelAdvisorOrderLoader));
         }
 
         /// <summary>
@@ -91,8 +96,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // we need to figure out the difference so that the user can see that there was an aditional discount or cost
             if (downloadedOrder.TotalPrice != calculatedTotal)
             {
-                orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount",
-                        (downloadedOrder.TotalPrice - calculatedTotal));
+                decimal adjustment = downloadedOrder.TotalPrice - calculatedTotal;
+
+                log.Info($"Order total for {downloadedOrder.ID} does not match our calculated total, adding an adjustment charge of {adjustment} to compensate for the discrepancy.");
+
+                orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount", adjustment);
             }
         }
 
