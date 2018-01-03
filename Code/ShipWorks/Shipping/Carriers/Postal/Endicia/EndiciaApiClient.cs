@@ -307,7 +307,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        public List<RateResult> GetRatesFast(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public List<RateResult> GetRates(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
         {
             PostalShipmentEntity postal = shipment.Postal;
 
@@ -593,181 +593,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private static double CalculateWeight(ShipmentEntity shipment)
         {
             return Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces + .04, 1, MidpointRounding.AwayFromZero);
-        }
-
-        /// <summary>
-        /// Get postal rates for the given shipment for all possible mail classes and rates.
-        /// </summary>
-        [NDependIgnoreLongMethod]
-        [NDependIgnoreComplexMethod]
-        public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
-        {
-            List<RateResult> results = new List<RateResult>();
-            List<Exception> errors = new List<Exception>();
-
-            if (shipment.ShipPerson.IsDomesticCountry())
-            {
-                PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
-
-                // Special DestinationConfirmation (not Delivery) handling
-                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
-                {
-                    try
-                    {
-                        results.Add(GetRate(shipment, endiciaShipmentType, PostalServiceType.FirstClass, PostalConfirmationType.None));
-                    }
-                    catch (EndiciaException ex)
-                    {
-                        errors.Add(ex);
-                    }
-                }
-                else
-                {
-                    errors.Add(AddRateResultsWithConfirmationOptions(shipment, endiciaShipmentType, PostalServiceType.FirstClass, results));
-                }
-
-                errors.Add(AddRateResultsWithConfirmationOptions(shipment, endiciaShipmentType, PostalServiceType.PriorityMail, results));
-
-                // Express doesn't have confirmation options, we add it's result manually
-                try
-                {
-                    results.Add(GetRate(shipment, endiciaShipmentType, PostalServiceType.ExpressMail, PostalConfirmationType.None));
-                }
-                catch (EndiciaException ex)
-                {
-                    errors.Add(ex);
-                }
-
-                errors.Add(AddRateResultsWithConfirmationOptions(shipment, endiciaShipmentType, PostalServiceType.StandardPost, results));
-                errors.Add(AddRateResultsWithConfirmationOptions(shipment, endiciaShipmentType, PostalServiceType.MediaMail, results));
-            }
-            else
-            {
-                try
-                {
-                    results.Add(GetRate(shipment, endiciaShipmentType, PostalServiceType.InternationalExpress, PostalConfirmationType.None));
-                }
-                catch (EndiciaException ex)
-                {
-                    errors.Add(ex);
-                }
-
-                try
-                {
-                    results.Add(GetRate(shipment, endiciaShipmentType, PostalServiceType.InternationalPriority, PostalConfirmationType.None));
-                }
-                catch (EndiciaException ex)
-                {
-                    errors.Add(ex);
-                }
-
-                try
-                {
-                    results.Add(GetRate(shipment, endiciaShipmentType, PostalServiceType.InternationalFirst, PostalConfirmationType.None));
-                }
-                catch (EndiciaException ex)
-                {
-                    errors.Add(ex);
-                }
-
-                // If there are results, try to fill in the delivery days
-                if (results.Count > 0)
-                {
-                    try
-                    {
-                        List<RateResult> webToolsRates = PostalWebClientRates.GetRates(shipment, logEntryFactory);
-
-                        List<RateResult> resultsWithDays = new List<RateResult>();
-
-                        foreach (RateResult result in results)
-                        {
-                            RateResult webToolRate = webToolsRates.FirstOrDefault(r => ((PostalRateSelection) r.OriginalTag).ServiceType == ((PostalRateSelection) result.OriginalTag).ServiceType);
-                            if (webToolRate != null)
-                            {
-                                resultsWithDays.Add(new RateResult(
-                                    result.Description,
-                                    webToolRate.Days,
-                                    result.AmountOrDefault,
-                                    result.Tag)
-                                {
-                                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
-                                });
-                            }
-                            else
-                            {
-                                resultsWithDays.Add(result);
-                            }
-                        }
-
-                        results.Clear();
-                        results.AddRange(resultsWithDays);
-                    }
-                    catch (ShippingException ex)
-                    {
-                        log.Error("Could not get international transit times for rates.", ex);
-                    }
-                }
-            }
-
-            // Error trimming
-            errors = errors
-
-                // Obviously we don't want null
-                .Where(e => e != null)
-
-                // Filter out any we really don't care about
-                .Where(e =>
-                {
-                    EndiciaApiException apiEx = e as EndiciaApiException;
-                    if (apiEx != null)
-                    {
-                        // Indicates the PackagingType isn't valid for service.  For rates ignore the error - the
-                        // user just won't get the rate for it (which makes sense)
-                        return !(apiEx.ErrorCode == 1001 && apiEx.ErrorDetail.Contains("MailpieceShape"));
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                })
-
-                .ToList();
-
-            if (results.Count == 0 && errors.Count > 0)
-            {
-                throw new EndiciaException(string.Join("\r\n", errors.Select(e => e.Message).Distinct()));
-            }
-
-            results.ForEach(PostalUtility.SetServiceDetails);
-
-            return results;
-        }
-
-        /// <summary>
-        /// Get the rate for the service with all possible confirmation types and add to the rate result list
-        /// </summary>
-        private Exception AddRateResultsWithConfirmationOptions(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, PostalServiceType serviceType, List<RateResult> results)
-        {
-            // Ensures all or nothing if error
-            List<RateResult> localResults = new List<RateResult>();
-
-            try
-            {
-                // Add the base rate
-                localResults.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), PostalUtility.GetServiceTransitDays(serviceType)));
-
-                // Add the confirmation rates
-                localResults.Add(GetRate(shipment, endiciaShipmentType, serviceType, PostalConfirmationType.Delivery));
-                localResults.Add(GetRate(shipment, endiciaShipmentType, serviceType, PostalConfirmationType.Signature));
-
-                results.AddRange(localResults);
-
-                return null;
-            }
-            catch (EndiciaException ex)
-            {
-                return ex;
-            }
         }
 
         /// <summary>
@@ -1088,7 +913,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
         }
 
-        public double BestRateScope14 { get; set; }
 
         /// <summary>
         /// Process the given shipment
