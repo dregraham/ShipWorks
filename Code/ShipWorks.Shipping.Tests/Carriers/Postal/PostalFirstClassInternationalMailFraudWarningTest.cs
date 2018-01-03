@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()));
         }
 
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             uspsAccountRepository.Verify(a => a.AccountsReadOnly);
         }
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             uspsAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ShowWarningIfApplicable(shipment));
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.Warn(shipment));
             Assert.Equal("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.", ex.Message);
         }
 
@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             uspsAccountRepository.VerifyGet(r => r.Accounts);
             Assert.True(uspsAccountOne.AcceptedFCMILetterWarning);
         }
@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             uspsAccountRepository.Verify(a => a.GetAccount(shipment));
             Assert.True(uspsAccountOne.AcceptedFCMILetterWarning);
         }
@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()));
         }
 
@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
@@ -260,7 +260,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ShowWarningIfApplicable(shipment));
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.Warn(shipment));
             Assert.Equal("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.", ex.Message);
         }
 
@@ -281,7 +281,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccount(shipment));
             Assert.True(endiciaAccountOne.AcceptedFCMILetterWarning);
         }
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ShowWarningIfApplicable(shipment);
+            testObject.Warn(shipment);
 
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()), Times.Never);
         }

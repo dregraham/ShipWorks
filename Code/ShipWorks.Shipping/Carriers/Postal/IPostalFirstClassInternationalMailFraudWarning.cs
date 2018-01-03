@@ -8,8 +8,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public interface IPostalFirstClassInternationalMailFraudWarning
     {
         /// <summary>
-        /// validate the shipment
+        /// Warn the user
         /// </summary>
-        void ShowWarningIfApplicable(IShipmentEntity shipment);
+        void Warn(IShipmentEntity shipment);
     }
 }

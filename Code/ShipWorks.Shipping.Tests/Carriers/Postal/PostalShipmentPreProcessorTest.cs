@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             ShipmentEntity shipment = new ShipmentEntity();
 
             testObject.Run(shipment, null, null);
-            internationalValidator.Verify(i => i.ShowWarningIfApplicable(shipment));
+            internationalValidator.Verify(i => i.Warn(shipment));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2017, 2, 1));
 
             testObject.Run(shipment, null, null);
-            internationalValidator.Verify(i => i.ShowWarningIfApplicable(It.IsAny<ShipmentEntity>()), Times.Never);
+            internationalValidator.Verify(i => i.Warn(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
         [Fact]

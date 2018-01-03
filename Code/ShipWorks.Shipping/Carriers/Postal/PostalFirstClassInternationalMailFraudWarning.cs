@@ -37,9 +37,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// Show the warning if applicable to the given shipment
+        /// Warn the user
         /// </summary>
-        public void ShowWarningIfApplicable(IShipmentEntity shipment)
+        public void Warn(IShipmentEntity shipment)
         {
             if (IsLetter(shipment) &&
                 shipment.Postal.Service == (int) PostalServiceType.InternationalFirst && 

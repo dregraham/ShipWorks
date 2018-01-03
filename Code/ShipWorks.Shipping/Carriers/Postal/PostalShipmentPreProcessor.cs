@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // do this check after 1/21/218 because thats when the USPS starts these new rules
             if (dateTimeProvider.Now >= new DateTime(2018, 01, 21))
             {
-                firstClassInternationalMailFraudWarning.ShowWarningIfApplicable(shipment);
+                firstClassInternationalMailFraudWarning.Warn(shipment);
             }
 
             return defaultPreProcessor.Run(shipment, selectedRate, configurationCallback);
