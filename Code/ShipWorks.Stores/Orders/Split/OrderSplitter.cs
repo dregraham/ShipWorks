@@ -124,12 +124,23 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private static void AddOrderSearch(OrderEntity newOrderEntity, OrderEntity originalOrder)
         {
-            OrderSearchEntity orderSearch = newOrderEntity.OrderSearch.AddNew();
+            // Create an OrderSearch for the new order.  So that we get back to original order,
+            // everything is the same except for the OrderID.
+            OrderSearchEntity newOrderSearch = newOrderEntity.OrderSearch.AddNew();
+            newOrderSearch.OriginalOrderID = originalOrder.OrderID;
+            newOrderSearch.IsManual = originalOrder.IsManual;
+            newOrderSearch.OrderNumber = originalOrder.OrderNumber;
+            newOrderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
+            newOrderSearch.StoreID = originalOrder.StoreID;
+
+            // Also create an OrderSearch for the original order so that we know that
+            // it was part of a split operation and searching works.
+            OrderSearchEntity orderSearch = originalOrder.OrderSearch.AddNew();
             orderSearch.OriginalOrderID = originalOrder.OrderID;
-            orderSearch.IsManual = newOrderEntity.IsManual;
-            orderSearch.OrderNumber = newOrderEntity.OrderNumber;
-            orderSearch.OrderNumberComplete = newOrderEntity.OrderNumberComplete;
-            orderSearch.StoreID = newOrderEntity.StoreID;
+            orderSearch.IsManual = originalOrder.IsManual;
+            orderSearch.OrderNumber = originalOrder.OrderNumber;
+            orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
+            orderSearch.StoreID = originalOrder.StoreID;
         }
 
         /// <summary>

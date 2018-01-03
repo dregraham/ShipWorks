@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Orders.Combine.SearchProviders
         /// </summary>
         public virtual async Task<IEnumerable<TResult>> GetOrderIdentifiers(IOrderEntity order)
         {
-            return order.CombineSplitStatus == CombineSplitStatusType.Combined ?
+            return order.CombineSplitStatus != CombineSplitStatusType.None ?
                 await GetCombinedOnlineOrderIdentifiers(order).ConfigureAwait(false) :
                 order.IsManual ? Enumerable.Empty<TResult>() : new[] { GetOnlineOrderIdentifier(order) };
         }
