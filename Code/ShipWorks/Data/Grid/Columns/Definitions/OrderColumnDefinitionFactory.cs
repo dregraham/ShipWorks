@@ -737,7 +737,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{8AE72261-8FDB-4412-871A-789F1EB9A841}", false,
                         new GridEnumDisplayType<CombineSplitStatusType>(EnumSortMethod.Description), 
-                        "Combine/Split", CombineSplitStatusType.Both, OrderFields.CombineSplitStatus)
+                        "Combine/Split", CombineSplitStatusType.Combined, OrderFields.CombineSplitStatus)
                 };
 
             return definitions;
