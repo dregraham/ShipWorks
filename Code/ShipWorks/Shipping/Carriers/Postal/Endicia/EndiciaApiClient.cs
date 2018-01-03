@@ -714,6 +714,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.ContentsType = EndiciaApiTransforms.GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
             }
 
+            return ProcessRateRequest(shipment, serviceType, confirmation, account, request);
+        }
+
+        /// <summary>
+        /// Process RateRequest
+        /// </summary>
+        private RateResult ProcessRateRequest(ShipmentEntity shipment,
+            PostalServiceType serviceType,
+            PostalConfirmationType confirmation,
+            EndiciaAccountEntity account,
+            PostageRateRequest request)
+        {
             try
             {
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
@@ -743,12 +755,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
                     else if (confirmation == PostalConfirmationType.Delivery)
                     {
-                        description = string.Format("       Delivery Confirmation ({0:c})", response.PostagePrice[0].Fees.DeliveryConfirmation);
+                        description = string.Format("       Delivery Confirmation ({0:c})",
+                            response.PostagePrice[0].Fees.DeliveryConfirmation);
                         days = "";
                     }
                     else
                     {
-                        description = string.Format("       Signature Confirmation ({0:c})", response.PostagePrice[0].Fees.SignatureConfirmation);
+                        description = string.Format("       Signature Confirmation ({0:c})",
+                            response.PostagePrice[0].Fees.SignatureConfirmation);
                         days = "";
                     }
 
