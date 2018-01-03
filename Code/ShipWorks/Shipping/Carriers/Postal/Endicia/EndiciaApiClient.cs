@@ -708,6 +708,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.EntryFacility = EndiciaApiTransforms.GetEntryFacilityCode((PostalEntryFacility) shipment.Postal.EntryFacility);
             }
 
+            // If international we need customs
+            if (!CustomsManager.IsCustomsRequired(shipment))
+            {
+                request.ContentsType = EndiciaApiTransforms.GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
+            }
+
             try
             {
                 using (EwsLabelService service = CreateWebService("GetRates", GetReseller(account, shipment), LogActionType.GetRates))
@@ -912,7 +918,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new EndiciaException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
-
 
         /// <summary>
         /// Process the given shipment
