@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -40,7 +41,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            if (processedShipments.Any(ShowNotifiactionForShipment) && globalPostNotification.AppliesToCurrentUser())
+            bool showNotificationForShipment = processedShipments.Any(ShowNotifiactionForShipment);
+
+            if (showNotificationForShipment && globalPostNotification.AppliesToCurrentUser())
             {
                 globalPostNotification.Show();
             }
@@ -51,6 +54,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
         {
+            if (!shipment.Processed)
+            {
+                return false;
+            }
+
             bool showNotifiaction = IsGapLabel(shipment.Postal) || 
                 PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
 
@@ -75,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool IsGapLabel(IPostalShipmentEntity shipment)
         {
-            if (dateTimeProvider.Now < new DateTime(2018, 1, 21))
+            if (dateTimeProvider.Now < new DateTime(2018, 1, 21) && !InterapptiveOnly.MagicKeysDown)
             {
                 return false;
             }
