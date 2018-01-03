@@ -410,6 +410,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
 
+            if (CustomsManager.IsCustomsRequired(shipment))
+            {
+                request.ContentsType = EndiciaApiTransforms.GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
+            }
+
             try
             {
                 List<RateResult> rates = new List<RateResult>();
@@ -706,12 +711,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 request.SortType = EndiciaApiTransforms.GetSortTypeCode((PostalSortType) shipment.Postal.SortType);
                 request.EntryFacility = EndiciaApiTransforms.GetEntryFacilityCode((PostalEntryFacility) shipment.Postal.EntryFacility);
-            }
-
-            // If international we need customs
-            if (!CustomsManager.IsCustomsRequired(shipment))
-            {
-                request.ContentsType = EndiciaApiTransforms.GetCustomsContentTypeCode((PostalCustomsContentType) postal.CustomsContentType);
             }
 
             return ProcessRateRequest(shipment, serviceType, confirmation, account, request);
