@@ -129,7 +129,18 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
         /// </summary>
         public OrderEntityBuilder<TOrder> WithPaymentDetail(Action<EntityBuilder<OrderPaymentDetailEntity>> builderConfiguration) =>
             CreateCollectionEntity(builderConfiguration, x => x.OrderPaymentDetails);
+        
+        /// <summary>
+        /// Add a note to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithOrderSearch() => WithOrderSearch(null);
 
+        /// <summary>
+        /// Add a note to the order
+        /// </summary>
+        public OrderEntityBuilder<TOrder> WithOrderSearch(Action<EntityBuilder<OrderSearchEntity>> builderConfiguration) =>
+            CreateCollectionEntity(builderConfiguration, x => x.OrderSearch);
+        
         /// <summary>
         /// Create an entity and add it to a collection
         /// </summary>

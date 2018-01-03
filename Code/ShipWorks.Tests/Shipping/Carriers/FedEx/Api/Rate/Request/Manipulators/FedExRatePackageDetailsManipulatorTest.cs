@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Enums;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,6 +10,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             shipmentEntity = new ShipmentEntity
             {
-                FedEx = new FedExShipmentEntity { WeightUnitType = (int)WeightUnitOfMeasure.Pounds }
+                FedEx = new FedExShipmentEntity { WeightUnitType = (int) WeightUnitOfMeasure.Pounds }
             };
 
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity()
@@ -96,7 +96,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-
         [Fact]
         public void Manipulate_SetsPackageCount_BasedOnFedExPackageCount()
         {
@@ -111,38 +110,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.Equal(carrierRequest.Object.ShipmentEntity.FedEx.Packages.Count, 2);
-            Assert.Equal(nativeRequest.RequestedShipment.PackageCount, "2");
+            Assert.Equal(2, carrierRequest.Object.ShipmentEntity.FedEx.Packages.Count);
+            Assert.Equal("2", nativeRequest.RequestedShipment.PackageCount);
         }
 
         [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndDimensionsIsInchesTest()
         {
-            shipmentEntity.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
+            shipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
+            shipmentEntity.FedEx.PackagingType = (int) FedExPackagingType.Custom;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.Equal((int)FedExPackagingType.Custom, carrierRequest.Object.ShipmentEntity.FedEx.PackagingType);
+            Assert.Equal((int) FedExPackagingType.Custom, carrierRequest.Object.ShipmentEntity.FedEx.PackagingType);
             CompareDimensions(carrierRequest.Object.ShipmentEntity, carrierRequest.Object.ShipmentEntity.FedEx.Packages[0], nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndDimensionsIsCentimetersTest()
         {
-            shipmentEntity.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.CM;
-            shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
+            shipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.CM;
+            shipmentEntity.FedEx.PackagingType = (int) FedExPackagingType.Custom;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.Equal((int)FedExPackagingType.Custom, carrierRequest.Object.ShipmentEntity.FedEx.PackagingType);
+            Assert.Equal((int) FedExPackagingType.Custom, carrierRequest.Object.ShipmentEntity.FedEx.PackagingType);
             CompareDimensions(carrierRequest.Object.ShipmentEntity, carrierRequest.Object.ShipmentEntity.FedEx.Packages[0], nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsLB()
         {
-            shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Pounds;
+            shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            foreach (RequestedPackageLineItem lineItem in ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems)
+            foreach (RequestedPackageLineItem lineItem in ((RateRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems)
             {
                 Assert.Equal(0.1m, lineItem.Weight.Value);
             }
@@ -170,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndUnitsIsKG()
         {
-            shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
+            shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
             testObject.Manipulate(carrierRequest.Object);
 
             ValidateWeight(carrierRequest.Object.ShipmentEntity, carrierRequest.Object.ShipmentEntity.FedEx.Packages[0], nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             decimal packageEntityWeight = FedExUtility.GetPackageTotalWeight(fedExPackageEntity);
             Assert.Equal(packageEntityWeight, requestedPackageLineItem.Weight.Value);
 
-            if (shipment.FedEx.WeightUnitType == (int)WeightUnitOfMeasure.Pounds)
+            if (shipment.FedEx.WeightUnitType == (int) WeightUnitOfMeasure.Pounds)
             {
                 Assert.Equal(WeightUnits.LB, requestedPackageLineItem.Weight.Units);
             }
@@ -225,7 +224,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// </summary>
         private static void CompareDimensions(ShipmentEntity shipment, FedExPackageEntity fedExPackageEntity, RequestedPackageLineItem requestedPackage)
         {
-            if (shipment.FedEx.LinearUnitType == (int)FedExLinearUnitOfMeasure.CM)
+            if (shipment.FedEx.LinearUnitType == (int) FedExLinearUnitOfMeasure.CM)
             {
                 Assert.Equal(LinearUnits.CM, requestedPackage.Dimensions.Units);
             }

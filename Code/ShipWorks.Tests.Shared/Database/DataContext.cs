@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 
@@ -25,6 +26,7 @@ namespace ShipWorks.Tests.Shared.Database
             Store = Create.Store<GenericModuleStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "A Test Store")
+                .Set(s => s.TypeCode = (int) StoreTypeCode.GenericModule)
                 .Save();
 
             Customer = Create.Entity<CustomerEntity>().Save();

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps.LabelRetrieva
             ShipmentEntity shipment = new ShipmentEntity();
             mock.Mock<IInsuranceUtility>().Setup(x => x.ValidateShipment(shipment)).Throws<Exception>();
 
-            Assert.Throws<Exception>(() => testObject.Validate(shipment));
+            Assert.ThrowsAsync<Exception>(() => testObject.Validate(shipment));
         }
 
         [Fact]

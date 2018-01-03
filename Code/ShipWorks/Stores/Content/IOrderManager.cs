@@ -35,18 +35,21 @@ namespace ShipWorks.Stores.Content
         Task<OrderEntity> LoadOrderAsync(long orderId, ISqlAdapter sqlAdapter);
 
         /// <summary>
+        /// Load an order async using given prefetch path
+        /// </summary>
+        /// <remarks>
+        /// This method bypasses the entity cache
+        /// </remarks>
+        Task<OrderEntity> LoadOrderAsync(long orderId, ISqlAdapter sqlAdapter, IEnumerable<IPrefetchPathElement2> prefetchPaths);
+
+        /// <summary>
         /// Load orders async
         /// </summary>
         /// <remarks>
         /// This method bypasses the entity cache
         /// </remarks>
         Task<IEnumerable<OrderEntity>> LoadOrdersAsync(IEnumerable<long> orderIDs, ISqlAdapter sqlAdapter);
-
-        /// <summary>
-        /// Get the first order in the specified predicate
-        /// </summary>
-        Task<OrderEntity> FetchFirstOrderAsync(IPredicate predicate, params IPrefetchPathElement2[] prefetchPaths);
-
+        
         /// <summary>
         /// Load the specified order using the given prefetch path
         /// </summary>

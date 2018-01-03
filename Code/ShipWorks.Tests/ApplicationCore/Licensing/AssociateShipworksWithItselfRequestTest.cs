@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
@@ -7,7 +9,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using System.Collections.Generic;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -22,7 +23,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_DelegateValidateAddress_HasPhysicalAddress()
+        public async Task Execute_DelegateValidateAddress_HasPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null))
@@ -35,25 +36,25 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            testObject.Execute();
+            await testObject.Execute();
 
             webClient.Verify(c => c.ValidateAddressAsync(testObject.PhysicalAddress, null), Times.Once);
         }
 
         [Fact]
-        public void Execute_DoNotDelegateToValidateAddress_NoPhysicalAddress()
+        public async Task Execute_DoNotDelegateToValidateAddress_NoPhysicalAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
 
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
 
-            testObject.Execute();
+            await testObject.Execute();
 
             webClient.Verify(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null), Times.Never);
         }
 
         [Fact]
-        public async void Execute_ResponseTypeIsAddressValidationFailed_CannotValidateAddress()
+        public async Task Execute_ResponseTypeIsAddressValidationFailed_CannotValidateAddress()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null))
@@ -72,7 +73,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
+        public async Task Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNullSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null))
@@ -92,7 +93,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async void Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
+        public async Task Execute_MessageIsAddressValidationFailedDescription_WhenCannotValidateAddress_AndNoSuggestions()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null))
@@ -113,7 +114,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async void Execute_MessageContainsSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async Task Execute_MessageContainsSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -122,7 +123,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 .ReturnsAsync(new UspsAddressValidationResults()
                 {
                     IsSuccessfulMatch = false,
-                    Candidates = new List<Address>() {new Address() {Address1 = includedInSuggestedAddress}}
+                    Candidates = new List<Address>() { new Address() { Address1 = includedInSuggestedAddress } }
                 });
 
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
@@ -135,7 +136,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async void Execute_MessageContainsThirdSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async Task Execute_MessageContainsThirdSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -163,7 +164,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public async void Execute_MessageDoesNotContainForthSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
+        public async Task Execute_MessageDoesNotContainForthSuggestedAddress_WhenCannotValidateAddress_AndHasSuggestions()
         {
             string includedInSuggestedAddress = "123 Elm St.";
 
@@ -192,7 +193,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_MatchedAddressIsSet_WhenPhysicalAddressValidated()
+        public async Task Execute_MatchedAddressIsSet_WhenPhysicalAddressValidated()
         {
             var matchedAddress = new Address();
 
@@ -208,13 +209,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
             testObject.PhysicalAddress = new PersonAdapter();
 
-            testObject.Execute();
+            await testObject.Execute();
 
             Assert.Equal(matchedAddress, testObject.MatchedPhysicalAddress);
         }
 
         [Fact]
-        public async void Execute_ResultIsPoBoxNotAllowed_WhenValidationSetsIsPoBoxToTrue()
+        public async Task Execute_ResultIsPoBoxNotAllowed_WhenValidationSetsIsPoBoxToTrue()
         {
             var webClient = mock.Mock<IUspsWebClient>();
             webClient.Setup(c => c.ValidateAddressAsync(It.IsAny<PersonAdapter>(), null))
@@ -234,13 +235,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         }
 
         [Fact]
-        public void Execute_DelegatesToTangoWebClient()
+        public async Task Execute_DelegatesToTangoWebClient()
         {
             var webClient = mock.Mock<ITangoWebClient>();
 
             var testObject = mock.Create<AssociateShipworksWithItselfRequest>();
 
-            testObject.Execute();
+            await testObject.Execute();
 
             webClient.Verify(c => c.AssociateShipworksWithItself(testObject), Times.Once);
         }

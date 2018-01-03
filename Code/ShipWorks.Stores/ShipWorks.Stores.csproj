@@ -111,6 +111,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
@@ -184,11 +187,29 @@
     <Compile Include="Orders\Combine\Actions\CombineOrderPlatformSpecificAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordCreationAction.cs" />
     <Compile Include="Orders\Combine\Actions\CombineOrderSearchRecordMerger.cs" />
-    <Compile Include="Orders\Split\ISplitOrdersViewModel.cs" />
-    <Compile Include="Orders\Split\SplitOrderDefinition.cs" />
-    <Compile Include="Orders\Split\SplitOrderViewModel.cs" />
-    <Compile Include="Orders\Split\ISplitOrderDialog.cs" />
-    <Compile Include="Orders\Split\SplitOrderValidator.cs" />
+    <Compile Include="Orders\Split\Errors\CanceledException.cs" />
+    <Compile Include="Orders\Split\Errors\Errors.cs" />
+    <Compile Include="Orders\Split\Errors\OrderSplitException.cs" />
+    <Compile Include="Orders\Split\IOrderDetailSplitter.cs" />
+    <Compile Include="Orders\Split\IOrderSplitGateway.cs" />
+    <Compile Include="Orders\Split\IOrderSplitSuccessDialog.cs" />
+    <Compile Include="Orders\Split\IOrderSplitSuccessViewModel.cs" />
+    <Compile Include="Orders\Split\IOrderSplitter.cs" />
+    <Compile Include="Orders\Split\IOrderSplitViewModel.cs" />
+    <Compile Include="Orders\Split\IOrderSplitUserInteraction.cs" />
+    <Compile Include="Orders\Split\OrderChargeSplitter.cs" />
+    <Compile Include="Orders\Split\OrderItemSplitter.cs" />
+    <Compile Include="Orders\Split\OrderSplitChargeViewModel.cs" />
+    <Compile Include="Orders\Split\OrderSplitDefinition.cs" />
+    <Compile Include="Orders\Split\OrderSplitGateway.cs" />
+    <Compile Include="Orders\Split\OrderSplitItemViewModel.cs" />
+    <Compile Include="Orders\Split\OrderSplitOrchestrator.cs" />
+    <Compile Include="Orders\Split\OrderSplitSuccessViewModel.cs" />
+    <Compile Include="Orders\Split\OrderSplitter.cs" />
+    <Compile Include="Orders\Split\OrderSplitUserInteraction.cs" />
+    <Compile Include="Orders\Split\OrderSplitViewModel.cs" />
+    <Compile Include="Orders\Split\IOrderSplitDialog.cs" />
+    <Compile Include="Orders\Split\OrderSplitValidator.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
@@ -705,9 +726,9 @@
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
     <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.1.0\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\Google.Protobuf.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.CSharp.dll" />
-    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.1.22.0.1631\analyzers\SonarAnalyzer.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarAnalyzer.CSharp.6.7.1.4347\analyzers\SonarAnalyzer.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />

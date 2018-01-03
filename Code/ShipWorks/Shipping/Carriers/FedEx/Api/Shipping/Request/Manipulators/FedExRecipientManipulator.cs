@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,7 +6,6 @@ using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using Address = ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.Address;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
@@ -26,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         /// </summary>
         public FedExRecipientManipulator()
             : this(new FedExSettings(new FedExSettingsRepository()))
-        {}
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRecipientManipulator" /> class.
@@ -89,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             }
             else
             {
-                requestedShipment.Recipient = recipient;                
+                requestedShipment.Recipient = recipient;
             }
         }
 
@@ -112,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 bool line1Full = false;
 
                 string[] addressWords = address.StreetLines[0].Split(' ');
-                
+
                 foreach (string line1Word in addressWords)
                 {
                     if (!line1Full)
@@ -134,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 // if both lines are under max length, use them. If not, don't wrap.
                 if (newLine1.Length <= calculatedMathLenght && newLine2.Length <= calculatedMathLenght)
                 {
-                    address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };                    
+                    address.StreetLines = new[] { newLine1.ToString(), newLine2.ToString() };
                 }
             }
         }

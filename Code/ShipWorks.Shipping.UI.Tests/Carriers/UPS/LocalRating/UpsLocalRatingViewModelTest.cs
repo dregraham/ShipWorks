@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             var upsAccount = new UpsAccountEntity();
 
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
 
             Assert.Equal(UpsLocalRatingViewModel.NoRatesUploadedMessage, testObject.RateStatusMessage);
         }
@@ -65,12 +65,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var uploadDate = DateTime.UtcNow;
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(uploadDate);
-            
+
             var upsAccount = new UpsAccountEntity();
             upsAccount.UpsRateTableID = 42;
 
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
 
             Assert.StartsWith($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.RateStatusMessage);
         }
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.ZoneUploadDate).Returns(DateTime.Now);
             }
 
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             testObject.LocalRatingEnabled = localRatingEnabled;
 
             testObject.Save();
@@ -123,14 +123,14 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var upsAccount = new UpsAccountEntity();
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             testObject.LocalRatingEnabled = true;
 
             testObject.Save();
 
             Assert.Equal("Please upload your rate table to enable local rating", testObject.UploadMessage);
         }
-        
+
         [Fact]
         public void Save_SetsValidationMessageCorrectly_WhenZonesNotUploadedAndLocalRatingEnabledIsTrue()
         {
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var upsAccount = new UpsAccountEntity();
             var testObject = mock.Create<UpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             testObject.LocalRatingEnabled = false;
             testObject.IsUploading = true;
 
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                     dialog.Setup(d => d.ShowDialog()).Returns(DialogResult.OK);
                     dialog.Setup(d => d.CreateFileStream()).Returns(createFileStream);
                     mock.Mock<IFileDialogFactory>().Setup(f => f.CreateSaveFileDialog()).Returns(dialog);
-                    
+
                     mock.Create<UpsLocalRatingViewModel>().DownloadSampleRateFileCommand.Execute(null);
                 }
 
@@ -230,7 +230,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleRatesFileResourceName))
                 {
                     sampleFileBytes = new byte[resourceStream.Length];
-                    resourceStream.Read(sampleFileBytes, 0, (int)resourceStream.Length);
+                    resourceStream.Read(sampleFileBytes, 0, (int) resourceStream.Length);
                 }
 
                 // Verify that the contents of the embedded resource is identical to the file we
@@ -271,7 +271,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 using (Stream resourceStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleZoneFileResourceName))
                 {
                     sampleFileBytes = new byte[resourceStream.Length];
-                    resourceStream.Read(sampleFileBytes, 0, (int)resourceStream.Length);
+                    resourceStream.Read(sampleFileBytes, 0, (int) resourceStream.Length);
                 }
 
                 // Verify that the contents of the embedded resource is identical to the file we
@@ -292,10 +292,10 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadRatingFile_LoadsRateTableWithFileStream()
+        public async Task UploadRatingFile_LoadsRateTableWithFileStream()
         {
             var rateTable = mock.Mock<IUpsLocalRateTable>();
-            
+
             Stream fileStream = mock.Create<Stream>();
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.CreateFileStream()).Returns(fileStream);
@@ -303,14 +303,14 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(new UpsAccountEntity(), b=> { });
+            testObject.Load(new UpsAccountEntity(), b => { });
             await testObject.CallUploadRatingFile();
 
-            rateTable.Verify(t=> t.LoadRates(fileStream));
+            rateTable.Verify(t => t.LoadRates(fileStream));
         }
 
         [Fact]
-        public async void UploadRatingFile_SavesRateTableToAccount()
+        public async Task UploadRatingFile_SavesRateTableToAccount()
         {
             var upsAccount = new UpsAccountEntity();
             var rateTable = mock.Mock<IUpsLocalRateTable>();
@@ -320,19 +320,19 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             await testObject.CallUploadRatingFile();
 
             rateTable.Verify(t => t.SaveRates(upsAccount));
         }
 
         [Fact]
-        public async void UploadRatingFile_SetsStatusMessageToLastUpload()
+        public async Task UploadRatingFile_SetsStatusMessageToLastUpload()
         {
             var uploadDate = DateTime.UtcNow;
             var upsAccount = new UpsAccountEntity
             {
-                UpsRateTable = new UpsRateTableEntity(42) {UploadDate = uploadDate}
+                UpsRateTable = new UpsRateTableEntity(42) { UploadDate = uploadDate }
             };
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(uploadDate);
@@ -342,14 +342,14 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             await testObject.CallUploadRatingFile();
 
             Assert.Equal($"Last Upload: {uploadDate.ToLocalTime():g}", testObject.RateStatusMessage);
         }
 
         [Fact]
-        public async void UploadRatingFile_SetsValidationMessageToSuccess()
+        public async Task UploadRatingFile_SetsValidationMessageToSuccess()
         {
             var uploadDate = DateTime.UtcNow;
             var upsAccount = new UpsAccountEntity(42)
@@ -361,7 +361,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             await testObject.CallUploadRatingFile();
 
             Assert.Equal("Local rates have been uploaded successfully", testObject.UploadMessage);
@@ -380,20 +380,20 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>().SetupGet(t => t.RateUploadDate).Returns(DateTime.Now);
-            
+
             var log = mock.Mock<ILog>();
             var logFactory = mock.MockRepository.Create<Func<ILog>>();
             logFactory.Setup(f => f()).Returns(log);
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(upsAccount, b=> { });
+            testObject.Load(upsAccount, b => { });
             await testObject.CallUploadRatingFile();
 
-            log.Verify(l=> l.Info("Successfully uploaded rate table"));
+            log.Verify(l => l.Info("Successfully uploaded rate table"));
         }
 
         [Fact]
-        public async void UploadRatingFile_SetsValidationMessageToError_WhenExceptionOccurs()
+        public async Task UploadRatingFile_SetsValidationMessageToError_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -411,7 +411,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadRatingFile_LogsError_WhenExceptionOccurs()
+        public async Task UploadRatingFile_LogsError_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -426,7 +426,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 .Throws<UpsLocalRatingException>();
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(new UpsAccountEntity(), b=> { });
+            testObject.Load(new UpsAccountEntity(), b => { });
 
             await testObject.CallUploadRatingFile();
 
@@ -434,7 +434,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadRatingFile_SetsValidatingRatesToFalse_WhenExceptionOccurs()
+        public async Task UploadRatingFile_SetsValidatingRatesToFalse_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -448,7 +448,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadRatingFile_CallsIsBusyWithFalse_WhenExceptionOccurs()
+        public async Task UploadRatingFile_CallsIsBusyWithFalse_WhenExceptionOccurs()
         {
             List<bool> isBusyValues = new List<bool>();
 
@@ -498,7 +498,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
                 .Throws<UpsLocalRatingException>();
 
             var testObject = mock.Create<FakeUpsLocalRatingViewModel>();
-            testObject.Load(new UpsAccountEntity(), b=> { });
+            testObject.Load(new UpsAccountEntity(), b => { });
             await testObject.CallUploadRatingFile();
 
             Assert.True(testObject.ErrorUploading);
@@ -523,7 +523,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SavesZones()
+        public async Task UploadZoneFile_SavesZones()
         {
             var upsAccount = new UpsAccountEntity();
             var rateTable = mock.Mock<IUpsLocalRateTable>();
@@ -540,7 +540,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SetsStatusMessageToLastUpload()
+        public async Task UploadZoneFile_SetsStatusMessageToLastUpload()
         {
             var uploadDate = DateTime.UtcNow;
             var upsAccount = new UpsAccountEntity();
@@ -560,7 +560,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SetsValidationMessageToSuccess()
+        public async Task UploadZoneFile_SetsValidationMessageToSuccess()
         {
             var upsAccount = new UpsAccountEntity(42);
             var openFileDialog = mock.Mock<IOpenFileDialog>();
@@ -668,7 +668,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SetsValidationMessageToError_WhenExceptionOccurs()
+        public async Task UploadZoneFile_SetsValidationMessageToError_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -686,7 +686,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_LogsError_WhenExceptionOccurs()
+        public async Task UploadZoneFile_LogsError_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -709,7 +709,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SetsValidatingRatesToFalse_WhenExceptionOccurs()
+        public async Task UploadZoneFile_SetsValidatingRatesToFalse_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -723,7 +723,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_CallsIsBusyWithFalse_WhenExceptionOccurs()
+        public async Task UploadZoneFile_CallsIsBusyWithFalse_WhenExceptionOccurs()
         {
             List<bool> isBusyValues = new List<bool>();
 
@@ -762,11 +762,11 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         }
 
         [Fact]
-        public async void UploadZoneFile_SetsErrorValidatingRatesToTrue_WhenExceptionOccurs()
+        public async Task UploadZoneFile_SetsErrorValidatingRatesToTrue_WhenExceptionOccurs()
         {
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
-            
+
             mock.Mock<IFileDialogFactory>().Setup(f => f.CreateOpenFileDialog()).Returns(openFileDialog);
 
             mock.Mock<IUpsLocalRateTable>()

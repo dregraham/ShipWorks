@@ -1,12 +1,11 @@
-﻿using Interapptive.Shared.Utility;
-using Microsoft.Win32;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.ComponentModel;
+using System.Configuration.Install;
+using System.Diagnostics.CodeAnalysis;
 using System.Security;
 using System.ServiceProcess;
-using System.Windows.Forms;
-using System.Configuration.Install;
+using Interapptive.Shared.Utility;
+using Microsoft.Win32;
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 {
@@ -21,6 +20,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SuppressMessage("SonarLint", "S4015", Justification = "This is existing code")]
         new public string ServiceName
         {
             get { return base.ServiceName; }
@@ -29,6 +29,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SuppressMessage("SonarLint", "S4015", Justification = "This is existing code")]
         new public string DisplayName
         {
             get { return base.DisplayName; }
@@ -97,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Services.Hosting.Windows
 
             using (var serviceKey = Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Services\" + ServiceName, true))
             {
-                serviceKey.SetValue("ImagePath", (string)serviceKey.GetValue("ImagePath") + " /service=" + EnumHelper.GetApiValue(ServiceType));
+                serviceKey.SetValue("ImagePath", (string) serviceKey.GetValue("ImagePath") + " /service=" + EnumHelper.GetApiValue(ServiceType));
             }
         }
     }

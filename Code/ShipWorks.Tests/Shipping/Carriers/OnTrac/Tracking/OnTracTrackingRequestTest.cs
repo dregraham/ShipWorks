@@ -2,13 +2,13 @@ using System;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Track;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Tracking;
 using ShipWorks.Shipping.Tracking;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 {
@@ -82,11 +82,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             var trackingResult = RunSuccessfullRequestTracking();
 
             //Verify the xml deseralized correctly
-            Assert.True(trackingResult.Details.Count == 2);
-            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.Equal(
-                trackingResult.Summary,
-                "<b>First Event Desc</b> on 1/01/2012 2:30 AM ");
+            Assert.Equal(2, trackingResult.Details.Count);
+            Assert.Equal("First Event Desc", trackingResult.Details.First().Activity);
+            Assert.Equal("<b>First Event Desc</b> on 1/01/2012 2:30 AM ", trackingResult.Summary);
         }
 
         [Fact]
@@ -161,11 +159,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             //Get result
             TrackingResult trackingResult = testObject.GetTrackingResults("123456");
 
-            Assert.True(trackingResult.Details.Count == 2);
-            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.Equal(
-                trackingResult.Summary,
-                "<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>");
+            Assert.Equal(2, trackingResult.Details.Count);
+            Assert.Equal("First Event Desc", trackingResult.Details.First().Activity);
+            Assert.Equal("<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>",
+                trackingResult.Summary);
         }
 
         [Fact]
@@ -180,11 +177,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             //Get result
             TrackingResult trackingResult = testObject.GetTrackingResults("123456");
 
-            Assert.True(trackingResult.Details.Count == 2);
-            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.Equal(
-                trackingResult.Summary,
-                "<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>");
+            Assert.Equal(2, trackingResult.Details.Count);
+            Assert.Equal("First Event Desc", trackingResult.Details.First().Activity);
+            Assert.Equal("<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>",
+                trackingResult.Summary);
         }
 
         [Fact]

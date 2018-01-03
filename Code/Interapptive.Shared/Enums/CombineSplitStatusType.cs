@@ -13,6 +13,12 @@ namespace Interapptive.Shared.Enums
         None = 0,
 
         [Description("Combined")]
-        Combined = 1
+        Combined = 1,
+
+        [Description("Split")]
+        Split = 2,
+
+        [Description("Both")]
+        Both = 3
     }
 }

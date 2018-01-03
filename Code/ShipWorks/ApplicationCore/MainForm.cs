@@ -22,6 +22,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Metrics;
@@ -90,6 +91,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Templates.Distribution;
@@ -196,7 +198,7 @@ namespace ShipWorks
             selectionDependentEnabler.SetEnabledWhen(buttonSplit, SelectionDependentType.Ignore);
             selectionDependentEnabler.SetEnabledWhen(contextOrderCombineOrder, SelectionDependentType.Ignore);
             selectionDependentEnabler.SetEnabledWhen(contextOrderSplitOrder, SelectionDependentType.Ignore);
-            
+
             return Disposable.Create(InitializeCustomEnablerComponents);
         }
 
@@ -1459,7 +1461,7 @@ namespace ShipWorks
                 return orderSplitValidator.Validate(keys).Success;
             }
         }
-        
+
         /// <summary>
         /// Update the state of the ribbon buttons based on the current selection
         /// </summary>
@@ -2956,30 +2958,6 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Split an order
-        /// </summary>
-        private async void OnSplitOrder(object sender, EventArgs e)
-        {
-            if (!ShouldSplitOrderBeEnabled(gridControl.Selection.OrderedKeys))
-            {
-                UpdateCommandState();
-                return;
-            }
-
-            // TODO: Do the split here in an upcoming story.
-            GenericResult<long> result = await Task.FromResult(new GenericResult<long>());
-
-            if (result.Success)
-            {
-                LookupOrder(result.Value);
-            }
-            else
-            {
-                UpdateCommandState();
-            }
-        }
-
-        /// <summary>
         /// Combine the currently selected orders
         /// </summary>
         private async Task<GenericResult<long>> CombineOrders()
@@ -2995,6 +2973,38 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Split an order
+        /// </summary>
+        private async void OnSplitOrder(object sender, EventArgs e)
+        {
+            if (!ShouldSplitOrderBeEnabled(gridControl.Selection.OrderedKeys))
+            {
+                UpdateCommandState();
+                return;
+            }
+
+            await SplitOrder()
+                .Do(LookupOrders, _ => UpdateCommandState(), ContinueOn.CurrentThread)
+                .Recover(ex => Enumerable.Empty<long>())
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Combine the currently selected orders
+        /// </summary>
+        private async Task<IEnumerable<long>> SplitOrder()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (DisableCustomEnablerComponents())
+                {
+                    IOrderSplitOrchestrator orchestrator = lifetimeScope.Resolve<IOrderSplitOrchestrator>();
+                    return await orchestrator.Split(gridControl.Selection.OrderedKeys.FirstOrDefault()).ConfigureAwait(false);
+                }
+            }
+        }
+
+        /// <summary>
         /// Lookup the specified order by selecting it via Quick Search
         /// </summary>
         private void LookupOrder(long orderID)
@@ -3005,6 +3015,19 @@ namespace ShipWorks
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
+        }
+
+        /// <summary>
+        /// Lookup the specified order by selecting it via Quick Search
+        /// </summary>
+        private void LookupOrders(IEnumerable<long> orderIDs)
+        {
+            dockableWindowOrderFilters.Open(WindowOpenMethod.OnScreenSelect);
+
+            // Ensure the order grid is active
+            orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
+            gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderIDs));
         }
 
         /// <summary>
