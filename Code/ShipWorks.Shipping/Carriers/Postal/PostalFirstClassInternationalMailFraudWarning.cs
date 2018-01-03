@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Threading;
-using Interapptive.Shared.Collections;
+﻿using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -7,52 +6,47 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
-    /// Validate First Class International shipments, ensure the user has accepted to not commit mail fraud
+    /// Warn users not to commit Mail Fraud for first class international shipments
     /// </summary>
     [Component]
-    public class PostalFirstClassInternationalShipmentValidator : IPostalFirstClassInternationalShipmentValidator
+    public class PostalFirstClassInternationalMailFraudWarning : IPostalFirstClassInternationalMailFraudWarning
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
-        private readonly Func<IFirstClassInternationalWarningDialog> warningFactory;
+        private readonly Func<IFirstClassInternationalWarningDialog> warningDialogFactory;
         private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PostalFirstClassInternationalShipmentValidator(
+        public PostalFirstClassInternationalMailFraudWarning(
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
-            Func<IFirstClassInternationalWarningDialog> warningFactory,
+            Func<IFirstClassInternationalWarningDialog> warningDialogFactory,
             IMessageHelper messageHelper)
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.endiciaAccountRepository = endiciaAccountRepository;
-            this.warningFactory = warningFactory;
+            this.warningDialogFactory = warningDialogFactory;
             this.messageHelper = messageHelper;
         }
 
         /// <summary>
-        /// Validate the shipment
+        /// Show the warning if applicable to the given shipment
         /// </summary>
-        public void ValidateShipment(IShipmentEntity shipment)
+        public void ShowWarningIfApplicable(IShipmentEntity shipment)
         {
             if (IsLetter(shipment) &&
                 shipment.Postal.Service == (int) PostalServiceType.InternationalFirst && 
                 shipment.Postal.CustomsContentType == (int) PostalCustomsContentType.Documents &&
                 ShouldShowWarningForShipmentsAccount(shipment))
             {
-                bool? result = messageHelper.ShowDialog(() => warningFactory());
+                bool? result = messageHelper.ShowDialog(() => warningDialogFactory());
                 
                 if (!result.HasValue || !result.Value)
                 {

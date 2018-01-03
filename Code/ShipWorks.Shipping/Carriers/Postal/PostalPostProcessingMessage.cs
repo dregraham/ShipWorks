@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         private bool ShowNotifiactionForShipment(IShipmentEntity shipment)
         {
-            bool showNotifiaction = IsdGapLabel(shipment.Postal) || 
+            bool showNotifiaction = IsGapLabel(shipment.Postal) || 
                 PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
 
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Determines whether the shipment is a Gap shipment.
         /// </summary>
-        private bool IsdGapLabel(IPostalShipmentEntity shipment)
+        private bool IsGapLabel(IPostalShipmentEntity shipment)
         {
             if (dateTimeProvider.Now < new DateTime(2018, 1, 21))
             {

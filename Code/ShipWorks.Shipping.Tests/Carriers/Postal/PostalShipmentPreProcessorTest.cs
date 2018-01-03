@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly AutoMock mock;
         private readonly PostalShipmentPreProcessor testObject;
         private readonly Mock<IDateTimeProvider> dateTimeProvider;
-        private readonly Mock<IPostalFirstClassInternationalShipmentValidator> internationalValidator;
+        private readonly Mock<IPostalFirstClassInternationalMailFraudWarning> internationalValidator;
         private readonly Mock<IDefaultShipmentPreProcessor> defaultPreProcessor;
 
         public PostalShipmentPreProcessorTest()
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             dateTimeProvider = mock.Mock<IDateTimeProvider>();
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2018, 2, 1));
-            internationalValidator = mock.Mock<IPostalFirstClassInternationalShipmentValidator>();
+            internationalValidator = mock.Mock<IPostalFirstClassInternationalMailFraudWarning>();
             defaultPreProcessor = mock.Mock<IDefaultShipmentPreProcessor>();
             
             testObject = mock.Create<PostalShipmentPreProcessor>();
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             ShipmentEntity shipment = new ShipmentEntity();
 
             testObject.Run(shipment, null, null);
-            internationalValidator.Verify(i => i.ValidateShipment(shipment));
+            internationalValidator.Verify(i => i.ShowWarningIfApplicable(shipment));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             dateTimeProvider.SetupGet(d => d.Now).Returns(new DateTime(2017, 2, 1));
 
             testObject.Run(shipment, null, null);
-            internationalValidator.Verify(i => i.ValidateShipment(It.IsAny<ShipmentEntity>()), Times.Never);
+            internationalValidator.Verify(i => i.ShowWarningIfApplicable(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
         [Fact]

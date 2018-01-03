@@ -6,18 +6,13 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Postal
 {
-    public class PostalFirstClassInternationalShipmentValidatorTest
+    public class PostalFirstClassInternationalMailFraudWarningTest
     {
         private readonly AutoMock mock;
         private readonly Mock<IMessageHelper> messageHelper;
@@ -28,9 +23,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> endiciaAccountRepository;
         private readonly EndiciaAccountEntity endiciaAccountOne;
         private readonly EndiciaAccountEntity endiciaAccountTwo;
-        private readonly PostalFirstClassInternationalShipmentValidator testObject;
+        private readonly PostalFirstClassInternationalMailFraudWarning testObject;
         
-        public PostalFirstClassInternationalShipmentValidatorTest()
+        public PostalFirstClassInternationalMailFraudWarningTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             messageHelper = mock.Mock<IMessageHelper>();
@@ -51,11 +46,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             endiciaAccountRepository.Setup(a => a.GetAccount(It.IsAny<ShipmentEntity>())).Returns(endiciaAccountOne);
             endiciaAccountRepository.Setup(a => a.GetAccountReadOnly(It.IsAny<ShipmentEntity>())).Returns(endiciaAccountOne);
 
-            testObject = mock.Create<PostalFirstClassInternationalShipmentValidator>();
+            testObject = mock.Create<PostalFirstClassInternationalMailFraudWarning>();
         }
 
         [Fact]
-        public void ValidateShipment_DelegatesToMessageHelperShowDialog_WhenShipmentIsUSpsAndMeetsConditionsForShowingWarning()
+        public void ShowWarningIfApplicable_DelegatesToMessageHelperShowDialog_WhenShipmentIsUSpsAndMeetsConditionsForShowingWarning()
         {
             var shipment = new ShipmentEntity()
             {
@@ -72,12 +67,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()));
         }
 
         [Fact]
-        public void ValidateShipment_DelegatesToAccountRepoForAllAccounts_WhenShipmentIsUSpsAndIsRateShop()
+        public void ShowWarningIfApplicable_DelegatesToAccountRepoForAllAccounts_WhenShipmentIsUSpsAndIsRateShop()
         {
             var shipment = new ShipmentEntity()
             {
@@ -94,12 +89,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             uspsAccountRepository.Verify(a => a.AccountsReadOnly);
         }
 
         [Fact]
-        public void ValidateShipment_DelegatesToAccountRepoForShipmentsAccount_WhenShipmentIsUSpsAndIsRateShopIsDisabled()
+        public void ShowWarningIfApplicable_DelegatesToAccountRepoForShipmentsAccount_WhenShipmentIsUSpsAndIsRateShopIsDisabled()
         {
             var shipment = new ShipmentEntity()
             {
@@ -116,12 +111,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             uspsAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
         [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentIsUSpsAndShowDialogReturnsFalse()
+        public void ShowWarningIfApplicable_ThrowsShippingException_WhenShipmentIsUSpsAndShowDialogReturnsFalse()
         {
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(false);
 
@@ -140,12 +135,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ValidateShipment(shipment));
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ShowWarningIfApplicable(shipment));
             Assert.Equal("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.", ex.Message);
         }
 
         [Fact]
-        public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForAllAccounts_WhenShipmentIsUSpsAndUserAcceptsWarningAndRateShoppingIsEnabled()
+        public void ShowWarningIfApplicable_SetsAcceptedFCMILetterWarningToTrueForAllAccounts_WhenShipmentIsUSpsAndUserAcceptsWarningAndRateShoppingIsEnabled()
         {
             uspsAccountOne.AcceptedFCMILetterWarning = false;
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(true);
@@ -165,13 +160,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             uspsAccountRepository.VerifyGet(r => r.Accounts);
             Assert.True(uspsAccountOne.AcceptedFCMILetterWarning);
         }
 
         [Fact]
-        public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForShipmentsAccount_WhenShipmentIsUspsAndUserAcceptsWarningAndRateShoppingIsDisabled()
+        public void ShowWarningIfApplicable_SetsAcceptedFCMILetterWarningToTrueForShipmentsAccount_WhenShipmentIsUspsAndUserAcceptsWarningAndRateShoppingIsDisabled()
         {
             uspsAccountOne.AcceptedFCMILetterWarning = false;
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(true);
@@ -191,12 +186,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             uspsAccountRepository.Verify(a => a.GetAccount(shipment));
             Assert.True(uspsAccountOne.AcceptedFCMILetterWarning);
         }
         [Fact]
-        public void ValidateShipment_DelegatesToMessageHelperShowDialog_WhenShipmentIsEndiciaAndMeetsConditionsForShowingWarning()
+        public void ShowWarningIfApplicable_DelegatesToMessageHelperShowDialog_WhenShipmentIsEndiciaAndMeetsConditionsForShowingWarning()
         {
             var shipment = new ShipmentEntity()
             {
@@ -209,12 +204,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()));
         }
 
         [Fact]
-        public void ValidateShipment_DelegatesToAccountRepoForAllAccounts_WhenShipmentIsEndiciaAndIsRateShop()
+        public void ShowWarningIfApplicable_DelegatesToAccountRepoForAllAccounts_WhenShipmentIsEndiciaAndIsRateShop()
         {
             var shipment = new ShipmentEntity()
             {
@@ -227,12 +222,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
         [Fact]
-        public void ValidateShipment_DelegatesToAccountRepoForShipmentsAccount_WhenShipmentIsEndiciaAndIsRateShopIsDisabled()
+        public void ShowWarningIfApplicable_DelegatesToAccountRepoForShipmentsAccount_WhenShipmentIsEndiciaAndIsRateShopIsDisabled()
         {
             var shipment = new ShipmentEntity()
             {
@@ -245,12 +240,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccountReadOnly(shipment));
         }
 
         [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentIsEndiciaAndShowDialogReturnsFalse()
+        public void ShowWarningIfApplicable_ThrowsShippingException_WhenShipmentIsEndiciaAndShowDialogReturnsFalse()
         {
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(false);
 
@@ -265,12 +260,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ValidateShipment(shipment));
+            ShippingException ex = Assert.Throws<ShippingException>(() => testObject.ShowWarningIfApplicable(shipment));
             Assert.Equal("Please update the customs general Content: type, the shipment Packaging: type, and/or the Service: type prior to processing the shipment.", ex.Message);
         }
 
         [Fact]
-        public void ValidateShipment_SetsAcceptedFCMILetterWarningToTrueForShipmentsAccount_WhenShipmentIsEndiciaAndUserAcceptsWarningAndRateShoppingIsDisabled()
+        public void ShowWarningIfApplicable_SetsAcceptedFCMILetterWarningToTrueForShipmentsAccount_WhenShipmentIsEndiciaAndUserAcceptsWarningAndRateShoppingIsDisabled()
         {
             endiciaAccountOne.AcceptedFCMILetterWarning = false;
             messageHelper.Setup(m => m.ShowDialog(It.IsAny<Func<IDialog>>())).Returns(true);
@@ -286,13 +281,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
             endiciaAccountRepository.Verify(a => a.GetAccount(shipment));
             Assert.True(endiciaAccountOne.AcceptedFCMILetterWarning);
         }
 
         [Fact]
-        public void ValidateShipment_DoesNotShowWarning_WhenShipmentIsEndiciaAndConsolidator()
+        public void ShowWarningIfApplicable_DoesNotShowWarning_WhenShipmentIsEndiciaAndConsolidator()
         {
             endiciaAccountOne.AcceptedFCMILetterWarning = false;
             endiciaAccountOne.EndiciaReseller = (int) EndiciaReseller.Express1;
@@ -309,7 +304,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                 },
             };
 
-            testObject.ValidateShipment(shipment);
+            testObject.ShowWarningIfApplicable(shipment);
 
             messageHelper.Verify(m => m.ShowDialog(It.IsAny<Func<IDialog>>()), Times.Never);
         }

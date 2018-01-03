@@ -19,18 +19,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public class PostalShipmentPreProcessor : IShipmentPreProcessor
     {
         private readonly IDefaultShipmentPreProcessor defaultPreProcessor;
-        private readonly IPostalFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator;
+        private readonly IPostalFirstClassInternationalMailFraudWarning firstClassInternationalMailFraudWarning;
         private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public PostalShipmentPreProcessor(IDefaultShipmentPreProcessor defaultPreProcessor, 
-            IPostalFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator, 
+            IPostalFirstClassInternationalMailFraudWarning firstClassInternationalMailFraudWarning, 
             IDateTimeProvider dateTimeProvider)
         {
             this.defaultPreProcessor = defaultPreProcessor;
-            this.firstClassInternationalShipmentValidator = firstClassInternationalShipmentValidator;
+            this.firstClassInternationalMailFraudWarning = firstClassInternationalMailFraudWarning;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // do this check after 1/21/218 because thats when the USPS starts these new rules
             if (dateTimeProvider.Now >= new DateTime(2018, 01, 21))
             {
-                firstClassInternationalShipmentValidator.ValidateShipment(shipment);
+                firstClassInternationalMailFraudWarning.ShowWarningIfApplicable(shipment);
             }
 
             return defaultPreProcessor.Run(shipment, selectedRate, configurationCallback);
