@@ -589,13 +589,70 @@
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChallengeQuestionResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\IndiciumResponse1.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DdpRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DHLeCManifestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DhlgmManifestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\GetExtraServiceRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\LabelNumberResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupAvailabilityResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupCancelResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupChangeResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackageStatusResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRatesResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRateTableResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\RefundResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ResetSuspendedAccountRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\RetailAccountsResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SCANResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SetAccountFeatureOptInResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SetPendingCloseAccountResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\TransactionsListingResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\UpdatePaymentInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\UserSignUpResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\VoidLabelResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService.wsdl" />
@@ -2346,10 +2403,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_Infopia_WebServices2_InfopiaWebService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL">
+    <WebReferenceUrl Include="https://elstestserver.endicia.com/LabelService/EwsLabelService.asmx%3fwsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\</RelPath>
-      <UpdateFromURL>https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL</UpdateFromURL>
+      <UpdateFromURL>https://elstestserver.endicia.com/LabelService/EwsLabelService.asmx%3fwsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
