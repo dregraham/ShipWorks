@@ -2,7 +2,10 @@
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using System;
@@ -18,10 +21,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         private readonly ShipmentEntity gapShipment;
         private readonly PostalPostProcessingMessage testObject;
         private readonly Mock<IDateTimeProvider> dateTimeProvider;
+        private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> endiciaAccountRepository;
+        private readonly EndiciaAccountEntity endiciaAccount;
 
         public PostalPostProcessingMessageTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            
+            endiciaAccount = new EndiciaAccountEntity();
+            endiciaAccountRepository = mock.Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
+            endiciaAccountRepository.Setup(e => e.GetAccountReadOnly(It.IsAny<ShipmentEntity>())).Returns(endiciaAccount);
 
             globalPostNotification = mock.Mock<IGlobalPostLabelNotification>();
             globalPostNotification.Setup(g => g.AppliesToCurrentUser()).Returns(true);
@@ -48,6 +57,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             };
             
             testObject = mock.Create<PostalPostProcessingMessage>();
+        }
+
+        [Fact]
+        public void Show_DoesNotShowGapNotification_WhenShipmentIsEndiciaAndConsolidator()
+        {
+            gapShipment.ShipmentTypeCode = ShipmentTypeCode.Endicia;
+            endiciaAccount.EndiciaReseller = (int) EndiciaReseller.Express1;
+
+            testObject.Show(new[] { gapShipment });
+
+            globalPostNotification.Verify(g => g.Show(), Times.Never);
+        }
+
+        [Fact]
+        public void Show_DeligatesToEndiciaAccountRepository_WhenShipmentIsEndiciaAndGap()
+        {
+            gapShipment.ShipmentTypeCode = ShipmentTypeCode.Endicia;
+
+            testObject.Show(new[] { gapShipment });
+
+            endiciaAccountRepository.Verify(r => r.GetAccountReadOnly(gapShipment));
         }
 
         [Fact]
