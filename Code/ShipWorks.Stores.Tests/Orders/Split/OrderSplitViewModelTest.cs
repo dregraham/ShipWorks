@@ -56,8 +56,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             await testObject.GetSplitDetailsFromUser(order, "foo").Recover(_ => null);
 
-            Assert.True(testObject.Items.Any(x => x.Name == "Foo" && x.OriginalQuantity.IsEquivalentTo(2)));
-            Assert.True(testObject.Items.Any(x => x.Name == "Bar" && x.OriginalQuantity.IsEquivalentTo(3)));
+            Assert.True(testObject.Items.Any(x => x.Name == "Foo" && x.OriginalQuantity == 2));
+            Assert.True(testObject.Items.Any(x => x.Name == "Bar" && x.OriginalQuantity == 3));
         }
 
         [Fact]

@@ -8,7 +8,6 @@ namespace ShipWorks.Stores.Orders.Split
     /// <summary>
     /// Class for splitting order items between two orders
     /// </summary>
-    [Component]
     public class OrderItemSplitter : IOrderDetailSplitter
     {
         /// <summary>
