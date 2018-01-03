@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
             globalPostShipment = new ShipmentEntity()
             {
+                Processed = true,
                 Postal = new PostalShipmentEntity()
                 {
                     Service = (int)PostalServiceType.GlobalPostEconomyIntl
@@ -43,6 +44,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
             gapShipment = new ShipmentEntity()
             {
+                Processed = true,
                 Postal = new PostalShipmentEntity()
                 {
                     Service = (int)PostalServiceType.InternationalFirst,
