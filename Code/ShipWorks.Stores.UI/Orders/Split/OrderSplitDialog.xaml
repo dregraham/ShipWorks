@@ -70,7 +70,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border BorderThickness="0,0,0,1" 
@@ -87,7 +86,7 @@
                             <TextBlock FontWeight="Bold">Order Items</TextBlock>
                             <TextBlock FontWeight="Bold" 
                                        Grid.Column="1"
-                                       Margin="8,0">This Order</TextBlock>
+                                       Margin="8,0,16,0">This Order</TextBlock>
                             <TextBlock FontWeight="Bold" 
                                        Grid.Column="2"
                                        Margin="8,0,0,0">New Order</TextBlock>
@@ -96,17 +95,10 @@
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" IsTabStop="False">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <local:OrderSplitItem DataContext="{Binding .}" 
-                                                      ShowDecimals="{Binding IsChecked, ElementName=ShowDecimals}"  />
+                                <local:OrderSplitItem DataContext="{Binding .}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <CheckBox Grid.Row="2" 
-                              Margin="0,4,6,0"
-                              HorizontalAlignment="Right"
-                              VerticalContentAlignment="Center"
-                              IsChecked="{Binding ShowItemQuantityDecimals,Mode=OneTime}"
-                              x:Name="ShowDecimals">Show decimals</CheckBox>
                 </Grid>
 
                 <Grid Margin="0, 12, 0, 0"
@@ -131,9 +123,9 @@
 
                             <TextBlock FontWeight="Bold">Order Charges</TextBlock>
                             <TextBlock FontWeight="Bold" Grid.Column="1"
-                           Margin="4,0">This Order</TextBlock>
+                           Margin="0,0,16,0">This Order</TextBlock>
                             <TextBlock FontWeight="Bold" Grid.Column="2"
-                           Margin="4,0,0,0">New Order</TextBlock>
+                           Margin="20,0,0,0">New Order</TextBlock>
                         </Grid>
                     </Border>
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Charges}" IsTabStop="False">
@@ -154,12 +146,12 @@
                                    HorizontalAlignment="Right">Total:</TextBlock>
                         <TextBlock FontWeight="Bold" 
                                    Grid.Column="1"
-                                   Margin="0,0,8,0"
+                                   Margin="0,0,16,0"
                                    HorizontalAlignment="Right"
                                    Text="{Binding OriginalTotalCharge, StringFormat='c'}" />
                         <TextBlock FontWeight="Bold" 
                                    Grid.Column="2"
-                                   Margin="0,0,18,0"
+                                   Margin="0,0,21,0"
                                    HorizontalAlignment="Right"
                                    Text="{Binding SplitTotalCharge, StringFormat='c'}" />
                     </Grid>

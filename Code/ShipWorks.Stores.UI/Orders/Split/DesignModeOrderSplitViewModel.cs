@@ -1,7 +1,7 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Orders.Split;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Split;
 
 namespace ShipWorks.Stores.UI.Orders.Split
 {
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.UI.Orders.Split
         /// <summary>
         /// Total of the split order's charges
         /// </summary>
-        public decimal SplitTotalCharge => Charges.Sum(x => x.SplitAmount);
+        public decimal SplitTotalCharge => Charges.Sum(x => x.SplitAmountValue);
 
         /// <summary>
         /// Order items

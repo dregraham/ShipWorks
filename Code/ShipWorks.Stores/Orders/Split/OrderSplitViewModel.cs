@@ -1,13 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Orders.Split.Errors;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -16,6 +7,15 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Orders.Split.Errors;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -194,20 +194,20 @@ namespace ShipWorks.Stores.Orders.Split
         private void UpdateTotalCharges(string _propertyName)
         {
             OriginalTotalCharge = Charges.Select(x => x.OriginalAmount).Sum();
-            SplitTotalCharge = Charges.Select(x => x.SplitAmount).Sum();
+            SplitTotalCharge = Charges.Select(x => x.SplitAmountValue).Sum();
         }
 
         /// <summary>
         /// Build the list of item charges
         /// </summary>
         private IDictionary<long, decimal> BuildItemCharges() =>
-            Charges.ToImmutableDictionary(x => x.OrderChargeID, x => x.SplitAmount);
+            Charges.ToImmutableDictionary(x => x.OrderChargeID, x => x.SplitAmountValue);
 
         /// <summary>
         /// Build the list of item quantities
         /// </summary>
         private IDictionary<long, decimal> BuildItemQuantities() =>
-            Items.ToImmutableDictionary(x => x.OrderItemID, x => x.SplitQuantity);
+            Items.ToImmutableDictionary(x => x.OrderItemID, x => x.SplitQuantityValue);
 
         /// <summary>
         /// Handle the confirmation of combining orders

@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Assert.Equal(1050, testObject.OrderChargeID);
             Assert.Equal("Foo", testObject.Type);
             Assert.Equal(3, testObject.OriginalAmount);
-            Assert.Equal(0, testObject.SplitAmount);
+            Assert.Equal(0, testObject.SplitAmountValue);
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             var order = new OrderChargeEntity { Amount = total };
             var testObject = new OrderSplitChargeViewModel(order);
 
-            testObject.SplitAmount = split;
+            testObject.SplitAmount = split.ToString();
 
             Assert.Equal(expected, testObject.OriginalAmount);
         }
@@ -60,9 +60,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             var order = new OrderChargeEntity { Amount = total };
             var testObject = new OrderSplitChargeViewModel(order);
 
-            testObject.SplitAmount = split;
+            testObject.SplitAmount = split.ToString();
 
-            Assert.Equal(expected, testObject.SplitAmount);
+            Assert.Equal(expected, testObject.SplitAmountValue);
         }
     }
 }

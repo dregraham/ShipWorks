@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
@@ -122,8 +121,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 {
                     testObject.Items = new[]
                     {
-                        new OrderSplitItemViewModel(new OrderItemEntity { OrderItemID = 1050, Quantity = 2}) { SplitQuantity = 1},
-                        new OrderSplitItemViewModel(new OrderItemEntity { OrderItemID = 2050, Quantity = 6}) { SplitQuantity = 2}
+                        new OrderSplitItemViewModel(new OrderItemEntity { OrderItemID = 1050, Quantity = 2}) { SplitQuantity = "1"},
+                        new OrderSplitItemViewModel(new OrderItemEntity { OrderItemID = 2050, Quantity = 6}) { SplitQuantity = "2"}
                     };
                 })
                 .ReturnsAsync(true);
@@ -144,8 +143,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 {
                     testObject.Charges = new[]
                     {
-                        new OrderSplitChargeViewModel(new OrderChargeEntity { OrderChargeID = 1050, Amount = 2}) { SplitAmount = 1},
-                        new OrderSplitChargeViewModel(new OrderChargeEntity { OrderChargeID = 2050, Amount = 6}) { SplitAmount = 2}
+                        new OrderSplitChargeViewModel(new OrderChargeEntity { OrderChargeID = 1050, Amount = 2}) { SplitAmount = "1"},
+                        new OrderSplitChargeViewModel(new OrderChargeEntity { OrderChargeID = 2050, Amount = 6}) { SplitAmount = "2"}
                     };
                 })
                 .ReturnsAsync(true);

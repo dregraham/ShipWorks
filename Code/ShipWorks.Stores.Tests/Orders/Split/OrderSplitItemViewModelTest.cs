@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Assert.Equal(1050, testObject.OrderItemID);
             Assert.Equal("Foo", testObject.Name);
             Assert.Equal(3, testObject.OriginalQuantity);
-            Assert.Equal(0, testObject.SplitQuantity);
+            Assert.Equal(0, testObject.SplitQuantityValue);
             Assert.Contains("Bar: This is bar", testObject.Attributes);
             Assert.Contains("Baz: This is baz", testObject.Attributes);
         }
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             var order = new OrderItemEntity { Quantity = (double) total };
             var testObject = new OrderSplitItemViewModel(order);
 
-            testObject.SplitQuantity = split;
+            testObject.SplitQuantity = split.ToString();
 
             Assert.Equal(expected, testObject.OriginalQuantity);
         }
@@ -64,9 +64,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             var order = new OrderItemEntity { Quantity = (double) total };
             var testObject = new OrderSplitItemViewModel(order);
 
-            testObject.SplitQuantity = split;
+            testObject.SplitQuantity = split.ToString();
 
-            Assert.Equal(expected, testObject.SplitQuantity);
+            Assert.Equal(expected, testObject.SplitQuantityValue);
         }
     }
 }

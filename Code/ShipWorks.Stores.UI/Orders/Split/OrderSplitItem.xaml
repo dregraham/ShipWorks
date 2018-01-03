@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Split"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:ui="http://schemas.shipworks.com/ui"
              FontFamily="Tahoma"
              
@@ -50,7 +49,7 @@
             </Grid>
 
             <DockPanel Grid.Column="1"
-                       Margin="8,0">
+                       Margin="8,0,16,0">
                 <TextBlock DockPanel.Dock="Left"
                        VerticalAlignment="Center">Qty</TextBlock>
                 
@@ -59,17 +58,34 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center" />
             </DockPanel>
-            
-            <syncfusion:UpDown Grid.Column="2" 
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Stretch"
-                               ApplyZeroColor="False"
-                               TextAlignment="Right"
-                               Value="{Binding SplitQuantity}"
-                               MinValue="0"
-                               MaxValue="{Binding TotalQuantity}"
-                               NumberDecimalDigits="{Binding ShowDecimals,RelativeSource={RelativeSource AncestorType=UserControl},Converter={StaticResource NumberOfDecimals}}"
-                               Margin="8,0,0,0" />
+
+            <Grid Grid.Column="2"
+                  VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                </Grid.ColumnDefinitions>
+
+                <RepeatButton Grid.Column="0" 
+                        VerticalAlignment="Center"
+                        Command="{Binding Increment}"
+                        Content="+" />
+
+                <TextBox Grid.Column="1"
+                         Margin="2,0"
+                         MaxLength="10"
+                     VerticalAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
+                     HorizontalContentAlignment="Right"
+                         VerticalContentAlignment="Center"
+                     Text="{Binding SplitQuantity}"/>
+
+                <RepeatButton Grid.Column="2"
+                        VerticalAlignment="Center"
+                        Command="{Binding Decrement}"
+                        Content="-" />
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

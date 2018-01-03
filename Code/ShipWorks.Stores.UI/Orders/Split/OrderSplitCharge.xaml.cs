@@ -7,9 +7,9 @@ namespace ShipWorks.Stores.UI.Orders.Split
     /// </summary>
     public partial class OrderSplitCharge : UserControl
     {
-        public OrderSplitCharge()
-        {
-            InitializeComponent();
-        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OrderSplitCharge() => InitializeComponent();
     }
 }
