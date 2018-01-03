@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using System;
 using Interapptive.Shared;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Static list of UpsServicePackageTypeSettings
         /// The list is defined in the ServicePackageValidationSettings getter
         /// </summary>
-        static Lazy<List<UpsServicePackageTypeSetting>> servicePackageSettings = new Lazy<List<UpsServicePackageTypeSetting>>(()=> GetServicePackageSettings());
+        static readonly Lazy<List<UpsServicePackageTypeSetting>> servicePackageSettings = new Lazy<List<UpsServicePackageTypeSetting>>(()=> GetServicePackageSettings());
 
         readonly UpsServiceType serviceType;
         readonly UpsPackagingType packageType;
@@ -172,29 +173,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Validate each package in the shipment
             foreach (var package in shipment.Ups.Packages)
             {
-                Validate((UpsServiceType)shipment.Ups.Service, (UpsPackagingType)package.PackagingType, 
-                    (float)UpsUtility.GetPackageTotalWeight(package), 
-                    numberOfPackages, package.DryIceEnabled, package.DryIceWeight, (UpsDryIceRegulationSet)package.DryIceRegulationSet,
-                    package.VerbalConfirmationEnabled);
+                Validate((UpsServiceType)shipment.Ups.Service, package, numberOfPackages);
             }
         }
 
         /// <summary>
         /// Method to validate a package against all defined UpsServicePackageTypeSetting entries
         /// </summary>
-        /// <param name="upsServiceType"></param>
-        /// <param name="upsPackageType"></param>
-        /// <param name="weightInPounds"></param>
-        /// <param name="numberOfPackages"></param>
-        /// <param name="dryIceEnabled"></param>
-        /// <param name="dryIceWeight"></param>
-        /// <param name="dryIceRegulationSet"></param>
-        /// <param name="verbalConfirmationEnabled"></param>
         /// <exception cref="ShippingException" />
-        [NDependIgnoreTooManyParams]
         [NDependIgnoreComplexMethodAttribute]
-        private static void Validate(UpsServiceType upsServiceType, UpsPackagingType upsPackageType, float weightInPounds, int numberOfPackages, bool dryIceEnabled, double dryIceWeight, UpsDryIceRegulationSet dryIceRegulationSet, bool verbalConfirmationEnabled)
+        private static void Validate(UpsServiceType upsServiceType, IUpsPackageEntity package, int numberOfPackages)
         {
+            UpsPackagingType upsPackageType = (UpsPackagingType) package.PackagingType;
+            float weightInPounds = (float) UpsUtility.GetPackageTotalWeight(package);
             // Find the setting entry for the given service type and package type
             UpsServicePackageTypeSetting setting = ServicePackageValidationSettings.FirstOrDefault(s => s.ServiceType == upsServiceType &&
                                                                                                         s.PackageType == upsPackageType);
@@ -202,37 +193,34 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If we didn't find a setting, it is not a valid combination, so throw.
             if (setting == null)
             {
-                string allowedPackageTypes = string.Format("Allowed package types for {0} are:", EnumHelper.GetDescription(upsServiceType));
+                string allowedPackageTypes = $"Allowed package types for {EnumHelper.GetDescription(upsServiceType)} are:";
                 foreach (UpsServicePackageTypeSetting upsServicePackageTypeSetting in ServicePackageValidationSettings.Where(s => s.ServiceType == upsServiceType))
                 {
-                    allowedPackageTypes = string.Format("{0}{1}{2}", 
-                        allowedPackageTypes, 
-                        Environment.NewLine,
-                        EnumHelper.GetDescription(upsServicePackageTypeSetting.PackageType));
+                    allowedPackageTypes =
+                        $"{allowedPackageTypes}{Environment.NewLine}{EnumHelper.GetDescription(upsServicePackageTypeSetting.PackageType)}";
                 }
 
-                throw new ShippingException(string.Format("The Service type and package type combination you've selected is invalid. {0}{0}{1}", Environment.NewLine, allowedPackageTypes));
+                throw new ShippingException(
+                    $"The Service type and package type combination you've selected is invalid. {Environment.NewLine}{Environment.NewLine}{allowedPackageTypes}");
             }
 
             // Check to see if dry ice is allowed.
-            if (dryIceEnabled && !setting.dryIceAllowed)
+            if (package.DryIceEnabled && !setting.dryIceAllowed)
             {
-                throw new ShippingException(string.Format("Dry ice is not allowed for {0} - {1}.",
-                                                          EnumHelper.GetDescription(upsServiceType),
-                                                          EnumHelper.GetDescription(upsPackageType)));
+                throw new ShippingException(
+                    $"Dry ice is not allowed for {EnumHelper.GetDescription(upsServiceType)} - {EnumHelper.GetDescription(upsPackageType)}.");
             }
 
-            if (dryIceEnabled && dryIceWeight > 5.5 && dryIceRegulationSet == UpsDryIceRegulationSet.Cfr)
+            if (package.DryIceEnabled && package.DryIceWeight > 5.5 && (UpsDryIceRegulationSet) package.DryIceRegulationSet == UpsDryIceRegulationSet.Cfr)
             {
                 throw new ShippingException("UPS doesn't allow more than 5.5 pounds of Dry Ice for CFR shipments.");
             }
 
             // Check to see if verbal confirmation is allowed.
-            if (verbalConfirmationEnabled && !setting.verbalConfirmationAllowed)
+            if (package.VerbalConfirmationEnabled && !setting.verbalConfirmationAllowed)
             {
-                throw new ShippingException(string.Format("Verbal confirmation is not allowed for {0} - {1}.",
-                                                          EnumHelper.GetDescription(upsServiceType),
-                                                          EnumHelper.GetDescription(upsPackageType)));
+                throw new ShippingException(
+                    $"Verbal confirmation is not allowed for {EnumHelper.GetDescription(upsServiceType)} - {EnumHelper.GetDescription(upsPackageType)}.");
             }
 
             // If the setting doesn't allow the number of packages, throw
@@ -249,9 +237,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     throw new ShippingException("Mail Innovations only allows 1 package per shipment.");
                 }
                 
-                throw new ShippingException(string.Format("UPS only allows 1 package per shipment for {0} - {1}.",
-                                                          EnumHelper.GetDescription(upsServiceType),
-                                                          EnumHelper.GetDescription(upsPackageType)));
+                throw new ShippingException(
+                    $"UPS only allows 1 package per shipment for {EnumHelper.GetDescription(upsServiceType)} - {EnumHelper.GetDescription(upsPackageType)}.");
             }
 
             // Convert the weight to ounces if required
@@ -264,11 +251,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If the allowed weight falls outside bounds, throw.
             if (weight < setting.minWeight || weight > setting.maxWeight)
             {
-                string msg = string.Format("The allowed weight for {0} - {1} is {2} to {3} {4}.",
-                    EnumHelper.GetDescription(upsServiceType),
-                    EnumHelper.GetDescription(upsPackageType),
-                    setting.minWeight, setting.maxWeight,
-                    EnumHelper.GetDescription(setting.WeightUnitOfMeasure).ToLowerInvariant());
+                string msg =
+                    $"The allowed weight for {EnumHelper.GetDescription(upsServiceType)} - {EnumHelper.GetDescription(upsPackageType)} is {setting.minWeight} to {setting.maxWeight} {EnumHelper.GetDescription(setting.WeightUnitOfMeasure).ToLowerInvariant()}.";
 
                 throw new ShippingException(msg);
             }

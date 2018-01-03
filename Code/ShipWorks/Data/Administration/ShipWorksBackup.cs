@@ -35,13 +35,13 @@ namespace ShipWorks.Data.Administration
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksBackup));
 
         // File the backup will be written to \ restored from
-        IProgressProvider progress;
+        readonly IProgressProvider progress;
 
         // The user that is doing the backup
-        long userID = -1;
+        readonly long userID = -1;
 
         // The SqlSession that holds the connection information for the database to backup\restore
-        SqlSession sqlSession;
+        readonly SqlSession sqlSession;
 
         // Static (global) event that can notify any time a restore is starting.
         public static event EventHandler RestoreStarting;
@@ -517,20 +517,20 @@ namespace ShipWorks.Data.Administration
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
 
-                string targetPhysDb;
-                string targetPhysLog;
-                GetPhysicalFileLocations(con, out targetPhysDb, out targetPhysLog);
+                string targetDb;
+                string targetLog;
+                GetPhysicalFileLocations(con, out targetDb, out targetLog);
 
-                log.InfoFormat("Data file: {0}", targetPhysDb);
-                log.InfoFormat("Log file: {0}", targetPhysLog);
+                log.InfoFormat("Data file: {0}", targetDb);
+                log.InfoFormat("Log file: {0}", targetLog);
 
-                if (targetPhysDb == null || targetPhysLog == null)
+                if (targetDb == null || targetLog == null)
                 {
                     throw new FileNotFoundException("Could not locate physical database files.");
                 }
 
-                string sourceLogicalDb = null;
-                string sourceLogicalLog = null;
+                string sourceDb = null;
+                string sourceLog = null;
 
                 // We have to move the original logical files to the the file locations we are restoring to.  First we find
                 // the current logical file names.
@@ -549,12 +549,12 @@ namespace ShipWorks.Data.Administration
 
                             if (type == "D")
                             {
-                                sourceLogicalDb = (string) reader["LogicalName"];
+                                sourceDb = (string) reader["LogicalName"];
                             }
 
                             if (type == "L")
                             {
-                                sourceLogicalLog = (string) reader["LogicalName"];
+                                sourceLog = (string) reader["LogicalName"];
                             }
                         }
                     }
@@ -573,17 +573,19 @@ namespace ShipWorks.Data.Administration
                     }
                 }
 
-                log.InfoFormat("Logical Data file: {0}", sourceLogicalDb);
-                log.InfoFormat("Logical Log file: {0}", sourceLogicalLog);
+                log.InfoFormat("Logical Data file: {0}", sourceDb);
+                log.InfoFormat("Logical Log file: {0}", sourceLog);
 
                 // See if we have everything we need
-                if (sourceLogicalDb == null || sourceLogicalLog == null)
+                if (sourceDb == null || sourceLog == null)
                 {
                     throw new InvalidOperationException("The logical file groups could not be located in the SQL Server backup.");
                 }
 
-                ExecuteSqlRestore(con, database.DatabaseName, database.BackupFile, sourceLogicalDb, sourceLogicalLog, targetPhysDb, targetPhysLog, progress);
-
+                DbCommand cmdRestore = CreateRestoreCommand(sourceDb, sourceLog, targetDb, targetLog, con);
+                SetupRestoreParameters(database, cmdRestore);
+                ExecuteSqlRestore(con, cmdRestore, database.DatabaseName, progress);
+  
                 progress.Detail = "Done";
                 progress.Completed();
             }
@@ -592,15 +594,15 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Gets the physical locations of the database files of the active database on the connection
         /// </summary>
-        private static void GetPhysicalFileLocations(DbConnection con, out string targetPhysDb, out string targetPhysLog)
+        private static void GetPhysicalFileLocations(DbConnection con, out string targetDb, out string targetLog)
         {
             DbCommand cmd = DbCommandProvider.Create(con);
             cmd.CommandText = "sp_helpfile";
             cmd.CommandType = CommandType.StoredProcedure;
 
             // set outputs
-            targetPhysDb = null;
-            targetPhysLog = null;
+            targetDb = null;
+            targetLog = null;
 
             // Determine current physical files
             using (DbDataReader reader = DbCommandProvider.ExecuteReader(cmd))
@@ -612,12 +614,12 @@ namespace ShipWorks.Data.Administration
 
                     if (usage == "log only")
                     {
-                        targetPhysLog = file;
+                        targetLog = file;
                     }
 
                     if (usage == "data only")
                     {
-                        targetPhysDb = file;
+                        targetDb = file;
                     }
                 }
             }
@@ -626,8 +628,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Execute the restore operation
         /// </summary>
-        [NDependIgnoreTooManyParams]
-        private void ExecuteSqlRestore(DbConnection con, string databaseName, string backupFilePath, string sourceLogicalDb, string sourceLogicalLog, string targetPhysDb, string targetPhysLog, ProgressItem progress)
+        private void ExecuteSqlRestore(DbConnection con, DbCommand cmdRestore, string databaseName, ProgressItem progress)
         {
             RestoreStarting?.Invoke(this, EventArgs.Empty);
 
@@ -641,18 +642,6 @@ namespace ShipWorks.Data.Administration
 
             try
             {
-                // Determine physical names of the backup target
-                DbCommand cmdRestore = DbCommandProvider.Create(con);
-                cmdRestore.CommandText =
-                    "RESTORE DATABASE @Database  " +
-                    " FROM DISK = @FilePath      " +
-                    " WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE, " +
-                    "  MOVE '" + sourceLogicalDb + "' TO '" + targetPhysDb + "', " +
-                    "  MOVE '" + sourceLogicalLog + "' TO '" + targetPhysLog + "'";
-
-                cmdRestore.AddParameterWithValue("@FilePath", backupFilePath);
-                cmdRestore.AddParameterWithValue("@Database", databaseName);
-
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
                 // InfoMessage will provide progress updates
@@ -673,7 +662,6 @@ namespace ShipWorks.Data.Administration
                 progress.Detail = "Initiating restore";
 
                 // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                cmdRestore.CommandTimeout = 1800;
                 DbCommandProvider.ExecuteScalar(cmdRestore);
             }
             finally
@@ -692,6 +680,33 @@ namespace ShipWorks.Data.Administration
 
                 SqlConnection.ClearAllPools();
             }
+        }
+
+        /// <summary>
+        /// Creates the Restore DbCommand
+        /// </summary>
+        private static DbCommand CreateRestoreCommand(string sourceDb, string sourceLog, string targetDb, string targetLog, DbConnection con)
+        {
+            DbCommand cmdRestore = DbCommandProvider.Create(con);
+            cmdRestore.CommandText =
+                "RESTORE DATABASE @Database  " +
+                " FROM DISK = @FilePath      " +
+                " WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE, " +
+                "  MOVE '" + sourceDb + "' TO '" + targetDb + "', " +
+                "  MOVE '" + sourceLog + "' TO '" + targetLog + "'";
+
+            cmdRestore.CommandTimeout = 1800;
+
+            return cmdRestore;
+        }
+
+        /// <summary>
+        /// Sets the FilePath and Database parameters
+        /// </summary>
+        private static void SetupRestoreParameters(BackupDatabase database, DbCommand cmdRestore)
+        {
+            cmdRestore.AddParameterWithValue("@FilePath", database.BackupFile);
+            cmdRestore.AddParameterWithValue("@Database", database.DatabaseName);
         }
 
         #endregion
