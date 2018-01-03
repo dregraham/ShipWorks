@@ -6,14 +6,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Mark the web service as implementing the interface
     /// </summary>
-    public partial class SwsimV67 : ISwsimV67
+    public partial class SwsimV69 : ISwsimV69
     {
         /// <summary>
         /// Get account info
         /// </summary>
         public AccountInfoResult GetAccountInfo(Credentials credentials)
         {
-            AccountInfoV25 accountInfo;
+            AccountInfoV27 accountInfo;
             Address address;
             string email;
 
@@ -25,9 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Get rates
         /// </summary>
-        public RateV24[] GetRates(Credentials account, RateV24 rate)
+        public RateV25[] GetRates(Credentials account, RateV25 rate)
         {
-            RateV24[] rateResults;
+            RateV25[] rateResults;
 
             GetRates(account, rate, out rateResults);
 
