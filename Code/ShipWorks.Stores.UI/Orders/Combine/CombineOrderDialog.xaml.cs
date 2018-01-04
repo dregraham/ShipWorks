@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Stores.Orders.Combine;
 
 namespace ShipWorks.Stores.UI.Orders.Combine
@@ -14,7 +15,12 @@ namespace ShipWorks.Stores.UI.Orders.Combine
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrdersDialog() => InitializeComponent();
+        public CombineOrdersDialog()
+        {
+            InitializeComponent();
+
+            WindowStateSaver.Manage(this);
+        }
 
         /// <summary>
         /// Set the owner of this window
