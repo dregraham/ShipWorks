@@ -111,8 +111,7 @@ namespace ShipWorks.Templates.Emailing
             // Make a copy of the list so changes don't affect us
             this.keys = keys.ToList();
 
-            WindowStateSaver saver = new WindowStateSaver(this);
-            saver.ManageSplitter(splitContainer);
+            WindowStateSaver.Manage(this).ManageSplitter(splitContainer);
         }
 
         /// <summary>
@@ -562,7 +561,7 @@ namespace ShipWorks.Templates.Emailing
         }
 
         /// <summary>
-        /// Load suggestinos for the email button drop-downs
+        /// Load suggestions for the email button drop-downs
         /// </summary>
         private void LoadEmailAddressSuggestions(IList<TemplateResult> results)
         {
@@ -715,7 +714,7 @@ namespace ShipWorks.Templates.Emailing
         }
 
         /// <summary>
-        /// The backgorund loading of the message body has completed
+        /// The background loading of the message body has completed
         /// </summary>
         private void BackgroundLoadMessageBodyCompleted(MessageDraft draft, ProgressDisplayDelayer delayer, Exception error)
         {

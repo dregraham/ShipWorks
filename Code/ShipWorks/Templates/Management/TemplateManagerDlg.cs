@@ -1,28 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data;
-using ShipWorks.UI;
-using ShipWorks.Users;
-using Microsoft.Win32;
-using ShipWorks.Templates.Controls;
-using System.Windows.Forms.VisualStyles;
 using Interapptive.Shared;
-using ShipWorks.UI.Controls;
-using ShipWorks.Filters;
-using ShipWorks.UI.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.ApplicationCore.MessageBoxes;
-using ShipWorks.Users.Security;
-using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Appearance;
+using ShipWorks.ApplicationCore.MessageBoxes;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Properties;
+using ShipWorks.Templates.Controls;
+using ShipWorks.UI.Controls;
+using ShipWorks.UI.Utility;
+using ShipWorks.Users;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.Templates.Management
 {
@@ -33,7 +24,7 @@ namespace ShipWorks.Templates.Management
     public partial class TemplateManagerDlg : Form
     {
         FolderExpansionState folderState;
-        
+
         // Saved selection state
         long lastSelectedFallback;
         long lastSelectedID;
@@ -47,8 +38,7 @@ namespace ShipWorks.Templates.Management
         {
             InitializeComponent();
 
-            WindowStateSaver windowSaver = new WindowStateSaver(this);
-            windowSaver.ManageSplitter(splitContainer);
+            WindowStateSaver.Manage(this).ManageSplitter(splitContainer);
 
             templatePreview.Initialize();
 
@@ -84,7 +74,7 @@ namespace ShipWorks.Templates.Management
         }
 
         /// <summary>
-        /// Save the selection stae of the tree, so it can be restored on a reload
+        /// Save the selection state of the tree, so it can be restored on a reload
         /// </summary>
         private void SaveSelectionState()
         {
@@ -100,7 +90,7 @@ namespace ShipWorks.Templates.Management
         }
 
         /// <summary>
-        /// Reload the template tree.  If completeReload is true, instead of checking for changes, the tempalte manager completely 
+        /// Reload the template tree.  If completeReload is true, instead of checking for changes, the template manager completely 
         /// reloads all templates and folders.
         /// </summary>
         private void Reload()
@@ -226,7 +216,7 @@ namespace ShipWorks.Templates.Management
                 errorMessage = ex.Message;
             }
 
-            // Changing names could affect imports, so we do need to reload.  The grid doesnt like
+            // Changing names could affect imports, so we do need to reload.  The grid doesn't like
             // a reload happening in the middle of its callback to AfterRename, so we need to BeginInvoke this.
             BeginInvoke(new MethodInvoker(() =>
                 {
@@ -281,7 +271,7 @@ namespace ShipWorks.Templates.Management
         }
 
         /// <summary>
-        /// Move the given node to the specified target folder.  No exeptions are caught.
+        /// Move the given node to the specified target folder.  No exceptions are caught.
         /// </summary>
         private void MoveTemplate(TemplateTreeNode selected, TemplateFolderEntity targetFolder)
         {
@@ -458,7 +448,7 @@ namespace ShipWorks.Templates.Management
         }
 
         /// <summary>
-        /// Get the ID of of the template of the node represents a template, or the ID of every descendant template
+        /// Get the ID of the template of the node represents a template, or the ID of every descendant template
         /// if the node represents a folder.
         /// </summary>
         private List<long> GetTemplateOrDescendants(TemplateTreeNode node)
@@ -567,7 +557,7 @@ namespace ShipWorks.Templates.Management
 
             if (selectedNode != null)
             {
-                // For the builtin folders (System, Snippets) dont show anything but "New" on them - they cant be moved, copied, or edited
+                // For the builtin folders (System, Snippets) don't show anything but "New" on them - they cant be moved, copied, or edited
                 if (selectedNode.IsFolder && selectedNode.Folder.IsBuiltin)
                 {
                     foreach (ToolStripItem item in contextMenuTree.Items)

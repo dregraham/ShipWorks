@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Windows.Interop;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Stores.Orders.Split;
 
 namespace ShipWorks.Stores.UI.Orders.Split
@@ -14,7 +15,12 @@ namespace ShipWorks.Stores.UI.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitDialog() => InitializeComponent();
+        public OrderSplitDialog()
+        {
+            InitializeComponent();
+
+            WindowStateSaver.Manage(this);
+        }
 
         /// <summary>
         /// Set the owner of this window

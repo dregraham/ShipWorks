@@ -13,7 +13,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -23,7 +22,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -104,7 +102,7 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory, 
+            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             InitializeComponent();
@@ -175,9 +173,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void ManageWindowPositioning()
         {
-            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
-            windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+            WindowStateSaver.Manage(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize)
+                .ManageSplitter(splitContainer, "Splitter")
+                .ManageSplitter(ratesSplitContainer, "RateSplitter");
         }
 
         /// <summary>
@@ -1987,7 +1985,7 @@ namespace ShipWorks.Shipping
 
                 string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
 
-                messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates, 
+                messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates,
                     shipmentAdapterFactory.Get(shipment)));
             }
         }
