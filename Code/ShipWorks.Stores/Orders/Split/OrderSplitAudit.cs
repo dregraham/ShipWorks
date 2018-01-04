@@ -2,7 +2,6 @@
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Audit;
 
@@ -17,6 +16,8 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IAuditUtility auditUtility;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private const string SplitToOrderReasonFormat = "Split to order : {0}";
+        private const string SplitFromOrderReasonFormat = "Split from order : {0}";
 
         /// <summary>
         /// Constructor
@@ -31,25 +32,21 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Audit the original order and split order.
         /// </summary>
-        public async Task Audit(OrderEntity originalOrder, OrderEntity splitOrder)
+        public async Task Audit(IOrderEntity originalOrder, IOrderEntity splitOrder)
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                await AuditOrder(originalOrder, splitOrder, false, sqlAdapter).ConfigureAwait(false);
-                await AuditOrder(splitOrder, originalOrder, true, sqlAdapter).ConfigureAwait(false);
+                await AuditOrder(originalOrder, splitOrder, SplitToOrderReasonFormat, sqlAdapter).ConfigureAwait(false);
+                await AuditOrder(splitOrder, originalOrder, SplitFromOrderReasonFormat, sqlAdapter).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Audit a specific order
         /// </summary>
-        private async Task AuditOrder(OrderEntity fromOrder, OrderEntity toOrder, bool splitFromOrder, ISqlAdapter sqlAdapter)
+        private async Task AuditOrder(IOrderEntity fromOrder, IOrderEntity toOrder, string auditReasonFormat, ISqlAdapter sqlAdapter)
         {
-            string orderIdentifier = GetOrderIdentifier(toOrder);
-
-            string reason = splitFromOrder ? 
-                $"Split from order : { orderIdentifier }" : 
-                $"Split to order : { orderIdentifier }";
+            string reason = string.Format(auditReasonFormat, GetOrderIdentifier(toOrder));
 
             AuditReason auditReason = new AuditReason(AuditReasonType.SplitOrder, reason.Truncate(100));
 

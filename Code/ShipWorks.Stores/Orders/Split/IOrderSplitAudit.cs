@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -12,6 +11,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Audit the original order and split order.
         /// </summary>
-        Task Audit(OrderEntity originalOrder, OrderEntity splitOrder);
+        Task Audit(IOrderEntity originalOrder, IOrderEntity splitOrder);
     }
 }
