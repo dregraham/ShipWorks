@@ -80,10 +80,10 @@
                     <ColumnDefinition Width="16" />
                 </Grid.ColumnDefinitions>
 
-                <RepeatButton Grid.Column="0" 
+                <RepeatButton Grid.Column="0"
                         VerticalAlignment="Center"
-                        Command="{Binding Increment}"
-                        Content="+" />
+                        Command="{Binding Decrement}"
+                        Content="-" />
 
                 <TextBox Grid.Column="1"
                          Margin="2,0"
@@ -94,10 +94,10 @@
                          VerticalContentAlignment="Center"
                      Text="{Binding SplitQuantity}"/>
 
-                <RepeatButton Grid.Column="2"
+                <RepeatButton Grid.Column="2" 
                         VerticalAlignment="Center"
-                        Command="{Binding Decrement}"
-                        Content="-" />
+                        Command="{Binding Increment}"
+                        Content="+" />
             </Grid>
         </Grid>
     </Border>

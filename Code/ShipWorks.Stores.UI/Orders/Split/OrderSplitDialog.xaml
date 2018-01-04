@@ -137,8 +137,8 @@
                     <Grid Grid.Row="2" Margin="6,4,6,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderCharge" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderCharge" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderColumn" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderColumn" />
                         </Grid.ColumnDefinitions>
 
                         <TextBlock FontWeight="Bold"
