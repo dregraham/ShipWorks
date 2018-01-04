@@ -61,11 +61,11 @@
 
         <ScrollViewer Grid.Row="1" 
                       VerticalScrollBarVisibility="Auto"
+                      Grid.IsSharedSizeScope="True"
                       Padding="0,0,8,0"
                       Margin="0,0,-8,0">
             <StackPanel>
                 <Grid Margin="0, 8, 0, 0"
-                      Grid.IsSharedSizeScope="True"
                       Visibility="{Binding AnyItems, Converter={StaticResource ShowWhenTrue}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -79,8 +79,8 @@
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderItem" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderItem" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderColumn" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderColumn" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock FontWeight="Bold">Order Items</TextBlock>
@@ -102,7 +102,6 @@
                 </Grid>
 
                 <Grid Margin="0, 12, 0, 0"
-                      Grid.IsSharedSizeScope="True"
                       Visibility="{Binding AnyCharges, Converter={StaticResource ShowWhenTrue}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -117,8 +116,8 @@
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderCharge" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderCharge" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderColumn" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderColumn" />
                             </Grid.ColumnDefinitions>
 
                             <TextBlock FontWeight="Bold">Order Charges</TextBlock>

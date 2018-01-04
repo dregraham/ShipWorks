@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
@@ -35,8 +36,8 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Assert.Equal("Foo", testObject.Name);
             Assert.Equal(3, testObject.OriginalQuantity);
             Assert.Equal(0, testObject.SplitQuantityValue);
-            Assert.Contains("Bar: This is bar", testObject.Attributes);
-            Assert.Contains("Baz: This is baz", testObject.Attributes);
+            Assert.Contains(new KeyValuePair<string, string>("Bar", "This is bar"), testObject.Attributes);
+            Assert.Contains(new KeyValuePair<string, string>("Baz", "This is baz"), testObject.Attributes);
         }
 
         [Theory]

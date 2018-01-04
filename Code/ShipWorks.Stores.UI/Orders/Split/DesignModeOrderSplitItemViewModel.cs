@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.UI.Orders.Split
             Name = "Collegiate Cardigan";
             OriginalQuantity = 3;
             SplitQuantity = 1;
-            Attributes = new[] { "Size: Small", "Color: Red" };
+            Attributes = new Dictionary<string, string> { { "Size", "Small" }, { "Color", "Red" } };
         }
 
         /// <summary>
@@ -36,6 +36,6 @@ namespace ShipWorks.Stores.UI.Orders.Split
         /// <summary>
         /// List of attributes for the item
         /// </summary>
-        public IEnumerable<string> Attributes { get; }
+        public IEnumerable<KeyValuePair<string, string>> Attributes { get; }
     }
 }
