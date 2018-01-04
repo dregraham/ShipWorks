@@ -8805,7 +8805,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
-    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv67.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv69.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>
