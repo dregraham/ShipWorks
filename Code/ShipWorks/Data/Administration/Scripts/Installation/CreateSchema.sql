@@ -4568,7 +4568,8 @@ CREATE TABLE [dbo].[EndiciaAccount]
 [Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormAddressSource] [int] NOT NULL
+[ScanFormAddressSource] [int] NOT NULL,
+[AcceptedFCMILetterWarning] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaAccount] on [dbo].[EndiciaAccount]'

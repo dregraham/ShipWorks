@@ -7,28 +7,30 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Carriers.Postal;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Usps specific Shipment preprocessor
     /// </summary>
     [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Usps)]
-    public class UspsShipmentPreProcessor : IShipmentPreProcessor
+    [KeyedComponent(typeof(IShipmentPreProcessor), ShipmentTypeCode.Endicia)]
+    public class PostalShipmentPreProcessor : IShipmentPreProcessor
     {
         private readonly IDefaultShipmentPreProcessor defaultPreProcessor;
-        private readonly IUspsFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator;
+        private readonly IPostalFirstClassInternationalMailFraudWarning firstClassInternationalMailFraudWarning;
         private readonly IDateTimeProvider dateTimeProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsShipmentPreProcessor(IDefaultShipmentPreProcessor defaultPreProcessor, 
-            IUspsFirstClassInternationalShipmentValidator firstClassInternationalShipmentValidator, 
+        public PostalShipmentPreProcessor(IDefaultShipmentPreProcessor defaultPreProcessor, 
+            IPostalFirstClassInternationalMailFraudWarning firstClassInternationalMailFraudWarning, 
             IDateTimeProvider dateTimeProvider)
         {
             this.defaultPreProcessor = defaultPreProcessor;
-            this.firstClassInternationalShipmentValidator = firstClassInternationalShipmentValidator;
+            this.firstClassInternationalMailFraudWarning = firstClassInternationalMailFraudWarning;
             this.dateTimeProvider = dateTimeProvider;
         }
 
@@ -40,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // do this check after 1/21/218 because thats when the USPS starts these new rules
             if (dateTimeProvider.Now >= new DateTime(2018, 01, 21))
             {
-                firstClassInternationalShipmentValidator.ValidateShipment(shipment);
+                firstClassInternationalMailFraudWarning.Warn(shipment);
             }
 
             return defaultPreProcessor.Run(shipment, selectedRate, configurationCallback);

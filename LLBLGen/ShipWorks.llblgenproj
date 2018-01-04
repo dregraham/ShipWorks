@@ -905,6 +905,7 @@
       </EntityDefinition>
       <EntityDefinition Name="EndiciaAccount" ObjectID="278f2225-8342-4a89-b00f-6bddc72c4e31">
         <Fields>
+          <Field Name="AcceptedFCMILetterWarning" Type="bool" FieldIndex="26" />
           <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
           <Field Name="AccountType" Type="int" FieldIndex="7" />
           <Field Name="ApiInitialPassword" Type="string" MaxLength="250" FieldIndex="5" />
@@ -4226,7 +4227,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-12-27T19:28:53.6164645Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-02T21:53:08.2078573Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5250,6 +5251,7 @@
                     <Field Name="Email" Ordinal="24" DbType="12" Length="100" />
                     <Field Name="MailingPostalCode" Ordinal="25" DbType="12" Length="20" />
                     <Field Name="ScanFormAddressSource" Ordinal="26" DbType="8" Precision="10" />
+                    <Field Name="AcceptedFCMILetterWarning" Ordinal="27" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaProfile">
@@ -10959,6 +10961,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":EndiciaAccount" TargetName="ShipWorksLocal:dbo:EndiciaAccount">
           <FieldMappings>
+            <FieldMapping FieldName="AcceptedFCMILetterWarning" TargetFieldName="AcceptedFCMILetterWarning" />
             <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
             <FieldMapping FieldName="AccountType" TargetFieldName="AccountType" />
             <FieldMapping FieldName="ApiInitialPassword" TargetFieldName="ApiInitialPassword" />

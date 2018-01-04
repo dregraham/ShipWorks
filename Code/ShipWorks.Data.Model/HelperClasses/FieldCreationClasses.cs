@@ -6507,6 +6507,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.ScanFormAddressSource);}
 		}
+		/// <summary>Creates a new EndiciaAccountEntity.AcceptedFCMILetterWarning field instance</summary>
+		public static EntityField2 AcceptedFCMILetterWarning
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.AcceptedFCMILetterWarning);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaProfileEntity</summary>
