@@ -1197,6 +1197,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             rate.ShipDate = shipment.ShipDate;
             rate.DeclaredValue = shipment.CustomsValue;
 
+            if (CustomsManager.IsCustomsRequired(shipment))
+            {
+                rate.ContentTypeSpecified = true;
+                rate.ContentType = UspsUtility.GetApiContentType((PostalCustomsContentType) shipment.Postal.CustomsContentType);
+            }
+
             return rate;
         }
 
