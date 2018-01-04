@@ -17,6 +17,7 @@
              d:DesignWidth="300">
     <UserControl.Resources>
         <ui:BooleanToIntConverter x:Key="NumberOfDecimals" True="2" False="0" />
+        <ui:StringToVisibilityConverter x:Key="StringToVisibility" />
     </UserControl.Resources>
 
     <Border BorderThickness="0,0,0,1" 
@@ -25,8 +26,8 @@
         <Grid Grid.Row="0" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderItem" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderItem" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderColumn" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderColumn" />
             </Grid.ColumnDefinitions>
 
             <Grid>
@@ -35,14 +36,25 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text="{Binding Name, Mode=OneTime}" TextWrapping="WrapWithOverflow" />
                 <ItemsControl Grid.Row="1" IsTabStop="False"
-                          ItemsSource="{Binding Attributes}"
+                          ItemsSource="{Binding Attributes, Mode=OneTime}"
                           Margin="20,4,0,0"
                           Foreground="Gray">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock FontStyle="Italic" Text="{Binding .}" />
+                            <WrapPanel>
+                                <TextBlock FontStyle="Italic" 
+                                           FontWeight="Bold"
+                                           TextWrapping="WrapWithOverflow"
+                                           Visibility="{Binding Key, Converter={StaticResource StringToVisibility}, Mode=OneTime}">
+                                    <Run Text="{Binding Key, Mode=OneTime}" /><Run Text=":" />
+                                </TextBlock>
+                                <TextBlock FontStyle="Italic" 
+                                           Text="{Binding Value, Mode=OneTime}" 
+                                           Margin="4,0,0,0"
+                                           TextWrapping="WrapWithOverflow" />
+                            </WrapPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -51,6 +63,7 @@
             <DockPanel Grid.Column="1"
                        Margin="8,0,16,0">
                 <TextBlock DockPanel.Dock="Left"
+                           Margin="0,0,4,0"
                        VerticalAlignment="Center">Qty</TextBlock>
                 
                 <TextBlock DockPanel.Dock="Right"

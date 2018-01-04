@@ -22,8 +22,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="OrderChargeType" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderCharge" />
-                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderCharge" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="ThisOrderColumn" />
+                <ColumnDefinition Width="Auto" SharedSizeGroup="NewOrderColumn" />
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding Type}"

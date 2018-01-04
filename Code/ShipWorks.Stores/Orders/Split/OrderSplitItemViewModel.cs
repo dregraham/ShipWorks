@@ -34,8 +34,8 @@ namespace ShipWorks.Stores.Orders.Split
             TotalQuantity = (decimal) item.Quantity;
             OriginalQuantity = (decimal) item.Quantity;
             SplitQuantity = "0";
-            Attributes = item.OrderItemAttributes?.Select(x => $"{x.Name}: {x.Description}").ToImmutableList() ??
-                ImmutableList.Create(" ");
+            Attributes = item.OrderItemAttributes?.Select(x => new KeyValuePair<string, string>(x.Name, x.Description)).ToImmutableList() ??
+                ImmutableList.Create(new KeyValuePair<string, string>(string.Empty, " "));
 
             Increment = new RelayCommand(() => IncrementAction(), () => splitQuantity < TotalQuantity);
             Decrement = new RelayCommand(() => DecrementAction(), () => splitQuantity > 0);
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// List of attributes for the item
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IEnumerable<string> Attributes { get; }
+        public IEnumerable<KeyValuePair<string, string>> Attributes { get; }
 
         /// <summary>
         /// Gets the decimal split quantity
