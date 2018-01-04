@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -21,16 +22,20 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
+        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChannelAdvisorOrderLoader"/> class.
         /// </summary>
         /// <param name="orderChargeCalculator">The order charge calculator.</param>
         /// <param name="distributionCenters"></param>
-        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters)
+        public ChannelAdvisorOrderLoader(IOrderChargeCalculator orderChargeCalculator, 
+            IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters, 
+            Func<Type, ILog> loggerFactory)
         {
             this.orderChargeCalculator = orderChargeCalculator;
             this.distributionCenters = distributionCenters;
+            log = loggerFactory(typeof(ChannelAdvisorOrderLoader));
         }
 
         /// <summary>
@@ -74,8 +79,28 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // payments
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
 
-                // Update the total
-                orderToSave.OrderTotal = orderChargeCalculator.CalculateTotal(orderToSave);
+                SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
+            }
+        }
+
+        /// <summary>
+        /// Set the order total
+        /// </summary>
+        private void SetOrderTotal(ChannelAdvisorOrderEntity orderToSave, ChannelAdvisorOrder downloadedOrder, IOrderElementFactory orderElementFactory)
+        {
+            orderToSave.OrderTotal = downloadedOrder.TotalPrice;
+
+            decimal calculatedTotal = orderChargeCalculator.CalculateTotal(orderToSave);
+
+            // Sometimes ChannelAdvisor doesnt give us all of the discounts for the order, if the order total is different than what we calculate
+            // we need to figure out the difference so that the user can see that there was an aditional discount or cost
+            if (downloadedOrder.TotalPrice != calculatedTotal)
+            {
+                decimal adjustment = downloadedOrder.TotalPrice - calculatedTotal;
+
+                log.Info($"Order total for {downloadedOrder.ID} does not match our calculated total, adding an adjustment charge of {adjustment} to compensate for the discrepancy.");
+
+                orderElementFactory.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount", adjustment);
             }
         }
 
