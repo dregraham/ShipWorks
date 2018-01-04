@@ -85,6 +85,13 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         [Description("Combine Order")]
         [ImageResource("merge_icon_16x16")]
-        CombineOrder = 10
+        CombineOrder = 10,
+
+        /// <summary>
+        /// Order was split.
+        /// </summary>
+        [Description("Split Order")]
+        [ImageResource("split_icon_16x16")]
+        SplitOrder = 11
     }
 }
