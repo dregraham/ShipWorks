@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
         private readonly IOrderChargeCalculator orderChargeCalculator;
+        private readonly IOrderSplitAudit splitOrderAudit;
 
         /// <summary>
         /// Constructor
@@ -35,12 +36,15 @@ namespace ShipWorks.Stores.Orders.Split
             ISqlAdapterFactory sqlAdapterFactory,
             IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
-            IOrderChargeCalculator orderChargeCalculator)
+            IOrderChargeCalculator orderChargeCalculator,
+            IOrderSplitAudit splitOrderAudit
+            )
         {
             this.orderSplitGateway = orderSplitGateway;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderDetailSplitters = orderDetailSplitters;
             this.orderChargeCalculator = orderChargeCalculator;
+            this.splitOrderAudit = splitOrderAudit;
         }
 
         /// <summary>
@@ -52,14 +56,15 @@ namespace ShipWorks.Stores.Orders.Split
                 .LoadOrder(definition.Order.OrderID)
                 .Map(order => PerformSplit(order, definition))
                 .Bind(x => SaveOrders(x.original, x.split, progressProvider))
+                .Bind(x => AuditOrders(x.original, x.split))
                 .Map(newOrder => new Dictionary<long, string>
                 {
                     { definition.Order.OrderID, definition.Order.OrderNumberComplete },
-                    { newOrder.OrderID, newOrder.OrderNumberComplete}
+                    { newOrder.split.OrderID, newOrder.split.OrderNumberComplete}
                 })
                 .ConfigureAwait(false);
         }
-
+        
         /// <summary>
         /// Perform the split
         /// </summary>
@@ -85,17 +90,29 @@ namespace ShipWorks.Stores.Orders.Split
         }
 
         /// <summary>
+        /// Audit each order
+        /// </summary>
+        private async Task<(OrderEntity original, OrderEntity split)> AuditOrders(OrderEntity originalOrder, OrderEntity newOrderEntity)
+        {
+            await splitOrderAudit.Audit(originalOrder, newOrderEntity).ConfigureAwait(false);
+
+            return (originalOrder, newOrderEntity);
+        }
+
+        /// <summary>
         /// Save the orders
         /// </summary>
-        private async Task<OrderEntity> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
+        private async Task<(OrderEntity original, OrderEntity split)> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
-                return await SaveOrder(newOrderEntity, sqlAdapter)
+                await SaveOrder(newOrderEntity, sqlAdapter)
                     .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
                     .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
                     .Map(_ => newOrderEntity)
                     .ConfigureAwait(false);
+
+                return (originalOrder, newOrderEntity);
             }
         }
 
