@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -179,9 +180,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void RequestAddresses(object sender, DoWorkEventArgs e)
         {
-            IFedExShippingClerk fedExShippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IFedExShippingClerk fedExShippingClerk = lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment);
 
-            e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
+                e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
+            }
         }
 
         /// <summary>
@@ -196,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 CarrierException carrierException = e.Error as CarrierException;
                 if (carrierException != null)
                 {
-                    MessageHelper.ShowMessage(this,carrierException.Message);
+                    MessageHelper.ShowMessage(this, carrierException.Message);
 
                     Close();
                     return;
@@ -205,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 throw new Exception("Error returned finding drop off locations", e.Error);
             }
 
-            distanceAndLocationDetails = (DistanceAndLocationDetail[])e.Result;
+            distanceAndLocationDetails = (DistanceAndLocationDetail[]) e.Result;
 
             addressRadioButtons = new List<RadioButton>();
 

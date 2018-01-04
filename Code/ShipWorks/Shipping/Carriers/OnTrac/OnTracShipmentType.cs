@@ -441,10 +441,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// OnTrac always uses the residential indicator
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return true;
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Update the total weight of the shipment
@@ -477,7 +474,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Customs is never required for OnTrac.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             return false;
         }

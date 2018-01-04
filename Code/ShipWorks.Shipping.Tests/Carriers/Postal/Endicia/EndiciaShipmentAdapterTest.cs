@@ -41,24 +41,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Endicia
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new EndiciaShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<ICustomsManager>(),
-                mock.Create<IStoreManager>()));
+                new EndiciaShipmentAdapter(null, mock.Build<IShipmentTypeManager>(), mock.Build<ICustomsManager>(),
+                mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
 
             shipment.Postal.Endicia = null;
 
             Assert.Throws<ArgumentNullException>(() =>
-                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new EndiciaShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
 
             Assert.Throws<ArgumentNullException>(() =>
-                new EndiciaShipmentAdapter(shipment, null, mock.Create<ICustomsManager>(),
-                mock.Create<IStoreManager>()));
+                new EndiciaShipmentAdapter(shipment, null, mock.Build<ICustomsManager>(),
+                mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new EndiciaShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null,
-                mock.Create<IStoreManager>()));
+                new EndiciaShipmentAdapter(shipment, mock.Build<IShipmentTypeManager>(), null,
+                mock.Build<IStoreManager>()));
         }
 
         [Fact]

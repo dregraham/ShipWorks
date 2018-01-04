@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
@@ -43,9 +42,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         public OnlineCommandCreatorRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
-            IoC.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         /// <summary>

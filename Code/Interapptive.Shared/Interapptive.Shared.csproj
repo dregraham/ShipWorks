@@ -77,8 +77,8 @@
       <HintPath>..\..\packages\Apitron.PDF.Rasterizer.3.0.93.0\lib\net46\Apitron.PDF.Rasterizer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mef, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.Mef.4.0.0\lib\net45\Autofac.Integration.Mef.dll</HintPath>
@@ -95,6 +95,7 @@
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
       <Private>True</Private>
@@ -123,8 +124,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -191,6 +194,8 @@
     <Compile Include="Extensions\CharExtensions.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\NullableExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
@@ -214,6 +219,11 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Pdf\IPdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfColorDocument.cs" />
+    <Compile Include="Pdf\PdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfDocumentType.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
@@ -320,7 +330,6 @@
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IOpenFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
-    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialogException.cs" />
@@ -510,7 +519,7 @@
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectDeletedException.cs" />
-    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\PdfBlackAndWhiteDocument.cs" />
     <Compile Include="Properties\Flags.Designer.cs">
       <DependentUpon>Flags.resx</DependentUpon>
       <AutoGen>True</AutoGen>

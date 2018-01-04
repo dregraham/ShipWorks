@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
@@ -22,20 +23,53 @@ namespace ShipWorks.Startup
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        /// <remarks>
+        /// This method sets the current IoC instance, which means it is NOT thread-safe
+        /// </remarks>
         public static IContainer Initialize() =>
-            Initialize(new ContainerBuilder().Build());
+            IoC.Initialize(x => { }, AllAssemblies);
 
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
+        /// <remarks>
+        /// This method sets the current IoC instance, which means it is NOT thread-safe
+        /// </remarks>
         public static IContainer Initialize(IContainer container) =>
-            IoC.Initialize(BuildRegistrations(container));
+            IoC.Initialize(container, AllAssemblies);
 
         /// <summary>
-        /// Build the registrations in IoC container
+        /// Initialize the IoC container
         /// </summary>
-        public static IContainer BuildRegistrations(IContainer container) =>
-            IoC.BuildRegistrations(container, AllAssemblies);
+        /// <param name="addExtraRegistrations">
+        /// Extra registrations that will be applied after the defaults
+        /// </param>
+        /// <remarks>
+        /// This method sets the current IoC instance, which means it is NOT thread-safe
+        /// </remarks>
+        public static IContainer Initialize(Action<ContainerBuilder> addExtraRegistrations) =>
+            IoC.Initialize(addExtraRegistrations, AllAssemblies);
+
+        /// <summary>
+        /// Build the IoC container
+        /// </summary>
+        /// <remarks>
+        /// This method does NOT set the current IoC instance, which means it is thread-safe
+        /// </remarks>
+        public static IContainer Build() =>
+            IoC.Build(x => { }, AllAssemblies);
+
+        /// <summary>
+        /// Build the IoC container
+        /// </summary>
+        /// <param name="addExtraRegistrations">
+        /// Extra registrations that will be applied after the defaults
+        /// </param>
+        /// <remarks>
+        /// This method does NOT set the current IoC instance, which means it is thread-safe
+        /// </remarks>
+        public static IContainer Build(Action<ContainerBuilder> addExtraRegistrations) =>
+            IoC.Build(addExtraRegistrations, AllAssemblies);
 
         /// <summary>
         /// All ShipWorks assemblies to be used for dependency injection

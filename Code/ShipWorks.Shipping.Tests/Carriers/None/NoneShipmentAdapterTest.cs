@@ -34,8 +34,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.None
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new NoneShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new NoneShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
         }
 
         [Fact]

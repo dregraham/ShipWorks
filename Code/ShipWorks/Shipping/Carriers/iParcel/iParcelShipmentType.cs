@@ -6,9 +6,9 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -907,7 +907,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             bool requiresCustoms = base.IsCustomsRequiredByShipment(shipment);
 

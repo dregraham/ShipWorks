@@ -1,20 +1,16 @@
-﻿using Autofac;
+﻿using System;
+using System.IO;
+using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Pdf;
+using Moq;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
-using ShipWorks.Tests.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipEngine.ApiClient.Model;
-using Xunit;
-using ShipWorks.Data;
 using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.ApplicationCore.Logging;
-using Moq;
-using System.IO;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {
@@ -32,7 +28,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             shipment = new ShipmentEntity()
             {
                 ShipmentID = 123,
-                DhlExpress = new DhlExpressShipmentEntity(), 
+                DhlExpress = new DhlExpressShipmentEntity(),
                 ShipmentTypeCode = ShipmentTypeCode.DhlExpress
             };
 
@@ -82,7 +78,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.Save();
 
-            mock.Mock<IDataResourceManager>().Verify(r => r.CreateFromPdf(It.IsAny<MemoryStream>(), 123, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
+            mock.Mock<IDataResourceManager>()
+                .Verify(r => r.CreateFromPdf(
+                    PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(), 123, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
         }
 
 

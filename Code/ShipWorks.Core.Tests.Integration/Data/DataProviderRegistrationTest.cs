@@ -14,8 +14,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
         public DataProviderRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

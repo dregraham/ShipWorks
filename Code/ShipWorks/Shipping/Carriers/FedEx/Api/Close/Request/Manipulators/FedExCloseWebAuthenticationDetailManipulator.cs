@@ -31,7 +31,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             fedExSettings = new FedExSettings(settingsRepository);
         }
 
-
         /// <summary>
         /// Manipulates the specified request by setting the WebAuthenticationDetail property of a GroundCloseRequest object.
         /// </summary>

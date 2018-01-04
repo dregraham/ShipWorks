@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Startup;
 using Xunit;
-using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
@@ -18,8 +18,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public ShipDateManipulatorRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
+            container = ContainerInitializer.Build();
             expectedRegistrations = new Dictionary<ShipmentTypeCode, Type>
             {
                 {ShipmentTypeCode.Asendia, typeof(WeekdaysOnlyShipmentDateManipulator)},

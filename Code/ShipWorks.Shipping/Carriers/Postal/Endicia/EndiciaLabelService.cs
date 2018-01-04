@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private RateResult GetEndiciaRate(ShipmentEntity shipment, EndiciaApiClient endiciaApiClient)
         {
-            List<RateResult> endiciaRates = endiciaApiClient.GetRatesFast(shipment, endiciaShipmentType);
+            List<RateResult> endiciaRates = endiciaApiClient.GetRates(shipment, endiciaShipmentType);
             RateResult endiciaRate =
                 endiciaRates
                     .Where(er => er.Selectable)

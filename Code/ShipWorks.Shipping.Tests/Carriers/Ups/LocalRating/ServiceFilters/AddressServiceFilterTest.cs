@@ -5,8 +5,10 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
 {
@@ -46,6 +48,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.ServiceFilters
         [Fact]
         public void GetEligibleServices_ReturnsServicesWithUps2DayAirAM_WhenShipmentIsCommercial()
         {
+            mock.Mock<UpsOltShipmentType>()
+                .Setup(x => x.IsDomestic(AnyIShipment))
+                .Returns(true);
             mock.Mock<IResidentialDeterminationService>()
                 .Setup(r => r.IsResidentialAddress(It.IsAny<ShipmentEntity>()))
                 .Returns(false);

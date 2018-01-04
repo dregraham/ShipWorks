@@ -4,10 +4,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
+    /// <summary>
+    /// Services builder for FedEx
+    /// </summary>
     public class FedExShipmentServicesBuilder : IShipmentServicesBuilder
     {
         private readonly FedExShipmentType fedExShipmentType;
@@ -31,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<ShipmentEntity> shipmentList = shipments?.ToList() ?? new List<ShipmentEntity>();
 
-            // The service types need to to be loaded based on the overridden shipment data to account
+            // The service types need to be loaded based on the overridden shipment data to account
             // for various shipping programs/rules offered by stores (i.e. eBay GSP)
             List<ShipmentEntity> overriddenShipments = shipmentList.Select(shippingManager.GetOverriddenStoreShipment).ToList();
 
@@ -61,11 +63,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // event the shipment was configured prior to a service being excluded
                 // Always include the service that the shipments are currently configured with
                 // Only if the service type is a validServiceType
-                IEnumerable<FedExServiceType> loadedServices = shipmentList.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes).Distinct();
+                IEnumerable<FedExServiceType> loadedServices = shipmentList.Select(s => (FedExServiceType) s.FedEx.Service).Intersect(validServiceTypes).Distinct();
                 fedExServiceTypes = fedExServiceTypes.Union(loadedServices).ToList();
             }
 
-            return fedExServiceTypes.ToDictionary(s => (int)s, s => EnumHelper.GetDescription(s));
+            return fedExServiceTypes.ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
         }
     }
 }

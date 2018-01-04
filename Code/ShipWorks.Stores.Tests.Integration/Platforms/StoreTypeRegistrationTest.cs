@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using Xunit;
@@ -18,9 +17,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         public StoreTypeRegistrationTest(ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
-            IoC.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

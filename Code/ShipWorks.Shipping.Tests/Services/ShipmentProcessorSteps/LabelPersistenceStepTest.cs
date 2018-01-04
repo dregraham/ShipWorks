@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         public void SaveLabel_ReturnsCopiedResults_WhenPreviousPhaseWasNotSuccessful()
         {
             var exception = new ShippingException();
-            var entityLock = mock.Create<IDisposable>();
+            var entityLock = mock.Build<IDisposable>();
 
             input.SetupGet(x => x.Success).Returns(false);
             input.SetupGet(x => x.Exception).Returns(exception);
@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void SaveLabel_ReturnsDataFromInput_WhenSavingSucceeds()
         {
-            var entityLock = mock.Create<IDisposable>();
+            var entityLock = mock.Build<IDisposable>();
 
             input.SetupGet(x => x.EntityLock).Returns(entityLock);
 
@@ -208,7 +208,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var adapter = mock.CreateMock<ISqlAdapter>(a =>
                 a.Setup(x => x.SaveAndRefetch(It.IsAny<ShipmentEntity>())).Throws<Exception>());
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
-            var entityLock = mock.Create<IDisposable>();
+            var entityLock = mock.Build<IDisposable>();
 
             input.SetupGet(x => x.EntityLock).Returns(entityLock);
 

@@ -51,7 +51,17 @@ namespace ShipWorks.Actions.Tasks
         /// Constructor for a task of the given type bound to the given store.  It is automatically determined whether the task is StoreType based
         /// or StoreInstance based and the appropriate binding is created.
         /// </summary>
-        public ActionTaskDescriptorBinding(Type taskType, StoreEntity store)
+        public ActionTaskDescriptorBinding(Type taskType, StoreEntity store) :
+            this(taskType, store, IoC.UnsafeGlobalLifetimeScope)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor for a task of the given type bound to the given store.  It is automatically determined whether the task is StoreType based
+        /// or StoreInstance based and the appropriate binding is created.
+        /// </summary>
+        public ActionTaskDescriptorBinding(Type taskType, StoreEntity store, ILifetimeScope outerScope)
         {
             descriptor = ActionTaskManager.GetDescriptor(taskType);
             if (descriptor == null)
@@ -59,7 +69,7 @@ namespace ShipWorks.Actions.Tasks
                 throw new InvalidOperationException(string.Format("Type '{0}' does not have an associated descriptor.", taskType.FullName));
             }
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = outerScope.BeginLifetimeScope())
             {
                 ActionTask instance = descriptor.CreateInstance(lifetimeScope);
                 if (instance is StoreTypeTaskBase)

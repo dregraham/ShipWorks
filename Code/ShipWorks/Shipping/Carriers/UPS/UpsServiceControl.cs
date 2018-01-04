@@ -9,12 +9,12 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.UI.ValueConverters;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Core.UI.ValueConverters;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 sectionLabelOptions.Visible = false;
             }
 
-            infotipShipDate.Caption += $"{Environment.NewLine}{converter.Convert(shipmentTypeCode, typeof(string), null, null).ToString()}"; 
+            infotipShipDate.Caption += $"{Environment.NewLine}{converter.Convert(shipmentTypeCode, typeof(string), null, null).ToString()}";
         }
 
         protected override void Initialize()
@@ -952,5 +952,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             packageControl?.FlushChanges();
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

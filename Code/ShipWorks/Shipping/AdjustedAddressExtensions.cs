@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping
 {
@@ -18,28 +18,17 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the ship country code that has been adjusted according to carrier specific rules
         /// </summary>
-        public static string AdjustedShipCountryCode(this ShipmentEntity shipment)
+        public static string AdjustedShipCountryCode(this IShipmentEntity shipment)
         {
-            return AdjustedCountryCode(shipment, "Ship");
+            return AdjustedCountryCode(shipment.ShipPerson, shipment.ShipmentTypeCode);
         }
 
         /// <summary>
         /// Get the origin country code that has been adjusted according to carrier specific rules
         /// </summary>
-        public static string AdjustedOriginCountryCode(this ShipmentEntity shipment)
+        public static string AdjustedOriginCountryCode(this IShipmentEntity shipment)
         {
-            return AdjustedCountryCode(shipment, "Origin");
-        }
-
-        /// <summary>
-        /// Get the specified country code that has been adjusted according to carrier specific rules
-        /// </summary>
-        public static string AdjustedCountryCode(this ShipmentEntity shipment, string addressPrefix)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-
-            return new PersonAdapter(shipment, addressPrefix)
-                .AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
+            return AdjustedCountryCode(shipment.OriginPerson, shipment.ShipmentTypeCode);
         }
 
         /// <summary>

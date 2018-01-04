@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Net;
 using Moq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Communication.Throttling;
 using ShipWorks.Stores.Platforms.BigCommerce;
 using ShipWorks.Stores.Platforms.BigCommerce.DTO;
 using ShipWorks.Tests.Shared;
@@ -27,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            logFactory = mock.Create<ILogEntryFactory>();
+            logFactory = mock.Build<ILogEntryFactory>();
         }
 
         [Fact]
@@ -158,6 +157,40 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(TypedParameter.From((IBigCommerceStoreEntity) store));
 
             webClient.UploadOrderShipmentDetails(1, 1, "asdf", new Tuple<string, string>("1", "2"), new List<BigCommerceItem>());
+        }
+
+        [Theory]
+        [InlineData(BigCommerceAuthenticationType.Basic, "url", "BasicUsername", "BasicToken", "", "")]
+        public async Task Throttled_IsHandled(BigCommerceAuthenticationType authenticationType, string url, string username, string basicToken, string clientID, string oAuthToken)
+        {
+            BigCommerceStoreEntity store = new BigCommerceStoreEntity(1);
+            store.BigCommerceAuthentication = authenticationType;
+            store.ApiToken = basicToken;
+            store.ApiUserName = username;
+            store.ApiUrl = url;
+            store.OauthToken = oAuthToken;
+            store.OauthClientId = clientID;
+
+            IRestResponse failedRestResponse = new RestResponse { StatusCode = HttpStatusCode.InternalServerError };
+            IRestResponse successRestResponse = new RestResponse
+            {
+                StatusCode = HttpStatusCode.OK,
+                ErrorException = null,
+                Content = "{\"count\":313}"
+            };
+
+            Mock<IRestClient> restClient = mock.Mock<IRestClient>();
+            restClient
+                .SetupSequence(x => x.ExecuteTaskAsync(It.IsAny<IRestRequest>()))
+                .Returns(Task<IRestResponse>.FromResult(failedRestResponse))
+                .Returns(Task<IRestResponse>.FromResult(successRestResponse))
+                .Returns(Task<IRestResponse>.FromResult(successRestResponse));
+
+            Mock<IBigCommerceRestClientFactory> restClientFactory = mock.Mock<IBigCommerceRestClientFactory>();
+            restClientFactory.Setup(f => f.Create(It.IsAny<IBigCommerceStoreEntity>())).Returns(restClient.Object);
+
+            IBigCommerceWebClient webClient = mock.Create<BigCommerceWebClient>(TypedParameter.From((IBigCommerceStoreEntity) store));
+            await webClient.TestConnection();
         }
     }
 }

@@ -13,7 +13,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
@@ -23,7 +22,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -104,7 +102,7 @@ namespace ShipWorks.Shipping
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager,
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor,
             ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeManager shipmentTypeManager,
-            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory, 
+            ICustomsManager customsManager, Func<ShipmentTypeCode, IRateHashingService> rateHashingServiceFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
         {
             InitializeComponent();
@@ -1950,10 +1948,13 @@ namespace ShipWorks.Shipping
                 {
                     RateGroup rateGroup = runWorkerCompletedEventArgs.Result as RateGroup;
 
-                    SendRatesRetrievedMessage(rateGroup);
+                    if (rateGroup != null)
+                    {
+                        SendRatesRetrievedMessage(rateGroup);
 
-                    // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
-                    LoadDisplayedRates(rateGroup);
+                        // This is not necessary since we reload completely anyway, but it reduces the perceived load time by getting these displayed ASAP
+                        LoadDisplayedRates(rateGroup);
+                    }
                 }
                 catch (ObjectDisposedException ex)
                 {
@@ -1988,7 +1989,7 @@ namespace ShipWorks.Shipping
 
                 string ratingHash = rateHashingServiceFactory(shipment.ShipmentTypeCode).GetRatingHash(shipment);
 
-                messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates, 
+                messenger.Send(new RatesRetrievedMessage(this, ratingHash, rates,
                     shipmentAdapterFactory.Get(shipment)));
             }
         }
@@ -2008,6 +2009,10 @@ namespace ShipWorks.Shipping
 
                 // Just in case it used to have an error remove it
                 ErrorManager?.Remove(shipment.ShipmentID);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                log.Error("Shipping exception encountered while getting rates", ex);
             }
             catch (InvalidRateGroupShippingException ex)
             {

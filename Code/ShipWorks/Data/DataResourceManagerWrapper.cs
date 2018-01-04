@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Pdf;
 
 namespace ShipWorks.Data
@@ -10,29 +11,30 @@ namespace ShipWorks.Data
     /// </summary>
     public class DataResourceManagerWrapper : IDataResourceManager
     {
-        private readonly IPdfDocument pdfDocument;
-
+        private readonly IPdfDocumentFactory pdfDocumentFactory;
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="pdfDocument"></param>
-        public DataResourceManagerWrapper(IPdfDocument pdfDocument)
+        public DataResourceManagerWrapper(IPdfDocumentFactory pdfDocumentFactory)
         {
-            this.pdfDocument = pdfDocument;
+            this.pdfDocumentFactory = pdfDocumentFactory;
         }
 
         /// <summary>
         /// Saves PDF to database
         /// </summary>
-        public IEnumerable<DataResourceReference> CreateFromPdf(Stream pdfStream, long consumerID, string label) =>
-            CreateFromPdf(pdfStream, consumerID, i => i == 0 ? label : $"{label}-{i}", s => s.ToArray());
+        public IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID, string label) =>
+            CreateFromPdf(pdfDocumentType, pdfStream, consumerID, i => i == 0 ? label : $"{label}-{i}", s => s.ToArray());
 
         /// <summary>
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
-        public IEnumerable<DataResourceReference> CreateFromPdf(Stream pdfStream, long consumerID,
+        public IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID,
             Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream)
         {
+            IPdfDocument pdfDocument = pdfDocumentFactory.Create(pdfDocumentType);
+
             //// We need to convert the PDF into images and register each image as a resource in the database
             return pdfDocument.SavePages(pdfStream, (imageStream, index) =>
             {

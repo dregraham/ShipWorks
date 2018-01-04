@@ -37,8 +37,8 @@ namespace ShipWorks.Stores.Platforms.ProStores
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProStoresDownloader(StoreEntity store, IProStoresWebClient webClient)
-            : base(store)
+        public ProStoresDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, IProStoresWebClient webClient)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.webClient = webClient;
         }

@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions.Endicia;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 {
-    public class EndiciaScanBasedReturnsRestrictionTest
+    public class EndiciaScanBasedReturnsRestrictionTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly EndiciaScanBasedReturnsRestriction testObject;

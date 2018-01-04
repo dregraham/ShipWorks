@@ -1,10 +1,10 @@
-using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
 {
@@ -29,64 +29,49 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
 
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
-            testObject = new FedExRateResponse(nativeResponse, carrierRequest.Object);
+            testObject = new FedExRateResponse(nativeResponse);
         }
 
         [Fact]
-        public void Request_ReturnsRequestProvidedToConstructor()
+        public void Process_ReturnsRateReplyProvidedToConstructor()
         {
-            Assert.Equal(carrierRequest.Object, testObject.Request);
+            var response = testObject.Process();
+            Assert.Equal(nativeResponse, response.Value);
         }
 
-        [Fact]
-        public void NativeResponse_ReturnsRateReplyProvidedToConstructor()
+        [Theory]
+        [InlineData(NotificationSeverityType.ERROR)]
+        [InlineData(NotificationSeverityType.FAILURE)]
+        public void Process_ThrowsFedExApiException_WhenResponseContainsError(NotificationSeverityType failureType)
         {
-            Assert.Equal(nativeResponse, testObject.NativeResponse);
+            nativeResponse.HighestSeverity = failureType;
+            var result = testObject.Process();
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<FedExApiCarrierException>(result.Exception);
         }
 
         [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsError()
-        {
-            nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
-            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
-        }
-
-        [Fact]
-        public void Process_ThrowsFedExApiException_WhenResponseContainsFailure()
-        {
-            nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
-            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
-        }
-
-        [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyDetailsIsNull()
+        public void Process_ReturnsFedExApiException_WhenRateReplyDetailsIsNull()
         {
             nativeResponse.RateReplyDetails = null;
-            Assert.Throws<FedExException>(() => testObject.Process());
+            var result = testObject.Process();
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<FedExException>(result.Exception);
+            Assert.Equal("FedEx did not return any rates for the shipment.", result.Exception.Message);
         }
 
-        [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs556()
+        [Theory]
+        [InlineData("556")]
+        [InlineData("557")]
+        [InlineData("558")]
+        public void Process_ReturnsFedExApiExceptionWithMessage_WhenRateReplyIsNull(string code)
         {
             nativeResponse.RateReplyDetails = null;
-            nativeResponse.Notifications[0].Code = "556";
-            Assert.Throws<FedExException>(() => testObject.Process());
-        }
-
-        [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs557()
-        {
-            nativeResponse.RateReplyDetails = null;
-            nativeResponse.Notifications[0].Code = "557";
-            Assert.Throws<FedExException>(() => testObject.Process());
-        }
-
-        [Fact]
-        public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs558()
-        {
-            nativeResponse.RateReplyDetails = null;
-            nativeResponse.Notifications[0].Code = "558";
-            Assert.Throws<FedExException>(() => testObject.Process());
+            nativeResponse.Notifications[0].Code = code;
+            var result = testObject.Process();
+            Assert.True(result.Failure);
+            Assert.IsAssignableFrom<FedExException>(result.Exception);
+            Assert.Equal("There are no FedEx services available for the selected shipment options.", result.Exception.Message);
         }
     }
 }

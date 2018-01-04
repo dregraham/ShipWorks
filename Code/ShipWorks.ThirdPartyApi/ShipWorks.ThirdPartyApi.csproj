@@ -198,6 +198,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\IFedExNativeShipmentRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentReply.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\WebServices\Ship\ProcessShipmentRequest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Endicia\WebServices\LabelService\LabelRequest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Net\AccountInfoResult.cs" />
@@ -589,13 +590,70 @@
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ChallengeQuestionResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\IndiciumResponse1.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DdpRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DHLeCManifestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\DhlgmManifestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\GetExtraServiceRateResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\LabelNumberResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupAvailabilityResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupCancelResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupChangeResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackagePickupResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PackageStatusResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRatesResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\PostageRateTableResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\RefundResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\ResetSuspendedAccountRequestResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\RetailAccountsResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SCANResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SetAccountFeatureOptInResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\SetPendingCloseAccountResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\TransactionsListingResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\UpdatePaymentInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\UserSignUpResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\VoidLabelResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.CustomerService\CustomerService.wsdl" />
@@ -1950,10 +2008,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v11.wsdl">
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\OpenShipService_v13.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
-      <UpdateFromURL>C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v11.wsdl</UpdateFromURL>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\OpenShipService_v13.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1972,10 +2030,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v20.wsdl">
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\RateService_v22.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Rate\</RelPath>
-      <UpdateFromURL>C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v20.wsdl</UpdateFromURL>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\RateService_v22.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1983,10 +2041,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Rate_RateService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl">
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\RegistrationService_v7.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Registration\</RelPath>
-      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RegistrationService_v7.wsdl</UpdateFromURL>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\RegistrationService_v7.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -1994,10 +2052,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Registration1_RegistrationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v12.wsdl">
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\TrackService_v14.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
-      <UpdateFromURL>C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v12.wsdl</UpdateFromURL>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\TrackService_v14.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -2027,10 +2085,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Ups_WebServices_OpenAccount_OpenAccountService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v19.wsdl">
+    <WebReferenceUrl Include="\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\ShipService_v21.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Ship\</RelPath>
-      <UpdateFromURL>C:\work\shipworks\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\ShipService_v19.wsdl</UpdateFromURL>
+      <UpdateFromURL>\\intfs01\development\Partners\Shipping\FedEx\FedEx 2017 Certification\vWS Software 2017\2017 WSDLs\ShipService_v21.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -2346,10 +2404,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_Infopia_WebServices2_InfopiaWebService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL">
+    <WebReferenceUrl Include="https://elstestserver.endicia.com/LabelService/EwsLabelService.asmx%3fwsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Endicia.WebServices.LabelService\</RelPath>
-      <UpdateFromURL>https://LabelServer.Endicia.com/LabelService/EwsLabelService.asmx%3fWSDL</UpdateFromURL>
+      <UpdateFromURL>https://elstestserver.endicia.com/LabelService/EwsLabelService.asmx%3fwsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

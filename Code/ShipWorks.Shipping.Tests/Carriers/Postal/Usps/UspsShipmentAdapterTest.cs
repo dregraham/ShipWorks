@@ -41,20 +41,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new UspsShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UspsShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new UspsShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UspsShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new UspsShipmentAdapter(new ShipmentEntity { Postal = new PostalShipmentEntity() }, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UspsShipmentAdapter(new ShipmentEntity { Postal = new PostalShipmentEntity() }, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
 
             Assert.Throws<ArgumentNullException>(() =>
                 new UspsShipmentAdapter(shipment, null,
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
-            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
-
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
+            Assert.Throws<ArgumentNullException>(() => new UspsShipmentAdapter(shipment, mock.Build<IShipmentTypeManager>(), null, mock.Build<IStoreManager>()));
         }
 
         [Fact]
@@ -141,7 +140,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
 
         [Theory]
         [InlineData(true, true)]
-        [InlineData(true, true)]
+        [InlineData(false, false)]
         public void IsDomestic_DelegatesToIsDomestic_OnShipmentType(bool isDomestic, bool expected)
         {
             mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic));

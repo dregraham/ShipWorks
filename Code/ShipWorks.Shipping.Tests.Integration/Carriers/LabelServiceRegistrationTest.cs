@@ -25,8 +25,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
 
         public LabelServiceRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
+            container = ContainerInitializer.Build();
         }
 
         [Theory]

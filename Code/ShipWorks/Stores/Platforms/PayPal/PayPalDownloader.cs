@@ -39,8 +39,8 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// <summary>
         /// Constructor
         /// </summary>
-        public PayPalDownloader(StoreEntity store)
-            : base(store)
+        public PayPalDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
         }
 

@@ -13,5 +13,11 @@
             long value;
             return long.TryParse(input, out value);
         }
+
+        /// <summary>
+        /// Returns null if the input is an empty string
+        /// </summary>
+        public static string NullIfEmpty(this string input) =>
+            input == string.Empty ? null : input;
     }
 }

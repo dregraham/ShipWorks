@@ -6,9 +6,12 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -19,7 +22,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -28,6 +30,7 @@ using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.FedEx;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Services;
@@ -41,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx implementation of ShipmentType
     /// </summary>
+    [Component(RegistrationType.SpecificService, Service = typeof(ICustomsRequired))]
     public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
@@ -375,7 +379,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.ImporterCountryCode = "US";
             shipment.FedEx.ImporterPhone = "";
 
-            // If we couldn't apply the COD origin address here (then the FedEx account must have been deleted), fallback to blank
+            // If we couldn't apply the COD origin address here (then the FedEx account must have been deleted), fall back to blank
             if (!UpdatePersonAddress(shipment, new PersonAdapter(shipment.FedEx, "Cod"), shipment.FedEx.CodOriginID))
             {
                 PersonAdapter.ApplyDefaults(shipment.FedEx, "Cod");
@@ -423,6 +427,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shipment.FedEx.SmartPostUspsApplicationId = string.Empty;
 
             shipment.FedEx.ThirdPartyConsignee = false;
+
+            shipment.FedEx.FreightClass = FedExFreightClassType.None;
+            shipment.FedEx.FreightCollectTerms = FedExFreightCollectTermsType.None;
+            shipment.FedEx.FreightRole = FedExFreightShipmentRoleType.None;
+            shipment.FedEx.FreightSpecialServices = (int) FedExFreightSpecialServicesType.None;
+            shipment.FedEx.FreightTotalHandlinUnits = 0;
+            shipment.FedEx.FreightGuaranteeType = FedExFreightGuaranteeType.None;
+            shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now;
 
             FedExPackageEntity package = FedExUtility.CreateDefaultPackage();
             shipment.FedEx.Packages.Add(package);
@@ -646,7 +658,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.DangerousGoodsPackagingCount, package, FedExPackageFields.DangerousGoodsPackagingCount);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.ContainerType, package, FedExPackageFields.ContainerType);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.NumberOfContainers, package, FedExPackageFields.NumberOfContainers);
-                
+
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryContactName, package, FedExPackageFields.SignatoryContactName);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryTitle, package, FedExPackageFields.SignatoryTitle);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.SignatoryPlace, package, FedExPackageFields.SignatoryPlace);
@@ -659,6 +671,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.HazardousMaterialQuanityUnits, package, FedExPackageFields.HazardousMaterialQuanityUnits);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsCargoAircraftOnly, package, FedExPackageFields.PackingDetailsCargoAircraftOnly);
                 ShippingProfileUtility.ApplyProfileValue(packageProfile.PackingDetailsPackingInstructions, package, FedExPackageFields.PackingDetailsPackingInstructions);
+
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryMaterial, package, FedExPackageFields.BatteryMaterial);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryPacking, package, FedExPackageFields.BatteryPacking);
+                ShippingProfileUtility.ApplyProfileValue(packageProfile.BatteryRegulatorySubtype, package, FedExPackageFields.BatteryRegulatorySubtype);
             }
 
             // Remove any packages that are too many for the profile
@@ -757,6 +773,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 shipment.FedEx.HomeDeliveryDate = dateTimeProvider.Now.Date.AddHours(12);
             }
 
+            if (shipment.FedEx.FreightGuaranteeDate < dateTimeProvider.Now.Date)
+            {
+                shipment.FedEx.FreightGuaranteeDate = dateTimeProvider.Now.Date.AddHours(12);
+            }
+
             // Ensure the cod address is up-to-date
             if (!UpdatePersonAddress(shipment, new PersonAdapter(shipment.FedEx, "Cod"), shipment.FedEx.CodOriginID))
             {
@@ -784,7 +805,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Right now ShipWorks Insurance (due to Tango limitation) doesn't support multi-package - so in that case just auto-revert to carrier insurance
             // We're setting this once to avoid marking the entity as dirty
-            shipment.InsuranceProvider = shipment.FedEx.Packages.Count > 1 ?
+            shipment.InsuranceProvider = IsDeclaredValueRequired(shipment) ?
                 (int) InsuranceProvider.Carrier :
                 settings.FedExInsuranceProvider;
 
@@ -802,7 +823,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 package.InsurancePennyOne = settings.FedExInsurancePennyOne;
 
                 // For SmartPost, we force Penny One since FedEx does not provide the first $100 for that
-                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost)
+                // For LTL Freight, we force Penny One to match liability calculations from DHL Express and Asendia
+                if (shipment.FedEx.Service == (int) FedExServiceType.SmartPost ||
+                    FedExUtility.IsFreightLtlService(shipment.FedEx.Service))
                 {
                     package.InsurancePennyOne = true;
                 }
@@ -830,6 +853,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
             }
         }
+
+        /// <summary>
+        /// Does the shipment require FedEx declared value
+        /// </summary>
+        private static bool IsDeclaredValueRequired(IShipmentEntity shipment) =>
+            shipment.FedEx.Packages.IsCountGreaterThan(1) || FedExUtility.IsFreightAnyService(shipment.FedEx.Service);
 
         /// <summary>
         /// Redistribute the ContentWeight from the shipment to each package in the shipment.  This only does something
@@ -880,10 +909,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Indicates if the residential status indicator is required for the given shipment
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return IsDomestic(shipment); // shipment.ShipCountryCode == "US";
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) =>
+            IsDomestic(shipment);
 
         /// <summary>
         /// Get the carrier specific description of the shipping service used
@@ -990,8 +1017,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerkFactory().CreateShippingClerk(shipment, new FedExSettingsRepository());
-                return shippingClerk.Track(shipment);
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    return lifetimeScope.Resolve<IFedExShippingClerkFactory>().Create(shipment).Track(shipment);
+                }
             }
             catch (FedExException ex)
             {
@@ -1019,7 +1048,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Determines if a shipment will be domestic or international
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
             if (shipmentEntity == null)
             {
@@ -1091,7 +1120,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             if (FedExUtility.IsSmartPostEnabled(shipment)
                 && shipment.ShipPerson.IsUSInternationalTerritory()
@@ -1102,5 +1131,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return base.IsCustomsRequiredByShipment(shipment);
         }
+
+        /// <summary>
+        /// Implement the ICustomsRequired interface explicitly
+        /// </summary>
+        bool ICustomsRequired.IsCustomsRequired(IShipmentEntity shipment) =>
+            IsCustomsRequired(shipment);
     }
 }

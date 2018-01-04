@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 {
-    public class AlaskaHawaiiZoneExcelReaderTest
+    public class AlaskaHawaiiZoneExcelReaderTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly IEnumerable<UpsLocalRatingZoneEntity> readAlaskaHawaiiZones;
@@ -44,11 +45,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         {
             IWorksheet dasSheet = sampleExcelFile.Worksheets[sheetName];
             int zipCodeCount = dasSheet.Cells.Count(IsZip);
-            
+
             // each zip code found in this sheet should have 3 services associated with it.
             int expectedZonesForState = zipCodeCount * 3;
 
-            Assert.Equal(expectedZonesForState, readAlaskaHawaiiZones.Count(z=>z.DestinationZipCeiling.ToString().StartsWith(zipPrefix)));
+            Assert.Equal(expectedZonesForState, readAlaskaHawaiiZones.Count(z => z.DestinationZipCeiling.ToString().StartsWith(zipPrefix, StringComparison.Ordinal)));
         }
 
         [Theory]
@@ -69,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             IWorksheet dasSheet = sampleExcelFile.Worksheets[sheetName];
             int zipCodeCount = dasSheet.Rows.Where(r => r.Row >= startRow && r.Row <= endRow).Sum(row => row.Cells.Count(IsZip));
 
-            Assert.Equal(zipCodeCount, readAlaskaHawaiiZones.Count(z=>MatchesCriteria(z, zipPrefix, service, zone)));
+            Assert.Equal(zipCodeCount, readAlaskaHawaiiZones.Count(z => MatchesCriteria(z, zipPrefix, service, zone)));
         }
 
         private static bool MatchesCriteria(UpsLocalRatingZoneEntity upsLocalRatingZoneEntity, string zipPrefix, UpsServiceType service, string zone)
@@ -80,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                 return false;
             }
 
-            if (!upsLocalRatingZoneEntity.DestinationZipCeiling.ToString().StartsWith(zipPrefix))
+            if (!upsLocalRatingZoneEntity.DestinationZipCeiling.ToString().StartsWith(zipPrefix, StringComparison.Ordinal))
             {
                 return false;
             }

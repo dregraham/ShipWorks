@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Licensing;
@@ -16,15 +15,13 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
@@ -46,27 +43,14 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
 
         public ProcessUspsLabelTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock =>
+            context = db.CreateDataContext((mock, builder) =>
                 {
-                    // These mocks need to be created here so they are added to IoC registration
-                    webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
-                    mock.Provide(webServiceFactory.Object);
-                    mock.Override<IDataResourceManager>();
-                    mock.Override<IActionDispatcher>();
-                    mock.Override<ITangoWebClient>();
+                    webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
+                    builder.RegisterMock<IDataResourceManager>(mock);
+                    builder.RegisterMock<IActionDispatcher>(mock);
+                    builder.RegisterMock<ITangoWebClient>(mock);
+                    builder.RegisterMock<IMessageHelper>(mock);
                 });
-
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
-                item.Setup(x => x.Validate(It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess()));
-
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentManipulator>(item =>
-                item.Setup(x => x.Manipulate(It.IsAny<ShipmentEntity>())).Returns((ShipmentEntity s) => s));
-
-            context.Mock.Provide(new Control());
-            context.Mock.Provide<Func<Control>>(() => new Control());
-            context.Mock.Override<ITangoWebClient>();
-            context.Mock.Override<IMessageHelper>();
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -117,8 +101,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
 
-            var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+            var result = await context.Container.Resolve<IShipmentProcessor>()
+                .Process(new[] { shipment }, context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful);
@@ -179,8 +163,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);
 
-            var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+            var result = await context.Container.Resolve<IShipmentProcessor>()
+                .Process(new[] { shipment }, context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful, result.First().Error?.Message);

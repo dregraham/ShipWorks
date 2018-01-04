@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using Interapptive.Shared.ComponentRegistration;
-using Autofac;
-using Interapptive.Shared.Enums;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -325,6 +324,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 RateControl.ClearSelection();
             }
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
 
         /// <summary>
         /// Flush any in-progress changes before saving

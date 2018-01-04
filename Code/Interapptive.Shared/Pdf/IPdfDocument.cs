@@ -5,7 +5,7 @@ using System.IO;
 namespace Interapptive.Shared.Pdf
 {
     /// <summary>
-    /// Interface for PDF document manipulation.
+    /// Interface for PDF document manipulation..
     /// </summary>
     public interface IPdfDocument
     {

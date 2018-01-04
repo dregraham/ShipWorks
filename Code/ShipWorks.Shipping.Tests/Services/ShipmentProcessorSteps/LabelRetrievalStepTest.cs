@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public async Task GetLabel_ReturnsException_WhenInputHasException()
         {
-            IDisposable entityLock = mock.Create<IDisposable>();
+            IDisposable entityLock = mock.Build<IDisposable>();
             ShippingException exception = new ShippingException();
 
             getLabelInputMock.SetupGet(x => x.Success).Returns(false);
@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public async Task GetLabel_ReturnsLabelData_WhenLabelIsSuccessful()
         {
-            var labelData = mock.Create<IDownloadedLabelData>();
+            var labelData = mock.Build<IDownloadedLabelData>();
             var labelService = mock.Mock<ILabelService>();
             labelService.Setup(x => x.Create(It.IsAny<ShipmentEntity>()))
                 .ReturnsAsync(labelData);
