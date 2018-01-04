@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers
 
         private const string TestCredentialUspsUsername = "interapptive";
         private const string TestCredentialUspsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
-        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
 
