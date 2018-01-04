@@ -104,21 +104,25 @@ namespace Interapptive.Shared.UI
         /// Get a bounds rectangle
         /// </summary>
         private static Rectangle GetBounds(XElement bounds) =>
-            new Rectangle(
-                (int) bounds.Attribute("x"),
-                (int) bounds.Attribute("y"),
-                (int) bounds.Attribute("width"),
-                (int) bounds.Attribute("height"));
+            bounds == null ?
+                Rectangle.Empty :
+                new Rectangle(
+                    (int) bounds.Attribute("x"),
+                    (int) bounds.Attribute("y"),
+                    (int) bounds.Attribute("width"),
+                    (int) bounds.Attribute("height"));
 
         /// <summary>
         /// Get a bounds rectangle
         /// </summary>
         private static Rect GetBoundsWpf(XElement bounds) =>
-            new Rect(
-                (double) bounds.Attribute("x"),
-                (double) bounds.Attribute("y"),
-                (double) bounds.Attribute("width"),
-                (double) bounds.Attribute("height"));
+            bounds == null ?
+                Rect.Empty :
+                new Rect(
+                    (double) bounds.Attribute("x"),
+                    (double) bounds.Attribute("y"),
+                    (double) bounds.Attribute("width"),
+                    (double) bounds.Attribute("height"));
 
         /// <summary>
         /// Save the window state to the state file
@@ -152,17 +156,27 @@ namespace Interapptive.Shared.UI
 
             stateElement.Add(
                 new XAttribute("name", state.Name),
-                new XElement("Bounds",
-                    new XAttribute("x", state.Bounds.X),
-                    new XAttribute("y", state.Bounds.Y),
-                    new XAttribute("width", state.Bounds.Width),
-                    new XAttribute("height", state.Bounds.Height)),
-                new XElement("BoundsWpf",
-                    new XAttribute("x", state.BoundsWpf.X),
-                    new XAttribute("y", state.BoundsWpf.Y),
-                    new XAttribute("width", state.BoundsWpf.Width),
-                    new XAttribute("height", state.BoundsWpf.Height)),
                 new XElement("FormState", (int) state.FormState));
+
+            if (state.Bounds != Rectangle.Empty)
+            {
+                stateElement.Add(
+                    new XElement("Bounds",
+                        new XAttribute("x", state.Bounds.X),
+                        new XAttribute("y", state.Bounds.Y),
+                        new XAttribute("width", state.Bounds.Width),
+                        new XAttribute("height", state.Bounds.Height)));
+            }
+
+            if (state.BoundsWpf != Rect.Empty)
+            {
+                stateElement.Add(
+                    new XElement("BoundsWpf",
+                        new XAttribute("x", state.BoundsWpf.X),
+                        new XAttribute("y", state.BoundsWpf.Y),
+                        new XAttribute("width", state.BoundsWpf.Width),
+                        new XAttribute("height", state.BoundsWpf.Height)));
+            }
 
             if (state.SplitterDistances.Count > 0)
             {
