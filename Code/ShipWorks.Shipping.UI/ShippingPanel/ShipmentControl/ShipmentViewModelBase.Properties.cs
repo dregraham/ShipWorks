@@ -209,10 +209,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {
                         DimsProfileID = 0;
-                        DimsLength = 0;
-                        DimsWidth = 0;
-                        DimsHeight = 0;
-                        DimsWeight = 0;
+                        if (!suppressExternalChangeNotifications)
+                        {
+                            DimsLength = 0;
+                            DimsWidth = 0;
+                            DimsHeight = 0;
+                            DimsWeight = 0;
+                        }
                     }
                     else
                     {
