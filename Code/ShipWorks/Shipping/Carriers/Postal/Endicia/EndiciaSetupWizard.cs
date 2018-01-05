@@ -560,7 +560,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             paymentInfo.CardType = (EndiciaCreditCardType) cardType.SelectedValue;
             paymentInfo.CardNumber = cardNumber.Text.Trim();
             paymentInfo.CardExpirationMonth = cardExpireMonth.SelectedIndex + 1;
-            paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + 2009;
+            paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + 2018;
             paymentInfo.UseCheckingForPostage = postagePaymentCheck.Checked;
             paymentInfo.CheckingAccount = checkingAccount.Text.Trim();
             paymentInfo.CheckingRouting = checkingRouting.Text.Trim();
