@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private AccountInfoV27 GetAccountInfoInternal(UspsAccountEntity account)
+        private AccountInfoV27 GetAccountInfoInternal(IUspsAccountEntity account)
         {
             AccountInfoV27 accountInfo;
 
@@ -892,9 +892,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             Address fromAddress;
             Address toAddress;
 
-            Tuple<Address, Address> addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
-            toAddress = addresses.Item1;
-            fromAddress = addresses.Item2;
+            (Address to, Address from) addresses = await FixWebserviceAddresses(account, shipment).ConfigureAwait(false);
+            toAddress = addresses.to;
+            fromAddress = addresses.from;
 
             RateV25 rate = CreateRateForProcessing(shipment, account);
             CustomsV4 customs = CreateCustoms(shipment);
