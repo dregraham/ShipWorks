@@ -16,7 +16,7 @@ namespace Interapptive.Shared.UI
     /// <summary>
     /// Saves the size\position of a Form.
     /// </summary>
-    public class WindowStateSaver
+    public static class WindowStateSaver
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(WindowStateSaver));
 
