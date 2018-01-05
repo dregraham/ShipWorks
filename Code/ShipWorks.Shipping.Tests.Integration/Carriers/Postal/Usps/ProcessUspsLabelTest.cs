@@ -83,6 +83,21 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                         Rate = new RateV25(),
                         ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
                     });
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -133,6 +148,21 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     .Returns(createRate(second));
                 w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV25>()))
                     .Returns(createRate(third));
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);
