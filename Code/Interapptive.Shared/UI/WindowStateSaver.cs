@@ -18,10 +18,15 @@ namespace Interapptive.Shared.UI
     /// </summary>
     public class WindowStateSaver
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowStateSaver));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WindowStateSaver));
 
         // The dictionary of window state, keyed from window name
-        static IDictionary<string, WindowState> windowStateMap;
+        private static IDictionary<string, WindowState> windowStateMap;
+
+        /// <summary>
+        /// The file that the settings are saved and read from.  Only valid if Initialized
+        /// </summary>
+        public static string StateFile { get; private set; }
 
         /// <summary>
         /// Initialize the WindowStateSaver with the path on disk to store the window state
@@ -39,11 +44,6 @@ namespace Interapptive.Shared.UI
 
             System.Windows.Forms.Application.ApplicationExit += (s, e) => SaveState(statefile);
         }
-
-        /// <summary>
-        /// The file that the settings are saved and read from.  Only valid if Initialized
-        /// </summary>
-        public static string StateFile { get; private set; }
 
         /// <summary>
         /// Load the window state from the state file
