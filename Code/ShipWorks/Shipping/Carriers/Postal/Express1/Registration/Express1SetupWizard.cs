@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private readonly Express1Registration registration;
         private readonly ICarrierAccountRetriever accountRetriever;
         private readonly int initialPersonCreditCardHeight;
+        private readonly int currentYear;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
@@ -82,6 +83,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                     new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.MasterCard, "MasterCard"),
                     new KeyValuePair<Express1CreditCardType, string>(Express1CreditCardType.Visa, "Visa")
                 };
+
+            currentYear = DateTime.Now.Year;
+            cardExpireYear.DataSource = Enumerable.Range(currentYear, 10).ToList();
 
             cardType.ValueMember = "Key";
             cardType.DisplayMember = "Value";
@@ -318,7 +322,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 CreditCardBillingAddress = billingAddress,
                 CreditCardType = (Express1CreditCardType) cardType.SelectedValue,
                 CreditCardAccountNumber = cardNumber.Text.Trim(),
-                CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2018, cardExpireMonth.SelectedIndex + 1, 1),
+                CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + currentYear, cardExpireMonth.SelectedIndex + 1, 1),
                 AchAccountNumber = string.Empty,
                 AchRoutingId = string.Empty
             };

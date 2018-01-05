@@ -41,6 +41,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         FreemiumFreeEdition freemiumEdition = null;
         private bool planTypeWasShown = false;
 
+        private readonly int currentYear;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -48,7 +50,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             InitializeComponent();
 
+            currentYear = DateTime.Now.Year;
+            cardExpireYear.DataSource = Enumerable.Range(currentYear, 10).ToList();
+
             EnumHelper.BindComboBox<EndiciaCreditCardType>(cardType);
+
             cardExpireMonth.SelectedIndex = 0;
             cardExpireYear.SelectedIndex = 0;
         }
@@ -560,7 +566,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             paymentInfo.CardType = (EndiciaCreditCardType) cardType.SelectedValue;
             paymentInfo.CardNumber = cardNumber.Text.Trim();
             paymentInfo.CardExpirationMonth = cardExpireMonth.SelectedIndex + 1;
-            paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + 2018;
+            paymentInfo.CardExpirationYear = cardExpireYear.SelectedIndex + currentYear;
             paymentInfo.UseCheckingForPostage = postagePaymentCheck.Checked;
             paymentInfo.CheckingAccount = checkingAccount.Text.Trim();
             paymentInfo.CheckingRouting = checkingRouting.Text.Trim();
