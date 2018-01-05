@@ -30,6 +30,9 @@ namespace ShipWorks.Stores.Orders.Split
                 // Update the new Quantity to be the split order defined Quantity
                 newOrderItemEntity.Quantity = (double) orderItemQuantityDefinition.Value;
 
+                // Change the original order id to be the split order's id
+                newOrderItemEntity.OriginalOrderID = splitOrder.OrderID;
+
                 // Update the original item quantity to be the difference of the two
                 originalOrderItemEntity.Quantity = originalOrderItemEntity.Quantity - newOrderItemEntity.Quantity;
             }
