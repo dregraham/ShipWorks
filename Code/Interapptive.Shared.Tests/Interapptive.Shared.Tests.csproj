@@ -133,6 +133,7 @@
     <Compile Include="Collections\CollectionChangedEventArgsTest.cs" />
     <Compile Include="Collections\EnumerableExtensionsTest.cs" />
     <Compile Include="Collections\ObservableExtensionsTest.cs" />
+    <Compile Include="Extensions\DecimalExtensionsTest.cs" />
     <Compile Include="Extensions\TaskExtensionsTest.cs" />
     <Compile Include="Filters\FilterTestingHelper.cs" />
     <Compile Include="Net\HttpVariableCollectionTest.cs" />

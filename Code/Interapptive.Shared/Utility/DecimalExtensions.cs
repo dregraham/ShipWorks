@@ -16,12 +16,11 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Clamp a value to an allowable range
         /// </summary>
-        public static decimal Clamp(this decimal value, decimal min, decimal max)
+        public static decimal Clamp(this decimal value, decimal left, decimal right)
         {
-            if (min > max)
-            {
-                throw new ArgumentOutOfRangeException("Min must be less than max");
-            }
+            var (min, max) = left > right ?
+                (right, left) :
+                (left, right);
 
             if (value < min)
             {

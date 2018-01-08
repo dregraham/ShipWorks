@@ -28,15 +28,22 @@ namespace ShipWorks.Stores.Orders.Split
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
+            // These cannot be broken out into factory methods because the CanExecute WeakReference
+            // will be false, and the buttons will no longer update correctly
+            Decrement = new RelayCommand(
+                () => UpdateSplitAmount(x => ClampValue(x - 1)),
+                () => ClampValue(splitAmount - 1) != splitAmount);
+
+            Increment = new RelayCommand(
+                () => UpdateSplitAmount(x => ClampValue(x + 1)),
+                () => ClampValue(splitAmount + 1) != splitAmount);
+
             OrderChargeID = item.OrderChargeID;
             Type = item.Type;
             Description = item.Description;
             TotalAmount = item.Amount;
             OriginalAmount = item.Amount;
             SplitAmount = "0";
-
-            Increment = new RelayCommand(() => IncrementAction(), () => splitAmount < TotalAmount);
-            Decrement = new RelayCommand(() => DecrementAction(), () => splitAmount > 0);
         }
 
         /// <summary>
@@ -100,16 +107,16 @@ namespace ShipWorks.Stores.Orders.Split
         [Obfuscation(Exclude = true)]
         public string SplitAmount
         {
-            get => splitAmount.ToString("$0.00");
+            get => SplitAmountValue.ToString("C");
             set
             {
                 if (decimal.TryParse(value, NumberStyles.Currency, NumberFormatInfo.CurrentInfo, out decimal parsedValue))
                 {
-                    UpdateSplitAmount(parsedValue);
+                    SplitAmountValue = parsedValue;
                 }
                 else
                 {
-                    SplitAmount = splitAmount.ToString();
+                    SplitAmount = SplitAmountValue.ToString();
                 }
             }
         }
@@ -117,28 +124,24 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Gets the decimal split amount
         /// </summary>
-        public decimal SplitAmountValue => splitAmount;
+        public decimal SplitAmountValue
+        {
+            get => splitAmount;
+            set => UpdateSplitAmount(_ => ClampValue(value));
+        }
 
         /// <summary>
-        /// Decrement the value of split charges by one
+        /// Clamp the given value to the total amount
         /// </summary>
-        private void DecrementAction() =>
-            UpdateSplitAmount(splitAmount - 1);
-
-        /// <summary>
-        /// Increment the value of split charges by one
-        /// </summary>
-        private void IncrementAction() =>
-            UpdateSplitAmount(splitAmount + 1);
+        private decimal ClampValue(decimal value) =>
+            value.Clamp(0, TotalAmount);
 
         /// <summary>
         /// Update the split amount value
         /// </summary>
-        private void UpdateSplitAmount(decimal value)
+        private void UpdateSplitAmount(Func<decimal, decimal> changeValue)
         {
-            var clampedValue = value.Clamp(0, TotalAmount);
-
-            if (handler.Set(nameof(SplitAmount), ref splitAmount, clampedValue))
+            if (handler.Set(nameof(SplitAmount), ref splitAmount, changeValue(splitAmount)))
             {
                 OriginalAmount = TotalAmount - splitAmount;
             }

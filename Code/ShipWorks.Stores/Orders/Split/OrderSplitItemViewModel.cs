@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +29,16 @@ namespace ShipWorks.Stores.Orders.Split
             MethodConditions.EnsureArgumentIsNotNull(item, nameof(item));
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
+            
+            // These cannot be broken out into factory methods because the CanExecute WeakReference
+            // will be false, and the buttons will no longer update correctly
+            Decrement = new RelayCommand(
+                () => UpdateSplitQuantity(x => ClampValue(x - 1)),
+                () => ClampValue(splitQuantity - 1) != splitQuantity);
+
+            Increment = new RelayCommand(
+                () => UpdateSplitQuantity(x => ClampValue(x + 1)),
+                () => ClampValue(splitQuantity + 1) != splitQuantity);
 
             OrderItemID = item.OrderItemID;
             Name = item.Name;
@@ -36,9 +47,6 @@ namespace ShipWorks.Stores.Orders.Split
             SplitQuantity = "0";
             Attributes = item.OrderItemAttributes?.Select(x => new KeyValuePair<string, string>(x.Name, x.Description)).ToImmutableList() ??
                 ImmutableList.Create(new KeyValuePair<string, string>(string.Empty, " "));
-
-            Increment = new RelayCommand(() => IncrementAction(), () => splitQuantity < TotalQuantity);
-            Decrement = new RelayCommand(() => DecrementAction(), () => splitQuantity > 0);
         }
 
         /// <summary>
@@ -91,18 +99,27 @@ namespace ShipWorks.Stores.Orders.Split
         [Obfuscation(Exclude = true)]
         public string SplitQuantity
         {
-            get => splitQuantity.ToString("0.##");
+            get => SplitQuantityValue.ToString("0.##");
             set
             {
                 if (decimal.TryParse(value, out decimal parsedValue))
                 {
-                    UpdateSplitQuantity(parsedValue);
+                    SplitQuantityValue = parsedValue;
                 }
                 else
                 {
-                    SplitQuantity = splitQuantity.ToString();
+                    SplitQuantity = SplitQuantityValue.ToString();
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the decimal split amount
+        /// </summary>
+        public decimal SplitQuantityValue
+        {
+            get => splitQuantity;
+            set => UpdateSplitQuantity(_ => ClampValue(value));
         }
 
         /// <summary>
@@ -112,30 +129,17 @@ namespace ShipWorks.Stores.Orders.Split
         public IEnumerable<KeyValuePair<string, string>> Attributes { get; }
 
         /// <summary>
-        /// Gets the decimal split quantity
+        /// Clamp the given value to the total amount
         /// </summary>
-        public decimal SplitQuantityValue => splitQuantity;
-
+        private decimal ClampValue(decimal value) =>
+            value.Clamp(0, TotalQuantity);
+        
         /// <summary>
-        /// Decrement the value of split items by one
+        /// Update the split amount value
         /// </summary>
-        private void DecrementAction() =>
-            UpdateSplitQuantity(splitQuantity - 1);
-
-        /// <summary>
-        /// Increment the value of split items by one
-        /// </summary>
-        private void IncrementAction() =>
-            UpdateSplitQuantity(splitQuantity + 1);
-
-        /// <summary>
-        /// Update the split quantity value
-        /// </summary>
-        private void UpdateSplitQuantity(decimal value)
+        private void UpdateSplitQuantity(Func<decimal, decimal> changeValue)
         {
-            var clampedValue = value.Clamp(0, TotalQuantity);
-
-            if (handler.Set(nameof(SplitQuantity), ref splitQuantity, clampedValue))
+            if (handler.Set(nameof(SplitQuantity), ref splitQuantity, changeValue(splitQuantity)))
             {
                 OriginalQuantity = TotalQuantity - splitQuantity;
             }

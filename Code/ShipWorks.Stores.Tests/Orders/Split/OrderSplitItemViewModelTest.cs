@@ -41,6 +41,19 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         }
 
         [Theory]
+        [InlineData(10, 0.01, "0.01")]
+        [InlineData(10, 5, "5")]
+        [InlineData(10, 5.009, "5.01")]
+        [InlineData(-10, -3, "-3")]
+        [InlineData(-10, -3.05, "-3.05")]
+        public void SplitQuantity_GetsFormattedValue(decimal total, decimal input, string expected)
+        {
+            var order = new OrderItemEntity { Quantity = (double) total };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantityValue = input };
+            Assert.Equal(expected, testObject.SplitQuantity);
+        }
+
+        [Theory]
         [InlineData(10, 4, 6)]
         [InlineData(10, 10, 0)]
         [InlineData(10, 0, 10)]
@@ -68,6 +81,73 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             testObject.SplitQuantity = split.ToString();
 
             Assert.Equal(expected, testObject.SplitQuantityValue);
+        }
+
+        [Fact]
+        public void SplitQuantity_ResetsValue_WhenInputIsNotValidDecimal()
+        {
+            var order = new OrderItemEntity { Quantity = 10 };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantity = "6" };
+            testObject.SplitQuantity = "Foo";
+            Assert.Equal(6, testObject.SplitQuantityValue);
+        }
+
+        [Theory]
+        [InlineData(10, 4, 5, 5)]
+        [InlineData(10, 10, 0, 10)]
+        [InlineData(10, 0, 9, 1)]
+        [InlineData(10, 3.3, 5.7, 4.3)]
+        public void Increment_SetsValuesCorrectly(decimal total, decimal split, decimal expectedOriginal, decimal expectedSplit)
+        {
+            var order = new OrderItemEntity { Quantity = (double) total };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantity = split.ToString() };
+            testObject.Increment.Execute(null);
+            Assert.Equal(expectedOriginal, testObject.OriginalQuantity);
+            Assert.Equal(expectedSplit, testObject.SplitQuantityValue);
+        }
+
+        [Theory]
+        [InlineData(10, 10, false)]
+        [InlineData(10, 9, true)]
+        [InlineData(10, 9.99, true)]
+        [InlineData(-10, -6, true)]
+        [InlineData(-10, -0.99, true)]
+        [InlineData(-10, 0, false)]
+        public void Increment_CanExecute_ReturnsCorrectValue(decimal total, decimal split, bool expected)
+        {
+            var order = new OrderItemEntity { Quantity = (double) total };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantityValue = split };
+            var result = testObject.Increment.CanExecute(null);
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(6, 4, 7, 3)]
+        [InlineData(10, 0, 10, 0)]
+        [InlineData(0, 10, 1, 9)]
+        [InlineData(6.7, 3.3, 7.7, 2.3)]
+        public void Decrement_SetsValuesCorrectly(decimal original, decimal split, decimal expectedOriginal, decimal expectedSplit)
+        {
+            var order = new OrderItemEntity { Quantity = (double) (original + split) };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantity = split.ToString() };
+            testObject.Decrement.Execute(null);
+            Assert.Equal(expectedOriginal, testObject.OriginalQuantity);
+            Assert.Equal(expectedSplit, testObject.SplitQuantityValue);
+        }
+
+        [Theory]
+        [InlineData(10, 0, false)]
+        [InlineData(10, 1, true)]
+        [InlineData(10, 0.01, true)]
+        [InlineData(-10, -6, true)]
+        [InlineData(-10, -9.99, true)]
+        [InlineData(-10, -10, false)]
+        public void Decrement_CanExecute_ReturnsCorrectValue(decimal total, decimal split, bool expected)
+        {
+            var order = new OrderItemEntity { Quantity = (double) total };
+            var testObject = new OrderSplitItemViewModel(order) { SplitQuantityValue = split };
+            var result = testObject.Decrement.CanExecute(null);
+            Assert.Equal(expected, result);
         }
     }
 }
