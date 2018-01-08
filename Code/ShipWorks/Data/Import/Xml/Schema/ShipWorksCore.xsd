@@ -68,6 +68,11 @@
           <xs:documentation>The billing address specified on the order.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="Amazon" type="AmazonOrder" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The Amazon order information on the order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="Payment" minOccurs="0" >
         <xs:annotation>
           <xs:documentation>Container for payment information provided by the customer.  This information is displayed on the Payments panel in the ShipWorks user interface.</xs:documentation>
@@ -276,6 +281,11 @@
           <xs:documentation>The weight of a single one of these items.  This value is multiplied by Quantity when the total order weight is calculated.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="Amazon" type="AmazonItem" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>The Amazon information for this item.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="Location" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Typically the stock location of the item in a warehouse.</xs:documentation>
@@ -352,6 +362,47 @@
     </xs:simpleContent>
   </xs:complexType>
 
+  <xs:complexType name="AmazonOrder">
+    <xs:annotation>
+      <xs:documentation>Container for Amazon order information.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="IsPrime" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Is the order an Amazon Prime order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="IsFBA" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Is the order an Amazon Fulfilled by Amazon order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="AmazonOrderID" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The Amazon order id.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="IsSameDay" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Is the order an seller fulfilled prime same day order.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AmazonItem">
+    <xs:annotation>
+      <xs:documentation>Container for Amazon item information.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="AmazonOrderItemCode" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The Amazon order item code.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
   <xs:complexType name="Address">
     <xs:annotation>
       <xs:documentation>Container for address information.</xs:documentation>
