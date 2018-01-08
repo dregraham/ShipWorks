@@ -42,6 +42,8 @@ namespace ShipWorks.Data.Import.Xml
             // only do the remainder for new orders
             if (order.IsNew)
             {
+                LoadAmazonOrderDetails((GenericModuleOrderEntity) order, xpath);
+
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("Items/Item");
                 while (itemNodes.MoveNext())
@@ -80,6 +82,17 @@ namespace ShipWorks.Data.Import.Xml
             {
                 observer.OnOrderLoadComplete(order, xpath);
             }
+        }
+
+        /// <summary>
+        /// Load Amazon order details from xml
+        /// </summary>
+        private static void LoadAmazonOrderDetails(GenericModuleOrderEntity order, XPathNavigator xpath)
+        {
+            order.IsPrime = XPathUtility.Evaluate(xpath, "Amazon/IsPrime", 0);
+            order.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
+            order.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
+            order.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);
         }
 
         /// <summary>
@@ -215,6 +228,9 @@ namespace ShipWorks.Data.Import.Xml
             {
                 observer.OnItemLoadComplete(item, xpath);
             }
+
+            // Load Amazon Order Item ID
+           ((GenericModuleOrderItemEntity) item).AmazonOrderItemCode = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderItemCode", string.Empty);
         }
 
         /// <summary>
