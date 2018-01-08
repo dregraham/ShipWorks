@@ -527,6 +527,9 @@
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.resx">
+      <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Jet\JetStoreSetupControlHost.resx">
       <DependentUpon>JetStoreSetupControlHost.cs</DependentUpon>
     </EmbeddedResource>
