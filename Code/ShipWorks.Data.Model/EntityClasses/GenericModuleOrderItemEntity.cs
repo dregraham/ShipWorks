@@ -120,12 +120,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 		}
 
+        public GenericModuleOrderItemEntity(OrderEntity order) : base(order)
+        {
+        }
 
-		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
-		/// <param name="propertyName">Name of the property.</param>
-		/// <param name="entity">Entity to set as an related entity</param>
-		/// <remarks>Used by prefetch path logic.</remarks>
-		protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
+
+        /// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="entity">Entity to set as an related entity</param>
+        /// <remarks>Used by prefetch path logic.</remarks>
+        protected override void SetRelatedEntityProperty(string propertyName, IEntityCore entity)
 		{
 			switch(propertyName)
 			{

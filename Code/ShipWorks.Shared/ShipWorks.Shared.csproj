@@ -149,6 +149,7 @@
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
+    <Compile Include="Stores\Platforms\GenericModule\Enums\GenericModuleIsAmazonPrime.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />
     <Compile Include="Stores\StoreTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeIdentity.cs" />

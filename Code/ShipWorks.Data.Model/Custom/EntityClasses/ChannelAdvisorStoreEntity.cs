@@ -13,37 +13,28 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Amazon auth token
         /// </summary>
-        string IAmazonCredentials.AuthToken
+        public string AuthToken
         {
-            get { return AmazonAuthToken; }
-            set
-            {
-                // No setter needed for this implementation
-            }
+            get => AmazonAuthToken;
+            set => AmazonAuthToken = value;
         }
 
         /// <summary>
         /// Amazon merchant ID
         /// </summary>
-        string IAmazonCredentials.MerchantID
+        public string MerchantID
         {
-            get { return AmazonMerchantID; }
-            set
-            {
-                // No setter needed for this implementation
-            }
+            get => AmazonMerchantID;
+            set => AmazonMerchantID = value;
         }
 
         /// <summary>
         /// Amazon store region
         /// </summary>
-        string IAmazonCredentials.Region
+        public string Region
         {
-            get { return AmazonApiRegion; }
-            set
-            {
-                // No setter needed for this implementation
-            }
+            get => AmazonApiRegion;
+            set => AmazonApiRegion = value;
         }
 
         /// <summary>

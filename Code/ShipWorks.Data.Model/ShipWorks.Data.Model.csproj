@@ -173,6 +173,9 @@
     <Compile Include="Custom\EntityClasses\BigCommerceOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExShipmentEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\FedExShipmentEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\GenericModuleStoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\GrouponOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
