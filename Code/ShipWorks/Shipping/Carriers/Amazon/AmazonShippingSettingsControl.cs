@@ -5,20 +5,20 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Stores.Platforms.Amazon;
 
-namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+namespace ShipWorks.Shipping.Carriers.Amazon
 {
     /// <summary>
-    /// CA-specific store settings
+    /// Amazon shipping store settings
     /// </summary>
     [ToolboxItem(true)]
-    public partial class ChannelAdvisorAmazonSettingsControl : UserControl
+    public partial class AmazonShippingSettingsControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ChannelAdvisorAmazonSettingsControl()
+        public AmazonShippingSettingsControl()
         {
             InitializeComponent();
 
@@ -32,13 +32,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Populate the UI with values from the store entity
         /// </summary>
-        public void LoadStore(ChannelAdvisorStoreEntity caStore)
+        public void LoadStore(IAmazonCredentials amazonCredentials)
         {
-            MethodConditions.EnsureArgumentIsNotNull(caStore, nameof(caStore));
+            MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
 
-            countries.SelectedItem = Geography.GetCountryName(caStore.AmazonApiRegion);
-            merchantID.Text = caStore.AmazonMerchantID;
-            authToken.Text = caStore.AmazonAuthToken;
+            countries.SelectedItem = Geography.GetCountryName(amazonCredentials.Region);
+            merchantID.Text = amazonCredentials.MerchantID;
+            authToken.Text = amazonCredentials.AuthToken;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
                         if (!validator.ValidateAccount(caStore))
                         {
-                            throw new ChannelAdvisorException("Invalid Amazon credentials.", null);
+                            throw new AmazonShippingException("Invalid Amazon credentials.");
                         }
                     }
                 }

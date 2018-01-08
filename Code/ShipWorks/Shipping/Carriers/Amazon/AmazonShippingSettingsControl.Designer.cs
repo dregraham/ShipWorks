@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+﻿namespace ShipWorks.Shipping.Carriers.Amazon
 {
-    partial class ChannelAdvisorAmazonSettingsControl
+    partial class AmazonShippingSettingsControl
     {
         /// <summary> 
         /// Required designer variable.
