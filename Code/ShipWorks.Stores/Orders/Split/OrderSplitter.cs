@@ -28,6 +28,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IOrderSplitAudit splitOrderAudit;
+        private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
 
         /// <summary>
         /// Constructor
@@ -70,6 +71,8 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private (OrderEntity original, OrderEntity split) PerformSplit(OrderEntity originalOrder, OrderSplitDefinition definition)
         {
+            originalOrderCombineSplitStatus = originalOrder.CombineSplitStatus;
+
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             originalOrder.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
@@ -139,25 +142,28 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Add an order search to the new order
         /// </summary>
-        private static void AddOrderSearch(OrderEntity newOrderEntity, OrderEntity originalOrder)
+        private void AddOrderSearch(OrderEntity newOrderEntity, OrderEntity originalOrder)
         {
-            // Create an OrderSearch for the new order.  So that we get back to original order,
-            // everything is the same except for the OrderID.
-            OrderSearchEntity newOrderSearch = newOrderEntity.OrderSearch.AddNew();
-            newOrderSearch.OriginalOrderID = originalOrder.OrderID;
-            newOrderSearch.IsManual = originalOrder.IsManual;
-            newOrderSearch.OrderNumber = originalOrder.OrderNumber;
-            newOrderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
-            newOrderSearch.StoreID = originalOrder.StoreID;
+            if (originalOrderCombineSplitStatus == CombineSplitStatusType.None)
+            {
+                // Create an OrderSearch for the new order.  So that we get back to original order,
+                // everything is the same except for the OrderID.
+                OrderSearchEntity newOrderSearch = newOrderEntity.OrderSearch.AddNew();
+                newOrderSearch.OriginalOrderID = originalOrder.OrderID;
+                newOrderSearch.IsManual = originalOrder.IsManual;
+                newOrderSearch.OrderNumber = originalOrder.OrderNumber;
+                newOrderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
+                newOrderSearch.StoreID = originalOrder.StoreID;
 
-            // Also create an OrderSearch for the original order so that we know that
-            // it was part of a split operation and searching works.
-            OrderSearchEntity orderSearch = originalOrder.OrderSearch.AddNew();
-            orderSearch.OriginalOrderID = originalOrder.OrderID;
-            orderSearch.IsManual = originalOrder.IsManual;
-            orderSearch.OrderNumber = originalOrder.OrderNumber;
-            orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
-            orderSearch.StoreID = originalOrder.StoreID;
+                // Also create an OrderSearch for the original order so that we know that
+                // it was part of a split operation and searching works.
+                OrderSearchEntity orderSearch = originalOrder.OrderSearch.AddNew();
+                orderSearch.OriginalOrderID = originalOrder.OrderID;
+                orderSearch.IsManual = originalOrder.IsManual;
+                orderSearch.OrderNumber = originalOrder.OrderNumber;
+                orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
+                orderSearch.StoreID = originalOrder.StoreID;
+            }
         }
 
         /// <summary>
@@ -169,6 +175,9 @@ namespace ShipWorks.Stores.Orders.Split
             order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
+
+            //order.OrderSearch.First().OriginalOrderID = order.OrderID;
+            //saveResult &= await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
 
             foreach (OrderItemEntity orderItem in order.OrderItems.Where(oi => Math.Abs(oi.Quantity) < 0.001))
             {
@@ -194,12 +203,14 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private void SplitValues(OrderSplitDefinition definition, OrderEntity newOrderEntity, string newOrderNumber, OrderEntity originalOrder)
         {
-            originalOrder.CombineSplitStatus = CombineSplitStatusType.Split;
+            originalOrder.CombineSplitStatus = originalOrder.CombineSplitStatus.AsSplit();
 
             newOrderEntity.IsNew = true;
             newOrderEntity.OrderID = 0;
             newOrderEntity.ChangeOrderNumber(newOrderNumber, "", "", newOrderEntity.OrderNumber);
-            newOrderEntity.CombineSplitStatus = CombineSplitStatusType.Split;
+
+            newOrderEntity.CombineSplitStatus = newOrderEntity.CombineSplitStatus.AsSplit();
+
             newOrderEntity.OnlineLastModified = originalOrder.OnlineLastModified;
 
             foreach (IOrderDetailSplitter orderDetailSplitter in orderDetailSplitters)

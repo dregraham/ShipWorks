@@ -232,7 +232,9 @@ namespace ShipWorks.Stores.Orders.Combine
             combinedOrder.IsNew = true;
             combinedOrder.OrderID = 0;
             combinedOrder.ChangeOrderNumber(orderNumberComplete, string.Empty, string.Empty, combinedOrder.OrderNumber);
-            combinedOrder.CombineSplitStatus = CombineSplitStatusType.Combined;
+
+            combinedOrder.CombineSplitStatus = combinedOrder.CombineSplitStatus.AsCombined();
+
             combinedOrder.OnlineLastModified = onlineLastModified;
             combinedOrder.RollupItemCount = 0;
             combinedOrder.RollupItemTotalWeight = 0;

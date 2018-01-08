@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// </summary>
         private async Task<IDictionary<long, IEnumerable<CombinedOrder>>> GetCombinedOrdersAsync(IEnumerable<IOrderEntity> orders, QueryFactory factory)
         {
-            var combinedOrderKeys = orders.Where(x => x.CombineSplitStatus == CombineSplitStatusType.Combined).Select(x => x.OrderID);
+            var combinedOrderKeys = orders.Where(x => x.CombineSplitStatus.IsCombined()).Select(x => x.OrderID);
             if (combinedOrderKeys.None())
             {
                 return new Dictionary<long, IEnumerable<CombinedOrder>>();

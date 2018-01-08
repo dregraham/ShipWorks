@@ -140,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 return;
             }
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.InfoFormat("Not uploading order status since order {0} is manual.", order.OrderID);
                 return;

@@ -49,6 +49,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
                     IsManual = OrderSearchFields.IsManual.ToValue<bool>(),
                     OriginalOrderID = ThreeDCartOrderSearchFields.OriginalOrderID.ToValue<long>(),
                 })
+                .Distinct()
                 .Where(ThreeDCartOrderSearchFields.OrderID == order.OrderID)
                 .AndWhere(OrderSearchFields.IsManual == false);
 

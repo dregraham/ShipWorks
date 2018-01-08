@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.OnlineUpdating
                 return;
             }
 
-            if (order.IsManual && order.CombineSplitStatus != CombineSplitStatusType.Combined)
+            if (order.IsManual && !order.CombineSplitStatus.IsCombined())
             {
                 log.WarnFormat("Not uploading shipment details since order {0} is manual.", order.OrderID);
                 return;

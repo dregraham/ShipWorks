@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_C_1 = await identityProvider.GetOrderIdentifiers(orderA_C_1);
-            var identities_D_C = await identityProvider.GetOrderIdentifiers(orderA_C_1);
+            var identities_D_C = await identityProvider.GetOrderIdentifiers(orderD_C);
 
             Assert.Equal(new[] { 10L, 20L }, identities_A_C_1);
             Assert.Equal(new[] { 10L, 20L, 30L }, identities_D_C);
