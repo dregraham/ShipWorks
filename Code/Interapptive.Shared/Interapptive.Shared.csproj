@@ -188,6 +188,7 @@
     <Compile Include="Enums\CombineSplitStatusType.cs" />
     <Compile Include="Enums\ShopSiteAuthenticationType.cs" />
     <Compile Include="Extensions\CharExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Extensions\ContinueOn.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />

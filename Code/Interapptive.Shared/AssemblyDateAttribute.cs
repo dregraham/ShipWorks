@@ -1,67 +1,58 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.Threading;
 using System.Globalization;
+using System.Reflection;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared
 {
     /// <summary>
-    /// Attribute that can be applied to indicate the date\time the assembly was built.
+    /// Attribute that can be applied to indicate the date/time the assembly was built.
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
     public sealed class AssemblyDateAttribute : Attribute
     {
-        DateTime date;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public AssemblyDateAttribute(string date)
         {
-            this.date = DateTime.Parse(date, CultureInfo.CurrentCulture);
+            Date = DateTime.Parse(date, CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        /// The date\time the assembly was built.
+        /// The date/time the assembly was built.
         /// </summary>
-        public DateTime Date
-        {
-            get
-            {
-                return this.date;
-            }
-        }
+        public DateTime Date { get; }
 
         /// <summary>
-        /// Reads the DateTime specifed in the attribute applied to the current calling assembly.
+        /// Reads the DateTime specified in the attribute applied to the current calling assembly.
         /// </summary>
         /// <exception cref="System.InvalidOperationException" />
-        public static DateTime Read()
-        {
-            return Read(Assembly.GetCallingAssembly());
-        }
+        public static DateTime Read() =>
+            Read(Assembly.GetCallingAssembly());
 
         /// <summary>
-        /// Reads the DateTime specifed in the attribute applied to the specified assembly.
+        /// Reads the DateTime specified in the attribute applied to the specified assembly.
         /// </summary>
         /// <exception cref="System.InvalidOperationException" />
-        public static DateTime Read(Assembly assembly)
-        {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("assembly");
-            }
+        public static DateTime Read(Assembly assembly) =>
+            ReadResult(assembly).Match(x => x, ex => throw ex);
 
-            AssemblyDateAttribute attribute = GetCustomAttribute(assembly, typeof(AssemblyDateAttribute)) as AssemblyDateAttribute;
+        /// <summary>
+        /// Reads the DateTime specified in the attribute applied to the specified assembly.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException" />
+        public static GenericResult<DateTime> ReadResult(Assembly assembly) =>
+            assembly.ToResult(() => new ArgumentNullException("assembly"))
+                .Bind(GetAssemblyDateAttribute)
+                .Map(x => x.Date);
 
-            if (attribute == null)
-            {
-                throw new InvalidOperationException(string.Format("The AssemblyDateAttribute is not applied to assembly '{0}'.", assembly.FullName));
-            }
-
-            return attribute.Date;
-        }
+        /// <summary>
+        /// Get the assembly date attribute
+        /// </summary>
+        private static GenericResult<AssemblyDateAttribute> GetAssemblyDateAttribute(Assembly assembly) =>
+            assembly.GetCustomAttribute<AssemblyDateAttribute>()
+                .ToResult(() => new InvalidOperationException($"The AssemblyDateAttribute is not applied to assembly '{assembly.FullName}'."));
     }
 }
