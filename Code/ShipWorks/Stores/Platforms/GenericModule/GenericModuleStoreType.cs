@@ -20,7 +20,9 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.GenericModule.Enums;
 using ShipWorks.Stores.Platforms.GenericModule.WizardPages;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
@@ -165,6 +167,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             generic.ModuleHttpExpect100Continue = true;
             generic.ModuleResponseEncoding = (int) GenericStoreResponseEncoding.UTF8;
 
+            generic.AmazonMerchantID = "";
+            generic.AmazonAuthToken = "";
+            generic.AmazonApiRegion = "";
         }
 
         /// <summary>
@@ -503,6 +508,37 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public virtual string GetOnlineCarrierName(ShipmentEntity shipment)
         {
             return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
+        }
+
+        /// <summary>
+        /// Generate GenericModule specific template order elements
+        /// </summary>
+        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
+        {
+            GenericModuleOrderEntity order = (GenericModuleOrderEntity) orderSource();
+
+            string storeType = StoreTypeIdentity.FromCode(order.Store.StoreTypeCode).TangoCode;
+
+            ElementOutline outline = container.AddElement(storeType);
+            outline.AddElement("IsFBA", order.IsFBA);
+            outline.AddElement("IsPrime", EnumHelper.GetDescription((GenericModuleIsAmazonPrime) order.IsPrime));
+            outline.AddElement("AmazonOrderID", order.AmazonOrderID);
+            outline.AddElement("IsSameDay", order.IsSameDay);
+        }
+
+        /// <summary>
+        /// Determines whether the shipping address is editable for the specified shipment.
+        /// </summary>
+        public override ShippingAddressEditStateType ShippingAddressEditableState(OrderEntity order, ShipmentEntity shipment)
+        {
+            ShippingAddressEditStateType editable = base.ShippingAddressEditableState(order, shipment);
+
+            if (editable == ShippingAddressEditStateType.Editable && shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return ShippingAddressEditStateType.AmazonSfp;
+            }
+
+            return editable;
         }
 
         /// <summary>
