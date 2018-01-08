@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -74,11 +73,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
         }
 
         [Fact]
-        public async Task CombineSplitCombine()
+        public async Task CombineSplitCombine_WithOrderNumbers()
         {
-            OrderEntity orderA_C = await PerformCombine(1, "A-C", orderA, orderB);
+            OrderEntity orderA_C = await PerformCombine("A-C", orderA, orderB);
             var (orderA_C_O, orderA_C_1) = await PerformSplit(orderA_C);
-            var orderD_C = await PerformCombine(3, "D-C", orderD, orderA_C_O);
+            var orderD_C = await PerformCombine("D-C", orderD, orderA_C_O);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
@@ -89,6 +88,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             Assert.Equal(new[] { 10L, 20L, 30L }, identities_D_C);
         }
 
+        /// <summary>
+        /// Perform a split of the given order
+        /// </summary>
         private async Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order)
         {
             var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
@@ -104,13 +106,16 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             return (original, split);
         }
 
-        private async Task<OrderEntity> PerformCombine(int surviving, string orderNumber, params IOrderEntity[] ordersToCombine)
+        /// <summary>
+        /// Combine the given orders, using the first order in the params as the surviving order
+        /// </summary>
+        private async Task<OrderEntity> PerformCombine(string orderNumber, params IOrderEntity[] ordersToCombine)
         {
             var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var combineOrchestrator = context.Mock.Container.Resolve<ICombineOrderOrchestrator>();
 
             combineInteraction.Setup(x => x.GetCombinationDetailsFromUser(It.IsAny<IEnumerable<IOrderEntity>>()))
-                .Returns(GenericResult.FromSuccess(Tuple.Create(orders[surviving].OrderID, orderNumber)));
+                .Returns(Tuple.Create(ordersToCombine.First().OrderID, orderNumber));
 
             var result = await combineOrchestrator.Combine(ordersToCombine.Select(x => x.OrderID));
             return await dataProvider.GetEntityAsync<OrderEntity>(result.Value);
