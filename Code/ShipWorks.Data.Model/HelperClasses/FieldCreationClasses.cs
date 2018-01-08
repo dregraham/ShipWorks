@@ -9494,6 +9494,526 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity GenericModuleOrderEntity</summary>
+	public partial class GenericModuleOrderFields
+	{
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.CombineSplitStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.AmazonOrderID field instance</summary>
+		public static EntityField2 AmazonOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.AmazonOrderID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.IsFBA field instance</summary>
+		public static EntityField2 IsFBA
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.IsFBA);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.IsPrime field instance</summary>
+		public static EntityField2 IsPrime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.IsPrime);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.IsSameDay field instance</summary>
+		public static EntityField2 IsSameDay
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.IsSameDay);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity GenericModuleOrderItemEntity</summary>
+	public partial class GenericModuleOrderItemFields
+	{
+		/// <summary>Creates a new GenericModuleOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.HarmonizedCode field instance</summary>
+		public static EntityField2 HarmonizedCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.HarmonizedCode);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new GenericModuleOrderItemEntity.AmazonOrderItemCode field instance</summary>
+		public static EntityField2 AmazonOrderItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderItemFieldIndex.AmazonOrderItemCode);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity GenericModuleStoreEntity</summary>
 	public partial class GenericModuleStoreFields
 	{
@@ -9751,6 +10271,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SchemaVersion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.SchemaVersion);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.AmazonMerchantID field instance</summary>
+		public static EntityField2 AmazonMerchantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AmazonMerchantID);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.AmazonAuthToken field instance</summary>
+		public static EntityField2 AmazonAuthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AmazonAuthToken);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.AmazonApiRegion field instance</summary>
+		public static EntityField2 AmazonApiRegion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.AmazonApiRegion);}
 		}
 	}
 
@@ -13432,6 +13967,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.SchemaVersion);}
 		}
+		/// <summary>Creates a new MagentoStoreEntity.AmazonMerchantID field instance</summary>
+		public static EntityField2 AmazonMerchantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AmazonMerchantID);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.AmazonAuthToken field instance</summary>
+		public static EntityField2 AmazonAuthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AmazonAuthToken);}
+		}
+		/// <summary>Creates a new MagentoStoreEntity.AmazonApiRegion field instance</summary>
+		public static EntityField2 AmazonApiRegion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.AmazonApiRegion);}
+		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -14386,6 +14936,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 SchemaVersion
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.SchemaVersion);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.AmazonMerchantID field instance</summary>
+		public static EntityField2 AmazonMerchantID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AmazonMerchantID);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.AmazonAuthToken field instance</summary>
+		public static EntityField2 AmazonAuthToken
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AmazonAuthToken);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.AmazonApiRegion field instance</summary>
+		public static EntityField2 AmazonApiRegion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.AmazonApiRegion);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID

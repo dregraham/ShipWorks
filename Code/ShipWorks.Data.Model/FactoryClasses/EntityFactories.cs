@@ -1659,6 +1659,48 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty GenericModuleOrderEntity objects.</summary>
+	[Serializable]
+	public partial class GenericModuleOrderEntityFactory : EntityFactoryBase2<GenericModuleOrderEntity> {
+		/// <summary>CTor</summary>
+		public GenericModuleOrderEntityFactory() : base("GenericModuleOrderEntity", ShipWorks.Data.Model.EntityType.GenericModuleOrderEntity, true) { }
+		
+		/// <summary>Creates a new GenericModuleOrderEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new GenericModuleOrderEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleOrderUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty GenericModuleOrderItemEntity objects.</summary>
+	[Serializable]
+	public partial class GenericModuleOrderItemEntityFactory : EntityFactoryBase2<GenericModuleOrderItemEntity> {
+		/// <summary>CTor</summary>
+		public GenericModuleOrderItemEntityFactory() : base("GenericModuleOrderItemEntity", ShipWorks.Data.Model.EntityType.GenericModuleOrderItemEntity, true) { }
+		
+		/// <summary>Creates a new GenericModuleOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new GenericModuleOrderItemEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleOrderItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty GenericModuleStoreEntity objects.</summary>
 	[Serializable]
 	public partial class GenericModuleStoreEntityFactory : EntityFactoryBase2<GenericModuleStoreEntity> {
@@ -4744,6 +4786,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.GenericFileStoreEntity:
 					factoryToUse = new GenericFileStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.GenericModuleOrderEntity:
+					factoryToUse = new GenericModuleOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.GenericModuleOrderItemEntity:
+					factoryToUse = new GenericModuleOrderItemEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.GenericModuleStoreEntity:
 					factoryToUse = new GenericModuleStoreEntityFactory();

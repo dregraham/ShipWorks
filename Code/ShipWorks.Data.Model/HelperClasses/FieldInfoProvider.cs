@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (220 + 0));
+			this.InitClass( (222 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -128,6 +128,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitFilterSequenceEntityInfos();
 			InitFtpAccountEntityInfos();
 			InitGenericFileStoreEntityInfos();
+			InitGenericModuleOrderEntityInfos();
+			InitGenericModuleOrderItemEntityInfos();
 			InitGenericModuleStoreEntityInfos();
 			InitGridColumnFormatEntityInfos();
 			InitGridColumnLayoutEntityInfos();
@@ -1664,6 +1666,23 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GenericFileStoreEntity", "XmlXsltContent", typeof(System.String), false, false, false, true,  (int)GenericFileStoreFieldIndex.XmlXsltContent, 1073741823, 0, 0);
 			this.AddElementFieldInfo("GenericFileStoreEntity", "FlatImportMap", typeof(System.String), false, false, false, false,  (int)GenericFileStoreFieldIndex.FlatImportMap, 1073741823, 0, 0);
 		}
+		/// <summary>Inits GenericModuleOrderEntity's FieldInfo objects</summary>
+		private void InitGenericModuleOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(GenericModuleOrderFieldIndex), "GenericModuleOrderEntity");
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)GenericModuleOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "AmazonOrderID", typeof(System.String), false, false, false, false,  (int)GenericModuleOrderFieldIndex.AmazonOrderID, 32, 0, 0);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsFBA, 0, 0, 0);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsPrime, 0, 0, 10);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsSameDay", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsSameDay, 0, 0, 0);
+		}
+		/// <summary>Inits GenericModuleOrderItemEntity's FieldInfo objects</summary>
+		private void InitGenericModuleOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(GenericModuleOrderItemFieldIndex), "GenericModuleOrderItemEntity");
+			this.AddElementFieldInfo("GenericModuleOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)GenericModuleOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("GenericModuleOrderItemEntity", "AmazonOrderItemCode", typeof(System.String), false, false, false, false,  (int)GenericModuleOrderItemFieldIndex.AmazonOrderItemCode, 64, 0, 0);
+		}
 		/// <summary>Inits GenericModuleStoreEntity's FieldInfo objects</summary>
 		private void InitGenericModuleStoreEntityInfos()
 		{
@@ -1688,6 +1707,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleHttpExpect100Continue", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleHttpExpect100Continue, 0, 0, 0);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleResponseEncoding", typeof(System.Int32), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, 0, 0, 10);
 			this.AddElementFieldInfo("GenericModuleStoreEntity", "SchemaVersion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.SchemaVersion, 20, 0, 0);
+			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonMerchantID", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonMerchantID, 50, 0, 0);
+			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
+			this.AddElementFieldInfo("GenericModuleStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 		}
 		/// <summary>Inits GridColumnFormatEntity's FieldInfo objects</summary>
 		private void InitGridColumnFormatEntityInfos()

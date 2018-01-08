@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(220);
+			this.InitClass(222);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -125,6 +125,8 @@ namespace ShipWorks.Data.Model
 			InitFilterSequenceEntityMappings();
 			InitFtpAccountEntityMappings();
 			InitGenericFileStoreEntityMappings();
+			InitGenericModuleOrderEntityMappings();
+			InitGenericModuleOrderItemEntityMappings();
 			InitGenericModuleStoreEntityMappings();
 			InitGridColumnFormatEntityMappings();
 			InitGridColumnLayoutEntityMappings();
@@ -1737,10 +1739,29 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("GenericFileStoreEntity", "FlatImportMap", "FlatImportMap", false, "NText", 1073741823, 0, 0, false, "", null, typeof(System.String), 19);
 		}
 
+		/// <summary>Inits GenericModuleOrderEntity's mappings</summary>
+		private void InitGenericModuleOrderEntityMappings()
+		{
+			this.AddElementMapping("GenericModuleOrderEntity", @"ShipWorksLocal", @"dbo", "GenericModuleOrder", 5, 0);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "AmazonOrderID", "AmazonOrderID", false, "VarChar", 32, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsFBA", "IsFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsPrime", "IsPrime", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsSameDay", "IsSameDay", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+		}
+
+		/// <summary>Inits GenericModuleOrderItemEntity's mappings</summary>
+		private void InitGenericModuleOrderItemEntityMappings()
+		{
+			this.AddElementMapping("GenericModuleOrderItemEntity", @"ShipWorksLocal", @"dbo", "GenericModuleOrderItem", 2, 0);
+			this.AddElementFieldMapping("GenericModuleOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("GenericModuleOrderItemEntity", "AmazonOrderItemCode", "AmazonOrderItemCode", false, "NVarChar", 64, 0, 0, false, "", null, typeof(System.String), 1);
+		}
+
 		/// <summary>Inits GenericModuleStoreEntity's mappings</summary>
 		private void InitGenericModuleStoreEntityMappings()
 		{
-			this.AddElementMapping("GenericModuleStoreEntity", @"ShipWorksLocal", @"dbo", "GenericModuleStore", 20, 0);
+			this.AddElementMapping("GenericModuleStoreEntity", @"ShipWorksLocal", @"dbo", "GenericModuleStore", 23, 0);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleUsername", "ModuleUsername", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModulePassword", "ModulePassword", false, "NVarChar", 80, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1761,6 +1782,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleHttpExpect100Continue", "ModuleHttpExpect100Continue", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 17);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "ModuleResponseEncoding", "ModuleResponseEncoding", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
 			this.AddElementFieldMapping("GenericModuleStoreEntity", "SchemaVersion", "SchemaVersion", false, "VarChar", 20, 0, 0, false, "", null, typeof(System.String), 19);
+			this.AddElementFieldMapping("GenericModuleStoreEntity", "AmazonMerchantID", "AmazonMerchantID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("GenericModuleStoreEntity", "AmazonAuthToken", "AmazonAuthToken", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 21);
+			this.AddElementFieldMapping("GenericModuleStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 22);
 		}
 
 		/// <summary>Inits GridColumnFormatEntity's mappings</summary>
