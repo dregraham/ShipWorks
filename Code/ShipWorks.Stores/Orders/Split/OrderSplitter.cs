@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Orders.Split
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             originalOrder.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
-            OrderEntity newOrderEntity = EntityUtility.CloneAsNew(definition.Order);
+            OrderEntity newOrderEntity = EntityUtility.CloneAsNew(originalOrder);
             newOrderEntity.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             newOrderEntity.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
@@ -175,9 +175,6 @@ namespace ShipWorks.Stores.Orders.Split
             order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
-
-            //order.OrderSearch.First().OriginalOrderID = order.OrderID;
-            //saveResult &= await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
 
             foreach (OrderItemEntity orderItem in order.OrderItems.Where(oi => Math.Abs(oi.Quantity) < 0.001))
             {

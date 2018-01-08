@@ -61,12 +61,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 
             orderA = Create.Order(store, context.Customer)
                 .Set(x => x.OrderNumber, 10)
+                .Set(x => x.OrderNumberComplete, "10")
                 .Save();
             orderB = Create.Order(store, context.Customer)
                 .Set(x => x.OrderNumber, 20)
+                .Set(x => x.OrderNumberComplete, "20")
                 .Save();
             orderD = Create.Order(store, context.Customer)
                 .Set(x => x.OrderNumber, 30)
+                .Set(x => x.OrderNumberComplete, "30")
                 .Save();
 
             orders = new Dictionary<long, OrderEntity> { { 1, orderA }, { 2, orderB }, { 3, orderD } };
@@ -97,7 +100,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
 
             splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
-                .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "-1"));
+                .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), order.OrderNumberComplete + "-1"));
 
             var result = await orchestrator.Split(order.OrderID);
             var original = await dataProvider.GetEntityAsync<OrderEntity>(result.First());
