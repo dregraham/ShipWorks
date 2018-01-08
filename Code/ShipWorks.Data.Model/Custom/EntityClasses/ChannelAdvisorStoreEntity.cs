@@ -16,6 +16,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.AuthToken
         {
             get { return AmazonAuthToken; }
+            set
+            {
+                // No setter needed for this implementation
+            }
         }
 
         /// <summary>
@@ -24,6 +28,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.MerchantID
         {
             get { return AmazonMerchantID; }
+            set
+            {
+                // No setter needed for this implementation
+            }
         }
 
         /// <summary>
@@ -32,6 +40,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         string IAmazonCredentials.Region
         {
             get { return AmazonApiRegion; }
+            set
+            {
+                // No setter needed for this implementation
+            }
         }
 
         /// <summary>
