@@ -324,6 +324,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
+    <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleIsPrimeCondition.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />
     <Compile Include="Platforms\Jet\Content\JetCombineOrderAction.cs" />
     <Compile Include="Platforms\Jet\CoreExtensions\Actions\JetShipmentUploadTask.cs" />
