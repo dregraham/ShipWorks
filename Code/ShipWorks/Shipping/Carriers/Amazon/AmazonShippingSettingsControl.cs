@@ -44,13 +44,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Save the UI settings to the store entity
         /// </summary>
-        public void SaveToEntity(ChannelAdvisorStoreEntity caStore)
+        public void SaveToEntity(IAmazonCredentials amazonCredentials)
         {
-            MethodConditions.EnsureArgumentIsNotNull(caStore, nameof(caStore));
+            MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
 
-            caStore.AmazonApiRegion = Geography.GetCountryCode((string)countries.SelectedItem);
-            caStore.AmazonMerchantID = merchantID.Text;
-            caStore.AmazonAuthToken = authToken.Text;
+            amazonCredentials.Region = Geography.GetCountryCode((string)countries.SelectedItem);
+            amazonCredentials.MerchantID = merchantID.Text;
+            amazonCredentials.AuthToken = authToken.Text;
 
             // If the credentials are not not blank we test them to ensure they are correct
             if (!string.IsNullOrWhiteSpace(merchantID.Text) && !string.IsNullOrWhiteSpace(authToken.Text))
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                     {
                         // Account validator is available so we validate
                         IAmazonAccountValidator validator = lifetimeScope.Resolve<IAmazonAccountValidator>();
-                        if (!validator.ValidateAccount(caStore))
+                        if (!validator.ValidateAccount(amazonCredentials))
                         {
                             throw new AmazonShippingException("Invalid Amazon credentials.");
                         }

@@ -232,6 +232,12 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.Designer.cs">
+      <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
       <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
     </Compile>
