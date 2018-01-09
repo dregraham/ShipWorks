@@ -163,6 +163,26 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             Assert.Equal(new[] { 10L }, identities_B_M_C);
         }
 
+        [Fact]
+        public async Task SplitManualCombineWithNotManualOrder_WithOrderNumbers()
+        {
+            orderA.IsManual = true;
+            Modify.Order(orderA).Save();
+
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+
+            var orderA_M_1_C = await PerformCombine("10A-M-1-C", orderA_1, orderB);
+
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
+
+            var identities_A_M_1_C = await identityProvider.GetOrderIdentifiers(orderA_M_1_C);
+            var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
+
+            Assert.Equal(new[] { 20L }, identities_A_M_1_C);
+            Assert.Equal(0, identities_A_0.Count());
+        }
+
         /// <summary>
         /// Perform a split of the given order
         /// </summary>
