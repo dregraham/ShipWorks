@@ -194,6 +194,7 @@
     <Compile Include="Platforms\Ebay\EbayOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Ebay\EbayQuickSearchTest.cs" />
     <Compile Include="Platforms\Etsy\EtsyOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleOrderNumberCompleteCombineAndSplitTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleCombineAndSplitTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleMultiCombineTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponOrderCombinationUserInteractionTest.cs" />
