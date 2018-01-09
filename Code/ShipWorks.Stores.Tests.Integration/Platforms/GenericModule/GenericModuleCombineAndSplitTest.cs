@@ -84,17 +84,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
-            var identities_A = await identityProvider.GetOrderIdentifiers(orderA_1);
-            var identities_B = await identityProvider.GetOrderIdentifiers(orderA_2);
-            var identities_C = await identityProvider.GetOrderIdentifiers(orderA_3);
-            var identities_D = await identityProvider.GetOrderIdentifiers(orderA_4);
-            var identities_E = await identityProvider.GetOrderIdentifiers(orderA_5);
+            var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
+            var identities_A_2 = await identityProvider.GetOrderIdentifiers(orderA_2);
+            var identities_A_3 = await identityProvider.GetOrderIdentifiers(orderA_3);
+            var identities_A_4 = await identityProvider.GetOrderIdentifiers(orderA_4);
+            var identities_A_5 = await identityProvider.GetOrderIdentifiers(orderA_5);
 
-            Assert.Equal(new[] { 10L }, identities_A);
-            Assert.Equal(new[] { 10L }, identities_B);
-            Assert.Equal(new[] { 10L }, identities_C);
-            Assert.Equal(new[] { 10L }, identities_D);
-            Assert.Equal(new[] { 10L }, identities_E);
+            Assert.Equal(new[] { 10L }, identities_A_1);
+            Assert.Equal(new[] { 10L }, identities_A_2);
+            Assert.Equal(new[] { 10L }, identities_A_3);
+            Assert.Equal(new[] { 10L }, identities_A_4);
+            Assert.Equal(new[] { 10L }, identities_A_5);
         }
 
         [Fact]
