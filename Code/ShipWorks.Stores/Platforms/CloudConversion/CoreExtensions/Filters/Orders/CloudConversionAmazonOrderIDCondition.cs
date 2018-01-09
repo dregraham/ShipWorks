@@ -4,7 +4,7 @@ using ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders;
 namespace ShipWorks.Stores.Platforms.CloudConversion.CoreExtensions.Filters.Orders
 {
     /// <summary>
-    /// Filter condition for Is Prime
+    /// Filter condition for Amazon Order ID Condition
     /// </summary>
     [ConditionElement("CloudConversion Amazon Order ID", "CloudConversion.AmazonOrderID")]
     [ConditionStoreType(StoreTypeCode.CloudConversion)]

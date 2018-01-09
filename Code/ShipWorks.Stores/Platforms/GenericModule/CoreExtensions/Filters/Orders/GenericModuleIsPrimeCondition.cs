@@ -7,7 +7,7 @@ using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Stores.Platforms.GenericModule.Enums;
 
-namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters
+namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
 {
     /// <summary>
     /// Filter condition for Is Prime
