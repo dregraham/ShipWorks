@@ -183,6 +183,24 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             Assert.Equal(0, identities_A_0.Count());
         }
 
+        [Fact]
+        public async Task SplitManualOrder_WithOrderNumbers()
+        {
+            orderA.IsManual = true;
+            Modify.Order(orderA).Save();
+
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
+
+            var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
+            var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
+
+            Assert.Equal(0, identities_A_0.Count());
+            Assert.Equal(0, identities_A_1.Count());
+        }
+
         /// <summary>
         /// Perform a split of the given order
         /// </summary>
