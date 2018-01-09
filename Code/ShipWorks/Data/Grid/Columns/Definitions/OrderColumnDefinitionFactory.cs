@@ -24,6 +24,8 @@ using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
 using Interapptive.Shared.UI;
+using ShipWorks.Stores.Platforms.GenericModule.Enums;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -308,6 +310,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         ChannelAdvisorOrderFields.IsPrime)
                         {
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
+                        },
+
+                    new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}", true,
+                        new GridEnumDisplayType<GenericModuleIsAmazonPrime>(EnumSortMethod.Description), "Amazon Prime", GenericModuleIsAmazonPrime.Yes,
+                        GenericModuleOrderFields.IsPrime)
+                        {
+                            ApplicableTest = (data) => StoreManager.GetStoreTypeInstances().Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType()))
                         },
 
                     new GridColumnDefinition("{74EF7153-8DFC-4afb-B9A7-0ABD5359B983}", true,
