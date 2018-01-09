@@ -264,6 +264,9 @@
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
+    <Compile Include="Platforms\CloudConversion\CoreExtensions\Filters\Orders\CloudConversionIsFBACondition.cs" />
+    <Compile Include="Platforms\CloudConversion\CoreExtensions\Filters\Orders\CloudConversionAmazonOrderIDCondition.cs" />
+    <Compile Include="Platforms\CloudConversion\CoreExtensions\Filters\Orders\CloudConversionIsPrimeCondition.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSql.cs" />
     <Compile Include="Platforms\CommerceInterface\OnlineUpdating\CommerceInterfaceOnlineUpdateCommandCreator.cs" />
@@ -324,8 +327,7 @@
     <Compile Include="Platforms\BigCommerce\IBigCommerceStatusCodeProvider.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClient.cs" />
     <Compile Include="Platforms\BigCommerce\IBigCommerceWebClientFactory.cs" />
-    <Compile Include="Platforms\GenericModule\GenericModuleConditionAttribute.cs" />
-    <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\GenericModuleIsFBACondition.cs" />
+    <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleIsFBACondition.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleIsPrimeCondition.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />

@@ -10,8 +10,6 @@ namespace ShipWorks.Filters.Content
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public class ConditionStoreTypeAttribute : Attribute
     {
-        readonly StoreTypeCode storeType;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -24,13 +22,12 @@ namespace ShipWorks.Filters.Content
         /// </summary>
         public ConditionStoreTypeAttribute(StoreTypeCode storeType)
         {
-            this.storeType = storeType;
+            StoreType = storeType;
         }
 
         /// <summary>
         /// The StoreType that restricts the filter condition
         /// </summary>
-        public virtual IEnumerable<StoreTypeCode> StoreType => 
-            new[] { storeType };
+        public virtual StoreTypeCode StoreType { get; }
     }
 }

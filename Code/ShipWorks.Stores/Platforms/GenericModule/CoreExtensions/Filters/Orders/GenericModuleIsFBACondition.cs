@@ -1,44 +1,45 @@
-﻿using ShipWorks.Data.Model.HelperClasses;
+﻿using System;
+using System.Linq;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
 {
-    /// <summary>
-    /// Filter condition for Is Prime
-    /// </summary>
-    [ConditionElement("Generic Module Amazon Order ID", "GenericModule.AmazonOrderID")]
+    [ConditionElement("Generic Module Is FBA", "GenericModule.IsFBA")]
     [ConditionStoreType(StoreTypeCode.GenericModule)]
-    public class GenericModuleAmazonOrderIDCondition : StringCondition
+    public class GenericModuleIsFBACondition : BooleanCondition
     {
+        public GenericModuleIsFBACondition() 
+            : base("Yes", "No")
+        { }
+
         /// <summary>
-        /// Generate Sql that filters orders based on StoreType and AmazonOrderID
+        /// Generate Sql that filters orders based on StoreType and FBA status
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
             string storeSql = GenerateStoreTypeSql(context);
-            string amazonOrderIDSql = GenerateAmazonOrderIDSql(context);
+            string fbaSql = GenerateFbaSql(context);
 
             // AND the two together.
-            return $"{storeSql} AND {amazonOrderIDSql}";
+            return $"{storeSql} AND {fbaSql}";
         }
 
         /// <summary>
-        /// Generate the SQL for the condition
+        /// Generate SQL to filter out FBA orders
         /// </summary>
-        public string GenerateAmazonOrderIDSql(SqlGenerationContext context)
+        private string GenerateFbaSql(SqlGenerationContext context)
         {
+            string fbaSql;
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, GenericModuleOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(base.GenerateSql(context.GetColumnReference(GenericModuleOrderFields.AmazonOrderID), context));
+                fbaSql = scope.Adorn(base.GenerateSql(context.GetColumnReference(GenericModuleOrderFields.IsFBA), context));
             }
+
+            return fbaSql;
         }
 
         /// <summary>

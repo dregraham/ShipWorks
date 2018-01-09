@@ -567,9 +567,16 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             return new Version();
         }
 
+        /// <summary>
+        /// Create Order Instance
+        /// </summary>
         protected override OrderEntity CreateOrderInstance() => 
             new GenericModuleOrderEntity();
 
+        /// <summary>
+        /// Create Order Item Instance
+        /// </summary>
+        /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance() => 
             new GenericModuleOrderItemEntity
             {

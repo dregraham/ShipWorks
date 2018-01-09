@@ -73,7 +73,7 @@ namespace ShipWorks.Filters.Content
             // Determine the valid store types
             foreach (ConditionStoreTypeAttribute storeAttribute in Attribute.GetCustomAttributes(type, typeof(ConditionStoreTypeAttribute)))
             {
-                storeTypesCodes.AddRange(storeAttribute.StoreType);
+                storeTypesCodes.Add(storeAttribute.StoreType);
             }
 
             // Determine if there should be a function to test for applicability

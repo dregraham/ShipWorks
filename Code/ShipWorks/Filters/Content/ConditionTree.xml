@@ -127,7 +127,8 @@
         <Condition identifier="SearsOrder.PoNumber" />
         <Condition identifier="ShopifyOrder.OnlineFulfillmentStatusCode" />
         <Condition identifier="ShopifyOrder.OnlinePaymentStatusCode" />
-        <Condition identifier= "GenericModule.IsFBA" />
+        <Condition identifier="GenericModule.IsFBA" />
+        <Condition identifier="CloudConversion.IsFBA" />
       </Group>
       <Group name="Person">
         <Group name="Name">
