@@ -17,9 +17,8 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
-using System.Diagnostics.CodeAnalysis;
 using ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Orders.Combine;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdating
@@ -36,6 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdat
         private readonly Mock<IMenuCommandExecutionContext> menuContext;
         private readonly GenericModuleOnlineUpdateCommandCreator commandCreator;
         private Mock<IGenericStoreWebClientFactory> webClientFactory;
+        private Mock<ICombineOrderNumberCompleteSearchProvider> combinedOrderSearchProvider;
 
         private static int NewStatus = 1;
         private static int ProcessingStatus = 2;
@@ -141,6 +141,64 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdat
             webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<OrderEntity>(), AnyString, ProcessingStatus, ""), Times.Exactly(2));
             webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<OrderEntity>(), "20", ProcessingStatus, ""), Times.Once);
             webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<OrderEntity>(), "30", ProcessingStatus, ""), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateOrderStatus_MakesSameNumberOfWebRequests_AsNumberOfOrderIdentifiersReturned()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ProcessingStatus)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
+            context.Mock.Provide(combinedOrderSearchProvider.Object);
+
+            for (int i = 1; i < 100; i++)
+            {
+                IEnumerable<string> ids = Enumerable.Range(0, i).Select(x => x.ToString());
+                combinedOrderSearchProvider.Setup(p => p.GetOrderIdentifiers(order)).Returns(Task.FromResult(ids));
+
+                await commandCreator.OnSetOnlineStatus(menuContext.Object, store);
+
+                combinedOrderSearchProvider.Verify(x => x.GetOrderIdentifiers(order), Times.Exactly(i));
+
+                foreach (var id in ids)
+                {
+                    webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<OrderEntity>(), id, ProcessingStatus, ""), Times.Exactly(1));
+                }
+
+                webClient.ResetCalls();
+            }
+        }
+
+        [Fact]
+        public async Task UploadShipmentDetails_MakesSameNumberOfWebRequests_AsNumberOfOrderIdentifiersReturned()
+        {
+            OrderEntity order = CreateCombinedOrder(1, "track-123", Tuple.Create(2, false), Tuple.Create(3, false));
+
+            menuContext.SetupGet(x => x.MenuCommand).Returns(context.Mock.CreateMock<IMenuCommand>(x => x.Setup(z => z.Tag).Returns(ProcessingStatus)));
+            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
+
+            combinedOrderSearchProvider = new Mock<ICombineOrderNumberCompleteSearchProvider>();
+            context.Mock.Provide(combinedOrderSearchProvider.Object);
+
+            for (int i = 1; i < 100; i++)
+            {
+                IEnumerable<string> ids = Enumerable.Range(0, i).Select(x => x.ToString());
+                combinedOrderSearchProvider.Setup(p => p.GetOrderIdentifiers(order)).Returns(Task.FromResult(ids));
+
+                await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
+
+                combinedOrderSearchProvider.Verify(x => x.GetOrderIdentifiers(order), Times.Exactly(i));
+
+                foreach (var id in ids)
+                {
+                    webClient.Verify(x => x.UploadShipmentDetails(It.IsAny<OrderEntity>(), id, It.IsAny<ShipmentEntity>()), Times.Once);
+                }
+
+                webClient.ResetCalls();
+            }
         }
 
         [Fact]

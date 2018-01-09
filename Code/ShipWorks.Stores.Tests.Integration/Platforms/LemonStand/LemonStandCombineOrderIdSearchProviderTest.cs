@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
         [InlineData(CombineSplitStatusType.None, 1, 1, "12345")]
         [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345-OS")]
         [InlineData(CombineSplitStatusType.None, 2, 1, "12345")]
-        [InlineData(CombineSplitStatusType.Combined, 2, 2, "12345-OS")]
+        [InlineData(CombineSplitStatusType.Combined, 2, 1, "12345-OS")]
         public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType,
             int numberToCreate, int expectedCount, string expectedFirstResult)
         {
@@ -69,6 +69,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
             Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
         }
 
+        [Fact]
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsDistinctValues()
+        {
+            LemonStandCombineOrderIdSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<LemonStandCombineOrderIdSearchProvider>();
+
+            LemonStandOrderEntity order = Create.Order<LemonStandOrderEntity>(context.Store, context.Customer)
+                .WithOrderNumber(12345)
+                .Set(x => x.LemonStandOrderID, "12345")
+                .Set(x => x.CombineSplitStatus, CombineSplitStatusType.Combined)
+                .Save();
+
+            CreateOrderSearchEntities(order, 1);
+                CreateOrderSearchEntities(order, 1);
+                CreateOrderSearchEntities(order, 1);
+                CreateOrderSearchEntities(order, 1);
+
+                var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                Assert.Equal(1, results?.Count());
+                Assert.Equal($"{order.OrderNumberComplete}-OS", results?.FirstOrDefault());
+        }
+
         private void CreateOrderSearchEntities(IOrderEntity order, int numberToCreate)
         {
             for (int i = 1; i < numberToCreate + 1; i++)
@@ -79,6 +101,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
                     .Set(os => os.OrderNumberComplete, i.ToString())
                     .Set(os => os.IsManual, false)
                     .Set(os => os.OrderID, order.OrderID)
+                    .Set(os => os.OriginalOrderID, order.OrderID)
                     .Save();
 
                 Create.Entity<LemonStandOrderSearchEntity>()
