@@ -507,6 +507,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual string GetOnlineCarrierName(ShipmentEntity shipment)
         {
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.Amazon)
+            {
+                return shipment.Amazon.CarrierName;
+            }
+
             return ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType);
         }
 
