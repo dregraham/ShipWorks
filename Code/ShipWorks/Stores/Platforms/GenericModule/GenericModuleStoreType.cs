@@ -561,5 +561,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             return new Version();
         }
+
+        protected override OrderEntity CreateOrderInstance() => 
+            new GenericModuleOrderEntity();
+
+        public override OrderItemEntity CreateOrderItemInstance() => 
+            new GenericModuleOrderItemEntity
+            {
+                AmazonOrderItemCode = string.Empty
+            };
     }
 }
