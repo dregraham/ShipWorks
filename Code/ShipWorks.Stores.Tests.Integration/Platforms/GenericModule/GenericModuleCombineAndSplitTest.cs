@@ -76,6 +76,18 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
         }
 
         [Fact]
+        public async Task Split_WithOrderNumbers()
+        {
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
+            var identities_A = await identityProvider.GetOrderIdentifiers(orderA_1);
+
+            Assert.Equal(new[] { 10L }, identities_A);
+        }
+
+        [Fact]
         public async Task CombineSplitCombine_WithOrderNumbers()
         {
             OrderEntity orderA_C = await PerformCombine("A-C", orderA, orderB);
