@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public string Result { get; internal set; }
         public string IntegratorTxID { get; set; }
         public string TrackingNumber { get; set; }
-        public RateV24 Rate { get; set; }
+        public RateV25 Rate { get; set; }
         public Guid StampsTxID { get; set; }
         public string URL { get; set; }
         public PostageBalance PostageBalance { get; set; }

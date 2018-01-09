@@ -257,6 +257,9 @@
       <DependentUpon>AmazonSameDayNotAvailableFootnote.xaml</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Postal\Usps\FirstClassInternationalWarningDialog.xaml.cs">
+      <DependentUpon>FirstClassInternationalWarningDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateDiscrepancyViewModel.cs" />
     <Compile Include="Carriers\Ups\LocalRating\UpsLocalRateDiscrepancyDialog.xaml.cs">
       <DependentUpon>UpsLocalRateDiscrepancyDialog.xaml</DependentUpon>
@@ -589,6 +592,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Carriers\Amazon\AmazonSameDayNotAvailableFootnote.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Carriers\Postal\Usps\FirstClassInternationalWarningDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

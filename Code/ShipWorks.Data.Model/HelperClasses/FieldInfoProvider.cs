@@ -1131,6 +1131,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.Email, 100, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.MailingPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "ScanFormAddressSource", typeof(System.Int32), false, false, false, false,  (int)EndiciaAccountFieldIndex.ScanFormAddressSource, 0, 0, 10);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
 		}
 		/// <summary>Inits EndiciaProfileEntity's FieldInfo objects</summary>
 		private void InitEndiciaProfileEntityInfos()
@@ -3499,6 +3500,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsAccountFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "GlobalPostAvailability", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.GlobalPostAvailability, 0, 0, 10);
+			this.AddElementFieldInfo("UspsAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

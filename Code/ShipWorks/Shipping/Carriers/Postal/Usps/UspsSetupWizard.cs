@@ -205,7 +205,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 CountryCode = "US",
                 ContractType = (int) UspsAccountContractType.Unknown,
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                AcceptedFCMILetterWarning = false
             };
 
             UspsAccount.InitializeNullsToDefault();

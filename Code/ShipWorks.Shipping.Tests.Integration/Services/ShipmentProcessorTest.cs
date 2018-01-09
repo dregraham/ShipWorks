@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
+using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
@@ -36,6 +37,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
@@ -266,17 +268,27 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
-            });
 
-            string errorMessage = string.Empty;
-            messageHelper
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+            });
 
             webServiceFactory
                 .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -292,31 +304,41 @@ namespace ShipWorks.Shipping.Tests.Services
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
-
-            Assert.Contains("There was an error", errorMessage);
+            
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV24(),
+                        Rate = new RateV25(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
-            });
 
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+            });
+            
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
-
-            string errorMessage = string.Empty;
-            messageHelper
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
 
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
@@ -329,13 +351,13 @@ namespace ShipWorks.Shipping.Tests.Services
 
             await ProcessShipment();
 
-            Assert.Contains("Parameter is not valid", errorMessage);
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("Parameter is not valid"))));
         }
 
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenServerReturns500()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");
@@ -343,15 +365,25 @@ namespace ShipWorks.Shipping.Tests.Services
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
-
-            string errorMessage = string.Empty;
-            messageHelper
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
 
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
@@ -364,7 +396,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
             await ProcessShipment();
 
-            Assert.Contains("There was an error", errorMessage);
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
         /// <summary>

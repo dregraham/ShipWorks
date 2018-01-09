@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Startup;
 using Xunit;
 
@@ -20,19 +22,34 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         }
 
         [Fact]
-        public void EnsureBestRateUsesBestRateShipmentPreProcessor()
+        public void EnsureCarriersThatDoNotUseDefaultPreProcessorAreRegistered()
         {
-            IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(ShipmentTypeCode.BestRate);
-            Assert.IsType<BestRateShipmentPreProcessor>(service);
+            foreach (KeyValuePair<ShipmentTypeCode, Type> carrier in CarriersThatDoNotUseDefaultPreProcessor)
+            {
+                IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(carrier.Key);
+                Assert.Equal(carrier.Value, service.GetType());
+            }
         }
 
         [Fact]
         public void EnsureAllCarriersExceptBestRateUseGenericShipmentPreProcessor()
         {
-            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => x != ShipmentTypeCode.BestRate))
+            foreach (var value in Enum.GetValues(typeof(ShipmentTypeCode)).OfType<ShipmentTypeCode>().Where(x => !CarriersThatDoNotUseDefaultPreProcessor.ContainsKey(x)))
             {
                 IShipmentPreProcessor service = container.ResolveKeyed<IShipmentPreProcessor>(value);
                 Assert.IsType<DefaultShipmentPreProcessor>(service);
+            }
+        }
+
+        private static IDictionary<ShipmentTypeCode, Type> CarriersThatDoNotUseDefaultPreProcessor
+        {
+            get
+            {
+                var dict = new Dictionary<ShipmentTypeCode, Type>();
+                dict.Add(ShipmentTypeCode.Endicia, typeof(PostalShipmentPreProcessor));
+                dict.Add(ShipmentTypeCode.Usps, typeof(PostalShipmentPreProcessor));
+                dict.Add(ShipmentTypeCode.BestRate, typeof(BestRateShipmentPreProcessor));
+                return dict;
             }
         }
 

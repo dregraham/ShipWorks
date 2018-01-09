@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
     [Trait("Category", "ContinuousIntegration")]
     public class LabelServiceRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public LabelServiceRegistrationTest()
         {

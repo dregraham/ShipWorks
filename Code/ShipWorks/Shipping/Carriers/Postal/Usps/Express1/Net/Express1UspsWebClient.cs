@@ -20,6 +20,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -39,6 +40,7 @@ using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps
 using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ServiceType;
 using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.StatusCodes;
 using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.UrlType;
+using PaperSizeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PaperSizeV1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -199,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
-        public object GetAccountInfo(UspsAccountEntity account)
+        public object GetAccountInfo(IUspsAccountEntity account)
         {
             return AuthenticationWrapper(() => GetAccountInfoInternal(account), account);
         }
@@ -207,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
-        private AccountInfo GetAccountInfoInternal(UspsAccountEntity account)
+        private AccountInfo GetAccountInfoInternal(IUspsAccountEntity account)
         {
             AccountInfo accountInfo;
 
@@ -1089,7 +1091,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Wraps the given executor in methods that ensure the appropriate authentication for the account
         /// </summary>
-        private T AuthenticationWrapper<T>(Func<T> executor, UspsAccountEntity account)
+        private T AuthenticationWrapper<T>(Func<T> executor, IUspsAccountEntity account)
         {
             object authenticationLock;
 
@@ -1140,7 +1142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Get the authenticator for the given account
         /// </summary>
-        private string GetAuthenticator(UspsAccountEntity account)
+        private string GetAuthenticator(IUspsAccountEntity account)
         {
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
@@ -1320,6 +1322,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Not implemented in Express1
         /// </summary>
         public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter address, UspsAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Not implemented in Express1
+        /// </summary>
+        public string GetUrl(IUspsAccountEntity account, WebServices.UrlType urlType)
         {
             throw new NotImplementedException();
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -35,7 +36,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// A shipment type for the USPS shipment type in ShipWorks.
     /// </summary>
-    public class UspsShipmentType : PostalShipmentType
+    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Usps)]
+    public class UspsShipmentType : PostalShipmentType, IUspsShipmentType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentType"/> class.
@@ -213,7 +215,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the dynamic data of the shipment
         /// </summary>
-        /// <param name="shipment"></param>
         public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
         {
             base.UpdateDynamicShipmentData(shipment);
@@ -407,13 +408,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        public void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
+        public void UseAccountForShipment(IUspsAccountEntity account, ShipmentEntity shipment)
         {
             shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
             if (shipment.OriginOriginID == (int) ShipmentOriginSource.Account)
             {
-                PersonAdapter.Copy(account, string.Empty, shipment, "Origin");
+                account.Address.CopyTo(shipment, "Origin");
             }
         }
 
