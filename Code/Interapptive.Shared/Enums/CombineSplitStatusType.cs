@@ -26,7 +26,7 @@ namespace Interapptive.Shared.Enums
     {
         public static CombineSplitStatusType AsCombined(this CombineSplitStatusType value)
         {
-            return value == CombineSplitStatusType.None ? 
+            return value == CombineSplitStatusType.None || value == CombineSplitStatusType.Combined ? 
                 CombineSplitStatusType.Combined : 
                 CombineSplitStatusType.Both;
         }
@@ -39,7 +39,7 @@ namespace Interapptive.Shared.Enums
 
         public static CombineSplitStatusType AsSplit(this CombineSplitStatusType value)
         {
-            return value == CombineSplitStatusType.None ?
+            return value == CombineSplitStatusType.None || value == CombineSplitStatusType.Split ?
                 CombineSplitStatusType.Split :
                 CombineSplitStatusType.Both;
         }
