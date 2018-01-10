@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Model.EntityClasses

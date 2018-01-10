@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;

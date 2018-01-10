@@ -147,7 +147,6 @@
     <Compile Include="Stores\Platforms\Amazon\IAmazonCredentials.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrder.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />
-    <Compile Include="Stores\Platforms\Amazon\AmazonIsPrime.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />
     <Compile Include="Stores\StoreTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeIdentity.cs" />

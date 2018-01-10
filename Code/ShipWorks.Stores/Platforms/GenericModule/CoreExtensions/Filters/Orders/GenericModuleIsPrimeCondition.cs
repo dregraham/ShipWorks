@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
 {

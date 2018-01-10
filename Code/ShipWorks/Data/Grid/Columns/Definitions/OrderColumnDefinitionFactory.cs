@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;

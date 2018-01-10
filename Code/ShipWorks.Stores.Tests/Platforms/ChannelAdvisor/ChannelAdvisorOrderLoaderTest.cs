@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Moq;

@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
-namespace ShipWorks.Stores.Platforms.Amazon
+namespace Interapptive.Shared.Enums
 {
     /// <summary>
     /// The fulfillment channel an order was placed

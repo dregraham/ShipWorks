@@ -85,6 +85,7 @@
   </Properties>
   <TypeShortcuts>
     <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AmazonIsPrime" Type="Interapptive.Shared.Enums.AmazonIsPrime, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -1451,7 +1452,7 @@
         <Fields>
           <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="0" />
           <Field Name="IsFBA" Type="bool" FieldIndex="1" />
-          <Field Name="IsPrime" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
           <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
         </Fields>
       </EntityDefinition>

@@ -1,5 +1,6 @@
 ﻿using System;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using log4net;

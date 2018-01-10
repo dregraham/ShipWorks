@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores.Platforms.Amazon;
+﻿using Interapptive.Shared.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using Xunit;

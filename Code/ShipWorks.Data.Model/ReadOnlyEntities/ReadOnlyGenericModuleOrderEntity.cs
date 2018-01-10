@@ -65,7 +65,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <remarks>Mapped on table field: "GenericModuleOrder"."IsPrime"<br/>
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Int32 IsPrime { get; }
+        public Interapptive.Shared.Enums.AmazonIsPrime IsPrime { get; }
         /// <summary> The IsSameDay property of the Entity GenericModuleOrder<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "GenericModuleOrder"."IsSameDay"<br/>

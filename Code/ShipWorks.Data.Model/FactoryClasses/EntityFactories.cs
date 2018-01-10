@@ -1672,7 +1672,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new GenericModuleOrderEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleOrderUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
@@ -1693,7 +1692,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new GenericModuleOrderItemEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGenericModuleOrderItemUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code

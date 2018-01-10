@@ -1673,7 +1673,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)GenericModuleOrderFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "AmazonOrderID", typeof(System.String), false, false, false, false,  (int)GenericModuleOrderFieldIndex.AmazonOrderID, 32, 0, 0);
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsFBA", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsFBA, 0, 0, 0);
-			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsPrime, 0, 0, 10);
+			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsPrime", typeof(Interapptive.Shared.Enums.AmazonIsPrime), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsPrime, 0, 0, 10);
 			this.AddElementFieldInfo("GenericModuleOrderEntity", "IsSameDay", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleOrderFieldIndex.IsSameDay, 0, 0, 0);
 		}
 		/// <summary>Inits GenericModuleOrderItemEntity's FieldInfo objects</summary>
