@@ -369,22 +369,22 @@
     <xs:sequence>
       <xs:element name="IsPrime" type="xs:boolean">
         <xs:annotation>
-          <xs:documentation>Is the order an Amazon Prime order.</xs:documentation>
+          <xs:documentation>Indicates whether an order is an Amazon Prime order.</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="IsFBA" type="xs:boolean">
         <xs:annotation>
-          <xs:documentation>Is the order an Amazon Fulfilled by Amazon order.</xs:documentation>
+          <xs:documentation>Indicates whether an order is Fulfilled by Amazon (FBA).</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="AmazonOrderID" type="xs:string">
         <xs:annotation>
-          <xs:documentation>The Amazon order id.</xs:documentation>
+          <xs:documentation>The Amazon order ID. Ex. 000-1234567-1234567</xs:documentation>
         </xs:annotation>
       </xs:element>
       <xs:element name="IsSameDay" type="xs:boolean">
         <xs:annotation>
-          <xs:documentation>Is the order an seller fulfilled prime same day order.</xs:documentation>
+          <xs:documentation>Indicates whether an order is a Seller Fulfilled Prime (SFP) same day order.</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>
@@ -397,7 +397,7 @@
     <xs:sequence>
       <xs:element name="AmazonOrderItemCode" type="xs:string">
         <xs:annotation>
-          <xs:documentation>The Amazon order item code.</xs:documentation>
+          <xs:documentation>The Amazon order item code. Ex. 12345678901234</xs:documentation>
         </xs:annotation>
       </xs:element>
     </xs:sequence>

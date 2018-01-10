@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
 
             // Show Amazon control if the Amazon ctrl is configured.
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            amazon.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
+            amazonShippingSettingsControl.Visible = settings.ConfiguredTypes.Contains(ShipmentTypeCode.Amazon);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
                 throw new InvalidOperationException("A non Generic Module store was passed to the Channel Advisor store settings control.");
             }
 
-            amazon.LoadStore(amazonCredentials);
+            amazonShippingSettingsControl.LoadStore(amazonCredentials);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
 
             try
             {
-                amazon.SaveToEntity(amazonCredentials);
+                amazonShippingSettingsControl.SaveToEntity(amazonCredentials);
             }
             catch (AmazonShippingException ex)
             {

@@ -30,22 +30,22 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
         /// </summary>
         private void InitializeComponent()
         {
-            this.amazon = new ShipWorks.Shipping.Carriers.Amazon.AmazonShippingSettingsControl();
+            this.amazonShippingSettingsControl = new ShipWorks.Shipping.Carriers.Amazon.AmazonShippingSettingsControl();
             this.SuspendLayout();
             // 
             // amazon
             // 
-            this.amazon.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.amazon.Location = new System.Drawing.Point(0, 13);
-            this.amazon.Name = "amazon";
-            this.amazon.Size = new System.Drawing.Size(617, 129);
-            this.amazon.TabIndex = 2;
+            this.amazonShippingSettingsControl.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.amazonShippingSettingsControl.Location = new System.Drawing.Point(0, 13);
+            this.amazonShippingSettingsControl.Name = "amazon";
+            this.amazonShippingSettingsControl.Size = new System.Drawing.Size(617, 129);
+            this.amazonShippingSettingsControl.TabIndex = 2;
             // 
             // GenericModuleStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.amazon);
+            this.Controls.Add(this.amazonShippingSettingsControl);
             this.Name = "GenericModuleStoreSettingsControl";
             this.Size = new System.Drawing.Size(617, 142);
             this.ResumeLayout(false);
@@ -54,6 +54,6 @@ namespace ShipWorks.Stores.UI.Platforms.GenericModule
 
         #endregion
         
-        private AmazonShippingSettingsControl amazon;
+        private AmazonShippingSettingsControl amazonShippingSettingsControl;
     }
 }
