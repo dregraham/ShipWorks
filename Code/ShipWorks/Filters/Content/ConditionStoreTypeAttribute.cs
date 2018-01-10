@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Filters.Content
@@ -8,7 +7,7 @@ namespace ShipWorks.Filters.Content
     /// Attribute that can be applied to conditions to control what storetypes they are valid for
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
-    public class ConditionStoreTypeAttribute : Attribute
+    public sealed class ConditionStoreTypeAttribute : Attribute
     {
         /// <summary>
         /// Constructor
@@ -28,6 +27,6 @@ namespace ShipWorks.Filters.Content
         /// <summary>
         /// The StoreType that restricts the filter condition
         /// </summary>
-        public virtual StoreTypeCode StoreType { get; }
+        public StoreTypeCode StoreType { get; }
     }
 }
