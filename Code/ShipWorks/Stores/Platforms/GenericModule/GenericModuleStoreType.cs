@@ -103,13 +103,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                     if (moduleUrlEnd.Contains("."))
                     {
                         //Use the old version to remove files from the end of the url
-                        identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+                        identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", string.Empty, RegexOptions.IgnoreCase);
                     }
                 }
                 else
                 {
                     //Old version
-                    identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+                    identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", string.Empty, RegexOptions.IgnoreCase);
                 }
 
                 // append the storecode if there is one
@@ -153,24 +153,24 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericModuleStoreEntity generic = (GenericModuleStoreEntity) store;
 
             generic.ModuleVersion = "0.0.0";
-            generic.ModuleDeveloper = "";
-            generic.ModulePlatform = "";
+            generic.ModuleDeveloper = string.Empty;
+            generic.ModulePlatform = string.Empty;
 
-            generic.ModuleUrl = "";
-            generic.ModuleUsername = "";
-            generic.ModulePassword = "";
+            generic.ModuleUrl = string.Empty;
+            generic.ModuleUsername = string.Empty;
+            generic.ModulePassword = string.Empty;
 
-            generic.ModuleOnlineStoreCode = "";
-            generic.ModuleStatusCodes = "";
+            generic.ModuleOnlineStoreCode = string.Empty;
+            generic.ModuleStatusCodes = string.Empty;
 
             generic.ModuleRequestTimeout = 60;
             generic.ModuleDownloadPageSize = 50;
             generic.ModuleHttpExpect100Continue = true;
             generic.ModuleResponseEncoding = (int) GenericStoreResponseEncoding.UTF8;
 
-            generic.AmazonMerchantID = "";
-            generic.AmazonAuthToken = "";
-            generic.AmazonApiRegion = "";
+            generic.AmazonMerchantID = string.Empty;
+            generic.AmazonAuthToken = string.Empty;
+            generic.AmazonApiRegion = string.Empty;
         }
 
         /// <summary>
@@ -184,18 +184,18 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericModuleResponse webResponse = webClient.GetStore();
 
             // Create the client for connecting to the module
-            generic.StoreName = XPathUtility.Evaluate(webResponse.XPath, "//Store/Name", "");
-            generic.Company = XPathUtility.Evaluate(webResponse.XPath, "//Store/CompanyOrOwner", "");
-            generic.Email = XPathUtility.Evaluate(webResponse.XPath, "//Store/Email", "");
-            generic.Street1 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street1", "");
-            generic.Street2 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street2", "");
-            generic.Street3 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street3", "");
-            generic.City = XPathUtility.Evaluate(webResponse.XPath, "//Store/City", "");
-            generic.StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(webResponse.XPath, "//Store/State", ""));
-            generic.PostalCode = XPathUtility.Evaluate(webResponse.XPath, "//Store/PostalCode", "");
+            generic.StoreName = XPathUtility.Evaluate(webResponse.XPath, "//Store/Name", string.Empty);
+            generic.Company = XPathUtility.Evaluate(webResponse.XPath, "//Store/CompanyOrOwner", string.Empty);
+            generic.Email = XPathUtility.Evaluate(webResponse.XPath, "//Store/Email", string.Empty);
+            generic.Street1 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street1", string.Empty);
+            generic.Street2 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street2", string.Empty);
+            generic.Street3 = XPathUtility.Evaluate(webResponse.XPath, "//Store/Street3", string.Empty);
+            generic.City = XPathUtility.Evaluate(webResponse.XPath, "//Store/City", string.Empty);
+            generic.StateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(webResponse.XPath, "//Store/State", string.Empty));
+            generic.PostalCode = XPathUtility.Evaluate(webResponse.XPath, "//Store/PostalCode", string.Empty);
             generic.CountryCode = Geography.GetCountryCode(XPathUtility.Evaluate(webResponse.XPath, "//Store/Country", "US"));
-            generic.Phone = XPathUtility.Evaluate(webResponse.XPath, "//Store/Phone", "");
-            generic.Website = XPathUtility.Evaluate(webResponse.XPath, "//Store/Website", "");
+            generic.Phone = XPathUtility.Evaluate(webResponse.XPath, "//Store/Phone", string.Empty);
+            generic.Website = XPathUtility.Evaluate(webResponse.XPath, "//Store/Website", string.Empty);
 
             // Default to US if it wasn't provided.  The XPathUtility won't use the defaultValue argument for an empty node, only a missing node.
             if (string.IsNullOrWhiteSpace(generic.CountryCode))
@@ -226,8 +226,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
             XPathNavigator xpath = webResponse.XPath;
 
-            string platform = XPathUtility.Evaluate(xpath, "//Platform", "");
-            string developer = XPathUtility.Evaluate(xpath, "//Developer", "");
+            string platform = XPathUtility.Evaluate(xpath, "//Platform", string.Empty);
+            string developer = XPathUtility.Evaluate(xpath, "//Developer", string.Empty);
             string moduleVersion = webResponse.ModuleVersion.ToString();
             string schemaVersion = webResponse.SchemaVersion.ToString();
 
