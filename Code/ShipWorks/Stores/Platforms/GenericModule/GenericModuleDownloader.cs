@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.XPath;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -397,6 +398,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             GenericXmlOrderLoader.LoadOrder(order, this, this, xpath);
 
+            LoadAmazonOrderDetails(order, xpath);
+
             // last modified
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString("s")));
 
@@ -447,6 +450,23 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
             return true;
+        }
+
+        /// <summary>
+        /// Load Amazon order details from the xml
+        /// </summary>
+        private void LoadAmazonOrderDetails(OrderEntity order, XPathNavigator xpath)
+        {
+            GenericModuleOrderEntity genericModuleOrder = order as GenericModuleOrderEntity;
+
+            if (genericModuleOrder != null)
+            {
+                bool isPrime = XPathUtility.Evaluate(xpath, "Amazon/IsPrime", false);
+                genericModuleOrder.IsPrime = isPrime ? AmazonIsPrime.Yes : AmazonIsPrime.No;
+                genericModuleOrder.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
+                genericModuleOrder.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
+                genericModuleOrder.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);
+            }
         }
 
         /// <summary>
