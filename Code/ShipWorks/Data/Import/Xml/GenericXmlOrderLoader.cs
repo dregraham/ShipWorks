@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Import.Xml
             // only do the remainder for new orders
             if (order.IsNew)
             {
-                LoadAmazonOrderDetails((GenericModuleOrderEntity) order, xpath);
+                LoadAmazonOrderDetails(order, xpath);
 
                 // Items
                 XPathNodeIterator itemNodes = xpath.Select("Items/Item");
@@ -89,13 +89,18 @@ namespace ShipWorks.Data.Import.Xml
         /// <summary>
         /// Load Amazon order details from xml
         /// </summary>
-        private static void LoadAmazonOrderDetails(GenericModuleOrderEntity order, XPathNavigator xpath)
+        private static void LoadAmazonOrderDetails(OrderEntity order, XPathNavigator xpath)
         {
-            bool isPrime = XPathUtility.Evaluate(xpath, "Amazon/IsPrime", false);
-            order.IsPrime = isPrime ? AmazonIsPrime.Yes : AmazonIsPrime.No;
-            order.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
-            order.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
-            order.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);
+            GenericModuleOrderEntity genericModuleOrder = order as GenericModuleOrderEntity;
+
+            if (genericModuleOrder != null)
+            {
+                bool isPrime = XPathUtility.Evaluate(xpath, "Amazon/IsPrime", false);
+                genericModuleOrder.IsPrime = isPrime ? AmazonIsPrime.Yes : AmazonIsPrime.No;
+                genericModuleOrder.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
+                genericModuleOrder.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
+                genericModuleOrder.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);
+            }
         }
 
         /// <summary>
