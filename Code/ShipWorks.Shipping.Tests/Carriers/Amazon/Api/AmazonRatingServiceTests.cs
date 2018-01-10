@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.RateGroupFilters;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -42,15 +43,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-            RateGroup result = testObject.GetRates(SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes));
+            RateGroup result = testObject.GetRates(SampleShipmentAmazonOrder(AmazonIsPrime.Yes));
 
             Assert.Equal(0, result.Rates.Count);
         }
 
         [Theory]
-        [InlineData(AmazonMwsIsPrime.No)]
-        [InlineData(AmazonMwsIsPrime.Unknown)]
-        public void GetRates_ReturnsAmazonShippingException_WhenNotPrimeOrder(AmazonMwsIsPrime isPrime)
+        [InlineData(AmazonIsPrime.No)]
+        [InlineData(AmazonIsPrime.Unknown)]
+        public void GetRates_ReturnsAmazonShippingException_WhenNotPrimeOrder(AmazonIsPrime isPrime)
         {
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
@@ -88,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
             AmazonRatingService testObject = mock.Create<AmazonRatingService>();
 
-            RateGroup rates = testObject.GetRates(SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes));
+            RateGroup rates = testObject.GetRates(SampleShipmentAmazonOrder(AmazonIsPrime.Yes));
 
             Assert.Equal(filteredRate, rates);
         }
@@ -116,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 
         private void VerifyApiRequest(Action<ShipmentEntity, AmazonOrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
         {
-            ShipmentEntity shipment = SampleShipmentAmazonOrder(AmazonMwsIsPrime.Yes);
+            ShipmentEntity shipment = SampleShipmentAmazonOrder(AmazonIsPrime.Yes);
             configureInput(shipment, shipment.Order as AmazonOrderEntity);
 
             using (var mock = AutoMock.GetLoose())
@@ -162,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             }
         }
 
-        public ShipmentEntity SampleShipmentAmazonOrder(AmazonMwsIsPrime isPrime)
+        public ShipmentEntity SampleShipmentAmazonOrder(AmazonIsPrime isPrime)
         {
             return new ShipmentEntity()
             {
@@ -204,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             }
         }
 
-        public ShipmentEntity SampleShipmentChannelAdvisorOrder(AmazonMwsIsPrime isPrime)
+        public ShipmentEntity SampleShipmentChannelAdvisorOrder(AmazonIsPrime isPrime)
         {
             return new ShipmentEntity()
             {

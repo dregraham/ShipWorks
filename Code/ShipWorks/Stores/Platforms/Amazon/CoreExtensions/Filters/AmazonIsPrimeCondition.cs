@@ -11,14 +11,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
     /// </summary>
     [ConditionElement("Amazon Prime", "Amazon.IsPrime")]
     [ConditionStoreType(StoreTypeCode.Amazon)]
-    public class AmazonIsPrimeCondition : EnumCondition<AmazonMwsIsPrime>
+    public class AmazonIsPrimeCondition : EnumCondition<AmazonIsPrime>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonIsPrimeCondition()
         {
-            Value = AmazonMwsIsPrime.Yes;
+            Value = AmazonIsPrime.Yes;
         }
 
         /// <summary>

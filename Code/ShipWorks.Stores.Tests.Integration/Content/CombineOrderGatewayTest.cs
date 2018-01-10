@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -63,10 +64,10 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         }
 
         [Theory]
-        [InlineData(AmazonMwsIsPrime.Yes, false)]
-        [InlineData(AmazonMwsIsPrime.No, true)]
-        [InlineData(AmazonMwsIsPrime.Unknown, false)]
-        public void CanCombine_QueriesPrime_FromAmazon(AmazonMwsIsPrime isPrime, bool expected)
+        [InlineData(AmazonIsPrime.Yes, false)]
+        [InlineData(AmazonIsPrime.No, true)]
+        [InlineData(AmazonIsPrime.Unknown, false)]
+        public void CanCombine_QueriesPrime_FromAmazon(AmazonIsPrime isPrime, bool expected)
         {
             var testObject = context.Mock.Create<CombineOrderGateway>();
 
@@ -94,7 +95,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             var order = Create.Order<AmazonOrderEntity>(store, context.Customer)
                 .Set(x => x.FulfillmentChannel = (int) isFulfillment)
-                .Set(x => x.IsPrime = (int) AmazonMwsIsPrime.No)
+                .Set(x => x.IsPrime = (int) AmazonIsPrime.No)
                 .Save();
 
             var result = testObject.CanCombine(store, new[] { order.OrderID });
@@ -141,10 +142,10 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         }
 
         [Theory]
-        [InlineData(AmazonMwsIsPrime.Yes, false)]
-        [InlineData(AmazonMwsIsPrime.No, true)]
-        [InlineData(AmazonMwsIsPrime.Unknown, false)]
-        public void CanCombine_QueriesPrime_FromChannelAdvisor(AmazonMwsIsPrime isPrime, bool expected)
+        [InlineData(AmazonIsPrime.Yes, false)]
+        [InlineData(AmazonIsPrime.No, true)]
+        [InlineData(AmazonIsPrime.Unknown, false)]
+        public void CanCombine_QueriesPrime_FromChannelAdvisor(AmazonIsPrime isPrime, bool expected)
         {
             var testObject = context.Mock.Create<CombineOrderGateway>();
 
@@ -172,7 +173,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             var order = Create.Order<ChannelAdvisorOrderEntity>(store, context.Customer)
                 .WithItem<ChannelAdvisorOrderItemEntity>(i => i.Set(x => x.IsFBA = itemIsFba1))
                 .WithItem<ChannelAdvisorOrderItemEntity>(i => i.Set(x => x.IsFBA = itemIsFba2))
-                .Set(x => x.IsPrime = (int) AmazonMwsIsPrime.No)
+                .Set(x => x.IsPrime = (int) AmazonIsPrime.No)
                 .Save();
 
             var result = testObject.CanCombine(store, new[] { order.OrderID });

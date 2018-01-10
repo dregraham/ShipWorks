@@ -20,7 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericModule.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.GenericModule.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
@@ -526,7 +526,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             ElementOutline outline = container.AddElement(storeType);
             outline.AddElement("IsFBA", order.IsFBA);
-            outline.AddElement("IsPrime", EnumHelper.GetDescription((GenericModuleIsAmazonPrime) order.IsPrime));
+            outline.AddElement("IsPrime", EnumHelper.GetDescription((AmazonIsPrime) order.IsPrime));
             outline.AddElement("AmazonOrderID", order.AmazonOrderID);
             outline.AddElement("IsSameDay", order.IsSameDay);
         }

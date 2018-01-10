@@ -25,9 +25,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
             AmazonOrderEntity order = (AmazonOrderEntity) combinedOrder;
 
             order.IsPrime =
-                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonMwsIsPrime.No) ? 
-                    (int) AmazonMwsIsPrime.No : 
-                    (int) AmazonMwsIsPrime.Unknown;
+                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonIsPrime.No) ? 
+                    (int) AmazonIsPrime.No : 
+                    (int) AmazonIsPrime.Unknown;
 
             order.FulfillmentChannel = 
                 orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.MFN) ? 

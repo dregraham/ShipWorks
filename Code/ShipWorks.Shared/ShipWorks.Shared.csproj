@@ -147,9 +147,7 @@
     <Compile Include="Stores\Platforms\Amazon\IAmazonCredentials.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrder.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOrderItem.cs" />
-    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\Enums\ChannelAdvisorIsAmazonPrime.cs" />
-    <Compile Include="Stores\Platforms\GenericModule\Enums\GenericModuleIsAmazonPrime.cs" />
+    <Compile Include="Stores\Platforms\Amazon\AmazonIsPrime.cs" />
     <Compile Include="Stores\StoreTypeCode.cs" />
     <Compile Include="Stores\StoreTypeIconAttribute.cs" />
     <Compile Include="Stores\StoreTypeIdentity.cs" />
@@ -206,6 +204,10 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stores\Platforms\ChannelAdvisor\Enums\" />
+    <Folder Include="Stores\Platforms\GenericModule\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

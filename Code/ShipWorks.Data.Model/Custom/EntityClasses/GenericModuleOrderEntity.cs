@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.GenericModule.Enums;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -13,7 +12,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// The Amazon Order ID from Amazon
         /// </summary>
-        bool IAmazonOrder.IsPrime => IsPrime == (int) GenericModuleIsAmazonPrime.Yes;
+        bool IAmazonOrder.IsPrime => IsPrime == (int) AmazonIsPrime.Yes;
         
         /// <summary>
         /// List of IAmazonOrderItem representing the Amazon order items

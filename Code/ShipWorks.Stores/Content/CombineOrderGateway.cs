@@ -14,6 +14,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Stores.Content
@@ -133,7 +134,7 @@ namespace ShipWorks.Stores.Content
 
             IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
             IPredicate newPredicate = predicate
-                .Or(AmazonOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(AmazonOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(AmazonOrderFields.FulfillmentChannel.In((int) AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
 
             return Tuple.Create(newJoin, newPredicate);
@@ -170,7 +171,7 @@ namespace ShipWorks.Stores.Content
                 .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
                 .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
             IPredicate newPredicate = predicate
-                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
 
             return Tuple.Create(newJoin, newPredicate);

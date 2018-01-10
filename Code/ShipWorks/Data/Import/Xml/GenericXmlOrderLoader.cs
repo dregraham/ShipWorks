@@ -9,7 +9,7 @@ using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.GenericModule.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Import.Xml
 {
@@ -91,7 +91,7 @@ namespace ShipWorks.Data.Import.Xml
         private static void LoadAmazonOrderDetails(GenericModuleOrderEntity order, XPathNavigator xpath)
         {
             bool isPrime = XPathUtility.Evaluate(xpath, "Amazon/IsPrime", false);
-            order.IsPrime = isPrime ? (int) GenericModuleIsAmazonPrime.Yes : (int)GenericModuleIsAmazonPrime.No;
+            order.IsPrime = isPrime ? (int) AmazonIsPrime.Yes : (int) AmazonIsPrime.No;
             order.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
             order.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
             order.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);

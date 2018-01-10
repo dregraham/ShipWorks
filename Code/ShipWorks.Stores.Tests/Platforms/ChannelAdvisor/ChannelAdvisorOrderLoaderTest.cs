@@ -14,6 +14,7 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using Xunit;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 {
@@ -643,7 +644,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int) ChannelAdvisorIsAmazonPrime.Yes, orderToSave.IsPrime);
+            Assert.Equal((int) AmazonIsPrime.Yes, orderToSave.IsPrime);
         }
 
         [Fact]
@@ -653,7 +654,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.No, orderToSave.IsPrime);
+            Assert.Equal((int)AmazonIsPrime.No, orderToSave.IsPrime);
         }
 
         [Fact]
@@ -661,7 +662,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         {
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            Assert.Equal((int)ChannelAdvisorIsAmazonPrime.Unknown, orderToSave.IsPrime);
+            Assert.Equal((int)AmazonIsPrime.Unknown, orderToSave.IsPrime);
         }
 
         [Fact]

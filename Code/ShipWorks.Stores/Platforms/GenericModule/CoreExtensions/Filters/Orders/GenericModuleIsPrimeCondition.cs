@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
-using ShipWorks.Stores.Platforms.GenericModule.Enums;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
 {
@@ -14,14 +14,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
     /// </summary>
     [ConditionElement("Generic Module Is Amazon Prime", "GenericModule.IsPrime")]
     [ConditionStoreType(StoreTypeCode.GenericModule)]
-    public class GenericModuleIsPrimeCondition : EnumCondition<GenericModuleIsAmazonPrime>
+    public class GenericModuleIsPrimeCondition : EnumCondition<AmazonIsPrime>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public GenericModuleIsPrimeCondition()
         {
-            Value = GenericModuleIsAmazonPrime.Yes;
+            Value = AmazonIsPrime.Yes;
         }
 
         /// <summary>

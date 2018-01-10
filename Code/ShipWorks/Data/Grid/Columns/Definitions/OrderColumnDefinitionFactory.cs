@@ -23,9 +23,8 @@ using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
-using Interapptive.Shared.UI;
-using ShipWorks.Stores.Platforms.GenericModule.Enums;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -163,7 +162,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{74CFD9FC-21DF-45D6-8F58-E1F72901EE44}", true,
-                        new GridEnumDisplayType<AmazonMwsIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonMwsIsPrime.Yes,
+                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonIsPrime.Yes,
                         AmazonOrderFields.IsPrime)
                         {
                             StoreTypeCode = StoreTypeCode.Amazon
@@ -306,14 +305,14 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                     new GridColumnDefinition("{CDC41FA5-B652-4E1D-B0E6-7908443249D7}", true,
-                        new GridEnumDisplayType<ChannelAdvisorIsAmazonPrime>(EnumSortMethod.Description), "Amazon Prime", ChannelAdvisorIsAmazonPrime.Yes,
+                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonIsPrime.Yes,
                         ChannelAdvisorOrderFields.IsPrime)
                         {
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
                         },
 
                     new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}", true,
-                        new GridEnumDisplayType<GenericModuleIsAmazonPrime>(EnumSortMethod.Description), "Amazon Prime", GenericModuleIsAmazonPrime.Yes,
+                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonIsPrime.Yes,
                         GenericModuleOrderFields.IsPrime)
                         {
                             ApplicableTest = (data) => StoreManager.GetStoreTypeInstances().Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType()))

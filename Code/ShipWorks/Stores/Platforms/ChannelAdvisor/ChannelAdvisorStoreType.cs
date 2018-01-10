@@ -17,6 +17,7 @@ using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
+using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters.Orders;
@@ -178,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // Order is Amazon Prime
             ChannelAdvisorIsPrimeCondition primeCondition = new ChannelAdvisorIsPrimeCondition();
             primeCondition.Operator = EqualityOperator.Equals;
-            primeCondition.Value = ChannelAdvisorIsAmazonPrime.Yes;
+            primeCondition.Value = AmazonIsPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
             // All the order items are not FBA
@@ -337,7 +338,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             outline.AddElement("OrderID", () => order.Value.CustomOrderIdentifier);
             outline.AddElement("FlagStyle", () => order.Value.FlagStyle);
             outline.AddElement("FlagDescription", () => order.Value.FlagDescription);
-            outline.AddElement("IsPrime", () => EnumHelper.GetDescription((ChannelAdvisorIsAmazonPrime) order.Value.IsPrime));
+            outline.AddElement("IsPrime", () => EnumHelper.GetDescription((AmazonIsPrime) order.Value.IsPrime));
         }
 
         /// <summary>

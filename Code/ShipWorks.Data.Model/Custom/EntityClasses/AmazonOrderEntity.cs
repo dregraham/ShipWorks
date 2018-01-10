@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -21,7 +20,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         bool IAmazonOrder.IsPrime
         {
-            get { return IsPrime == (int) AmazonMwsIsPrime.Yes; }
+            get { return IsPrime == (int) AmazonIsPrime.Yes; }
         }
 
         /// <summary>

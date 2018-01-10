@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Reflection;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
-namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
+namespace ShipWorks.Stores.Platforms.Amazon
 {
     /// <summary>
     /// The fulfillment channel an order was placed
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum ChannelAdvisorIsAmazonPrime
+    public enum AmazonIsPrime
     {
         [Description("Unavailable")]
         Unknown = 0,
