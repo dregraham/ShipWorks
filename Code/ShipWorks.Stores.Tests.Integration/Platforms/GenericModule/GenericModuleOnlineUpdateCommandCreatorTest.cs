@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdat
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "CombinedOrderUpdates")]
+    [Trait("Category", "CombineSplit")]
     public class GenericModuleOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;

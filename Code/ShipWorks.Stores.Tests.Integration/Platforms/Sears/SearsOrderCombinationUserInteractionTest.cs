@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public class OrderCombinationUserInteraction : IDisposable
     {
         private readonly DataContext context;

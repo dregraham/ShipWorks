@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Store", "Sears")]
+    [Trait("Category", "CombineSplit")]
     public class SearsCombineOrderNumberCompleteSearchProviderTest : IDisposable
     {
         private readonly DataContext context;
@@ -49,9 +50,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
         [Theory]
         [InlineData(CombineSplitStatusType.None, 0, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 1, 1, "12345")]
-        [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345-OS")]
+        [InlineData(CombineSplitStatusType.Combined, 1, 1, "12345")]
         [InlineData(CombineSplitStatusType.None, 2, 1, "12345")]
-        [InlineData(CombineSplitStatusType.Combined, 2, 1, "12345-OS")]
+        [InlineData(CombineSplitStatusType.Combined, 2, 1, "12345")]
         public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues(CombineSplitStatusType combineSplitStatusType,
             int numberToCreate, int expectedCount, string expectedFirstResult)
         {
@@ -98,7 +99,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
             var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(1, results?.Count());
-            Assert.Equal($"{order.OrderNumberComplete}-OS", results?.FirstOrDefault().PoNumber);
+            Assert.Equal($"{order.OrderNumberComplete}", results?.FirstOrDefault().PoNumber);
         }
 
         private void CreateOrderSearchEntities(IOrderEntity order, int numberToCreate)
@@ -115,7 +116,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
                     .Save();
 
                 Create.Entity<SearsOrderSearchEntity>()
-                    .Set(os => os.PoNumber, $"{order.OrderNumberComplete}-OS")
+                    .Set(os => os.PoNumber, $"{order.OrderNumberComplete}")
                     .Set(os => os.OriginalOrderID, order.OrderID)
                     .Set(os => os.OrderID, order.OrderID)
                     .Save();

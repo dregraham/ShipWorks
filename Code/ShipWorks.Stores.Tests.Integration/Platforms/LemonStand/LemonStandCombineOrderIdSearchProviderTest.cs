@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Store", "LemonStand")]
+    [Trait("Category", "CombineSplit")]
     public class LemonStandCombineOrderIdSearchProviderTest : IDisposable
     {
         private readonly DataContext context;
