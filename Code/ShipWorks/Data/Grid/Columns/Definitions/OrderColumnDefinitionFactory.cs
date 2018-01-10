@@ -25,6 +25,7 @@ using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Amazon;
+using System.Collections.Generic;
 
 namespace ShipWorks.Data.Grid.Columns.Definitions
 {
@@ -311,11 +312,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.ChannelAdvisor
                         },
 
-                    new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}", true,
-                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonIsPrime.Yes,
-                        GenericModuleOrderFields.IsPrime)
+                    new GridColumnDefinition("{E7DC633D-6BF8-4BF6-8F82-A07363FBFF89}", 
+                        false,
+                        new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), 
+                        "Amazon Prime", 
+                        AmazonIsPrime.Yes, 
+                        new GridColumnFunctionValueProvider(GetAmazonIsPrimeValue), 
+                        new GridColumnSortProvider(GetAmazonIsPrimeValueDescription, AmazonOrderFields.IsPrime, ChannelAdvisorOrderFields.IsPrime, GenericModuleOrderFields.IsPrime))
                         {
-                            ApplicableTest = (data) => StoreManager.GetStoreTypeInstances().Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType()))
+                            ApplicableTest = ShowIsPrimeColumn
                         },
 
                     new GridColumnDefinition("{74EF7153-8DFC-4afb-B9A7-0ABD5359B983}", true,
@@ -745,6 +750,51 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 };
 
             return definitions;
+        }
+
+        /// <summary>
+        /// Determine if we should show the IsPrime column based on the setup stores
+        /// </summary>
+        private static bool ShowIsPrimeColumn(object data)
+        {
+            IList<StoreType> stores = StoreManager.GetStoreTypeInstances();
+            
+            // If there are any amazon/channeladvisor or generic module based stores in shipworks
+            // show the isprime column
+            if (stores.Any(s => s.TypeCode == StoreTypeCode.Amazon || 
+                s.TypeCode == StoreTypeCode.ChannelAdvisor) ||
+                stores.Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType())))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the value description for the entities IsPrime value
+        /// </summary>
+        private static object GetAmazonIsPrimeValueDescription(EntityBase2 entity)
+        {
+            AmazonIsPrime value = (AmazonIsPrime) GetAmazonIsPrimeValue(entity);
+            return EnumHelper.GetDescription(value);
+        }
+
+        /// <summary>
+        /// Get the entities IsPrime value
+        /// </summary>
+        private static object GetAmazonIsPrimeValue(EntityBase2 entity)
+        {
+            int index = entity.Fields.GetFieldIndex("IsPrime");
+
+            if (index != -1)
+            {
+                int value = (int) entity.GetCurrentFieldValue(index);
+
+                return (AmazonIsPrime) value;
+            }
+
+            return AmazonIsPrime.Unknown;
         }
 
         /// <summary>
