@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Orders.Combine.Actions
         private async Task InsertSearchRecords<T>(Func<TEntity, T> orderCreator) where T : EntityBase2
         {
             IEnumerable<T> orderSearches = orders
-                .Where(x => x.CombineSplitStatus != CombineSplitStatusType.Combined && x.CombineSplitStatus != CombineSplitStatusType.Both)
+                .Where(x => !x.CombineSplitStatus.IsCombined())
                 .Select(orderCreator);
 
             if (orderSearches.None())

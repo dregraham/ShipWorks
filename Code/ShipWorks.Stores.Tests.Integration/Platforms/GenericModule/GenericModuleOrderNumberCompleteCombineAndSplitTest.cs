@@ -241,8 +241,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             Assert.Equal(new[] { "10", "20" }, identities_A_1);
         }
 
-        // TODO: Fix these in next story
-        /*
         [Fact]
         public async Task SplitCombine_WithOrderNumbers()
         {
@@ -255,7 +253,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 
             Assert.Equal(new[] { "10" }, identities_A_C);
         }
-
+        
         [Fact]
         public async Task SplitCombine_SplitSurvivingOrder_WithOrderNumbers()
         {
@@ -300,7 +298,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 
             Assert.Equal(new[] { "10" }, identities_B_M_C);
         }
-        */
 
         /// <summary>
         /// Perform a split of the given order
