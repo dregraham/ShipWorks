@@ -321,7 +321,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<AmazonIsPrime>(e, "IsPrime")), 
                         new GridColumnSortProvider(GetAmazonIsPrimeValueDescription,  GenericModuleOrderFields.IsPrime, AmazonOrderFields.IsPrime, ChannelAdvisorOrderFields.IsPrime))
                         {
-                            ApplicableTest = ShowIsPrimeColumn
+                            ApplicableTest = ShowGenericModuleAmazonColumns
                         },
 
                     new GridColumnDefinition("{13F79C24-7A68-43F0-8142-C9682AC37E81}",
@@ -332,7 +332,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnFunctionValueProvider((e) => GetAmazonFbaValue(e)),
                         new GridColumnSortProvider((e) => GetAmazonFbaValue(e), GenericModuleOrderFields.IsFBA, AmazonOrderFields.FulfillmentChannel))
                         {
-                            ApplicableTest = ShowIsPrimeColumn
+                            ApplicableTest = ShowGenericModuleAmazonColumns
                         },
 
                     new GridColumnDefinition("{3224B32E-470B-499B-AA2E-4DF781BA52C0}",
@@ -343,7 +343,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<string>(e, "AmazonOrderID")),
                         new GridColumnSortProvider((e) => GetEntityFieldValue<string>(e, "AmazonOrderID"), GenericModuleOrderFields.AmazonOrderID, AmazonOrderFields.AmazonOrderID))
                         {
-                            ApplicableTest = ShowIsPrimeColumn
+                            ApplicableTest = ShowGenericModuleAmazonColumns
                         },
 
                     new GridColumnDefinition("{74EF7153-8DFC-4afb-B9A7-0ABD5359B983}", true,
