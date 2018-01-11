@@ -521,15 +521,15 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            GenericModuleOrderEntity order = (GenericModuleOrderEntity) orderSource();
+            var order = new Lazy<GenericModuleOrderEntity>(() => (GenericModuleOrderEntity) orderSource());
 
-            string storeType = StoreTypeIdentity.FromCode(order.Store.StoreTypeCode).TangoCode;
+            string storeType = TypeCode.ToString();
 
             ElementOutline outline = container.AddElement(storeType);
-            outline.AddElement("IsFBA", order.IsFBA);
-            outline.AddElement("IsPrime", EnumHelper.GetDescription((AmazonIsPrime) order.IsPrime));
-            outline.AddElement("AmazonOrderID", order.AmazonOrderID);
-            outline.AddElement("IsSameDay", order.IsSameDay);
+            outline.AddElement("IsFBA", () => order.Value.IsFBA);
+            outline.AddElement("IsPrime", () => EnumHelper.GetDescription(order.Value.IsPrime));
+            outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
+            outline.AddElement("IsSameDay", () => order.Value.IsSameDay);
         }
 
         /// <summary>
