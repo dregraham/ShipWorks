@@ -67,23 +67,23 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         }
 
         [Theory]
-        [InlineData(new[] { false, false, false }, 1, 3, new[] { 10L, 20L, 30L })]
-        [InlineData(new[] { true, true, false }, 1, 3, new[] { 30L })]
-        [InlineData(new[] { false, true, false }, 2, 3, new[] { 10L, 30L })]
-        [InlineData(new[] { true, false, false }, 2, 3, new[] { 20L, 30L })]
-        [InlineData(new[] { false, false, false }, 1, 4, new[] { 10L, 20L, 30L })]
-        [InlineData(new[] { true, true, false }, 1, 4, new[] { 30L })]
-        [InlineData(new[] { false, true, false }, 2, 4, new[] { 10L, 30L })]
-        [InlineData(new[] { true, false, false }, 2, 4, new[] { 20L, 30L })]
-        [InlineData(new[] { false, false, true }, 1, 3, new[] { 10L, 20L })]
-        [InlineData(new[] { true, true, true }, 1, 3, new long[] { })]
-        [InlineData(new[] { false, true, true }, 2, 3, new[] { 10L })]
-        [InlineData(new[] { true, false, true }, 2, 3, new[] { 20L })]
-        [InlineData(new[] { false, false, true }, 1, 4, new[] { 10L, 20L })]
-        [InlineData(new[] { true, true, true }, 1, 4, new long[] { })]
-        [InlineData(new[] { false, true, true }, 2, 4, new[] { 10L })]
-        [InlineData(new[] { true, false, true }, 2, 4, new[] { 20L })]
-        public async Task VariousOrderCombinations(bool[] manualOrders, int firstSurviving, int secondSurviving, long[] expected)
+        [InlineData(new[] { false, false, false }, 1, 3)]
+        [InlineData(new[] { true, true, false }, 1, 3)]
+        [InlineData(new[] { false, true, false }, 2, 3)]
+        [InlineData(new[] { true, false, false }, 2, 3)]
+        [InlineData(new[] { false, false, false }, 1, 4)]
+        [InlineData(new[] { true, true, false }, 1, 4)]
+        [InlineData(new[] { false, true, false }, 2, 4)]
+        [InlineData(new[] { true, false, false }, 2, 4)]
+        [InlineData(new[] { false, false, true }, 1, 3)]
+        [InlineData(new[] { true, true, true }, 1, 3)]
+        [InlineData(new[] { false, true, true }, 2, 3)]
+        [InlineData(new[] { true, false, true }, 2, 3)]
+        [InlineData(new[] { false, false, true }, 1, 4)]
+        [InlineData(new[] { true, true, true }, 1, 4)]
+        [InlineData(new[] { false, true, true }, 2, 4)]
+        [InlineData(new[] { true, false, true }, 2, 4)]
+        public async Task VariousOrderCombinations(bool[] manualOrders, int firstSurviving, int secondSurviving)
         {
             for (int i = 0; i < manualOrders.Length; i++)
             {

@@ -5,11 +5,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Interapptive.Shared;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -28,7 +27,7 @@ namespace ShipWorks.Shipping.Insurance
         // So we know when not to raise the changed event
         bool loading = false;
 
-        // The last valud value. This tracks if the value has changed.
+        // The last value. This tracks if the value has changed.
         private decimal? lastValue = null;
 
         /// <summary>
@@ -281,111 +280,137 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Clicking the savings link to view information about ShipWorks insurance
         /// </summary>
-        [NDependIgnoreLongMethod]
         private void OnClickSave(object sender, EventArgs e)
         {
             if (linkSavings.Tag is InsuranceCost || linkSavings.Tag == null)
             {
-                ShipmentEntity shipment = loadedInsurance[0].Shipment;
-                InsuranceCost cost = (InsuranceCost) linkSavings.Tag;
-
-                using (InsuranceBenefitsDlg dlg = new InsuranceBenefitsDlg(cost, shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks))
-                {
-                    dlg.ShowDialog(this);
-
-                    if (dlg.ShipWorksInsuranceEnabled)
-                    {
-                        ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-                        ShipmentTypeCode shipmentType = (ShipmentTypeCode)shipment.ShipmentType;
-                        
-                        if (ShipmentTypeManager.IsFedEx(shipmentType))
-                        {
-                            settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                        }
-                        else if (ShipmentTypeManager.IsUps(shipmentType))
-                        {
-                            settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                        }
-                        else if (shipmentType == ShipmentTypeCode.OnTrac)
-                        {
-                            settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                        }
-                        else if (shipmentType == ShipmentTypeCode.iParcel)
-                        {
-                            settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                        }
-                        else if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
-                        {
-                            settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("Invalid ShipmentType unhandled in savings link: " + shipment.ShipmentType);
-                        }
-
-                        ShippingSettings.Save(settings);
-
-                        SaveToInsuranceChoices();
-
-                        // We also need to update the shipment to reflect the change, so that the UI picks it up on the reload
-                        shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
-
-                        LoadInsuranceChoices(loadedInsurance);
-                    }
-                }
+                SaveInsuranceSettings();
             }
-            // Otherwise a ShipmentTypeCode as a tag represents the PennyOne display
             else
             {
-                var shipmentTypeCode = (ShipmentTypeCode) linkSavings.Tag;
+                // Otherwise a ShipmentTypeCode as a tag represents the PennyOne display
+                SavePennyOneSettings();
+            }
+        }
 
-                using (InsurancePennyOneDlg dlg = new InsurancePennyOneDlg(ShippingManager.GetCarrierName(shipmentTypeCode), true))
+        private void SaveInsuranceSettings()
+        {
+            ShipmentEntity shipment = loadedInsurance[0].Shipment;
+            InsuranceCost cost = (InsuranceCost) linkSavings.Tag;
+
+            using (InsuranceBenefitsDlg dlg = new InsuranceBenefitsDlg(cost, shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks))
+            {
+                dlg.ShowDialog(this);
+
+                if (dlg.ShipWorksInsuranceEnabled)
                 {
-                    dlg.ShowDialog(this);
+                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-                    if (dlg.PennyOne)
-                    {
-                        ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                    SetCarrierSpecificInsuranceProvider(settings, shipment.ShipmentTypeCode);
 
-                        if (ShipmentTypeManager.IsFedEx(shipmentTypeCode))
-                        {
-                            settings.FedExInsurancePennyOne = true;
-                        }
-                        else if(ShipmentTypeManager.IsUps(shipmentTypeCode))
-                        {
-                            settings.UpsInsurancePennyOne = true;
-                        }
-                        else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
-                        {
-                            settings.OnTracInsurancePennyOne = true;
-                        }
-                        else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
-                        {
-                            settings.IParcelInsurancePennyOne = true;
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException("linkSavings.Tag",shipmentTypeCode,"Invalid ShipmentTypeCode for PennyOne Insurance");
-                        }
+                    ShippingSettings.Save(settings);
 
-                        ShippingSettings.Save(settings);
+                    SaveToInsuranceChoices();
 
-                        SaveToInsuranceChoices();
+                    // We also need to update the shipment to reflect the change, so that the UI picks it up on the reload
+                    shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
-                        // We also need to update the shipment to reflect the change, so that the UI picks it up on the reload
-                        ShipmentEntity shipment = loadedInsurance[0].Shipment;
-                        ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-                        
-                        // The penny one setting would apply to every package in the shipment
-                        for (int index = 0; index < shipmentType.GetParcelCount(shipment); index++)
-                        {
-                            shipmentType.GetParcelDetail(shipment, index).Insurance.InsurancePennyOne = true;
-                        }
-
-                        LoadInsuranceChoices(loadedInsurance);
-                    }
+                    LoadInsuranceChoices(loadedInsurance);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Set the carrier specific insurance provider
+        /// </summary>
+        private static void SetCarrierSpecificInsuranceProvider(ShippingSettingsEntity settings, ShipmentTypeCode shipmentType)
+        {
+            if (ShipmentTypeManager.IsFedEx(shipmentType))
+            {
+                settings.FedExInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else if (ShipmentTypeManager.IsUps(shipmentType))
+            {
+                settings.UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else if (shipmentType == ShipmentTypeCode.OnTrac)
+            {
+                settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else if (shipmentType == ShipmentTypeCode.iParcel)
+            {
+                settings.IParcelInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else if (shipmentType == ShipmentTypeCode.Endicia)
+            {
+                settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid ShipmentType unhandled in savings link: " + shipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Save penny one settings
+        /// </summary>
+        private void SavePennyOneSettings()
+        {
+            var shipmentTypeCode = (ShipmentTypeCode) linkSavings.Tag;
+
+            using (InsurancePennyOneDlg dlg = new InsurancePennyOneDlg(ShippingManager.GetCarrierName(shipmentTypeCode), true))
+            {
+                dlg.ShowDialog(this);
+
+                if (dlg.PennyOne)
+                {
+                    ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+                    SaveCarrierSpecificPennyOne(settings, shipmentTypeCode);
+
+                    ShippingSettings.Save(settings);
+
+                    SaveToInsuranceChoices();
+
+                    // We also need to update the shipment to reflect the change, so that the UI picks it up on the reload
+                    ShipmentEntity shipment = loadedInsurance[0].Shipment;
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+                    // The penny one setting would apply to every package in the shipment
+                    for (int index = 0; index < shipmentType.GetParcelCount(shipment); index++)
+                    {
+                        shipmentType.GetParcelDetail(shipment, index).Insurance.InsurancePennyOne = true;
+                    }
+
+                    LoadInsuranceChoices(loadedInsurance);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save the carrier specific penny one setting
+        /// </summary>
+        private static void SaveCarrierSpecificPennyOne(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeCode)
+        {
+            if (ShipmentTypeManager.IsFedEx(shipmentTypeCode))
+            {
+                settings.FedExInsurancePennyOne = true;
+            }
+            else if (ShipmentTypeManager.IsUps(shipmentTypeCode))
+            {
+                settings.UpsInsurancePennyOne = true;
+            }
+            else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
+            {
+                settings.OnTracInsurancePennyOne = true;
+            }
+            else if (shipmentTypeCode == ShipmentTypeCode.iParcel)
+            {
+                settings.IParcelInsurancePennyOne = true;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("linkSavings.Tag", shipmentTypeCode, "Invalid ShipmentTypeCode for PennyOne Insurance");
             }
         }
 

@@ -31,10 +31,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             builder.RegisterType<iParcelShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.iParcel)
                 .SingleInstance();
-
-            builder.RegisterType<NullShipmentPackageTypesBuilder>()
-                .Keyed<IShipmentPackageTypesBuilder>(ShipmentTypeCode.iParcel)
-                .SingleInstance();
         }
     }
 }

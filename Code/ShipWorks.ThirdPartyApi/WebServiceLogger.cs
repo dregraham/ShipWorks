@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV55
+    partial class SwsimV69
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        public SwsimV55(IApiLogEntry logEntry)
+        public SwsimV69(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1112,7 +1112,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
+        bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1123,30 +1123,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
             this.logEntry = logEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Only log error result.
         /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
+        public bool OnlyLogOnMagicKeys
+        {
+            get { return onlyLogOnMagicKeys; }
+            set { onlyLogOnMagicKeys = value; }
+        }
 
         /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
+        /// Provides access to the raw soap XML sent and received
         /// </summary>
         public WebServiceRawSoap RawSoap
         {
             get { return rawSoap; }
         }
-        
+
         /// <summary>
         /// The log entry being used to log the request and response
         /// </summary>
-		public IApiLogEntry ApiLogEntry
+        public IApiLogEntry ApiLogEntry
         {
-			get { return logEntry; }
-		}
+            get { return logEntry; }
+        }
 
         /// <summary>
         /// Get the writer for the message
@@ -1169,16 +1169,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
 
-			// get the reponse
+            // get the response
             System.Net.WebResponse baseResponse = base.GetWebResponse(request);
 
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
+            // check for Soap the same way the framework does
+            if (!IsSoap(baseResponse.ContentType))
+            {
+                RaiseInvalidSoapException(baseResponse);
+            }
 
-			return baseResponse;
+            return baseResponse;
         }
 
         /// <summary>
@@ -1199,9 +1199,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
 
         /// <summary>
         /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
+        /// This was pulled out of a .NET Framework internal class.
         /// </summary>
-		private bool IsSoap(string contentType)
+        private bool IsSoap(string contentType)
         {
             if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -1211,7 +1211,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
             return true;
         }
 
-		/// <summary>
+        /// <summary>
         /// Extract the response and raise an exception
         /// </summary>
         private void RaiseInvalidSoapException(System.Net.WebResponse response)
@@ -1238,7 +1238,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.Promo
             }
         }
     }
-}		
+}
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
 {

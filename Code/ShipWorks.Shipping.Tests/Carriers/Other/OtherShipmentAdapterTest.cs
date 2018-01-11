@@ -35,14 +35,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new OtherShipmentAdapter(null, mock.Create<IShipmentTypeManager>(), mock.Create<ICustomsManager>(),
-                    mock.Create<IStoreManager>()));
+                new OtherShipmentAdapter(null, mock.Build<IShipmentTypeManager>(), mock.Build<ICustomsManager>(),
+                    mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new OtherShipmentAdapter(shipment, null, mock.Create<ICustomsManager>(),
-                    mock.Create<IStoreManager>()));
+                new OtherShipmentAdapter(shipment, null, mock.Build<ICustomsManager>(),
+                    mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new OtherShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null,
-                    mock.Create<IStoreManager>()));
+                new OtherShipmentAdapter(shipment, mock.Build<IShipmentTypeManager>(), null,
+                    mock.Build<IStoreManager>()));
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Other
 
         [Theory]
         [InlineData(true, true)]
-        [InlineData(true, true)]
+        [InlineData(false, false)]
         public void IsDomestic_DelegatesToIsDomestic_OnShipmentType(bool isDomestic, bool expected)
         {
             mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic));

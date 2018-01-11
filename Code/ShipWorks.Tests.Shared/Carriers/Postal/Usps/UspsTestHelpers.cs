@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
         /// </summary>
         /// <remarks>This hang is because we're mixing async calls with waits. Until we can use async calls
         /// for more of the web client, we'll need to use this.</remarks>
-        public static void SetupAddressValidationResponse(Mock<ISwsimV55> mock)
+        public static void SetupAddressValidationResponse(Mock<ISwsimV69> mock)
         {
             mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
                 .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
@@ -27,7 +27,9 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
                     false,
                     new Address[] { },
                     new StatusCodes(),
-                    new RateV20[] { },
+                    new RateV25[] { },
+                    "",
+                    0
                 }, null, false, null));
         }
     }

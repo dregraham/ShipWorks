@@ -36,13 +36,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader,
-            Func<Type, ILog> logFactory) : base(store)
+            IOdbcDownloaderExtraDependencies extras) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.store = (OdbcStoreEntity) store;
-            log = logFactory(GetType());
+            log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
             fieldMap.Load(this.store.ImportMap);
@@ -80,7 +80,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new DownloadException(ex.Message, ex);
             }
         }
-
 
         /// <summary>
         /// Generates the download command based on the store entity

@@ -27,6 +27,16 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteFactory"/> class.
+        /// </summary>
+        public ExceptionsRateFootnoteFactory(ShipmentTypeCode shipmentTypeCode, string errorMessage)
+        {
+            ShipmentTypeCode = shipmentTypeCode;
+            ratingExceptionType = RatingExceptionType.General;
+            ErrorMessage = errorMessage;
+        }
+
+        /// <summary>
         /// Gets the error message.
         /// </summary>
         public string ErrorMessage { get; }

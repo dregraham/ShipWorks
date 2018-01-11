@@ -79,10 +79,8 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Initialize the IoC container
         /// </summary>
-        public static IContainer Initialize(IContainer container)
-        {
-            return current = container;
-        }
+        public static IContainer Initialize(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies) =>
+            current = Build(addExtraRegistrations, assemblies);
 
         /// <summary>
         /// Build the registrations
@@ -90,12 +88,41 @@ namespace ShipWorks.ApplicationCore
         /// <remarks>
         /// This should be used for tests since the Initialize method sets the current container, which is not thread safe
         /// </remarks>
-        [NDependIgnoreLongMethod]
-        public static IContainer BuildRegistrations(IContainer container, params Assembly[] assemblies)
+        public static IContainer Initialize(IContainer container, params Assembly[] assemblies)
         {
             Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
             var builder = new ContainerBuilder();
 
+            AddRegistrations(builder, allAssemblies);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            builder.Update(container);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            return current = container;
+        }
+
+        /// <summary>
+        /// Build the IoC container
+        /// </summary>
+        public static IContainer Build(Action<ContainerBuilder> addExtraRegistrations, params Assembly[] assemblies)
+        {
+            Assembly[] allAssemblies = assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray();
+            var builder = new ContainerBuilder();
+
+            AddRegistrations(builder, allAssemblies);
+
+            addExtraRegistrations(builder);
+
+            return builder.Build();
+        }
+
+        /// <summary>
+        /// Add registrations to the given builder
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private static void AddRegistrations(ContainerBuilder builder, Assembly[] allAssemblies)
+        {
             builder.RegisterSource(new OrderedRegistrationSource());
 
             builder.RegisterType<ClipboardHelper>()
@@ -125,10 +152,6 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<SqlServerInstaller>()
                 .AsSelf();
-
-            builder.RegisterType<StampsAddressValidationWebClient>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
 
             builder.RegisterType<ValidatedAddressScope>()
                 .AsImplementedInterfaces()
@@ -179,7 +202,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<PdfDocument>()
+            builder.RegisterType<PdfBlackAndWhiteDocument>()
                 .AsImplementedInterfaces();
 
             RegisterWrappers(builder);
@@ -231,12 +254,6 @@ namespace ShipWorks.ApplicationCore
             {
                 builder.RegisterType(taskDescriptor.SystemType).AsSelf();
             }
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            builder.Update(container);
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            return container;
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
@@ -44,7 +45,7 @@ namespace ShipWorks.AddressValidation
         private const string BatchSizeRegistryKey = "batchSize";
         private const string ValidationConcurrencyRegistryKey = "requests";
         public const string ValidationConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\ValidationConcurrency";
-        private static readonly AddressValidator addressValidator = new AddressValidator();
+        private static readonly Lazy<AddressValidator> addressValidator = new Lazy<AddressValidator>();
         private static object lockObj = new object();
         private static Task validationThread;
         private static CancellationToken cancellationToken;
@@ -248,9 +249,9 @@ namespace ShipWorks.AddressValidation
                 if (entityToValidate != null && validatableStatuses.Contains((int) entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
                 {
                     StoreEntity store = StoreManager.GetRelatedStore((long) entityToValidate.Fields["OrderID"].CurrentValue);
-                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
+                    bool shouldAutomaticallyAdjustAddress = store.DomesticAddressValidationSetting != AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    Task task = addressValidator.ValidateAsync(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
+                    Task task = addressValidator.Value.ValidateAsync(entityToValidate, store, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))

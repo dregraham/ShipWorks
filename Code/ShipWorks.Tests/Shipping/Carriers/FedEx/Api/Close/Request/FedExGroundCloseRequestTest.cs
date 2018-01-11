@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
         public FedExGroundCloseRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
-            account = new FedExAccountEntity {AccountNumber = "1234", MeterNumber = "45453"};
+            account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
             fedExService = new Mock<IFedExServiceGateway>();
             fedExService.Setup(s => s.Close(It.IsAny<GroundCloseRequest>())).Returns(new GroundCloseReply());

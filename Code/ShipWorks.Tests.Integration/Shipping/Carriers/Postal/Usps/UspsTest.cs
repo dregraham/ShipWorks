@@ -16,12 +16,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
     public class UspsTest : DataDrivenIntegrationTestBase
     {
-        private const bool justLabels = true;
         private readonly ITestOutputHelper output;
 
         public UspsTest(ITestOutputHelper output)
         {
             this.output = output;
+            justLabels = true;
         }
 
         // [DataSource("DataSource_Ship_Stamps")]

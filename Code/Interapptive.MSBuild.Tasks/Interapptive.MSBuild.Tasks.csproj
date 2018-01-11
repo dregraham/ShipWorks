@@ -37,9 +37,10 @@
     <SccLocalPath>2~4dc65538-e67f-4277-9622-0ab008abf2fc</SccLocalPath>
     <SccAuxPath>http://vault.interapptive.com/VaultService</SccAuxPath>
     <SccProvider>SourceGear Vault Visual Studio 2005 Client:{1EA47954-8515-402d-82D9-B5C332120A8D}</SccProvider>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisModuleSuppressionsFile>AnalysisSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,11 +64,11 @@
     <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RunCodeAnalysis>true</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks" />
@@ -78,83 +80,14 @@
   <ItemGroup>
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="EnsureActiproInLicenseFile.cs" />
-    <Compile Include="PackageMivaModules.cs" />
-    <Compile Include="PackageModuleUtility.cs" />
-    <Compile Include="PackagePhpModule.cs" />
     <Compile Include="ReadAssemblyInfoVersion.cs" />
     <Compile Include="SplitVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StripDivelementsFromLicenseFile.cs" />
-    <Compile Include="Zip\GZipUtility.cs" />
-    <Compile Include="Zip\SharpZipLib\BZip2\BZip2.cs" />
-    <Compile Include="Zip\SharpZipLib\BZip2\BZip2Constants.cs" />
-    <Compile Include="Zip\SharpZipLib\BZip2\BZip2Exception.cs" />
-    <Compile Include="Zip\SharpZipLib\BZip2\BZip2InputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\BZip2\BZip2OutputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Checksums\Adler32.cs" />
-    <Compile Include="Zip\SharpZipLib\Checksums\CRC32.cs" />
-    <Compile Include="Zip\SharpZipLib\Checksums\IChecksum.cs" />
-    <Compile Include="Zip\SharpZipLib\Checksums\StrangeCRC.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\FileSystemScanner.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\INameTransform.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\IScanFilter.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\NameFilter.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\PathFilter.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\StreamUtils.cs" />
-    <Compile Include="Zip\SharpZipLib\Core\WindowsPathUtils.cs" />
-    <Compile Include="Zip\SharpZipLib\Encryption\PkzipClassic.cs" />
-    <Compile Include="Zip\SharpZipLib\GZip\GZIPConstants.cs" />
-    <Compile Include="Zip\SharpZipLib\GZip\GZipException.cs" />
-    <Compile Include="Zip\SharpZipLib\GZip\GzipInputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\GZip\GzipOutputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\SharpZipBaseException.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\InvalidHeaderException.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarArchive.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarBuffer.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarEntry.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarException.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarHeader.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarInputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Tar\TarOutputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Deflater.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\DeflaterConstants.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\DeflaterEngine.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\DeflaterHuffman.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\DeflaterPending.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Inflater.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\InflaterDynHeader.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\InflaterHuffmanTree.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\PendingBuffer.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Streams\DeflaterOutputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Streams\InflaterInputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Streams\OutputWindow.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\Compression\Streams\StreamManipulator.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\FastZip.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\IEntryFactory.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\WindowsNameTransform.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipConstants.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipEntry.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipEntryFactory.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipException.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipExtraData.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipFile.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipHelperStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipInputStream.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipNameTransform.cs" />
-    <Compile Include="Zip\SharpZipLib\Zip\ZipOutputStream.cs" />
-    <Compile Include="Zip\ZipExtractProgressEventArgs.cs" />
-    <Compile Include="Zip\ZipReader.cs" />
-    <Compile Include="Zip\ZipReaderItem.cs" />
-    <Compile Include="Zip\ZipReaderProgressEventArgs.cs" />
-    <Compile Include="Zip\ZipWriter.cs" />
-    <Compile Include="Zip\ZipWriterBinaryItem.cs" />
-    <Compile Include="Zip\ZipWriterFileItem.cs" />
-    <Compile Include="Zip\ZipWriterItem.cs" />
-    <Compile Include="Zip\ZipWriterProgressEventArgs.cs" />
-    <Compile Include="Zip\ZipWriterStringItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Interapptive.MSBuild.Tasks.Targets" />
+    <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>

@@ -46,10 +46,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         /// <param name="store">Store for which this downloader will operate</param>
         public BigCommerceDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
             IBigCommerceWebClientFactory webClientFactory,
             IBigCommerceOrderSearchCriteriaFactory orderSearchCriteriaFactory,
             Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.orderSearchCriteriaFactory = orderSearchCriteriaFactory;
             this.createStatusCodeProvider = createStatusCodeProvider;

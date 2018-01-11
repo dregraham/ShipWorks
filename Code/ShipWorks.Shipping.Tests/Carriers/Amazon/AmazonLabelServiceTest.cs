@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
@@ -25,15 +26,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         }
 
         [Fact]
-        public void Create_ThrowsArgumentNullException_WithNullShipment()
+        public async Task Create_ThrowsArgumentNullException_WithNullShipment()
         {
             var testObject = mock.Create<AmazonLabelService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.Create(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => testObject.Create(null));
         }
 
         [Fact]
-        public void Create_ReturnsLabelData_WithShipmentAndApiResults()
+        public async Task Create_ReturnsLabelData_WithShipmentAndApiResults()
         {
             var labelData = new AmazonShipment();
             mock.Mock<IAmazonCreateShipmentRequest>().Setup(x => x.Submit(It.IsAny<ShipmentEntity>()))
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 (s, a) => s == defaultShipment && a == labelData ? response : null);
 
             var testObject = mock.Create<AmazonLabelService>();
-            var result = testObject.Create(defaultShipment);
+            var result = await testObject.Create(defaultShipment);
 
             Assert.Equal(response, result);
         }

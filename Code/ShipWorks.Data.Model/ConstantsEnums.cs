@@ -550,8 +550,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -654,8 +656,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -680,6 +684,112 @@ namespace ShipWorks.Data.Model
 		StoreCode,
 		///<summary>StatusCodes. </summary>
 		StatusCodes,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaAccount.</summary>
+	public enum AsendiaAccountFieldIndex
+	{
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaProfile.</summary>
+	public enum AsendiaProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AsendiaShipment.</summary>
+	public enum AsendiaShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>AsendiaAccountID. </summary>
+		AsendiaAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -908,8 +1018,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -1056,8 +1168,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -1388,8 +1502,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -1899,6 +2015,146 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressAccount.</summary>
+	public enum DhlExpressAccountFieldIndex
+	{
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>AccountNumber. </summary>
+		AccountNumber,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Phone. </summary>
+		Phone,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressPackage.</summary>
+	public enum DhlExpressPackageFieldIndex
+	{
+		///<summary>DhlExpressPackageID. </summary>
+		DhlExpressPackageID,
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>TrackingNumber. </summary>
+		TrackingNumber,
+		///<summary>Insurance. </summary>
+		Insurance,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressProfile.</summary>
+	public enum DhlExpressProfileFieldIndex
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveryDutyPaid. </summary>
+		DeliveryDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressProfilePackage.</summary>
+	public enum DhlExpressProfilePackageFieldIndex
+	{
+		///<summary>DhlExpressProfilePackageID. </summary>
+		DhlExpressProfilePackageID,
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DhlExpressShipment.</summary>
+	public enum DhlExpressShipmentFieldIndex
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>DhlExpressAccountID. </summary>
+		DhlExpressAccountID,
+		///<summary>Service. </summary>
+		Service,
+		///<summary>DeliveredDutyPaid. </summary>
+		DeliveredDutyPaid,
+		///<summary>NonMachinable. </summary>
+		NonMachinable,
+		///<summary>SaturdayDelivery. </summary>
+		SaturdayDelivery,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>Contents. </summary>
+		Contents,
+		///<summary>NonDelivery. </summary>
+		NonDelivery,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: DimensionsProfile.</summary>
 	public enum DimensionsProfileFieldIndex
 	{
@@ -2342,8 +2598,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -2568,6 +2826,8 @@ namespace ShipWorks.Data.Model
 		MailingPostalCode,
 		///<summary>ScanFormAddressSource. </summary>
 		ScanFormAddressSource,
+		///<summary>AcceptedFCMILetterWarning. </summary>
+		AcceptedFCMILetterWarning,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2896,8 +3156,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -3094,6 +3356,16 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
+		///<summary>FreightPackaging. </summary>
+		FreightPackaging,
+		///<summary>FreightPieces. </summary>
+		FreightPieces,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3248,6 +3520,12 @@ namespace ShipWorks.Data.Model
 		PackingDetailsCargoAircraftOnly,
 		///<summary>PackingDetailsPackingInstructions. </summary>
 		PackingDetailsPackingInstructions,
+		///<summary>BatteryMaterial. </summary>
+		BatteryMaterial,
+		///<summary>BatteryPacking. </summary>
+		BatteryPacking,
+		///<summary>BatteryRegulatorySubtype. </summary>
+		BatteryRegulatorySubtype,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3566,6 +3844,20 @@ namespace ShipWorks.Data.Model
 		Currency,
 		///<summary>InternationalTrafficInArmsService. </summary>
 		InternationalTrafficInArmsService,
+		///<summary>FreightRole. </summary>
+		FreightRole,
+		///<summary>FreightCollectTerms. </summary>
+		FreightCollectTerms,
+		///<summary>FreightTotalHandlinUnits. </summary>
+		FreightTotalHandlinUnits,
+		///<summary>FreightClass. </summary>
+		FreightClass,
+		///<summary>FreightSpecialServices. </summary>
+		FreightSpecialServices,
+		///<summary>FreightGuaranteeType. </summary>
+		FreightGuaranteeType,
+		///<summary>FreightGuaranteeDate. </summary>
+		FreightGuaranteeDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3766,8 +4058,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -3872,8 +4166,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4266,8 +4562,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4392,8 +4690,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -4862,8 +5162,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5194,8 +5496,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5442,8 +5746,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5736,8 +6042,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5840,8 +6148,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -5906,6 +6216,8 @@ namespace ShipWorks.Data.Model
 		OnlineUpdateStrategy,
 		///<summary>OnlineUpdateStatusChangeEmail. </summary>
 		OnlineUpdateStatusChangeEmail,
+		///<summary>AddendumCheckoutDataEnabled. </summary>
+		AddendumCheckoutDataEnabled,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6132,8 +6444,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -6432,8 +6746,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -6564,8 +6880,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7200,8 +7518,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7514,8 +7834,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -7940,8 +8262,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -8328,8 +8652,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -8878,6 +9204,8 @@ namespace ShipWorks.Data.Model
 		ShipmentEditLimit,
 		///<summary>ShipmentsLoaderEnsureFiltersLoadedTimeout. </summary>
 		ShipmentsLoaderEnsureFiltersLoadedTimeout,
+		///<summary>ShipEngineApiKey. </summary>
+		ShipEngineApiKey,
 		///<summary>ShipmentDateCutoffJson. </summary>
 		ShipmentDateCutoffJson,
 		/// <summary></summary>
@@ -9172,8 +9500,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9252,8 +9582,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9342,8 +9674,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -9434,8 +9768,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. </summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. </summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. </summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -9866,8 +10202,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -10498,6 +10836,8 @@ namespace ShipWorks.Data.Model
 		PendingInitialAccount,
 		///<summary>GlobalPostAvailability. </summary>
 		GlobalPostAvailability,
+		///<summary>AcceptedFCMILetterWarning. </summary>
+		AcceptedFCMILetterWarning,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10662,8 +11002,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -10930,6 +11272,8 @@ namespace ShipWorks.Data.Model
 		PurchaseOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>CustomerOrderID. </summary>
+		CustomerOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10982,8 +11326,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -11594,8 +11940,10 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. Inherited from Store</summary>
 		AutoDownloadOnlyAway,
-		///<summary>AddressValidationSetting. Inherited from Store</summary>
-		AddressValidationSetting,
+		///<summary>DomesticAddressValidationSetting. Inherited from Store</summary>
+		DomesticAddressValidationSetting,
+		///<summary>InternationalAddressValidationSetting. Inherited from Store</summary>
+		InternationalAddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. Inherited from Store</summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. Inherited from Store</summary>
@@ -11659,6 +12007,12 @@ namespace ShipWorks.Data.Model
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>
 		AmeriCommerceStoreEntity,
+		///<summary>AsendiaAccount</summary>
+		AsendiaAccountEntity,
+		///<summary>AsendiaProfile</summary>
+		AsendiaProfileEntity,
+		///<summary>AsendiaShipment</summary>
+		AsendiaShipmentEntity,
 		///<summary>Audit</summary>
 		AuditEntity,
 		///<summary>AuditChange</summary>
@@ -11699,6 +12053,16 @@ namespace ShipWorks.Data.Model
 		ConfigurationEntity,
 		///<summary>Customer</summary>
 		CustomerEntity,
+		///<summary>DhlExpressAccount</summary>
+		DhlExpressAccountEntity,
+		///<summary>DhlExpressPackage</summary>
+		DhlExpressPackageEntity,
+		///<summary>DhlExpressProfile</summary>
+		DhlExpressProfileEntity,
+		///<summary>DhlExpressProfilePackage</summary>
+		DhlExpressProfilePackageEntity,
+		///<summary>DhlExpressShipment</summary>
+		DhlExpressShipmentEntity,
 		///<summary>DimensionsProfile</summary>
 		DimensionsProfileEntity,
 		///<summary>Download</summary>

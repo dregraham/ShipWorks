@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -78,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
 
                 DefaultEmailAccountID = -1,
 
-                AddressValidationSetting = (int) AddressValidationStoreSettingType.ValidateAndApply,
+                DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndApply,
 
                 Token = "",
                 StoreUrl = "",

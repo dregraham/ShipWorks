@@ -160,14 +160,23 @@
     <Compile Include="Custom\EntityClasses\ActionEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\ActionEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\CustomerEntity.ReadOnly.cs" />
+    <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.cs" />
+    <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\AsendiaAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\EndiciaAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EbayOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\BigCommerceOrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\FedExShipmentEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\GrouponOrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.Interface.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.Interface.cs" />
+    <Compile Include="Custom\EntityClasses\DhlExpressAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\IParcelAccountEntity.ReadOnly.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
@@ -2834,6 +2843,102 @@
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
     <Compile Include=".\RelationClasses\AmazonServiceTypeRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressAccountRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressPackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressPackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressPackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressPackageRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressProfilePackageEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressProfilePackageRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\DhlExpressProfileRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\DhlExpressAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IDhlExpressAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyDhlExpressAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AsendiaAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAsendiaAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAsendiaAccountEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AsendiaAccountRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AsendiaShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAsendiaShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAsendiaShipmentEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AsendiaShipmentRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityClasses\AsendiaProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\EntityInterfaces\IAsendiaProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\ReadOnlyEntities\ReadOnlyAsendiaProfileEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\AsendiaProfileRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
   </ItemGroup>

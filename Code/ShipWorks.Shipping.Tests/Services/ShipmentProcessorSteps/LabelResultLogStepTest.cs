@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [InlineData(2)]
         public void Finish_ReturnsTermsAndConditionsException_WhenInputExceptionContainsTermsAndConditionsException(int levels)
         {
-            Exception termsException = new UspsGlobalPostTermsAndConditionsException(new UspsAccountEntity(), "Foo");
+            Exception termsException = new UspsTermsAndConditionsException("Foo", null);
             Exception exception = termsException;
             for (int i = 0; i < levels; i++)
             {

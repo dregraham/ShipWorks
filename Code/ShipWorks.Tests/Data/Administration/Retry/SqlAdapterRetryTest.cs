@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            testObject.ExecuteWithRetry(x => calls += 1, () => mock.Create<ISqlAdapter>());
+            testObject.ExecuteWithRetry(x => calls += 1, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(1, calls);
         }
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 {
                     throw new Exception();
                 }
-            }, () => mock.Create<ISqlAdapter>());
+            }, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(2, calls);
         }
@@ -147,7 +147,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 testObject.ExecuteWithRetry(x => { throw new Exception(); }, () =>
                 {
                     calls += 1;
-                    return mock.Create<ISqlAdapter>();
+                    return mock.Build<ISqlAdapter>();
                 });
             }
             catch (Exception)
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 {
                     throw new Exception("Foo", new InvalidOperationException());
                 }
-            }, () => mock.Create<ISqlAdapter>());
+            }, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(2, calls);
         }
@@ -182,7 +182,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
         {
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            Assert.Throws<Exception>(() => testObject.ExecuteWithRetry(x => { throw new Exception(); }, () => mock.Create<ISqlAdapter>()));
+            Assert.Throws<Exception>(() => testObject.ExecuteWithRetry(x => { throw new Exception(); }, () => mock.Build<ISqlAdapter>()));
         }
 
         [Fact]
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 testObject.ExecuteWithRetry(x =>
                 {
                     throw new Exception();
-                }, () => mock.Create<ISqlAdapter>());
+                }, () => mock.Build<ISqlAdapter>());
             }
             catch (Exception)
             {
@@ -216,7 +216,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             Assert.Throws<ArgumentException>(() => testObject.ExecuteWithRetry(x =>
             {
                 throw new ArgumentException("foo", new InvalidOperationException());
-            }, () => mock.Create<ISqlAdapter>()));
+            }, () => mock.Build<ISqlAdapter>()));
         }
 
         [Fact]
@@ -470,7 +470,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             int calls = 0;
             var testObject = new SqlAdapterRetry<Exception>(1, 1, "Foo", TimeSpan.FromMilliseconds(10));
 
-            await testObject.ExecuteWithRetryAsync(x => { calls += 1; return Task.CompletedTask; }, () => mock.Create<ISqlAdapter>());
+            await testObject.ExecuteWithRetryAsync(x => { calls += 1; return Task.CompletedTask; }, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(1, calls);
         }
@@ -491,7 +491,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 }
 
                 return Task.CompletedTask;
-            }, () => mock.Create<ISqlAdapter>());
+            }, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(2, calls);
         }
@@ -507,7 +507,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 await testObject.ExecuteWithRetryAsync(x => { throw new Exception(); }, () =>
                 {
                     calls += 1;
-                    return mock.Create<ISqlAdapter>();
+                    return mock.Build<ISqlAdapter>();
                 });
             }
             catch (Exception)
@@ -534,7 +534,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 }
 
                 return Task.CompletedTask;
-            }, () => mock.Create<ISqlAdapter>());
+            }, () => mock.Build<ISqlAdapter>());
 
             Assert.Equal(2, calls);
         }
@@ -547,7 +547,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             await Assert.ThrowsAsync<Exception>(() => testObject.ExecuteWithRetryAsync(x =>
             {
                 throw new Exception();
-            }, () => mock.Create<ISqlAdapter>()));
+            }, () => mock.Build<ISqlAdapter>()));
         }
 
         [Fact]
@@ -562,7 +562,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
                 await testObject.ExecuteWithRetryAsync(x =>
                 {
                     throw new Exception();
-                }, () => mock.Create<ISqlAdapter>());
+                }, () => mock.Build<ISqlAdapter>());
             }
             catch (Exception)
             {
@@ -581,7 +581,7 @@ namespace ShipWorks.Tests.Data.Administration.Retry
             await Assert.ThrowsAsync<ArgumentException>(() => testObject.ExecuteWithRetryAsync(x =>
             {
                 throw new ArgumentException("foo", new InvalidOperationException());
-            }, () => mock.Create<ISqlAdapter>()));
+            }, () => mock.Build<ISqlAdapter>()));
         }
 
         public void Dispose()

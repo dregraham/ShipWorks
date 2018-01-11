@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         {
             get
             {
-                return UseTestServer ? new Uri("https://int.insureship.com") : new Uri("https://api2.insureship.com");
+                return UseTestServer ? new Uri("https://osisstagingapi.insureship.com") : new Uri("https://api2.insureship.com");
             }
         }
 

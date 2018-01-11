@@ -2,11 +2,17 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Net;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.AddressValidation
 {
@@ -15,6 +21,37 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public class StampsAddressValidationWebClient : IAddressValidationWebClient
     {
+        private readonly IUspsWebClient uspsWebClient;
+        private readonly IAddressValidationResultFactory addressValidationResultFactory;
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsAddressValidationWebClient()
+			: this(new UspsWebClient(new UspsAccountRepository(),
+	                new UspsWebServiceFactory(new LogEntryFactory()),
+    	            new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData),
+        	        UspsResellerType.None), 
+                  new StampsAddressValidationResultFactory(), 
+                  new UspsCounterRateAccountRepository(TangoCredentialStore.Instance))
+        {
+            
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public StampsAddressValidationWebClient(
+            IUspsWebClient uspsWebClient, 
+            IAddressValidationResultFactory addressValidationResultFactory,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository)
+        {
+            this.uspsWebClient = uspsWebClient;
+            this.addressValidationResultFactory = addressValidationResultFactory;
+            this.accountRepository = accountRepository;
+        }
+
         /// <summary>
         /// Validate the address
         /// </summary>
@@ -34,17 +71,23 @@ namespace ShipWorks.AddressValidation
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
-
-            UspsWebClient session = new UspsWebClient(IoC.UnsafeGlobalLifetimeScope, UspsResellerType.None);
-
             try
             {
-                UspsAddressValidationResults uspsResult = await session.ValidateAddressAsync(personAdapter);
-                validationResult.AddressType = ConvertAddressType(uspsResult);
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepository.DefaultProfileAccount).ConfigureAwait(false);
+                validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult));
+                    // Only add the origin to the validation results if it was fully matched
+                    if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum)
+                    {
+                        validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult, (int)validationResult.AddressType));
+                    }
+                                        
+                    if (validationResult.AddressType == AddressType.InternationalAmbiguous)
+                    {
+                        validationResult.AddressValidationError = TranslateValidationResultMessage(uspsResult);
+                    }
                 }
                 else
                 {
@@ -53,7 +96,7 @@ namespace ShipWorks.AddressValidation
 
                 foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult));
+                    validationResult.AddressValidationResults.Add(addressValidationResultFactory.CreateAddressValidationResult(address, false, uspsResult, (int) validationResult.AddressType));
                 }
             }
             catch (UspsException ex)
@@ -65,45 +108,41 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Create an AddressValidationResult from a Stamps.com address
+        /// Translate the error from stamps to a ShipWorks customer friendly error
         /// </summary>
-        private static AddressValidationResult CreateAddressValidationResult(Address address, bool isValid, UspsAddressValidationResults uspsResult)
+        private string TranslateValidationResultMessage(UspsAddressValidationResults uspsResult)
         {
-            AddressValidationResult addressValidationResult = new AddressValidationResult
+            string originalMessage = uspsResult?.AddressCleansingResult ?? string.Empty;
+
+            if (originalMessage == "Province and Postal Code are valid, but City and Street could not be verified.")
             {
-                Street1 = address.Address1 ?? string.Empty,
-                Street2 = address.Address2 ?? string.Empty,
-                Street3 = address.Address3 ?? string.Empty,
-                City = address.City ?? string.Empty,
-                StateProvCode = address.State ?? string.Empty,
-                PostalCode = GetPostalCode(address) ?? string.Empty,
-                CountryCode = address.Country ?? string.Empty,
-                IsValid = isValid,
-                POBox = ConvertPoBox(uspsResult.IsPoBox),
-                ResidentialStatus = ConvertResidentialStatus(uspsResult.ResidentialIndicator)
-            };
+                return "The address has been verified to the State level, which is the highest level possible for the destination country.";
+            }
 
-            addressValidationResult.ParseStreet1();
-            addressValidationResult.ApplyAddressCasing();
+            if (originalMessage == "City, Province, and Postal Code are valid, but the Street could not be verified.")
+            {
+                return "The address has been verified to the City level, which is the highest level possible for the destination country.";
+            }
 
-            return addressValidationResult;
+            if (originalMessage == "Street, City, Province, and Postal Code are valid, but the Street Number could not be verified.")
+            {
+                return "The address has been verified to the Street level, which is the highest level possible for the destination country.";
+            }
+
+            return originalMessage;
         }
 
         /// <summary>
         /// Analyzes the uspsResult and returns the appropriate AddressType
         /// </summary>
-        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult)
+        private static AddressType ConvertAddressType(UspsAddressValidationResults uspsResult, AddressAdapter addressAdapter)
         {
-            bool isMilitary = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
-            bool isSecondaryAddressProblem = uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
-            bool isUsTerritory = CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
-
             if (!uspsResult.IsCityStateZipOk)
             {
                 return AddressType.Invalid;
             }
-
-            if (isSecondaryAddressProblem)
+            
+            if (IsSecondaryAddressProblem(uspsResult))
             {
                 return AddressType.SecondaryNotFound;
             }
@@ -114,13 +153,12 @@ namespace ShipWorks.AddressValidation
             }
 
             // successful match!
-
-            if (isMilitary)
+            if (IsMilitary(uspsResult))
             {
                 return AddressType.Military;
             }
-
-            if (isUsTerritory)
+            
+            if (IsUsTerritory(uspsResult))
             {
                 return AddressType.UsTerritory;
             }
@@ -137,50 +175,57 @@ namespace ShipWorks.AddressValidation
                 case ResidentialDeliveryIndicatorType.No:
                     return AddressType.Commercial;
                 default:
-                    return AddressType.Valid;
+                    if (addressAdapter.IsDomesticCountry())
+                    {
+                        return AddressType.Valid;
+                    }
+                    return DetermineInternationalCorectness(uspsResult);
             }
         }
 
         /// <summary>
-        /// Converts the po box indicator into a ShipWorks ValidationDetailStatus
+        /// Does the Address Validation Result have a secondary address problem 
         /// </summary>
-        private static ValidationDetailStatusType ConvertPoBox(bool? isPoBox)
+        private static bool IsSecondaryAddressProblem(UspsAddressValidationResults uspsResult)
         {
-            if (!isPoBox.HasValue)
-            {
-                return ValidationDetailStatusType.Unknown;
-            }
-
-            return isPoBox.Value ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No;
+            return uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "H" || (x.Value ?? string.Empty) == "S") ?? false;
         }
 
         /// <summary>
-        /// Convert Stamps.com residential status into ShipWorks residential status
+        /// Is the Address Validation Result for a US Territory
         /// </summary>
-        private static ValidationDetailStatusType ConvertResidentialStatus(ResidentialDeliveryIndicatorType residentialStatus)
+        private static bool IsUsTerritory(UspsAddressValidationResults uspsResult)
         {
-            switch (residentialStatus)
-            {
-                case ResidentialDeliveryIndicatorType.No:
-                    return ValidationDetailStatusType.No;
-                case ResidentialDeliveryIndicatorType.Yes:
-                    return ValidationDetailStatusType.Yes;
-                default:
-                    return ValidationDetailStatusType.Unknown;
-            }
+            return CountryList.IsUSInternationalTerritory(uspsResult.MatchedAddress?.State ?? string.Empty);
         }
 
         /// <summary>
-        /// Get a full postal code from an address
+        /// Is the Address Validation Result for a military address
         /// </summary>
-        private static string GetPostalCode(Address address)
+        private static bool IsMilitary(UspsAddressValidationResults uspsResult)
         {
-            if (!string.IsNullOrEmpty(address.ZIPCodeAddOn) && address.ZIPCodeAddOn != "0000")
+            return uspsResult.StatusCodes?.Footnotes?.Any(x => (x.Value ?? string.Empty) == "Y") ?? false;
+        }
+
+        /// <summary>
+        /// Check to see if an international address has been verified but still ambiguous
+        /// </summary>
+        private static AddressType DetermineInternationalCorectness(UspsAddressValidationResults uspsResult)
+        {
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Maximum && 
+                !string.IsNullOrWhiteSpace(uspsResult.AddressCleansingResult) &&
+                uspsResult.AddressCleansingResult != "Full Address Verified.")
             {
-                return address.ZIPCode + "-" + address.ZIPCodeAddOn;
+                return AddressType.InternationalAmbiguous;
             }
 
-            return address.ZIPCode;
+            // If the address is matched partially consider it a bad address
+            if (uspsResult.VerificationLevel == AddressVerificationLevel.Partial)
+            {
+                return AddressType.PrimaryNotFound;
+            }
+
+            return AddressType.Valid;
         }
     }
 }

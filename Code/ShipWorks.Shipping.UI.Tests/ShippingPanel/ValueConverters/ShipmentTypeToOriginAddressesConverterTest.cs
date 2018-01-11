@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ValueConverters
             using (AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 var testObject = mock.Create<ShipmentTypeToOriginAddressesConverter>();
-                var result = testObject.Convert("foo", typeof(object), null, null) as IEnumerable<KeyValuePair<string, long>>;
+                var result = testObject.Convert(value, typeof(object), null, null) as IEnumerable<KeyValuePair<string, long>>;
                 Assert.Empty(result);
             }
         }

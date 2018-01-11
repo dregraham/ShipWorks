@@ -83,7 +83,12 @@ CREATE TABLE [dbo].[FedExPackage]
 [ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [NumberOfContainers] [int] NOT NULL,
 [PackingDetailsCargoAircraftOnly] [bit] NOT NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BatteryMaterial] [int] NOT NULL,
+[BatteryPacking] [int] NOT NULL,
+[BatteryRegulatorySubtype] [int] NOT NULL,
+[FreightPackaging] [int] NOT NULL,
+[FreightPieces] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -933,7 +938,8 @@ CREATE TABLE [dbo].[Store]
 [AutoDownload] [bit] NOT NULL,
 [AutoDownloadMinutes] [int] NOT NULL,
 [AutoDownloadOnlyAway] [bit] NOT NULL,
-[AddressValidationSetting] [int] NOT NULL,
+[DomesticAddressValidationSetting] [int] NOT NULL,
+[InternationalAddressValidationSetting] [int] NOT NULL,
 [ComputerDownloadPolicy] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultEmailAccountID] [bigint] NOT NULL,
 [ManualOrderPrefix] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -2065,7 +2071,14 @@ CREATE TABLE [dbo].[FedExShipment]
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ThirdPartyConsignee] [bit] NOT NULL,
 [Currency] [int] NULL,
-[InternationalTrafficInArmsService] [bit] NULL
+[InternationalTrafficInArmsService] [bit] NULL,
+[FreightRole] [int] NOT NULL,
+[FreightCollectTerms] [int] NOT NULL,
+[FreightTotalHandlinUnits] [int] NOT NULL,
+[FreightClass] [int] NOT NULL,
+[FreightSpecialServices] [int] NOT NULL,
+[FreightGuaranteeType] [int] NOT NULL,
+[FreightGuaranteeDate] [datetime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -2164,7 +2177,10 @@ CREATE TABLE [dbo].[FedExProfilePackage]
 [ContainerType] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [NumberOfContainers] [int] NULL,
 [PackingDetailsCargoAircraftOnly] [bit] NULL,
-[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[PackingDetailsPackingInstructions] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BatteryMaterial] [int] NULL,
+[BatteryPacking] [int] NULL,
+[BatteryRegulatorySubtype] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfilePackage] on [dbo].[FedExProfilePackage]'
@@ -2645,7 +2661,8 @@ CREATE TABLE [dbo].[MivaStore]
 [LiveManualOrderNumbers] [bit] NOT NULL,
 [SebenzaCheckoutDataEnabled] [bit] NOT NULL,
 [OnlineUpdateStrategy] [int] NOT NULL,
-[OnlineUpdateStatusChangeEmail] [bit] NOT NULL
+[OnlineUpdateStatusChangeEmail] [bit] NOT NULL,
+[AddendumCheckoutDataEnabled] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_MivaStore] on [dbo].[MivaStore]'
@@ -2817,6 +2834,167 @@ GO
 PRINT N'Creating index [IX_OnTracShipment_PackagingType] on [dbo].[OnTracShipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_OnTracShipment_PackagingType] ON [dbo].[OnTracShipment] ([PackagingType])
+GO
+PRINT N'Creating [dbo].[DhlExpressShipment]'
+GO
+CREATE TABLE [dbo].[DhlExpressShipment](
+	[ShipmentID] [bigint] NOT NULL,
+	[DhlExpressAccountID] [bigint] NOT NULL,
+	[Service] [int] NOT NULL,
+	[DeliveredDutyPaid] [bit] NOT NULL,
+	[NonMachinable] [bit] NOT NULL,
+	[SaturdayDelivery] [bit] NOT NULL,
+	[RequestedLabelFormat] [int] NOT NULL,
+	[Contents][int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (12) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
+GO
+ALTER TABLE [dbo].[DhlExpressShipment] ADD CONSTRAINT [PK_DhlExpressShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+PRINT N'Adding foreign keys to [dbo].[DhlExpressShipment]'
+GO
+ALTER TABLE [dbo].[DhlExpressShipment] ADD CONSTRAINT [FK_DhlExpressShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Creating index [IX_OnTracShipment_Service] on [dbo].[OnTracShipment]'
+GO
+
+CREATE NONCLUSTERED INDEX [IX_DhlExpressShipment_Service] ON [dbo].[DhlExpressShipment] ([Service])
+GO
+
+ALTER TABLE [dbo].[DhlExpressShipment] ENABLE CHANGE_TRACKING
+GO
+
+PRINT N'Creating [dbo].[DhlExpressPackage]'
+GO
+CREATE TABLE [dbo].[DhlExpressPackage](
+	[DhlExpressPackageID] [bigint] IDENTITY(1093,1000) NOT NULL,
+	[ShipmentID] [bigint] NOT NULL,
+	[Weight] [float] NOT NULL,
+	[DimsProfileID] [bigint] NOT NULL,
+	[DimsLength] [float] NOT NULL,
+	[DimsWidth] [float] NOT NULL,
+	[DimsHeight] [float] NOT NULL,
+	[DimsAddWeight] [bit] NOT NULL,
+	[DimsWeight] [float] NOT NULL,
+	[Insurance] [bit] NOT NULL,
+	[InsuranceValue] [money] NOT NULL,
+	[TrackingNumber] [varchar](50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_DhlExpressPackage] on [dbo].[DhlExpressPackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressPackage] ADD CONSTRAINT [PK_DhlExpressPackage] PRIMARY KEY CLUSTERED  ([DhlExpressPackageID])
+GO
+PRINT N'Adding foreign keys to [dbo].[DhlExpressPackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressPackage] ADD CONSTRAINT [FK_DhlExpressPackage_DhlExpressShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[DhlExpressShipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Creating [dbo].[DhlExpressProfile]'
+GO
+CREATE TABLE [dbo].[DhlExpressProfile](
+	[ShippingProfileID] [bigint] NOT NULL,
+	[DhlExpressAccountID] [bigint] NULL,
+	[Service] [int] NULL,
+	[DeliveryDutyPaid] [bit] NULL,
+	[NonMachinable] [bit] NULL,
+	[SaturdayDelivery] [bit] NULL,
+	[Contents][int] Null,
+	[NonDelivery] [int] Null
+)
+GO
+PRINT N'Creating primary key [PK_DhlExpressProfile] on [dbo].[DhlExpressProfile]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfile] ADD CONSTRAINT [PK_DhlExpressProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[DhlExpressProfile]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfile] ADD CONSTRAINT [FK_DhlExpressProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+
+PRINT N'Creating [dbo].[DhlExpressProfilePackage]'
+GO
+CREATE TABLE [dbo].[DhlExpressProfilePackage](
+	[DhlExpressProfilePackageID] [bigint] IDENTITY(1094,1000) NOT NULL,
+	[ShippingProfileID] [bigint] NOT NULL,
+	[Weight] [float] NULL,
+	[DimsProfileID] [bigint] NULL,
+	[DimsLength] [float] NULL,
+	[DimsWidth] [float] NULL,
+	[DimsHeight] [float] NULL,
+	[DimsWeight] [float] NULL,
+	[DimsAddWeight] [bit] NULL
+)
+GO
+PRINT N'Creating primary key [PK_DhlExpressPackageProfile] on [dbo].[DhlExpressProfilePackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfilePackage] ADD CONSTRAINT [PK_DhlExpressPackageProfile] PRIMARY KEY CLUSTERED  ([DhlExpressProfilePackageID])
+GO
+PRINT N'Adding foreign keys to [dbo].[DhlExpressProfilePackage]'
+GO
+ALTER TABLE [dbo].[DhlExpressProfilePackage] ADD CONSTRAINT [FK_DhlExpressPackageProfile_DhlExpressProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[DhlExpressProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Creating [dbo].[AsendiaProfile]'
+GO
+CREATE TABLE [dbo].[AsendiaProfile](
+	[ShippingProfileID] [bigint] NOT NULL,
+	[AsendiaAccountID] [bigint] NULL,
+	[Service] [int] NULL,
+	[NonMachinable] [bit] NULL,
+	[Contents] [int] NULL,
+	[NonDelivery] [int] NULL,
+	[Weight] [float] NULL,
+	[DimsProfileID] [bigint] NULL,
+	[DimsLength] [float] NULL,
+	[DimsWidth] [float] NULL,
+	[DimsHeight] [float] NULL,
+	[DimsWeight] [float] NULL,
+	[DimsAddWeight] [bit] NULL,
+)
+GO
+PRINT N'Creating primary key [PK_AsendiaProfile] on [dbo].[AsendiaProfile]'
+GO
+ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [PK_AsendiaProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+GO
+PRINT N'Adding foreign keys to [dbo].[AsemdoaProfile]'
+GO
+ALTER TABLE [dbo].[AsendiaProfile] ADD CONSTRAINT [FK_AsendiaProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
+GO
+PRINT N'Creating [dbo].[AsendiaShipment]'
+GO
+CREATE TABLE [dbo].[AsendiaShipment](
+	[ShipmentID] [bigint] NOT NULL,
+	[AsendiaAccountID] [bigint] NOT NULL,
+	[Service] [int] NOT NULL,
+	[NonMachinable] [bit] NOT NULL,
+	[RequestedLabelFormat] [int] NOT NULL,
+	[Contents][int] NOT NULL,
+	[NonDelivery] [int] NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
+	[DimsProfileID] [bigint] NOT NULL,
+	[DimsLength] [float] NOT NULL,
+	[DimsWidth] [float] NOT NULL,
+	[DimsHeight] [float] NOT NULL,
+	[DimsAddWeight] [bit] NOT NULL,
+	[DimsWeight] [float] NOT NULL,
+	[InsuranceValue] [money] NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_AsendiaShipment] on [dbo].[AsendiaShipment]'
+GO
+ALTER TABLE [dbo].[AsendiaShipment] ADD CONSTRAINT [PK_AsendiaShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+GO
+PRINT N'Adding foreign keys to [dbo].[AsendiaShipment]'
+GO
+ALTER TABLE [dbo].[AsendiaShipment] ADD CONSTRAINT [FK_AsendiaShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
+GO
+PRINT N'Creating index [IX_AsendiaShipment_Service] on [dbo].[AsendiaShipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_AsendiaShipment_Service] ON [dbo].[AsendiaShipment] ([Service])
+GO
+ALTER TABLE [dbo].[AsendiaShipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[Customer]'
 GO
@@ -4405,7 +4583,8 @@ CREATE TABLE [dbo].[EndiciaAccount]
 [Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ScanFormAddressSource] [int] NOT NULL
+[ScanFormAddressSource] [int] NOT NULL,
+[AcceptedFCMILetterWarning] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaAccount] on [dbo].[EndiciaAccount]'
@@ -4978,7 +5157,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT (''),
 [ShipmentEditLimit] [int] NOT NULL,
 [ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0)),
-[ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT ('')
+[ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT (''),
+[ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
@@ -5049,7 +5229,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [ContractType] [int] NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
 [PendingInitialAccount] [int] NOT NULL,
-[GlobalPostAvailability] [int] NOT NULL
+[GlobalPostAvailability] [int] NOT NULL,
+[AcceptedFCMILetterWarning] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
@@ -5057,6 +5238,62 @@ GO
 ALTER TABLE [dbo].[UspsAccount] ADD CONSTRAINT [PK_PostalUspsAccount] PRIMARY KEY CLUSTERED  ([UspsAccountID])
 GO
 ALTER TABLE [dbo].[UspsAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Creating [dbo].[DhlExpressAccount]'
+GO
+CREATE TABLE [dbo].[DhlExpressAccount]
+(
+[DhlExpressAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[AccountNumber] [bigint] NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (43) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'
+GO
+ALTER TABLE [dbo].[DhlExpressAccount] ADD CONSTRAINT [PK_DhlExpressAccount] PRIMARY KEY CLUSTERED  ([DhlExpressAccountID])
+GO
+ALTER TABLE [dbo].[DhlExpressAccount] ENABLE CHANGE_TRACKING
+GO
+PRINT N'Creating [dbo].[AsendiaAccount]'
+GO
+CREATE TABLE [dbo].[AsendiaAccount]
+(
+[AsendiaAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
+[RowVersion] [timestamp] NOT NULL,
+[AccountNumber] [bigint] NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Company] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Street1] [nvarchar] (43) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[City] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AsendiaAccount] on [dbo].[AsendiaAccount]'
+GO
+ALTER TABLE [dbo].[AsendiaAccount] ADD CONSTRAINT [PK_AsendiaAccount] PRIMARY KEY CLUSTERED  ([AsendiaAccountID])
+GO
+ALTER TABLE [dbo].[AsendiaAccount] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[SystemData]'
 GO
@@ -6573,7 +6810,8 @@ CREATE TABLE [dbo].[WalmartOrderSearch]
 [WalmartOrderSearchID] [bigint] NOT NULL IDENTITY(1, 1),
 [OrderID] [bigint] NOT NULL,
 [PurchaseOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[CustomerOrderID] [varchar] (50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_WalmartOrderSearch] on [dbo].[WalmartOrderSearch]'
@@ -6583,6 +6821,10 @@ GO
 PRINT N'Creating index [IX_WalmartOrderSearch_PurchaseOrderID] on [dbo].[WalmartOrderSearch]'
 GO
 CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_PurchaseOrderID] ON [dbo].[WalmartOrderSearch] ([PurchaseOrderID]) INCLUDE ([OrderID])
+GO
+PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
+GO
+CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
 GO
 PRINT N'Creating [dbo].[YahooOrderSearch]'
 GO
@@ -7271,4 +7513,18 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'129', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeliveryExperience'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'DeclaredValue'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AsendiaShipment', @level2type=N'COLUMN',@level2name=N'AsendiaAccountID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'130' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'AsendiaShipment', @level2type=N'COLUMN',@level2name=N'Service'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'4' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'DhlExpressAccountID'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'130' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'Service'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'DeliveredDutyPaid'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'NonMachinable'
+GO
+EXEC sys.sp_addextendedproperty @name=N'AuditFormat', @value=N'1' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'DhlExpressShipment', @level2type=N'COLUMN',@level2name=N'SaturdayDelivery'
 GO

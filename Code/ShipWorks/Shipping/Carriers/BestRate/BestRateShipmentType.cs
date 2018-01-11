@@ -91,28 +91,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 ShippingProfileUtility.ApplyProfileValue(bestRateProfile.Weight, shipment, ShipmentFields.ContentWeight);
             }
         }
-
-        /// <summary>
-        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
-        /// the originID is no longer valid and the address could not be updated, false is returned.
-        /// </summary>
-        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
-        {
-            if (shipment.Processed)
-            {
-                return true;
-            }
-
-            if (originID == (int)ShipmentOriginSource.Account)
-            {
-                // Copy an empty person since the account address used will depend on each carrier
-                PersonAdapter.Copy(new PersonAdapter { OriginID = (int)ShipmentOriginSource.Account }, person);
-                return true;
-            }
-
-            return base.UpdatePersonAddress(shipment, person, originID);
-        }
-
+        
         /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>

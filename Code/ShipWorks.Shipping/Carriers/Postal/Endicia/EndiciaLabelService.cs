@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.ComponentRegistration;
@@ -53,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Creates an Endicia label
         /// </summary>
-        public IDownloadedLabelData Create(ShipmentEntity shipment)
+        public Task<IDownloadedLabelData> Create(ShipmentEntity shipment)
         {
             endiciaShipmentType.ValidateShipment(shipment);
             IShippingSettingsEntity settings = shippingSettings.FetchReadOnly();
@@ -115,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 LabelRequestResponse response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType);
-                return createDownloadedLabelData(shipment, response);
+                return Task.FromResult<IDownloadedLabelData>(createDownloadedLabelData(shipment, response));
             }
             catch (EndiciaException ex)
             {
@@ -141,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the label via Express1
         /// </summary>
-        private IDownloadedLabelData CreateUsingExpress1(ShipmentEntity shipment, IEndiciaAccountEntity express1Account)
+        private Task<IDownloadedLabelData> CreateUsingExpress1(ShipmentEntity shipment, IEndiciaAccountEntity express1Account)
         {
             // Now we turn this into an Express1 shipment...
             shipment.ShipmentType = (int) ShipmentTypeCode.Express1Endicia;
@@ -168,7 +169,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         private RateResult GetEndiciaRate(ShipmentEntity shipment, EndiciaApiClient endiciaApiClient)
         {
-            List<RateResult> endiciaRates = endiciaApiClient.GetRatesFast(shipment, endiciaShipmentType);
+            List<RateResult> endiciaRates = endiciaApiClient.GetRates(shipment, endiciaShipmentType);
             RateResult endiciaRate =
                 endiciaRates
                     .Where(er => er.Selectable)

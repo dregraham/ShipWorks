@@ -29,7 +29,6 @@ namespace ShipWorks.Actions
     /// <summary>
     /// Window for editing the properties of an individual action
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class ActionEditorDlg : Form
     {
         ActionEntity action;

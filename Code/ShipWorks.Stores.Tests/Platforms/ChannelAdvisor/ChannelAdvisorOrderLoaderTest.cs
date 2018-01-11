@@ -225,13 +225,26 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void LoadOrder_OrderTotalSet_WhenOrderIsNew()
         {
             orderToSave.OrderTotal = 12.23M;
-            mock.Mock<IOrderChargeCalculator>()
-                .Setup(c => c.CalculateTotal(orderToSave))
-                .Returns(45.73M);
+            downloadedOrder.TotalPrice = 45.73M;
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
             Assert.Equal(45.73M, orderToSave.OrderTotal);
+        }
+
+        [Fact]
+        public void LoadOrder_AddsAdditionalCostOrDiscount_WhenOrderTotalDoesNotMatchChannelAdvisorResponse()
+        {
+            orderToSave.OrderTotal = 12.23M;
+            downloadedOrder.TotalPrice = 45.73M;
+            mock.Mock<IOrderChargeCalculator>()
+                .Setup(c => c.CalculateTotal(orderToSave))
+                .Returns(20M);
+
+            testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
+
+            Assert.Equal(45.73M, orderToSave.OrderTotal);
+            orderElementFactory.Verify(e => e.CreateCharge(orderToSave, "ADDITIONAL COST OR DISCOUNT", "Additional Cost or Discount", 25.73M));
         }
 
         #region ShippingAddressTests

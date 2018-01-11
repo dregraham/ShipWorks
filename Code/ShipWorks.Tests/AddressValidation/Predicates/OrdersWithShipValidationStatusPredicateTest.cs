@@ -1,5 +1,4 @@
 ﻿using Xunit;
-using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Model.HelperClasses;
@@ -14,7 +13,6 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         public UnprocessedShipmentsWithShipValidationStatusPredicateTest()
         {
             pred = new FakePredicateExpression();
-
             predicate = new UnprocessedErrorShipmentsPredicate();
         }
 

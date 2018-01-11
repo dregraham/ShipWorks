@@ -36,8 +36,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// Initializes a new instance of the <see cref="NeweggDownloader"/> class.
         /// </summary>
         /// <param name="store">The store.</param>
-        public NeweggDownloader(StoreEntity store, INeweggWebClient webClient, Func<Type, ILog> createLogger)
-            : base(store)
+        public NeweggDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, INeweggWebClient webClient, Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.webClient = webClient;
             log = createLogger(GetType());

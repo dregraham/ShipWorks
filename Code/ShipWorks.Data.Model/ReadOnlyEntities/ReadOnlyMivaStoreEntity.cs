@@ -41,6 +41,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             SebenzaCheckoutDataEnabled = source.SebenzaCheckoutDataEnabled;
             OnlineUpdateStrategy = source.OnlineUpdateStrategy;
             OnlineUpdateStatusChangeEmail = source.OnlineUpdateStatusChangeEmail;
+            AddendumCheckoutDataEnabled = source.AddendumCheckoutDataEnabled;
             
             
             
@@ -79,6 +80,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean OnlineUpdateStatusChangeEmail { get; }
+        /// <summary> The AddendumCheckoutDataEnabled property of the Entity MivaStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "MivaStore"."AddendumCheckoutDataEnabled"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AddendumCheckoutDataEnabled { get; }
         
         
         

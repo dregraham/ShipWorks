@@ -33,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.Sears
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearsDownloader(StoreEntity store, ISearsWebClient webClient, Func<Type, ILog> createLogger)
-            : base(store)
+        public SearsDownloader(StoreEntity store, IStoreTypeManager storeTypeManager, ISearsWebClient webClient, Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.webClient = webClient;
             log = createLogger(GetType());

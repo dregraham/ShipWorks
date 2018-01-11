@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Status of the shipment
     /// </summary>
-    [Obfuscation]
+    [Obfuscation(StripAfterObfuscation = false)]
     public enum ShipmentStatus
     {
         /// <summary>

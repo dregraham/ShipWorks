@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.Web.Services3.Referral;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -13,19 +9,19 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip
 {
+    /// <summary>
+    /// Utility for getting InsureShip carrier codes for a shipment
+    /// </summary>
     public static class InsureShipCarrierCode
     {
         /// <summary>
         /// Gets the carrier code for a policy request
         /// </summary>
-        public static string GetCarrierCode(ShipmentEntity shipment)
+        public static string GetCarrierCode(IShipmentEntity shipment, bool isDomestic)
         {
-            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
-            bool isDomestic = ShipmentTypeManager.GetType(shipmentTypeCode).IsDomestic(shipment);
-
             string carrierCode;
 
-            switch (shipmentTypeCode)
+            switch (shipment.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Amazon:
                     carrierCode = GetCarrierCodeForAmazon(shipment);
@@ -44,8 +40,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                    carrierCode = ShipmentTypeManager.GetType(shipmentTypeCode).IsDomestic(shipment) ? "USPS" : "USPS-I";
-                break;
+                    carrierCode = isDomestic ? "USPS" : "USPS-I";
+                    break;
 
                 case ShipmentTypeCode.FedEx:
                     carrierCode = GetFedExCarrierCode(shipment, isDomestic);
@@ -56,15 +52,23 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     break;
 
                 case ShipmentTypeCode.iParcel:
-                    carrierCode = shipment.IParcel.Packages[0].InsurancePennyOne ? "I-PARCEL-P1" : "I-PARCEL";
+                    carrierCode = shipment.IParcel.Packages.First().InsurancePennyOne ? "I-PARCEL-P1" : "I-PARCEL";
                     break;
 
                 case ShipmentTypeCode.Other:
                     carrierCode = "OTHER";
                     break;
 
+                case ShipmentTypeCode.DhlExpress:
+                    carrierCode = "DHL-E-I-P1";
+                    break;
+
+                case ShipmentTypeCode.Asendia:
+                    carrierCode = ShipmentTypeManager.GetType(shipment.ShipmentTypeCode).IsDomestic(shipment) ? "ASE-DOM" : "ASE-INTL";
+                    break;
+
                 default:
-                    throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipmentTypeCode)));
+                    throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipment.ShipmentTypeCode)));
             }
 
             return carrierCode;
@@ -73,7 +77,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Get carrier code for USPS and Endicia
         /// </summary>
-        private static string GetCarrierCodeForUspsEndicia(ShipmentEntity shipment, bool isDomestic)
+        private static string GetCarrierCodeForUspsEndicia(IShipmentEntity shipment, bool isDomestic)
         {
             string carrierCode;
             PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
@@ -91,7 +95,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Get carrier code for Amazon
         /// </summary>
-        private static string GetCarrierCodeForAmazon(ShipmentEntity shipment)
+        private static string GetCarrierCodeForAmazon(IShipmentEntity shipment)
         {
             string carrierCode;
             carrierCode = shipment.Amazon.CarrierName;
@@ -105,41 +109,37 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <summary>
         /// Gets the FedEx carrier code based on the shipment configuration.
         /// </summary>
-        private static string GetFedExCarrierCode(ShipmentEntity shipment, bool isDomestic)
+        private static string GetFedExCarrierCode(IShipmentEntity shipment, bool isDomestic)
         {
-            string carrierCode;
             FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
-            if (fedExServiceType == FedExServiceType.InternationalEconomy || fedExServiceType == FedExServiceType.InternationalEconomyFreight || fedExServiceType == FedExServiceType.SmartPost)
+            if (fedExServiceType == FedExServiceType.InternationalEconomy ||
+                fedExServiceType == FedExServiceType.InternationalEconomyFreight ||
+                fedExServiceType == FedExServiceType.SmartPost)
             {
-                carrierCode = isDomestic ? "E-FEDEX" : "E-FEDEX-I";
+                return isDomestic ? "E-FEDEX" : "E-FEDEX-I";
             }
-            else
+
+            if (isDomestic)
             {
-                if (isDomestic)
-                {
-                    carrierCode = shipment.FedEx.Packages[0].InsurancePennyOne ? "FEDEX-P1" : "FEDEX";
-                }
-                else
-                {
-                    carrierCode = "FEDEX-I";
-                }
+                return shipment.FedEx.Packages.First().InsurancePennyOne ? "FEDEX-P1" : "FEDEX";
             }
-            return carrierCode;
+
+            return "FEDEX-I";
         }
 
         /// <summary>
         /// Gets the UPS carrier code based on the shipment configuration.
         /// </summary>
-        private static string GetUpsCarrierCode(ShipmentEntity shipment, bool isDomestic)
+        private static string GetUpsCarrierCode(IShipmentEntity shipment, bool isDomestic)
         {
             string carrierCode;
-            if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)shipment.Ups.Service))
+            if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType) shipment.Ups.Service))
             {
                 carrierCode = isDomestic ? "E-UPS" : "E-UPS-I";
             }
             else
             {
-                if (shipment.Ups.Packages[0].InsurancePennyOne)
+                if (shipment.Ups.Packages.First().InsurancePennyOne)
                 {
                     carrierCode = "UPS-P1";
                 }

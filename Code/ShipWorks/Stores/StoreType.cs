@@ -87,13 +87,14 @@ namespace ShipWorks.Stores
 
             store.DefaultEmailAccountID = -1;
 
-            store.AddressValidationSetting = (int) GetDefaultValidationSetting();
+            store.DomesticAddressValidationSetting = GetDefaultDomesticValidationSetting();
+            store.InternationalAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify;
         }
 
         /// <summary>
-        /// Gets the default validation setting.
+        /// Gets the default domestic validation setting.
         /// </summary>
-        protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
+        protected virtual AddressValidationStoreSettingType GetDefaultDomesticValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndApply;
         }
@@ -604,7 +605,7 @@ namespace ShipWorks.Stores
         /// <returns>
         ///   <c>true</c> if [is customs required] [the specified shipment]; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsCustomsRequired(ShipmentEntity shipment, bool customsRequiredRecommendation)
+        public virtual bool IsCustomsRequired(IShipmentEntity shipment, bool customsRequiredRecommendation)
         {
             // Just accept whatever the recommendation is by default.
             return customsRequiredRecommendation;
