@@ -14,6 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
+using Interapptive.Shared;
+using ShipWorks.Stores.Orders.Split.Actions;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -29,16 +32,19 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IOrderSplitAudit splitOrderAudit;
         private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
+        private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public OrderSplitter(
             ISqlAdapterFactory sqlAdapterFactory,
             IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
             IOrderChargeCalculator orderChargeCalculator,
-            IOrderSplitAudit splitOrderAudit
+            IOrderSplitAudit splitOrderAudit,
+            IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
             )
         {
             this.orderSplitGateway = orderSplitGateway;
@@ -46,6 +52,7 @@ namespace ShipWorks.Stores.Orders.Split
             this.orderDetailSplitters = orderDetailSplitters;
             this.orderChargeCalculator = orderChargeCalculator;
             this.splitOrderAudit = splitOrderAudit;
+            this.storeSpecificOrderSplitter = storeSpecificOrderSplitter;
         }
 
         /// <summary>
@@ -163,6 +170,10 @@ namespace ShipWorks.Stores.Orders.Split
                 orderSearch.OrderNumber = originalOrder.OrderNumber;
                 orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
                 orderSearch.StoreID = originalOrder.StoreID;
+
+                IStoreSpecificSplitOrderAction platformSplitter;
+                storeSpecificOrderSplitter.TryGetValue((StoreTypeCode) originalOrder.Store.TypeCode, out platformSplitter);
+                platformSplitter?.Perform(originalOrder.OrderID, newOrderEntity);
             }
         }
 

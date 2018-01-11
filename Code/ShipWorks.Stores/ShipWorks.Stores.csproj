@@ -159,6 +159,7 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Orders\Split\Actions\IStoreSpecificSplitOrderAction.cs" />
     <Compile Include="Orders\Combine\SearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Orders\Combine\SearchProviders\CombineOrderNumberSearchProvider.cs" />
     <Compile Include="Orders\Combine\SearchProviders\CombineOrderSearchBaseProvider.cs" />
@@ -645,6 +646,7 @@
     <Compile Include="Platforms\Odbc\DataSource\OdbcDataSourceRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreType.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcShipWorksDbProviderFactory.cs" />
+    <Compile Include="Platforms\ThreeDCart\Content\ThreeDCartSplitOrderAction.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartOnlineUpdatingDataAccess.cs" />
