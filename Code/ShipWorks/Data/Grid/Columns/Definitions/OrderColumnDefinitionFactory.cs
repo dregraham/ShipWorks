@@ -318,8 +318,30 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridEnumDisplayType<AmazonIsPrime>(EnumSortMethod.Description), 
                         "Amazon Prime", 
                         AmazonIsPrime.Yes, 
-                        new GridColumnFunctionValueProvider(GetAmazonIsPrimeValue), 
-                        new GridColumnSortProvider(GetAmazonIsPrimeValueDescription, AmazonOrderFields.IsPrime, ChannelAdvisorOrderFields.IsPrime, GenericModuleOrderFields.IsPrime))
+                        new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<AmazonIsPrime>(e, "IsPrime")), 
+                        new GridColumnSortProvider(GetAmazonIsPrimeValueDescription,  GenericModuleOrderFields.IsPrime, AmazonOrderFields.IsPrime, ChannelAdvisorOrderFields.IsPrime))
+                        {
+                            ApplicableTest = ShowIsPrimeColumn
+                        },
+
+                    new GridColumnDefinition("{13F79C24-7A68-43F0-8142-C9682AC37E81}",
+                        false,
+                        new GridBooleanDisplayType(){TrueText = "Yes", FalseText = "No" },
+                        "Amazon FBA",
+                        false,
+                        new GridColumnFunctionValueProvider((e) => GetAmazonFbaValue(e)),
+                        new GridColumnSortProvider((e) => GetAmazonFbaValue(e), GenericModuleOrderFields.IsFBA, AmazonOrderFields.FulfillmentChannel))
+                        {
+                            ApplicableTest = ShowIsPrimeColumn
+                        },
+
+                    new GridColumnDefinition("{3224B32E-470B-499B-AA2E-4DF781BA52C0}",
+                        false,
+                        new GridTextDisplayType(),
+                        "Amazon OrderID",
+                        false,
+                        new GridColumnFunctionValueProvider((e) => GetEntityFieldValue<string>(e, "AmazonOrderID")),
+                        new GridColumnSortProvider((e) => GetEntityFieldValue<string>(e, "AmazonOrderID"), GenericModuleOrderFields.AmazonOrderID, AmazonOrderFields.AmazonOrderID))
                         {
                             ApplicableTest = ShowIsPrimeColumn
                         },
@@ -756,20 +778,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// <summary>
         /// Determine if we should show the IsPrime column based on the setup stores
         /// </summary>
-        private static bool ShowIsPrimeColumn(object data)
+        private static bool ShowGenericModuleAmazonColumns(object data)
         {
-            IList<StoreType> stores = StoreManager.GetStoreTypeInstances();
-            
-            // If there are any amazon/channeladvisor or generic module based stores in shipworks
-            // show the isprime column
-            if (stores.Any(s => s.TypeCode == StoreTypeCode.Amazon || 
-                s.TypeCode == StoreTypeCode.ChannelAdvisor) ||
-                stores.Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType())))
-            {
-                return true;
-            }
-
-            return false;
+            return StoreManager.GetStoreTypeInstances().Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType()));
         }
 
         /// <summary>
@@ -777,25 +788,45 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         private static object GetAmazonIsPrimeValueDescription(EntityBase2 entity)
         {
-            AmazonIsPrime value = (AmazonIsPrime) GetAmazonIsPrimeValue(entity);
+            AmazonIsPrime value = GetEntityFieldValue<AmazonIsPrime>(entity, "IsPrime");
             return EnumHelper.GetDescription(value);
+        }
+
+        /// <summary>
+        /// Get the fba value for the entity
+        /// </summary>
+        private static bool GetAmazonFbaValue(EntityBase2 entity)
+        {
+            int index = entity.Fields.GetFieldIndex("FulfillmentChannel");
+            if (index != -1)
+            {
+                AmazonMwsFulfillmentChannel amazonFulfilmentChannel = GetEntityFieldValue<AmazonMwsFulfillmentChannel>(entity, "FulfillmentChannel");
+
+                return amazonFulfilmentChannel == AmazonMwsFulfillmentChannel.AFN;
+            }
+
+            index = entity.Fields.GetFieldIndex("IsFBA");
+            if (index != -1)
+            {
+                return GetEntityFieldValue<bool>(entity, "IsFBA");
+            }
+
+            return false;
         }
 
         /// <summary>
         /// Get the entities IsPrime value
         /// </summary>
-        private static object GetAmazonIsPrimeValue(EntityBase2 entity)
+        private static T GetEntityFieldValue<T>(EntityBase2 entity, string field)
         {
-            int index = entity.Fields.GetFieldIndex("IsPrime");
+            int index = entity.Fields.GetFieldIndex(field);
 
             if (index != -1)
             {
-                int value = (int) entity.GetCurrentFieldValue(index);
-
-                return (AmazonIsPrime) value;
+                return (T) entity.GetCurrentFieldValue(index);
             }
 
-            return AmazonIsPrime.Unknown;
+            return default(T);
         }
 
         /// <summary>
