@@ -188,6 +188,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorQuickSearchTest.cs" />
+    <Compile Include="Platforms\CommerceInterface\CommerceInterfaceCombineAndSplitTest.cs" />
     <Compile Include="Platforms\CommerceInterface\CommerceInterfaceQuickSearchTest.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.LeaveFeedback.cs" />
     <Compile Include="Platforms\Ebay\EbayOnlineUpdateCommandCreatorTest.SendMessage.cs" />
