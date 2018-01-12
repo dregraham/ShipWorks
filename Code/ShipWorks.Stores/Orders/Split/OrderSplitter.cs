@@ -171,9 +171,12 @@ namespace ShipWorks.Stores.Orders.Split
                 orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
                 orderSearch.StoreID = originalOrder.StoreID;
 
+                // Add store specific search entries.
                 IStoreSpecificSplitOrderAction platformSplitter;
                 storeSpecificOrderSplitter.TryGetValue((StoreTypeCode) originalOrder.Store.TypeCode, out platformSplitter);
+
                 platformSplitter?.Perform(originalOrder.OrderID, newOrderEntity);
+                platformSplitter?.Perform(originalOrder.OrderID, originalOrder);
             }
         }
 
