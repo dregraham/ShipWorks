@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
-using LibGit2Sharp;
 using Moq;
 using Respawn;
 using ShipWorks.ApplicationCore;
@@ -27,7 +26,6 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
 using SQL.LocalDB.Test;
-using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Tests.Shared.Database
 {
@@ -184,6 +182,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
+            securityContext.Setup(x => x.RequestPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(Result.FromSuccess());
 
             ShippingManager.InitializeForCurrentDatabase();
 

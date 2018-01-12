@@ -47,7 +47,9 @@ namespace Interapptive.Shared.Metrics
             telemetryClient.Context.Component.Version = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             telemetryClient.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
             telemetryClient.Context.Properties.Add("ScreenResolution", $"{Screen.PrimaryScreen.Bounds.Width}x{Screen.PrimaryScreen.Bounds.Height}");
-            telemetryClient.Context.Properties.Add("Build date", AssemblyDateAttribute.Read(Assembly.GetEntryAssembly()).ToString());
+            AssemblyDateAttribute.ReadResult(Assembly.GetEntryAssembly())
+                .Map(date => date.ToString())
+                .Do(x => telemetryClient.Context.Properties.Add("Build date", x));
 
             // Bitness
             telemetryClient.Context.Properties.Add("x64 OS", MyComputer.Is64BitWindows ? "Yes" : "No");

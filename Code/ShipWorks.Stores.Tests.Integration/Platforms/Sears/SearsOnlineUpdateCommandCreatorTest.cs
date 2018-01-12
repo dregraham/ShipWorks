@@ -22,6 +22,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public partial class SearsOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;

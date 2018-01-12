@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         {
             OrderEntity order = orderManager.FetchOrder(orderID);
 
-            if (order != null && (!order.IsManual || order.CombineSplitStatus == CombineSplitStatusType.Combined))
+            if (order != null && (!order.IsManual || order.CombineSplitStatus.IsCombined()))
             {
                 var statusCodeProvider = statusCodeProviderFactory(store);
 

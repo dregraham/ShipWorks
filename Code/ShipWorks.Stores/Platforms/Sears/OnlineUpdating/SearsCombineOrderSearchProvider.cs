@@ -46,6 +46,7 @@ namespace ShipWorks.Stores.Platforms.Sears.OnlineUpdating
                             SearsOrderSearchFields.OrderID.ToValue<long>(),
                             SearsOrderSearchFields.PoNumber.ToValue<string>(),
                             order.OrderDate))
+                .Distinct()
                 .Where(SearsOrderSearchFields.OrderID == order.OrderID);
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())

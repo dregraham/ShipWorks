@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public partial class LemonStandOnlineUpdateCommandCreatorTest : IDisposable
     {
         private readonly DataContext context;

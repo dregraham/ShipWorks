@@ -96,6 +96,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
                     .Set(os => os.OrderNumberComplete, i.ToString())
                     .Set(os => os.IsManual, false)
                     .Set(os => os.OrderID, orderID)
+                    .Set(os => os.OriginalOrderID, orderID)
                     .Save();
             }
         }

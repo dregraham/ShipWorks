@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -61,7 +60,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
                 store.StoreTypeCode = storeTypeCode;
                 CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
 
-                OrderEntity order = Create.Order(context.Store, context.Customer)
+                OrderEntity order = Create.Order(store, context.Customer)
                     .WithOrderNumber(12345)
                     .Set(o => o.CombineSplitStatus, CombineSplitStatusType.Combined)
                     .Save();
@@ -93,7 +92,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
                 store.StoreTypeCode = storeTypeCode;
                 CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
 
-                OrderEntity order = Create.Order(context.Store, context.Customer)
+                OrderEntity order = Create.Order(store, context.Customer)
                     .WithOrderNumber(12345)
                     .Set(o => o.CombineSplitStatus, CombineSplitStatusType.None)
                     .Save();
@@ -107,20 +106,49 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             }
         }
 
+        [Fact]
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsDistinctValues()
+        {
+            var storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>()
+                .Select(x => x.Value)
+                .Where(x => x == StoreTypeCode.GenericModule || x == StoreTypeCode.GenericFile);
+
+            foreach (var storeTypeCode in storeTypeCodes)
+            {
+                store.StoreTypeCode = storeTypeCode;
+                CombineOrderNumberCompleteSearchProvider searchProvider = IoC.UnsafeGlobalLifetimeScope.Resolve<CombineOrderNumberCompleteSearchProvider>();
+
+                OrderEntity order = Create.Order(store, context.Customer)
+                    .WithOrderNumber(12345)
+                    .Set(o => o.CombineSplitStatus, CombineSplitStatusType.Combined)
+                    .Save();
+
+                CreateOrderSearchEntities(order, 12345, false);
+                CreateOrderSearchEntities(order, 12345, false);
+                CreateOrderSearchEntities(order, 12345, false);
+                CreateOrderSearchEntities(order, 12345, false);
+
+                var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                Assert.Equal(1, results?.Count());
+                Assert.Equal($"{order.OrderNumberComplete}-{12345}-OS", results?.FirstOrDefault());
+            }
+        }
+
         private void CreateOrderSearchEntities(IOrderEntity order, int numberTotalToCreate, int numberManualToCreate)
         {
             for (int i = 1; i < numberTotalToCreate - numberManualToCreate + 1; i++)
             {
-                CreateOrder(order, i, false);
+                CreateOrderSearchEntities(order, i, false);
             }
 
             for (int i = 1; i < numberManualToCreate + 1; i++)
             {
-                CreateOrder(order, i, true);
+                CreateOrderSearchEntities(order, i, true);
             }
         }
 
-        private void CreateOrder(IOrderEntity order, int orderNumber, bool isManual)
+        private void CreateOrderSearchEntities(IOrderEntity order, int orderNumber, bool isManual)
         {
             Create.Entity<OrderSearchEntity>()
                 .Set(os => os.Store, store)
@@ -128,6 +156,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
                 .Set(os => os.OrderNumberComplete, $"{order.OrderNumberComplete}-{orderNumber}-OS")
                 .Set(os => os.IsManual, isManual)
                 .Set(os => os.OrderID, order.OrderID)
+                .Set(os => os.OriginalOrderID, order.OrderID)
                 .Save();
         }
 

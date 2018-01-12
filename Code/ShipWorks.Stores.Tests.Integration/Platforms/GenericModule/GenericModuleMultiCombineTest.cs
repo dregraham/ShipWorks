@@ -23,6 +23,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
+    [Trait("Category", "CombineSplit")]
     public class GenericModuleMultiCombineTest : IDisposable
     {
         private readonly DataContext context;

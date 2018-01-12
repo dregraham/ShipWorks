@@ -38,7 +38,8 @@ namespace ShipWorks.Stores.Orders.Combine.SearchProviders
         {
             QueryFactory factory = new QueryFactory();
             var query = factory.Create<TEntity>()
-                .Where(predicate);
+                .Where(predicate)
+                .Distinct();
 
             if (typeof(TEntity) == typeof(OrderSearchEntity))
             {
@@ -60,6 +61,7 @@ namespace ShipWorks.Stores.Orders.Combine.SearchProviders
             QueryFactory factory = new QueryFactory();
             var query = factory.Create<TEntity>()
                 .Select(selectExpression)
+                .Distinct()
                 .Where(predicate);
 
             if (typeof(TEntity) == typeof(OrderSearchEntity))
