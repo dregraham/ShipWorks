@@ -17,14 +17,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
     [Component]
     public class OrderMotionCombineOrderSearchProvider : CombineOrderSearchBaseProvider<OrderDetail>, IOrderMotionCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public OrderMotionCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

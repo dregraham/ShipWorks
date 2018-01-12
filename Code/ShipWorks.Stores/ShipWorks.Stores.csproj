@@ -214,6 +214,7 @@
     <Compile Include="Orders\Split\OrderSplitValidator.cs" />
     <Compile Include="Orders\Split\OrderSplitAudit.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
+    <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdater.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOrderSearchProvider.cs" />

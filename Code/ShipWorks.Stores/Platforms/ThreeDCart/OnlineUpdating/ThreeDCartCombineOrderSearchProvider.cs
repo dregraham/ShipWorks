@@ -17,14 +17,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
     [Component]
     public class ThreeDCartCombineOrderSearchProvider : CombineOrderSearchBaseProvider<ThreeDCartOnlineUpdatingOrderDetail>, IThreeDCartCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public ThreeDCartCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

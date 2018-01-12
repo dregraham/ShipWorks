@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Orders.Combine.SearchProviders
     /// <typeparam name="TResult">Type of the resulting order identifier</typeparam>
     public abstract class CombineOrderSearchBaseProvider<TResult> : ICombineOrderSearchProvider<TResult>
     {
-        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        protected readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor

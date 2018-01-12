@@ -16,14 +16,11 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
     [Component]
     public class WalmartCombineOrderSearchProvider : CombineOrderSearchBaseProvider<WalmartCombinedIdentifier>, IWalmartCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public WalmartCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

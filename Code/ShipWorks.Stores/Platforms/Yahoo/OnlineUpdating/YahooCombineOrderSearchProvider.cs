@@ -15,14 +15,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.OnlineUpdating
     [Component]
     public class YahooCombineOrderSearchProvider : CombineOrderSearchBaseProvider<string>, IYahooCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public YahooCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>

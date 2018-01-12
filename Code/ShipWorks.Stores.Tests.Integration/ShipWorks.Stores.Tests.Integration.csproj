@@ -175,6 +175,7 @@
     <Compile Include="Platforms\Amazon\AmazonOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonQuickSearchTest.cs" />
+    <Compile Include="Platforms\Amazon\AmazonCombineAndSplitTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceStoreTypeTest.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceDownloadTest.cs" />

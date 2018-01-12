@@ -17,14 +17,11 @@ namespace ShipWorks.Stores.Platforms.Sears.OnlineUpdating
     [Component]
     public class SearsCombineOrderSearchProvider : CombineOrderSearchBaseProvider<SearsOrderDetail>, ISearsCombineOrderSearchProvider
     {
-        readonly ISqlAdapterFactory sqlAdapterFactory;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public SearsCombineOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
