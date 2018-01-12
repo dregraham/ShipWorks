@@ -208,6 +208,7 @@
     <Compile Include="Platforms\Jet\JetOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandQuickSearchTest.cs" />
+    <Compile Include="Platforms\LemonStand\LemonStandCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Module.OnOrderCommand.cs" />
     <Compile Include="Platforms\Magento\MagentoOnlineUpdateCommandCreatorTest.V2Rest.OnOrderCommand.cs" />
