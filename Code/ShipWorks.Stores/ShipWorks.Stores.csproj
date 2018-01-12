@@ -243,6 +243,7 @@
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactory.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestDownloader.cs" />
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorOrderLoader.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorSplitOrderAction.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSql.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorUpdateClient.cs" />
     <Compile Include="Platforms\ChannelAdvisor\DTO\ChannelAdvisorCustomField.cs" />

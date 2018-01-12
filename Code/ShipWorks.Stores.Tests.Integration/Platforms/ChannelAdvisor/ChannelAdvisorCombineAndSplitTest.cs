@@ -12,9 +12,8 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Orders.Split;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.Amazon.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -22,25 +21,25 @@ using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
+namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "CombineSplit")]
-    public class AmazonCombineAndSplitTest : IDisposable
+    public class ChannelAdvisorCombineAndSplitTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
         private Mock<IOrderCombinationUserInteraction> combineInteraction;
         private Mock<IOrderSplitUserInteraction> splitInteraction;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
-        private readonly AmazonStoreEntity store;
+        private readonly ChannelAdvisorStoreEntity store;
         private readonly OrderEntity orderA;
         private readonly OrderEntity orderB;
         private readonly OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
 
-        public AmazonCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
+        public ChannelAdvisorCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
@@ -54,25 +53,25 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
                 .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
 
-            store = Create.Store<AmazonStoreEntity>()
-                .Set(x => x.StoreTypeCode, StoreTypeCode.Amazon)
+            store = Create.Store<ChannelAdvisorStoreEntity>()
+                .Set(x => x.StoreTypeCode, StoreTypeCode.ChannelAdvisor)
                 .Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
             Create.Order(store, context.Customer).Save();
 
-            orderA = Create.Order<AmazonOrderEntity>(store, context.Customer)
-                .Set(x => x.AmazonOrderID, "1000")
+            orderA = Create.Order<ChannelAdvisorOrderEntity>(store, context.Customer)
+                .Set(x => x.CustomOrderIdentifier, "1000")
                 .Set(x => x.OrderNumber, 10)
                 .Set(x => x.OrderNumberComplete, "10")
                 .Save();
-            orderB = Create.Order<AmazonOrderEntity>(store, context.Customer)
-                .Set(x => x.AmazonOrderID, "2000")
+            orderB = Create.Order<ChannelAdvisorOrderEntity>(store, context.Customer)
+                .Set(x => x.CustomOrderIdentifier, "2000")
                 .Set(x => x.OrderNumber, 20)
                 .Set(x => x.OrderNumberComplete, "20")
                 .Save();
-            orderD = Create.Order<AmazonOrderEntity>(store, context.Customer)
-                .Set(x => x.AmazonOrderID, "3000")
+            orderD = Create.Order<ChannelAdvisorOrderEntity>(store, context.Customer)
+                .Set(x => x.CustomOrderIdentifier, "3000")
                 .Set(x => x.OrderNumber, 30)
                 .Set(x => x.OrderNumberComplete, "30")
                 .Save();
@@ -88,7 +87,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var (orderA_4, orderA_5) = await PerformSplit(orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
             var identities_A_2 = await identityProvider.GetOrderIdentifiers(orderA_2);
@@ -96,12 +95,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var identities_A_4 = await identityProvider.GetOrderIdentifiers(orderA_4);
             var identities_A_5 = await identityProvider.GetOrderIdentifiers(orderA_5);
 
-            Assert.True(identities_A_0.All(i => i == "1000"));
-            Assert.True(identities_A_1.All(i => i == "1000"));
-            Assert.True(identities_A_2.All(i => i == "1000"));
-            Assert.True(identities_A_3.All(i => i == "1000"));
-            Assert.True(identities_A_4.All(i => i == "1000"));
-            Assert.True(identities_A_5.All(i => i == "1000"));
+            Assert.True(identities_A_0.All(i => i == 10));
+            Assert.True(identities_A_1.All(i => i == 10));
+            Assert.True(identities_A_2.All(i => i == 10));
+            Assert.True(identities_A_3.All(i => i == 10));
+            Assert.True(identities_A_4.All(i => i == 10));
+            Assert.True(identities_A_5.All(i => i == 10));
         }
 
         [Fact]
@@ -112,12 +111,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderD_C = await PerformCombine("D-C", orderD, orderA_C_O);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_C_1 = await identityProvider.GetOrderIdentifiers(orderA_C_1);
             var identities_D_C = await identityProvider.GetOrderIdentifiers(orderD_C);
 
-            Assert.Equal(new[] { "1000", "2000" }, identities_A_C_1);
-            Assert.Equal(new[] { "1000", "2000", "3000" }, identities_D_C);
+            Assert.Equal(new[] { 10L, 20L }, identities_A_C_1);
+            Assert.Equal(new[] { 10L, 20L, 30L }, identities_D_C);
         }
 
         [Fact]
@@ -131,7 +130,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_M_C = await PerformCombine("10A-M-C", orderA, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_A_M_C = await identityProvider.GetOrderIdentifiers(orderA_M_C);
 
@@ -149,12 +148,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_M_1_C = await PerformCombine("10A-M-1-C", orderA_1, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_A_M_1_C = await identityProvider.GetOrderIdentifiers(orderA_M_1_C);
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
 
-            Assert.Equal(new[] { "2000" }, identities_A_M_1_C);
+            Assert.Equal(new[] { 20L }, identities_A_M_1_C);
             Assert.Equal(0, identities_A_0.Count());
         }
 
@@ -167,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var (orderA_0, orderA_1) = await PerformSplit(orderA);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
@@ -187,13 +186,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
             var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
 
-            Assert.Equal(new[] { "2000" }, identities_B_0);
-            Assert.Equal(new[] { "2000" }, identities_B_1);
+            Assert.Equal(new[] { 20L }, identities_B_0);
+            Assert.Equal(new[] { 20L }, identities_B_1);
         }
 
         [Fact]
@@ -204,13 +203,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_C = await PerformCombine("10A-1-C", orderA_0, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
 
-            Assert.Equal(new[] { "1000", "2000" }, identities_A_C);
-            Assert.Equal(new[] { "1000" }, identities_A_1);
+            Assert.Equal(new[] { 10L, 20L }, identities_A_C);
+            Assert.Equal(new[] { 10L }, identities_A_1);
         }
 
         [Fact]
@@ -221,13 +220,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
             var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
 
-            Assert.Equal(new[] { "1000", "2000" }, identities_B_0);
-            Assert.Equal(new[] { "1000", "2000" }, identities_B_1);
+
+            Assert.Equal(new[] { 10L, 20L }, identities_B_0);
+            Assert.Equal(new[] { 10L, 20L }, identities_B_1);
         }
 
         [Fact]
@@ -238,13 +238,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var (orderA_0, orderA_1) = await PerformSplit(orderA_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
 
-            Assert.Equal(new[] { "1000", "2000" }, identities_A_0);
-            Assert.Equal(new[] { "1000", "2000" }, identities_A_1);
+            Assert.Equal(new[] { 10L, 20L }, identities_A_0);
+            Assert.Equal(new[] { 10L, 20L }, identities_A_1);
         }
 
         [Fact]
@@ -254,10 +254,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_C = await PerformCombine("A-C", orderA_0, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
 
-            Assert.Equal(new[] { "1000" }, identities_A_C);
+            Assert.Equal(new[] { 10L }, identities_A_C);
         }
 
         [Fact]
@@ -267,10 +267,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_1_C = await PerformCombine("A-1-C", orderA_0, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_1_C = await identityProvider.GetOrderIdentifiers(orderA_1_C);
 
-            Assert.Equal(new[] { "1000" }, identities_A_1_C);
+            Assert.Equal(new[] { 10L }, identities_A_1_C);
         }
 
         [Fact]
@@ -281,10 +281,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderA_1_C_1 = await PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
             var identities_A_1_C_1 = await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
 
-            Assert.Equal(new[] { "1000", "2000" }, identities_A_1_C_1);
+            Assert.Equal(new[] { 10L, 20L }, identities_A_1_C_1);
         }
 
         [Fact]
@@ -298,17 +298,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             var orderB_M_C = await PerformCombine("10A-M-C", orderB, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<IAmazonOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<ICombineOrderNumberSearchProvider>();
 
             var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
 
-            Assert.Equal(new[] { "1000" }, identities_B_M_C);
+            Assert.Equal(new[] { 10L }, identities_B_M_C);
         }
 
         /// <summary>
         /// Perform a split of the given order
         /// </summary>
-        private async Task<(AmazonOrderEntity original, AmazonOrderEntity split)> PerformSplit(OrderEntity order)
+        private async Task<(ChannelAdvisorOrderEntity original, ChannelAdvisorOrderEntity split)> PerformSplit(OrderEntity order)
         {
             var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
@@ -317,8 +317,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), order.OrderNumberComplete + "-1"));
 
             var result = await orchestrator.Split(order.OrderID);
-            var original = await dataProvider.GetEntityAsync<AmazonOrderEntity>(result.First());
-            var split = await dataProvider.GetEntityAsync<AmazonOrderEntity>(result.Last());
+            var original = await dataProvider.GetEntityAsync<ChannelAdvisorOrderEntity>(result.First());
+            var split = await dataProvider.GetEntityAsync<ChannelAdvisorOrderEntity>(result.Last());
 
             return (original, split);
         }
@@ -338,11 +338,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
             return await dataProvider.GetEntityAsync<OrderEntity>(result.Value);
         }
         
-        private bool IsMatchingShipmentUpload(AmazonOrderUploadDetail orderDetail, string amazonOrderID, string trackingNumber)
-        {
-            return orderDetail.AmazonOrderID == amazonOrderID && orderDetail.Shipment.TrackingNumber == trackingNumber;
-        }
-
         public void Dispose() => context.Dispose();
     }
 }
