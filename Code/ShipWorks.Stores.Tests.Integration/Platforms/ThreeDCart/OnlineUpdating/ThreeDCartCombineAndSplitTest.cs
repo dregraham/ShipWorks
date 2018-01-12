@@ -201,119 +201,125 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
             Assert.True(identities_B_0.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderB_0.IsManual)));
             Assert.True(identities_B_1.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderB_0.IsManual)));
-
-            //Assert.Equal(new[] { "20" }, identities_B_0);
-            //Assert.Equal(new[] { "20" }, identities_B_1);
         }
 
-        //[Fact]
-        //public async Task SplitThenCombineOrder_WithOrderNumbers()
-        //{
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA);
+        [Fact]
+        public async Task SplitThenCombineOrder_WithOrderNumbers()
+        {
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
 
-        //    var orderA_C = await PerformCombine("10A-1-C", orderA_0, orderB);
+            var orderA_C = await PerformCombine("10A-1-C", orderA_0, orderB);
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
 
-        //    var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
-        //    var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
+            var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
+            var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
 
-        //    Assert.Equal(new[] { "10", "20" }, identities_A_C);
-        //    Assert.Equal(new[] { "10" }, identities_A_1);
-        //}
+            Assert.True(identities_A_C.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_C.IsManual)));
+            Assert.True(identities_A_C.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderA_C.IsManual)));
+            Assert.True(identities_A_1.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_1.IsManual)));
+        }
 
-        //[Fact]
-        //public async Task CombineSplitWithBSurviving_WithOrderNumbers()
-        //{
-        //    var orderB_1_C = await PerformCombine("10B-1-C", orderB, orderA);
+        [Fact]
+        public async Task CombineSplitWithBSurviving_WithOrderNumbers()
+        {
+            var orderB_1_C = await PerformCombine("10B-1-C", orderB, orderA);
 
-        //    var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
+            var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
 
-        //    var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
-        //    var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
+            var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
+            var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
 
-        //    Assert.Equal(new[] { "10", "20" }, identities_B_0);
-        //    Assert.Equal(new[] { "10", "20" }, identities_B_1);
-        //}
 
-        //[Fact]
-        //public async Task CombineSplitWithASurviving_WithOrderNumbers()
-        //{
-        //    var orderA_1_C = await PerformCombine("10B-1-C", orderA, orderB);
+            Assert.True(identities_B_0.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderB_0.IsManual)));
+            Assert.True(identities_B_0.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderB_0.IsManual)));
 
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA_1_C);
+            Assert.True(identities_B_1.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderB_1.IsManual)));
+            Assert.True(identities_B_1.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderB_1.IsManual)));
+        }
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+        [Fact]
+        public async Task CombineSplitWithASurviving_WithOrderNumbers()
+        {
+            var orderA_1_C = await PerformCombine("10B-1-C", orderA, orderB);
 
-        //    var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
-        //    var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
+            var (orderA_0, orderA_1) = await PerformSplit(orderA_1_C);
 
-        //    Assert.Equal(new[] { "10", "20" }, identities_A_0);
-        //    Assert.Equal(new[] { "10", "20" }, identities_A_1);
-        //}
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
 
-        //[Fact]
-        //public async Task SplitCombine_WithOrderNumbers()
-        //{
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA);
-        //    var orderA_C = await PerformCombine("A-C", orderA_0, orderA_1);
+            var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
+            var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
-        //    var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
+            Assert.True(identities_A_0.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_0.IsManual)));
+            Assert.True(identities_A_0.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderA_0.IsManual)));
 
-        //    Assert.Equal(new[] { "10" }, identities_A_C);
-        //}
+            Assert.True(identities_A_1.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_1.IsManual)));
+            Assert.True(identities_A_1.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderA_1.IsManual)));
+        }
 
-        //[Fact]
-        //public async Task SplitCombine_SplitSurvivingOrder_WithOrderNumbers()
-        //{
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA);
-        //    var orderA_1_C = await PerformCombine("A-1-C", orderA_0, orderA_1);
+        [Fact]
+        public async Task SplitCombine_WithOrderNumbers()
+        {
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+            var orderA_C = await PerformCombine("A-C", orderA_0, orderA_1);
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
-        //    var identities_A_1_C = await identityProvider.GetOrderIdentifiers(orderA_1_C);
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+            var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
 
-        //    Assert.Equal(new[] { "10" }, identities_A_1_C);
-        //}
+            Assert.True(identities_A_C.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_C.IsManual)));
+        }
 
-        //[Fact]
-        //public async Task SplitACombineBCombineRemainingTwo_WithOrderNumbers()
-        //{
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA);
-        //    var orderA_1_C = await PerformCombine("10A-1-C", orderA_1, orderB);
-        //    var orderA_1_C_1 = await PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
+        [Fact]
+        public async Task SplitCombine_SplitSurvivingOrder_WithOrderNumbers()
+        {
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+            var orderA_1_C = await PerformCombine("A-1-C", orderA_0, orderA_1);
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
-        //    var identities_A_1_C_1 = await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+            var identities_A_1_C = await identityProvider.GetOrderIdentifiers(orderA_1_C);
 
-        //    Assert.Equal(new[] { "10", "20" }, identities_A_1_C_1);
-        //}
+            Assert.True(identities_A_1_C.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_1_C.IsManual)));
+        }
 
-        //[Fact]
-        //public async Task SplitCombineWithManualOrder_WithOrderNumbers()
-        //{
-        //    orderB.IsManual = true;
-        //    Modify.Order(orderB).Save();
+        [Fact]
+        public async Task SplitACombineBCombineRemainingTwo_WithOrderNumbers()
+        {
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+            var orderA_1_C = await PerformCombine("10A-1-C", orderA_1, orderB);
+            var orderA_1_C_1 = await PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
 
-        //    var (orderA_0, orderA_1) = await PerformSplit(orderA);
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+            var identities_A_1_C_1 = await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
 
-        //    var orderB_M_C = await PerformCombine("10A-M-C", orderB, orderA_1);
+            Assert.True(identities_A_1_C_1.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderA_1_C_1.IsManual)));
+            Assert.True(identities_A_1_C_1.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderA_1_C_1.IsManual)));
+        }
 
-        //    // Get online identities
-        //    var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+        [Fact]
+        public async Task SplitCombineWithManualOrder_WithOrderNumbers()
+        {
+            orderB.IsManual = true;
+            Modify.Order(orderB).Save();
 
-        //    var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
+            var (orderA_0, orderA_1) = await PerformSplit(orderA);
 
-        //    Assert.Equal(new[] { "10" }, identities_B_M_C);
-        //}
+            var orderB_M_C = await PerformCombine("10A-M-C", orderB, orderA_1);
+
+            // Get online identities
+            var identityProvider = context.Mock.Container.Resolve<IThreeDCartCombineOrderSearchProvider>();
+
+            var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
+
+            Assert.True(identities_B_M_C.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderB_M_C.IsManual)));
+        }
 
         /// <summary>
         /// Perform a split of the given order
