@@ -245,7 +245,8 @@
     <Compile Include="Platforms\OnlineCommandCreatorRegistrationTest.cs" />
     <Compile Include="Platforms\StoreDownloaderRegistrationTest.cs" />
     <Compile Include="Platforms\StoreTypeRegistrationTest.cs" />
-    <Compile Include="Platforms\CombineOrderNumberSearchCompleteProviderTest.cs" />
+    <Compile Include="Platforms\CombineOrderNumberCompleteSearchProviderTest.cs" />
+    <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartRestOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ThreeDCart\OnlineUpdating\ThreeDCartSoapOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Volusion\VolusionOnlineUpdateCommandCreatorTest.cs" />
