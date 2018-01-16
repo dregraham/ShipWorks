@@ -94,7 +94,7 @@
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(30, 31);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(2156, 1);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(450, 1);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // label6
