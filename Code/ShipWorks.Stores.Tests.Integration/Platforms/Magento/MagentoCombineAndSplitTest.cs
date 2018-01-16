@@ -13,7 +13,7 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Split;
-using ShipWorks.Stores.Platforms.Ebay;
+using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -21,28 +21,28 @@ using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
+namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Category", "CombineSplit")]
-    public class EbayCombineAndSplitTest : IDisposable
+    public class MagentoCombineAndSplitTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ITestOutputHelper output;
         private Mock<IOrderCombinationUserInteraction> combineInteraction;
         private Mock<IOrderSplitUserInteraction> splitInteraction;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
-        private readonly EbayStoreEntity store;
-        private readonly EbayOrderSearchEntityComparer comparer;
-        private readonly EbayOrderEntity orderA;
-        private readonly EbayOrderEntity orderB;
-        private readonly EbayOrderEntity orderD;
-        private readonly EbayOrderSearchEntity expectedOrderSearchA;
-        private readonly EbayOrderSearchEntity expectedOrderSearchB;
-        private readonly EbayOrderSearchEntity expectedOrderSearchD;
+        private readonly MagentoStoreEntity store;
+        private readonly MagentoOrderEntity orderA;
+        private readonly MagentoOrderEntity orderB;
+        private readonly MagentoOrderEntity orderD;
+        private readonly MagentoOrderSearchEntity expectedOrderSearchA;
+        private readonly MagentoOrderSearchEntity expectedOrderSearchB;
+        private readonly MagentoOrderSearchEntity expectedOrderSearchD;
+        private readonly MagentoCombineOrderSearchProviderComparer comparer;
 
-        public EbayCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
+        public MagentoCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
         {
             this.output = output;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x), mock =>
@@ -56,22 +56,22 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
                 .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
 
-            store = Create.Store<EbayStoreEntity>()
-                .Set(x => x.StoreTypeCode, StoreTypeCode.Ebay)
+            store = Create.Store<MagentoStoreEntity>()
+                .Set(x => x.StoreTypeCode, StoreTypeCode.Magento)
                 .Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching aL orders later
             Create.Order(store, context.Customer).Save();
 
-            orderA = CreateEbayOrder(10L, 1000L, "1000L", 1000);
-            orderB = CreateEbayOrder(20L, 2000L, "2000L", 2000);
-            orderD = CreateEbayOrder(30L, 3000L, "3000L", 3000);
+            orderA = CreateMagentoOrder(10L, 1000L, "1000L", 1000);
+            orderB = CreateMagentoOrder(20L, 2000L, "2000L", 2000);
+            orderD = CreateMagentoOrder(30L, 3000L, "3000L", 3000);
 
-            expectedOrderSearchA = CreateEbayOrderSearch(orderA);
-            expectedOrderSearchB = CreateEbayOrderSearch(orderB);
-            expectedOrderSearchD = CreateEbayOrderSearch(orderD);
+            expectedOrderSearchA = CreateMagentoOrderSearch(orderA);
+            expectedOrderSearchB = CreateMagentoOrderSearch(orderB);
+            expectedOrderSearchD = CreateMagentoOrderSearch(orderD);
 
-            comparer = new EbayOrderSearchEntityComparer();
+            comparer = new MagentoCombineOrderSearchProviderComparer();
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var (orderA_4, orderA_5) = await PerformSplit(orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
             var identities_A_2 = await identityProvider.GetOrderIdentifiers(orderA_2);
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderD_C = await PerformCombine("D-C", orderD, orderA_C_O);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_C_1 = await identityProvider.GetOrderIdentifiers(orderA_C_1);
             var identities_D_C = await identityProvider.GetOrderIdentifiers(orderD_C);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_M_C = await PerformCombine("10A-M-C", orderA, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_A_M_C = await identityProvider.GetOrderIdentifiers(orderA_M_C);
 
@@ -143,10 +143,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_M_1_C = await PerformCombine("10A-M-1-C", orderA_1, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_A_M_1_C = await identityProvider.GetOrderIdentifiers(orderA_M_1_C);
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
+
+            Assert.Equal(new[] { 2000L }, identities_A_M_1_C.Select(i => i.MagentoOrderID));
 
             Assert.Equal(new[] { expectedOrderSearchB }, identities_A_M_1_C, comparer);
             Assert.Equal(0, identities_A_0.Count());
@@ -161,7 +163,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var (orderA_0, orderA_1) = await PerformSplit(orderA);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
@@ -181,7 +183,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
             var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
@@ -198,7 +200,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_C = await PerformCombine("10A-1-C", orderA_0, orderB);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
@@ -215,7 +217,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
             var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
@@ -232,7 +234,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var (orderA_0, orderA_1) = await PerformSplit(orderA_1_C);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_A_0 = await identityProvider.GetOrderIdentifiers(orderA_0);
             var identities_A_1 = await identityProvider.GetOrderIdentifiers(orderA_1);
@@ -248,7 +250,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_C = await PerformCombine("A-C", orderA_0, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_C = await identityProvider.GetOrderIdentifiers(orderA_C);
 
             Assert.Equal(new[] { expectedOrderSearchA }, identities_A_C, comparer);
@@ -261,9 +263,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_1_C = await PerformCombine("A-1-C", orderA_0, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_1_C = await identityProvider.GetOrderIdentifiers(orderA_1_C);
-
+            
             Assert.Equal(new[] { expectedOrderSearchA }, identities_A_1_C, comparer);
         }
 
@@ -275,7 +277,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderA_1_C_1 = await PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
             var identities_A_1_C_1 = await identityProvider.GetOrderIdentifiers(orderA_1_C_1);
 
             Assert.Equal(new[] { expectedOrderSearchA, expectedOrderSearchB }, identities_A_1_C_1, comparer);
@@ -292,38 +294,34 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             var orderB_M_C = await PerformCombine("10A-M-C", orderB, orderA_1);
 
             // Get online identities
-            var identityProvider = context.Mock.Container.Resolve<EbayCombineOrderSearchProvider>();
+            var identityProvider = context.Mock.Container.Resolve<MagentoCombineOrderSearchProvider>();
 
             var identities_B_M_C = await identityProvider.GetOrderIdentifiers(orderB_M_C);
 
             Assert.Equal(new[] { expectedOrderSearchA }, identities_B_M_C, comparer);
         }
 
-        private EbayOrderEntity CreateEbayOrder(long orderNumber, long ebayOrderID, string ebayBuyerID, int sellerManagerRecord)
+        private MagentoOrderEntity CreateMagentoOrder(long orderNumber, long magentoOrderID, string magentoBuyerID, int sellerManagerRecord)
         {
-            return Create.Order<EbayOrderEntity>(store, context.Customer)
-                .Set(x => x.EbayOrderID, ebayOrderID)
-                .Set(x => x.EbayBuyerID, ebayBuyerID)
-                .Set(x => x.SellingManagerRecord, sellerManagerRecord)
+            return Create.Order<MagentoOrderEntity>(store, context.Customer)
+                .Set(x => x.MagentoOrderID, magentoOrderID)
                 .Set(x => x.OrderNumber, orderNumber)
                 .Set(x => x.OrderNumberComplete, orderNumber.ToString())
                 .Save();
         }
 
-        private EbayOrderSearchEntity CreateEbayOrderSearch(EbayOrderEntity order)
+        private MagentoOrderSearchEntity CreateMagentoOrderSearch(MagentoOrderEntity order)
         {
-            return new EbayOrderSearchEntity()
+            return new MagentoOrderSearchEntity()
             {
-                EbayOrderID = order.EbayOrderID,
-                EbayBuyerID = order.EbayBuyerID,
-                SellingManagerRecord = order.SellingManagerRecord
+                MagentoOrderID = order.MagentoOrderID,
             };
         }
 
         /// <summary>
         /// Perform a split of the given order
         /// </summary>
-        private async Task<(EbayOrderEntity original, EbayOrderEntity split)> PerformSplit(OrderEntity order)
+        private async Task<(MagentoOrderEntity original, MagentoOrderEntity split)> PerformSplit(OrderEntity order)
         {
             var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
@@ -332,8 +330,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
                 .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), order.OrderNumberComplete + "-1"));
 
             var result = await orchestrator.Split(order.OrderID);
-            var original = await dataProvider.GetEntityAsync<EbayOrderEntity>(result.First());
-            var split = await dataProvider.GetEntityAsync<EbayOrderEntity>(result.Last());
+            var original = await dataProvider.GetEntityAsync<MagentoOrderEntity>(result.First());
+            var split = await dataProvider.GetEntityAsync<MagentoOrderEntity>(result.Last());
 
             return (original, split);
         }
@@ -355,4 +353,26 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
         public void Dispose() => context.Dispose();
     }
+
+    ///// <summary>
+    ///// IEqualityComparer for MagentoOrderSearchEntity
+    ///// </summary>
+    //public class MagentoOrderSearchEntityComparer : IEqualityComparer<MagentoOrderSearchEntity>
+    //{
+    //    /// <summary>
+    //    /// Compare 2 MagentoOrderSearchEntities
+    //    /// </summary>
+    //    public bool Equals(MagentoOrderSearchEntity x, MagentoOrderSearchEntity y)
+    //    {
+    //        return x.MagentoOrderID.Equals(y.MagentoOrderID);
+    //    }
+
+    //    /// <summary>
+    //    /// Get hash code for an MagentoOrderSearchEntity
+    //    /// </summary>
+    //    public int GetHashCode(MagentoOrderSearchEntity MagentoOrderSearchEntity)
+    //    {
+    //        return MagentoOrderSearchEntity.MagentoOrderID.GetHashCode();
+    //    }
+    //}
 }

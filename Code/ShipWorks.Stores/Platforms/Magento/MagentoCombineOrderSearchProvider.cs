@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Orders.Combine.SearchProviders;
@@ -29,8 +32,31 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <param name="order">The order for which to find combined order identifiers</param>
         protected override async Task<IEnumerable<MagentoOrderSearchEntity>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            return await GetCombinedOnlineOrderIdentifiers<MagentoOrderSearchEntity>(MagentoOrderSearchFields.OrderID == order.OrderID)
-                .ConfigureAwait(false);
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.MagentoOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(MagentoOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(() => new MagentoOrderSearchEntity()
+                {
+                    MagentoOrderID = MagentoOrderSearchFields.MagentoOrderID.ToValue<long>(),
+                    OrderID = MagentoOrderSearchFields.OrderID.As("MOSFOrderID").ToValue<long>(),
+                    OriginalOrderID = MagentoOrderSearchFields.OriginalOrderID.ToValue<long>(),
+                })
+                .Distinct()
+                .Where(MagentoOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                IEnumerable<MagentoOrderSearchEntity> results = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                return results
+                    .Distinct(new MagentoCombineOrderSearchProviderComparer())
+                    .OrderBy(o => o.MagentoOrderID);
+            }
         }
 
         /// <summary>

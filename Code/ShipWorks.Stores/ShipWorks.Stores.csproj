@@ -447,8 +447,10 @@
     <Compile Include="Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandWebClient.cs" />
     <Compile Include="Platforms\LemonStand\OnlineUpdating\LemonStandOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Magento\Content\MagentoSplitOrderAction.cs" />
     <Compile Include="Platforms\Magento\IMagentoTwoRestDownloader.cs" />
     <Compile Include="Platforms\Magento\MagentoCombineOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Magento\MagentoCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Platforms\Magento\MagentoDownloaderFactory.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneConnectProbe.cs" />
     <Compile Include="Platforms\Magento\Compatibility\MagentoOneModuleProbe.cs" />
