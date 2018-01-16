@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:viewModels="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels"
+             xmlns:odbcDownload="clr-namespace:ShipWorks.Stores.Platforms.Odbc.Download;assembly=ShipWorks.Stores"
              xmlns:import="clr-namespace:ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import"
              Width="540"
              Height="500"
@@ -99,16 +99,16 @@
                 <RadioButton Content="Orders by last modified date"
                              GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
-                                        Converter={StaticResource EnumBooleanConverter},
-                                        ConverterParameter='ByModifiedTime'}" />
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.ByModifiedTime}}" />
                 <RadioButton Content="All orders" GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
-                                        Converter={StaticResource EnumBooleanConverter},
-                                        ConverterParameter='All'}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.All}}" />
                 <RadioButton Content="On order search only" GroupName="DownloadStrategy"
                              IsChecked="{Binding ImportStrategy,
-                                        Converter={StaticResource EnumBooleanConverter},
-                                        ConverterParameter='OnDemand'}"/>
+                                        Converter={StaticResource RadioButtonCheckedConverter},
+                                        ConverterParameter={x:Static odbcDownload:OdbcImportStrategy.OnDemand}}" />
             </StackPanel>
             <Label Grid.Row="3"
                    Grid.Column="0"
