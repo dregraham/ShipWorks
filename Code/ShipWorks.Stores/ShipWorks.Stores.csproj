@@ -697,6 +697,7 @@
     <Compile Include="Platforms\Walmart\WalmartRequestSigner.cs" />
     <Compile Include="Platforms\Walmart\WalmartStoreType.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClient.cs" />
+    <Compile Include="Platforms\Yahoo\Content\YahooSplitOrderAction.cs" />
     <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Yahoo\OnlineUpdating\YahooCombineOrderSearchProvider.cs" />
     <Compile Include="Platforms\Yahoo\YahooDownloaderFactory.cs" />

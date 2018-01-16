@@ -266,6 +266,7 @@
     <Compile Include="Platforms\Walmart\WalmartWizardTest.cs" />
     <Compile Include="Platforms\Walmart\WalmartDownloaderTest.cs" />
     <Compile Include="Platforms\WizardPageRegistrationTest.cs" />
+    <Compile Include="Platforms\Yahoo\YahooCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.UploadShipmentDetails.cs" />
     <Compile Include="Platforms\Yahoo\YahooOnlineUpdateCommandCreatorTest.cs" />
