@@ -5,7 +5,7 @@ using ShipWorks.Stores.Orders.Split.Actions;
 namespace ShipWorks.Stores.Platforms.OrderMotion.Content
 {
     /// <summary>
-    /// Split action that is specific to Ebay
+    /// Split action that is specific to OrderMotion
     /// </summary>
     [KeyedComponent(typeof(IStoreSpecificSplitOrderAction), StoreTypeCode.OrderMotion)]
     public class OrderMotionOrderAction : IStoreSpecificSplitOrderAction
