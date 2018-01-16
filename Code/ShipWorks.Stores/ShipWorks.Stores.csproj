@@ -574,6 +574,7 @@
     <Compile Include="Platforms\Odbc\Upload\OdbcShipmentUploadStrategy.cs" />
     <Compile Include="Platforms\Odbc\Upload\OdbcUploader.cs" />
     <Compile Include="Platforms\OrderMotion\Content\OrderMotionCombineOrderAction.cs" />
+    <Compile Include="Platforms\OrderMotion\Content\OrderMotionSplitOrderAction.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\DataAccess.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\IDataAccess.cs" />
     <Compile Include="Platforms\OrderMotion\OnlineUpdating\IOrderMotionCombineOrderSearchProvider.cs" />

@@ -43,7 +43,8 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating
                     OrderMotionOrderSearchFields.OrderMotionShipmentID.ToValue<long>(),
                     OrderSearchFields.IsManual.ToValue<bool>()))
                 .Distinct()
-                .Where(OrderMotionOrderSearchFields.OrderID == order.OrderID);
+                .Where(OrderMotionOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
