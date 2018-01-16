@@ -595,6 +595,7 @@
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsOnlineUpdater.cs" />
     <Compile Include="Platforms\SellerActive\SellerActiveStoreType.cs" />
     <Compile Include="Platforms\SellerCloud\SellerCloudStoreType.cs" />
+    <Compile Include="Platforms\Shopify\Content\ShopifySplitOrderAction.cs" />
     <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdater.cs" />
     <Compile Include="Platforms\Shopify\OnlineUpdating\ShopifyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Shopify\Content\ShopifyCombineOrderAction.cs" />

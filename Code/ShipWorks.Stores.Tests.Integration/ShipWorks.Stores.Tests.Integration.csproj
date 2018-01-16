@@ -247,6 +247,7 @@
     <Compile Include="Platforms\Magento\MagentoWizardTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceWizardTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcStoreDownloaderTest.cs" />
+    <Compile Include="Platforms\Shopify\ShopifyCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Shopify\ShopifyOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\SparkPay\SparkPayOnlineUpdateCommandCreatorTest.SetOnlineStatus.cs" />
