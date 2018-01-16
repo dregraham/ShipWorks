@@ -1457,6 +1457,12 @@
     <Compile Include="Stores\Management\AddStoreWizardFinishPage.Designer.cs">
       <DependentUpon>AddStoreWizardFinishPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Management\AddStoreWizardFinishPageDownloadControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\AddStoreWizardFinishPageDownloadControl.Designer.cs">
+      <DependentUpon>AddStoreWizardFinishPageDownloadControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
     <Compile Include="Stores\Management\DownloadSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -8163,6 +8169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\AddStoreWizardFinishPage.resx">
       <DependentUpon>AddStoreWizardFinishPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\AddStoreWizardFinishPageDownloadControl.resx">
+      <DependentUpon>AddStoreWizardFinishPageDownloadControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\DownloadSettingsControl.resx">
       <DependentUpon>DownloadSettingsControl.cs</DependentUpon>

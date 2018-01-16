@@ -34,15 +34,12 @@
             this.label7 = new System.Windows.Forms.Label();
             this.kryptonBorderEdge = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.downloadPanel = new System.Windows.Forms.Panel();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // label11
@@ -108,26 +105,6 @@
             this.label6.TabIndex = 18;
             this.label6.Text = "Wondering what\'s next?";
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Image = global::ShipWorks.Properties.Resources.box_closed1;
-            this.pictureBox3.Location = new System.Drawing.Point(442, 173);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(24, 24);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox3.TabIndex = 17;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::ShipWorks.Properties.Resources.nav_down_green1;
-            this.pictureBox2.Location = new System.Drawing.Point(321, 119);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(24, 24);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox2.TabIndex = 16;
-            this.pictureBox2.TabStop = false;
-            // 
             // label5
             // 
             this.label5.Location = new System.Drawing.Point(60, 177);
@@ -147,27 +124,6 @@
             this.label1.TabIndex = 14;
             this.label1.Text = "Print Shipping Labels";
             // 
-            // label4
-            // 
-            this.label4.Location = new System.Drawing.Point(60, 85);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(430, 73);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "ShipWorks will immediately start to download your orders, and will automatically " +
-    "check for more every 15 minutes.\r\n\r\nTo force a download just click the \'Download" +
-    "\' button:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
-            this.label8.Location = new System.Drawing.Point(46, 66);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(103, 13);
-            this.label8.TabIndex = 12;
-            this.label8.Text = "Download Orders";
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -178,10 +134,28 @@
             this.label10.TabIndex = 10;
             this.label10.Text = "ShipWorks is ready!";
             // 
+            // downloadPanel
+            // 
+            this.downloadPanel.Location = new System.Drawing.Point(46, 66);
+            this.downloadPanel.Name = "downloadPanel";
+            this.downloadPanel.Size = new System.Drawing.Size(420, 88);
+            this.downloadPanel.TabIndex = 25;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::ShipWorks.Properties.Resources.box_closed1;
+            this.pictureBox3.Location = new System.Drawing.Point(442, 173);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(24, 24);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox3.TabIndex = 17;
+            this.pictureBox3.TabStop = false;
+            // 
             // AddStoreWizardFinishPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.downloadPanel);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.linkGettingStarted);
             this.Controls.Add(this.label9);
@@ -189,18 +163,14 @@
             this.Controls.Add(this.kryptonBorderEdge);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.label10);
             this.Description = "ShipWorks is ready to connect to your store.";
             this.Name = "AddStoreWizardFinishPage";
             this.Size = new System.Drawing.Size(548, 452);
             this.Title = "Setup Complete";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,13 +185,9 @@
         private System.Windows.Forms.Label label7;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label10;
-
-
+        private System.Windows.Forms.Panel downloadPanel;
     }
 }
