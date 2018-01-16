@@ -1910,6 +1910,7 @@
     <Compile Include="Stores\Platforms\Sears\ISearsWebClient.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\ISearsCombineOrderSearchProvider.cs" />
+    <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProviderComparer.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsTracking.cs" />
     <Compile Include="Stores\Platforms\Sears\OnlineUpdating\SearsOrderDetail.cs" />
     <Compile Include="Stores\Platforms\Shopify\OnlineUpdating\IShopifyOnlineUpdater.cs" />

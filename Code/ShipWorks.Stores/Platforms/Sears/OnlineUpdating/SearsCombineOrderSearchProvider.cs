@@ -44,11 +44,16 @@ namespace ShipWorks.Stores.Platforms.Sears.OnlineUpdating
                             SearsOrderSearchFields.PoNumber.ToValue<string>(),
                             order.OrderDate))
                 .Distinct()
-                .Where(SearsOrderSearchFields.OrderID == order.OrderID);
+                .Where(SearsOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                IEnumerable<SearsOrderDetail> results = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                return results
+                    .Distinct(new SearsCombineOrderSearchProviderComparer())
+                    .OrderBy(o => o.PoNumber);
             }
         }
 

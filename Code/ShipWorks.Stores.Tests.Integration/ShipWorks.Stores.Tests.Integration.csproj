@@ -233,6 +233,7 @@
     <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresQuickSearchTest.cs" />
+    <Compile Include="Platforms\Sears\SearsCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Sears\SearsQuickSearchTest.cs" />
     <Compile Include="Platforms\Sears\SearsOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Sears\SearsOrderCombinationUserInteractionTest.cs" />

@@ -588,6 +588,7 @@
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ProStoresOrderSearchProvider.cs" />
     <Compile Include="Platforms\ProStores\OnlineUpdating\ShipmentDetailsUpdater.cs" />
+    <Compile Include="Platforms\Sears\Content\SearsSplitOrderAction.cs" />
     <Compile Include="Platforms\Sears\Content\SearsCombineOrderAction.cs" />
     <Compile Include="Platforms\Sears\Content\SearsQuickSearchSql.cs" />
     <Compile Include="Platforms\Sears\OnlineUpdating\SearsCombineOrderSearchProvider.cs" />
