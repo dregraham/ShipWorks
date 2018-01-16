@@ -973,6 +973,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
+            wizardPageFinished.LoadStore();
+
             try
             {
                 // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters

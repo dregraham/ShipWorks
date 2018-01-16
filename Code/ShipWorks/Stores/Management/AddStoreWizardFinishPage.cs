@@ -18,6 +18,10 @@ namespace ShipWorks.Stores.Management
         {
             InitializeComponent();
 
+        }
+
+        public void LoadStore()
+        {
             StoreEntity store = GetStore<StoreEntity>();
             StoreType storeType = StoreTypeManager.GetType(store);
             UserControl finishPageControl = storeType.CreateWizardFinishPageControl();
@@ -26,8 +30,9 @@ namespace ShipWorks.Stores.Management
             otherMessagingPanel.Location =
                 new Point(addStoreWizardFinishPanel.Location.X + addStoreWizardFinishPanel.Size.Width,
                     addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
+
         }
-     
+
         /// <summary>
         /// User clicked the link to open the getting started guide
         /// </summary>
