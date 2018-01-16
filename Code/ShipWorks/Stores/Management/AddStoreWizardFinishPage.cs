@@ -17,10 +17,12 @@ namespace ShipWorks.Stores.Management
         public AddStoreWizardFinishPage()
         {
             InitializeComponent();
-
         }
 
-        public void LoadStore()
+        /// <summary>
+        /// Load messaging based on store
+        /// </summary>
+        public void LoadDownloadMessage()
         {
             StoreEntity store = GetStore<StoreEntity>();
             StoreType storeType = StoreTypeManager.GetType(store);
@@ -28,9 +30,8 @@ namespace ShipWorks.Stores.Management
             addStoreWizardFinishPanel.Controls.Add(finishPageControl);
             addStoreWizardFinishPanel.Size = finishPageControl.Size;
             otherMessagingPanel.Location =
-                new Point(addStoreWizardFinishPanel.Location.X + addStoreWizardFinishPanel.Size.Width,
+                new Point(addStoreWizardFinishPanel.Location.X,
                     addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
-
         }
 
         /// <summary>

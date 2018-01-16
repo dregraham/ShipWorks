@@ -86,7 +86,7 @@
             this.Controls.Add(this.label7);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "OdbcWizardFinishPageControl";
-            this.Size = new System.Drawing.Size(456, 451);
+            this.Size = new System.Drawing.Size(456, 81);
             this.ResumeLayout(false);
             this.PerformLayout();
 
