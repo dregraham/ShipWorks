@@ -250,10 +250,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ConfigureDownloadSettingsControl()
         {
-            if (downloadSettingsControl != null &&
-                optionPageSettings.Controls.Contains(downloadSettingsControl as Control))
+            Control oldDownloadSettingsControl = downloadSettingsControl as Control;
+
+            if (oldDownloadSettingsControl != null &&
+                optionPageSettings.Controls.Contains(oldDownloadSettingsControl))
             {
-                optionPageSettings.Controls.Remove(downloadSettingsControl as Control);
+                optionPageSettings.Controls.Remove(oldDownloadSettingsControl);
             }
 
             downloadSettingsControl = storeType.CreateDownloadSettingsControl();

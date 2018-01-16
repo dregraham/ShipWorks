@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnChangeAllowDownloading(object sender, EventArgs e)
         {
-            downloadPolicy.SetComputerAllowed(UserSession.Computer.ComputerID, (ComputerDownloadAllowed)comboAllowDownload.SelectedValue);
+            downloadPolicy.SetComputerAllowed(UserSession.Computer.ComputerID, (ComputerDownloadAllowed) comboAllowDownload.SelectedValue);
         }
 
         /// <summary>
