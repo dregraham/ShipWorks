@@ -1452,7 +1452,14 @@
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Management\AddStoreWizardWrapper.cs" />
+    <Compile Include="Stores\Management\DownloadSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Management\DownloadSettingsControl.Designer.cs">
+      <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
+    <Compile Include="Stores\Management\IDownloadSettingsControl.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
@@ -8147,6 +8154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Management\ActivationErrorWizardPage.resx">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Management\DownloadSettingsControl.resx">
+      <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
