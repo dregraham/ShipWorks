@@ -206,6 +206,7 @@
     <Compile Include="Platforms\Groupon\GrouponOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Groupon\GrouponQuickSearchTest.cs" />
+    <Compile Include="Platforms\Jet\JetCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Jet\JetOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Jet\JetOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\LemonStand\LemonStandOnlineUpdateCommandCreatorTest.cs" />
