@@ -316,6 +316,12 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.Designer.cs">
+      <DependentUpon>OdbcOnDemandDownloadSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcSettingsWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -550,6 +556,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcDataSourceControl.resx">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.resx">
+      <DependentUpon>OdbcOnDemandDownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcSettingsWizard.resx">
       <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
