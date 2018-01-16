@@ -32,6 +32,6 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Load the store into the control
         /// </summary>
-        void Load(StoreEntity store);
+        void LoadStore(StoreEntity store);
     }
 }

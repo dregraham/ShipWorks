@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Load the store
         /// </summary>
-        public void Load(StoreEntity store)
+        public void LoadStore(StoreEntity store)
         {
             this.store = store;
 

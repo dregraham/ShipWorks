@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Load the store
         /// </summary>
-        public void Load(StoreEntity store)
+        public void LoadStore(StoreEntity store)
         {
             this.store = store;
 
