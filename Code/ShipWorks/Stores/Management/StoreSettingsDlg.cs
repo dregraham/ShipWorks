@@ -228,6 +228,13 @@ namespace ShipWorks.Stores.Management
                 licenseTabInitialized = true;
                 LoadLicenseTab();
             }
+
+            // Load the download settings when the option page is selected, that way we show
+            // the most up to date version based on the store
+            if (optionControl.SelectedPage == optionPageSettings)
+            {
+                ConfigureDownloadSettingsControl();
+            }
         }
 
         /// <summary>
@@ -243,6 +250,12 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ConfigureDownloadSettingsControl()
         {
+            if (downloadSettingsControl != null &&
+                optionPageSettings.Controls.Contains(downloadSettingsControl as Control))
+            {
+                optionPageSettings.Controls.Remove(downloadSettingsControl as Control);
+            }
+
             downloadSettingsControl = storeType.CreateDownloadSettingsControl();
             downloadSettingsControl.LoadStore(store);
             downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
