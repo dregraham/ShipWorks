@@ -243,7 +243,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void ConfigureDownloadSettingsControl()
         {
-            downloadSettingsControl = new DownloadSettingsControl(store);
+            downloadSettingsControl = storeType.CreateDownloadSettingsControl();
+            downloadSettingsControl.Load(store);
             downloadSettingsControl.Location = new Point(32, sectionAutoDownloads.Bottom + VerticalSpaceBetweenSections);
             downloadSettingsControl.Width = optionPageSettings.Width - downloadSettingsControl.Location.X - 10;
             downloadSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;

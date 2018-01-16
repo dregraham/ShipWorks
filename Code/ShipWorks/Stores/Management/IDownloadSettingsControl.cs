@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Management
@@ -27,5 +28,10 @@ namespace ShipWorks.Stores.Management
         /// Save the donwload settings
         /// </summary>
         void Save();
+        
+        /// <summary>
+        /// Load the store into the control
+        /// </summary>
+        void Load(StoreEntity store);
     }
 }

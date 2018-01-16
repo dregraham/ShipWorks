@@ -16,24 +16,9 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// constructor
         /// </summary>
-        public DownloadSettingsControl(StoreEntity store)
+        public DownloadSettingsControl()
         {
             InitializeComponent();
-            this.store = store;
-
-            // Download policy
-            downloadPolicy = ComputerDownloadPolicy.Load(store);
-
-            // Load the download policy choices and start listening for changes
-            comboAllowDownload.LoadChoices(downloadPolicy.DefaultToYes);
-            comboAllowDownload.SelectedIndex = -1;
-            comboAllowDownload.SelectedIndexChanged += OnChangeAllowDownloading;
-
-            // Auto download
-            automaticDownloadControl.LoadStore(store);
-
-            // Download on\off
-            comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
         }
 
         /// <summary>
@@ -70,6 +55,28 @@ namespace ShipWorks.Stores.Management
                     OnChangeAllowDownloading(null, EventArgs.Empty);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Load the store
+        /// </summary>
+        public void Load(StoreEntity store)
+        {
+            this.store = store;
+
+            // Download policy
+            downloadPolicy = ComputerDownloadPolicy.Load(store);
+
+            // Load the download policy choices and start listening for changes
+            comboAllowDownload.LoadChoices(downloadPolicy.DefaultToYes);
+            comboAllowDownload.SelectedIndex = -1;
+            comboAllowDownload.SelectedIndexChanged += OnChangeAllowDownloading;
+
+            // Auto download
+            automaticDownloadControl.LoadStore(store);
+
+            // Download on\off
+            comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
         }
     }
 }

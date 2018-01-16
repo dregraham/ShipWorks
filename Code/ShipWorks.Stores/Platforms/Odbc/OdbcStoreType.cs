@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
@@ -24,13 +26,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     [Component(RegistrationType.Self)]
     public class OdbcStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store)
+        public OdbcStoreType(StoreEntity store, IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory)
             : base(store)
         {
-
+            this.downloadSettingsFactory = downloadSettingsFactory;
         }
 
         /// <summary>
@@ -137,6 +141,22 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             return ((OdbcStoreEntity) Store).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ? null :
                 new OnlineUpdateShipmentUpdateActionControl(typeof(OdbcShipmentUploadTask));
+        }
+
+        /// <summary>
+        /// Create the download settings control
+        /// </summary>
+        /// <returns></returns>
+        public override IDownloadSettingsControl CreateDownloadSettingsControl()
+        {
+            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
+
+            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                return downloadSettingsFactory[StoreTypeCode.Odbc];
+            }
+
+            return base.CreateDownloadSettingsControl();
         }
 
         /// <summary>

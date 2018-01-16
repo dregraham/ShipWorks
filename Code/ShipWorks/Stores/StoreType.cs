@@ -352,6 +352,14 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
+        /// Create the control used to edit the manual order number settings for the store
+        /// </summary>
+        public virtual IDownloadSettingsControl CreateDownloadSettingsControl()
+        {
+            return new DownloadSettingsControl();
+        }
+
+        /// <summary>
         /// Create the control to use on the Store Settings dialog, for custom store-specific
         /// configuration options.
         /// </summary>
