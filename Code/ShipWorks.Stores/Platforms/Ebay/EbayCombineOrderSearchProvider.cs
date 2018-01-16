@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Orders.Combine.SearchProviders;
 
@@ -28,8 +31,32 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <param name="order">The order for which to find combined order identifiers</param>
         protected override async Task<IEnumerable<EbayOrderSearchEntity>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            return await GetCombinedOnlineOrderIdentifiers<EbayOrderSearchEntity>(EbayOrderSearchFields.OrderID == order.OrderID)
-                .ConfigureAwait(false);
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.EbayOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(EbayOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(() => new EbayOrderSearchEntity()
+                    {
+                        EbayOrderID = EbayOrderSearchFields.EbayOrderID.ToValue<long>(),
+                        OrderID = EbayOrderSearchFields.OrderID.As("EOSFOrderID").ToValue<long>(),
+                        OriginalOrderID = EbayOrderSearchFields.OriginalOrderID.ToValue<long>(),
+                        EbayBuyerID = EbayOrderSearchFields.EbayBuyerID.ToValue<string>(),
+                        SellingManagerRecord = EbayOrderSearchFields.SellingManagerRecord.ToValue<int>()
+                    })
+                .Distinct()
+                .Where(EbayOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                IEnumerable<EbayOrderSearchEntity> results = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+                return results.Distinct(new EbayOrderSearchEntityComparer())
+                    .OrderBy(o => o.EbayOrderID);
+            }
         }
 
         /// <summary>
