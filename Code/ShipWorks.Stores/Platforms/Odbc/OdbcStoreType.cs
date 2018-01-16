@@ -172,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return false;
             }
 
-            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.All ||
+            return odbcStore.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime ||
                    odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
         }
 
