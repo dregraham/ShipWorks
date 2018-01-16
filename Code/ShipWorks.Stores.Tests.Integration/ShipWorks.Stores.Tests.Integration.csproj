@@ -229,6 +229,7 @@
     <Compile Include="Platforms\OrderIdentifierTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderMotion\OrderMotionOrderCombinationUserInteractionTest.cs" />
+    <Compile Include="Platforms\ProStores\ProStoresCombineAndSplitTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\ProStores\ProStoresQuickSearchTest.cs" />
