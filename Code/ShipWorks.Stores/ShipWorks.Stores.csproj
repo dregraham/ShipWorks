@@ -298,6 +298,7 @@
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\ChannelAdvisor\OnlineUpdating\ChannelAdvisorOnlineUpdater.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProCombineOrderNumberCompleteSearchProvider.cs" />
+    <Compile Include="Platforms\ClickCartPro\Content\ClickCartProSplitOrderAction.cs" />
     <Compile Include="Platforms\ClickCartPro\Content\ClickCartProCombineOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceSplitOrderAction.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceCombineOrderAction.cs" />
