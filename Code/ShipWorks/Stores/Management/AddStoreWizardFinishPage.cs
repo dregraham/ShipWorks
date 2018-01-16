@@ -27,17 +27,7 @@ namespace ShipWorks.Stores.Management
                 new Point(addStoreWizardFinishPanel.Location.X + addStoreWizardFinishPanel.Size.Width,
                     addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
         }
-        
-        /// <summary>
-        /// Loads the given control into the download section of the page 
-        /// </summary>
-        /// <param name="downloadControl"></param>
-        public void SetDownloadSection(UserControl downloadControl)
-        {
-            downloadPanel.Controls.Clear();
-            downloadPanel.Controls.Add(downloadControl);
-        }
-
+     
         /// <summary>
         /// User clicked the link to open the getting started guide
         /// </summary>

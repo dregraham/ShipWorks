@@ -431,7 +431,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         [InlineData(OdbcImportStrategy.All)]
         [InlineData(OdbcImportStrategy.ByModifiedTime)]
         [InlineData(OdbcImportStrategy.OnDemand)]
-        public void OpenMapSettingsFileCommand_SetsDownloadStrategy(OdbcImportStrategy strategy)
+        public void OpenMapSettingsFileCommand_SetsDownloadStrategyIsLastModified(OdbcImportStrategy strategy, bool isLastModified)
         {
             using (var stream = new MemoryStream())
             {
@@ -454,7 +454,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
-                Assert.Equal(testObject.ImportStrategy, strategy);
+                Assert.Equal(strategy, testObject.ImportStrategy);
             }
         }
 

@@ -28,14 +28,21 @@ namespace ShipWorks.Stores.Platforms.Odbc
     [Component(RegistrationType.Self)]
     public class OdbcStoreType : StoreType
     {
+        private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
+        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControl> storeWizardFinishPageControlFactory;
+        private readonly OdbcStoreEntity odbcStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreType(StoreEntity store, IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory)
+        public OdbcStoreType(StoreEntity store,
+            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory,
+            IIndex<StoreTypeCode, IStoreWizardFinishPageControl> storeWizardFinishPageControlFactory)
             : base(store)
         {
-
+            this.downloadSettingsFactory = downloadSettingsFactory;
+            this.storeWizardFinishPageControlFactory = storeWizardFinishPageControlFactory;
+            odbcStore = (OdbcStoreEntity) store;
         }
 
         /// <summary>
@@ -189,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
-                return (UserControl) IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreWizardFinishPageControl>(TypeCode);
+                return (UserControl) storeWizardFinishPageControlFactory[StoreTypeCode.Odbc];
             }
 
             return base.CreateWizardFinishPageControl();
