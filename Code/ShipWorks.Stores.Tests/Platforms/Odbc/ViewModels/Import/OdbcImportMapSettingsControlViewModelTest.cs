@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Fact]
-        public void LoadMapSettings_SetsDownloadStrategyIsLastModified()
+        public void LoadMapSettings_SetsImportStrategy()
         {
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
             testObject.LoadMapSettings(store);
 
-            Assert.True(testObject.DownloadStrategyIsLastModified);
+            Assert.Equal(OdbcImportStrategy.ByModifiedTime, testObject.ImportStrategy);
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
             testObject.Load(dataSource.Object, schema.Object, "ColumnSource", store);
-            testObject.DownloadStrategyIsLastModified = false;
+            testObject.ImportStrategy = OdbcImportStrategy.All;
             testObject.SaveMapSettings(store);
 
             Assert.Equal((int)OdbcImportStrategy.All, store.ImportStrategy);
@@ -428,9 +428,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Theory]
-        [InlineData(OdbcImportStrategy.All, false)]
-        [InlineData(OdbcImportStrategy.ByModifiedTime, true)]
-        public void OpenMapSettingsFileCommand_SetsDownloadStrategyIsLastModified(OdbcImportStrategy strategy, bool isLastModified)
+        [InlineData(OdbcImportStrategy.All)]
+        [InlineData(OdbcImportStrategy.ByModifiedTime)]
+        [InlineData(OdbcImportStrategy.OnDemand)]
+        public void OpenMapSettingsFileCommand_SetsDownloadStrategy(OdbcImportStrategy strategy)
         {
             using (var stream = new MemoryStream())
             {
@@ -453,7 +454,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
 
                 testObject.OpenMapSettingsFileCommand.Execute(null);
 
-                Assert.Equal(testObject.DownloadStrategyIsLastModified, isLastModified);
+                Assert.Equal(testObject.ImportStrategy, strategy);
             }
         }
 
