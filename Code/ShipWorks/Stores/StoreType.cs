@@ -632,5 +632,13 @@ namespace ShipWorks.Stores
         {
             return true;
         }
+
+        /// <summary>
+        /// Returns messaging to display on the AddStoreWizard finish page
+        /// </summary>
+        public virtual UserControl CreateWizardFinishPageControl()
+        {
+            return (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreWizardFinishPageControl>();
+        }
     }
 }

@@ -145,6 +145,12 @@
     <Compile Include="Content\CombineOrderSuccessDialog.xaml.cs">
       <DependentUpon>CombineOrderSuccessDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControl.Designer.cs">
+      <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -500,6 +506,9 @@
     <Compile Include="StoreModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\StoreWizardFinishPageControl.resx">
+      <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\BigCommerce\BigCommerceAccountSettingsControl.resx">
       <DependentUpon>BigCommerceAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
 {
@@ -22,8 +17,17 @@ namespace ShipWorks.Stores.Management
         public AddStoreWizardFinishPage()
         {
             InitializeComponent();
-        }
 
+            StoreEntity store = GetStore<StoreEntity>();
+            StoreType storeType = StoreTypeManager.GetType(store);
+            UserControl finishPageControl = storeType.CreateWizardFinishPageControl();
+            addStoreWizardFinishPanel.Controls.Add(finishPageControl);
+            addStoreWizardFinishPanel.Size = finishPageControl.Size;
+            otherMessagingPanel.Location =
+                new Point(addStoreWizardFinishPanel.Location.X + addStoreWizardFinishPanel.Size.Width,
+                    addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
+        }
+        
         /// <summary>
         /// Loads the given control into the download section of the page 
         /// </summary>

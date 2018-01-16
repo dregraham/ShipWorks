@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -26,7 +28,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
     [Component(RegistrationType.Self)]
     public class OdbcStoreType : StoreType
     {
-        private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
 
         /// <summary>
         /// Constructor
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public OdbcStoreType(StoreEntity store, IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory)
             : base(store)
         {
-            this.downloadSettingsFactory = downloadSettingsFactory;
+
         }
 
         /// <summary>
@@ -180,5 +181,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the online store's order identifier
         /// </summary>
         public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
+
+        /// <summary>
+        /// Returns messaging to display on the AddStoreWizard finish page
+        /// </summary>
+        public override UserControl CreateWizardFinishPageControl()
+        {
+            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                return (UserControl) IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<IStoreWizardFinishPageControl>(TypeCode);
+            }
+
+            return base.CreateWizardFinishPageControl();
+        }
     }
 }
