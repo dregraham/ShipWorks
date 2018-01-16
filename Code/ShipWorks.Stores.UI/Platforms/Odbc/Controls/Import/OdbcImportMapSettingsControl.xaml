@@ -44,6 +44,7 @@
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
+        <ui:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
 
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
@@ -92,17 +93,22 @@
                    Content="Download:" />
             <StackPanel Grid.Row="2"
                         Grid.Column="1"
+                        Grid.ColumnSpan="2"
                         Margin="5 5 0 5"
                         Orientation="Horizontal">
                 <RadioButton Content="Orders by last modified date"
                              GroupName="DownloadStrategy"
-                             IsChecked="{Binding DownloadStrategyIsLastModified,
-                                        Converter={StaticResource RadioButtonCheckedConverter},
-                                        ConverterParameter={StaticResource True}}" />
+                             IsChecked="{Binding ImportStrategy,
+                                        Converter={StaticResource EnumBooleanConverter},
+                                        ConverterParameter='ByModifiedTime'}" />
                 <RadioButton Content="All orders" GroupName="DownloadStrategy"
-                             IsChecked="{Binding DownloadStrategyIsLastModified,
-                                        Converter={StaticResource RadioButtonCheckedConverter},
-                                        ConverterParameter={StaticResource False}}"/>
+                             IsChecked="{Binding ImportStrategy,
+                                        Converter={StaticResource EnumBooleanConverter},
+                                        ConverterParameter='All'}"/>
+                <RadioButton Content="On order search only" GroupName="DownloadStrategy"
+                             IsChecked="{Binding ImportStrategy,
+                                        Converter={StaticResource EnumBooleanConverter},
+                                        ConverterParameter='OnDemand'}"/>
             </StackPanel>
             <Label Grid.Row="3"
                    Grid.Column="0"
