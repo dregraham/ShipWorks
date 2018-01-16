@@ -331,6 +331,12 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml.cs">
       <DependentUpon>OdbcMappingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.Designer.cs">
+      <DependentUpon>OdbcWizardFinishPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml.cs">
       <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -562,6 +568,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcSettingsWizard.resx">
       <DependentUpon>OdbcSettingsWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.resx">
+      <DependentUpon>OdbcWizardFinishPageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportDataSourcePage.resx">
       <DependentUpon>OdbcImportDataSourcePage.cs</DependentUpon>
