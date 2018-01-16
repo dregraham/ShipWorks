@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
@@ -57,7 +54,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             get
             {
-                OdbcStoreEntity odbcStore = (OdbcStoreEntity) Store;
                 StringHash stringHash = new StringHash();
 
                 return $"{stringHash.Hash(odbcStore.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
@@ -157,8 +153,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <returns></returns>
         public override IDownloadSettingsControl CreateDownloadSettingsControl()
         {
-            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-
             if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 return downloadSettingsFactory[StoreTypeCode.Odbc];
@@ -173,8 +167,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <returns></returns>
         public override bool ShowTaskWizardPage()
         {
-            OdbcStoreEntity odbcStore = Store as OdbcStoreEntity;
-
             if (odbcStore == null)
             {
                 return false;
