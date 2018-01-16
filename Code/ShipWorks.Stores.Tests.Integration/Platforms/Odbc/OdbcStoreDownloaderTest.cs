@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Store", "Odbc")]
-    public class OdbcRestDownloaderTest : IDisposable
+    public class OdbcStoreDownloaderTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly DataContext context;
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         private OdbcRecord odbcRecord;
         private readonly OdbcStoreEntity store;
 
-        public OdbcRestDownloaderTest(DatabaseFixture db)
+        public OdbcStoreDownloaderTest(DatabaseFixture db)
         {
             DateTime utcNow = DateTime.UtcNow;
 
@@ -147,6 +147,18 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             Assert.Equal("1", orders.Single().OrderNumberComplete);
             Assert.Equal("Kevin", orders.Single().ShipFirstName);
             Assert.Equal(1, orders.Single().OrderNumber);
+        }
+
+        [Fact]
+        public async Task Download_ThrowsDownloadException_WhenStoreImportStrategyIsOnDemand()
+        {
+            odbcRecord = GetOdbcRecord("001", "Kevin");
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+
+            var exception = await Assert.ThrowsAsync<DownloadException>(()=> testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection));
+            Assert.StartsWith("Store set to download orders on order search only", exception.Message);
         }
 
         [Fact]

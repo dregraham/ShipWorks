@@ -56,6 +56,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                throw new DownloadException("Store set to download orders on order search only. \r\n\r\n" +
+                                            "To automatically download orders, change your store's order import settings.");
+            }
+
             Progress.Detail = "Querying data source...";
             try
             {
