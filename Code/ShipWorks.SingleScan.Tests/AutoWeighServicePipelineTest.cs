@@ -123,10 +123,8 @@ namespace ShipWorks.SingleScan.Tests
             mock.Mock<IAutoWeighService>().Verify(a => a.ApplyWeight(It.IsAny<IEnumerable<ShipmentEntity>>(), It.IsAny<ITrackedEvent>()), Times.Never);
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void DoesNotWeighShipment_WhenAutoPrintIsOff_AndFilterNodeContentCountIsNotOne(int filterCount)
+        [Fact]
+        public void DoesNotWeighShipment_WhenAutoPrintIsOff_AndFilterNodeContentCountIsNotOne()
         {
             autoPrint = false;
             

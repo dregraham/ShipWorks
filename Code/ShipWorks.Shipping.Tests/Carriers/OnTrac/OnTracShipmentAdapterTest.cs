@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
         [Theory]
         [InlineData(true, true)]
-        [InlineData(true, true)]
+        [InlineData(false, false)]
         public void IsDomestic_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
             mock.WithShipmentTypeFromShipmentManager(x =>

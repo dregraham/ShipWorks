@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,7 +15,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 {
-    public class AlaskaHawaiiZoneExcelReaderTest
+    public class AlaskaHawaiiZoneExcelReaderTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly IEnumerable<UpsLocalRatingZoneEntity> readAlaskaHawaiiZones;

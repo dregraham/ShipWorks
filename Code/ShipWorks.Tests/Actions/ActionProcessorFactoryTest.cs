@@ -20,9 +20,9 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Theory]
-        [InlineData(false, true)]
-        [InlineData(false, false)]
-        public void CreateStandard_Returns_OneActionProcessorWithStandardGateway_WhenUserInterfaceMode(bool useParallelActionQueue, bool isUiSupported)
+        [InlineData(false)]
+        [InlineData(true)]
+        public void CreateStandard_Returns_OneActionProcessorWithStandardGateway_WhenUserInterfaceMode(bool useParallelActionQueue)
         {
             config.Setup(c => c.UseParallelActionQueue).Returns(useParallelActionQueue);
             configData.Setup(cd => cd.FetchReadOnly()).Returns(config.Object);
@@ -37,9 +37,9 @@ namespace ShipWorks.Tests.Actions
         }
 
         [Theory]
-        [InlineData(true, true)]
-        [InlineData(true, false)]
-        public void CreateStandard_Returns_TwoProcessors_WhenUserInterfaceMode(bool useParallelActionQueue, bool isUiSupported)
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CreateStandard_Returns_TwoProcessors_WhenUserInterfaceMode(bool useParallelActionQueue)
         {
             config.Setup(c => c.UseParallelActionQueue).Returns(useParallelActionQueue);
             configData.Setup(cd => cd.FetchReadOnly()).Returns(config.Object);

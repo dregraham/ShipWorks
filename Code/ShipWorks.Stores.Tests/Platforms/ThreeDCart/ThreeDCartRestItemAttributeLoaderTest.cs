@@ -19,6 +19,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             orderElementFactory = mock.Mock<IOrderElementFactory>();
         }
 
+        [Fact]
         public void LoadItemNameAndAttributes_LoadsItemName()
         {
 

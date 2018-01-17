@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
 
         [Theory]
         [InlineData(true, true)]
-        [InlineData(true, true)]
+        [InlineData(false, false)]
         public void IsDomestic_DelegatesToIsDomestic_OnShipmentType(bool isDomestic, bool expected)
         {
             shipmentType.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic);

@@ -238,6 +238,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             Assert.Equal(upsShipment, testShipment.Ups);
         }
+
+        [Fact]
         public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown()
         {
             testObject.GetRatesAction = (shipment, type) => { throw new ShippingException(); };

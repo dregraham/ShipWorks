@@ -346,25 +346,5 @@ namespace ShipWorks.Tests.Stores.Newegg
             // the data/configuration of the request
             Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest) allSuccessRequest).Method);
         }
-
-
-        public void Ship_ReturnsShippingResults_WhenShippingAnOrderWithNeweggAPI_IntegrationTest()
-        {
-            //    // We're going to try to bounce the request off of the Newegg API, so setup
-            //    // the test object to use a "live" NeweggHttpRequest and an order setup in
-            //    // our sandbox seller account, and use the sandbox seller account credentials
-
-            //    // TODO: Plug in an unshipped order number and build the appropriate item list to test
-            //    Shipment shipment = new Shipment { ... };
-            //    Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-            //    testObject = new ShippingRequest(credentials, new NeweggHttpRequest());
-
-            //    ShippingResult shippingResult = testObject.Ship(shipment);
-
-            //    Assert.True(shippingResult.IsSuccessful);
-            //    Assert.Equal(shipment.Header.OrderNumber, shippingResult.Detail.OrderNumber);
-            //    Assert.Equal(shipment.Header.SellerId, shippingResult.Detail.SellerId);
-            //Assert.Inconclusive("Need an unshipped order to run this integration test.");
-        }
     }
 }

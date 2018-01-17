@@ -28,15 +28,8 @@ namespace ShipWorks.UI.Tests.ValueConverters
             Assert.Equal(defaultValue, result);
         }
 
-        [Theory]
-        [InlineData("", 0)]
-        [InlineData("", 1.23)]
-        [InlineData("", 1523.23)]
-        [InlineData("", "1523.23")]
-        [InlineData("", -1.23)]
-        [InlineData("", -1523.23)]
-        [InlineData("", "-1523.23")]
-        public void Convert_ReturnsDefaultValue_WhenValueIsBlankString(object value, object parameter)
+        [Fact]
+        public void Convert_ReturnsDefaultValue_WhenValueIsBlankString()
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
             double result = (double)testObject.Convert(string.Empty, typeof(double), null, null);
@@ -133,11 +126,11 @@ namespace ShipWorks.UI.Tests.ValueConverters
         [InlineData("1,501.23", 0)]
         [InlineData("1501.23", 3.3)]
         [InlineData("1,501.23", 3.3)]
-        public void ConvertBack_ReturnsCorrectDoubleValue_WhenAString(string value, double defaultValue)
+        public void ConvertBack_ReturnsCorrectDoubleValue_WhenAString(string value, double? defaultValue)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double convertResult = (double)testObject.Convert(value, typeof(double), defaultValue, null);
-            double convertBackResult = (double)testObject.ConvertBack(convertResult, typeof(double), defaultValue, CultureInfo.CurrentCulture);
+            double? convertResult = (double?)testObject.Convert(value, typeof(double?), defaultValue, null);
+            double? convertBackResult = (double?)testObject.ConvertBack(convertResult, typeof(double?), defaultValue, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult, convertResult);
         }
 
@@ -148,11 +141,11 @@ namespace ShipWorks.UI.Tests.ValueConverters
         [InlineData("-1,501.23", 0)]
         [InlineData("-1501.23", -3.3)]
         [InlineData("-1,501.23", -3.3)]
-        public void ConvertBack_ReturnsCorrectDoubleValue_WhenNegativeAndAString(string value, double defaultValue)
+        public void ConvertBack_ReturnsCorrectDoubleValue_WhenNegativeAndAString(string value, double? defaultValue)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double convertResult = (double)testObject.Convert(value, typeof(double), defaultValue, null);
-            double convertBackResult = (double)testObject.ConvertBack(convertResult, typeof(double), defaultValue, CultureInfo.CurrentCulture);
+            double? convertResult = (double?) testObject.Convert(value, typeof(double?), defaultValue, null);
+            double? convertBackResult = (double?) testObject.ConvertBack(convertResult, typeof(double?), defaultValue, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult, convertResult);
         }
     }

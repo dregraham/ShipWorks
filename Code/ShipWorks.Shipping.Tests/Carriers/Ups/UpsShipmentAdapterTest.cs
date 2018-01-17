@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
         [Theory]
         [InlineData(true, true)]
-        [InlineData(true, true)]
+        [InlineData(false, false)]
         public void IsDomestic_DomesticIsTrue_WhenShipCountryIsUs(bool isDomestic, bool expected)
         {
             mock.WithShipmentTypeFromShipmentManager(x => x.Setup(b => b.IsDomestic(shipment)).Returns(isDomestic));

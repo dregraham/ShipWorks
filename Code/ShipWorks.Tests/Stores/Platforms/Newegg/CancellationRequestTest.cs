@@ -88,6 +88,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.Equal(expectedCancelledSellerId, result.Detail.SellerId);
         }
 
+        [Fact]
         public async Task Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()
         {
             // We're going to try to bounce the request off of the Newegg API, so setup

@@ -572,7 +572,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
             Assert.Equal(6, person.AddressValidationSuggestionCount);
         }
 
-        public void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
+        private void VerifyPropertySetterResetsValidationStatus(Action<AddressViewModel> setAction)
         {
             entityBasedAdapter.AddressValidationStatus = (int) AddressValidationStatusType.Fixed;
 

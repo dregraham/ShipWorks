@@ -252,6 +252,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
         }
 
+        [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]

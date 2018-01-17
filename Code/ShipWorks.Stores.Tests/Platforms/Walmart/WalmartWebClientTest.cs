@@ -90,6 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             Assert.NotEmpty(webHeaderCollection.GetValues("WM_QOS.CORRELATION_ID"));
         }
 
+        [Fact]
         public void GetOrders_RethrowsWalmartException_WhenWebRequestThrowsWebException()
         {
             SetupHttpVariableRequestSubmitter(OrdersResponse);

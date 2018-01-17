@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         [InlineData(0, null)]
         [InlineData(1, 1)]
         [InlineData(2, 1)]
-        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsCombined(int expectedCount, int expectedFirstResult)
+        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsCombined(int expectedCount, int? expectedFirstResult)
         {
             store.StoreTypeCode = storeTypeCode;
 
@@ -65,10 +65,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
         }
 
         [Theory]
-        [InlineData(0, 0, null)]
-        [InlineData(1, 1, 1)]
-        [InlineData(2, 1, 1)]
-        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsNotCombined(int numberToCreate, int expectedCount, int expectedFirstResult)
+        [InlineData(0, null)]
+        [InlineData(1, 1)]
+        public async Task AmeriCommerceStoreType_GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenOrderIsNotCombined(int expectedCount, int? expectedFirstResult)
         {
             store.StoreTypeCode = storeTypeCode;
 

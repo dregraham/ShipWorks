@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             Assert.Contains(linkShouldContain, testObject.TrackShipment(trackedShipment).Summary, StringComparison.OrdinalIgnoreCase);
         }
 
-        public void SetGetServiceUsedReturn(string serviceToReturn)
+        private void SetGetServiceUsedReturn(string serviceToReturn)
         {
             mock.Mock<IShippingManager>()
                 .Setup(s => s.GetOverriddenServiceUsed(It.IsAny<ShipmentEntity>()))

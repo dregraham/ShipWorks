@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -9,7 +10,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
 {
-    public class AlaskaHawaiiZoneExcelReaderTest
+    public class AlaskaHawaiiZoneExcelReaderTest : IDisposable
     {
         readonly AutoMock mock;
         readonly AlaskaHawaiiZoneExcelReader testObject;

@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Editions
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
         }
 
-        public void SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach()
+        private void SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -69,7 +69,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithMultipleFedExRestrictions()
+        private void SetupXmlWithMultipleFedExRestrictions()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithNoFedExRestrictions()
+        private void SetupXmlWithNoFedExRestrictions()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithNoShipmentTypes()
+        private void SetupXmlWithNoShipmentTypes()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithDuplicateFedExRestrictions()
+        private void SetupXmlWithDuplicateFedExRestrictions()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -191,7 +191,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithDuplicateShipmentTypeNodes()
+        private void SetupXmlWithDuplicateShipmentTypeNodes()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -225,7 +225,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithShipmentTypeListedMultipleTimesWithDifferentRestrictions()
+        private void SetupXmlWithShipmentTypeListedMultipleTimesWithDifferentRestrictions()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -258,7 +258,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithoutShipmentTypeFunctionalityNode()
+        private void SetupXmlWithoutShipmentTypeFunctionalityNode()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -290,7 +290,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithFedExProcessingRestriction()
+        private void SetupXmlWithFedExProcessingRestriction()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -322,7 +322,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithFedExPurchasingRestriction()
+        private void SetupXmlWithFedExPurchasingRestriction()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>
@@ -354,7 +354,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        public void SetupXmlWithFedExConversionRestriction()
+        private void SetupXmlWithFedExConversionRestriction()
         {
             xml = new XmlDocument();
             xml.LoadXml(@"<?xml version=""1.0"" standalone=""yes""?>

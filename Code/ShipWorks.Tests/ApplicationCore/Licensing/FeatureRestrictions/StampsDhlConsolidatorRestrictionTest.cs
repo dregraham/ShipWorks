@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions
 {
-    public class StampsDhlConsolidatorRestrictionTest
+    public class StampsDhlConsolidatorRestrictionTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly StampsDhlConsolidatorRestriction testObject;

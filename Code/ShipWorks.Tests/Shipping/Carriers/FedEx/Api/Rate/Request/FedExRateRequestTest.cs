@@ -72,6 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
+        [Fact]
         public void CarrierAccountEntity_IsAccountRetrievedFromRepository()
         {
             Assert.Equal(account, testObject.CarrierAccountEntity);

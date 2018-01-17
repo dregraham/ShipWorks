@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         [InlineData(0, 0, null, 1)]
         [InlineData(1, 0, null, 1)]
         [InlineData(2, 1, 1, 1)]
-        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenCombined(int numberToCreate, int expectedCount, long expectedFirstResult, int manualOrders)
+        public async Task GetCombinedOnlineOrderIdentifiers_ReturnsCorrectValues_WhenCombined(int numberToCreate, int expectedCount, long? expectedFirstResult, int manualOrders)
         {
             var storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>()
                 .Select(x => x.Value)

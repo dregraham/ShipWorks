@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.Equal(expectedAddressType, result.AddressType);
         }
 
-        public void SetupUpspsAddressValidationResults(
+        private void SetupUpspsAddressValidationResults(
             bool isSuccessfulMatch,
             bool isCityStateZipOk,
             string footNoteValue,

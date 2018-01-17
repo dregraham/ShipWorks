@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Rate
 {
-    class ReturnedRateTypeTest
+    public class ReturnedRateTypeTest
     {
         [Fact]
         public void ReturnedRateType_ContainsPayorRetialPackage()
