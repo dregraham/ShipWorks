@@ -157,8 +157,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
 
-            var exception = await Assert.ThrowsAsync<DownloadException>(()=> testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection));
-            Assert.StartsWith("Store set to download orders on order search only", exception.Message);
+            var exception = await Assert.ThrowsAsync<DownloadException>(() => testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection));
+            Assert.StartsWith("The store, Odbc Store, is set to download orders on order search only.", exception.Message);
         }
 
         [Fact]
