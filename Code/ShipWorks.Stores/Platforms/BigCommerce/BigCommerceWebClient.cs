@@ -336,7 +336,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <exception cref="BigCommerceException" />
         private void CheckRestResponseForError(IRestResponse restResponse)
         {
-            if ((int) restResponse.StatusCode == BigCommerceConstants.MaxRequestsPerHourLimitReachedStatusCode)
+            if ((int) restResponse.StatusCode == BigCommerceConstants.MaxRequestsPerHourLimitReachedStatusCode || 
+                (int)restResponse.StatusCode == BigCommerceConstants.TooManyRequests)
             {
                 // Check to see if we are over the API requests per hour limit
                 log.Error("BigCommerce max API requests per hour reached.");
