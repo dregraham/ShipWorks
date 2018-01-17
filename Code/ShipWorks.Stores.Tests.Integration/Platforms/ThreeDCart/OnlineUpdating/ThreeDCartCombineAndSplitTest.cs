@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<ThreeDCartStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.ThreeDCart)

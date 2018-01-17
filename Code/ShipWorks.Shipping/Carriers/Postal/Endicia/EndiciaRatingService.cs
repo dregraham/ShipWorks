@@ -93,9 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 new EndiciaApiClient(GetAccountRepository((ShipmentTypeCode) shipment.ShipmentType), logEntryFactory,
                     certificateInspectorFactory(string.Empty));
 
-            List<RateResult> allEndiciaRates = (InterapptiveOnly.MagicKeysDown) ?
-                endiciaApiClient.GetRatesSlow(shipment, endiciaShipmentType) :
-                endiciaApiClient.GetRatesFast(shipment, endiciaShipmentType);
+            List<RateResult> allEndiciaRates = endiciaApiClient.GetRates(shipment, endiciaShipmentType);
 
             // Filter out any excluded services, but always include the service that the shipment is configured with
             List<RateResult> endiciaRates = FilterRatesByExcludedServices(shipment, allEndiciaRates);

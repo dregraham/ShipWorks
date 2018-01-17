@@ -21,8 +21,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
         public StoreSpecificCombineOrderActionTest(ITestOutputHelper testOutputHelper)
         {
             this.testOutputHelper = testOutputHelper;
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

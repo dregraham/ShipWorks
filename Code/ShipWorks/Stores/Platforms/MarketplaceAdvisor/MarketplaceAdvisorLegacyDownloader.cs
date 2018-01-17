@@ -34,8 +34,8 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
         /// <summary>
         /// Constructor
         /// </summary>
-        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store)
-            : base(store)
+        public MarketplaceAdvisorLegacyDownloader(MarketplaceAdvisorStoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
         }

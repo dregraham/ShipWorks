@@ -2,12 +2,14 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Empty Rating Service
     /// </summary>
+    [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.Asendia)]
     public class EmptyRatingService : IRatingService
     {
         /// <summary>

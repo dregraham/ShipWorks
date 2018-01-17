@@ -68,6 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
             endiciaAccount.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
             endiciaAccount.TestAccount = Express1EndiciaUtility.UseTestServer;
 
+            endiciaAccount.AcceptedFCMILetterWarning = false;
+
             endiciaAccount.Description = EndiciaAccountManager.GetDefaultDescription(endiciaAccount);
 
             // Persist the account entity to the database

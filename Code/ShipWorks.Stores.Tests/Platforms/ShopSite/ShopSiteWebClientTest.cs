@@ -31,12 +31,11 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.ShopSiteAuthentication = ShopSiteAuthenticationType.Oauth;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store,
-                mock.Create<IEncryptionProviderFactory>(),
-                () => mock.Create<IHttpVariableRequestSubmitter>(),
-                (x, y) => mock.Create<IApiLogEntry>()));
+                mock.Build<IEncryptionProviderFactory>(),
+                () => mock.Build<IHttpVariableRequestSubmitter>(),
+                (x, y) => mock.Build<IApiLogEntry>()));
 
             Assert.Contains("configured to use OAuth authentication", ex.Message);
-
         }
 
         [Theory]
@@ -53,9 +52,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
             store.Username = username;
 
             ShopSiteException ex = Assert.Throws<ShopSiteException>(() => new ShopSiteWebClient(store,
-                 mock.Create<IEncryptionProviderFactory>(),
-                () => mock.Create<IHttpVariableRequestSubmitter>(),
-                (x, y) => mock.Create<IApiLogEntry>()));
+                 mock.Build<IEncryptionProviderFactory>(),
+                () => mock.Build<IHttpVariableRequestSubmitter>(),
+                (x, y) => mock.Build<IApiLogEntry>()));
 
             Assert.Contains($"{expectedValue} is missing or invalid", ex.Message);
         }

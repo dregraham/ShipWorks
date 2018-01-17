@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -145,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             switch (dropoffType)
             {
                 case FedExDropoffType.BusinessServiceCenter: return DropoffType.BUSINESS_SERVICE_CENTER;
-                case FedExDropoffType.DropBox:return DropoffType.DROP_BOX;
+                case FedExDropoffType.DropBox: return DropoffType.DROP_BOX;
                 case FedExDropoffType.RegularPickup: return DropoffType.REGULAR_PICKUP;
                 case FedExDropoffType.RequestCourier: return DropoffType.REQUEST_COURIER;
                 case FedExDropoffType.Station: return DropoffType.STATION;
@@ -154,71 +156,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             throw new InvalidOperationException("Invalid FedEx ServiceType " + dropoffType);
         }
 
-
         /// <summary>
         /// Get the API service type based on our internal value
         /// </summary>
-        [NDependIgnoreComplexMethod]
         public static ServiceType GetApiServiceType(FedExServiceType serviceType)
         {
-            switch (serviceType)
-            {
-                case FedExServiceType.PriorityOvernight:
-                case FedExServiceType.OneRatePriorityOvernight:
-                    return ServiceType.PRIORITY_OVERNIGHT;
-
-                case FedExServiceType.StandardOvernight:
-                case FedExServiceType.OneRateStandardOvernight:
-                    return ServiceType.STANDARD_OVERNIGHT;
-
-                case FedExServiceType.FirstOvernight:
-                case FedExServiceType.OneRateFirstOvernight:
-                    return ServiceType.FIRST_OVERNIGHT;
-
-                case FedExServiceType.FedEx2Day:
-                case FedExServiceType.OneRate2Day:
-                    return ServiceType.FEDEX_2_DAY;
-
-                case FedExServiceType.FedEx2DayAM:
-                case FedExServiceType.OneRate2DayAM:
-                    return ServiceType.FEDEX_2_DAY_AM;
-
-                case FedExServiceType.FedExExpressSaver:
-                case FedExServiceType.OneRateExpressSaver:
-                case FedExServiceType.FedExEconomyCanada:
-                    return ServiceType.FEDEX_EXPRESS_SAVER;
-
-                case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;
-                case FedExServiceType.InternationalEconomy: return ServiceType.INTERNATIONAL_ECONOMY;
-                case FedExServiceType.InternationalFirst: return ServiceType.INTERNATIONAL_FIRST;
-                case FedExServiceType.FedEx1DayFreight: return ServiceType.FEDEX_1_DAY_FREIGHT;
-                case FedExServiceType.FedEx2DayFreight: return ServiceType.FEDEX_2_DAY_FREIGHT;
-                case FedExServiceType.FedEx3DayFreight: return ServiceType.FEDEX_3_DAY_FREIGHT;
-
-                case FedExServiceType.FedExGround:
-                case FedExServiceType.FedExInternationalGround:
-                    return ServiceType.FEDEX_GROUND;
-
-                case FedExServiceType.GroundHomeDelivery: return ServiceType.GROUND_HOME_DELIVERY;
-                case FedExServiceType.InternationalPriorityFreight: return ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
-                case FedExServiceType.InternationalEconomyFreight: return ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;
-                case FedExServiceType.SmartPost: return ServiceType.SMART_POST;
-                case FedExServiceType.FirstFreight: return ServiceType.FEDEX_FIRST_FREIGHT;
-                case FedExServiceType.FedExNextDayAfternoon:
-                    return ServiceType.FEDEX_NEXT_DAY_AFTERNOON;
-                case FedExServiceType.FedExNextDayEndOfDay:
-                    return ServiceType.FEDEX_NEXT_DAY_END_OF_DAY;
-                case FedExServiceType.FedExNextDayMidMorning:
-                    return ServiceType.FEDEX_NEXT_DAY_MID_MORNING;
-                case FedExServiceType.FedExNextDayEarlyMorning:
-                    return ServiceType.FEDEX_NEXT_DAY_EARLY_MORNING;
-                case FedExServiceType.FedExDistanceDeferred:
-                    return ServiceType.FEDEX_DISTANCE_DEFERRED;
-                case FedExServiceType.FedExNextDayFreight:
-                    return ServiceType.FEDEX_NEXT_DAY_FREIGHT;
-            }
-
-            throw new InvalidOperationException("Invalid FedEx ServiceType " + serviceType);
+            return (ServiceType) EnumHelper.GetApiValue<ServiceType>(serviceType);
         }
 
         /// <summary>
@@ -226,8 +169,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>A WebAuthenticationDetail object for a shipping API request.</returns>
-        public static WebAuthenticationDetail CreateShippingWebAuthenticationDetail(FedExSettings settings)
+        public static WebAuthenticationDetail CreateShippingWebAuthenticationDetail(IFedExSettingsRepository settingsRepository)
         {
+            FedExSettings settings = new FedExSettings(settingsRepository); 
+
             return new WebAuthenticationDetail
             {
                 ParentCredential = new WebAuthenticationCredential
@@ -249,7 +194,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
+        public static ClientDetail CreateShippingClientDetail(IFedExAccountEntity account)
         {
             return new ClientDetail
             {
@@ -358,8 +303,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
         }
 
-
-
         /// <summary>
         /// Creates the package movement API web authentication detail.
         /// </summary>
@@ -388,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a close API request.</returns>
-        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account)
+        public static WebServices.Close.ClientDetail CreateCloseClientDetail(IFedExAccountEntity account)
         {
             return new WebServices.Close.ClientDetail
             {
@@ -402,7 +345,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="account">The account.</param>
         /// <returns>A ClientDetail object for a rate API request.</returns>
-        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account)
+        public static WebServices.Rate.ClientDetail CreateRateClientDetail(IFedExAccountEntity account)
         {
             if (account == null)
             {

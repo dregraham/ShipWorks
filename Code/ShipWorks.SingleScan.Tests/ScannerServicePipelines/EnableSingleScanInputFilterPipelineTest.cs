@@ -22,6 +22,7 @@ namespace ShipWorks.SingleScan.Tests.ScannerServicePipelines
             subject = new Subject<IShipWorksMessage>();
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             scannerService = mock.Override<ScannerService>();
+            scannerService.Setup(x => x.Dispose());
             mock.Provide<IObservable<IShipWorksMessage>>(subject);
         }
 

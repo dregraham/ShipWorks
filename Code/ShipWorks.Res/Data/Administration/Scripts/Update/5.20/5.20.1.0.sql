@@ -1,14 +1,21 @@
-﻿PRINT N'Altering [dbo].[WalmartOrderSearch]'
+﻿
+PRINT N'Altering TABLE [dbo].[UspsAccount]'
 GO
-ALTER TABLE [WalmartOrderSearch]
-ADD CustomerOrderID varchar(50) NOT NULL
-CONSTRAINT DF_CustomerOrderID DEFAULT ''
+ALTER TABLE [dbo].[UspsAccount]
+Add [AcceptedFCMILetterWarning] [bit] NOT NULL CONSTRAINT [DF_UspsAccount_AcceptedFCMILetterWarning] DEFAULT ((0))
 GO
-PRINT N'Dropping Constraint on [dbo].[WalmartOrderSearch]'
-ALTER TABLE [WalmartOrderSearch]
-DROP CONSTRAINT DF_CustomerOrderID
+PRINT N'Dropping constraints from [dbo].[UspsAccount]'
 GO
-PRINT N'Creating index [IX_WalmartOrderSearch_CustomerOrderID] on [dbo].[WalmartOrderSearch]'
+ALTER TABLE [dbo].[UspsAccount] DROP CONSTRAINT [DF_UspsAccount_AcceptedFCMILetterWarning]
 GO
-CREATE NONCLUSTERED INDEX [IX_WalmartOrderSearch_CustomerOrderID] ON [dbo].[WalmartOrderSearch] ([CustomerOrderID]) INCLUDE ([OrderID])
+
+
+PRINT N'Altering TABLE [dbo].[EndiciaAccount]'
+GO
+ALTER TABLE [dbo].EndiciaAccount
+Add [AcceptedFCMILetterWarning] [bit] NOT NULL CONSTRAINT [DF_EndiciaAccount_AcceptedFCMILetterWarning] DEFAULT ((0))
+GO
+PRINT N'Dropping constraints from [dbo].[EndiciaAccount]'
+GO
+ALTER TABLE [dbo].[EndiciaAccount] DROP CONSTRAINT [DF_EndiciaAccount_AcceptedFCMILetterWarning]
 GO

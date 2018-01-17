@@ -51,8 +51,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderMotionDownloader(StoreEntity store, IOrderMotionWebClient webClient, Func<Type, ILog> createLogger)
-            : base(store)
+        public OrderMotionDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
+            IOrderMotionWebClient webClient,
+            Func<Type, ILog> createLogger)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.webClient = webClient;
             log = createLogger(GetType());

@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<MagentoStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.Magento)

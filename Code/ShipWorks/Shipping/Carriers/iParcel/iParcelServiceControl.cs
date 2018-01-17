@@ -344,5 +344,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
 
             packageControl?.FlushChanges();
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

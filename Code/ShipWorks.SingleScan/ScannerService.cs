@@ -141,7 +141,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Dispose resources
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             subscriptions.Dispose();
             Disable();

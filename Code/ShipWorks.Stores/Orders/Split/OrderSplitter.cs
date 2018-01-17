@@ -16,6 +16,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split.Actions;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -29,7 +30,6 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
-        private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly IOrderSplitAudit splitOrderAudit;
         private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
         private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
@@ -37,12 +37,10 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams]
         public OrderSplitter(
             ISqlAdapterFactory sqlAdapterFactory,
             IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
-            IOrderChargeCalculator orderChargeCalculator,
             IOrderSplitAudit splitOrderAudit,
             IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
             )
@@ -50,7 +48,6 @@ namespace ShipWorks.Stores.Orders.Split
             this.orderSplitGateway = orderSplitGateway;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderDetailSplitters = orderDetailSplitters;
-            this.orderChargeCalculator = orderChargeCalculator;
             this.splitOrderAudit = splitOrderAudit;
             this.storeSpecificOrderSplitter = storeSpecificOrderSplitter;
         }
@@ -186,7 +183,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private async Task<bool> SaveOrder(OrderEntity order, ISqlAdapter sqlAdapter)
         {
-            order.OrderTotal = orderChargeCalculator.CalculateTotal(order);
+            order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
 

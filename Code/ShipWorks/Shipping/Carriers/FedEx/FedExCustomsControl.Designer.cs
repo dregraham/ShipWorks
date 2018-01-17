@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
-using ShipWorks.Core.Messaging;
+﻿using System.Windows.Forms;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -24,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 if (components != null)
                 {
-                    components.Dispose();    
+                    components.Dispose();
                 }
             }
             base.Dispose(disposing);
@@ -92,22 +90,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.numberOfPieces = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.unitPrice = new ShipWorks.UI.Controls.MoneyTextBox();
             this.labelUnitPrice = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).BeginInit();
             this.sectionContents.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).BeginInit();
             this.sectionGeneral.ContentPanel.SuspendLayout();
             this.groupSelectedContent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBroker)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBroker.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBroker)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBroker.ContentPanel)).BeginInit();
             this.sectionBroker.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCommercialInvoice)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCommercialInvoice.ContentPanel)).BeginInit();
             this.sectionCommercialInvoice.ContentPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionNafta)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionNafta.ContentPanel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionNafta)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionNafta.ContentPanel)).BeginInit();
             this.sectionNafta.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -167,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelBrokerAccountHeading.AutoSize = true;
             this.labelBrokerAccountHeading.BackColor = System.Drawing.Color.Transparent;
-            this.labelBrokerAccountHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBrokerAccountHeading.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelBrokerAccountHeading.Location = new System.Drawing.Point(27, 31);
             this.labelBrokerAccountHeading.Name = "labelBrokerAccountHeading";
             this.labelBrokerAccountHeading.Size = new System.Drawing.Size(53, 13);
@@ -205,16 +203,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // brokerControl
             // 
-            this.brokerControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Country) 
-            | ShipWorks.Data.Controls.PersonFields.Email) 
+            this.brokerControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) (((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Country)
+            | ShipWorks.Data.Controls.PersonFields.Email)
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.brokerControl.BackColor = System.Drawing.Color.White;
-            this.brokerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.brokerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.brokerControl.Location = new System.Drawing.Point(26, 69);
             this.brokerControl.Name = "brokerControl";
             this.brokerControl.Size = new System.Drawing.Size(337, 340);
@@ -222,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionBroker
             // 
-            this.sectionBroker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionBroker.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionBroker.Collapsed = true;
             // 
@@ -303,7 +301,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionCommercialInvoice
             // 
-            this.sectionCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionCommercialInvoice.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionCommercialInvoice.Collapsed = true;
             // 
@@ -400,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelIorAccount.AutoSize = true;
             this.labelIorAccount.BackColor = System.Drawing.Color.White;
-            this.labelIorAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelIorAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.labelIorAccount.Location = new System.Drawing.Point(57, 281);
             this.labelIorAccount.Name = "labelIorAccount";
             this.labelIorAccount.Size = new System.Drawing.Size(53, 13);
@@ -409,15 +407,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // iorPersonControl
             // 
-            this.iorPersonControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
-            | ShipWorks.Data.Controls.PersonFields.Street) 
-            | ShipWorks.Data.Controls.PersonFields.City) 
-            | ShipWorks.Data.Controls.PersonFields.State) 
-            | ShipWorks.Data.Controls.PersonFields.Postal) 
-            | ShipWorks.Data.Controls.PersonFields.Country) 
+            this.iorPersonControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields) ((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company)
+            | ShipWorks.Data.Controls.PersonFields.Street)
+            | ShipWorks.Data.Controls.PersonFields.City)
+            | ShipWorks.Data.Controls.PersonFields.State)
+            | ShipWorks.Data.Controls.PersonFields.Postal)
+            | ShipWorks.Data.Controls.PersonFields.Country)
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.iorPersonControl.BackColor = System.Drawing.Color.White;
-            this.iorPersonControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.iorPersonControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.iorPersonControl.Location = new System.Drawing.Point(54, 346);
             this.iorPersonControl.Name = "iorPersonControl";
             this.iorPersonControl.Size = new System.Drawing.Size(358, 308);
@@ -448,7 +446,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(24, 170);
+            this.label6.Location = new System.Drawing.Point(24, 196);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(86, 13);
             this.label6.TabIndex = 11;
@@ -617,7 +615,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionNafta
             // 
-            this.sectionNafta.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionNafta.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // sectionNafta.ContentPanel
@@ -703,7 +701,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // naftaPreference
             // 
-            this.naftaPreference.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.naftaPreference.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.naftaPreference.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.naftaPreference.FormattingEnabled = true;
@@ -715,7 +713,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // naftaProducerDetermination
             // 
-            this.naftaProducerDetermination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.naftaProducerDetermination.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.naftaProducerDetermination.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.naftaProducerDetermination.FormattingEnabled = true;
@@ -727,7 +725,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // naftaNetCostMethod
             // 
-            this.naftaNetCostMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.naftaNetCostMethod.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.naftaNetCostMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.naftaNetCostMethod.FormattingEnabled = true;
@@ -791,28 +789,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.SetChildIndex(this.sectionNafta, 0);
             this.Controls.SetChildIndex(this.sectionContents, 0);
             this.Controls.SetChildIndex(this.sectionGeneral, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents.ContentPanel)).EndInit();
             this.sectionContents.ContentPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.sectionContents)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionContents)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral.ContentPanel)).EndInit();
             this.sectionGeneral.ContentPanel.ResumeLayout(false);
             this.sectionGeneral.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionGeneral)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionGeneral)).EndInit();
             this.groupSelectedContent.ResumeLayout(false);
             this.groupSelectedContent.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBroker.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBroker.ContentPanel)).EndInit();
             this.sectionBroker.ContentPanel.ResumeLayout(false);
             this.sectionBroker.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionBroker)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionBroker)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCommercialInvoice.ContentPanel)).EndInit();
             this.sectionCommercialInvoice.ContentPanel.ResumeLayout(false);
             this.sectionCommercialInvoice.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionCommercialInvoice)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionNafta.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionCommercialInvoice)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionNafta.ContentPanel)).EndInit();
             this.sectionNafta.ContentPanel.ResumeLayout(false);
             this.sectionNafta.ContentPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionNafta)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionNafta)).EndInit();
             this.ResumeLayout(false);
 
         }

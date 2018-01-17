@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
         {
             return new RatesRetrievedMessage(this, hash,
                 GenericResult.FromSuccess(new RateGroup(Enumerable.Empty<RateResult>())),
-                mock.Create<ICarrierShipmentAdapter>());
+                mock.Build<ICarrierShipmentAdapter>());
         }
 
         public void Dispose()

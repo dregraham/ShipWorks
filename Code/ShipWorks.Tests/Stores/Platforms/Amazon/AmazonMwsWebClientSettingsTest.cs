@@ -3,6 +3,7 @@ using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using System;
 using Xunit;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
@@ -14,11 +15,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("UK");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("https://mws.amazonservices.co.uk", testObject.Endpoint);
             }
@@ -29,11 +28,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("US");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("https://mws.amazonservices.com", testObject.Endpoint);
             }
@@ -44,11 +41,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("MX");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("https://mws.amazonservices.com.mx", testObject.Endpoint);
             }
@@ -60,11 +55,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("CA");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("https://mws.amazonservices.ca", testObject.Endpoint);
             }
@@ -75,11 +68,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("US");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("FMrhIncQWseTBwglDs00lVdXyPVgObvu", testObject.InterapptiveAccessKeyID);
             }
@@ -90,9 +81,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("6bFMt0mymaWE0aWiaWT3SGs9LjvI//db", testObject.InterapptiveAccessKeyID);
             }
@@ -103,11 +92,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
                 mock.Mock<IAmazonCredentials>().Setup(c => c.Region).Returns("US");
 
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5", testObject.InterapptiveSecretKey);
             }
@@ -118,9 +105,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 Assert.Equal("JjHvzq+MGZuxJu9EkjDv0QGSNQC/FYFg4lSe5PP5HMHRinkOWJhMLPeRH2057Ohd", testObject.InterapptiveSecretKey);
             }
@@ -131,9 +116,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
 
                 Assert.Equal("/Orders/2013-09-01", testObject.GetApiEndpointPath(AmazonMwsApiCall.ListOrders));
@@ -145,9 +128,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
 
                 Assert.Equal("ListOrders", testObject.GetActionName(AmazonMwsApiCall.ListOrders));
@@ -159,9 +140,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
 
                 Assert.Equal("https://mws.amazonservices.com/Orders/2013-09-01", testObject.GetApiNamespace(AmazonMwsApiCall.ListOrders));
@@ -173,9 +152,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 foreach (AmazonMwsApiCall call in Enum.GetValues(typeof(AmazonMwsApiCall)))
                 {
@@ -189,9 +166,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (var mock = AutoMock.GetLoose())
             {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 foreach (AmazonMwsApiCall call in Enum.GetValues(typeof(AmazonMwsApiCall)))
                 {
@@ -204,10 +179,8 @@ namespace ShipWorks.Tests.Stores.Amazon
         public void GetApiVersion_ForEachAmazonMwsApiCall_DoesNotThrowException()
         {
             using (var mock = AutoMock.GetLoose())
-            {
-                IAmazonCredentials testCredentials = mock.Create<IAmazonCredentials>();
-                
-                AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testCredentials);
+            {                
+                AmazonMwsWebClientSettings testObject = mock.Create<AmazonMwsWebClientSettings>();
 
                 foreach (AmazonMwsApiCall call in Enum.GetValues(typeof(AmazonMwsApiCall)))
                 {
@@ -215,6 +188,5 @@ namespace ShipWorks.Tests.Stores.Amazon
                 }
             }
         }
-
     }
 }

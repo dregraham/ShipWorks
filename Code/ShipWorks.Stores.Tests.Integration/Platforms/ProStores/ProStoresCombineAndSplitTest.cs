@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ProStores
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<ProStoresStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.ProStores)

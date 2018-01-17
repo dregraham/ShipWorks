@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<EbayStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.Ebay)

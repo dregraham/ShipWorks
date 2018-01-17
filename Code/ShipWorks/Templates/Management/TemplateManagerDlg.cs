@@ -20,7 +20,6 @@ namespace ShipWorks.Templates.Management
     /// <summary>
     /// Window for managing templates
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class TemplateManagerDlg : Form
     {
         FolderExpansionState folderState;

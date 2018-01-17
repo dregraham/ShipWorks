@@ -85,8 +85,18 @@
   </Properties>
   <TypeShortcuts>
     <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExBatteryRegulatorySubType" Type="ShipWorks.Shipping.FedEx.FedExBatteryRegulatorySubType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightClassType" Type="ShipWorks.Shipping.FedEx.FedExFreightClassType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightCollectTermsType" Type="ShipWorks.Shipping.FedEx.FedExFreightCollectTermsType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightGuaranteeType" Type="ShipWorks.Shipping.FedEx.FedExFreightGuaranteeType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightPhysicalPackagingType" Type="ShipWorks.Shipping.FedEx.FedExFreightPhysicalPackagingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightShipmentRoleType" Type="ShipWorks.Shipping.FedEx.FedExFreightShipmentRoleType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="FedExFreightSpecialServicesType" Type="ShipWorks.Shipping.FedEx.FedExFreightSpecialServicesType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
@@ -330,6 +340,62 @@
           <Field Name="StoreCode" Type="int" FieldIndex="3" />
           <Field Name="StoreUrl" Type="string" MaxLength="350" FieldIndex="2" />
           <Field Name="Username" Type="string" MaxLength="70" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="AsendiaAccount" ObjectID="c52eca27-f251-4cc6-a3e0-96315ddd468a">
+        <Fields>
+          <Field Name="AccountNumber" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="AsendiaAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
+          <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="13" />
+          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
+          <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
+          <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
+          <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="AsendiaProfile" ObjectID="edeb8e73-3ab9-4612-a981-c5d945574738">
+        <Fields>
+          <Field Name="AsendiaAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
+          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="12" />
+          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="10" />
+          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="8" />
+          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="7" />
+          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="11" />
+          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="9" />
+          <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="5" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="3" />
+          <Field Name="Service" Type="AsendiaServiceType" IsOptional="true" FieldIndex="2" />
+          <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="AsendiaShipment" ObjectID="fbbc5278-1284-409b-ba77-c07c9b69fbb9">
+        <Fields>
+          <Field Name="AsendiaAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="4" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="11" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="10" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="8" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="7" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="12" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="9" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="13" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="14" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
+          <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
+          <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Audit" ObjectID="cd4aef4c-eca4-463a-ae1f-4fcf58e1f09a">
@@ -581,6 +647,81 @@
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="31" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="DhlExpressAccount" ObjectID="37d7aa88-e504-4c62-9bf1-890724dd2ec7">
+        <Fields>
+          <Field Name="AccountNumber" Type="long" FieldIndex="2" />
+          <Field Name="City" Type="string" MaxLength="25" FieldIndex="10" />
+          <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="CountryCode" Type="string" MaxLength="50" FieldIndex="13" />
+          <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
+          <Field Name="DhlExpressAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
+          <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
+          <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
+          <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
+          <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="DhlExpressPackage" ObjectID="9babcfbe-334c-4763-99fb-5a5bf36e78c3">
+        <Fields>
+          <Field Name="DhlExpressPackageID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="DimsAddWeight" Type="bool" FieldIndex="7" />
+          <Field Name="DimsHeight" Type="double" Precision="38" FieldIndex="6" />
+          <Field Name="DimsLength" Type="double" Precision="38" FieldIndex="4" />
+          <Field Name="DimsProfileID" Type="long" Precision="19" FieldIndex="3" />
+          <Field Name="DimsWeight" Type="double" Precision="38" FieldIndex="8" />
+          <Field Name="DimsWidth" Type="double" Precision="38" FieldIndex="5" />
+          <Field Name="Insurance" Type="bool" FieldIndex="10" />
+          <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="11" />
+          <Field Name="ShipmentID" Type="long" FieldIndex="1" />
+          <Field Name="TrackingNumber" Type="string" MaxLength="50" FieldIndex="9" />
+          <Field Name="Weight" Type="double" Precision="38" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="DhlExpressProfile" ObjectID="dcb08b8b-2494-4a85-908e-2da80b2a65f6">
+        <Fields>
+          <Field Name="Contents" Type="int" IsOptional="true" Precision="10" FieldIndex="6" />
+          <Field Name="DeliveryDutyPaid" Type="bool" IsOptional="true" FieldIndex="3" />
+          <Field Name="DhlExpressAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
+          <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="7" />
+          <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="4" />
+          <Field Name="SaturdayDelivery" Type="bool" IsOptional="true" FieldIndex="5" />
+          <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
+          <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="DhlExpressProfilePackage" ObjectID="ee79dd76-ab08-4681-b775-af3fa62fc45f">
+        <Fields>
+          <Field Name="DhlExpressProfilePackageID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="DimsAddWeight" Type="bool" IsOptional="true" FieldIndex="8" />
+          <Field Name="DimsHeight" Type="double" IsOptional="true" Precision="38" FieldIndex="6" />
+          <Field Name="DimsLength" Type="double" IsOptional="true" Precision="38" FieldIndex="4" />
+          <Field Name="DimsProfileID" Type="long" IsOptional="true" Precision="19" FieldIndex="3" />
+          <Field Name="DimsWeight" Type="double" IsOptional="true" Precision="38" FieldIndex="7" />
+          <Field Name="DimsWidth" Type="double" IsOptional="true" Precision="38" FieldIndex="5" />
+          <Field Name="ShippingProfileID" Type="long" FieldIndex="1" />
+          <Field Name="Weight" Type="double" IsOptional="true" Precision="38" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="DhlExpressShipment" ObjectID="75fabbb6-2e0f-4566-b510-e8b363732b79">
+        <Fields>
+          <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
+          <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
+          <Field Name="DhlExpressAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
+          <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
+          <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
+          <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
+          <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="9" />
+          <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="DimensionsProfile" ObjectID="049d2daa-2d00-456e-b841-05c6e40adfab">
         <Fields>
           <Field Name="DimensionsProfileID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
@@ -773,6 +914,7 @@
       </EntityDefinition>
       <EntityDefinition Name="EndiciaAccount" ObjectID="278f2225-8342-4a89-b00f-6bddc72c4e31">
         <Fields>
+          <Field Name="AcceptedFCMILetterWarning" Type="bool" FieldIndex="26" />
           <Field Name="AccountNumber" Type="string" IsOptional="true" MaxLength="50" FieldIndex="2" />
           <Field Name="AccountType" Type="int" FieldIndex="7" />
           <Field Name="ApiInitialPassword" Type="string" MaxLength="250" FieldIndex="5" />
@@ -904,6 +1046,9 @@
       <EntityDefinition Name="FedExPackage" ObjectID="8179c396-8aa8-4f34-8ba0-2cfd8eede45a">
         <Fields>
           <Field Name="AlcoholRecipientType" Type="int" Precision="10" FieldIndex="37" />
+          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" FieldIndex="42" />
+          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" FieldIndex="43" />
+          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" FieldIndex="44" />
           <Field Name="ContainerType" Type="string" MaxLength="100" FieldIndex="38" />
           <Field Name="ContainsAlcohol" Type="bool" FieldIndex="19" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" FieldIndex="22" />
@@ -922,6 +1067,8 @@
           <Field Name="DimsWidth" Type="double" FieldIndex="5" />
           <Field Name="DryIceWeight" Type="double" FieldIndex="18" />
           <Field Name="FedExPackageID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="FreightPackaging" Type="FedExFreightPhysicalPackagingType" FieldIndex="45" />
+          <Field Name="FreightPieces" Type="int" Precision="10" FieldIndex="46" />
           <Field Name="HazardousMaterialClass" Type="string" MaxLength="8" FieldIndex="28" />
           <Field Name="HazardousMaterialNumber" Type="string" MaxLength="16" FieldIndex="27" />
           <Field Name="HazardousMaterialPackingGroup" Type="int" FieldIndex="30" />
@@ -990,6 +1137,9 @@
       </EntityDefinition>
       <EntityDefinition Name="FedExProfilePackage" ObjectID="4fa66e16-e8ea-46e7-b3b1-51fc5047a885">
         <Fields>
+          <Field Name="BatteryMaterial" Type="FedExBatteryMaterialType" IsOptional="true" FieldIndex="34" />
+          <Field Name="BatteryPacking" Type="FedExBatteryPackingType" IsOptional="true" FieldIndex="35" />
+          <Field Name="BatteryRegulatorySubtype" Type="FedExBatteryRegulatorySubType" IsOptional="true" FieldIndex="36" />
           <Field Name="ContainerType" Type="string" IsOptional="true" MaxLength="100" FieldIndex="30" />
           <Field Name="ContainsAlcohol" Type="bool" IsOptional="true" FieldIndex="13" />
           <Field Name="DangerousGoodsAccessibilityType" Type="int" IsOptional="true" FieldIndex="16" />
@@ -1100,9 +1250,16 @@
           <Field Name="FedExHoldAtLocationEnabled" Type="bool" FieldIndex="110" />
           <Field Name="FimsAirWaybill" Type="string" IsOptional="true" MaxLength="50" FieldIndex="149" />
           <Field Name="FreightBookingNumber" Type="string" MaxLength="12" FieldIndex="25" />
+          <Field Name="FreightClass" Type="FedExFreightClassType" FieldIndex="159" />
+          <Field Name="FreightCollectTerms" Type="FedExFreightCollectTermsType" FieldIndex="157" />
+          <Field Name="FreightGuaranteeDate" Type="datetime" FieldIndex="162" />
+          <Field Name="FreightGuaranteeType" Type="FedExFreightGuaranteeType" FieldIndex="161" />
           <Field Name="FreightInsideDelivery" Type="bool" FieldIndex="24" />
           <Field Name="FreightInsidePickup" Type="bool" FieldIndex="23" />
           <Field Name="FreightLoadAndCount" Type="int" FieldIndex="26" />
+          <Field Name="FreightRole" Type="FedExFreightShipmentRoleType" FieldIndex="156" />
+          <Field Name="FreightSpecialServices" Type="int" FieldIndex="160" />
+          <Field Name="FreightTotalHandlinUnits" Type="int" Precision="10" FieldIndex="158" />
           <Field Name="HoldCity" Type="string" IsOptional="true" MaxLength="100" FieldIndex="125" />
           <Field Name="HoldCompanyName" Type="string" IsOptional="true" MaxLength="50" FieldIndex="116" />
           <Field Name="HoldContactId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="113" />
@@ -2421,6 +2578,7 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
+          <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
           <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="53" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
@@ -2941,6 +3099,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UspsAccount" ObjectID="942b6875-502d-46af-8aa9-59f014378ab9">
         <Fields>
+          <Field Name="AcceptedFCMILetterWarning" Type="bool" FieldIndex="25" />
           <Field Name="City" Type="string" MaxLength="50" FieldIndex="12" />
           <Field Name="Company" Type="string" MaxLength="30" FieldIndex="8" />
           <Field Name="ContractType" Type="int" FieldIndex="21" />
@@ -3314,6 +3473,16 @@
           <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="AsendiaProfile.ShippingProfile-ShippingProfile.Asendia" Start=":AsendiaProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="AsendiaShipment.Shipment-Shipment.Asendia" Start=":AsendiaShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="Asendia" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="Audit.Computer-Computer.Audit" Start=":Audit" End=":Computer" StartNavigator="Computer" EndNavigator="Audit" Type="4">
         <FieldRelationships>
           <FieldFieldRelationship FkField="ComputerID" PkField="ComputerID" />
@@ -3357,6 +3526,26 @@
       <NormalRelationship Name="CommerceInterfaceOrderSearch.CommerceInterfaceOrder-CommerceInterfaceOrder.CommerceInterfaceOrderSearch" Start=":CommerceInterfaceOrderSearch" End=":CommerceInterfaceOrder" StartNavigator="CommerceInterfaceOrder" EndNavigator="CommerceInterfaceOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="DhlExpressPackage.DhlExpressShipment-DhlExpressShipment.Packages" Start=":DhlExpressPackage" End=":DhlExpressShipment" StartNavigator="DhlExpressShipment" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="DhlExpressProfile.ShippingProfile-ShippingProfile.DhlExpress" Start=":DhlExpressProfile" End=":ShippingProfile" StartNavigator="ShippingProfile" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="DhlExpressProfilePackage.DhlExpressProfile-DhlExpressProfile.Packages" Start=":DhlExpressProfilePackage" End=":DhlExpressProfile" StartNavigator="DhlExpressProfile" EndNavigator="Packages" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShippingProfileID" PkField="ShippingProfileID" />
+        </FieldRelationships>
+      </NormalRelationship>
+      <NormalRelationship Name="DhlExpressShipment.Shipment-Shipment.DhlExpress" Start=":DhlExpressShipment" End=":Shipment" StartNavigator="Shipment" EndNavigator="DhlExpress" Type="1" StartIsOptional="true" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="ShipmentID" PkField="ShipmentID" />
         </FieldRelationships>
       </NormalRelationship>
       <NormalRelationship Name="Download.Computer-Computer." Start=":Download" End=":Computer" StartNavigator="Computer" Type="4">
@@ -4062,7 +4251,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2017-11-28T15:17:44.6734339Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-02T21:53:08.2078573Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4305,6 +4494,73 @@
                     <Field Name="StoreUrl" Ordinal="4" DbType="12" Length="350" />
                     <Field Name="StoreCode" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="StatusCodes" Ordinal="6" DbType="26" Length="2147483647" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaAccount">
+                  <PkConstraintName Name="PK_AsendiaAccount" />
+                  <Fields>
+                    <Field Name="AsendiaAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
+                    <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
+                    <Field Name="LastName" Ordinal="8" DbType="12" Length="30" />
+                    <Field Name="Company" Ordinal="9" DbType="12" Length="30" />
+                    <Field Name="Street1" Ordinal="10" DbType="12" Length="43" />
+                    <Field Name="City" Ordinal="11" DbType="12" Length="25" />
+                    <Field Name="StateProvCode" Ordinal="12" DbType="12" Length="50" />
+                    <Field Name="PostalCode" Ordinal="13" DbType="12" Length="10" />
+                    <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
+                    <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
+                    <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaProfile">
+                  <PkConstraintName Name="PK_AsendiaProfile" />
+                  <Fields>
+                    <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AsendiaAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonMachinable" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="Contents" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="6" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="Weight" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="8" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="9" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="10" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="11" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="12" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="13" IsOptional="true" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="AsendiaShipment">
+                  <PkConstraintName Name="PK_AsendiaShipment" />
+                  <Fields>
+                    <Field Name="ShipmentID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AsendiaAccountID" Ordinal="2" DbType="0" Precision="19">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="4" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="Service" Ordinal="3" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="130" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="NonMachinable" Ordinal="4" DbType="2" />
+                    <Field Name="RequestedLabelFormat" Ordinal="5" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="6" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="8" DbType="12" Length="12" />
+                    <Field Name="DimsProfileID" Ordinal="9" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="10" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="11" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="12" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="13" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="14" DbType="6" Precision="38" />
+                    <Field Name="InsuranceValue" Ordinal="15" DbType="9" Precision="19" Scale="4" />
                   </Fields>
                 </Table>
                 <Table Name="Audit">
@@ -4635,6 +4891,106 @@
                     <Field Name="RollupNoteCount" Ordinal="35" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
+                <Table Name="DhlExpressAccount">
+                  <PkConstraintName Name="PK_DhlExpressAccount" />
+                  <Fields>
+                    <Field Name="DhlExpressAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
+                    <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
+                    <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
+                    <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
+                    <Field Name="LastName" Ordinal="8" DbType="12" Length="30" />
+                    <Field Name="Company" Ordinal="9" DbType="12" Length="30" />
+                    <Field Name="Street1" Ordinal="10" DbType="12" Length="43" />
+                    <Field Name="City" Ordinal="11" DbType="12" Length="25" />
+                    <Field Name="StateProvCode" Ordinal="12" DbType="12" Length="50" />
+                    <Field Name="PostalCode" Ordinal="13" DbType="12" Length="10" />
+                    <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
+                    <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
+                    <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressPackage">
+                  <PkConstraintName Name="PK_DhlExpressPackage" />
+                  <Fields>
+                    <Field Name="DhlExpressPackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ShipmentID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="Weight" Ordinal="3" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="5" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="6" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="7" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="8" DbType="2" />
+                    <Field Name="DimsWeight" Ordinal="9" DbType="6" Precision="38" />
+                    <Field Name="Insurance" Ordinal="10" DbType="2" />
+                    <Field Name="InsuranceValue" Ordinal="11" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="TrackingNumber" Ordinal="12" DbType="24" Length="50" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressProfile">
+                  <PkConstraintName Name="PK_DhlExpressProfile" />
+                  <Fields>
+                    <Field Name="ShippingProfileID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="DhlExpressAccountID" Ordinal="2" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Service" Ordinal="3" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="DeliveryDutyPaid" Ordinal="4" IsOptional="true" DbType="2" />
+                    <Field Name="NonMachinable" Ordinal="5" IsOptional="true" DbType="2" />
+                    <Field Name="SaturdayDelivery" Ordinal="6" IsOptional="true" DbType="2" />
+                    <Field Name="Contents" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressProfilePackage">
+                  <PkConstraintName Name="PK_DhlExpressPackageProfile" />
+                  <Fields>
+                    <Field Name="DhlExpressProfilePackageID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="ShippingProfileID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="Weight" Ordinal="3" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsProfileID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="DimsLength" Ordinal="5" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWidth" Ordinal="6" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsHeight" Ordinal="7" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsWeight" Ordinal="8" IsOptional="true" DbType="6" Precision="38" />
+                    <Field Name="DimsAddWeight" Ordinal="9" IsOptional="true" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="DhlExpressShipment">
+                  <PkConstraintName Name="PK_DhlExpressShipment" />
+                  <Fields>
+                    <Field Name="ShipmentID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="DhlExpressAccountID" Ordinal="2" DbType="0" Precision="19">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="4" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="Service" Ordinal="3" DbType="8" Precision="10">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="130" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="DeliveredDutyPaid" Ordinal="4" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="1" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="NonMachinable" Ordinal="5" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="1" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="SaturdayDelivery" Ordinal="6" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditFormat" Value="1" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
+                    <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
+                    <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="12" />
+                  </Fields>
+                </Table>
                 <Table Name="DimensionsProfile">
                   <PkConstraintName Name="PK_PackagingProfile" />
                   <Fields>
@@ -4919,6 +5275,7 @@
                     <Field Name="Email" Ordinal="24" DbType="12" Length="100" />
                     <Field Name="MailingPostalCode" Ordinal="25" DbType="12" Length="20" />
                     <Field Name="ScanFormAddressSource" Ordinal="26" DbType="8" Precision="10" />
+                    <Field Name="AcceptedFCMILetterWarning" Ordinal="27" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaProfile">
@@ -5099,6 +5456,11 @@
                     <Field Name="NumberOfContainers" Ordinal="40" DbType="8" Precision="10" />
                     <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="41" DbType="2" />
                     <Field Name="PackingDetailsPackingInstructions" Ordinal="42" DbType="12" Length="50" />
+                    <Field Name="BatteryMaterial" Ordinal="43" DbType="8" Precision="10" />
+                    <Field Name="BatteryPacking" Ordinal="44" DbType="8" Precision="10" />
+                    <Field Name="BatteryRegulatorySubtype" Ordinal="45" DbType="8" Precision="10" />
+                    <Field Name="FreightPackaging" Ordinal="46" DbType="8" Precision="10" />
+                    <Field Name="FreightPieces" Ordinal="47" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfile">
@@ -5180,6 +5542,9 @@
                     <Field Name="NumberOfContainers" Ordinal="32" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="PackingDetailsCargoAircraftOnly" Ordinal="33" IsOptional="true" DbType="2" />
                     <Field Name="PackingDetailsPackingInstructions" Ordinal="34" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="BatteryMaterial" Ordinal="35" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryPacking" Ordinal="36" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="BatteryRegulatorySubtype" Ordinal="37" IsOptional="true" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="FedExShipment">
@@ -5894,6 +6259,13 @@
                     <Field Name="ThirdPartyConsignee" Ordinal="154" DbType="2" />
                     <Field Name="Currency" Ordinal="155" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="InternationalTrafficInArmsService" Ordinal="156" IsOptional="true" DbType="2" />
+                    <Field Name="FreightRole" Ordinal="157" DbType="8" Precision="10" />
+                    <Field Name="FreightCollectTerms" Ordinal="158" DbType="8" Precision="10" />
+                    <Field Name="FreightTotalHandlinUnits" Ordinal="159" DbType="8" Precision="10" />
+                    <Field Name="FreightClass" Ordinal="160" DbType="8" Precision="10" />
+                    <Field Name="FreightSpecialServices" Ordinal="161" DbType="8" Precision="10" />
+                    <Field Name="FreightGuaranteeType" Ordinal="162" DbType="8" Precision="10" />
+                    <Field Name="FreightGuaranteeDate" Ordinal="163" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="Filter">
@@ -7699,6 +8071,7 @@
                     <Field Name="ShipmentEditLimit" Ordinal="52" DbType="8" Precision="10" />
                     <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Ordinal="53" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                     <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
+                    <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -7830,7 +8203,7 @@
                     <Field Name="AutoDownloadMinutes" Ordinal="22" DbType="8" Precision="10" />
                     <Field Name="AutoDownloadOnlyAway" Ordinal="23" DbType="2" />
                     <Field Name="DomesticAddressValidationSetting" Ordinal="24" DbType="8" Precision="10" />
-                    <Field Name="InternationalAddressValidationSetting" Ordinal="25" HasDefaultValue="true" DefaultValue="(1)" DbType="8" Precision="10" />
+                    <Field Name="InternationalAddressValidationSetting" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="ComputerDownloadPolicy" Ordinal="26" DbType="12" Length="2147483647" />
                     <Field Name="DefaultEmailAccountID" Ordinal="27" DbType="0" Precision="19" />
                     <Field Name="ManualOrderPrefix" Ordinal="28" DbType="12" Length="10" />
@@ -8414,6 +8787,7 @@
                     <Field Name="CreatedDate" Ordinal="23" DbType="4" />
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
+                    <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -8880,6 +9254,16 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:AmeriCommerceStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AsendiaProfile:FK_AsendiaProfile_ShippingProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:AsendiaProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:AsendiaShipment:FK_AsendiaShipment_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:AsendiaShipment:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Audit:FK_Audit_Computer">
               <FieldPairs>
                 <FieldPair PkField="dbo:Computer:ComputerID" FkField="dbo:Audit:ComputerID" />
@@ -8968,6 +9352,26 @@
             <ForeignKeyConstraint Name="dbo:CommerceInterfaceOrderSearch:FK_CommerceInterfaceOrderSearch_CommerceInterfaceOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:CommerceInterfaceOrder:OrderID" FkField="dbo:CommerceInterfaceOrderSearch:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressPackage:FK_DhlExpressPackage_DhlExpressShipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:DhlExpressShipment:ShipmentID" FkField="dbo:DhlExpressPackage:ShipmentID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressProfile:FK_DhlExpressProfile_ShippingProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:ShippingProfile:ShippingProfileID" FkField="dbo:DhlExpressProfile:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressProfilePackage:FK_DhlExpressPackageProfile_DhlExpressProfile" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:DhlExpressProfile:ShippingProfileID" FkField="dbo:DhlExpressProfilePackage:ShippingProfileID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:DhlExpressShipment:FK_DhlExpressShipment_Shipment" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Shipment:ShipmentID" FkField="dbo:DhlExpressShipment:ShipmentID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Download:FK_Download_Computer">
@@ -10017,6 +10421,62 @@
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":AsendiaAccount" TargetName="ShipWorksLocal:dbo:AsendiaAccount">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="City" TargetFieldName="City" />
+            <FieldMapping FieldName="Company" TargetFieldName="Company" />
+            <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="Email" TargetFieldName="Email" />
+            <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
+            <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
+            <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
+            <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
+            <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AsendiaProfile" TargetName="ShipWorksLocal:dbo:AsendiaProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":AsendiaShipment" TargetName="ShipWorksLocal:dbo:AsendiaShipment">
+          <FieldMappings>
+            <FieldMapping FieldName="AsendiaAccountID" TargetFieldName="AsendiaAccountID" />
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":Audit" TargetName="ShipWorksLocal:dbo:Audit">
           <FieldMappings>
             <FieldMapping FieldName="Action" TargetFieldName="Action" />
@@ -10270,6 +10730,81 @@
             <FieldMapping FieldName="ShipWebsite" TargetFieldName="ShipWebsite" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressAccount" TargetName="ShipWorksLocal:dbo:DhlExpressAccount">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
+            <FieldMapping FieldName="City" TargetFieldName="City" />
+            <FieldMapping FieldName="Company" TargetFieldName="Company" />
+            <FieldMapping FieldName="CountryCode" TargetFieldName="CountryCode" />
+            <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="Email" TargetFieldName="Email" />
+            <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
+            <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
+            <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
+            <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
+            <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
+            <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
+            <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressPackage" TargetName="ShipWorksLocal:dbo:DhlExpressPackage">
+          <FieldMappings>
+            <FieldMapping FieldName="DhlExpressPackageID" TargetFieldName="DhlExpressPackageID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
+            <FieldMapping FieldName="InsuranceValue" TargetFieldName="InsuranceValue" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressProfile" TargetName="ShipWorksLocal:dbo:DhlExpressProfile">
+          <FieldMappings>
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DeliveryDutyPaid" TargetFieldName="DeliveryDutyPaid" />
+            <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressProfilePackage" TargetName="ShipWorksLocal:dbo:DhlExpressProfilePackage">
+          <FieldMappings>
+            <FieldMapping FieldName="DhlExpressProfilePackageID" TargetFieldName="DhlExpressProfilePackageID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="DimsAddWeight" TargetFieldName="DimsAddWeight" />
+            <FieldMapping FieldName="DimsHeight" TargetFieldName="DimsHeight" />
+            <FieldMapping FieldName="DimsLength" TargetFieldName="DimsLength" />
+            <FieldMapping FieldName="DimsProfileID" TargetFieldName="DimsProfileID" />
+            <FieldMapping FieldName="DimsWeight" TargetFieldName="DimsWeight" />
+            <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
+            <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
+            <FieldMapping FieldName="Weight" TargetFieldName="Weight" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":DhlExpressShipment" TargetName="ShipWorksLocal:dbo:DhlExpressShipment">
+          <FieldMappings>
+            <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
+            <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
+            <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
+            <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
+            <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
+            <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
+            <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
+            <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
+            <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":DimensionsProfile" TargetName="ShipWorksLocal:dbo:DimensionsProfile">
           <FieldMappings>
             <FieldMapping FieldName="DimensionsProfileID" TargetFieldName="DimensionsProfileID" SequenceToUse="SCOPE_IDENTITY()" />
@@ -10465,6 +11000,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":EndiciaAccount" TargetName="ShipWorksLocal:dbo:EndiciaAccount">
           <FieldMappings>
+            <FieldMapping FieldName="AcceptedFCMILetterWarning" TargetFieldName="AcceptedFCMILetterWarning" />
             <FieldMapping FieldName="AccountNumber" TargetFieldName="AccountNumber" />
             <FieldMapping FieldName="AccountType" TargetFieldName="AccountType" />
             <FieldMapping FieldName="ApiInitialPassword" TargetFieldName="ApiInitialPassword" />
@@ -10599,6 +11135,9 @@
         <EntityMapping EntityName=":FedExPackage" TargetName="ShipWorksLocal:dbo:FedExPackage">
           <FieldMappings>
             <FieldMapping FieldName="AlcoholRecipientType" TargetFieldName="AlcoholRecipientType" />
+            <FieldMapping FieldName="BatteryMaterial" TargetFieldName="BatteryMaterial" />
+            <FieldMapping FieldName="BatteryPacking" TargetFieldName="BatteryPacking" />
+            <FieldMapping FieldName="BatteryRegulatorySubtype" TargetFieldName="BatteryRegulatorySubtype" />
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
@@ -10617,6 +11156,8 @@
             <FieldMapping FieldName="DimsWidth" TargetFieldName="DimsWidth" />
             <FieldMapping FieldName="DryIceWeight" TargetFieldName="DryIceWeight" />
             <FieldMapping FieldName="FedExPackageID" TargetFieldName="FedExPackageID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="FreightPackaging" TargetFieldName="FreightPackaging" />
+            <FieldMapping FieldName="FreightPieces" TargetFieldName="FreightPieces" />
             <FieldMapping FieldName="HazardousMaterialClass" TargetFieldName="HazardousMaterialClass" />
             <FieldMapping FieldName="HazardousMaterialNumber" TargetFieldName="HazardousMaterialNumber" />
             <FieldMapping FieldName="HazardousMaterialPackingGroup" TargetFieldName="HazardousMaterialPackingGroup" />
@@ -10685,6 +11226,9 @@
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfilePackage" TargetName="ShipWorksLocal:dbo:FedExProfilePackage">
           <FieldMappings>
+            <FieldMapping FieldName="BatteryMaterial" TargetFieldName="BatteryMaterial" />
+            <FieldMapping FieldName="BatteryPacking" TargetFieldName="BatteryPacking" />
+            <FieldMapping FieldName="BatteryRegulatorySubtype" TargetFieldName="BatteryRegulatorySubtype" />
             <FieldMapping FieldName="ContainerType" TargetFieldName="ContainerType" />
             <FieldMapping FieldName="ContainsAlcohol" TargetFieldName="ContainsAlcohol" />
             <FieldMapping FieldName="DangerousGoodsAccessibilityType" TargetFieldName="DangerousGoodsAccessibilityType" />
@@ -10795,9 +11339,16 @@
             <FieldMapping FieldName="FedExHoldAtLocationEnabled" TargetFieldName="FedExHoldAtLocationEnabled" />
             <FieldMapping FieldName="FimsAirWaybill" TargetFieldName="FimsAirWaybill" />
             <FieldMapping FieldName="FreightBookingNumber" TargetFieldName="FreightBookingNumber" />
+            <FieldMapping FieldName="FreightClass" TargetFieldName="FreightClass" />
+            <FieldMapping FieldName="FreightCollectTerms" TargetFieldName="FreightCollectTerms" />
+            <FieldMapping FieldName="FreightGuaranteeDate" TargetFieldName="FreightGuaranteeDate" />
+            <FieldMapping FieldName="FreightGuaranteeType" TargetFieldName="FreightGuaranteeType" />
             <FieldMapping FieldName="FreightInsideDelivery" TargetFieldName="FreightInsideDelivery" />
             <FieldMapping FieldName="FreightInsidePickup" TargetFieldName="FreightInsidePickup" />
             <FieldMapping FieldName="FreightLoadAndCount" TargetFieldName="FreightLoadAndCount" />
+            <FieldMapping FieldName="FreightRole" TargetFieldName="FreightRole" />
+            <FieldMapping FieldName="FreightSpecialServices" TargetFieldName="FreightSpecialServices" />
+            <FieldMapping FieldName="FreightTotalHandlinUnits" TargetFieldName="FreightTotalHandlinUnits" />
             <FieldMapping FieldName="HoldCity" TargetFieldName="HoldCity" />
             <FieldMapping FieldName="HoldCompanyName" TargetFieldName="HoldCompanyName" />
             <FieldMapping FieldName="HoldContactId" TargetFieldName="HoldContactId" />
@@ -12144,6 +12695,7 @@
             <FieldMapping FieldName="IParcelInsuranceProvider" TargetFieldName="iParcelInsuranceProvider" />
             <FieldMapping FieldName="OnTracInsurancePennyOne" TargetFieldName="OnTracInsurancePennyOne" />
             <FieldMapping FieldName="OnTracInsuranceProvider" TargetFieldName="OnTracInsuranceProvider" />
+            <FieldMapping FieldName="ShipEngineApiKey" TargetFieldName="ShipEngineApiKey" />
             <FieldMapping FieldName="ShipmentDateCutoffJson" TargetFieldName="ShipmentDateCutoffJson" />
             <FieldMapping FieldName="ShipmentEditLimit" TargetFieldName="ShipmentEditLimit" />
             <FieldMapping FieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" TargetFieldName="ShipmentsLoaderEnsureFiltersLoadedTimeout" />
@@ -12672,6 +13224,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UspsAccount" TargetName="ShipWorksLocal:dbo:UspsAccount">
           <FieldMappings>
+            <FieldMapping FieldName="AcceptedFCMILetterWarning" TargetFieldName="AcceptedFCMILetterWarning" />
             <FieldMapping FieldName="City" TargetFieldName="City" />
             <FieldMapping FieldName="Company" TargetFieldName="Company" />
             <FieldMapping FieldName="ContractType" TargetFieldName="ContractType" />

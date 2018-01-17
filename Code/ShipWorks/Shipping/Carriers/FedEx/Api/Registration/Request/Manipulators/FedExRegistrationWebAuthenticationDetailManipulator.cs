@@ -6,34 +6,28 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
+    /// <summary>
+    /// FedEx web auth detail manipulator
+    /// </summary>
     public class FedExRegistrationWebAuthenticationDetailManipulator : ICarrierRequestManipulator
     {
         private readonly FedExSettings fedExSettings;
         private Type requestType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRegistrationWebAuthenticationDetailManipulator" /> class using 
-        /// a FedExSettings backed by the FedExSettingsRepository.
+        /// Initializes a new instance of the <see cref="FedExRegistrationWebAuthenticationDetailManipulator" /> class.
         /// </summary>
         public FedExRegistrationWebAuthenticationDetailManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRegistrationWebAuthenticationDetailManipulator"/> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExRegistrationWebAuthenticationDetailManipulator(ICarrierSettingsRepository settingsRepository)
-            : this(new FedExSettings(settingsRepository))
-        { }
+        {
+            fedExSettings = new FedExSettings(new FedExSettingsRepository());
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRegistrationWebAuthenticationDetailManipulator" /> class.
         /// </summary>
-        /// <param name="fedExSettings">The FedEx settings.</param>
-        public FedExRegistrationWebAuthenticationDetailManipulator(FedExSettings fedExSettings)
+        public FedExRegistrationWebAuthenticationDetailManipulator(IFedExSettingsRepository settingsRepository)
         {
-            this.fedExSettings = fedExSettings;
+            fedExSettings = new FedExSettings(settingsRepository);
         }
 
         /// <summary>

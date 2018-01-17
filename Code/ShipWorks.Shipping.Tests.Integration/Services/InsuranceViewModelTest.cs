@@ -575,40 +575,37 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Theory]
-        [InlineData(50, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $1.80)", usCountryCode)]
-        [InlineData(100.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $2.30)", usCountryCode)]
-        [InlineData(101.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $2.85)", usCountryCode)]
-        [InlineData(201.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $4.75)", usCountryCode)]
-        [InlineData(301.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $5.80)", usCountryCode)]
-        [InlineData(401.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $6.85)", usCountryCode)]
-        [InlineData(501.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $7.90)", usCountryCode)]
-        [InlineData(1001.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $13.15)", usCountryCode)]
-        [InlineData(5001.00, providerShipWorks, insuredYes, linkVisibleNo, costVisibleNo, infoTipVisibleYes, null, usCountryCode)]
-
-        [InlineData(50.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $2.30)", caCountryCode)]
-        [InlineData(100.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $4.60)", caCountryCode)]
-        [InlineData(101.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $6.90)", caCountryCode)]
-        [InlineData(201.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $11.50)", caCountryCode)]
-        [InlineData(301.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $16.10)", caCountryCode)]
-        [InlineData(401.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $20.70)", caCountryCode)]
-        [InlineData(501.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $25.30)", caCountryCode)]
-        [InlineData(1001.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Compare to $48.30)", caCountryCode)]
-        [InlineData(5001.00, providerShipWorks, insuredYes, linkVisibleNo, costVisibleNo, infoTipVisibleYes, null, caCountryCode)]
-        public void None_ValuesMatch_Test(decimal insuredValue, InsuranceProvider insuranceProvider, bool insured,
-            Visibility expectedLinkVisibility, Visibility expectedCostVisibility, Visibility expectedInfoTipVisibility,
-            string expectedLinkDisplayText, string shipCountryCode)
+        [InlineData(50, usCountryCode)]
+        [InlineData(100.00, usCountryCode)]
+        [InlineData(101.00, usCountryCode)]
+        [InlineData(201.00, usCountryCode)]
+        [InlineData(301.00, usCountryCode)]
+        [InlineData(401.00, usCountryCode)]
+        [InlineData(501.00, usCountryCode)]
+        [InlineData(1001.00, usCountryCode)]
+        [InlineData(5001.00, usCountryCode)]
+        [InlineData(50.00, caCountryCode)]
+        [InlineData(100.00, caCountryCode)]
+        [InlineData(101.00, caCountryCode)]
+        [InlineData(201.00, caCountryCode)]
+        [InlineData(301.00, caCountryCode)]
+        [InlineData(401.00, caCountryCode)]
+        [InlineData(501.00, caCountryCode)]
+        [InlineData(1001.00, caCountryCode)]
+        [InlineData(5001.00, caCountryCode)]
+        public void None_ValuesMatch_Test(decimal insuredValue, string shipCountryCode)
         {
             shipment = Create.Shipment(order)
                 .AsPostal()
                 .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None)
                 .Save();
 
-            None_ValuesMatch(insuredValue, insuranceProvider, insured, shipCountryCode);
+            None_ValuesMatch(insuredValue, providerShipWorks, insuredYes, shipCountryCode);
         }
 
 
         [Theory]
-        [InlineData(50, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
+        [InlineData(50,     providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(100.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(101.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]
         [InlineData(201.00, providerShipWorks, insuredYes, linkVisibleYes, costVisibleYes, infoTipVisibleNo, "(Learn more)", noToolTipText, usCountryCode)]

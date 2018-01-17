@@ -33,7 +33,6 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Wizard for adding a new order to ShipWorks
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class AddOrderWizard : WizardForm
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AddOrderWizard));

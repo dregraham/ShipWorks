@@ -172,7 +172,8 @@ namespace ShipWorks.Shipping.Insurance
                 // Restriction since tango isn't setup to handle it yet
                 if (insuranceChoices.Count(choice => choice.InsuranceValue > 0) > 1)
                 {
-                    throw new ShippingException("The current release of ShipWorks does not support insuring multi-package shipments with ShipWorks insurance.");
+                    throw new ShippingException("Multi-package shipments cannot be insured using ShipWorks. " +
+                   "To insure multiple packages, create a shipment for each package.");
                 }
 
                 if (insuranceChoices.Any(choice => choice.InsuranceValue > 5000))
@@ -243,7 +244,7 @@ namespace ShipWorks.Shipping.Insurance
                 log.WarnFormat("Couldn't check excluded country", ex);
             }
 
-            // Make sure there arent new rates we don't know about
+            // Make sure there aren't new rates we don't know about
             if (shipWorksRateCalculateVersion == shipWorksRateActualVersion)
             {
                 FillInShipWorksCost(cost, shipment, declaredValue);
@@ -304,7 +305,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.OnTrac:
                 case ShipmentTypeCode.iParcel:
                     {
-                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipemnt will have the same pennyone setting
+                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipment will have the same pennyone setting
                         bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
 
                         if (!pennyOne)
@@ -516,7 +517,7 @@ namespace ShipWorks.Shipping.Insurance
             }
 
             // Get how many increments of $100
-            // This one is different from the other caclulations because the $100 increments
+            // This one is different from the other calculations because the $100 increments
             // start at $101 instead of $100
             int quantity = (int) Math.Floor((declaredValue - 101) / 100m) + 1;
 

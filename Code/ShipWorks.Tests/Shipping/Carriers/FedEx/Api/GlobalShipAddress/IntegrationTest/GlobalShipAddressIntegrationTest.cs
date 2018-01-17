@@ -1,13 +1,10 @@
 using System.Linq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
+using ShipWorks.Tests.Shared.Carriers.FedEx;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.IntegrationTest
@@ -23,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
             ShipmentEntity shipment = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             shipment.FedEx.Service = (int) FedExServiceType.FedExGround;
 
-            Mock<ICarrierSettingsRepository> MockSettingsRepository = new Mock<ICarrierSettingsRepository>();
+            Mock<IFedExSettingsRepository> MockSettingsRepository = new Mock<IFedExSettingsRepository>();
             MockSettingsRepository.Setup(x => x.GetShippingSettings())
                                   .Returns(new ShippingSettingsEntity()
                                   {
@@ -36,23 +33,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
             MockSettingsRepository.Setup(x => x.GetAccount(It.IsAny<ShipmentEntity>()))
                                   .Returns(account);
 
-            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(new FedExServiceGateway(MockSettingsRepository.Object),
-                new FedExOpenShipGateway(MockSettingsRepository.Object),
+            //TODO: See if we can use Autofac for this
+            FedExRequestFactory fedExRequestFactory = new FedExRequestFactory(
+                new FedExServiceGatewayFactory(
+                    _ => new FedExServiceGateway(MockSettingsRepository.Object),
+                    _ => new FedExOpenShipGateway(MockSettingsRepository.Object)),
                 MockSettingsRepository.Object,
                 new FedExShipmentTokenProcessor(),
-                new FedExResponseFactory(new FedExLabelRepository()));
-            CarrierRequest searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest(shipment, account);
-
-            ICarrierResponse carrierResponse = searchLocationsRequest.Submit();
-
-            FedExGlobalShipAddressResponse fedExGlobalShipAddressResponse = carrierResponse as FedExGlobalShipAddressResponse;
+                new FedExResponseFactory(),
+                null);
+            var searchLocationsRequest = fedExRequestFactory.CreateSearchLocationsRequest();
+            var carrierResponse = searchLocationsRequest.Submit(shipment);
 
             Assert.NotNull(carrierResponse);
-            carrierResponse.Process();
+            var result = carrierResponse.Value.Process();
 
-            Assert.NotNull(fedExGlobalShipAddressResponse);
-
-            Assert.Equal(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count());
+            Assert.Equal(1, result.Value.Count());
         }
     }
 }

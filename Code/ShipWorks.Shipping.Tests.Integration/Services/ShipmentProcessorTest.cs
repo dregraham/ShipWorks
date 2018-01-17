@@ -38,14 +38,13 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Services
@@ -54,32 +53,27 @@ namespace ShipWorks.Shipping.Tests.Services
     [Trait("Category", "ContinuousIntegration")]
     public class ShipmentProcessorTest : IDisposable
     {
-        private ShipmentProcessor testObject;
+        private IShipmentProcessor testObject;
         private readonly DataContext context;
         private ShipmentEntity shipment;
         private Mock<IUspsWebServiceFactory> webServiceFactory;
+        private Mock<IMessageHelper> messageHelper;
+        private Mock<IMessenger> messenger;
+        private Mock<IDateTimeProvider> dateTimeProvider;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock =>
+            context = db.CreateDataContext((mock, builder) =>
                 {
-                    webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
-                    mock.Provide(webServiceFactory.Object);
-                    mock.Override<IActionDispatcher>();
+                    webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
+                    messageHelper = builder.RegisterMock<IMessageHelper>(mock);
+                    messenger = builder.RegisterMock<IMessenger>(mock);
+                    dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
+                    builder.RegisterMock<IActionDispatcher>(mock);
+                    builder.RegisterMock<ITangoWebClient>(mock);
                 });
 
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
-                item.Setup(x => x.Validate(It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess()));
-
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentManipulator>(item =>
-                item.Setup(x => x.Manipulate(It.IsAny<ShipmentEntity>())).Returns((ShipmentEntity s) => s));
-
-            context.Mock.Provide(new Control());
-            context.Mock.Provide<Func<Control>>(() => new Control());
-            context.Mock.Override<ITangoWebClient>();
-            context.Mock.Override<IMessageHelper>();
-            context.Mock.Override<IMessenger>();
+            dateTimeProvider.Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -100,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ReturnsErrorResult_WhenShipmentCannotBeProcessed()
         {
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             var result = await ProcessShipment();
 
@@ -112,23 +106,22 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_DisplaysMessage_WhenShipmentCannotBeProcessed()
         {
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
-            context.Mock.Mock<IMessageHelper>()
-                .Verify(x => x.ShowError(It.IsAny<string>()));
+            messageHelper.Verify(x => x.ShowError(It.IsAny<string>()));
         }
 
         [Fact]
         public async Task Process_DisplaysMoreErrorsMessage_WhenMoreThanThreeShipmentsCannotBeProcessed()
         {
             string errorMessage = string.Empty;
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Setup(x => x.ShowError(It.IsAny<string>()))
                 .Callback((string x) => errorMessage = x);
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             var shippingManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>();
             await ProcessShipments(Enumerable.Repeat(shipment, 4).Select(shippingManager.CreateShipmentCopy));
@@ -149,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Set(x => x.Service, "Bar")
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             var result = await ProcessShipment();
 
@@ -161,15 +154,12 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_MarksShipmentCopyAsProcessed_WhenShipmentIsProcessed()
         {
-            context.Mock.Override<IDateTimeProvider>()
-                .Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
-
             Modify.Entity(shipment.Other)
                 .Set(x => x.Carrier, "Foo")
                 .Set(x => x.Service, "Bar")
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             var result = await ProcessShipment();
 
@@ -182,15 +172,12 @@ namespace ShipWorks.Shipping.Tests.Services
         [Fact]
         public async Task Process_ShipmentIsSaved_WhenShipmentIsProcessed()
         {
-            context.Mock.Override<IDateTimeProvider>()
-                .Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
-
             Modify.Entity(shipment.Other)
                 .Set(x => x.Carrier, "Foo")
                 .Set(x => x.Service, "Bar")
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
@@ -214,7 +201,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Set(x => x.Service, "Bar")
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
@@ -229,29 +216,28 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Set(x => x.Service, "Bar")
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
-            context.Mock.Mock<IMessenger>().
-                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
+            messenger.Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
         }
 
         [Fact]
         public async Task Process_SendsShipmentsProcessedMessage_WhenShipmentIsNotProcessed()
         {
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
-            var result = await testObject.Process(new[] { shipment },
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+            await testObject.Process(new[] { shipment },
+                context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
-            context.Mock.Mock<IMessenger>().
-                Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
+            messenger.Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
         }
 
+        [Theory]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]
@@ -267,31 +253,42 @@ namespace ShipWorks.Shipping.Tests.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(shipmentType, shipment);
 
             Func<IForm> dialogCreator = null;
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
                 .Callback((Func<IForm> x) => dialogCreator = x);
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
-            Assert.IsType(expectedWizardType, dialogCreator?.Invoke());
+            var dialog = dialogCreator?.Invoke() as IShipmentTypeSetupWizard;
+            Assert.IsType(expectedWizardType, dialog.GetUnwrappedWizard());
         }
 
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
-            });
 
-            string errorMessage = string.Empty;
-            context.Mock.Mock<IMessageHelper>()
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+            });
 
             webServiceFactory
                 .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -304,34 +301,44 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.Postal.Usps.UspsAccountID = account.AccountId;
             shipment.TotalWeight = 3;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
-
-            Assert.Contains("There was an error", errorMessage);
+            
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV24(),
+                        Rate = new RateV25(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
-            });
 
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
+            });
+            
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
-
-            string errorMessage = string.Empty;
-            context.Mock.Mock<IMessageHelper>()
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
 
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
@@ -340,17 +347,17 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.Postal.Usps.UspsAccountID = account.AccountId;
             shipment.TotalWeight = 3;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
-            Assert.Contains("Parameter is not valid", errorMessage);
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("Parameter is not valid"))));
         }
 
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenServerReturns500()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");
@@ -358,15 +365,25 @@ namespace ShipWorks.Shipping.Tests.Services
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
-
-            string errorMessage = string.Empty;
-            context.Mock.Mock<IMessageHelper>()
-                .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
 
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
@@ -375,11 +392,11 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.Postal.Usps.UspsAccountID = account.AccountId;
             shipment.TotalWeight = 3;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             await ProcessShipment();
 
-            Assert.Contains("There was an error", errorMessage);
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
         /// <summary>
@@ -397,7 +414,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
                 using (SqlEntityLock processLock = new SqlEntityLock(con, shipment.ShipmentID, "Process Shipment"))
                 {
-                    testObject = context.Mock.Create<ShipmentProcessor>();
+                    testObject = context.Container.Resolve<IShipmentProcessor>();
 
                     IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
@@ -428,7 +445,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .AsUpsWorldShip(s => s.WithPackage())
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             shipment.Ups.Packages[0].DimsWidth = 6;
             shipment.Ups.Packages[0].DimsLength = 6;
@@ -450,6 +467,7 @@ namespace ShipWorks.Shipping.Tests.Services
                     cmd.CommandText = $"select count(*) from WorldShipShipment where ShipmentID = {shipment.ShipmentID}";
 
                     int count = int.Parse(cmd.ExecuteScalar().ToString());
+                    Assert.Equal(1, count);
                     Assert.True(1 == count, "ProcessShipment failed to save the correct number of rows to WorldShipShipment.");
                 }
 
@@ -495,7 +513,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .AsUpsWorldShip(s => s.WithPackage())
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             shipment.Ups.Packages[0].DimsWidth = 6;
             shipment.Ups.Packages[0].DimsLength = 6;
@@ -544,7 +562,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .AsUpsWorldShip(s => s.WithPackage())
                 .Save();
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
@@ -552,7 +570,7 @@ namespace ShipWorks.Shipping.Tests.Services
             Assert.True(results.All(r => r.Error.Message.Contains("has invalid dimensions", StringComparison.InvariantCultureIgnoreCase)),
                 "ProcessShipment succeeded even though it was missing dimensions.");
 
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
@@ -583,13 +601,13 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.Ups.Packages[0].DimsAddWeight = true;
             shipment.Ups.Packages[0].DimsWeight = int.MaxValue;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
             Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have.");
 
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
@@ -625,13 +643,13 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.BilledWeight = 0;
             shipment.ContentWeight = 0;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
             Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have due to missing weight.");
 
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
@@ -667,13 +685,13 @@ namespace ShipWorks.Shipping.Tests.Services
             shipment.BilledWeight = int.MaxValue;
             shipment.ContentWeight = int.MaxValue;
 
-            testObject = context.Mock.Create<ShipmentProcessor>();
+            testObject = context.Container.Resolve<IShipmentProcessor>();
 
             IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
 
             Assert.True(results.All(r => !r.IsSuccessful), "ProcessShipment succeeded, but shouldn't have due to invalid weight.");
 
-            context.Mock.Mock<IMessageHelper>()
+            messageHelper
                 .Verify(x => x.ShowError(It.IsAny<string>()), "ShowError was not called.");
         }
 
@@ -682,7 +700,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
         private Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipments) =>
             testObject.Process(shipments,
-                context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+                context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
         public void Dispose()

@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public AmazonShipmentRequestDetailsFactoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-            order = mock.Create<IAmazonOrder>();
+            order = mock.Build<IAmazonOrder>();
             amazonShipmentRequestDetailsFactory = mock.Create<AmazonShipmentRequestDetailsFactory>();
         }
 

@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
@@ -38,8 +37,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Constructor
         /// </summary>
         /// <param name="store"></param>
-        public ChannelAdvisorDownloader(StoreEntity store)
-            : base(store)
+        public ChannelAdvisorDownloader(StoreEntity store, IStoreTypeManager storeTypeManager)
+            : base(store, storeTypeManager.GetType(store))
         {
             XDocument attributesToDownload = XDocument.Parse(ChannelAdvisorStore.AttributesToDownload);
 

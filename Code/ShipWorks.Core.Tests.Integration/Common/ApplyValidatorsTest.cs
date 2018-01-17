@@ -25,11 +25,11 @@ namespace ShipWorks.Core.Tests.Integration.Common
             first = mock.CreateMock<ITestValidator>();
             second = mock.CreateMock<ITestValidator>();
 
-            var builder = new ContainerBuilder();
-            builder.RegisterInstance(first.Object).AsImplementedInterfaces();
-            builder.RegisterInstance(second.Object).AsImplementedInterfaces();
-
-            container = ContainerInitializer.BuildRegistrations(builder.Build());
+            container = ContainerInitializer.Build(builder =>
+            {
+                builder.RegisterInstance(first.Object).AsImplementedInterfaces();
+                builder.RegisterInstance(second.Object).AsImplementedInterfaces();
+            });
         }
 
         [Fact]
@@ -100,7 +100,7 @@ namespace ShipWorks.Core.Tests.Integration.Common
         [Fact]
         public void Apply_ThrowsInvalidOperationException_WhenNoValidatorsAreRegistered()
         {
-            using (var container2 = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build()))
+            using (var container2 = ContainerInitializer.Build())
             {
                 var applicator = container2.Resolve<ICompositeValidator<ITestValidator, int>>();
                 Assert.Throws<InvalidOperationException>(() => applicator.Apply(0));

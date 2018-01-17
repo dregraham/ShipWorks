@@ -210,7 +210,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         public override async Task HandleException(Exception exception, bool guiThread, string userEmail)
         {
             bool shouldReopen = false;
-            Task sendReportTask = null;
+            Task sendReportTask = Task.CompletedTask;
 
             if (ConnectionMonitor.HandleTerminatedConnection(exception))
             {

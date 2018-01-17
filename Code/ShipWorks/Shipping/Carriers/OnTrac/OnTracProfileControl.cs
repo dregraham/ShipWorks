@@ -14,7 +14,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// OnTrac Shipping Profile
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class OnTracProfileControl : ShippingProfileControlBase
     {
         /// <summary>

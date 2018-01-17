@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<GenericModuleStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.GenericModule)

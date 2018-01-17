@@ -399,6 +399,66 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty AsendiaAccountEntity objects.</summary>
+	[Serializable]
+	public partial class AsendiaAccountEntityFactory : EntityFactoryBase2<AsendiaAccountEntity> {
+		/// <summary>CTor</summary>
+		public AsendiaAccountEntityFactory() : base("AsendiaAccountEntity", ShipWorks.Data.Model.EntityType.AsendiaAccountEntity, false) { }
+		
+		/// <summary>Creates a new AsendiaAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AsendiaAccountEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAsendiaAccountUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty AsendiaProfileEntity objects.</summary>
+	[Serializable]
+	public partial class AsendiaProfileEntityFactory : EntityFactoryBase2<AsendiaProfileEntity> {
+		/// <summary>CTor</summary>
+		public AsendiaProfileEntityFactory() : base("AsendiaProfileEntity", ShipWorks.Data.Model.EntityType.AsendiaProfileEntity, false) { }
+		
+		/// <summary>Creates a new AsendiaProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AsendiaProfileEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAsendiaProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty AsendiaShipmentEntity objects.</summary>
+	[Serializable]
+	public partial class AsendiaShipmentEntityFactory : EntityFactoryBase2<AsendiaShipmentEntity> {
+		/// <summary>CTor</summary>
+		public AsendiaShipmentEntityFactory() : base("AsendiaShipmentEntity", ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity, false) { }
+		
+		/// <summary>Creates a new AsendiaShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new AsendiaShipmentEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewAsendiaShipmentUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty AuditEntity objects.</summary>
 	[Serializable]
 	public partial class AuditEntityFactory : EntityFactoryBase2<AuditEntity> {
@@ -792,6 +852,106 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new CustomerEntity(fields);
             // __LLBLGENPRO_USER_CODE_REGION_START CreateNewCustomerUsingFields
             // __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressAccountEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressAccountEntityFactory : EntityFactoryBase2<DhlExpressAccountEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressAccountEntityFactory() : base("DhlExpressAccountEntity", ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressAccountEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressAccountUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressPackageEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressPackageEntityFactory : EntityFactoryBase2<DhlExpressPackageEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressPackageEntityFactory() : base("DhlExpressPackageEntity", ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressPackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressPackageEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressPackageUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressProfileEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressProfileEntityFactory : EntityFactoryBase2<DhlExpressProfileEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressProfileEntityFactory() : base("DhlExpressProfileEntity", ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressProfileEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressProfilePackageEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressProfilePackageEntityFactory : EntityFactoryBase2<DhlExpressProfilePackageEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressProfilePackageEntityFactory() : base("DhlExpressProfilePackageEntity", ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressProfilePackageEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressProfilePackageEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressProfilePackageUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
+	/// <summary>Factory to create new, empty DhlExpressShipmentEntity objects.</summary>
+	[Serializable]
+	public partial class DhlExpressShipmentEntityFactory : EntityFactoryBase2<DhlExpressShipmentEntity> {
+		/// <summary>CTor</summary>
+		public DhlExpressShipmentEntityFactory() : base("DhlExpressShipmentEntity", ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity, false) { }
+		
+		/// <summary>Creates a new DhlExpressShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new DhlExpressShipmentEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewDhlExpressShipmentUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
 			return toReturn;
 		}
 		#region Included Code
@@ -4396,6 +4556,15 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AmeriCommerceStoreEntity:
 					factoryToUse = new AmeriCommerceStoreEntityFactory();
 					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaAccountEntity:
+					factoryToUse = new AsendiaAccountEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaProfileEntity:
+					factoryToUse = new AsendiaProfileEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.AsendiaShipmentEntity:
+					factoryToUse = new AsendiaShipmentEntityFactory();
+					break;
 				case ShipWorks.Data.Model.EntityType.AuditEntity:
 					factoryToUse = new AuditEntityFactory();
 					break;
@@ -4455,6 +4624,21 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.CustomerEntity:
 					factoryToUse = new CustomerEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressAccountEntity:
+					factoryToUse = new DhlExpressAccountEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressPackageEntity:
+					factoryToUse = new DhlExpressPackageEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfileEntity:
+					factoryToUse = new DhlExpressProfileEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressProfilePackageEntity:
+					factoryToUse = new DhlExpressProfilePackageEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.DhlExpressShipmentEntity:
+					factoryToUse = new DhlExpressShipmentEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.DimensionsProfileEntity:
 					factoryToUse = new DimensionsProfileEntityFactory();

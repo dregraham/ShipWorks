@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
         public BigCommerceWizardTest()
         {
-            container = ContainerInitializer.BuildRegistrations(new ContainerBuilder().Build());
+            container = ContainerInitializer.Build();
         }
 
         [STAFact]

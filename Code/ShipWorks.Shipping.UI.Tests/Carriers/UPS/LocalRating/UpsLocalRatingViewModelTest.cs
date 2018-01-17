@@ -296,7 +296,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            Stream fileStream = mock.Create<Stream>();
+            Stream fileStream = mock.Build<Stream>();
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.CreateFileStream()).Returns(fileStream);
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);
@@ -509,7 +509,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.UPS.LocalRating
         {
             var rateTable = mock.Mock<IUpsLocalRateTable>();
 
-            Stream fileStream = mock.Create<Stream>();
+            Stream fileStream = mock.Build<Stream>();
             var openFileDialog = mock.Mock<IOpenFileDialog>();
             openFileDialog.Setup(f => f.CreateFileStream()).Returns(fileStream);
             openFileDialog.Setup(f => f.ShowDialog()).Returns(DialogResult.OK);

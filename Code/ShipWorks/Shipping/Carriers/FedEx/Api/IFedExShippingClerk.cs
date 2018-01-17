@@ -1,4 +1,5 @@
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
@@ -23,6 +24,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Queries FedEx for HoldAtLocations near the destination address.
         /// </summary>
-        DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment);
+        DistanceAndLocationDetail[] PerformHoldAtLocationSearch(IShipmentEntity shipment);
     }
 }

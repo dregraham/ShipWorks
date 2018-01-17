@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Pdf;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -97,7 +98,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var testObject = mock.Create<AmazonDownloadedLabelData>(TypedParameter.From(defaultShipment), TypedParameter.From(defaultLabel));
             testObject.Save();
             mock.Mock<IDataResourceManager>().Verify(x =>
-                x.CreateFromPdf(It.IsAny<Stream>(), defaultShipment.ShipmentID,
+                x.CreateFromPdf(It.IsAny<PdfDocumentType>(), It.IsAny<Stream>(), defaultShipment.ShipmentID,
                     It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
         }
 

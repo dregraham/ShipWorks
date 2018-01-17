@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ShopSite
                 .Returns(identifier);
             var testObject = mock.Create<ShopSiteIdentifier>();
 
-            var result = testObject.Get(mock.Create<IShopSiteStoreEntity>());
+            var result = testObject.Get(mock.Build<IShopSiteStoreEntity>());
 
             Assert.Equal(identifier, result);
         }

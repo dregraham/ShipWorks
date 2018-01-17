@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Fields of a shipment used to calculate rates
         /// </summary>
-        public override RatingFields RatingFields
+        protected override RatingFields RatingFields
         {
             get
             {
@@ -34,18 +34,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 ratingField.AddShipmentField(FedExShipmentFields.SmartPostEndorsement);
                 ratingField.AddShipmentField(FedExShipmentFields.CodEnabled);
                 ratingField.AddShipmentField(FedExShipmentFields.NonStandardContainer);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightSpecialServices);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightTotalHandlinUnits);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightClass);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightCollectTerms);
+                ratingField.AddShipmentField(FedExShipmentFields.FreightRole);
 
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
-                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
-                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
-                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+                AddPackageValues();
 
                 return ratingField;
             }
+        }
+
+        /// <summary>
+        /// Add package values
+        /// </summary>
+        private void AddPackageValues()
+        {
+            ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsAddWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
+            ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
+            ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
+            ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+            ratingField.PackageFields.Add(FedExPackageFields.FreightPieces);
+            ratingField.PackageFields.Add(FedExPackageFields.FreightPackaging);
         }
 
         /// <summary>

@@ -638,23 +638,42 @@ namespace ShipWorks.Filters.Search
         {
             log.InfoFormat("Search - Cleaning up session {0}.", searchID);
 
-            FilterNodeEntity searchNode = (FilterNodeEntity) ((object[]) state)[0];
+            FilterNodeEntity currentSearchNode = (FilterNodeEntity) ((object[]) state)[0];
             ApplicationBusyToken token = (ApplicationBusyToken) ((object[]) state)[1];
 
+            try
+            {
+                ExecuteCleanup(currentSearchNode);
+            }
+            catch (Exception e) when(e is ORMQueryExecutionException || 
+                                     e is SqlException)
+            {
+                //Since this is just cleanup, ignore any SQL or ORM query exceptions and carry on
+            }
+
+            // Mark the background operation as complete
+            ApplicationBusyManager.OperationComplete(token);
+        }
+
+        /// <summary>
+        /// Executes the cleanup
+        /// </summary>
+        private static void ExecuteCleanup(FilterNodeEntity currentSearchNode)
+        {
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 // Delete our search filter node
                 try
                 {
-                    adapter.DeleteEntity(new FilterNodeEntity(searchNode.FilterNodeID) { IgnoreConcurrency = true });
+                    adapter.DeleteEntity(new FilterNodeEntity(currentSearchNode.FilterNodeID) {IgnoreConcurrency = true});
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    log.Warn(string.Format("FilterNode {0} looks like it was already deleted", searchNode.FilterNodeID), ex);
+                    log.Warn(string.Format("FilterNode {0} looks like it was already deleted", currentSearchNode.FilterNodeID), ex);
                 }
 
                 // Delete our search database entry
-                adapter.DeleteEntitiesDirectly(typeof(SearchEntity), new RelationPredicateBucket(SearchFields.FilterNodeID == searchNode.FilterNodeID));
+                adapter.DeleteEntitiesDirectly(typeof(SearchEntity), new RelationPredicateBucket(SearchFields.FilterNodeID == currentSearchNode.FilterNodeID));
 
                 //
                 // Delete any search nodes that may have been abandoned due to a crash - do it for any over 24 hours old.  If the search is still actually open, ShipWorks
@@ -665,11 +684,14 @@ namespace ShipWorks.Filters.Search
                 SearchCollection abandonedSearch = SearchCollection.Fetch(adapter, SearchFields.Pinged < DateTime.UtcNow.AddDays(-1));
 
                 // Delete all filter nodes that are in that abandoned list
-                adapter.DeleteEntitiesDirectly(typeof(FilterNodeEntity),
-                    new RelationPredicateBucket(
-                        FilterNodeFields.FilterNodeID > 0 &
-                        FilterNodeFields.Purpose == (int) FilterNodePurpose.Search &
-                        FilterNodeFields.FilterNodeID == abandonedSearch.Select(s => s.FilterNodeID).ToArray()));
+                foreach (var search in abandonedSearch)
+                {
+                    adapter.DeleteEntitiesDirectly(typeof(FilterNodeEntity),
+                        new RelationPredicateBucket(
+                            FilterNodeFields.FilterNodeID > 0 &
+                            FilterNodeFields.Purpose == (int) FilterNodePurpose.Search &
+                            FilterNodeFields.FilterNodeID == search.FilterNodeID));
+                }
 
                 // Now delete the abandoned search nodes too
                 adapter.DeleteEntityCollection(abandonedSearch);
@@ -677,9 +699,6 @@ namespace ShipWorks.Filters.Search
 
             // Delete all abandoned counts.  This will delete all the ones we generated, plus any that were already lingering, but that should be fine.
             FilterContentManager.DeleteAbandonedFilterCounts();
-
-            // Mark the background operation as complete
-            ApplicationBusyManager.OperationComplete(token);
         }
     }
 }

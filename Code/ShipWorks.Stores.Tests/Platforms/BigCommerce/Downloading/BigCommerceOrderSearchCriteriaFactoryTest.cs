@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         [Fact]
         public async Task Create_DelegatesToDownloaderStartingPoint()
         {
-            var store = mock.Create<IBigCommerceStoreEntity>();
+            var store = mock.Build<IBigCommerceStoreEntity>();
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
             await testObject.Create(store, BigCommerceWebClientOrderDateSearchType.CreatedDate);
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(now, result.LastCreatedToDate);
             Assert.Equal(now, result.LastModifiedToDate);
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
             mock.Mock<IDownloadStartingPoint>().Setup(x => x.OrderDate(It.IsAny<IStoreEntity>())).ReturnsAsync(date);
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(expected, result.LastCreatedFromDate.ToString("u"));
         }
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(new DateTime(2016, 10, 23, 8, 12, 6, DateTimeKind.Utc), result.LastCreatedFromDate);
         }
@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
             mock.Mock<IDownloadStartingPoint>().Setup(x => x.OnlineLastModified(It.IsAny<IStoreEntity>())).ReturnsAsync(date);
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(expected, result.LastModifiedFromDate.ToString("u"));
         }
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(new DateTime(2016, 10, 23, 8, 12, 6, DateTimeKind.Utc), result.LastModifiedFromDate);
         }
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.Downloading
         {
             var testObject = mock.Create<BigCommerceOrderSearchCriteriaFactory>();
 
-            var result = await testObject.Create(mock.Create<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
+            var result = await testObject.Create(mock.Build<IBigCommerceStoreEntity>(), BigCommerceWebClientOrderDateSearchType.CreatedDate);
 
             Assert.Equal(1, result.Page);
             Assert.Equal(50, result.PageSize);

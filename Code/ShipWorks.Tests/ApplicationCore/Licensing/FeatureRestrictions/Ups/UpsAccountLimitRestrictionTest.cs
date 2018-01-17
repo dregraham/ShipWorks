@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -10,7 +11,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
 {
-    public class UpsAccountLimitRestrictionTest
+    public class UpsAccountLimitRestrictionTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly UpsAccountLimitRestriction testObject;
@@ -75,8 +76,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             var messageHelper = mock.Mock<IMessageHelper>();
             licenseCapabilities.Setup(l => l.UpsStatus)
                 .Returns(UpsStatus.Discount);
-
-            var testObject = mock.Create<UpsAccountLimitRestriction>();
 
             testObject.Handle(owner.Object, licenseCapabilities.Object, 5);
 

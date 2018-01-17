@@ -11,6 +11,7 @@ namespace Interapptive.Shared.ComponentRegistration
     /// <summary>
     /// Register a component keyed for specific service
     /// </summary>
+    /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class KeyedComponentAttribute : Attribute
     {
@@ -39,6 +40,11 @@ namespace Interapptive.Shared.ComponentRegistration
         public bool ExternallyOwned { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [single instance].
+        /// </summary>
+        public bool SingleInstance { get; set; } = false;
+
+        /// <summary>
         /// Register all components that use this attribute
         /// </summary>
         public static void Register(ContainerBuilder builder,
@@ -64,6 +70,11 @@ namespace Interapptive.Shared.ComponentRegistration
                     if (attribute.ExternallyOwned)
                     {
                         registration.ExternallyOwned();
+                    }
+
+                    if (attribute.SingleInstance)
+                    {
+                        registration.SingleInstance();
                     }
                 }
             }

@@ -117,6 +117,7 @@
     <Rule Id="S1449" Action="Info" />
     <Rule Id="S1939" Action="Warning" />
     <Rule Id="S3220" Action="None" />
+    <Rule Id="S3247" Action="None" />
   </Rules>
   <Rules AnalyzerId="System.Runtime.Analyzers" RuleNamespace="System.Runtime.Analyzers">
     <Rule Id="CA1001" Action="None" />

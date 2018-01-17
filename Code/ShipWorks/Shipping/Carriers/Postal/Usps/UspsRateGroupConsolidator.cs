@@ -75,8 +75,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void AddAccounts(RateResult targetRate, RateResult sourceRate)
         {
-            UspsPostalRateSelection targetRateTag = (UspsPostalRateSelection)targetRate.Tag;
-            UspsPostalRateSelection sourceRateTag = (UspsPostalRateSelection)sourceRate.Tag;
+            UspsPostalRateSelection targetRateTag = (UspsPostalRateSelection) targetRate.Tag;
+            UspsPostalRateSelection sourceRateTag = (UspsPostalRateSelection) sourceRate.Tag;
 
             targetRateTag.Accounts.AddRange(sourceRateTag.Accounts);
         }

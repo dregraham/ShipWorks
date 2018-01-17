@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -18,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the account info for the given USPS user name
         /// </summary>
-        object GetAccountInfo(UspsAccountEntity account);
+        object GetAccountInfo(IUspsAccountEntity account);
 
         /// <summary>
         /// Changes the contract associated with the given account based on the contract type provided.
@@ -69,5 +71,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="account">The account.</param>
         void PopulateUspsAccountEntity(UspsAccountEntity account);
+
+        /// <summary>
+        /// Get the USPS URL of the given urlType
+        /// </summary>
+        string GetUrl(IUspsAccountEntity account, UrlType urlType);
     }
 }

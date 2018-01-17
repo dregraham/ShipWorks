@@ -73,12 +73,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.Equal(1, brokerExceptions.Count);
             Assert.Equal("blah", brokerExceptions.Single().Message);
         }
-
-
+        
         public void Dispose()
         {
             mock.Dispose();
         }
-
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
@@ -54,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
-            IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
+            IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
@@ -93,7 +94,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
-            IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
+            IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
@@ -135,7 +136,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
             long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
 
-            IOrderSplitGateway orderSplitGateway = context.Mock.Create<IOrderSplitGateway>();
+            IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
             ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 

@@ -64,10 +64,27 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(IParcelAccountEntity account)
-        {
-            iParcelAccountManager.SaveAccount(account);
-        }
+        public override void Save(IParcelAccountEntity account) => iParcelAccountManager.SaveAccount(account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount(IParcelAccountEntity account) => iParcelAccountManager.DeleteAccount(account);
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void Save<T>(T account) => Save(account as IParcelAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public override void DeleteAccount<T>(T account) => DeleteAccount(account as IParcelAccountEntity);
 
         /// <summary>
         /// Get the account id from a given shipment

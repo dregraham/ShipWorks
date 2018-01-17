@@ -173,33 +173,15 @@ namespace ShipWorks.Shipping.Services
         private void ShowPostProcessingMessage(IEnumerable<ShipmentEntity> processedShipments)
         {
             MethodConditions.EnsureArgumentIsNotNull(processedShipments, nameof(processedShipments));
+            IEnumerable<ShipmentTypeCode> shipmentTypeCodes = processedShipments.Select(s => s.ShipmentTypeCode);
 
-            bool hasGlobalPost = processedShipments.Any(IsProcessedGlobalPost);
-
-            if (hasGlobalPost)
+            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeCodes)
             {
-                IGlobalPostLabelNotification globalPostLabelNotification = lifetimeScope.Resolve<IGlobalPostLabelNotification>();
-                if (globalPostLabelNotification.AppliesToCurrentUser())
+                if (lifetimeScope.IsRegisteredWithKey<ICarrierPostProcessingMessage>(shipmentTypeCode))
                 {
-                    globalPostLabelNotification.Show();
+                    lifetimeScope.ResolveKeyed<ICarrierPostProcessingMessage>(shipmentTypeCode).Show(processedShipments);
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether the shipment is a Processed GlobalPost shipment.
-        /// </summary>
-        private static bool IsProcessedGlobalPost(ShipmentEntity shipment)
-        {
-            if (shipment.Processed &&
-                shipment.ShipmentType == (int) ShipmentTypeCode.Usps &&
-                shipment.Postal != null)
-            {
-                // We have a processed USPS shipment. Now check for the GlobalPost service type
-                return PostalUtility.IsGlobalPost((PostalServiceType) shipment.Postal.Service);
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -248,7 +230,8 @@ namespace ShipWorks.Shipping.Services
             else if (workflowResult.TermsAndConditionsException != null)
             {
                 messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
-                workflowResult.TermsAndConditionsException.OpenTermsAndConditionsDlg(lifetimeScope);
+                ITermsAndConditionsException termsAndConditionsException = workflowResult.TermsAndConditionsException;
+                termsAndConditionsException.TermsAndConditions.Show();
             }
             else
             {

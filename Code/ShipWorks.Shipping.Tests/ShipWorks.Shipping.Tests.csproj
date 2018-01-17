@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\xunit.runner.msbuild.2.2.0\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.2.0\build\net452\xunit.runner.msbuild.props')" />
+  <Import Project="..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props')" />
+  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -58,21 +59,18 @@
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Extras.Moq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.Extras.Moq.4.0.0\lib\net45\Autofac.Extras.Moq.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Autofac.Extras.Moq, Version=4.2.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Extras.Moq.4.2.1-sw3\lib\net45\Autofac.Extras.Moq.dll</HintPath>
     </Reference>
     <Reference Include="Autofac.Integration.Mef, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.Mef.4.0.0\lib\net45\Autofac.Integration.Mef.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
@@ -82,16 +80,21 @@
       <HintPath>..\..\packages\Microsoft.Reactive.Testing.3.1.1\lib\net46\Microsoft.Reactive.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Moq, Version=4.7.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Moq.4.7.0\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.0.4\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=15.1460.0.41, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.15.1.0.41\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
@@ -104,7 +107,18 @@
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Primitives, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.Primitives.4.3.0\lib\net45\System.ComponentModel.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.TypeConverter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ComponentModel.TypeConverter.4.3.0\lib\net45\System.ComponentModel.TypeConverter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
       <Private>True</Private>
@@ -129,6 +143,7 @@
       <HintPath>..\..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -145,17 +160,14 @@
       <HintPath>..\..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.2.0\lib\netstandard1.1\xunit.assert.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="xunit.assert, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.assert.2.3.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.2.0\lib\netstandard1.1\xunit.core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="xunit.core, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.core.2.3.1\lib\netstandard1.1\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.2.0.3545, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.2.0\lib\net452\xunit.execution.desktop.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="xunit.execution.desktop, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\xunit.extensibility.execution.2.3.1\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -165,15 +177,107 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaLabelServiceTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactoryTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentTypeTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressBestRateBrokerTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressLabelServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressPackageAdapterTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRateHashingServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentRequestFactoryTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRatingServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactoryTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\FedExShippingClerkTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressAddressManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressConstraintManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\FedExRateRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateLtlFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateExpressFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateBrokerManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateCodOptionsRequestManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDangerousGoodsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDryIceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateHoldAtLocationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateOneRateManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageDetailsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackagingTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePickupManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateRateTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateRecipientManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateReturnTransitManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateShipperManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateSmartPostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateTotalWeightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateWebAuthenticationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\FedExShipRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\FedExShipResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\BuildFedExProcessShipmentReply.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCertificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCodOptionsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExDangerousGoodsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExDryIceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExEmailNotificationsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExHoldAtLocationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExHomeDeliveryManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLabelSpecificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightLabelSpecificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExMasterTrackingManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExOneRateManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackageDetailsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackagingTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPickupManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPriorityAlertManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRateTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRecipientManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReferenceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReturnsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShipperManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingChargesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExSmartPostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExTotalWeightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExAdmissibilityManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExBrokerManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExCommercialInvoiceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExCustomsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExInternationalControlledExportManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExTrafficInArmsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExCustomerReferenceResponseManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExLabelSpecificationResponseManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCodManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExTrackingManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\FedExServiceGatewayFactoryTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessorTest.cs" />
-    <Compile Include="Carriers\FedEx\Fims\FimsCarrierResponseTest.cs" />
-    <Compile Include="Carriers\FedEx\Fims\FimsShippingClerkTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
@@ -185,6 +289,11 @@
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\Postal\PostalFirstClassInternationalMailFraudWarningTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
+    <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />
@@ -285,7 +394,12 @@
     <Compile Include="Carriers\Other\OtherLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -347,15 +461,22 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.1.0\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.2.0\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.2.0\build\net452\xunit.runner.msbuild.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.2.0\build\net20\xunit.runner.visualstudio.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.props'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets'))" />
+    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
+  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" />
+  <Import Project="..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets" Condition="Exists('..\..\packages\xunit.runner.msbuild.2.3.1\build\net452\xunit.runner.msbuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
