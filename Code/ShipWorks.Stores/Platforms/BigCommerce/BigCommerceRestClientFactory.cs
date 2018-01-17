@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
+﻿using RestSharp;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -16,14 +11,12 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     public class BigCommerceRestClientFactory : IBigCommerceRestClientFactory
     {
         private readonly IBigCommerceAuthenticatorFactory authenticatorFactory;
-        readonly Func<string, IRestClient> createRestClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BigCommerceRestClientFactory(IBigCommerceAuthenticatorFactory authenticatorFactory, Func<string, IRestClient> createRestClient)
+        public BigCommerceRestClientFactory(IBigCommerceAuthenticatorFactory authenticatorFactory)
         {
-            this.createRestClient = createRestClient;
             this.authenticatorFactory = authenticatorFactory;
         }
 
@@ -32,11 +25,10 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public IRestClient Create(IBigCommerceStoreEntity store)
         {
-            IRestClient apiClient = new RestClient(store.ApiUrl);
-
-            apiClient.Authenticator = authenticatorFactory.Create(store);
-
-            return apiClient;
+            return new RestClient(store.ApiUrl)
+            {
+                Authenticator = authenticatorFactory.Create(store)
+            };
         }
     }
 }
