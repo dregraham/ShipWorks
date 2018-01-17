@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using ShipWorks.Shipping;
 using ShipWorks.UI.ValueConverters;
 using Xunit;
 
@@ -24,7 +23,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
             }
 
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), parameter, null);
+            double result = (double) testObject.Convert(value, typeof(double), parameter, null);
             Assert.Equal(defaultValue, result);
         }
 
@@ -32,7 +31,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void Convert_ReturnsDefaultValue_WhenValueIsBlankString()
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(string.Empty, typeof(double), null, null);
+            double result = (double) testObject.Convert(string.Empty, typeof(double), null, null);
             Assert.Equal(0, result);
         }
 
@@ -41,7 +40,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         {
             double value = default(double);
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), null, null);
+            double result = (double) testObject.Convert(value, typeof(double), null, null);
             Assert.Equal(0, result);
         }
 
@@ -50,7 +49,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         {
             decimal value = default(decimal);
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), null, null);
+            double result = (double) testObject.Convert(value, typeof(double), null, null);
             Assert.Equal(0, result);
         }
 
@@ -59,7 +58,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         {
             decimal value = 5.00M;
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), null, null);
+            double result = (double) testObject.Convert(value, typeof(double), null, null);
             Assert.Equal(5.00, result);
         }
 
@@ -69,7 +68,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void Convert_ReturnsCorrectDoubleValue_WhenAString(string value)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), null, null);
+            double result = (double) testObject.Convert(value, typeof(double), null, null);
             Assert.Equal(1501.23, result);
         }
 
@@ -79,7 +78,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void Convert_ReturnsCorrectDoubleValue_WhenNegativeAndAString(string value)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.Convert(value, typeof(double), null, null);
+            double result = (double) testObject.Convert(value, typeof(double), null, null);
             Assert.Equal(-1501.23, result);
         }
 
@@ -87,7 +86,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_Returns0_WhenValueIsNull()
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.ConvertBack(null, typeof(double), null, null);
+            double result = (double) testObject.ConvertBack(null, typeof(double), null, null);
             Assert.Equal(0, result);
         }
 
@@ -97,7 +96,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
             double defaultValue = 3.3;
 
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.ConvertBack(null, typeof(double), defaultValue, null);
+            double result = (double) testObject.ConvertBack(null, typeof(double), defaultValue, null);
             Assert.Equal(defaultValue, result);
         }
 
@@ -105,7 +104,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_Returns0_WhenValueIsBlankString()
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.ConvertBack(string.Empty, typeof(double), null, CultureInfo.CurrentCulture);
+            double result = (double) testObject.ConvertBack(string.Empty, typeof(double), null, CultureInfo.CurrentCulture);
             Assert.Equal(0, result);
         }
 
@@ -115,7 +114,7 @@ namespace ShipWorks.UI.Tests.ValueConverters
             double defaultValue = 3.3;
 
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double result = (double)testObject.ConvertBack(string.Empty, typeof(double), defaultValue, CultureInfo.CurrentCulture);
+            double result = (double) testObject.ConvertBack(string.Empty, typeof(double), defaultValue, CultureInfo.CurrentCulture);
             Assert.Equal(defaultValue, result);
         }
 
@@ -129,8 +128,8 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_ReturnsCorrectDoubleValue_WhenAString(string value, double? defaultValue)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double? convertResult = (double?)testObject.Convert(value, typeof(double?), defaultValue, null);
-            double? convertBackResult = (double?)testObject.ConvertBack(convertResult, typeof(double?), defaultValue, CultureInfo.CurrentCulture);
+            double convertResult = (double) testObject.Convert(value, typeof(double), defaultValue, null);
+            double convertBackResult = (double) testObject.ConvertBack(convertResult, typeof(double), defaultValue, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult, convertResult);
         }
 
@@ -144,8 +143,8 @@ namespace ShipWorks.UI.Tests.ValueConverters
         public void ConvertBack_ReturnsCorrectDoubleValue_WhenNegativeAndAString(string value, double? defaultValue)
         {
             EmptyDoubleConverter testObject = new EmptyDoubleConverter();
-            double? convertResult = (double?) testObject.Convert(value, typeof(double?), defaultValue, null);
-            double? convertBackResult = (double?) testObject.ConvertBack(convertResult, typeof(double?), defaultValue, CultureInfo.CurrentCulture);
+            double convertResult = (double) testObject.Convert(value, typeof(double), defaultValue, null);
+            double convertBackResult = (double) testObject.ConvertBack(convertResult, typeof(double), defaultValue, CultureInfo.CurrentCulture);
             Assert.Equal(convertBackResult, convertResult);
         }
     }

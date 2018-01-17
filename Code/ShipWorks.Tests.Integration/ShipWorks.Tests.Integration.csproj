@@ -193,18 +193,22 @@
     <Compile Include="Functional\Registrations\IInitializeForCurrentSessionRegistrationTest.cs" />
     <Compile Include="Functional\Services\ServiceStatusManagerTest.cs" />
     <Compile Include="ColumnPropertyMapDefinition.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\Canada\FedExCanadaIntegrationTest.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExCAIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExEMEAIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\EMEA\FedExEMEAFixture.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTests.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\FimsWebClientTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExIntegrationTestCollection.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FimsWebClientTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\TestCasesForPhysicalPrinting.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKETDMapping.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\UK\FedExUKIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExUKIntegrationTests.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK\FedExUkInternationalMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\UK-EMEA\UK\FedExUKIntraFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\International\FedExUSExpressInternationalEtdMapping.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\US\FedExUSIntegrationTests.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\US\SmartPost\FedExSmartPostIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExUSIntegrationTests.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Freight\FedExCAFreightInternationalMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Canada\Freight\FedExCAFreightDomesticMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\US\Freight\FedExUSFreightMapping.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Tests\FedExSmartPostIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\Express\International\FedExCanadaExpressInternationalMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\Express\Domestic\FedExCanadaExpressDomesticMapping.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Canada\Ground\FedExCanadaGroundDomesticInternationalMapping.cs" />
@@ -283,7 +287,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataSources\FedExAll\TestsWeWantToChange.txt" />
     <Content Include="Utilities\GenerateTestData.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -296,29 +299,30 @@
     <None Include="DataSources\FedExAll\CA Exp Intl.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="DataSources\FedExAll\CA Freight Dom.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\CA Freight Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\FedExAll\CA Grn Dom Intl.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\EMEA.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\FedExAll\ETD.xlsx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="DataSources\FedExAll\Grn Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\FedExAll\IDF.xlsx" />
-    <None Include="DataSources\FedExAll\IGD.xlsx" />
+    <None Include="DataSources\FedExAll\IMPB SmartPost Returns.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="DataSources\FedExAll\IMpB Smartpost.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\FedExAll\IPD.xlsx" />
     <None Include="DataSources\FedExAll\OneRate.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\FedExAll\TD Express.xlsx" />
-    <None Include="DataSources\FedExAll\TD Ground.xlsx" />
     <None Include="DataSources\FedExAll\UK ETD.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -328,7 +332,6 @@
     <None Include="DataSources\FedExAll\UK Intra.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\FedExAll\US Exp DG Open Ship.xlsx" />
     <None Include="DataSources\FedExAll\US Exp Dom-Alcohol.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -339,6 +342,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\US Exp Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Freight Intl.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\FedExAll\US Freight.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\FedExAll\US Grn Dom Intl And Home Del.xlsx">

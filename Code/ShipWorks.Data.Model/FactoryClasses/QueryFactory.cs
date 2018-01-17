@@ -196,6 +196,24 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AmeriCommerceStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the AsendiaAccount entity</summary>
+		public EntityQuery<AsendiaAccountEntity> AsendiaAccount
+		{
+			get { return Create<AsendiaAccountEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the AsendiaProfile entity</summary>
+		public EntityQuery<AsendiaProfileEntity> AsendiaProfile
+		{
+			get { return Create<AsendiaProfileEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the AsendiaShipment entity</summary>
+		public EntityQuery<AsendiaShipmentEntity> AsendiaShipment
+		{
+			get { return Create<AsendiaShipmentEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the Audit entity</summary>
 		public EntityQuery<AuditEntity> Audit
 		{
@@ -314,6 +332,36 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public EntityQuery<CustomerEntity> Customer
 		{
 			get { return Create<CustomerEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressAccount entity</summary>
+		public EntityQuery<DhlExpressAccountEntity> DhlExpressAccount
+		{
+			get { return Create<DhlExpressAccountEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressPackage entity</summary>
+		public EntityQuery<DhlExpressPackageEntity> DhlExpressPackage
+		{
+			get { return Create<DhlExpressPackageEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressProfile entity</summary>
+		public EntityQuery<DhlExpressProfileEntity> DhlExpressProfile
+		{
+			get { return Create<DhlExpressProfileEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressProfilePackage entity</summary>
+		public EntityQuery<DhlExpressProfilePackageEntity> DhlExpressProfilePackage
+		{
+			get { return Create<DhlExpressProfilePackageEntity>(); }
+		}
+
+		/// <summary>Creates and returns a new EntityQuery for the DhlExpressShipment entity</summary>
+		public EntityQuery<DhlExpressShipmentEntity> DhlExpressShipment
+		{
+			get { return Create<DhlExpressShipmentEntity>(); }
 		}
 
 		/// <summary>Creates and returns a new EntityQuery for the DimensionsProfile entity</summary>

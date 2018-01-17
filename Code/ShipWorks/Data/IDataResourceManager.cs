@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Interapptive.Shared.Pdf;
 
 namespace ShipWorks.Data
 {
@@ -12,16 +13,17 @@ namespace ShipWorks.Data
         /// <summary>
         /// Create database resource from PDF
         /// </summary>
-        IEnumerable<DataResourceReference> CreateFromPdf(Stream pdfStream, long consumerID, string label);
+        IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID, string label);
 
         /// <summary>
         /// Create database resource from PDF
         /// </summary>
+        /// <param name="pdfDocumentType">Type of pdf doc to create</param>
         /// <param name="pdfStream">Stream that contains the pdf data</param>
         /// <param name="consumerID">Id of the consumer</param>
         /// <param name="createLabelFromIndex">Function that creates a label given the index of the page</param>
         /// <param name="getBytesFromStream">Function that gets a byte array from the given image stream</param>
-        IEnumerable<DataResourceReference> CreateFromPdf(Stream pdfStream, long consumerID,
+        IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID,
             Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream);
 
         /// <summary>

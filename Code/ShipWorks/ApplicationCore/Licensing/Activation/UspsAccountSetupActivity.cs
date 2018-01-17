@@ -75,7 +75,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
                 Username = username,
                 Password = SecureText.Encrypt(password, username),
                 PendingInitialAccount = (int) UspsPendingAccountType.Existing,
-                GlobalPostAvailability = (int) GlobalPostServiceAvailability.None
+                GlobalPostAvailability = (int) GlobalPostServiceAvailability.None,
+                AcceptedFCMILetterWarning = false
             };
 
             try

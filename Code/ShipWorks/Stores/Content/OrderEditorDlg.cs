@@ -29,7 +29,6 @@ namespace ShipWorks.Stores.Content
     /// <summary>
     /// Window for editing an order
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class OrderEditorDlg : Form
     {
         private readonly long orderID;

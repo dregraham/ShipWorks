@@ -30,6 +30,11 @@
         {
             this.dangerousGoodsEnabled = new System.Windows.Forms.CheckBox();
             this.panelDangerousGoodsDetails = new System.Windows.Forms.Panel();
+            this.batteryDetailsGroup = new System.Windows.Forms.GroupBox();
+            this.batteryMaterial = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.batteryMaterialLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.batteryPackingLabel = new System.Windows.Forms.Label();
             this.containerTypeLabel = new System.Windows.Forms.Label();
             this.containerType = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.numberOfContainersLabel = new System.Windows.Forms.Label();
@@ -71,7 +76,10 @@
             this.offeror = new ShipWorks.UI.Controls.MultiValueTextBox();
             this.dangerousGoodsMaterialType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.emergencyContactPhone = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.batteryPacking = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.batteryRegulatorySubtype = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.panelDangerousGoodsDetails.SuspendLayout();
+            this.batteryDetailsGroup.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.hazardousMaterialGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +100,7 @@
             // 
             this.panelDangerousGoodsDetails.AutoSize = true;
             this.panelDangerousGoodsDetails.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panelDangerousGoodsDetails.Controls.Add(this.batteryDetailsGroup);
             this.panelDangerousGoodsDetails.Controls.Add(this.containerTypeLabel);
             this.panelDangerousGoodsDetails.Controls.Add(this.containerType);
             this.panelDangerousGoodsDetails.Controls.Add(this.numberOfContainersLabel);
@@ -113,9 +122,65 @@
             this.panelDangerousGoodsDetails.Controls.Add(this.emergencyContactPhone);
             this.panelDangerousGoodsDetails.Location = new System.Drawing.Point(0, 18);
             this.panelDangerousGoodsDetails.Name = "panelDangerousGoodsDetails";
-            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(306, 585);
+            this.panelDangerousGoodsDetails.Size = new System.Drawing.Size(306, 707);
             this.panelDangerousGoodsDetails.TabIndex = 1;
             this.panelDangerousGoodsDetails.Visible = false;
+            // 
+            // batteryDetailsGroup
+            // 
+            this.batteryDetailsGroup.Controls.Add(this.batteryRegulatorySubtype);
+            this.batteryDetailsGroup.Controls.Add(this.batteryPacking);
+            this.batteryDetailsGroup.Controls.Add(this.batteryMaterial);
+            this.batteryDetailsGroup.Controls.Add(this.batteryMaterialLabel);
+            this.batteryDetailsGroup.Controls.Add(this.label2);
+            this.batteryDetailsGroup.Controls.Add(this.batteryPackingLabel);
+            this.batteryDetailsGroup.Location = new System.Drawing.Point(9, 588);
+            this.batteryDetailsGroup.Name = "batteryDetailsGroup";
+            this.batteryDetailsGroup.Size = new System.Drawing.Size(294, 116);
+            this.batteryDetailsGroup.TabIndex = 18;
+            this.batteryDetailsGroup.TabStop = false;
+            this.batteryDetailsGroup.Text = "Battery Details";
+            // 
+            // batteryMaterial
+            // 
+            this.batteryMaterial.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryMaterial.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryMaterial.FormattingEnabled = true;
+            this.batteryMaterial.Location = new System.Drawing.Point(109, 28);
+            this.batteryMaterial.Name = "batteryMaterial";
+            this.batteryMaterial.PromptText = "(Multiple Values)";
+            this.batteryMaterial.Size = new System.Drawing.Size(171, 21);
+            this.batteryMaterial.TabIndex = 23;
+            // 
+            // batteryMaterialLabel
+            // 
+            this.batteryMaterialLabel.AutoSize = true;
+            this.batteryMaterialLabel.Location = new System.Drawing.Point(59, 31);
+            this.batteryMaterialLabel.Name = "batteryMaterialLabel";
+            this.batteryMaterialLabel.Size = new System.Drawing.Size(49, 13);
+            this.batteryMaterialLabel.TabIndex = 18;
+            this.batteryMaterialLabel.Text = "Material:";
+            this.batteryMaterialLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1, 85);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(107, 13);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Regulatory Subtype:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // batteryPackingLabel
+            // 
+            this.batteryPackingLabel.AutoSize = true;
+            this.batteryPackingLabel.Location = new System.Drawing.Point(61, 58);
+            this.batteryPackingLabel.Name = "batteryPackingLabel";
+            this.batteryPackingLabel.Size = new System.Drawing.Size(47, 13);
+            this.batteryPackingLabel.TabIndex = 20;
+            this.batteryPackingLabel.Text = "Packing:";
+            this.batteryPackingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // containerTypeLabel
             // 
@@ -522,6 +587,28 @@
             this.emergencyContactPhone.Size = new System.Drawing.Size(171, 21);
             this.emergencyContactPhone.TabIndex = 5;
             // 
+            // batteryPacking
+            // 
+            this.batteryPacking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryPacking.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryPacking.FormattingEnabled = true;
+            this.batteryPacking.Location = new System.Drawing.Point(109, 55);
+            this.batteryPacking.Name = "batteryPacking";
+            this.batteryPacking.PromptText = "(Multiple Values)";
+            this.batteryPacking.Size = new System.Drawing.Size(171, 21);
+            this.batteryPacking.TabIndex = 24;
+            // 
+            // batteryRegulatorySubtype
+            // 
+            this.batteryRegulatorySubtype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.batteryRegulatorySubtype.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.batteryRegulatorySubtype.FormattingEnabled = true;
+            this.batteryRegulatorySubtype.Location = new System.Drawing.Point(109, 82);
+            this.batteryRegulatorySubtype.Name = "batteryRegulatorySubtype";
+            this.batteryRegulatorySubtype.PromptText = "(Multiple Values)";
+            this.batteryRegulatorySubtype.Size = new System.Drawing.Size(171, 21);
+            this.batteryRegulatorySubtype.TabIndex = 25;
+            // 
             // FedExDangerousGoodsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -533,9 +620,11 @@
             this.Controls.Add(this.dangerousGoodsEnabled);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FedExDangerousGoodsControl";
-            this.Size = new System.Drawing.Size(309, 606);
+            this.Size = new System.Drawing.Size(309, 728);
             this.panelDangerousGoodsDetails.ResumeLayout(false);
             this.panelDangerousGoodsDetails.PerformLayout();
+            this.batteryDetailsGroup.ResumeLayout(false);
+            this.batteryDetailsGroup.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.hazardousMaterialGroupBox.ResumeLayout(false);
@@ -590,5 +679,12 @@
         private System.Windows.Forms.CheckBox packingDetailsAircraftOnly;
         private UI.Controls.MultiValueTextBox packingInstructions;
         private System.Windows.Forms.Label packingInstructionsLabel;
+        private System.Windows.Forms.GroupBox batteryDetailsGroup;
+        private UI.Controls.MultiValueComboBox batteryMaterial;
+        private System.Windows.Forms.Label batteryMaterialLabel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label batteryPackingLabel;
+        private UI.Controls.MultiValueComboBox batteryRegulatorySubtype;
+        private UI.Controls.MultiValueComboBox batteryPacking;
     }
 }

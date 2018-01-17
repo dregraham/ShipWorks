@@ -19,12 +19,10 @@ namespace ShipWorks.Tests.Actions
             config = new Mock<IConfigurationEntity>();
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void CreateStandard_Returns_OneActionProcessorWithStandardGateway_WhenUserInterfaceMode(bool useParallelActionQueue)
+        [Fact]
+        public void CreateStandard_Returns_OneActionProcessorWithStandardGateway_WhenUserInterfaceMode()
         {
-            config.Setup(c => c.UseParallelActionQueue).Returns(useParallelActionQueue);
+            config.Setup(c => c.UseParallelActionQueue).Returns(false);
             configData.Setup(cd => cd.FetchReadOnly()).Returns(config.Object);
             configData.Setup(cd => cd.ExecutionModeActionQueueType).Returns(ActionQueueType.UserInterface);
             configData.Setup(cd => cd.IncludeUserInterfaceActions).Returns(true);
@@ -36,12 +34,10 @@ namespace ShipWorks.Tests.Actions
             Assert.Equal(ActionQueueGatewayType.Standard, actionProcessors.First().GatewayType);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void CreateStandard_Returns_TwoProcessors_WhenUserInterfaceMode(bool useParallelActionQueue)
+        [Fact]
+        public void CreateStandard_Returns_TwoProcessors_WhenUserInterfaceMode()
         {
-            config.Setup(c => c.UseParallelActionQueue).Returns(useParallelActionQueue);
+            config.Setup(c => c.UseParallelActionQueue).Returns(true);
             configData.Setup(cd => cd.FetchReadOnly()).Returns(config.Object);
             configData.Setup(cd => cd.ExecutionModeActionQueueType).Returns(ActionQueueType.UserInterface);
             configData.Setup(cd => cd.IncludeUserInterfaceActions).Returns(true);

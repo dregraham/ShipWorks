@@ -39,9 +39,9 @@ namespace ShipWorks.Shipping.Carriers
         // Credentials to use when ShipWorks is using a provider's test environment
         private const string TestCredentialFedExAccountNumber = "607253064";
         private const string TestCredentialFedExMeterNumber = "118689634";
-        private const string TestCredentialFedExUsername = "jB2cT1YYx9uZfe0v";
-        private const string TestCredentialFedExPassword = "7wnqwmqWl2Q1u03AirUFwp9064noG+Bxb7esO7i0p88=";
-        private const string TestCredentialFedExCertificateVerificationData = "<Service><Subject><Value>wsbeta.fedex.com</Value><Value>OU=EIS-WSAS</Value></Subject></Service>";
+        private const string TestCredentialFedExUsername = "MFG2EvMKBLcxcCsk";
+        private const string TestCredentialFedExPassword = "nF4kG4o3/NwRrGa+QhLZtw95OnmtqNMr6mhhziyFEYE=";
+        private const string TestCredentialFedExCertificateVerificationData = "<Service><Subject><Value>wsbeta.fedex.com</Value><Value>OU=WSAS</Value></Subject></Service>";
 
         private const string TestCredentialUpsUserId = "6863e0f62cdd4a1b";
         private const string TestCredentialUpsPassword = "cf9e7473";
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers
 
         private const string TestCredentialUspsUsername = "interapptive";
         private const string TestCredentialUspsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
-        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
 

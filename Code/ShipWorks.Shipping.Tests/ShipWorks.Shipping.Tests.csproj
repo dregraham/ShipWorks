@@ -86,6 +86,9 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Mail">
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -112,6 +115,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
@@ -173,15 +177,107 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentServiceBuilderTest.cs" />
     <Compile Include="Carriers\Amazon\RateGroupFilters\AmazonAvailableServiceTypeRateGroupFilterTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaLabelServiceTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactoryTest.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaShipmentTypeTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressBestRateBrokerTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressDownloadedLabelDataTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressLabelServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressPackageAdapterTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRateHashingServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentRequestFactoryTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressRatingServiceTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentServiceBuilderTest.cs" />
+    <Compile Include="Carriers\DhlExpress\DhlExpressShipmentTypeTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactoryTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\FedExShippingClerkTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\FedExGlobalShipAddressResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressAddressManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressConstraintManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\GlobalShipAddress\Manipulators\Request\FedExGlobalShipAddressWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\FedExRateRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateLtlFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateExpressFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateBrokerManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateCodOptionsRequestManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDangerousGoodsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateDryIceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateHoldAtLocationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateOneRateManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageDetailsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePackagingTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRatePickupManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateRateTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateRecipientManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateReturnTransitManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateShipperManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateSmartPostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateTotalWeightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Rate\Manipulators\Request\FedExRateWebAuthenticationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\FedExShipRequestTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\FedExShipResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\BuildFedExProcessShipmentReply.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCertificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExCodOptionsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExDangerousGoodsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExDryIceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExEmailNotificationsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExHoldAtLocationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExHomeDeliveryManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLabelSpecificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightLabelSpecificationManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExMasterTrackingManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExOneRateManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackageDetailsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackageSpecialServicesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPackagingTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPickupManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExPriorityAlertManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExLtlFreightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRateTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExRecipientManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReferenceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExReturnsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShipmentSpecialServiceTypeManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShipperManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingChargesManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingClientDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingVersionManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExShippingWebAuthenticationDetailManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExSmartPostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExTotalInsuredValueManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\FedExTotalWeightManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExAdmissibilityManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExBrokerManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExCommercialInvoiceManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExCustomsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExInternationalControlledExportManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Request\International\FedExTrafficInArmsManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExCustomerReferenceResponseManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExLabelSpecificationResponseManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCodManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExShipmentCostManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Ship\Manipulators\Response\FedExTrackingManipulatorTest.cs" />
+    <Compile Include="Carriers\FedEx\FedExServiceGatewayFactoryTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentAdapterTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentPackageTypesBuilderTest.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessorTest.cs" />
-    <Compile Include="Carriers\FedEx\Fims\FimsCarrierResponseTest.cs" />
-    <Compile Include="Carriers\FedEx\Fims\FimsShippingClerkTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Fims\FimsCarrierResponseTest.cs" />
+    <Compile Include="Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentAdapterTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
@@ -193,6 +289,11 @@
     <Compile Include="Carriers\None\NoneShipmentAdapterTest.cs" />
     <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\Other\OtherShipmentDateManipulatorTest.cs" />
+    <Compile Include="Carriers\Postal\PostalFirstClassInternationalMailFraudWarningTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsLabelServiceTest.cs" />
+    <Compile Include="Carriers\Postal\PostalPostProcessingMessageTest.cs" />
+    <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulatorTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentPackageTypesBuilderTest.cs" />
@@ -293,7 +394,12 @@
     <Compile Include="Carriers\Other\OtherLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsLabelServiceTest.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerWebClientTest.cs" />
+    <Compile Include="ShipEngine\ShipmentElementFactoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
@@ -357,6 +463,7 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
     <Analyzer Include="..\..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

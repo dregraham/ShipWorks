@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
+﻿using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Track
@@ -15,11 +10,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Track
         {
             var trackNotificationPackage = new TrackNotificationPackage() { RecipientDetails = new NotificationEventType[0] };
 
-            // The object that is gerenated from the WSDL is a 2 dimensional array. It needs to be manually changed 
+            // The object that is generated from the WSDL is a 2 dimensional array. It needs to be manually changed 
             // in the Reference.cs file.
             Assert.IsType<NotificationEventType[]>(trackNotificationPackage.RecipientDetails);
         }
-        
+
         [Fact]
         public void EmailNotificationEventType_BackingFieldIsTwoDimensionalArray()
         {
@@ -33,7 +28,5 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Track
 
             Assert.Equal(array, trackNotificationPackage.RecipientDetails);
         }
-
-        
     }
 }

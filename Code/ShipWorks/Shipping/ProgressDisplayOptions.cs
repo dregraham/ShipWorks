@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Options for when a dialog should be displayed
     /// </summary>
-    [Obfuscation]
+    [Obfuscation(StripAfterObfuscation = false)]
     public enum ProgressDisplayOptions
     {
         /// <summary>

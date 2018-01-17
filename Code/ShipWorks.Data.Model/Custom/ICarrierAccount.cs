@@ -25,6 +25,11 @@ namespace ShipWorks.Data.Model.Custom
         PersonAdapter Address { get; }
 
         /// <summary>
+        /// Gets the account description.
+        /// </summary>
+        string AccountDescription { get; }
+
+        /// <summary>
         /// Apply this account to the shipment.
         /// </summary>
         void ApplyTo(ShipmentEntity shipment);

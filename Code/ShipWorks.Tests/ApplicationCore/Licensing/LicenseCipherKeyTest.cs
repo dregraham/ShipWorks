@@ -4,6 +4,7 @@ using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             byte[] expectedIV = { 125, 42, 69, 178, 253, 78, 1, 17, 77, 56, 129, 11, 25, 225, 201, 14 };
             using (var mock = AutoMock.GetLoose())
             {
-                IDatabaseIdentifier databaseIdentifier = mock.Create<IDatabaseIdentifier>();
+                IDatabaseIdentifier databaseIdentifier = mock.Build<IDatabaseIdentifier>();
 
                 LicenseCipherKey testObject = new LicenseCipherKey(databaseIdentifier);
                 Assert.Equal(expectedIV, testObject.InitializationVector);
@@ -31,9 +32,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
                 Guid dbGuid = Guid.NewGuid();
 
                 mock.Mock<IDatabaseIdentifier>().Setup(id => id.Get()).Returns(dbGuid);
-                IDatabaseIdentifier databaseIdentifier = mock.Create<IDatabaseIdentifier>();
 
-                LicenseCipherKey testObject = new LicenseCipherKey(databaseIdentifier);
+                LicenseCipherKey testObject = mock.Create<LicenseCipherKey>();
                 Assert.Equal(dbGuid.ToByteArray(), testObject.Key);
             }
         }
@@ -44,9 +44,8 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IDatabaseIdentifier>().Setup(id => id.Get()).Throws(new DatabaseIdentifierException());
-                IDatabaseIdentifier databaseIdentifier = mock.Create<IDatabaseIdentifier>();
-
-                LicenseCipherKey testObject = new LicenseCipherKey(databaseIdentifier);
+                
+                LicenseCipherKey testObject = mock.Create<LicenseCipherKey>();
                 Assert.Throws<EncryptionException>(() => testObject.Key);
             }
         }

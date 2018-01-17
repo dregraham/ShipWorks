@@ -14,18 +14,18 @@ using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Startup;
 using Xunit;
+using ShipWorks.Shipping.Carriers.Dhl;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers
 {
     [Trait("Category", "ContinuousIntegration")]
     public class LabelServiceRegistrationTest : IDisposable
     {
-        IContainer container;
+        readonly IContainer container;
 
         public LabelServiceRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.BuildRegistrations(container);
+            container = ContainerInitializer.Build();
         }
 
         [Theory]
@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         [InlineData(ShipmentTypeCode.UpsOnLineTools, typeof(UpsOltLabelService))]
         [InlineData(ShipmentTypeCode.UpsWorldShip, typeof(WorldShipLabelService))]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsLabelService))]
+        [InlineData(ShipmentTypeCode.DhlExpress, typeof(DhlExpressLabelService))]
         public void EnsureLabelServicesAreRegisteredCorrectly(ShipmentTypeCode shipmentType, Type expectedServiceType)
         {
             ILabelService retriever = container.ResolveKeyed<ILabelService>(shipmentType);

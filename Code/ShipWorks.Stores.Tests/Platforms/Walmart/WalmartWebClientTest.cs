@@ -1,15 +1,15 @@
-﻿using Autofac.Extras.Moq;
-using ShipWorks.Stores.Platforms.Walmart;
-using ShipWorks.Tests.Shared;
-using System;
+﻿using System;
 using System.Linq;
-using Xunit;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using Moq;
 using System.Net;
+using Autofac.Extras.Moq;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Moq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Walmart;
 using ShipWorks.Stores.Platforms.Walmart.DTO;
+using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Walmart
 {
@@ -93,7 +93,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         [Fact]
         public void GetOrders_RethrowsWalmartException_WhenWebRequestThrowsWebException()
         {
-            SetupHttpVariableRequestSubmitter(OrdersResponse);
+            mock.Mock<IHttpVariableRequestSubmitter>()
+                .Setup(r => r.GetResponse())
+                .Throws(new WebException());
 
             WalmartWebClient testObject = mock.Create<WalmartWebClient>();
 
@@ -200,7 +202,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
             testObject.UpdateShipmentDetails(new WalmartStoreEntity(), new orderShipment(), "123");
 
             mock.Mock<IHttpRequestSubmitterFactory>()
-                .Verify(f=>f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), @"application/xml"));
+                .Verify(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), @"application/xml"));
         }
 
         [Fact]
@@ -234,7 +236,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
 
             Exception ex = Assert.Throws<WalmartException>(() => testObject.GetOrders(new WalmartStoreEntity(), "nextCursorValue"));
 
-            Assert.Equal($"{BaseErrorMessage}:{Environment.NewLine}400 Bad Request{Environment.NewLine}WM_SVC.ENV set blank or null, WM_CONSUMER.ID set blank or null",ex.Message);
+            Assert.Equal($"{BaseErrorMessage}:{Environment.NewLine}400 Bad Request{Environment.NewLine}WM_SVC.ENV set blank or null, WM_CONSUMER.ID set blank or null", ex.Message);
         }
 
         [Fact]

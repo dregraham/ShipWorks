@@ -31,7 +31,6 @@ namespace ShipWorks.Templates.Controls
     /// <summary>
     /// UserControl for editing template settings
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class TemplateSettingsControl : UserControl
     {
         TemplateEntity template;

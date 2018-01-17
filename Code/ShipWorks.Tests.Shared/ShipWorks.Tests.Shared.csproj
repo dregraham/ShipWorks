@@ -155,6 +155,7 @@
   <ItemGroup>
     <Compile Include="AssemblyProvider.cs" />
     <Compile Include="AutoMockExtensions.cs" />
+    <Compile Include="Carriers\FedEx\BuildFedExShipmentEntity.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTestHelpers.cs" />
     <Compile Include="Database\DatabaseFixture.cs" />
     <Compile Include="Database\DatabaseFixtureWithReusableContext.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="EntityBuilders\UpsShipmentEntityBuilder.cs" />
     <Compile Include="EntityBuilders\PostalShipmentEntityBuilder.cs" />
     <Compile Include="Expressions\ClassHelper.cs" />
+    <Compile Include="ExtensionMethods\ContainerBuilderExtensions.cs" />
     <Compile Include="ExtensionMethods\ParameterShorteners.cs" />
     <Compile Include="Expressions\For.cs" />
     <Compile Include="UninitializeObjectCreator.cs" />

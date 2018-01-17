@@ -575,33 +575,32 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Theory]
-        [InlineData(50,      providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(100.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(101.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(201.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(301.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(401.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(501.00,  providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(1001.00, providerShipWorks, insuredYes, usCountryCode)]
-        [InlineData(5001.00, providerShipWorks, insuredYes, usCountryCode)]
-
-        [InlineData(50.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(100.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(101.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(201.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(301.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(401.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(501.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(1001.00, providerShipWorks, insuredYes, caCountryCode)]
-        [InlineData(5001.00, providerShipWorks, insuredYes, caCountryCode)]
-        public void None_ValuesMatch_Test(decimal insuredValue, InsuranceProvider insuranceProvider, bool insured, string shipCountryCode)
+        [InlineData(50, usCountryCode)]
+        [InlineData(100.00, usCountryCode)]
+        [InlineData(101.00, usCountryCode)]
+        [InlineData(201.00, usCountryCode)]
+        [InlineData(301.00, usCountryCode)]
+        [InlineData(401.00, usCountryCode)]
+        [InlineData(501.00, usCountryCode)]
+        [InlineData(1001.00, usCountryCode)]
+        [InlineData(5001.00, usCountryCode)]
+        [InlineData(50.00, caCountryCode)]
+        [InlineData(100.00, caCountryCode)]
+        [InlineData(101.00, caCountryCode)]
+        [InlineData(201.00, caCountryCode)]
+        [InlineData(301.00, caCountryCode)]
+        [InlineData(401.00, caCountryCode)]
+        [InlineData(501.00, caCountryCode)]
+        [InlineData(1001.00, caCountryCode)]
+        [InlineData(5001.00, caCountryCode)]
+        public void None_ValuesMatch_Test(decimal insuredValue, string shipCountryCode)
         {
             shipment = Create.Shipment(order)
                 .AsPostal()
                 .Set(x => x.ShipmentTypeCode, ShipmentTypeCode.None)
                 .Save();
 
-            None_ValuesMatch(insuredValue, insuranceProvider, insured, shipCountryCode);
+            None_ValuesMatch(insuredValue, providerShipWorks, insuredYes, shipCountryCode);
         }
 
 

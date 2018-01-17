@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// <summary>
     /// UserControl for editing the OnTrac service settings
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class OnTracServiceControl : ServiceControlBase
     {
         /// <summary>
@@ -29,6 +28,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             : base(ShipmentTypeCode.OnTrac, rateControl)
         {
             InitializeComponent();
+
+            this.residentialDetermination.TextChanged += OnRateCriteriaChanged;
+            this.codAmount.TextChanged += OnRateCriteriaChanged;
+            this.saturdayDelivery.CheckedChanged += OnRateCriteriaChanged;
+            this.insuranceControl.InsuranceOptionsChanged += OnRateCriteriaChanged;
+            this.dimensionsControl.DimensionsChanged += OnRateCriteriaChanged;
+            this.weight.WeightChanged += OnRateCriteriaChanged;
+            this.packagingType.SelectedIndexChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -396,5 +403,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             dimensionsControl.FlushChanges();
             weight.FlushChanges();
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

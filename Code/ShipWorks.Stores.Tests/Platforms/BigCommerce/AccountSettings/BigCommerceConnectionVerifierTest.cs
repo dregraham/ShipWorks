@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = await testObject.Verify(new BigCommerceStoreEntity(), mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Success);
         }
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            await testObject.Verify(new BigCommerceStoreEntity(), mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity(), mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.Mock<IBigCommerceWebClientFactory>()
                 .Verify(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()), Times.Never);
@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.Mock<IBigCommerceWebClientFactory>()
                 .Verify(x => x.Create(It.IsAny<IBigCommerceStoreEntity>()));
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
         {
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Success);
         }
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = await testObject.Verify(store, mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(store, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Failure);
         }
@@ -103,7 +103,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             mock.VerifyAll = true;
         }
@@ -117,7 +117,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce.AccountSettings
 
             var testObject = mock.Create<BigCommerceConnectionVerifier>();
 
-            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Create<IBigCommerceAuthenticationPersistenceStrategy>());
+            var result = await testObject.Verify(new BigCommerceStoreEntity { ApiUrl = "foo" }, mock.Build<IBigCommerceAuthenticationPersistenceStrategy>());
 
             Assert.True(result.Failure);
         }

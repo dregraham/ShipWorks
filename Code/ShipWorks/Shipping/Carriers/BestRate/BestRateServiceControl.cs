@@ -258,5 +258,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 RateControl.SelectRate(matchingRate);
             }
         }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
     }
 }

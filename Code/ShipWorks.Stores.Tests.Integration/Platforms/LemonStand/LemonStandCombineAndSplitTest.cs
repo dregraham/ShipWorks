@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<LemonStandStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")

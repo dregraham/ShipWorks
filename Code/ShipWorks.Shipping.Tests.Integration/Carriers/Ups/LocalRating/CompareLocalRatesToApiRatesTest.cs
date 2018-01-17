@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -14,7 +15,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -22,7 +22,6 @@ using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.UI.Carriers.Ups.LocalRating;
-using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Tests.Integration.Shared;
@@ -538,7 +537,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             context = db.GetExistingContext(ContextName);
             if (context == null)
             {
-                context = db.GetNewDataContext(x => ContainerInitializer.Initialize(x),
+                context = db.GetNewDataContext((mock, builder) =>
+                    {
+                        builder.RegisterInstance(new TrustingCertificateInspector()).As<ICertificateInspector>();
+                        builder.RegisterInstance(new UpsSettingsRepository()).As<ICarrierSettingsRepository>();
+                    },
                     ShipWorksInitializer.GetShipWorksInstance(), ContextName);
 
                 context.UpdateShippingSetting(s =>
@@ -552,23 +555,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
                 context.Store.Enabled = true;
 
-                var certInspector = new TrustingCertificateInspector();
-                context.Mock.Provide<ICertificateInspector>(certInspector);
-                context.Mock.Provide<ICarrierSettingsRepository>(new UpsSettingsRepository());
 
                 localRatingAccountID = SetupLocalRatingAccount().UpsAccountID;
                 apiRatingAccountID = SetupApiAccount().UpsAccountID;
                 UpdateStore();
-
-                // When a constructor has an IEnumberable<IUpsServiceType>, mock returns all expected IServiceFilter's and a mocked version.
-                // The mocked version was filtering out all the service types, so this converts the mocked version into a passthrough.
-                // Ideally, it wouldn't be returned at all but I found no way of doing this...
-                context.Mock.SetupDefaultMocksForEnumerable<IServiceFilter>(item =>
-                    item.Setup(
-                            x =>
-                                x.GetEligibleServices(It.IsAny<UpsShipmentEntity>(),
-                                    It.IsAny<IEnumerable<UpsServiceType>>()))
-                        .Returns<UpsShipmentEntity, IEnumerable<UpsServiceType>>((_, types) => types));
             }
             else
             {
@@ -649,7 +639,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
 
             Assembly shippingAssembly = Assembly.GetAssembly(typeof(UpsLocalRatingViewModel));
 
-            var table = context.Mock.Create<IUpsLocalRateTable>();
+            var table = context.Mock.Build<IUpsLocalRateTable>();
 
             using (Stream zoneStream = shippingAssembly.GetManifestResourceStream(UpsLocalRatingViewModel.SampleZoneFileResourceName))
             {

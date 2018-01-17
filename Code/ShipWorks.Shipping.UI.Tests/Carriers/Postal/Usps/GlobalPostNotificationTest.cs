@@ -20,16 +20,12 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
         public GlobalPostNotificationTest()
         {
-            mock = AutoMock.GetLoose();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
         [Fact]
         public void AppliesToSession_ReturnsTrue_WhenNextGlobalPostNotificationDateIsInPast()
         {
-            var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(SqlDateTime.MinValue.Value);
-
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
             Assert.True(testObject.AppliesToCurrentUser());
@@ -38,9 +34,9 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         [Fact]
         public void AppliesToSession_ReturnsFalse_WhenNextGlobalPostNotificationDateIsInFuture()
         {
-            var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(SqlDateTime.MaxValue.Value);
+            mock.Mock<IUserSession>()
+                .Setup(u => u.User)
+                .Returns(new UserEntity { Settings = new UserSettingsEntity { NextGlobalPostNotificationDate = SqlDateTime.MaxValue.Value } });
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
@@ -57,10 +53,6 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
             mock.MockFunc<string, IDialog>(dialog);
             
-            var userSession = mock.Mock<IUserSession>();
-            userSession.Setup(u => u.User.Settings.NextGlobalPostNotificationDate)
-                .Returns(SqlDateTime.MinValue.Value);
-
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
             testObject.Show();

@@ -45,11 +45,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
         {
             IWorksheet dasSheet = sampleExcelFile.Worksheets[sheetName];
             int zipCodeCount = dasSheet.Cells.Count(IsZip);
-            
+
             // each zip code found in this sheet should have 3 services associated with it.
             int expectedZonesForState = zipCodeCount * 3;
 
-            Assert.Equal(expectedZonesForState, readAlaskaHawaiiZones.Count(z=>z.DestinationZipCeiling.ToString().StartsWith(zipPrefix)));
+            Assert.Equal(expectedZonesForState, readAlaskaHawaiiZones.Count(z => z.DestinationZipCeiling.ToString().StartsWith(zipPrefix, StringComparison.Ordinal)));
         }
 
         [Theory]
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
             IWorksheet dasSheet = sampleExcelFile.Worksheets[sheetName];
             int zipCodeCount = dasSheet.Rows.Where(r => r.Row >= startRow && r.Row <= endRow).Sum(row => row.Cells.Count(IsZip));
 
-            Assert.Equal(zipCodeCount, readAlaskaHawaiiZones.Count(z=>MatchesCriteria(z, zipPrefix, service, zone)));
+            Assert.Equal(zipCodeCount, readAlaskaHawaiiZones.Count(z => MatchesCriteria(z, zipPrefix, service, zone)));
         }
 
         private static bool MatchesCriteria(UpsLocalRatingZoneEntity upsLocalRatingZoneEntity, string zipPrefix, UpsServiceType service, string zone)
@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Ups.LocalRating
                 return false;
             }
 
-            if (!upsLocalRatingZoneEntity.DestinationZipCeiling.ToString().StartsWith(zipPrefix))
+            if (!upsLocalRatingZoneEntity.DestinationZipCeiling.ToString().StartsWith(zipPrefix, StringComparison.Ordinal))
             {
                 return false;
             }

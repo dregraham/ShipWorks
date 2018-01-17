@@ -11,10 +11,12 @@ namespace ShipWorks.Shipping.Carriers
     /// <summary>
     /// Manipulate the date of the given shipment
     /// </summary>
-    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsOnLineTools)]
-    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsWorldShip)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.Asendia)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.DhlExpress)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.FedEx)]
     [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.OnTrac)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IShipmentDateManipulator), ShipmentTypeCode.UpsWorldShip)]
     public class WeekdaysOnlyShipmentDateManipulator : IShipmentDateManipulator
     {
         private readonly IShippingSettings shippingSettings;

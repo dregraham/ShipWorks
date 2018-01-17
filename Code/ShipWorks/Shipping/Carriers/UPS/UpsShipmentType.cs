@@ -93,10 +93,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// UPS always uses the residential indicator
         /// </summary>
-        public override bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return true;
-        }
+        public override bool IsResidentialStatusRequired(IShipmentEntity shipment) => true;
 
         /// <summary>
         /// Create the user control used to edit UPS shipments
@@ -580,46 +577,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             UpdateDynamicShipmentData(shipment);
         }
-
-        /// <summary>
-        /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
-        /// the originID is no longer valid and the address could not be updated, false is returned.
-        /// </summary>
-        public override bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            if (shipment.Processed)
-            {
-                return true;
-            }
-
-            // The Ups object may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int) ShipmentOriginSource.Account && shipment.Ups != null)
-            {
-                IUpsAccountEntity account = UpsAccountManager.GetAccountReadOnly(shipment.Ups.UpsAccountID);
-                if (account == null)
-                {
-                    account = UpsAccountManager.AccountsReadOnly.FirstOrDefault();
-                }
-
-                if (account != null)
-                {
-                    account.Address.CopyTo(person);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return base.UpdatePersonAddress(shipment, person, originID);
-        }
-
+        
         /// <summary>
         /// Update the dynamic shipment data that could have changed "outside" the known editor
         /// </summary>
@@ -679,7 +637,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
                 else if (UpsUtility.IsUpsSurePostService((UpsServiceType) shipment.Ups.Service))
                 {
-                    // If Surepost, don't send any declared value.
+                    // If SurePost, don't send any declared value.
                     package.DeclaredValue = 0;
                 }
                 else
@@ -875,12 +833,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Determines if a shipment will be domestic or international
         /// </summary>
-        public override bool IsDomestic(ShipmentEntity shipmentEntity)
+        public override bool IsDomestic(IShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity == null)
-            {
-                throw new ArgumentNullException("shipmentEntity");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity, nameof(shipmentEntity));
 
             string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
             string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
@@ -965,7 +920,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Indicates if customs forms may be required to ship the shipment based on the
         /// shipping address.
         /// </summary>
-        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             if (shipment.AdjustedOriginCountryCode() == "PR" &&
                 shipment.AdjustedShipCountryCode() == "US")

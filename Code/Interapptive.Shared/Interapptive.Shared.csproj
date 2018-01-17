@@ -187,6 +187,7 @@
     <Compile Include="ComponentRegistration\ServiceAttribute.cs" />
     <Compile Include="Data\DbCommandExtensions.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
+    <Compile Include="Enums\AsendiaServiceType.cs" />
     <Compile Include="Enums\BigCommerceAuthenticationType.cs" />
     <Compile Include="Enums\CombineSplitStatusType.cs" />
     <Compile Include="Enums\ShopSiteAuthenticationType.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Extensions\ContinueOn.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\NullableExtensions.cs" />
     <Compile Include="Extensions\FuncExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -220,6 +222,11 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
+    <Compile Include="Pdf\IPdfDocument.cs" />
+    <Compile Include="Pdf\IPdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfColorDocument.cs" />
+    <Compile Include="Pdf\PdfDocumentFactory.cs" />
+    <Compile Include="Pdf\PdfDocumentType.cs" />
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="Security\AesEncryptionProvider.cs" />
     <Compile Include="Security\AesStreamEncryptionProvider.cs" />
@@ -331,7 +338,6 @@
     <Compile Include="UI\IDialog.cs" />
     <Compile Include="UI\IOpenFileDialog.cs" />
     <Compile Include="UI\IMessageHelper.cs" />
-    <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Threading\IProgressProvider.cs" />
     <Compile Include="UI\ShipWorksSaveFileDialog.cs" />
     <Compile Include="UI\ShipWorksOpenFileDialogException.cs" />
@@ -524,7 +530,7 @@
     <Compile Include="Net\HttpXmlVariableRequestSubmitter.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="ObjectDeletedException.cs" />
-    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\PdfBlackAndWhiteDocument.cs" />
     <Compile Include="Properties\Flags.Designer.cs">
       <DependentUpon>Flags.resx</DependentUpon>
       <AutoGen>True</AutoGen>

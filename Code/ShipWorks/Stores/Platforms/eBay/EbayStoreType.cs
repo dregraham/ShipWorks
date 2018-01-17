@@ -664,7 +664,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <returns>
         ///   <c>true</c> if [is customs required] [the specified shipment]; otherwise, <c>false</c>.
         /// </returns>
-        public override bool IsCustomsRequired(ShipmentEntity shipment, bool customsRequiredRecommendation)
+        public override bool IsCustomsRequired(IShipmentEntity shipment, bool customsRequiredRecommendation)
         {
             bool requiresCustoms = customsRequiredRecommendation;
 

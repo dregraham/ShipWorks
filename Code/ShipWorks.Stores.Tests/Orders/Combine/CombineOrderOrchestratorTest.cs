@@ -31,8 +31,8 @@ namespace ShipWorks.Stores.Tests.Orders.Combine
 
             orders = new[]
             {
-                mock.Create<IOrderEntity>(),
-                mock.Create<IOrderEntity>()
+                mock.Build<IOrderEntity>(),
+                mock.Build<IOrderEntity>()
             };
 
             mock.Mock<ICombineOrderGateway>()

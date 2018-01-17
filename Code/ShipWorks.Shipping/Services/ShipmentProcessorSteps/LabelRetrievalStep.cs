@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Stores;
 using ShipWorks.Templates.Tokens;
+using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -83,7 +84,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 ex is ShipWorksLicenseException ||
                 ex is TangoException ||
                 ex is TemplateTokenException ||
-                ex is ShippingException;
+                ex is ShippingException ||
+                ex is CarrierException;
         }
 
         /// <summary>

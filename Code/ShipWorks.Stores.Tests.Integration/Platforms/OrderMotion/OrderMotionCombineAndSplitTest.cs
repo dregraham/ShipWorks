@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion.OnlineUpdatin
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<OrderMotionStoreEntity>(StoreTypeCode.OrderMotion)
                 .Set(x => x.OrderMotionEmailAccountID, 999999)

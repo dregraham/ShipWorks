@@ -95,8 +95,8 @@ namespace ShipWorks.Tests.Stores.Newegg
             // the test object to use a "live" NeweggHttpRequest and an order setup in
             // our sandbox seller account, and use the sandbox seller account credentials
             Order sandboxedOrderToCancel = new Order { OrderNumber = 137956884 };
-            Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.US);
-            testObject = new CancelOrderRequest(credentials, new Mocked.NonLoggingNeweggRequest());
+            Credentials localCredentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.US);
+            testObject = new CancelOrderRequest(localCredentials, new Mocked.NonLoggingNeweggRequest());
 
             // This should throw an exception since the order we're trying to cancel has
             // already been invoiced

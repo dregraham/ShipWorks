@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.UI;
+using Autofac.Extras.Moq;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Users;
 
 namespace ShipWorks.Tests.Shared.Database
@@ -28,7 +26,7 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Returns the datacontext. A new one is created if contextName differs from previous contextName or context hasn't been resolved.
         /// </summary>
-        public DataContext GetNewDataContext(Action<IContainer> initializeContainer, Guid instance, string contextName)
+        public DataContext GetNewDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance, string contextName)
         {
             if (GetExistingContext(contextName) != null)
             {
@@ -36,7 +34,7 @@ namespace ShipWorks.Tests.Shared.Database
             }
 
             previousContextName = contextName;
-            context = CreateReusableDataContext(initializeContainer, instance);
+            context = CreateReusableDataContext(addExtraRegistrations, instance);
 
             return context;
         }
@@ -47,14 +45,9 @@ namespace ShipWorks.Tests.Shared.Database
         /// <remarks>
         /// Removed initialization of LogSession because it makes getting details on specific test failures difficult.
         /// </remarks>
-        private DataContext CreateReusableDataContext(Action<IContainer> initializeContainer, Guid instance)
+        private DataContext CreateReusableDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations, Guid instance)
         {
-            var newContext = CreateDataContext(initializeContainer);
-
-            newContext.Mock.Provide(new Control());
-            newContext.Mock.Provide<Func<Control>>(() => new Control());
-            newContext.Mock.Override<ITangoWebClient>();
-            newContext.Mock.Override<IMessageHelper>();
+            var newContext = CreateDataContext(addExtraRegistrations);
 
             ShipWorksSession.Initialize(instance);
 

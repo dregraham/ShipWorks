@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
             ShipmentsProcessedPipeline testObject = mock.Create<ShipmentsProcessedPipeline>();
             testObject.Register(viewModelMock.Object);
 
-            subject.OnNext(mock.Create<IShipWorksMessage>());
+            subject.OnNext(mock.Build<IShipWorksMessage>());
 
             viewModelMock.Verify(x => x.LoadShipment(It.IsAny<ICarrierShipmentAdapter>()), Times.Never);
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.ObservableRegistrations
         [Fact]
         public void Register_CallsPopulate_WithCarrierCreatedFromShipment()
         {
-            var shipmentAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var shipmentAdapter = mock.Build<ICarrierShipmentAdapter>();
 
             mock.Mock<ICarrierShipmentAdapterFactory>()
                 .Setup(x => x.Get(processedShipment))

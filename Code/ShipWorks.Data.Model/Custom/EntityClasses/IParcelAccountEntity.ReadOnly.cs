@@ -26,6 +26,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public PersonAdapter Address { get; private set; }
 
         /// <summary>
+        /// Gets the account description.
+        /// </summary>
+        public string AccountDescription => Description;
+
+        /// <summary>
         /// Applies account to shipment
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment) => shipment.IParcel.IParcelAccountID = AccountId;

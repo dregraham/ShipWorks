@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -24,5 +25,11 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         /// <param name="account">The account.</param>
         void Save(T account);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <param name="account">The account.</param>
+        void DeleteAccount(T account);
     }
 }

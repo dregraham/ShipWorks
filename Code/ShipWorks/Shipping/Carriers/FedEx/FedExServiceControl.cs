@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
@@ -30,6 +31,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public partial class FedExServiceControl : ServiceControlBase
     {
         bool updatingPayorChoices = false;
+        private ImmutableList<FedExEmailNotificationControlContainer> senderNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> recipientNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> otherNotificationControls;
+        private ImmutableList<FedExEmailNotificationControlContainer> brokerNotificationControls;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExServiceControl"/> class.
@@ -40,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             : base(ShipmentTypeCode.FedEx, rateControl)
         {
             InitializeComponent();
+            fedExFreightContainerControl.RateCriteriaChanged += OnRateCriteriaChanged;
         }
 
         /// <summary>
@@ -48,6 +54,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override void Initialize()
         {
             base.Initialize();
+
+            senderNotificationControls = BuildNotificationControlsList(
+                emailNotifySenderShip, emailNotifySenderException, emailNotifySenderDelivery, emailNotifySenderEstimatedDelivery);
+            recipientNotificationControls = BuildNotificationControlsList(
+                emailNotifyRecipientShip, emailNotifyRecipientException, emailNotifyRecipientDelivery, emailNotifyRecipientEstimatedDelivery);
+            otherNotificationControls = BuildNotificationControlsList(
+                emailNotifyOtherShip, emailNotifyOtherException, emailNotifyOtherDelivery, emailNotifyOtherEstimatedDelivery);
+            brokerNotificationControls = BuildNotificationControlsList(
+                emailNotifyBrokerShip, emailNotifyBrokerException, emailNotifyBrokerDelivery, emailNotifyBrokerEstimatedDelivery);
 
             originControl.Initialize(ShipmentTypeCode.FedEx);
             codOrigin.Initialize(ShipmentTypeCode.FedEx);
@@ -74,10 +89,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             packageControl.Initialize();
 
-            packageControl.PackageCountChanged = packageDetailsControl.PackageCountChanged;
 
             cutoffDateDisplay.ShipmentType = ShipmentTypeCode;
         }
+
+        /// <summary>
+        /// Build a list of notification controls with their corresponding notification type
+        /// </summary>
+        private ImmutableList<FedExEmailNotificationControlContainer> BuildNotificationControlsList(CheckBox ship, CheckBox exception, CheckBox delivery, CheckBox estimated) =>
+            ImmutableList.Create(
+                new FedExEmailNotificationControlContainer(ship, FedExEmailNotificationType.Ship),
+                new FedExEmailNotificationControlContainer(exception, FedExEmailNotificationType.Exception),
+                new FedExEmailNotificationControlContainer(delivery, FedExEmailNotificationType.Deliver),
+                new FedExEmailNotificationControlContainer(estimated, FedExEmailNotificationType.EstimatedDelivery));
 
         /// <summary>
         /// Loads the list of FedEx accounts into the account drop down list.
@@ -162,7 +186,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         [NDependIgnoreLongMethod]
         private void LoadShipmentDetails()
         {
-            bool anyDomestic = false;
             bool anyInternational = false;
 
             FedExServiceType? serviceType = null;
@@ -179,14 +202,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Need to check with the store  to see if anything about the shipment was overridden in case
                 // it may have affected the shipping services available (i.e. the eBay GSP program)
                 ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
-                if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment))
-                {
-                    anyDomestic = true;
-                }
-                else
-                {
-                    anyInternational = true;
-                }
+
+                anyInternational = !ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment);
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
                 if (FedExUtility.IsGroundService(thisService))
@@ -236,12 +253,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Make it visible if any of them have Saturday dates
             saturdayDelivery.Visible = anySaturday;
 
-            // Show freight if there are all freight
-            freightInsidePickup.Visible = anyDomestic;
-            freightInsideDelivery.Visible = anyDomestic;
-            labelLoadAndCount.Visible = !anyDomestic;
-            freightLoadAndCount.Visible = !anyDomestic;
-
             // Enable the COD editing ui if any shipments have COD enabled
             EnableCodUI(anyCodEnabled);
 
@@ -251,6 +262,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Only show non-standard for a ground (home or not)
             nonStandardPackaging.Visible = anyGround;
+
+            // Show freight if they are all freight
+            UpdateFreightSection();
 
             using (MultiValueScope scope = new MultiValueScope())
             {
@@ -286,11 +300,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     homePremiumDate.ApplyMultiDate(shipment.FedEx.HomeDeliveryDate);
                     homePremiumPhone.ApplyMultiText(shipment.FedEx.HomeDeliveryPhone);
 
-                    freightBookingNumber.ApplyMultiText(shipment.FedEx.FreightBookingNumber);
-                    freightInsidePickup.ApplyMultiCheck(shipment.FedEx.FreightInsidePickup);
-                    freightInsideDelivery.ApplyMultiCheck(shipment.FedEx.FreightInsideDelivery);
-                    freightLoadAndCount.ApplyMultiText(shipment.FedEx.FreightLoadAndCount.ToString());
-
                     codEnabled.ApplyMultiCheck(shipment.FedEx.CodEnabled);
                     codAmount.ApplyMultiAmount(shipment.FedEx.CodAmount);
                     codAddFreight.ApplyMultiCheck(shipment.FedEx.CodAddFreight);
@@ -320,44 +329,47 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Hide/Show the freight section
+        /// </summary>
+        private void UpdateFreightSection()
+        {
+            List<int> allDistinct = LoadedShipments.Select(s => s.FedEx.Service).Distinct().ToList();
+
+            sectionFreight.Visible = allDistinct.All(x => FedExUtility.IsFreightLtlService(x)) ||
+                                     allDistinct.All(FedExUtility.IsFreightExpressService);
+
+            if (sectionFreight.Visible)
+            {
+                fedExFreightContainerControl.LoadShipmentDetails(LoadedShipments);
+                sectionFreight.Height = fedExFreightContainerControl.Bottom + 30;
+            }
+        }
+
+        /// <summary>
         /// Load into the UI the configured values for email notifications
         /// </summary>
         private void LoadEmailNotificationSettings(FedExShipmentEntity fedex)
         {
-            bool senderShip = (fedex.EmailNotifySender & (int) FedExEmailNotificationType.Ship) != 0;
-            bool senderException = (fedex.EmailNotifySender & (int) FedExEmailNotificationType.Exception) != 0;
-            bool senderDelivery = (fedex.EmailNotifySender & (int) FedExEmailNotificationType.Deliver) != 0;
-
-            bool recipientShip = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Ship) != 0;
-            bool recipientException = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Exception) != 0;
-            bool recipientDelivery = (fedex.EmailNotifyRecipient & (int) FedExEmailNotificationType.Deliver) != 0;
-
-            bool otherShip = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Ship) != 0;
-            bool otherException = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Exception) != 0;
-            bool otherDelivery = (fedex.EmailNotifyOther & (int) FedExEmailNotificationType.Deliver) != 0;
-
-            bool brokerShip = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Ship) != 0;
-            bool brokerException = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Exception) != 0;
-            bool brokerDelivery = (fedex.EmailNotifyBroker & (int) FedExEmailNotificationType.Deliver) != 0;
-
-            emailNotifySenderShip.ApplyMultiCheck(senderShip);
-            emailNotifySenderException.ApplyMultiCheck(senderException);
-            emailNotifySenderDelivery.ApplyMultiCheck(senderDelivery);
-
-            emailNotifyRecipientShip.ApplyMultiCheck(recipientShip);
-            emailNotifyRecipientException.ApplyMultiCheck(recipientException);
-            emailNotifyRecipientDelivery.ApplyMultiCheck(recipientDelivery);
-
-            emailNotifyOtherShip.ApplyMultiCheck(otherShip);
-            emailNotifyOtherException.ApplyMultiCheck(otherException);
-            emailNotifyOtherDelivery.ApplyMultiCheck(otherDelivery);
-
-            emailNotifyBrokerShip.ApplyMultiCheck(brokerShip);
-            emailNotifyBrokerException.ApplyMultiCheck(brokerException);
-            emailNotifyBrokerDelivery.ApplyMultiCheck(brokerDelivery);
+            LoadEmailNotificationSettings(fedex.EmailNotifySender, senderNotificationControls);
+            LoadEmailNotificationSettings(fedex.EmailNotifyRecipient, recipientNotificationControls);
+            LoadEmailNotificationSettings(fedex.EmailNotifyOther, otherNotificationControls);
+            LoadEmailNotificationSettings(fedex.EmailNotifyBroker, brokerNotificationControls);
 
             emailNotifyOtherAddress.ApplyMultiText(fedex.EmailNotifyOtherAddress);
             emailNotifyMessage.ApplyMultiText(fedex.EmailNotifyMessage);
+        }
+
+        /// <summary>
+        /// Load email notification settings for a group of controls
+        /// </summary>
+        private void LoadEmailNotificationSettings(int notificationValue, IEnumerable<FedExEmailNotificationControlContainer> map)
+        {
+            var notification = (FedExEmailNotificationType) notificationValue;
+
+            foreach (var item in map)
+            {
+                item.Control.ApplyMultiCheck(notification.HasFlag(item.NotificationType));
+            }
         }
 
         /// <summary>
@@ -365,42 +377,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void SaveEmailNotificationSettings(FedExShipmentEntity fedex)
         {
-            emailNotifySenderShip.ReadMultiCheck(c => { fedex.EmailNotifySender = ApplyEmailNotificationType(c, fedex.EmailNotifySender, FedExEmailNotificationType.Ship); });
-            emailNotifySenderException.ReadMultiCheck(c => { fedex.EmailNotifySender = ApplyEmailNotificationType(c, fedex.EmailNotifySender, FedExEmailNotificationType.Exception); });
-            emailNotifySenderDelivery.ReadMultiCheck(c => { fedex.EmailNotifySender = ApplyEmailNotificationType(c, fedex.EmailNotifySender, FedExEmailNotificationType.Deliver); });
-
-            emailNotifyRecipientShip.ReadMultiCheck(c => { fedex.EmailNotifyRecipient = ApplyEmailNotificationType(c, fedex.EmailNotifyRecipient, FedExEmailNotificationType.Ship); });
-            emailNotifyRecipientException.ReadMultiCheck(c => { fedex.EmailNotifyRecipient = ApplyEmailNotificationType(c, fedex.EmailNotifyRecipient, FedExEmailNotificationType.Exception); });
-            emailNotifyRecipientDelivery.ReadMultiCheck(c => { fedex.EmailNotifyRecipient = ApplyEmailNotificationType(c, fedex.EmailNotifyRecipient, FedExEmailNotificationType.Deliver); });
-
-            emailNotifyOtherShip.ReadMultiCheck(c => { fedex.EmailNotifyOther = ApplyEmailNotificationType(c, fedex.EmailNotifyOther, FedExEmailNotificationType.Ship); });
-            emailNotifyOtherException.ReadMultiCheck(c => { fedex.EmailNotifyOther = ApplyEmailNotificationType(c, fedex.EmailNotifyOther, FedExEmailNotificationType.Exception); });
-            emailNotifyOtherDelivery.ReadMultiCheck(c => { fedex.EmailNotifyOther = ApplyEmailNotificationType(c, fedex.EmailNotifyOther, FedExEmailNotificationType.Deliver); });
-
-            emailNotifyBrokerShip.ReadMultiCheck(c => { fedex.EmailNotifyBroker = ApplyEmailNotificationType(c, fedex.EmailNotifyBroker, FedExEmailNotificationType.Ship); });
-            emailNotifyBrokerException.ReadMultiCheck(c => { fedex.EmailNotifyBroker = ApplyEmailNotificationType(c, fedex.EmailNotifyBroker, FedExEmailNotificationType.Exception); });
-            emailNotifyBrokerDelivery.ReadMultiCheck(c => { fedex.EmailNotifyBroker = ApplyEmailNotificationType(c, fedex.EmailNotifyBroker, FedExEmailNotificationType.Deliver); });
+            fedex.EmailNotifySender = SaveEmailNotificationSettings(fedex.EmailNotifySender, senderNotificationControls);
+            fedex.EmailNotifyRecipient = SaveEmailNotificationSettings(fedex.EmailNotifyRecipient, recipientNotificationControls);
+            fedex.EmailNotifyOther = SaveEmailNotificationSettings(fedex.EmailNotifyOther, otherNotificationControls);
+            fedex.EmailNotifyBroker = SaveEmailNotificationSettings(fedex.EmailNotifyBroker, brokerNotificationControls);
 
             emailNotifyOtherAddress.ReadMultiText(t => fedex.EmailNotifyOtherAddress = t);
             emailNotifyMessage.ReadMultiText(t => fedex.EmailNotifyMessage = t);
         }
 
         /// <summary>
+        /// Save email notification settings for the given control map
+        /// </summary>
+        private int SaveEmailNotificationSettings(int currentNotificationValue, IEnumerable<FedExEmailNotificationControlContainer> map) =>
+            map.Aggregate(currentNotificationValue, ReadNotificationValueFromControl);
+
+        /// <summary>
+        /// Read the notification value from the control
+        /// </summary>
+        private int ReadNotificationValueFromControl(int currentNotificationValue, FedExEmailNotificationControlContainer item)
+        {
+            item.Control.ReadMultiCheck(c => currentNotificationValue = ApplyEmailNotificationType(c, currentNotificationValue, item.NotificationType));
+            return currentNotificationValue;
+        }
+
+        /// <summary>
         /// Turn the given notification type on or off depending on the enabled state given
         /// </summary>
-        private int ApplyEmailNotificationType(bool enabled, int previous, FedExEmailNotificationType notificationTypes)
-        {
-            if (enabled)
-            {
-                previous |= (int) notificationTypes;
-            }
-            else
-            {
-                previous &= ~(int) notificationTypes;
-            }
-
-            return previous;
-        }
+        private int ApplyEmailNotificationType(bool enabled, int previous, FedExEmailNotificationType notificationTypes) =>
+            enabled ?
+                previous | (int) notificationTypes :
+                previous & ~(int) notificationTypes;
 
         /// <summary>
         /// Update the insurance cost display
@@ -478,12 +485,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Save the origin
             originControl.SaveToEntities();
 
-            // Save the package crap
+            // Save the packages
             packageControl.SaveToEntities();
             packageDetailsControl.SaveToEntities();
 
-            // Save cod address crap
+            // Save cod address
             codOrigin.SaveToEntities();
+
+            this.fedExFreightContainerControl.SaveToShipments(LoadedShipments);
 
             // Save the whales
             foreach (ShipmentEntity shipment in LoadedShipments)
@@ -519,11 +528,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
                 homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
                 homePremiumPhone.ReadMultiText(t => shipment.FedEx.HomeDeliveryPhone = t);
-
-                freightBookingNumber.ReadMultiText(t => shipment.FedEx.FreightBookingNumber = t);
-                freightInsideDelivery.ReadMultiCheck(c => shipment.FedEx.FreightInsideDelivery = c);
-                freightInsidePickup.ReadMultiCheck(c => shipment.FedEx.FreightInsidePickup = c);
-                freightLoadAndCount.ReadMultiText(t => { int count; if (int.TryParse(t, out count)) shipment.FedEx.FreightLoadAndCount = count; });
 
                 codEnabled.ReadMultiCheck(c => shipment.FedEx.CodEnabled = c);
                 codAmount.ReadMultiAmount(a => shipment.FedEx.CodAmount = a);
@@ -581,6 +585,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 UpdateLayoutForMultipleServices();
             }
 
+            packageControl.PackageCountChanged = packageCount =>
+            {
+                fedExFreightContainerControl.PackageCountChanged(packageCount);
+                packageDetailsControl.PackageCountChanged(packageCount);
+            };
+
             UpdateLabelFormat();
 
             ResumeLayout();
@@ -601,6 +611,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             UpdatePackagingChoices(null);
 
             SetStandardControlVisibility(true);
+
+            UpdateFreightSection();
 
             // Don't show any selection when multiple services are selected
             RateControl.ClearSelection();
@@ -633,9 +645,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Hide Hold At Location if we are SmartPost
             sectionHoldAtLocation.Visible = !isSmartPost && !isFims;
 
-            // Only show freight if its a freight service
-            sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
-
             // Update the packages\skids ui
             packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
 
@@ -651,6 +660,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             RaiseRateCriteriaChanged();
             SyncSelectedRate();
+
+            // Only show freight if its a freight service
+            UpdateFreightSection();
 
             Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
         }
@@ -1106,10 +1118,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" +
-                "FedEx SmartPost® parcel select lightweight\n" +
+                "FedEx SmartPost parcel select lightweight\n" +
                 "FedEx SmartPost® Bound Printed Matter\n" +
                 "FedEx SmartPost® Media\n" +
-                "FedEx SmartPost® parcel select\n" +
+                "FedEx SmartPost parcel select\n" +
                 "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n" +
                 "FedEx International Ground® Distribution\n" +
@@ -1138,12 +1150,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Called when freight container resizes.
+        /// </summary>
+        private void OnFreightContainerControlResize(object sender, EventArgs e)
+        {
+            ResizePackageDetails();
+        }
+
+        /// <summary>
         /// Resizes the package details.
         /// </summary>
         private void ResizePackageDetails()
         {
             otherPackageHolder.Height = packageDetailsControl.Bottom;
             sectionPackageDetails.Height = packageDetailsControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
+
+            sectionFreight.Height = fedExFreightContainerControl.Bottom + (sectionHomeDelivery.Height - sectionHomeDelivery.ContentPanel.Height) + 4;
         }
 
         /// <summary>
@@ -1196,6 +1218,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     .Where(x => x != null)
                     .Select(x => x.PackagingType))
                 .Cast<FedExPackagingType>();
+        }
+
+        /// <summary>
+        /// One of the values that affects rates has changed
+        /// </summary>
+        private void OnRateCriteriaChanged(object sender, EventArgs e) => RaiseRateCriteriaChanged();
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+
+                fedExFreightContainerControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

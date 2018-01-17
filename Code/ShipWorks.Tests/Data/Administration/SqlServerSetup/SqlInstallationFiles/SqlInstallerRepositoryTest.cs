@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -26,18 +19,18 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
 
         private static OperatingSystem Xp_5_1_2600_32Bit = new OperatingSystem(PlatformID.Win32NT, new Version(5, 1, 2600, 0));
         private static OperatingSystem Xp_5_2_2600_64Bit = new OperatingSystem(PlatformID.Win32NT, new Version(5, 2, 2600, 0));
-        private static OperatingSystem Vista_6_0_6002 =    new OperatingSystem(PlatformID.Win32NT, new Version(6, 0, 6002, 0));
-        private static OperatingSystem Win7_6_1_7601 =     new OperatingSystem(PlatformID.Win32NT, new Version(6, 1, 7601, 0));
-        private static OperatingSystem Win8_6_2_9200 =     new OperatingSystem(PlatformID.Win32NT, new Version(6, 2, 9200, 0));
-        private static OperatingSystem Win81_6_3_9600 =     new OperatingSystem(PlatformID.Win32NT, new Version(6, 3, 9600, 0));
-        private static OperatingSystem Win10_10_0_14393 =  new OperatingSystem(PlatformID.Win32NT, new Version(10, 0, 14393, 0));
+        private static OperatingSystem Vista_6_0_6002 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 0, 6002, 0));
+        private static OperatingSystem Win7_6_1_7601 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 1, 7601, 0));
+        private static OperatingSystem Win8_6_2_9200 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 2, 9200, 0));
+        private static OperatingSystem Win81_6_3_9600 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 3, 9600, 0));
+        private static OperatingSystem Win10_10_0_14393 = new OperatingSystem(PlatformID.Win32NT, new Version(10, 0, 14393, 0));
 
-        private static OperatingSystem Server2003_5_2 =   new OperatingSystem(PlatformID.Win32NT, new Version(5, 2, 0, 0)); // 2003
-        private static OperatingSystem Server2008_6_0 =   new OperatingSystem(PlatformID.Win32NT, new Version(6, 0, 0, 0)); // 2008
+        private static OperatingSystem Server2003_5_2 = new OperatingSystem(PlatformID.Win32NT, new Version(5, 2, 0, 0)); // 2003
+        private static OperatingSystem Server2008_6_0 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 0, 0, 0)); // 2008
         private static OperatingSystem Server2008R2_6_1 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 1, 0, 0)); // 2008 R2
-        private static OperatingSystem Server2012_6_2 =   new OperatingSystem(PlatformID.Win32NT, new Version(6, 2, 0, 0)); // 2012
+        private static OperatingSystem Server2012_6_2 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 2, 0, 0)); // 2012
         private static OperatingSystem Server2012R2_6_3 = new OperatingSystem(PlatformID.Win32NT, new Version(6, 3, 0, 0)); // 2012 R2
-        private static OperatingSystem Server2016_10_0 =  new OperatingSystem(PlatformID.Win32NT, new Version(10, 0, 0, 0)); // 2016
+        private static OperatingSystem Server2016_10_0 = new OperatingSystem(PlatformID.Win32NT, new Version(10, 0, 0, 0)); // 2016
 
         public SqlInstallerRepositoryTest()
         {
@@ -279,11 +272,10 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.True(si.Is64Bit == is64Bit && si.Edition == expectedEdition);
         }
 
-        [Theory]
-        [InlineData(false)]
-        public void Win8_SqlServerLocalDb2014AndExpress_AreAvailable(bool is64Bit)
+        [Fact]
+        public void Win8_SqlServerLocalDb2014AndExpress_AreAvailable()
         {
-            environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
+            environment.Setup(e => e.Is64BitOperatingSystem).Returns(false);
             environment.Setup(e => e.OSVersion).Returns(Win8_6_2_9200);
 
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);
@@ -310,11 +302,10 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.True(si.Is64Bit == is64Bit && si.Edition == expectedEdition);
         }
 
-        [Theory]
-        [InlineData(true)]
-        public void Win8_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit(bool is64Bit)
+        [Fact]
+        public void Win8_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit()
         {
-            environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
+            environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win8_6_2_9200);
 
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);
@@ -342,11 +333,10 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.True(si.Is64Bit == is64Bit && si.Edition == expectedEdition);
         }
 
-        [Theory]
-        [InlineData(false)]
-        public void Win81_SqlServerLocalDb2014AndExpress_AreAvailable(bool is64Bit)
+        [Fact]
+        public void Win81_SqlServerLocalDb2014AndExpress_AreAvailable()
         {
-            environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
+            environment.Setup(e => e.Is64BitOperatingSystem).Returns(false);
             environment.Setup(e => e.OSVersion).Returns(Win81_6_3_9600);
 
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);
@@ -373,11 +363,10 @@ namespace ShipWorks.Tests.Data.Administration.SqlServerSetup.SqlInstallationFile
             Assert.True(si.Is64Bit == is64Bit && si.Edition == expectedEdition);
         }
 
-        [Theory]
-        [InlineData(true)]
-        public void Win81_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit(bool is64Bit)
+        [Fact]
+        public void Win81_SqlServerLocalDb2016AndExpress_AreAvailable_When64Bit()
         {
-            environment.Setup(e => e.Is64BitOperatingSystem).Returns(is64Bit);
+            environment.Setup(e => e.Is64BitOperatingSystem).Returns(true);
             environment.Setup(e => e.OSVersion).Returns(Win81_6_3_9600);
 
             testObject = new SqlInstallerRepository(clrHelper.Object, environment.Object);

@@ -44,17 +44,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.iParcel
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new iParcelShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new iParcelShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new iParcelShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new iParcelShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
                 new iParcelShipmentAdapter(shipment, null,
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new iParcelShipmentAdapter(shipment, mock.Create
-                    <IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
+                new iParcelShipmentAdapter(shipment, 
+                    mock.Build<IShipmentTypeManager>(), null, mock.Build<IStoreManager>()));
         }
 
         [Fact]

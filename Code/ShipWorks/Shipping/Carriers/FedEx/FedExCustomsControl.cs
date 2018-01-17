@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// Customized customs control for FedEx
     /// </summary>
-    [NDependIgnoreLongTypes]
     public partial class FedExCustomsControl : CustomsControlBase
     {
         private IDisposable fedExServiceChangedToken;

@@ -62,6 +62,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Email = source.Email;
             MailingPostalCode = source.MailingPostalCode;
             ScanFormAddressSource = source.ScanFormAddressSource;
+            AcceptedFCMILetterWarning = source.AcceptedFCMILetterWarning;
             
             
             
@@ -226,6 +227,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int32 ScanFormAddressSource { get; }
+        /// <summary> The AcceptedFCMILetterWarning property of the Entity EndiciaAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaAccount"."AcceptedFCMILetterWarning"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean AcceptedFCMILetterWarning { get; }
         
         
         

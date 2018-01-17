@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
 
         public FedExSettingsTest()
         {
-            shippingSettings = new ShippingSettingsEntity {FedExUsername = "username", FedExPassword = "password"};
+            shippingSettings = new ShippingSettingsEntity { FedExUsername = "username", FedExPassword = "password" };
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.UseListRates).Returns(true);
@@ -43,26 +43,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         [Fact]
         public void UserCredentialsPassword_IsNull_WhenFedExPasswordIsNull()
         {
-            // setup the test by setting the password to ull
+            // setup the test by setting the password to null
             shippingSettings.FedExPassword = null;
 
             // Make sure the user credentials return those retrieved from the repository
             Assert.Null(testObject.UserCredentialsPassword);
         }
 
-
         [Fact]
         public void CspCredentialKey()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("olaPdFVk3aMvbfNA", testObject.CspCredentialKey);
+            Assert.Equal("55sFa2ocvAw0Baxl", testObject.CspCredentialKey);
         }
 
         [Fact]
         public void CspCredentialPassword()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.Equal("SAISQtME8lAOPurbWNQD2Ft96", testObject.CspCredentialPassword);
+            Assert.Equal("9kJDF0zRYZ9kyBiavLBPyGTSO", testObject.CspCredentialPassword);
         }
 
         [Fact]

@@ -21,6 +21,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
+using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
@@ -42,6 +43,7 @@ namespace ShipWorks.Tests.Shared.Database
         Justification = "We don't want to dispose these fields since they need to live during the test")]
     public class DatabaseFixture : IDisposable
     {
+        protected bool clearTestData = true;
         private readonly Checkpoint checkpoint;
         private readonly SqlSessionScope sqlSessionScope;
         private readonly ExecutionModeScope executionModeScope;
@@ -86,20 +88,29 @@ namespace ShipWorks.Tests.Shared.Database
 
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
 
-            checkpoint = new Checkpoint();
-            TempLocalDb db = new TempLocalDb(databaseName);
-
-            sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
-
-            SqlUtility.EnableClr(db.Open());
-
-            using (SqlCommand command = db.Open().CreateCommand())
+            if (clearTestData)
             {
-                command.CommandText = string.Format(enableChangeTrackingScript, databaseName);
-                command.ExecuteNonQuery();
-            }
+                checkpoint = new Checkpoint();
+                TempLocalDb db = new TempLocalDb(databaseName);
 
-            ShipWorksDatabaseUtility.CreateSchemaAndData();
+            	sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+
+                SqlUtility.EnableClr(db.Open());
+
+                using (SqlCommand command = db.Open().CreateCommand())
+                {
+                    command.CommandText = string.Format(enableChangeTrackingScript, databaseName);
+                    command.ExecuteNonQuery();
+                }
+
+                ShipWorksDatabaseUtility.CreateSchemaAndData();
+            }
+            else
+            {
+                string connectionString = $"Data Source = (localdb)\\v11.0; Initial Catalog = {databaseName}";
+
+                sqlSessionScope = CreateSqlSessionScope(connectionString);
+            }
 
             DataProvider.InitializeForApplication(ExecutionModeScope.Current);
         }
@@ -151,6 +162,64 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Create a data context for use in a test
         /// </summary>
+        /// <remarks>
+        /// When this context is disposed, everything created inside it is rolled back.  Further,
+        /// calling this method again will dispose the previous context.  This is because when a test results
+        /// in an exception, the context may not be disposed properly in the test itself.
+        /// </remarks>
+        public DataContext CreateDataContext(Action<AutoMock, ContainerBuilder> addExtraRegistrations)
+        {
+            AutoMock mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            var container = ContainerInitializer.Initialize(builder =>
+            {
+                addExtraRegistrations(mock, builder);
+
+                var securityContext = mock.Override<ISecurityContext>();
+                securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), null));
+                securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), It.IsAny<long>()));
+                securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
+                securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
+
+                OverrideMainFormInAutofacContainer(mock, builder);
+            });
+
+            if (clearTestData)
+            {
+                using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
+                {
+                    using (var connection = SqlSession.Current.OpenConnection())
+                    {
+                        checkpoint.Reset(connection);
+                        var command = connection.CreateCommand();
+                        command.CommandText =
+                            @"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
+                              DROP PROCEDURE [dbo].[GetDatabaseGuid]";
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            var context = SetupFreshData(container);
+
+            ShippingManager.InitializeForCurrentDatabase();
+
+            foreach (IInitializeForCurrentDatabase service in container.Resolve<IEnumerable<IInitializeForCurrentDatabase>>())
+            {
+                service.InitializeForCurrentDatabase(ExecutionModeScope.Current);
+            }
+
+            // This initializes all the other dependencies
+            UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
+
+            ShipWorksSession.Initialize(Guid.NewGuid());
+
+            return new DataContext(mock, context.Item1, context.Item2, container);
+        }
+
+        /// <summary>
+        /// Create a data context for use in a test
+        /// </summary>
         /// <remarks>When this context is disposed, everything created inside it is rolled back.  Further,
         /// calling this method again will dispose the previous context.  This is because when a test results
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
@@ -162,20 +231,23 @@ namespace ShipWorks.Tests.Shared.Database
             configureMock?.Invoke(mock);
             OverrideMainFormInAutofacContainer(mock);
 
-            using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
+            if (clearTestData)
             {
-                using (var connection = SqlSession.Current.OpenConnection())
+                using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, AuditReason.Default, AuditState.Disabled))
                 {
-                    checkpoint.Reset(connection);
-                    var command = connection.CreateCommand();
-                    command.CommandText =
+                    using (var connection = SqlSession.Current.OpenConnection())
+                    {
+                    	checkpoint.Reset(connection);
+                        var command = connection.CreateCommand();
+                        command.CommandText =
 @"IF OBJECTPROPERTY(object_id('dbo.GetDatabaseGuid'), N'IsProcedure') = 1
 DROP PROCEDURE [dbo].[GetDatabaseGuid]";
                     command.ExecuteNonQuery();
+                    }
                 }
             }
 
-            var context = SetupFreshData();
+            var context = SetupFreshData(mock.Container);
 
             var securityContext = mock.Override<ISecurityContext>();
             securityContext.Setup(x => x.DemandPermission(It.IsAny<PermissionType>(), null));
@@ -206,24 +278,36 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
         private static void OverrideMainFormInAutofacContainer(AutoMock mock)
         {
             var builder = new ContainerBuilder();
-            builder.Register(c => new Control())
-                .As<Control>()
-                .As<IWin32Window>()
-                .ExternallyOwned();
+
+            OverrideMainFormInAutofacContainer(mock, builder);
+
 #pragma warning disable CS0618 // Type or member is obsolete
             builder.Update(mock.Container);
 #pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
+        /// Override registration for Control, which is usually MainForm
+        /// </summary>
+        /// <remarks>MainForm doesn't exist in tests, so this needs to be done</remarks>
+        private static void OverrideMainFormInAutofacContainer(AutoMock mock, ContainerBuilder builder) =>
+            builder.Register(c => new Control())
+                .As<Control>()
+                .As<IWin32Window>()
+                .ExternallyOwned();
+
+        /// <summary>
         /// Setup fresh data
         /// </summary>
-        private Tuple<UserEntity, ComputerEntity> SetupFreshData()
+        private Tuple<UserEntity, ComputerEntity> SetupFreshData(IContainer container)
         {
-            ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
-            ShipWorksDatabaseUtility.AddRequiredData();
+            if (clearTestData)
+            {
+                ShipWorksDatabaseUtility.AddInitialDataAndVersion(SqlSession.Current.OpenConnection());
+                ShipWorksDatabaseUtility.AddRequiredData();
+            }
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            using (var lifetimeScope = container.BeginLifetimeScope())
             {
                 var writer = lifetimeScope.Resolve<ICustomerLicenseWriter>();
                 writer.Write(new DummyLegacyLicense());
@@ -231,8 +315,21 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             using (SqlAdapter sqlAdapter = new SqlAdapter(SqlSession.Current.OpenConnection()))
             {
-                UserEntity user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
-                ComputerEntity computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
+                UserEntity user;
+                ComputerEntity computer;
+
+                if (clearTestData)
+                {
+                    user = UserUtility.CreateUser("shipworks", "shipworks@shipworks.com", string.Empty, true);
+                    computer = Create.Entity<ComputerEntity>().Save(sqlAdapter);
+                }
+                else
+                {
+                    user = UserUtility.GetShipWorksUser("shipworks", string.Empty);
+
+                    ComputerManager.InitializeForCurrentSession();
+                    computer = ComputerManager.Computers.First();
+                }
 
                 UserSession.Logon(user, computer, true);
 

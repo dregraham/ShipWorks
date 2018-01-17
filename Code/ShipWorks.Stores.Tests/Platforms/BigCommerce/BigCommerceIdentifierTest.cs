@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
                 .Returns(identifier);
             var testObject = mock.Create<BigCommerceIdentifier>();
 
-            var result = testObject.Get(mock.Create<IBigCommerceStoreEntity>());
+            var result = testObject.Get(mock.Build<IBigCommerceStoreEntity>());
 
             Assert.Equal(identifier, result);
         }

@@ -77,8 +77,6 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.FeatureRestrictions.Ups
             licenseCapabilities.Setup(l => l.UpsStatus)
                 .Returns(UpsStatus.Discount);
 
-            var testObject = mock.Create<UpsAccountLimitRestriction>();
-
             testObject.Handle(owner.Object, licenseCapabilities.Object, 5);
 
             messageHelper.Verify(m => m.ShowError(owner.Object, EnumHelper.GetDescription(testObject.EditionFeature)), Times.Once);

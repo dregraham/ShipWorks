@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -31,7 +32,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Rating service for the Usps carrier
     /// </summary>
-    public class UspsRatingService : PostalRatingService, ISupportExpress1Rates
+    [Component(Service = typeof(IUspsRatingService))]
+    public class UspsRatingService : PostalRatingService, ISupportExpress1Rates, IUspsRatingService
     {
         private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
 

@@ -1,14 +1,13 @@
-﻿using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Xml.Serialization;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
 {
     public class FedExWebServiceShipReferenceTest
     {
-
         private Type contactType;
         private Type addressType;
 
@@ -18,18 +17,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
             addressType = typeof(Address);
         }
 
-        /// <summary>
-        /// Generated code makes RegulatoryLineItemsField a 2 dimensional array and this needs corrected.
-        /// </summary>
-        [Fact]
-        public void RegulatoryLineItemsField_IsOneDimensionalArray()
-        {
-            KeyValueDetail[] regulatoryLineItemsField = new DangerousGoodsDetail().RegulatoryLineItems;
-            var dangerousGoodsDetailType = typeof(DangerousGoodsDetail);
-            PropertyInfo propertyInfo = dangerousGoodsDetailType.GetProperty("RegulatoryLineItems");
+        ///// <summary>
+        ///// Generated code makes RegulatoryLineItemsField a 2 dimensional array and this needs corrected.
+        ///// </summary>
+        //[Fact]
+        //public void RegulatoryLineItemsField_IsOneDimensionalArray()
+        //{
+        //    KeyValueDetail[] regulatoryLineItemsField = new DangerousGoodsDetail().RegulatoryLineItems;
+        //    var dangerousGoodsDetailType = typeof(DangerousGoodsDetail);
+        //    PropertyInfo propertyInfo = dangerousGoodsDetailType.GetProperty("RegulatoryLineItems");
 
-            Assert.Equal(propertyInfo.PropertyType, typeof(KeyValueDetail[]));
-        }
+        //    Assert.Equal(propertyInfo.PropertyType, typeof(KeyValueDetail[]));
+        //}
 
         [Fact]
         public void Contact_ContactIdHasOrderElementTest()
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
         {
             PropertyInfo propertyInfo = type.GetProperty(propertyName);
 
-            XmlElementAttribute[] xmlElementAttributes = (XmlElementAttribute[])propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), false);
+            XmlElementAttribute[] xmlElementAttributes = (XmlElementAttribute[]) propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), false);
 
             Assert.Equal(1, xmlElementAttributes.Length);
             Assert.Equal(orderValue, xmlElementAttributes[0].Order);

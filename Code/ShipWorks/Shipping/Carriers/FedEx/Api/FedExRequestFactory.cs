@@ -1,137 +1,133 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Autofac;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators;
+using ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators.International;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
     /// <summary>
     /// FedEx Request Factory
     /// </summary>
+    [Component]
     public class FedExRequestFactory : IFedExRequestFactory
     {
-        private readonly IFedExServiceGateway defaultFedExServiceGateway;
-        private readonly IFedExServiceGateway openShipFedExServiceGateway;
         private readonly IFedExResponseFactory responseFactory;
-        private readonly ICarrierSettingsRepository settingsRepository;
+        private readonly IFedExSettingsRepository settingsRepository;
         private readonly IFedExShipmentTokenProcessor tokenProcessor;
+        private readonly IFedExServiceGatewayFactory serviceGatewayFactory;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class.
+        /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class
         /// </summary>
-        public FedExRequestFactory(ICarrierSettingsRepository settingsRepository)
-            : this(new FedExServiceGateway(settingsRepository),
-                  new FedExOpenShipGateway(settingsRepository),
-                  settingsRepository,
-                  new FedExShipmentTokenProcessor(),
-                  new FedExResponseFactory(new FedExLabelRepository()))
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRequestFactory" /> class. This
-        /// constructor is primarily for testing purposes.
-        /// </summary>
-        public FedExRequestFactory(IFedExServiceGateway defaultFedExServiceGateway, IFedExServiceGateway openShipFedExServiceGateway, ICarrierSettingsRepository settingsRepository, IFedExShipmentTokenProcessor tokenProcessor, IFedExResponseFactory responseFactory)
+        /// <remarks>
+        /// We're taking a dependency on ILifetimeScope for the Create methods that are now
+        /// just passed through to Autofac.
+        /// </remarks>
+        public FedExRequestFactory(
+            IFedExServiceGatewayFactory serviceGatewayFactory,
+            IFedExSettingsRepository settingsRepository,
+            IFedExShipmentTokenProcessor tokenProcessor,
+            IFedExResponseFactory responseFactory,
+            ILifetimeScope lifetimeScope)
         {
-            this.defaultFedExServiceGateway = defaultFedExServiceGateway;
-            this.openShipFedExServiceGateway = openShipFedExServiceGateway;
+            this.lifetimeScope = lifetimeScope;
+            this.serviceGatewayFactory = serviceGatewayFactory;
             this.responseFactory = responseFactory;
             this.settingsRepository = settingsRepository;
             this.tokenProcessor = tokenProcessor;
         }
 
         /// <summary>
-        /// Creates the carrier-specific request to ship an order/create a label.
+        /// Creates the rate request
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <returns>A CarrierRequest object that can be used for submitting requests to a carrier API to
-        /// ship an order/create a label.
-        /// </returns>
-        public virtual CarrierRequest CreateShipRequest(ShipmentEntity shipmentEntity)
-        {
-            if (shipmentEntity == null)
-            {
-                throw new ArgumentNullException("shipmentEntity");
-            }
+        public IFedExShipRequest CreateShipRequest() =>
+            lifetimeScope.Resolve<IFedExShipRequest>(TypedParameter.From(settingsRepository));
 
-            if (shipmentEntity.FedEx == null)
-            {
-                throw new ArgumentException("ShipmentEntity not associated with a FedEx shipment.");
-            }
+        ///// <summary>
+        ///// Creates the carrier-specific request to ship an order/create a label.
+        ///// </summary>
+        ///// <param name="shipmentEntity">The shipment entity.</param>
+        ///// <returns>A CarrierRequest object that can be used for submitting requests to a carrier API to
+        ///// ship an order/create a label.
+        ///// </returns>
+        //public virtual CarrierRequest CreateShipRequest(ShipmentEntity shipmentEntity)
+        //{
+        //    if (shipmentEntity == null)
+        //    {
+        //        throw new ArgumentNullException("shipmentEntity");
+        //    }
 
-            // Load up all of the dependencies for a FedExShipRequest and provide them to the constructor
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>()
-            {
-                // This list will grow as shipping request manipulators are implemented
-                new FedExShipperManipulator(),
-                new FedExRecipientManipulator(),
-                new FedExShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTypeManipulator(settingsRepository),
-                new FedExLabelSpecificationManipulator(settingsRepository),
-                new FedExTotalWeightManipulator(),
-                new FedExTotalInsuredValueManipulator(),
-                new FedExShippingChargesManipulator(),
-                new FedExCertificationManipulator(tokenProcessor, settingsRepository),
-                new FedExPackagingTypeManipulator(),
-                new FedExPickupManipulator(),
-                new FedExServiceTypeManipulator(),
-                new FedExPackageSpecialServicesManipulator(),
-                new FedExShippingWebAuthenticationDetailManipulator(),
-                new FedExShippingClientDetailManipulator(settingsRepository),
-                new FedExShippingVersionManipulator(),
-                new FedExReferenceManipulator(tokenProcessor, settingsRepository),
-                new FedExPackageDetailsManipulator(),
-                new FedExEmailNotificationsManipulator(),
-                new FedExPriorityAlertManipulator(),
-                new FedExDryIceManipulator(),
-                new FedExMasterTrackingManipulator(),
-                new FedExCodOptionsManipulator(settingsRepository),
-                new FedExCustomsManipulator(),
-                new FedExHoldAtLocationManipulator(),
-                new FedExAdmissibilityManipulator(),
-                new FedExBrokerManipulator(),
-                new FedExCommercialInvoiceManipulator(),
-                new FedExHomeDeliveryManipulator(),
-                new FedExFreightManipulator(settingsRepository),
-                new FedExDangerousGoodsManipulator(),
-                new FedExSmartPostManipulator(),
-                new FedExReturnsManipulator(),
-                new FedExTrafficInArmsManipulator(),
-                new FedExInternationalControlledExportManipulator(),
-                new FedExOneRateManipulator()
-            };
+        //    if (shipmentEntity.FedEx == null)
+        //    {
+        //        throw new ArgumentException("ShipmentEntity not associated with a FedEx shipment.");
+        //    }
 
-            IFedExNativeShipmentRequest nativeShipmentRequest;
+        //    // Load up all of the dependencies for a FedExShipRequest and provide them to the constructor
+        //    List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>()
+        //    {
+        //        // This list will grow as shipping request manipulators are implemented
+        //        new FedExShipperManipulator(),
+        //        new FedExRecipientManipulator(),
+        //        new FedExShipmentSpecialServiceTypeManipulator(),
+        //        new FedExRateTypeManipulator(settingsRepository),
+        //        new FedExLabelSpecificationManipulator(settingsRepository),
+        //        new FedExTotalWeightManipulator(),
+        //        new FedExTotalInsuredValueManipulator(),
+        //        new FedExShippingChargesManipulator(),
+        //        new FedExCertificationManipulator(tokenProcessor, settingsRepository),
+        //        new FedExPackagingTypeManipulator(),
+        //        new FedExPickupManipulator(),
+        //        new FedExServiceTypeManipulator(),
+        //        new FedExPackageSpecialServicesManipulator(),
+        //        new FedExShippingWebAuthenticationDetailManipulator(),
+        //        new FedExShippingClientDetailManipulator(settingsRepository),
+        //        new FedExShippingVersionManipulator(),
+        //        new FedExReferenceManipulator(tokenProcessor, settingsRepository),
+        //        new FedExPackageDetailsManipulator(),
+        //        new FedExEmailNotificationsManipulator(),
+        //        new FedExPriorityAlertManipulator(),
+        //        new FedExDryIceManipulator(),
+        //        new FedExMasterTrackingManipulator(),
+        //        new FedExCodOptionsManipulator(settingsRepository),
+        //        new FedExCustomsManipulator(),
+        //        new FedExHoldAtLocationManipulator(),
+        //        new FedExAdmissibilityManipulator(),
+        //        new FedExBrokerManipulator(),
+        //        new FedExCommercialInvoiceManipulator(),
+        //        new FedExHomeDeliveryManipulator(),
+        //        new FedExFreightManipulator(settingsRepository),
+        //        new FedExDangerousGoodsManipulator(),
+        //        new FedExSmartPostManipulator(),
+        //        new FedExReturnsManipulator(),
+        //        new FedExTrafficInArmsManipulator(),
+        //        new FedExInternationalControlledExportManipulator(),
+        //        new FedExOneRateManipulator()
+        //    };
 
-            nativeShipmentRequest = new ProcessShipmentRequest();
+        //    IFedExNativeShipmentRequest nativeShipmentRequest;
 
-            return new FedExShipRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), responseFactory, settingsRepository, nativeShipmentRequest);
-        }
+        //    nativeShipmentRequest = new ProcessShipmentRequest();
+
+        //    return new FedExShipRequest(manipulators, shipmentEntity, serviceGatewayFactory.Create(shipmentEntity, settingsRepository), responseFactory, settingsRepository, nativeShipmentRequest);
+        //}
 
         /// <summary>
         /// Creates the version capture request.
@@ -150,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             // TODO: Look into injecting the response factory here like that used in the CreateShipResponse method
-            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, defaultFedExServiceGateway, account);
+            return new FedExVersionCaptureRequest(manipulators, shipmentEntity, accountLocationId, serviceGatewayFactory.Create(settingsRepository), account);
         }
 
         /// <summary>
@@ -170,29 +166,35 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             };
 
             // TODO: Look into injecting the response factory here like that used in the CreateShipResponse method
-            return new FedExPackageMovementRequest(manipulators, shipmentEntity, account, defaultFedExServiceGateway);
+            return new FedExPackageMovementRequest(manipulators, shipmentEntity, account, serviceGatewayFactory.Create(settingsRepository));
         }
 
         /// <summary>
-        /// Creates the Search Location request.
+        /// Creates the Search Location request
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="accountEntity">The account entity.</param>
-        /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx searching dropoff location.</returns>
-        public CarrierRequest CreateSearchLocationsRequest(ShipmentEntity shipmentEntity, FedExAccountEntity accountEntity)
-        {
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
-            {
-                new FedExGlobalShipAddressAddressManipulator(),
-                new FedExGlobalShipAddressConstraintManipulator(),
-                new FedExGlobalShipAddressWebAuthenticationDetailManipulator(settingsRepository),
-                new FedExGlobalShipAddressVersionManipulator(),
-                new FedExGlobalShipAddressClientDetailManipulator(settingsRepository)
-            };
+        public IFedExGlobalShipAddressRequest CreateSearchLocationsRequest() =>
+            lifetimeScope.Resolve<IFedExGlobalShipAddressRequest>(TypedParameter.From(settingsRepository));
 
-            return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, responseFactory, defaultFedExServiceGateway, accountEntity);
-        }
+        ///// <summary>
+        ///// Creates the Search Location request.
+        ///// </summary>
+        ///// <param name="shipmentEntity">The shipment entity.</param>
+        ///// <param name="accountEntity">The account entity.</param>
+        ///// <returns>A CarrierRequest object that can be used for submitting a request to
+        ///// FedEx searching drop-off location.</returns>
+        //public FedExGlobalShipAddressRequest CreateSearchLocationsRequest(ShipmentEntity shipmentEntity, FedExAccountEntity accountEntity)
+        //{
+        //    List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
+        //    {
+        //        new FedExGlobalShipAddressAddressManipulator(),
+        //        new FedExGlobalShipAddressConstraintManipulator(),
+        //        new FedExGlobalShipAddressWebAuthenticationDetailManipulator(settingsRepository),
+        //        new FedExGlobalShipAddressVersionManipulator(),
+        //        new FedExGlobalShipAddressClientDetailManipulator(settingsRepository)
+        //    };
+
+        //    return new FedExGlobalShipAddressRequest(manipulators, shipmentEntity, responseFactory, serviceGatewayFactory.Create(settingsRepository), accountEntity);
+        //}
 
         /// <summary>
         /// Creates the ground close request.
@@ -210,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExCloseDateManipulator()
             };
 
-            return new FedExGroundCloseRequest(manipulators, null, defaultFedExServiceGateway, responseFactory, accountEntity);
+            return new FedExGroundCloseRequest(manipulators, null, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -229,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExPickupCarrierManipulator()
             };
 
-            return new FedExSmartPostCloseRequest(manipulators, null, defaultFedExServiceGateway, responseFactory, accountEntity);
+            return new FedExSmartPostCloseRequest(manipulators, null, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -249,7 +251,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExVoidParametersManipulator()
             };
 
-            return new FedExVoidRequest(manipulators, shipmentEntity, ChooseFedExServiceGateway(shipmentEntity), responseFactory, accountEntity);
+            return new FedExVoidRequest(manipulators, shipmentEntity, serviceGatewayFactory.Create(shipmentEntity, settingsRepository), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -268,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExCspContactManipulator()
             };
 
-            return new FedExRegisterCspUserRequest(manipulators, defaultFedExServiceGateway, responseFactory, accountEntity);
+            return new FedExRegisterCspUserRequest(manipulators, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -287,54 +289,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExSubscriberManipulator()
             };
 
-            return new FedExSubscriptionRequest(manipulators, defaultFedExServiceGateway, responseFactory, accountEntity);
+            return new FedExSubscriptionRequest(manipulators, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
-
 
         /// <summary>
-        /// Creates the rate request.
+        /// Creates the rate request
         /// </summary>
-        /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <param name="specializedManipulators">Any specialized manipulators that should be added to the request in addition
-        /// to the standard/basic manipulators of the rate request.</param>
-        /// <returns>A CarrierRequest object that can be used for submitting a request to
-        /// FedEx for obtaining shipping rates.</returns>
-        public CarrierRequest CreateRateRequest(ShipmentEntity shipmentEntity, IEnumerable<ICarrierRequestManipulator> specializedManipulators)
-        {
-            FedExSettings settings = new FedExSettings(settingsRepository);
-
-            // Create the "standard" manipulators for a FedEx rate request
-            List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
-            {
-                new FedExRateClientDetailManipulator(),
-                new FedExRateWebAuthenticationManipulator(settings),
-                new FedExRateVersionManipulator(),
-                new FedExRateReturnTransitManipulator(),
-                new FedExRateShipperManipulator(),
-                new FedExRateRecipientManipulator(),
-                new FedExRateShipmentSpecialServiceTypeManipulator(),
-                new FedExRateTotalInsuredValueManipulator(settings),
-                new FedExRateTotalWeightManipulator(),
-                new FedExRateRateTypeManipulator(settingsRepository),
-                new FedExRatePickupManipulator(),
-                new FedExRatePackageDetailsManipulator(settings),
-                new FedExRatePackageSpecialServicesManipulator(),
-                new FedExRatePackagingTypeManipulator(),
-                new FedExRateCodOptionsManipulator(settingsRepository),
-                new FedExRateDryIceManipulator(settings),
-                new FedExRateBrokerManipulator(settings),
-                new FedExRateDangerousGoodsManipulator(),
-                new FedExRateHoldAtLocationManipulator()
-            };
-
-            if (specializedManipulators != null && specializedManipulators.Any())
-            {
-                // Add any special manipulators on top of the basic manipulators
-                manipulators.AddRange(specializedManipulators);
-            }
-
-            return new FedExRateRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, responseFactory, settingsRepository);
-        }
+        public IFedExRateRequest CreateRateRequest() =>
+            lifetimeScope.Resolve<IFedExRateRequest>(TypedParameter.From(settingsRepository));
 
         /// <summary>
         /// Creates the track request.
@@ -353,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExTrackingPackageIdentifierManipulator()
             };
 
-            return new FedExTrackRequest(manipulators, shipmentEntity, defaultFedExServiceGateway, responseFactory, accountEntity);
+            return new FedExTrackRequest(manipulators, shipmentEntity, serviceGatewayFactory.Create(settingsRepository), responseFactory, accountEntity);
         }
 
         /// <summary>
@@ -366,19 +328,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             Uri fedExEndpoint = new Uri(new FedExSettings(settingsRepository).EndpointUrl);
             return new CertificateRequest(fedExEndpoint, certificateInspector);
-        }
-
-        /// <summary>
-        /// If Email Return Shipment, return OpenShipFedExServiceGateway, else return default gateway.
-        /// </summary>
-        public IFedExServiceGateway ChooseFedExServiceGateway(ShipmentEntity shipmentEntity)
-        {
-            IFedExServiceGateway fedExServiceGateway = defaultFedExServiceGateway;
-            if (shipmentEntity.ReturnShipment && shipmentEntity.FedEx.ReturnType == (int) FedExReturnType.EmailReturnLabel)
-            {
-                fedExServiceGateway = openShipFedExServiceGateway;
-            }
-            return fedExServiceGateway;
         }
     }
 }

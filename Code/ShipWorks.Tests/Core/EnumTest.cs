@@ -1,8 +1,10 @@
-﻿using ShipWorks.Tests.Shared;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Rate;
+using ShipWorks.Tests.Shared;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,11 +20,43 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
+        public void Verify_AllObfuscatedEnums_CanGetMetadata()
+        {
+            var metadataErrors = AssemblyProvider.GetAssemblies()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => x.IsEnum)
+                .Where(HasObfuscationAttribute)
+                .Select(x => new { Type = x, Value = Enum.GetValues(x).OfType<Enum>().First() })
+                .Select(x =>
+                {
+                    try
+                    {
+                        EnumHelper.GetDetails(x.Value);
+                        return null;
+                    }
+                    catch (Exception ex)
+                    {
+                        return new { x.Type, Exception = ex };
+                    }
+                })
+                .Where(x => x != null)
+                .ToList();
+
+            foreach (var error in metadataErrors)
+            {
+                output.WriteLine($"{error.Type}; {error.Exception.Message}");
+            }
+
+            Assert.Empty(metadataErrors);
+        }
+
+        [Fact]
         public void Verify_EnumObfuscation_IsSet()
         {
             IEnumerable<Assembly> assemblies = AssemblyProvider.GetAssemblies();
             IEnumerable<Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
+                .Except(ignoreTypes)
                 .Where(t => t.Namespace != null &&
                             t.IsEnum &&
                             t.Namespace.ToUpperInvariant().Contains("ShipWorks".ToUpperInvariant()) &&
@@ -61,6 +95,12 @@ namespace ShipWorks.Tests.Core
         }
 
         /// <summary>
+        /// Does the type have an obfuscation attribute
+        /// </summary>
+        private bool HasObfuscationAttribute(Type type) =>
+            type.GetCustomAttribute<ObfuscationAttribute>(false) != null;
+
+        /// <summary>
         /// If namespace begins with these values, they are ignored.
         /// </summary>
         private List<string> ignoreShipmentTypeNameParts = new List<string>
@@ -81,6 +121,11 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Stores.Platforms.Odbc.Odbc32".ToUpperInvariant(),
                 "ShipWorks.Stores.Platforms.Walmart.DTO".ToUpperInvariant()
             };
+
+        private HashSet<Type> ignoreTypes = new HashSet<Type>
+        {
+            typeof(FedExRateRequestOptions),
+        };
 
         /// <summary>
         /// Actual namespace of the enum

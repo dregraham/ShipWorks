@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:ns="http://fedex.com/ws/rate/v20" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RateServiceDefinitions" targetNamespace="http://fedex.com/ws/rate/v20" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/rate/v22" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RateServiceDefinitions" targetNamespace="http://fedex.com/ws/rate/v22" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v20" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/rate/v22" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="RateReply" type="ns:RateReply" />
       <xs:element name="RateRequest" type="ns:RateRequest" />
       <xs:complexType name="AdditionalLabelsDetail">
@@ -78,6 +78,11 @@
               <xs:documentation>Indicates whether this address residential (as opposed to commercial).</xs:documentation>
             </xs:annotation>
           </xs:element>
+          <xs:element minOccurs="0" name="GeographicCoordinates" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The geographic coordinates cooresponding to this address.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="AlcoholDetail">
@@ -143,6 +148,54 @@
           <xs:enumeration value="POSTNET" />
           <xs:enumeration value="QR_CODE" />
           <xs:enumeration value="UCC128" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="BatteryClassificationDetail">
+        <xs:annotation>
+          <xs:documentation>Describes attributes of a battery or cell that are used for classification purposes. Typically this structure would be used to allow customers to declare batteries or cells for which full dangerous goods documentation and procedures are not required.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Material" type="ns:BatteryMaterialType">
+            <xs:annotation>
+              <xs:documentation>Describes the material composition of the battery or cell.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="Packing" type="ns:BatteryPackingType">
+            <xs:annotation>
+              <xs:documentation>Describes the packing arrangement of the battery or cell with respect to other items within the same package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" name="RegulatorySubType" type="ns:BatteryRegulatorySubType">
+            <xs:annotation>
+              <xs:documentation>A regulation specific classification for the battery or cell.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="BatteryMaterialType">
+        <xs:annotation>
+          <xs:documentation>Describes the material composition of a battery or cell.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="LITHIUM_ION" />
+          <xs:enumeration value="LITHIUM_METAL" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="BatteryPackingType">
+        <xs:annotation>
+          <xs:documentation>Describes the packing arrangement of a battery or cell with respect to other items within the same package.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="CONTAINED_IN_EQUIPMENT" />
+          <xs:enumeration value="PACKED_WITH_EQUIPMENT" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="BatteryRegulatorySubType">
+        <xs:annotation>
+          <xs:documentation>A regulation specific classification for a battery or cell.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="IATA_SECTION_II" />
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="BrokerDetail">
@@ -637,7 +690,6 @@
         <xs:restriction base="xs:string">
           <xs:enumeration value="INTERNATIONAL_DISTRIBUTION_FREIGHT" />
           <xs:enumeration value="INTERNATIONAL_ECONOMY_DISTRIBUTION" />
-          <xs:enumeration value="INTERNATIONAL_GROUND_DIRECT_DISTRIBUTION" />
           <xs:enumeration value="INTERNATIONAL_GROUND_DISTRIBUTION" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY_DISTRIBUTION" />
           <xs:enumeration value="TRANSBORDER_DISTRIBUTION" />
@@ -1484,11 +1536,17 @@
           <xs:enumeration value="TRANSPORT_FACILITIES_TAX" />
         </xs:restriction>
       </xs:simpleType>
+      <xs:simpleType name="EtdAttributeType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="POST_SHIPMENT_UPLOAD_REQUESTED" />
+        </xs:restriction>
+      </xs:simpleType>
       <xs:complexType name="EtdDetail">
         <xs:annotation>
           <xs:documentation>Electronic Trade document references used with the ETD special service.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Attributes" type="ns:EtdAttributeType" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="RequestedDocumentCopies" type="ns:RequestedShippingDocumentType">
             <xs:annotation>
               <xs:documentation>Indicates the types of shipping documents produced for the shipper by FedEx (see ShippingDocumentSpecification) which should be copied back to the shipper in the shipment result data.</xs:documentation>
@@ -2858,6 +2916,7 @@
         <xs:restriction base="xs:string">
           <xs:enumeration value="ALCOHOL" />
           <xs:enumeration value="APPOINTMENT_DELIVERY" />
+          <xs:enumeration value="BATTERY" />
           <xs:enumeration value="COD" />
           <xs:enumeration value="DANGEROUS_GOODS" />
           <xs:enumeration value="DRY_ICE" />
@@ -2882,6 +2941,11 @@
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="0" name="DangerousGoodsDetail" type="ns:DangerousGoodsDetail" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="BatteryDetails" type="ns:BatteryClassificationDetail">
+            <xs:annotation>
+              <xs:documentation>Provides details about the batteries or cells that are contained within this specific package.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element minOccurs="0" name="DryIceWeight" type="ns:Weight" />
           <xs:element minOccurs="0" name="SignatureOptionDetail" type="ns:SignatureOptionDetail" />
           <xs:element minOccurs="0" name="PriorityAlertDetail" type="ns:PriorityAlertDetail" />
@@ -3459,6 +3523,7 @@
           <xs:enumeration value="FOOD_OR_PERISHABLE" />
           <xs:enumeration value="NAFTA" />
           <xs:enumeration value="NOT_APPLICABLE_FOR_LOW_CUSTOMS_VALUE_EXCEPTION" />
+          <xs:enumeration value="NOT_IN_FREE_CIRCULATION" />
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="RegulatoryLabelContentDetail">
@@ -3738,6 +3803,7 @@
           <xs:documentation>The "PAYOR..." rates are expressed in the currency identified in the payor's rate table(s). The "RATED..." rates are expressed in the currency of the origin country. Former "...COUNTER..." values have become "...RETAIL..." values, except for PAYOR_COUNTER and RATED_COUNTER, which have been removed.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
+          <xs:enumeration value="NEGOTIATED" />
           <xs:enumeration value="PAYOR_ACCOUNT_PACKAGE" />
           <xs:enumeration value="PAYOR_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PAYOR_LIST_PACKAGE" />
@@ -3746,6 +3812,7 @@
           <xs:enumeration value="PREFERRED_ACCOUNT_SHIPMENT" />
           <xs:enumeration value="PREFERRED_LIST_PACKAGE" />
           <xs:enumeration value="PREFERRED_LIST_SHIPMENT" />
+          <xs:enumeration value="PREFERRED_NEGOTIATED" />
         </xs:restriction>
       </xs:simpleType>
       <xs:complexType name="Rma">
@@ -3834,6 +3901,7 @@
           <xs:enumeration value="INTERNATIONAL_ECONOMY_FREIGHT" />
           <xs:enumeration value="INTERNATIONAL_FIRST" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY" />
+          <xs:enumeration value="INTERNATIONAL_PRIORITY_EXPRESS" />
           <xs:enumeration value="INTERNATIONAL_PRIORITY_FREIGHT" />
           <xs:enumeration value="PRIORITY_OVERNIGHT" />
           <xs:enumeration value="SAME_DAY" />
@@ -4235,6 +4303,7 @@
           <xs:enumeration value="EAST_COAST_SPECIAL" />
           <xs:enumeration value="ELECTRONIC_TRADE_DOCUMENTS" />
           <xs:enumeration value="EVENT_NOTIFICATION" />
+          <xs:enumeration value="EXCLUDE_FROM_CONSOLIDATION" />
           <xs:enumeration value="EXTREME_LENGTH" />
           <xs:enumeration value="FEDEX_ONE_RATE" />
           <xs:enumeration value="FOOD" />
@@ -4613,7 +4682,9 @@
       </xs:simpleType>
       <xs:simpleType name="SurchargeType">
         <xs:restriction base="xs:string">
+          <xs:enumeration value="ACCOUNT_NUMBER_PROCESSING_FEE" />
           <xs:enumeration value="ADDITIONAL_HANDLING" />
+          <xs:enumeration value="ADDRESS_CORRECTION" />
           <xs:enumeration value="ANCILLARY_FEE" />
           <xs:enumeration value="APPOINTMENT_DELIVERY" />
           <xs:enumeration value="BROKER_SELECT_OPTION" />
@@ -4658,6 +4729,7 @@
           <xs:enumeration value="NON_MACHINABLE" />
           <xs:enumeration value="OFFSHORE" />
           <xs:enumeration value="ON_CALL_PICKUP" />
+          <xs:enumeration value="ON_DEMAND_CARE" />
           <xs:enumeration value="OTHER" />
           <xs:enumeration value="OUT_OF_DELIVERY_AREA" />
           <xs:enumeration value="OUT_OF_PICKUP_AREA" />
@@ -4835,6 +4907,7 @@
           <xs:enumeration value="COMMERCIAL_INVOICE" />
           <xs:enumeration value="ETD_LABEL" />
           <xs:enumeration value="NAFTA_CERTIFICATE_OF_ORIGIN" />
+          <xs:enumeration value="NET_RATE_SHEET" />
           <xs:enumeration value="OTHER" />
           <xs:enumeration value="PRO_FORMA_INVOICE" />
         </xs:restriction>
@@ -4955,7 +5028,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" fixed="20" name="Major" type="xs:int">
+          <xs:element minOccurs="1" fixed="22" name="Major" type="xs:int">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -4989,7 +5062,7 @@
   <binding name="RateServiceSoapBinding" type="ns:RatePortType">
     <s1:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <operation name="getRates">
-      <s1:operation soapAction="http://fedex.com/ws/rate/v20/getRates" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/rate/v22/getRates" style="document" />
       <input>
         <s1:body use="literal" />
       </input>

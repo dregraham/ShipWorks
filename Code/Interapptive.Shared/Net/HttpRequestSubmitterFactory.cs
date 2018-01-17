@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Interapptive.Shared.ComponentRegistration;
 
 namespace Interapptive.Shared.Net
 {
-
     /// <summary>
     /// Creates requested HttpRequestSubmitterFactory
     /// </summary>
+    [Component]
     public class HttpRequestSubmitterFactory : IHttpRequestSubmitterFactory
     {
         /// <summary>
@@ -16,17 +13,17 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public IHttpRequestSubmitter GetHttpBinaryPostRequestSubmitter(byte[] postData) =>
             new HttpBinaryPostRequestSubmitter(postData);
-
+        
         /// <summary>
         /// Gets an HttpTextPostRequestSubmitter
         /// </summary>
-        public IHttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType) => 
+        public IHttpRequestSubmitter GetHttpTextPostRequestSubmitter(string text, string contentType) =>
             new HttpTextPostRequestSubmitter(text, contentType);
 
         /// <summary>
         /// Gets the HTTP variable request submitter.
         /// </summary>
-        public IHttpVariableRequestSubmitter GetHttpVariableRequestSubmitter() => 
+        public IHttpVariableRequestSubmitter GetHttpVariableRequestSubmitter() =>
             new HttpVariableRequestSubmitter();
     }
 }

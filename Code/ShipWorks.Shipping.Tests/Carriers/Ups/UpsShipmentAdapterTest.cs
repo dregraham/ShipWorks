@@ -40,25 +40,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new UpsShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UpsShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new UpsShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UpsShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
                 new UpsShipmentAdapter(shipment, null,
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new UpsShipmentAdapter(shipment, mock.Create
-                    <IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
+                new UpsShipmentAdapter(shipment,
+                    mock.Build<IShipmentTypeManager>(), null, mock.Build<IStoreManager>()));
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenPostalShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new UpsShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new UpsShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
         }
 
         [Fact]
@@ -307,7 +307,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
         [Fact]
         public void AddPackage_DelegatesToCustomsManager_WhenNewPackageIsAdded()
         {
-            var shipmentType = mock.WithShipmentTypeFromShipmentManager(x =>
+            mock.WithShipmentTypeFromShipmentManager(x =>
                 x.Setup(b => b.SupportsMultiplePackages).Returns(true));
 
             var testObject = mock.Create<UpsShipmentAdapter>(TypedParameter.From(shipment));

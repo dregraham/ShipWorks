@@ -47,17 +47,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new FedExShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new FedExShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new FedExShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new FedExShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
                 new FedExShipmentAdapter(shipment, null,
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
                 new FedExShipmentAdapter(shipment, mock.
-                    Create<IShipmentTypeManager>(), null, mock.Create<IStoreManager>()));
+                    Create<IShipmentTypeManager>(), null, mock.Build<IStoreManager>()));
         }
 
         [Fact]

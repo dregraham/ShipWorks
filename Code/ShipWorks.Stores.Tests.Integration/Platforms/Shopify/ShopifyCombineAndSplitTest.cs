@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<ShopifyStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.Shopify)

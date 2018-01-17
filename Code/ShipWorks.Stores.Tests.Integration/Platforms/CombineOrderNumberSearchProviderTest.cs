@@ -73,7 +73,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
                 var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
                 Assert.Equal(expectedCount, results?.Count());
-                Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+
+                if (results.Any())
+                {
+                    Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+                }
             }
         }
 

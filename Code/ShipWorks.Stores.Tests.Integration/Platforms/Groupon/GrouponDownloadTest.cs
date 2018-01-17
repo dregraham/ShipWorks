@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var order = await GetOrderWithItems("GG-ZPKZ-WSTB-337S-VKMY");
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var mergedOrder = await GetOrderWithItemsByParentOrderId("12345");

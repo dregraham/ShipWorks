@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 {
     /// <summary>
     /// A repository for FedEx counter rate accounts
     /// </summary>
-    public class FedExCounterRateAccountRepository : FedExSettingsRepository,
+    public class FedExCounterRateAccountRepository : IFedExSettingsRepository,
         ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>,
         ICarrierAccountRetriever
     {
@@ -30,6 +32,31 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [use test server] based on a registry setting.
+        /// </summary>
+        public bool UseTestServer
+        {
+            get { return FedExRegistryOptions.UseTestServer; }
+            set { FedExRegistryOptions.UseTestServer = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to [use list rates] based on a registry setting. Indicates if LIST rates are in
+        /// effect, instead of the standard ACCOUNT rates
+        /// </summary>
+        public bool UseListRates
+        {
+            get { return FedExRegistryOptions.UseListRates; }
+            set { FedExRegistryOptions.UseListRates = value; }
+        }
+
+        /// <summary>
+        /// Indicates whether the current user is an Interapptive user.
+        /// </summary>
+        /// <value><c>true</c> if this user is an Interapptive user; otherwise, <c>false</c>.</value>
+        public bool IsInterapptiveUser => InterapptiveOnly.IsInterapptiveUser;
+
+        /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
         public IEnumerable<FedExAccountEntity> Accounts => lazyAccounts.Value;
@@ -38,6 +65,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// Gets the accounts for the carrier.
         /// </summary>
         public IEnumerable<IFedExAccountEntity> AccountsReadOnly => lazyAccounts.Value;
+
+
+        /// <summary>
+        /// Saves the specified account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        /// v
+        public void Save<T>(T account) => Save(account as FedExAccountEntity);
+
+        /// <summary>
+        /// Deletes the account.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="account">The account.</param>
+        public void DeleteAccount<T>(T account) => DeleteAccount(account as FedExAccountEntity);
 
         /// <summary>
         /// Force a check for changes
@@ -106,21 +149,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <summary>
         /// Gets shipping settings with the counter version of the FedEx credentials
         /// </summary>
-        /// <returns></returns>
-        public override ShippingSettingsEntity GetShippingSettings()
+        public ShippingSettingsEntity GetShippingSettings()
         {
-            ShippingSettingsEntity settings = base.GetShippingSettings();
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
             settings.FedExUsername = credentialStore.FedExUsername;
             settings.FedExPassword = credentialStore.FedExPassword;
             return settings;
         }
 
         /// <summary>
+        /// Saves the shipping settings to the data source.
+        /// </summary>
+        public void SaveShippingSettings(ShippingSettingsEntity shippingSettings) =>
+            ShippingSettings.Save(shippingSettings);
+
+        /// <summary>
         /// Gets the FedEx account that should be used for counter rates.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A FedExAccountEntity object.</returns>
-        public override IEntity2 GetAccount(ShipmentEntity shipment)
+        public IEntity2 GetAccount(ShipmentEntity shipment)
         {
             return Accounts.First();
         }
@@ -128,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <summary>
         /// Gets a list of the FedEx account that should be used for counter rates
         /// </summary>
-        public override IEnumerable<IEntity2> GetAccounts()
+        public IEnumerable<IEntity2> GetAccounts()
         {
             return lazyAccounts.Value;
         }
@@ -140,6 +188,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         public void Save(FedExAccountEntity account)
         {
             // Nothing to save. This is a counter rate account.
+        }
+
+        public void DeleteAccount(FedExAccountEntity account)
+        {
+            // Nothing to save for counter rate account.
         }
 
         /// <summary>
@@ -159,5 +212,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
             AccountsReadOnly.OfType<ICarrierAccount>();
+
+        /// <summary>
+        /// Returns a list of FedEx accounts.
+        /// </summary>
+        IEnumerable<ICarrierAccount> ICarrierAccountRetriever.Accounts => Accounts;
     }
 }

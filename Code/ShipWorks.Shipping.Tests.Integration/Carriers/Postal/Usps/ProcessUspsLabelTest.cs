@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Licensing;
@@ -16,15 +15,13 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
@@ -40,33 +37,20 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         private readonly CreateIndiciumResult defaultResponse = new CreateIndiciumResult
         {
             TrackingNumber = string.Empty,
-            Rate = new RateV24(),
+            Rate = new RateV25(),
             ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
         };
 
         public ProcessUspsLabelTest(DatabaseFixture db)
         {
-            context = db.CreateDataContext(x => ContainerInitializer.Initialize(x),
-                mock =>
-                {
-                    // These mocks need to be created here so they are added to IoC registration
-                    webServiceFactory = mock.CreateMock<IUspsWebServiceFactory>();
-                    mock.Provide(webServiceFactory.Object);
-                    mock.Override<IDataResourceManager>();
-                    mock.Override<IActionDispatcher>();
-                    mock.Override<ITangoWebClient>();
-                });
-
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentValidator>(item =>
-                item.Setup(x => x.Validate(It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess()));
-
-            context.Mock.SetupDefaultMocksForEnumerable<ILabelRetrievalShipmentManipulator>(item =>
-                item.Setup(x => x.Manipulate(It.IsAny<ShipmentEntity>())).Returns((ShipmentEntity s) => s));
-
-            context.Mock.Provide(new Control());
-            context.Mock.Provide<Func<Control>>(() => new Control());
-            context.Mock.Override<ITangoWebClient>();
-            context.Mock.Override<IMessageHelper>();
+            context = db.CreateDataContext((mock, builder) =>
+            {
+                webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
+                builder.RegisterMock<IDataResourceManager>(mock);
+                builder.RegisterMock<IActionDispatcher>(mock);
+                builder.RegisterMock<ITangoWebClient>(mock);
+                builder.RegisterMock<IMessageHelper>(mock);
+            });
 
             Modify.Store(context.Store)
                 .Set(x => x.Enabled, true)
@@ -89,23 +73,38 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         [Fact]
         public async Task Process_WithUspsShipment_SavesTrackingNumber()
         {
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
                         TrackingNumber = "FooTracking",
-                        Rate = new RateV24(),
+                        Rate = new RateV25(),
                         ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
                     });
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(webService);
 
-            var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+            var result = await context.Container.Resolve<IShipmentProcessor>()
+                .Process(new[] { shipment }, context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful);
@@ -124,7 +123,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 .Set(x => x.OriginPerson = localAddress)
                 .Set(x => x.ShipPerson = localAddress)
                 .Set(x => x.Postal.Usps.RateShop = true)
-                .Set(x => x.Postal.Service = (int) PostalServiceType.FirstClass)
+                .Set(x => x.Postal.Service = (int)PostalServiceType.FirstClass)
                 .Save();
 
             var accounts = new Dictionary<string, long>
@@ -134,27 +133,42 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 { "third", Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Set(x => x.Username, "third").Save().AccountId },
             };
 
-            Mock<ISwsimV67> webService = context.Mock.CreateMock<ISwsimV67>(w =>
+            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>())).Returns(defaultResponse);
 
-                Func<decimal, RateV24[]> createRate = amount => new[] {
-                    new RateV24 { ServiceType = ServiceType.USFC, Amount = amount,
+                Func<decimal, RateV25[]> createRate = amount => new[] {
+                    new RateV25 { ServiceType = ServiceType.USFC, Amount = amount,
                         AddOns = new [] { new AddOnV11 { AddOnType = AddOnTypeV11.USADC } }, DeliverDays = "2" } };
 
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV24>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV25>()))
                     .Returns(createRate(first));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV24>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV25>()))
                     .Returns(createRate(second));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV24>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV25>()))
                     .Returns(createRate(third));
+
+                AccountInfoV27 accountInfo = new AccountInfoV27()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                Address address = new Address();
+                string email = "";
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<object>(), out accountInfo, out address, out email)).Returns("");
             });
 
             webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(webService);
 
-            var result = await context.Mock.Create<ShipmentProcessor>()
-                .Process(new[] { shipment }, context.Mock.Create<ICarrierConfigurationShipmentRefresher>(),
+            var result = await context.Container.Resolve<IShipmentProcessor>()
+                .Process(new[] { shipment }, context.Mock.Build<ICarrierConfigurationShipmentRefresher>(),
                 null, null);
 
             Assert.True(result.First().IsSuccessful, result.First().Error?.Message);

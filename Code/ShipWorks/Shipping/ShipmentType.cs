@@ -139,10 +139,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the ShipmentType needs the ResidentialResult field determined for the given shipment.
         /// </summary>
-        public virtual bool IsResidentialStatusRequired(ShipmentEntity shipment)
-        {
-            return false;
-        }
+        public virtual bool IsResidentialStatusRequired(IShipmentEntity shipment) => false;
 
         /// <summary>
         /// Gets or sets the certificate inspector that should be used when wanting to add additional security
@@ -313,13 +310,23 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Creates the UserControl that is used to edit customs options
+        /// </summary>
+        public virtual CustomsControlBase CreateCustomsControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<CustomsControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<CustomsControlBase>(ShipmentTypeCode) :
+                CreateCustomsControl();
+        }
+
+        /// <summary>
         /// Creates the UserControl that is used to edit return shipments
         /// </summary>
         public virtual ReturnsControlBase CreateReturnsControl()
         {
             return new ReturnsControlBase();
         }
-
+        
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
@@ -761,49 +768,22 @@ namespace ShipWorks.Shipping
         /// Update the person address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
         /// </summary>
-        public virtual bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
+        public bool UpdatePersonAddress(ShipmentEntity shipment, PersonAdapter person, long originID)
         {
-            if (shipment.Processed)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return true;
-            }
+                IShippingOriginManager shippingOriginManager = lifetimeScope.Resolve<IShippingOriginManager>();
 
-            // Copy from the store
-            if (originID == (int) ShipmentOriginSource.Store)
-            {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                PersonAdapter originAddress = shippingOriginManager.GetOriginAddress(originID, shipment);
+
+                if (originAddress != null)
                 {
-                    // We need to use a temporary address so that we only do a single update on the destination address
-                    // This is necessary because the source has a null parsed name which causes the destination to
-                    // look dirty even if we end up setting the ParsedName to what it originally was.
-                    StoreEntity store = shipment.Order?.Store ?? lifetimeScope.Resolve<IStoreManager>().GetRelatedStore(shipment.OrderID);
-
-                    PersonAdapter storeCopy = new PersonAdapter();
-                    PersonAdapter.Copy(store, string.Empty, storeCopy);
-                    storeCopy.ParsedName = PersonName.Parse(store.StoreName);
-
-                    PersonAdapter.Copy(storeCopy, person);
+                    originAddress.CopyTo(person);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            // Other - no change.
-            if (originID == (int) ShipmentOriginSource.Other)
-            {
-                return true;
-            }
-
-            // Try looking it up as ShippingOriginID
-            IShippingOriginEntity origin = ShippingOriginManager.GetOriginReadOnly(originID);
-            if (origin != null)
-            {
-                PersonAdapter.Copy(origin.AsPersonAdapter(), person);
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -977,12 +957,9 @@ namespace ShipWorks.Shipping
         /// Determines if a shipment will be domestic or international
         /// </summary>
         /// <param name="shipmentEntity"></param>
-        public virtual bool IsDomestic(ShipmentEntity shipmentEntity)
+        public virtual bool IsDomestic(IShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity == null)
-            {
-                throw new ArgumentNullException("shipmentEntity");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipmentEntity, nameof(shipmentEntity));
 
             return shipmentEntity.AdjustedOriginCountryCode().ToUpperInvariant() == shipmentEntity.AdjustedShipCountryCode().ToUpperInvariant();
         }
@@ -1015,14 +992,25 @@ namespace ShipWorks.Shipping
         /// shipping address and any store specific logic that may impact whether customs
         /// is required (i.e. eBay GSP).
         /// </summary>
-        public virtual bool IsCustomsRequired(ShipmentEntity shipment)
+        /// <remarks>
+        /// This override is only needed for BestRate since it loads data into the shipment.
+        /// No other shipment type needs this to be a concrete type.
+        /// </remarks>
+        public virtual bool IsCustomsRequired(ShipmentEntity shipment) =>
+            IsCustomsRequired(shipment as IShipmentEntity);
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address and any store specific logic that may impact whether customs
+        /// is required (i.e. eBay GSP).
+        /// </summary>
+        protected bool IsCustomsRequired(IShipmentEntity shipment)
         {
             // Some carts have an international shipping program in place that allow
             // sellers to ship international orders to a domestic facility meaning
             // customs is not required despite the international shipping address, so
             // let the store take a look at the shipment as well to determine if customs
             // are required in addition to the just looking at the shipping address.
-
             bool requiresCustoms = IsCustomsRequiredByShipment(shipment);
 
             if (requiresCustoms)
@@ -1044,7 +1032,7 @@ namespace ShipWorks.Shipping
         /// shipping address.
         /// </summary>
         [NDependIgnoreComplexMethodAttribute]
-        protected virtual bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        protected virtual bool IsCustomsRequiredByShipment(IShipmentEntity shipment)
         {
             bool requiresCustoms = !IsDomestic(shipment);
 
@@ -1111,14 +1099,14 @@ namespace ShipWorks.Shipping
         /// <param name="shipment">Shipment that should be checked</param>
         /// <returns></returns>
         /// <remarks>This check handles the situation where a PR address has US as the country but PR as the state</remarks>
-        public static bool IsShipmentBetweenUnitedStatesAndPuertoRico(ShipmentEntity shipment)
+        public static bool IsShipmentBetweenUnitedStatesAndPuertoRico(IShipmentEntity shipment)
         {
             return (shipment.OriginCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) &&
-                    !IsPuertoRicoAddress(shipment, "Origin") &&
-                    IsPuertoRicoAddress(shipment, "Ship")) ||
-                   (IsPuertoRicoAddress(shipment, "Origin") &&
+                    !IsPuertoRicoAddress(shipment.OriginPerson) &&
+                    IsPuertoRicoAddress(shipment.ShipPerson)) ||
+                   (IsPuertoRicoAddress(shipment.OriginPerson) &&
                     shipment.ShipCountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) &&
-                    !IsPuertoRicoAddress(shipment, "Ship"));
+                    !IsPuertoRicoAddress(shipment.ShipPerson));
         }
 
         /// <summary>
@@ -1128,9 +1116,18 @@ namespace ShipWorks.Shipping
         /// <param name="fieldPrefix">Prefix of the address that should be checked</param>
         /// <returns>True if the address is a Puerto Rico address or false if not</returns>
         /// <remarks>This check handles situations where the address has US as the country but PR as the state</remarks>
-        public static bool IsPuertoRicoAddress(EntityBase2 entity, string fieldPrefix)
+        public static bool IsPuertoRicoAddress(EntityBase2 entity, string fieldPrefix) =>
+            IsPuertoRicoAddress(new PersonAdapter(entity, fieldPrefix));
+
+        /// <summary>
+        /// Gets whether the entity's specified address is in Puerto Rico
+        /// </summary>
+        /// <param name="entity">Entity whose address should be checked</param>
+        /// <param name="fieldPrefix">Prefix of the address that should be checked</param>
+        /// <returns>True if the address is a Puerto Rico address or false if not</returns>
+        /// <remarks>This check handles situations where the address has US as the country but PR as the state</remarks>
+        public static bool IsPuertoRicoAddress(PersonAdapter address)
         {
-            PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
             return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
         }
@@ -1141,6 +1138,6 @@ namespace ShipWorks.Shipping
         public virtual void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
         {
             // Default will have nothing to update
-        }
+        }        
     }
 }

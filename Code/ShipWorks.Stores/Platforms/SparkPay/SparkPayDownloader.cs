@@ -32,10 +32,11 @@ namespace ShipWorks.Stores.Platforms.SparkPay
         /// The spark pay downloader
         /// </summary>
         public SparkPayDownloader(StoreEntity store,
+            IStoreTypeManager storeTypeManager,
             ISparkPayWebClient webClient,
             Func<SparkPayStoreEntity, SparkPayStatusCodeProvider> statusProviderFactory,
             Func<Type, ILog> logFactory)
-            : base(store)
+            : base(store, storeTypeManager.GetType(store))
         {
             this.webClient = webClient;
             this.store = (SparkPayStoreEntity) store;

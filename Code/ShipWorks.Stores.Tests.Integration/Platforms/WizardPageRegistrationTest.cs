@@ -19,8 +19,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
 
         public WizardPageRegistrationTest()
         {
-            container = new ContainerBuilder().Build();
-            ContainerInitializer.Initialize(container);
+            container = ContainerInitializer.Build();
         }
 
         [Fact]

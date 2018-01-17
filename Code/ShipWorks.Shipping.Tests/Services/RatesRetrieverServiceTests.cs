@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Tests.Services
 
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => Assert.True(false, "Message should not have been sent"));
 
-                messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
+                messenger.Send(new ShipmentChangedMessage(this, mock.Build<ICarrierShipmentAdapter>()));
                 testScheduler.AdvanceBy(TimeSpan.FromMilliseconds(249).Ticks);
             }
         }
@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 RatesRetrievedMessage message = null;
                 messenger.OfType<RatesRetrievedMessage>().Subscribe(x => message = x);
 
-                messenger.Send(new ShipmentChangedMessage(this, mock.Create<ICarrierShipmentAdapter>()));
+                messenger.Send(new ShipmentChangedMessage(this, mock.Build<ICarrierShipmentAdapter>()));
                 testScheduler.AdvanceBy(TimeSpan.FromMilliseconds(250).Ticks);
 
                 Assert.NotNull(message);
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Tests.Services
         {
             rateHashingService.Setup(x => x.GetRatingHash(It.IsAny<ShipmentEntity>())).Returns("Foo");
 
-            var shipmentAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var shipmentAdapter = mock.Build<ICarrierShipmentAdapter>();
 
             using (var testObject = mock.Create<RatesRetrieverService>())
             {
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.Services
                 .Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                 .Returns(results);
 
-            var shipmentAdapter = mock.Create<ICarrierShipmentAdapter>();
+            var shipmentAdapter = mock.Build<ICarrierShipmentAdapter>();
 
             using (var testObject = mock.Create<RatesRetrieverService>())
             {

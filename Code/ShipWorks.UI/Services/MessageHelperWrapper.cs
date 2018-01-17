@@ -128,6 +128,21 @@ namespace ShipWorks.UI.Services
                 return dlg.ShowDialog(ownerFactory());
             }
         }
+        
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public bool? ShowDialog(Func<IDialog> createDialog)
+        {
+            Control owner = ownerFactory();
+            if (owner.InvokeRequired)
+            {
+                return (bool?)owner.Invoke((Func<Func<IDialog>, bool?>)ShowDialog, createDialog);
+            }
+
+            IDialog dlg = createDialog();
+            return ShowDialog(dlg);
+        }
 
         /// <summary>
         /// Show a dialog and get the results

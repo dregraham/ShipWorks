@@ -38,10 +38,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         public EtsyWebClient(EtsyStoreEntity etsyStore, ILogEntryFactory logEntryFactory)
         {
             this.logEntryFactory = logEntryFactory;
-            if (etsyStore == null)
-            {
-                throw new ArgumentNullException("etsyStore");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(etsyStore, nameof(etsyStore));
 
             store = etsyStore;
         }
@@ -52,10 +49,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <returns>URL for Etsy Authorization</returns>
         public Uri GetRequestTokenURL(Uri callbackURL)
         {
-            if (callbackURL == null)
-            {
-                throw new ArgumentNullException("callbackURL");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(callbackURL, nameof(callbackURL));
 
             OAuth oAuth = new OAuth(EtsyEndpoints.EncryptedConsumerKey, EtsyEndpoints.EncryptedConsumerSecretKey)
             {

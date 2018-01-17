@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var statuses = storeType.GetOnlineStatusChoices();
@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.BigCommerce
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Create<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
                 }
 
                 var orderID = await GetNewestOrderIDForStore(store);

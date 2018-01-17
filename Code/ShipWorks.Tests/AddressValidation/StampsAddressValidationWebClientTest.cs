@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
@@ -37,7 +36,8 @@ namespace ShipWorks.Tests.AddressValidation
                 IsCityStateZipOk = true,
                 ResidentialIndicator = ResidentialDeliveryIndicatorType.Yes,
                 MatchedAddress = matchedAddress,
-                Candidates = new[] { candidateOne, candidateTwo }
+                Candidates = new[] { candidateOne, candidateTwo },
+                VerificationLevel = AddressVerificationLevel.Maximum
             };
 
             mock.Mock<IUspsWebClient>()
@@ -47,13 +47,13 @@ namespace ShipWorks.Tests.AddressValidation
             var resultFactory = mock.Mock<IAddressValidationResultFactory>();
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
-            await testObject.ValidateAddressAsync(new AddressAdapter());
+            await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US" });
 
             resultFactory.Verify(r => r.CreateAddressValidationResult(matchedAddress, true, validationResult, It.IsAny<int>()));
             resultFactory.Verify(r => r.CreateAddressValidationResult(candidateOne, false, validationResult, It.IsAny<int>()));
             resultFactory.Verify(r => r.CreateAddressValidationResult(candidateTwo, false, validationResult, It.IsAny<int>()));
         }
-        
+
         [Fact]
         public async Task ValidateAddressAsync_ReturnsValidationError_WhenNotIsSuccessfulMatch()
         {
@@ -71,10 +71,10 @@ namespace ShipWorks.Tests.AddressValidation
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
             var result = await testObject.ValidateAddressAsync(new AddressAdapter());
-            
+
             Assert.Equal("bad address", result.AddressValidationError);
         }
-    
+
         [Theory]
         [InlineData(AddressType.Invalid, true, false, "Y", "MO", true, ResidentialDeliveryIndicatorType.No)]
         [InlineData(AddressType.SecondaryNotFound, true, true, "H", "MO", true, ResidentialDeliveryIndicatorType.No)]
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.AddressValidation
                 residentialIndicator);
 
             var testObject = mock.Create<StampsAddressValidationWebClient>();
-            var result = await testObject.ValidateAddressAsync(new AddressAdapter());
+            var result = await testObject.ValidateAddressAsync(new AddressAdapter() { CountryCode = "US"});
 
             Assert.Equal(expectedAddressType, result.AddressType);
         }

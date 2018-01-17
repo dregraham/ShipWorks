@@ -120,6 +120,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
 
                 handler.Set(nameof(ServiceType), ref serviceType, updatedServiceType, false);
                 RefreshPackageTypes();
+                RefreshInsurance();
             }
         }
 
@@ -208,6 +209,13 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
                     if (SelectedDimensionsProfile.DimensionsProfileID == 0)
                     {
                         DimsProfileID = 0;
+                        if (!suppressExternalChangeNotifications)
+                        {
+                            DimsLength = 0;
+                            DimsWidth = 0;
+                            DimsHeight = 0;
+                            DimsWeight = 0;
+                        }
                     }
                     else
                     {

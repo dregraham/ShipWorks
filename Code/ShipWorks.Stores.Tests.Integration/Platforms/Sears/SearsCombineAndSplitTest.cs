@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
             });
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
-                .ReturnsAsync(context.Mock.Create<ISingleItemProgressDialog>());
+                .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
 
             store = Create.Store<SearsStoreEntity>()
                 .Set(x => x.StoreTypeCode, StoreTypeCode.Sears)

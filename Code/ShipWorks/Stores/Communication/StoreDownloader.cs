@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
@@ -53,14 +52,6 @@ namespace ShipWorks.Stores.Communication
         private string itemStatusText = string.Empty;
         private bool orderStatusHasTokens;
         private bool itemStatusHasTokens;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        protected StoreDownloader(StoreEntity store) :
-            this(store, StoreTypeManager.GetType(store), ConfigurationData.FetchReadOnly(), new SqlAdapterFactory())
-        {
-        }
 
         /// <summary>
         /// Constructor

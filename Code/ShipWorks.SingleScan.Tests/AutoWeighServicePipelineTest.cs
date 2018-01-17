@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
@@ -14,6 +13,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
@@ -40,7 +40,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(f => f.Count)
                 .Returns(() => filterCount);
 
- 
+
 
             singleScanFilterUpdateCompleteMessage = new SingleScanFilterUpdateCompleteMessage(this,
                 mock.Mock<IFilterNodeContentEntity>().Object, 42);
@@ -52,7 +52,7 @@ namespace ShipWorks.SingleScan.Tests
             autoPrint = false;
             filterCount = 1;
 
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>() {new ShipmentEntity(5)};
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>() { new ShipmentEntity(5) };
             mock.Mock<IOrderLoader>()
                 .Setup(
                     o =>
@@ -65,7 +65,7 @@ namespace ShipWorks.SingleScan.Tests
             testObject.InitializeForCurrentSession();
             testMessenger.Send(singleScanFilterUpdateCompleteMessage);
 
-            mock.Mock<IAutoWeighService>().Verify(a=>a.ApplyWeight(shipments, It.IsAny<ITrackedEvent>()), Times.Once);
+            mock.Mock<IAutoWeighService>().Verify(a => a.ApplyWeight(shipments, It.IsAny<ITrackedEvent>()), Times.Once);
         }
 
         [Fact]
@@ -92,8 +92,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(m => m.GetShipmentAdapter(shipment))
                 .Returns(shipmentAdapter.Object);
 
-
-            var testObject = mock.Create<AutoWeighServicePipeline>(); ;
+            var testObject = mock.Create<AutoWeighServicePipeline>();
             testObject.InitializeForCurrentSession();
             testMessenger.Send(singleScanFilterUpdateCompleteMessage);
 
@@ -127,7 +126,7 @@ namespace ShipWorks.SingleScan.Tests
         public void DoesNotWeighShipment_WhenAutoPrintIsOff_AndFilterNodeContentCountIsNotOne()
         {
             autoPrint = false;
-            
+
             List<ShipmentEntity> shipments = new List<ShipmentEntity>() { new ShipmentEntity(5) };
             mock.Mock<IOrderLoader>()
                 .Setup(
@@ -168,8 +167,7 @@ namespace ShipWorks.SingleScan.Tests
                 .Setup(m => m.GetShipmentAdapter(shipment))
                 .Returns(shipmentAdapter.Object);
 
-
-            var testObject = mock.Create<AutoWeighServicePipeline>(); ;
+            var testObject = mock.Create<AutoWeighServicePipeline>();
             testObject.InitializeForCurrentSession();
             testMessenger.Send(singleScanFilterUpdateCompleteMessage);
 

@@ -39,25 +39,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
         public void Constructor_ThrowsArgumentNullExcpetion_WhenShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new OnTracShipmentAdapter(null, mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new OnTracShipmentAdapter(null, mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
                 new OnTracShipmentAdapter(shipment, null,
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
             Assert.Throws<ArgumentNullException>(() =>
-                new OnTracShipmentAdapter(shipment, mock.Create<IShipmentTypeManager>(), null,
-                    mock.Create<IStoreManager>()));
+                new OnTracShipmentAdapter(shipment, mock.Build<IShipmentTypeManager>(), null,
+                    mock.Build<IStoreManager>()));
         }
 
         [Fact]
         public void Constructor_ThrowsArgumentNullExcpetion_WhenOnTracShipmentIsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Create<IShipmentTypeManager>(),
-                    mock.Create<ICustomsManager>(), mock.Create<IStoreManager>()));
+                new OnTracShipmentAdapter(new ShipmentEntity(), mock.Build<IShipmentTypeManager>(),
+                    mock.Build<ICustomsManager>(), mock.Build<IStoreManager>()));
         }
 
         [Fact]

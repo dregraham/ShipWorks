@@ -61,7 +61,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(expectedCount, results?.Count());
-            Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+
+            if (expectedCount > 0)
+            {
+                Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+            }
         }
 
         [Theory]
@@ -82,7 +86,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             var results = await searchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
 
             Assert.Equal(expectedCount, results?.Count());
-            Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+
+            if (expectedCount > 0)
+            {
+                Assert.Equal(expectedFirstResult, results?.FirstOrDefault());
+            }
         }
 
         private void CreateOrderSearchEntities(long orderID, int numberToCreate)

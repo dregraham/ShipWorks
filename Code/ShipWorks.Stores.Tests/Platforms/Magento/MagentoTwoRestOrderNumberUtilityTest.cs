@@ -30,10 +30,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         [InlineData("!@#$")]
         [InlineData("--345")]
         [InlineData("-")]
-        
+
         public void GetOrderNumber_ThrowsMagentoExcpetion_WhenIncrementIdIsInUnexpectedFormat(string incrementId)
         {
-            MagentoException ex = Assert.Throws<MagentoException>(() =>  MagentoTwoRestOrderNumberUtility.GetOrderNumber(incrementId));
+            MagentoException ex = Assert.Throws<MagentoException>(() => MagentoTwoRestOrderNumberUtility.GetOrderNumber(incrementId));
             Assert.Equal($"Order number {incrementId} is in an unknown format.", ex.Message);
         }
 

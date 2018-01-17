@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
     /// Shipment type for Express 1 for USPS shipments.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = false)]
+    [KeyedComponent(typeof(IUspsShipmentType), ShipmentTypeCode.Express1Usps)]
     public class Express1UspsShipmentType : UspsShipmentType
     {
         /// <summary>

@@ -1,6 +1,9 @@
+using System;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             this.settingsRepository = settingsRepository;
 
-            // Fetch the shipping settings and save them so we don't have to make repeated reqeusts
+            // Fetch the shipping settings and save them so we don't have to make repeated requests
             shippingSettings = settingsRepository.GetShippingSettings();
         }
 
@@ -49,15 +52,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <value>
         /// The CSP credential key.
         /// </value>
-        public string CspCredentialKey => "olaPdFVk3aMvbfNA";
+        public string CspCredentialKey => "55sFa2ocvAw0Baxl";
 
         /// <summary>
         /// Gets the CSP credential password.
         /// </summary>
         /// <remarks>
-        /// Password - SAISQtME8lAOPurbWNQD2Ft96
+        /// Password - 9kJDF0zRYZ9kyBiavLBPyGTSO
         /// </remarks>
-        public string CspCredentialPassword => SecureText.Decrypt("5SbhB/whSJsVfHFUoLlKA4/B2c5p2/PUgmo8d1uGaZo=", "apptive");
+        public string CspCredentialPassword => SecureText.Decrypt("gTtN7wou2AkqYoTXnhoK/cBlWH4M72PAaJbR/28bRNo=", "apptive");
 
         /// <summary>
         /// Gets the user credentials key.
@@ -124,27 +127,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "19";
+        public const string ShipVersionNumber = "21";
 
         /// <summary>
         /// Gets the open ship version number.
         /// </summary>
-        public const string OpenShipVersionNumber = "11";
+        public const string OpenShipVersionNumber = "13";
 
         /// <summary>
         /// Gets the type of the currency.
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns></returns>
-        public CurrencyType GetCurrencyType(ShipmentEntity shipment)
+        public static string GetCurrencyTypeApiValue(IShipmentEntity shipment, Func<IFedExAccountEntity> getAccount) =>
+            EnumHelper.GetApiValue(FedExSettings.GetCurrencyType(shipment, getAccount));
+
+        /// <summary>
+        /// Gets the type of the currency.
+        /// </summary>
+        public CurrencyType GetCurrencyType(ShipmentEntity shipment) =>
+            GetCurrencyType(shipment, () => (FedExAccountEntity) settingsRepository.GetAccount(shipment));
+
+        /// <summary>
+        /// Gets the type of the currency.
+        /// </summary>
+        public static CurrencyType GetCurrencyType(IShipmentEntity shipment, Func<IFedExAccountEntity> getAccount)
         {
             if (shipment.FedEx.Currency.HasValue)
             {
                 return (CurrencyType) shipment.FedEx.Currency;
             }
 
-            FedExAccountEntity account = (FedExAccountEntity)settingsRepository.GetAccount(shipment);
-            
+            IFedExAccountEntity account = getAccount();
+
             if (account == null)
             {
                 throw new CarrierException("Shipment not associated with a FedEx account.");
