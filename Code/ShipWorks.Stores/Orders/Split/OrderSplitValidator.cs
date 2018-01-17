@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -27,14 +24,16 @@ namespace ShipWorks.Stores.Orders.Split
     {
         private readonly ISecurityContext securityContext;
         private readonly IOrderSplitGateway orderSplitGateway;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitValidator(ISecurityContext securityContext, IOrderSplitGateway orderSplitGateway)
+        public OrderSplitValidator(ISecurityContext securityContext, IOrderSplitGateway orderSplitGateway, IStoreManager storeManager)
         {
             this.securityContext = securityContext;
             this.orderSplitGateway = orderSplitGateway;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -59,6 +58,12 @@ namespace ShipWorks.Stores.Orders.Split
             if (!hasPermission)
             {
                 return Result.FromError("The current user does not have permission to modify orders");
+            }
+
+            var store = storeManager.GetRelatedStore(firstId);
+            if (store.StoreTypeCode == StoreTypeCode.Walmart)
+            {
+                return Result.FromError("Walmart orders cannot be split");
             }
 
             return orderSplitGateway.CanSplit(firstId) == false ?
