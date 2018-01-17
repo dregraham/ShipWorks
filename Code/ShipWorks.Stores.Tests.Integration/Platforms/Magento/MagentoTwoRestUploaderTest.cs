@@ -160,10 +160,28 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 .AsOther()
                 .Save();
 
+            Create.Entity<OrderSearchEntity>()
+                .Set(os => os.StoreID, secondOrder.StoreID)
+                .Set(os => os.OrderID, secondOrder.OrderID)
+                .Set(os => os.OrderNumber, secondOrder.OrderNumber)
+                .Set(os => os.OrderNumberComplete, secondOrder.OrderNumberComplete)
+                .Set(os => os.IsManual, secondOrder.IsManual)
+                .Set(os => os.OriginalOrderID, secondOrder.OrderID)
+                .Save();
+
             Create.Entity<MagentoOrderSearchEntity>()
                 .Set(os => os.OrderID, order.OrderID)
                 .Set(os => os.MagentoOrderID, secondOrder.MagentoOrderID)
                 .Set(os => os.OriginalOrderID, secondOrder.OrderID)
+                .Save();
+
+            Create.Entity<OrderSearchEntity>()
+                .Set(os => os.StoreID, order.StoreID)
+                .Set(os => os.OrderID, order.OrderID)
+                .Set(os => os.OrderNumber, order.OrderNumber)
+                .Set(os => os.OrderNumberComplete, order.OrderNumberComplete)
+                .Set(os => os.IsManual, order.IsManual)
+                .Set(os => os.OriginalOrderID, order.OrderID)
                 .Save();
 
             Create.Entity<MagentoOrderSearchEntity>()
