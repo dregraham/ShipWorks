@@ -2,7 +2,7 @@
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
@@ -57,6 +57,19 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long?>()))
                 .Returns(false);
+
+            var testObject = mock.Create<OrderSplitValidator>();
+            var result = testObject.Validate(new long[] { 1006 });
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
+        public void Validate_ReturnFailure_WhenStoreIsWalmart()
+        {
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(1006))
+                .Returns(new WalmartStoreEntity { StoreTypeCode = StoreTypeCode.Walmart });
 
             var testObject = mock.Create<OrderSplitValidator>();
             var result = testObject.Validate(new long[] { 1006 });
