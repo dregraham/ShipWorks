@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Management
             StoreEntity store = GetStore<StoreEntity>();
             StoreType storeType = StoreTypeManager.GetType(store);
 
-            UserControl finishPageControl = storeType.CreateWizardFinishPageControl();
+            Control finishPageControl = storeType.CreateWizardFinishPageControl();
             addStoreWizardFinishPanel.Controls.Add(finishPageControl);
             addStoreWizardFinishPanel.Size = finishPageControl.Size;
 

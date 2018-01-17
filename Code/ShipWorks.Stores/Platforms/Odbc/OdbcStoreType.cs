@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
-        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControl> storeWizardFinishPageControlFactory;
+        private readonly IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory;
         private readonly OdbcStoreEntity odbcStore;
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public OdbcStoreType(StoreEntity store,
             IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory,
-            IIndex<StoreTypeCode, IStoreWizardFinishPageControl> storeWizardFinishPageControlFactory)
+            IIndex<StoreTypeCode, IStoreWizardFinishPageControlFactory> storeWizardFinishPageControlFactory)
             : base(store)
         {
             this.downloadSettingsFactory = downloadSettingsFactory;
@@ -184,14 +185,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Returns messaging to display on the AddStoreWizard finish page
         /// </summary>
-        public override UserControl CreateWizardFinishPageControl()
+        public override Control CreateWizardFinishPageControl()
         {
-            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
-            {
-                return (UserControl) storeWizardFinishPageControlFactory[StoreTypeCode.Odbc];
-            }
-
-            return base.CreateWizardFinishPageControl();
+            return storeWizardFinishPageControlFactory[StoreTypeCode.Odbc].Create(odbcStore);
         }
     }
 }

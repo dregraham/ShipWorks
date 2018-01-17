@@ -151,6 +151,7 @@
     <Compile Include="Controls\StoreWizardFinishPageControl.Designer.cs">
       <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StoreWizardFinishPageControlFactory.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -343,6 +344,7 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControl.Designer.cs">
       <DependentUpon>OdbcWizardFinishPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcWizardFinishPageControlFactory.cs" />
     <Compile Include="Platforms\Odbc\Controls\Upload\OdbcUploadMapSettingsControl.xaml.cs">
       <DependentUpon>OdbcUploadMapSettingsControl.xaml</DependentUpon>
     </Compile>

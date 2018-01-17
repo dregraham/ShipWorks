@@ -36,7 +36,7 @@ namespace ShipWorks.Stores
     public abstract class StoreType
     {
         // Store this instance is wrapping
-        private StoreEntity store;
+        private readonly StoreEntity store;
 
         /// <summary>
         /// Construction
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public override string ToString()
         {
-            return this.StoreTypeName;
+            return StoreTypeName;
         }
 
         /// <summary>
@@ -636,16 +636,12 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Returns messaging to display on the AddStoreWizard finish page
         /// </summary>
-        public virtual UserControl CreateWizardFinishPageControl()
+        public virtual Control CreateWizardFinishPageControl()
         {
-            // Need unsafe scope because we need to return and use the control outside of this method
-            // and we do not have access to a safe lifetime scope at this point. 
-            if (IoC.UnsafeGlobalLifetimeScope.IsRegistered<IStoreWizardFinishPageControl>()){ 
-
-                return (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreWizardFinishPageControl>();
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
             }
-
-            return null;
         }
     }
 }

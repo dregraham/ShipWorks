@@ -1467,7 +1467,7 @@
     <Compile Include="Stores\Management\IAddStoreWizard.cs" />
     <Compile Include="Stores\Management\IDownloadSettingsControl.cs" />
     <Compile Include="Stores\Management\IStoreWizard.cs" />
-    <Compile Include="Stores\Management\IStoreWizardFinishPageControl.cs" />
+    <Compile Include="Stores\Management\IStoreWizardFinishPageControlFactory.cs" />
     <Compile Include="Stores\Platforms\Amazon\IAmazonOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonOrderUploadDetail.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonAccountValidator.cs" />

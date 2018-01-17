@@ -9,8 +9,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
     /// <summary>
     /// Control to display on the finish page
     /// </summary>
-    [KeyedComponent(typeof(IStoreWizardFinishPageControl), StoreTypeCode.Odbc)]
-    public partial class OdbcWizardFinishPageControl : UserControl, IStoreWizardFinishPageControl
+    public partial class OdbcWizardFinishPageControl : UserControl
     {
         /// <summary>
         /// Constructor
