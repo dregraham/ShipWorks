@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -86,14 +86,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
         public void Show_DeligatesToGlobalPostNotificationShow_WhenShipmentIsGap()
         {
             testObject.Show(new[] { gapShipment });
-            globalPostNotification.Verify(g => g.Show());
+            globalPostNotification.Verify(g => g.Show(gapShipment));
         }
 
         [Fact]
         public void Show_DeligatesToGlobalPostNotificationShow_WhenShipmentIsGlobalPost()
         {
             testObject.Show(new[] { globalPostShipment });
-            globalPostNotification.Verify(g => g.Show());
+            globalPostNotification.Verify(g => g.Show(globalPostShipment));
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
             globalPostNotification.Setup(g => g.AppliesToCurrentUser()).Returns(false);
             testObject.Show(new[] { globalPostShipment });
 
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(globalPostShipment), Times.Never);
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
                     }
                 });
 
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
             
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
             
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal
 
             testObject.Show(new[] { gapShipment });
 
-            globalPostNotification.Verify(g => g.Show(), Times.Never);
+            globalPostNotification.Verify(g => g.Show(gapShipment), Times.Never);
         }
     }
 }

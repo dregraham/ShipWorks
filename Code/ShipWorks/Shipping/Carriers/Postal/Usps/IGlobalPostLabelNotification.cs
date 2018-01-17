@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
+﻿using ShipWorks.Data.Model.EntityInterfaces;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     public interface IGlobalPostLabelNotification
     {
@@ -10,6 +12,6 @@
         /// <summary>
         /// Show the notification and save result
         /// </summary>
-        void Show();
+        void Show(IShipmentEntity shipment);
     }
 }

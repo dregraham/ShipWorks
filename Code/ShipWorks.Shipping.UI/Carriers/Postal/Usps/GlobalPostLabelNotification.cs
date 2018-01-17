@@ -1,4 +1,6 @@
 ﻿using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
 using ShipWorks.Users;
@@ -20,7 +22,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private readonly IUserSession userSession;
         private readonly IWin32Window owner;
 
-        private const string DisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
+        private const string GlobalPostDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
+        private const string GlobalPostAccessProgramDisplayUrl = "https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png";
         private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
         private const string BrowserDlgTitle = "Your GlobalPost Label";
 
@@ -48,9 +51,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// <summary>
         /// Show the notification and save result
         /// </summary>
-        public void Show()
+        public void Show(IShipmentEntity shipment)
         {
-            Uri displayUri = new Uri(DisplayUrl);
+            string urlToUse = PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service) ? 
+                GlobalPostDisplayUrl : 
+                GlobalPostAccessProgramDisplayUrl;
+
+            Uri displayUri = new Uri(urlToUse);
             browserViewModel.Load(displayUri, BrowserDlgTitle, MoreInfoUrl);
 
             IDialog webBrowserDlg = browserFactory("DismissableWebBrowserDlg");
