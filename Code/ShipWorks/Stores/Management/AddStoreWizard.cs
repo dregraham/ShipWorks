@@ -973,7 +973,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
-            wizardPageFinished.LoadDownloadMessage();
+            wizardPageFinished.LoadDownloadControl();
 
             try
             {

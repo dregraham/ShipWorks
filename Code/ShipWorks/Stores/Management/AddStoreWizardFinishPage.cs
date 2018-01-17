@@ -22,15 +22,16 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Load messaging based on store
         /// </summary>
-        public void LoadDownloadMessage()
+        public void LoadDownloadControl()
         {
             StoreEntity store = GetStore<StoreEntity>();
             StoreType storeType = StoreTypeManager.GetType(store);
+
             UserControl finishPageControl = storeType.CreateWizardFinishPageControl();
             addStoreWizardFinishPanel.Controls.Add(finishPageControl);
             addStoreWizardFinishPanel.Size = finishPageControl.Size;
-            otherMessagingPanel.Location =
-                new Point(addStoreWizardFinishPanel.Location.X,
+
+            otherMessagingPanel.Location = new Point(addStoreWizardFinishPanel.Location.X,
                     addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
         }
 
