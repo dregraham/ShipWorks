@@ -44,7 +44,6 @@
         <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameterConverter" />
         <ui:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
-        <ui:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
 
         <system:Boolean x:Key="True">True</system:Boolean>
         <system:Boolean x:Key="False">False</system:Boolean>
