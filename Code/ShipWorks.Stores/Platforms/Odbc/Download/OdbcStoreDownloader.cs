@@ -58,8 +58,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
-                throw new DownloadException("Store set to download orders on order search only. \r\n\r\n" +
-                                            "To automatically download orders, change your store's order import settings.");
+                throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
+                                            "To automatically download orders, change this store's order import settings.");
             }
 
             Progress.Detail = "Querying data source...";

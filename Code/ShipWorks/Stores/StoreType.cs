@@ -638,7 +638,14 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual UserControl CreateWizardFinishPageControl()
         {
-            return (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreWizardFinishPageControl>();
+            // Need unsafe scope because we need to return and use the control outside of this method
+            // and we do not have access to a safe lifetime scope at this point. 
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegistered<IStoreWizardFinishPageControl>()){ 
+
+                return (UserControl) IoC.UnsafeGlobalLifetimeScope.Resolve<IStoreWizardFinishPageControl>();
+            }
+
+            return null;
         }
     }
 }
