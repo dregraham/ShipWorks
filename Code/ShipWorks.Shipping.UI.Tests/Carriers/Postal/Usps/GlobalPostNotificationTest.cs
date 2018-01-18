@@ -1,6 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.UI.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared;
 using ShipWorks.UI.Controls.WebBrowser;
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         }
 
         [Fact]
-        public void Show_LoadsBrowserViewModelWithCorrectUrls()
+        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsGlobalPost()
         {
             Uri displayUri = new Uri(DisplayUrl);
 
@@ -55,7 +56,24 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
-            testObject.Show();
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
+
+            viewModel.Verify(v => v.Load(displayUri, BrowserDlgTitle, MoreInfoUrl));
+        }
+
+        [Fact]
+        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsGAP()
+        {
+            Uri displayUri = new Uri("https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png");
+
+            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
+            var dialog = mock.MockRepository.Create<IDialog>();
+            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
+            mock.MockFunc<string, IDialog>(dialog);
+
+            var testObject = mock.Create<GlobalPostLabelNotification>();
+
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
 
             viewModel.Verify(v => v.Load(displayUri, BrowserDlgTitle, MoreInfoUrl));
         }
@@ -85,7 +103,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 .Returns(user);
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
-            testObject.Show();
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
 
             Assert.Equal(SqlDateTime.MaxValue.Value.Date, user.Settings.NextGlobalPostNotificationDate.Date);
         }
@@ -115,7 +133,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
                 .Returns(user);
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
-            testObject.Show();
+            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
 
             Assert.True(userSession.Object.User.Settings.NextGlobalPostNotificationDate.Date.Equals(DateTime.UtcNow.AddDays(1).Date));
         }
