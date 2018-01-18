@@ -61,7 +61,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="80" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -139,7 +139,7 @@
                     </Binding.ConverterParameter>
                 </Binding>
             </DockPanel.Visibility>
-            <Label Width="90"
+            <Label Width="80"
                    Margin="0"
                    VerticalAlignment="Center"
                    HorizontalContentAlignment="Right"
