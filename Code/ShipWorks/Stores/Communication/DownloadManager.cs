@@ -169,7 +169,6 @@ namespace ShipWorks.Stores.Communication
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-
                 try
                 {
                     using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
