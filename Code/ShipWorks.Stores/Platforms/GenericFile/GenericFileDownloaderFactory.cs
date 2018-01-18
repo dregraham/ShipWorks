@@ -60,5 +60,13 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
             downloader.Download(progressItem, downloadID, con);
+
+        /// <summary>
+        /// Does not support downloading OrderNumbers
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

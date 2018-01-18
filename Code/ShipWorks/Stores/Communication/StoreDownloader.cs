@@ -1180,6 +1180,14 @@ namespace ShipWorks.Stores.Communication
             return adapter.SaveEntityAsync(history);
         }
 
+        /// <summary>
+        /// Download the order number for the store
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
+
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
@@ -1230,7 +1238,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
-
         #endregion
     }
 }
