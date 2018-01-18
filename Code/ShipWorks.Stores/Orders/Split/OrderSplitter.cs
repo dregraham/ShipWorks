@@ -202,7 +202,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private async Task<bool> DeleteCollection(ISqlAdapter sqlAdapter, IEntityCollection2 collection)
         {
-            var shouldBeDeleted = collection.OfType<IEntityCore>().Where(x => !x.IsNew).Count();
+            var shouldBeDeleted = collection.OfType<IEntityCore>().Count(x => !x.IsNew);
 
             if (shouldBeDeleted == 0)
             {
