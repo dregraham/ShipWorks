@@ -12,8 +12,8 @@ namespace ShipWorks.Stores.Tests.Communication
 {
     public class OnDemandDownloaderTest : IDisposable
     {
-        private AutoMock mock;
-        private OnDemandDownloader testObject;
+        private readonly AutoMock mock;
+        private readonly OnDemandDownloader testObject;
 
         public OnDemandDownloaderTest()
         {
