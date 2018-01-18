@@ -220,43 +220,10 @@ namespace ShipWorks.Stores.Communication
         /// <returns>A List of StoreEntity instances.</returns>
         private static List<StoreEntity> GetStoresForAutoDownloading()
         {
-            List<StoreEntity> readyToDownload = new List<StoreEntity>();
-
-            bool wereTimesCached = (lastDownloadTimesCache != null);
+            bool wereTimesCached = lastDownloadTimesCache != null;
 
             // Find each store that is ready for an auto-download
-            foreach (StoreEntity store in StoreManager.GetAllStores())
-            {
-                if (!ComputerDownloadPolicy.Load(store).IsThisComputerAllowed)
-                {
-                    continue;
-                }
-
-                // First see if its enabled in general, and if auto-downloads at all
-                if (!store.Enabled || !store.AutoDownload)
-                {
-                    continue;
-                }
-
-                // If only when a way, make sure we are away
-                if (store.AutoDownloadOnlyAway && !IdleWatcher.IsIdle)
-                {
-                    continue;
-                }
-
-                // Only download if store should AutoDownload
-                if (!StoreTypeManager.GetType(store).ShouldAutoDownload())
-                {
-                    continue;
-                }
-
-                DateTime? lastDownload = GetLastDownloadTime(store);
-
-                if (lastDownload == null || lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) < DateTime.UtcNow)
-                {
-                    readyToDownload.Add(store);
-                }
-            }
+            List<StoreEntity> readyToDownload = StoreManager.GetAllStores().Where(ShouldDownload).ToList();
 
             // We checked the ready-to-download with cached download times. If there are any that are ready to download it
             // could be that they've recently been downloaded since we cached the values.  So check again after refetching
@@ -281,6 +248,44 @@ namespace ShipWorks.Stores.Communication
             }
 
             return readyToDownload;
+        }
+
+        /// <summary>
+        /// Business logic to determine if we should download from the store
+        /// </summary>
+        private static bool ShouldDownload(StoreEntity store)
+        {
+            if (!ComputerDownloadPolicy.Load(store).IsThisComputerAllowed)
+            {
+                return false;
+            }
+
+            // First see if its enabled in general, and if auto-downloads at all
+            if (!store.Enabled || !store.AutoDownload)
+            {
+                return false;
+            }
+
+            // If only when a way, make sure we are away
+            if (store.AutoDownloadOnlyAway && !IdleWatcher.IsIdle)
+            {
+                return false;
+            }
+
+            // Only download if store should AutoDownload
+            if (!StoreTypeManager.GetType(store).ShouldAutoDownload())
+            {
+                return false;
+            }
+
+            DateTime? lastDownload = GetLastDownloadTime(store);
+
+            if (lastDownload != null && lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
