@@ -643,5 +643,13 @@ namespace ShipWorks.Stores
                 return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
             }
         }
+
+        /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public virtual bool ShouldAutoDownload()
+        { 
+            return true;
+        }
     }
 }
