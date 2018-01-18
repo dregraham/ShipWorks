@@ -31,7 +31,7 @@ namespace ShipWorks.ApplicationCore
     /// <summary>
     /// The primary grid control which contains the search header and the grid
     /// </summary>
-    public partial class MainGridControl : UserControl
+    public partial class MainGridControl : UserControl, IMainGridControl
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));

@@ -12,6 +12,6 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Register the pipeline with the main grid control
         /// </summary>
-        IDisposable Register(MainGridControl mainGridControl);
+        IDisposable Register(IMainGridControl mainGridControl);
     }
 }

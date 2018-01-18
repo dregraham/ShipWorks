@@ -728,6 +728,7 @@
     <Compile Include="ApplicationCore\ICheckForChangesNeeded.cs" />
     <Compile Include="ApplicationCore\IFactory.cs" />
     <Compile Include="ApplicationCore\IMainForm.cs" />
+    <Compile Include="ApplicationCore\IMainGridControl.cs" />
     <Compile Include="ApplicationCore\IMainGridControlPipeline.cs" />
     <Compile Include="ApplicationCore\Interaction\AsyncMenuCommand.cs" />
     <Compile Include="ApplicationCore\Interaction\IMenuCommand.cs" />

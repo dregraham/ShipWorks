@@ -57,7 +57,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Register the pipeline with the main grid control
         /// </summary>
-        public IDisposable Register(MainGridControl gridControl)
+        public IDisposable Register(IMainGridControl gridControl)
         {
             return new CompositeDisposable(
                 // Wire up observable for debouncing quick search text box
@@ -118,7 +118,7 @@ namespace ShipWorks.ApplicationCore
         /// We need to do the barcode search asynchronously so that the ContinueAfter registration starts immediately,
         /// otherwise we could miss incoming FilterCountsUpdatedMessages and have to fail over to the timeout.
         /// </remarks>
-        public void PerformBarcodeSearchAsync(MainGridControl gridControl, string scannedBarcode)
+        public void PerformBarcodeSearchAsync(IMainGridControl gridControl, string scannedBarcode)
         {
             gridControl.BeginInvoke((Action<string>) gridControl.PerformBarcodeSearch, scannedBarcode);
         }
@@ -154,7 +154,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Determines if the barcode search message should be sent
         /// </summary>
-        private bool AllowBarcodeSearch(MainGridControl gridControl, string barcode)
+        private bool AllowBarcodeSearch(IMainGridControl gridControl, string barcode)
         {
             return !barcode.IsNullOrWhiteSpace() &&
                    gridControl.Visible &&
