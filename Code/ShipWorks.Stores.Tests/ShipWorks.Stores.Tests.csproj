@@ -200,6 +200,7 @@
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcOrderNumberDownloadQueryTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonStoreTypeTest.cs" />
