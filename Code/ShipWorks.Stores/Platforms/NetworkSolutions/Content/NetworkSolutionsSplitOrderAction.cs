@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity) splitOrder;
             NetworkSolutionsOrderSearchEntity orderSearchEntity = order.NetworkSolutionsOrderSearch.AddNew();
 

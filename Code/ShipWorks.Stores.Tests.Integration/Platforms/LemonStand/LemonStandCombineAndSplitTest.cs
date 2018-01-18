@@ -14,6 +14,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Platforms.LemonStand;
+using ShipWorks.Stores.Tests.Integration.Helpers;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
@@ -21,7 +22,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
-namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
+namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
@@ -34,10 +35,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         private Mock<IOrderSplitUserInteraction> splitInteraction;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
         private readonly LemonStandStoreEntity store;
-        private readonly OrderEntity orderA;
-        private readonly OrderEntity orderB;
-        private readonly OrderEntity orderD;
+        private OrderEntity orderA;
+        private OrderEntity orderB;
+        private OrderEntity orderD;
         private readonly Dictionary<long, OrderEntity> orders;
+        private readonly CombineSplitHelpers combineSplitHelpers;
 
         public LemonStandCombineAndSplitTest(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -49,6 +51,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
                 mock.Override<IMessageHelper>();
                 asyncMessageHelper = mock.Override<IAsyncMessageHelper>();
             });
+
+            combineSplitHelpers = new CombineSplitHelpers(context, splitInteraction, combineInteraction);
 
             asyncMessageHelper.Setup(x => x.ShowProgressDialog(AnyString, AnyString))
                 .ReturnsAsync(context.Mock.Build<ISingleItemProgressDialog>());
@@ -97,9 +101,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task Split_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var (orderA_2, orderA_3) = await PerformSplit(orderA_0);
-            var (orderA_4, orderA_5) = await PerformSplit(orderA_1);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var (orderA_2, orderA_3) = await combineSplitHelpers.PerformSplit(orderA_0);
+            var (orderA_4, orderA_5) = await combineSplitHelpers.PerformSplit(orderA_1);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -121,8 +125,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitCombine_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderA_C = await PerformCombine("A-C", orderA_0, orderA_1);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderA_C = await combineSplitHelpers.PerformCombine("A-C", orderA_0, orderA_1);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -134,8 +138,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitCombine_SplitSurvivingOrder_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderA_1_C = await PerformCombine("A-1-C", orderA_0, orderA_1);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderA_1_C = await combineSplitHelpers.PerformCombine("A-1-C", orderA_0, orderA_1);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -147,9 +151,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task CombineSplitCombine_WithOrderNumbers()
         {
-            OrderEntity orderA_C = await PerformCombine("A-C", orderA, orderB);
-            var (orderA_C_O, orderA_C_1) = await PerformSplit(orderA_C);
-            var orderD_C = await PerformCombine("D-C", orderD, orderA_C_O);
+            OrderEntity orderA_C = await combineSplitHelpers.PerformCombine("A-C", orderA, orderB);
+            var (orderA_C_O, orderA_C_1) = await combineSplitHelpers.PerformSplit(orderA_C);
+            var orderD_C = await combineSplitHelpers.PerformCombine("D-C", orderD, orderA_C_O);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -163,9 +167,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitACombineBCombineRemainingTwo_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderA_1_C = await PerformCombine("10A-1-C", orderA_1, orderB);
-            var orderA_1_C_1 = await PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderA_1_C = await combineSplitHelpers.PerformCombine("10A-1-C", orderA_1, orderB);
+            var orderA_1_C_1 = await combineSplitHelpers.PerformCombine("10A-1-C-1", orderA_1_C, orderA_0);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -177,12 +181,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task CombineTwoManualOrders_WithOrderNumbers()
         {
-            orderA.IsManual = true;
-            Modify.Order(orderA).Save();
-            orderB.IsManual = true;
-            Modify.Order(orderB).Save();
+            orderA = Create.CreateManualOrder(store, context.Customer, 10);
+            orderB = Create.CreateManualOrder(store, context.Customer, 20);
 
-            var orderA_M_C = await PerformCombine("10A-M-C", orderA, orderB);
+            var orderA_M_C = await combineSplitHelpers.PerformCombine("10A-M-C", orderA, orderB);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -195,11 +197,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitCombineWithManualOrder_WithOrderNumbers()
         {
-            orderB.IsManual = true;
-            Modify.Order(orderB).Save();
+            orderB = Create.CreateManualOrder(store, context.Customer, 20);
 
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderB_M_C = await PerformCombine("10A-M-C", orderB, orderA_1);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderB_M_C = await combineSplitHelpers.PerformCombine("10A-M-C", orderB, orderA_1);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -211,11 +212,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitManualCombineWithNotManualOrder_WithOrderNumbers()
         {
-            orderA.IsManual = true;
-            Modify.Order(orderA).Save();
+            orderA = Create.CreateManualOrder(store, context.Customer, 10);
 
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderA_M_1_C = await PerformCombine("10A-M-1-C", orderA_1, orderB);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderA_M_1_C = await combineSplitHelpers.PerformCombine("10A-M-1-C", orderA_1, orderB);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -229,10 +229,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitManualOrder_WithOrderNumbers()
         {
-            orderA.IsManual = true;
-            Modify.Order(orderA).Save();
+            orderA = Create.CreateManualOrder(store, context.Customer, 10);
 
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -246,11 +245,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task CombineMixManualSplit_WithOrderNumbers()
         {
-            orderA.IsManual = true;
-            Modify.Order(orderA).Save();
+            orderA = Create.CreateManualOrder(store, context.Customer, 10);
 
-            var orderB_1_C = await PerformCombine("10B-1-C", orderB, orderA);
-            var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
+            var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, orderA);
+            var (orderB_0, orderB_1) = await combineSplitHelpers.PerformSplit(orderB_1_C);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -264,8 +262,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task SplitThenCombineOrder_WithOrderNumbers()
         {
-            var (orderA_0, orderA_1) = await PerformSplit(orderA);
-            var orderA_C = await PerformCombine("10A-1-C", orderA_0, orderB);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA);
+            var orderA_C = await combineSplitHelpers.PerformCombine("10A-1-C", orderA_0, orderB);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -279,8 +277,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task CombineSplitWithBSurviving_WithOrderNumbers()
         {
-            var orderB_1_C = await PerformCombine("10B-1-C", orderB, orderA);
-            var (orderB_0, orderB_1) = await PerformSplit(orderB_1_C);
+            var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, orderA);
+            var (orderB_0, orderB_1) = await combineSplitHelpers.PerformSplit(orderB_1_C);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -294,8 +292,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
         [Fact]
         public async Task CombineSplitWithASurviving_WithOrderNumbers()
         {
-            var orderA_1_C = await PerformCombine("10B-1-C", orderA, orderB);
-            var (orderA_0, orderA_1) = await PerformSplit(orderA_1_C);
+            var orderA_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderA, orderB);
+            var (orderA_0, orderA_1) = await combineSplitHelpers.PerformSplit(orderA_1_C);
 
             // Get online identities
             var identityProvider = context.Mock.Container.Resolve<LemonStandCombineOrderIdSearchProvider>();
@@ -306,41 +304,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand.OnlineUpdating
             Assert.Equal(new[] { "10", "20" }, identities_A_1);
         }
 
-        /// <summary>
-        /// Perform a split of the given order
-        /// </summary>
-        private async Task<(LemonStandOrderEntity original, LemonStandOrderEntity split)> PerformSplit(OrderEntity order)
-        {
-            var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
-            var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
-
-            splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
-                .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(), 
-                                                              new Dictionary<long, decimal>(), 
-                                                              order.OrderNumberComplete + "-1"));
-
-            var result = await orchestrator.Split(order.OrderID);
-            var original = await dataProvider.GetEntityAsync<LemonStandOrderEntity>(result.First());
-            var split = await dataProvider.GetEntityAsync<LemonStandOrderEntity>(result.Last());
-
-            return (original, split);
-        }
-
-        /// <summary>
-        /// Combine the given orders, using the first order in the params as the surviving order
-        /// </summary>
-        private async Task<OrderEntity> PerformCombine(string orderNumber, params OrderEntity[] ordersToCombine)
-        {
-            var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
-            var combineOrchestrator = context.Mock.Container.Resolve<ICombineOrderOrchestrator>();
-
-            combineInteraction.Setup(x => x.GetCombinationDetailsFromUser(It.IsAny<IEnumerable<IOrderEntity>>()))
-                .Returns(Tuple.Create(ordersToCombine.First().OrderID, orderNumber));
-
-            var result = await combineOrchestrator.Combine(ordersToCombine.Select(x => x.OrderID));
-            return await dataProvider.GetEntityAsync<OrderEntity>(result.Value);
-        }
-        
         public void Dispose() => context.Dispose();
     }
 }

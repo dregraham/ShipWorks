@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.PayPal.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             PayPalOrderEntity order = (PayPalOrderEntity) splitOrder;
             PayPalOrderSearchEntity orderSearchEntity = order.PayPalOrderSearch.AddNew();
 

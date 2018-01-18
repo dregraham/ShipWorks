@@ -32,11 +32,20 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
 
             EbayOrderEntity order = (EbayOrderEntity) combinedOrder;
 
-            order.GspEligible = orders.Where(o => o is EbayOrderEntity).Cast<EbayOrderEntity>()
+            order.GspEligible = orders
+                .Where(o => o is EbayOrderEntity)
+                .Cast<EbayOrderEntity>()
                 .Any(o => o.GspEligible);
-            order.RollupEffectiveCheckoutStatus = orders
-                .OfType<EbayOrderEntity>()
-                .First().RollupEffectiveCheckoutStatus;
+
+            var ebayOrders = orders
+                .Where(o => o is EbayOrderEntity)
+                .Cast<EbayOrderEntity>();
+
+            if (ebayOrders.Any())
+            {
+                order.RollupEffectiveCheckoutStatus = ebayOrders
+                    .First().RollupEffectiveCheckoutStatus;
+            }
 
             var recordCreator = new SearchRecordMerger<IEbayOrderEntity>(combinedOrder, orders, sqlAdapter);
 

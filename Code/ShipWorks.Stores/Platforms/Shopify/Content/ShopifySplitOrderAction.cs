@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Shopify.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             ShopifyOrderEntity order = (ShopifyOrderEntity) splitOrder;
             ShopifyOrderSearchEntity orderSearchEntity = order.ShopifyOrderSearch.AddNew();
 

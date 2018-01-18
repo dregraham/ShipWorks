@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) splitOrder;
             ChannelAdvisorOrderSearchEntity orderSearchEntity = order.ChannelAdvisorOrderSearch.AddNew();
 

@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             EbayOrderEntity order = (EbayOrderEntity) splitOrder;
             EbayOrderSearchEntity orderSearchEntity = order.EbayOrderSearch.AddNew();
 

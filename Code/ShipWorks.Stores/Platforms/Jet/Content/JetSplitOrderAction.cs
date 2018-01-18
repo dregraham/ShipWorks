@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Jet.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             JetOrderEntity order = (JetOrderEntity) splitOrder;
             JetOrderSearchEntity orderSearchEntity = order.JetOrderSearch.AddNew();
 

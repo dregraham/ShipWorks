@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Sears.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             SearsOrderEntity order = (SearsOrderEntity) splitOrder;
             SearsOrderSearchEntity orderSearchEntity = order.SearsOrderSearch.AddNew();
 

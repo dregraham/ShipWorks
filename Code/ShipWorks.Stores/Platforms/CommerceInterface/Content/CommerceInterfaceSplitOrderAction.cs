@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             CommerceInterfaceOrderEntity order = (CommerceInterfaceOrderEntity) splitOrder;
             CommerceInterfaceOrderSearchEntity orderSearchEntity = order.CommerceInterfaceOrderSearch.AddNew();
 

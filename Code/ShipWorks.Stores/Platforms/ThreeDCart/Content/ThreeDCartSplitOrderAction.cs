@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             ThreeDCartOrderEntity order = (ThreeDCartOrderEntity) splitOrder;
             ThreeDCartOrderSearchEntity orderSearchEntity = order.ThreeDCartOrderSearch.AddNew();
 

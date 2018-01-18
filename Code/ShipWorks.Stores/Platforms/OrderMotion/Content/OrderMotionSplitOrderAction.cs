@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.OrderMotion.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             OrderMotionOrderEntity order = (OrderMotionOrderEntity) splitOrder;
             OrderMotionOrderSearchEntity orderSearchEntity = order.OrderMotionOrderSearch.AddNew();
 

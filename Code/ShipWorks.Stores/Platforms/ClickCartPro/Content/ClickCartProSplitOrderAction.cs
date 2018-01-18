@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.ClickCartPro.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             ClickCartProOrderEntity order = (ClickCartProOrderEntity) splitOrder;
             ClickCartProOrderSearchEntity orderSearchEntity = order.ClickCartProOrderSearch.AddNew();
 

@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             YahooOrderEntity order = (YahooOrderEntity) splitOrder;
             YahooOrderSearchEntity orderSearchEntity = order.YahooOrderSearch.AddNew();
 
