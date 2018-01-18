@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -37,17 +37,13 @@ namespace ShipWorks.Stores.Orders.Split
                 originalOrderItemEntity.Quantity = originalOrderItemEntity.Quantity - newOrderItemEntity.Quantity;
             }
 
-            // Set any order items from the split order that were not in the newOrderItemQuantities
-            // to have a Quantity of 0
-            IEnumerable<long> notPresentOrderItemIDs = splitOrder.OrderItems
-                .Select(oi => oi.OrderItemID)
-                .Except(orderSplitDefinition.ItemQuantities.Keys)
-                .Distinct();
+            splitOrder.OrderItems
+                .RemoveWhere(x => x.Quantity == 0 || !orderSplitDefinition.ItemQuantities.ContainsKey(x.OrderItemID));
 
-            foreach (long orderItemID in notPresentOrderItemIDs)
-            {
-                splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemID).Quantity = 0;
-            }
+            originalOrder.OrderItems
+                .RemoveWhere(x => x.Quantity == 0 &&
+                    orderSplitDefinition.ItemQuantities.TryGetValue(x.OrderItemID, out decimal splitQuantity) &&
+                    splitQuantity != 0);
         }
     }
 }

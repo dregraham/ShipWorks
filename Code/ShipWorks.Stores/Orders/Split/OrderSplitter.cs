@@ -1,4 +1,10 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Reactive;
+using System.Threading.Tasks;
+using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
@@ -8,16 +14,9 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Stores.Orders.Split.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Threading.Tasks;
-using Autofac.Features.Indexed;
-using Interapptive.Shared;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split.Actions;
+using ShipWorks.Stores.Orders.Split.Errors;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -69,7 +68,7 @@ namespace ShipWorks.Stores.Orders.Split
                 })
                 .ConfigureAwait(false);
         }
-        
+
         /// <summary>
         /// Perform the split
         /// </summary>
@@ -111,35 +110,35 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private async Task<(OrderEntity original, OrderEntity split)> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
         {
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+            return await sqlAdapterFactory.WithPhysicalTransactionAsync(async (transaction, sqlAdapter) =>
             {
                 await SaveOrder(newOrderEntity, sqlAdapter)
                     .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
-                    .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
+                    .Bind(x => CompleteTransaction(x, transaction, sqlAdapter, progressProvider))
                     .Map(_ => newOrderEntity)
                     .ConfigureAwait(false);
 
                 return (originalOrder, newOrderEntity);
-            }
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Complete the transaction
         /// </summary>
-        private Task<Unit> CompleteTransaction(bool saveSucceeded, ISqlAdapter sqlAdapter, IProgressReporter progressProvider)
+        private Task<Unit> CompleteTransaction(bool saveSucceeded, DbTransaction transaction, ISqlAdapter sqlAdapter, IProgressReporter progressProvider)
         {
             var cancelRequested = progressProvider.IsCancelRequested;
             progressProvider.CanCancel = false;
 
             if (!saveSucceeded || cancelRequested)
             {
-                sqlAdapter.Rollback();
+                transaction.Rollback();
                 return Result.FromError(cancelRequested ? Error.Canceled : Error.SaveFailed);
             }
 
             progressProvider.PercentComplete = 50;
 
-            sqlAdapter.Commit();
+            transaction.Commit();
             return Result.FromSuccess();
         }
 
@@ -187,23 +186,31 @@ namespace ShipWorks.Stores.Orders.Split
 
             bool saveResult = await sqlAdapter.SaveEntityAsync(order, true).ConfigureAwait(false);
 
-            foreach (OrderItemEntity orderItem in order.OrderItems.Where(oi => Math.Abs(oi.Quantity) < 0.001))
+            foreach (OrderItemEntity orderItem in order.OrderItems.RemovedEntitiesTracker)
             {
-                // delete each attribute entity so derived entities are also deleted
-                foreach (OrderItemAttributeEntity attrib in orderItem.OrderItemAttributes)
-                {
-                    saveResult &= await sqlAdapter.DeleteEntityAsync(attrib).ConfigureAwait(false);
-                }
-
-                saveResult &= await sqlAdapter.DeleteEntityAsync(orderItem).ConfigureAwait(false);
+                saveResult &= await DeleteCollection(sqlAdapter, orderItem.OrderItemAttributes).ConfigureAwait(false);
             }
 
-            foreach (OrderChargeEntity orderCharge in order.OrderCharges.Where(oc => oc.Amount == 0))
-            {
-                saveResult &= await sqlAdapter.DeleteEntityAsync(orderCharge).ConfigureAwait(false);
-            }
+            saveResult &= await DeleteCollection(sqlAdapter, order.OrderItems.RemovedEntitiesTracker).ConfigureAwait(false);
+            saveResult &= await DeleteCollection(sqlAdapter, order.OrderCharges.RemovedEntitiesTracker).ConfigureAwait(false);
 
             return saveResult;
+        }
+
+        /// <summary>
+        /// Delete a collection
+        /// </summary>
+        private async Task<bool> DeleteCollection(ISqlAdapter sqlAdapter, IEntityCollection2 collection)
+        {
+            var shouldBeDeleted = collection.OfType<IEntityCore>().Where(x => !x.IsNew).Count();
+
+            if (shouldBeDeleted == 0)
+            {
+                return true;
+            }
+
+            var deletedCount = await sqlAdapter.DeleteEntityCollectionAsync(collection).ConfigureAwait(false);
+            return deletedCount == shouldBeDeleted;
         }
 
         /// <summary>
