@@ -1,7 +1,7 @@
 ﻿namespace ShipWorks.Stores.Communication
 {
     /// <summary>
-    /// Download
+    /// Downloader for downloading a specific order
     /// </summary>
     public interface IOnDemandDownloader
     {

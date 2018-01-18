@@ -189,5 +189,18 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             return storeWizardFinishPageControlFactory[StoreTypeCode.Odbc].Create(odbcStore);
         }
+
+        /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public override bool ShouldAutoDownload()
+        {
+            if(odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
