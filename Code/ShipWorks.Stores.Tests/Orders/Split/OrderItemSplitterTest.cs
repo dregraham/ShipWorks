@@ -146,5 +146,81 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Assert.Equal(1, originalOrder.OrderItems.First(oc => oc.OrderItemID == 1).Quantity);
             Assert.Equal(3, originalOrder.OrderItems.First(oc => oc.OrderItemID == 2).Quantity);
         }
+
+        [Fact]
+        public void Split_RemovesItemsWithZeroQuantityFromOriginalOrder_WhenSplitOrderHasItemWithNonZeroQuantity()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo", Quantity = 5 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 5 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+
+            OrderItemSplitter testObject = new OrderItemSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.Empty(originalOrder.OrderItems);
+        }
+
+        [Fact]
+        public void Split_RemovesItemsWithZeroQuantityFromSplitOrder_WhenOriginalOrderHasItemWithNonZeroQuantity()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo", Quantity = 5 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 0 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+
+            OrderItemSplitter testObject = new OrderItemSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.Empty(splitOrder.OrderItems);
+        }
+
+        [Fact]
+        public void Split_DoesNotRemoveItemsWithZeroQuantityFromOriginalOrder_WhenSplitOrderHasItemWithNonZeroQuantity()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo", Quantity = 0 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 0 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+
+            OrderItemSplitter testObject = new OrderItemSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.NotEmpty(originalOrder.OrderItems);
+            Assert.Empty(splitOrder.OrderItems);
+        }
+
+        [Fact]
+        public void Split_DoesNotRemoveItemsWithZeroAmountFromOriginalOrder_WhenNotIncludedInSplitAmounts()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo", Quantity = 0 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo" });
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "");
+
+            OrderItemSplitter testObject = new OrderItemSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.NotEmpty(originalOrder.OrderItems);
+            Assert.Empty(splitOrder.OrderItems);
+        }
     }
 }

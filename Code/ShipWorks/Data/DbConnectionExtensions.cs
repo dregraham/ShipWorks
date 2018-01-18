@@ -57,6 +57,28 @@ namespace ShipWorks.Data
         /// <summary>
         /// Perform an action with a transaction
         /// </summary>
+        public static async Task<T> WithTransactionAsync<T>(this DbConnection connection, Func<DbTransaction, ISqlAdapter, Task<T>> operation)
+        {
+            using (DbTransaction transaction = connection.BeginTransaction())
+            {
+                using (ISqlAdapter adapter = new SqlAdapter(connection, transaction))
+                {
+                    try
+                    {
+                        return await operation(transaction, adapter).ConfigureAwait(false);
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Perform an action with a transaction
+        /// </summary>
         public static void WithTransaction(this DbConnection connection, Action<DbTransaction, ISqlAdapter> operation)
         {
             using (DbTransaction transaction = connection.BeginTransaction())

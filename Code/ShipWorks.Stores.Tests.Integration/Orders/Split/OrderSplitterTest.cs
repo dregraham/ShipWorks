@@ -151,7 +151,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(originalOrderForCheckingValues.OrderCharges.Count, originalOrder.OrderCharges.Count);
             Assert.Equal(originalOrderTotal, originalOrder.OrderTotal);
 
-
             ThreeDCartOrderEntity newOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, false);
             newOrderForCheckingValues.OrderItems.Clear();
             newOrderForCheckingValues.OrderItems.Add(orderItem);
@@ -166,6 +165,36 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(newOrderTotal, newOrder.OrderTotal);
             Assert.Equal(newOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), newOrder.OrderCharges.Sum(oc => oc.Amount));
             Assert.Equal(newOrderForCheckingValues.OrderItems.Sum(oi => oi.Quantity), newOrder.OrderItems.Sum(oi => oi.Quantity));
+        }
+
+        [Fact]
+        public async Task Split_DoesNotMoveItemsOrCharges_WhenOriginalValueIsZero()
+        {
+            var order = Modify.Order(context.Order)
+                .WithItem(i => i.Set(x => x.Name, "Foo").Set(x => x.Quantity, 0))
+                .WithCharge(c => c.Set(x => x.Description, "Bar").Set(x => x.Amount, 0))
+                .Save();
+
+            IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
+
+            var orderItem = order.OrderItems.First();
+            var itemQuanities = new Dictionary<long, decimal> { { orderItem.OrderItemID, 0 } };
+
+            var orderCharge = order.OrderCharges.First();
+            var chargeAmounts = new Dictionary<long, decimal> { { orderCharge.OrderChargeID, 0 } };
+
+            var result = await testObject.Split(
+                new OrderSplitDefinition(order, itemQuanities, chargeAmounts, "ABC"), new ProgressItem("Foo"));
+
+            var gateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
+
+            var originalOrder = await gateway.LoadOrder(result.Keys.First());
+            Assert.Contains("Foo", originalOrder.OrderItems.Select(x => x.Name));
+            Assert.Contains("Bar", originalOrder.OrderCharges.Select(x => x.Description));
+
+            var splitOrder = await gateway.LoadOrder(result.Keys.Last());
+            Assert.DoesNotContain("Foo", splitOrder.OrderItems.Select(x => x.Name));
+            Assert.DoesNotContain("Bar", splitOrder.OrderCharges.Select(x => x.Description));
         }
 
         private ThreeDCartStoreEntity CreateThreeDCartStore()

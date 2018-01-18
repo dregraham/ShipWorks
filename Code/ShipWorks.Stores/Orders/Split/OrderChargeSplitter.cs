@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -34,17 +34,13 @@ namespace ShipWorks.Stores.Orders.Split
                 originalOrderChargeEntity.Amount = originalOrderChargeEntity.Amount - newOrderChargeEntity.Amount;
             }
 
-            // Set any charges from the split order that were not in the newOrderChargeAmounts to
-            // have an Amount of 0
-            IEnumerable<long> notPresentOrderChargeIDs = splitOrder.OrderCharges
-                .Select(oi => oi.OrderChargeID)
-                .Except(orderSplitDefinition.ChargeAmounts.Keys)
-                .Distinct();
+            splitOrder.OrderCharges
+                .RemoveWhere(x => x.Amount == 0 || !orderSplitDefinition.ChargeAmounts.ContainsKey(x.OrderChargeID));
 
-            foreach (long orderChargeID in notPresentOrderChargeIDs)
-            {
-                splitOrder.OrderCharges.First(oi => oi.OrderChargeID == orderChargeID).Amount = 0;
-            }
+            originalOrder.OrderCharges
+                .RemoveWhere(x => x.Amount == 0 &&
+                    orderSplitDefinition.ChargeAmounts.TryGetValue(x.OrderChargeID, out decimal chargeAmount) &&
+                    chargeAmount != 0);
         }
     }
 }

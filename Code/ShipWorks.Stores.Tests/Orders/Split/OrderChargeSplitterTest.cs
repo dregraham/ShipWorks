@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
 using Xunit;
@@ -145,9 +142,85 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             Assert.Equal(0, splitOrder.OrderCharges.Sum(oi => oi.Amount));
             Assert.Equal(4, originalOrder.OrderCharges.Sum(oi => oi.Amount));
-            
+
             Assert.Equal(1M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 1).Amount);
             Assert.Equal(3M, originalOrder.OrderCharges.First(oc => oc.OrderChargeID == 2).Amount);
+        }
+
+        [Fact]
+        public void Split_RemovesChargesWithZeroAmountFromOriginalOrder_WhenSplitOrderHasChargeWithNonZeroAmount()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo", Amount = 5 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderChargeAmounts = new Dictionary<long, decimal> { { 1, 5 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
+            OrderChargeSplitter testObject = new OrderChargeSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.Empty(originalOrder.OrderCharges);
+        }
+
+        [Fact]
+        public void Split_RemovesChargesWithZeroAmountFromSplitOrder_WhenOriginalOrderHasChargeWithNonZeroAmount()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo", Amount = 5 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderChargeAmounts = new Dictionary<long, decimal> { { 1, 0 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
+            OrderChargeSplitter testObject = new OrderChargeSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.Empty(splitOrder.OrderCharges);
+        }
+
+        [Fact]
+        public void Split_DoesNotRemoveChargesWithZeroAmountFromOriginalOrder_WhenSplitOrderHasChargeWithNonZeroAmount()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo", Amount = 0 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo" });
+
+            Dictionary<long, decimal> newOrderChargeAmounts = new Dictionary<long, decimal> { { 1, 0 } };
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), newOrderChargeAmounts, "");
+
+            OrderChargeSplitter testObject = new OrderChargeSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.NotEmpty(originalOrder.OrderCharges);
+            Assert.Empty(splitOrder.OrderCharges);
+        }
+
+        [Fact]
+        public void Split_DoesNotRemoveChargesWithZeroAmountFromOriginalOrder_WhenNotIncludedInSplitAmounts()
+        {
+            var originalOrder = new OrderEntity { OrderNumber = 1 };
+            originalOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo", Amount = 0 });
+
+            OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
+            splitOrder.OrderCharges.Add(new OrderChargeEntity(1) { Description = "Foo" });
+
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "");
+
+            OrderChargeSplitter testObject = new OrderChargeSplitter();
+            testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
+
+            Assert.NotEmpty(originalOrder.OrderCharges);
+            Assert.Empty(splitOrder.OrderCharges);
         }
     }
 }
