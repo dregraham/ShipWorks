@@ -1183,7 +1183,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download the order number for the store
         /// </summary>
-        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        public virtual Task Download(string orderNumber, long downloadID, DbConnection con)
         {
             return Task.CompletedTask;
         }
