@@ -245,6 +245,12 @@ namespace ShipWorks.Stores.Communication
                     continue;
                 }
 
+                // Only download if store should AutoDownload
+                if (!StoreTypeManager.GetType(store).ShouldAutoDownload())
+                {
+                    continue;
+                }
+
                 DateTime? lastDownload = GetLastDownloadTime(store);
 
                 if (lastDownload == null || lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) < DateTime.UtcNow)
@@ -285,9 +291,14 @@ namespace ShipWorks.Stores.Communication
         {
             Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
 
+            bool oneStore = stores.Count == 1;
+
             foreach (StoreEntity store in stores)
             {
-                AddToDownloadedQueue(store, initiatedBy);
+                if (oneStore || StoreTypeManager.GetType(store).ShouldAutoDownload())
+                {
+                    AddToDownloadedQueue(store, initiatedBy);
+                }
             }
         }
 
