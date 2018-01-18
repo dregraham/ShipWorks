@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private readonly IWin32Window owner;
 
         private const string GlobalPostDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
-        private const string GlobalPostAccessProgramDisplayUrl = "https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png";
+        private const string GlobalPostAdvantageProgramDisplayUrl = "https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png";
         private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
         private const string BrowserDlgTitle = "Your GlobalPost Label";
 
@@ -54,8 +54,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         public void Show(IShipmentEntity shipment)
         {
             string urlToUse = PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service) ? 
-                GlobalPostDisplayUrl : 
-                GlobalPostAccessProgramDisplayUrl;
+                GlobalPostDisplayUrl :
+                GlobalPostAdvantageProgramDisplayUrl;
 
             Uri displayUri = new Uri(urlToUse);
             browserViewModel.Load(displayUri, BrowserDlgTitle, MoreInfoUrl);
