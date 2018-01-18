@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,6 +8,8 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Communication;
@@ -49,6 +52,32 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         }
 
         /// <summary>
+        /// Download the order with matching order number for the store
+        /// </summary>
+        public override async Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            Progress = new ProgressItem("Download single order");
+            downloadLogID = downloadID;
+            connection = con;
+            try
+            {
+                // Try to find an existing order
+                OrderEntity order = await FindOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
+                if (order != null)
+                {
+                    return;
+                }
+
+                IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                await Download(downloadCommand).ConfigureAwait(false);
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
         /// Import ODBC Orders from external data source.
         /// </summary>
         /// <param name="trackedDurationEvent">The telemetry event that can be used to
@@ -68,22 +97,30 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
                 trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
-                IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
-                List<IGrouping<string, OdbcRecord>> orderGroups =
-                    downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
-
-                int orderCount = GetOrderCount(orderGroups);
-
-                if (orderCount > 0)
-                {
-                    EnsureRecordIdentifiersAreNotNull(orderGroups);
-
-                    await LoadOrders(orderGroups, orderCount).ConfigureAwait(false);
-                }
+                await Download(downloadCommand);
             }
             catch (ShipWorksOdbcException ex)
             {
                 throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Download using the download command
+        /// </summary>
+        private async Task Download(IOdbcCommand downloadCommand)
+        {
+            IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
+            List<IGrouping<string, OdbcRecord>> orderGroups =
+                downloadedOrders.GroupBy(o => o.RecordIdentifier).ToList();
+
+            int orderCount = GetOrderCount(orderGroups);
+
+            if (orderCount > 0)
+            {
+                EnsureRecordIdentifiersAreNotNull(orderGroups);
+
+                await LoadOrders(orderGroups, orderCount).ConfigureAwait(false);
             }
         }
 
