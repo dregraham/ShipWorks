@@ -68,6 +68,7 @@
             this.configureDownloadComputers.Size = new System.Drawing.Size(148, 13);
             this.configureDownloadComputers.TabIndex = 8;
             this.configureDownloadComputers.Text = "Configure other computers...";
+            this.configureDownloadComputers.Click += new System.EventHandler(this.OnConfigureDownloadPolicy);
             // 
             // label1
             // 
@@ -127,7 +128,7 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "tab to the left.";
             // 
-            // OdbcDownloadSettingsControl
+            // OdbcOnDemandDownloadSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -140,7 +141,7 @@
             this.Controls.Add(this.labelAllowDownload);
             this.Controls.Add(this.comboAllowDownload);
             this.Controls.Add(this.configureDownloadComputers);
-            this.Name = "OdbcDownloadSettingsControl";
+            this.Name = "OdbcOnDemandDownloadSettingsControl";
             this.Size = new System.Drawing.Size(540, 87);
             this.ResumeLayout(false);
             this.PerformLayout();

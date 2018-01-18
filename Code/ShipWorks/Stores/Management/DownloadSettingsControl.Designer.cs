@@ -63,6 +63,7 @@
             this.configureDownloadComputers.Size = new System.Drawing.Size(148, 13);
             this.configureDownloadComputers.TabIndex = 4;
             this.configureDownloadComputers.Text = "Configure other computers...";
+            this.configureDownloadComputers.Click += new System.EventHandler(this.OnConfigureDownloadPolicy);
             // 
             // automaticDownloadControl
             // 
