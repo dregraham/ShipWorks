@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Communication
         int QuantityNew { get; }
 
         /// <summary>
-        /// Download orders from the store
+        /// Downloads a specific order from the store
         /// </summary>
         Task Download(IProgressReporter progressItem, long downloadID, DbConnection con);
         
