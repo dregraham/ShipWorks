@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Communication
+﻿using System.Threading.Tasks;
+
+namespace ShipWorks.Stores.Communication
 {
     /// <summary>
     /// Downloader for downloading a specific order
@@ -8,6 +10,6 @@
         /// <summary>
         /// Download using an order number
         /// </summary>
-        void Download(string orderNumber);
+        Task Download(string orderNumber);
     }
 }

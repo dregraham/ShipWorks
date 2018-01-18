@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
@@ -80,7 +81,7 @@ namespace ShipWorks.ApplicationCore
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
-                    .Do(scanMsg => DownloadOnDemand(scanMsg.ScannedText))
+                    .SelectMany(scanMsg => Observable.FromAsync(() => DownloadOnDemand(scanMsg.ScannedText)).Select(_ => scanMsg))
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
@@ -106,9 +107,9 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Download on demand
         /// </summary>
-        private void DownloadOnDemand(string searchString)
+        private Task DownloadOnDemand(string searchString)
         {
-            onDemandDownloader.Download(searchString.Trim());
+            return onDemandDownloader.Download(searchString.Trim());
         }
 
         /// <summary>

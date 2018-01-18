@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -25,9 +26,9 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Initiate download using given orderNumber
         /// </summary>
-        public void Download(string orderNumber)
+        public async Task Download(string orderNumber)
         {
-            IResult result = downloadManager.Download(orderNumber);
+            IResult result = await downloadManager.Download(orderNumber);
 
             if (result.Failure)
             {
