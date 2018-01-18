@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
 
 namespace ShipWorks.ApplicationCore
@@ -27,6 +28,7 @@ namespace ShipWorks.ApplicationCore
         private readonly IMessenger messenger;
         private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IOnDemandDownloader onDemandDownloader;
 
         // Debouncing observables for searching
         private readonly IConnectableObservable<ScanMessage> scanMessages;
@@ -35,11 +37,17 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainGridControlPipeline(IMessenger messenger, IUserSession userSession, IMainForm mainForm, ISchedulerProvider schedulerProvider)
+        public MainGridControlPipeline(
+            IMessenger messenger, 
+            IUserSession userSession, 
+            IMainForm mainForm, 
+            ISchedulerProvider schedulerProvider, 
+            IOnDemandDownloader onDemandDownloader)
         {
             this.messenger = messenger;
             this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
+            this.onDemandDownloader = onDemandDownloader;
             this.mainForm = mainForm;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
@@ -72,6 +80,7 @@ namespace ShipWorks.ApplicationCore
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
+                    .Do(scanMsg => DownloadOnDemand(scanMsg.ScannedText))
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
@@ -92,6 +101,14 @@ namespace ShipWorks.ApplicationCore
                     scanMessagesConnection = null;
                 })
             );
+        }
+
+        /// <summary>
+        /// Download on demand
+        /// </summary>
+        private void DownloadOnDemand(string searchString)
+        {
+            onDemandDownloader.Download(searchString.Trim());
         }
 
         /// <summary>
