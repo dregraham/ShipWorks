@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Communication
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Interface that represents the DownloadManager
     /// </summary>
+    [Component]
     public class DownloadManagerWrapper : IDownloadManager
     {
         /// <summary>
