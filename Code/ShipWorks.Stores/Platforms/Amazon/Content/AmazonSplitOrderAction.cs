@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             AmazonOrderEntity order = (AmazonOrderEntity) splitOrder;
             AmazonOrderSearchEntity orderSearchEntity = order.AmazonOrderSearch.AddNew();
 

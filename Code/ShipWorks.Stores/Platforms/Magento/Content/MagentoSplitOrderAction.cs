@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.Magento.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             MagentoOrderEntity order = (MagentoOrderEntity) splitOrder;
             MagentoOrderSearchEntity orderSearchEntity = order.MagentoOrderSearch.AddNew();
 

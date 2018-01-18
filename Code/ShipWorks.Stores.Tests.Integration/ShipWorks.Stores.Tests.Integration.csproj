@@ -171,6 +171,7 @@
     <Compile Include="Content\StoreSpecificCombineOrderActionTest.cs" />
     <Compile Include="DatabaseCollection.cs" />
     <Compile Include="Extensions\RestClientMockExtensions.cs" />
+    <Compile Include="Helpers\CombineSplitHelpers.cs" />
     <Compile Include="Helpers\DbHelpers.cs" />
     <Compile Include="Helpers\HttpArchiveReplayServer.cs" />
     <Compile Include="Helpers\Response.cs" />

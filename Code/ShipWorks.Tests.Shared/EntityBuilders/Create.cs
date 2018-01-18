@@ -65,5 +65,19 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
             where T : EntityBase2, TInterface, new()
             where TInterface : ICarrierAccount =>
             new CarrierAccountEntityBuilder<T, TInterface>();
+
+        /// <summary>
+        /// Create a manual order
+        /// </summary>
+        public static OrderEntity CreateManualOrder(StoreEntity store, CustomerEntity customer, long orderNumber)
+        {
+            return Create.Order<OrderEntity>(store, customer)
+                .WithItem<OrderItemEntity>(i => i
+                    .Set(x => x.Description, orderNumber.ToString())
+                    .Set(i2 => i2.Quantity, 2))
+                .Set(x => x.OrderNumber, orderNumber)
+                .Set(x => x.IsManual, true)
+                .Save();
+        }
     }
 }

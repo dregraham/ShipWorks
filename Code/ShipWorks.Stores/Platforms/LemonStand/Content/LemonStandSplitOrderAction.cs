@@ -15,6 +15,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand.Content
         /// </summary>
         public void Perform(long originalOrderID, OrderEntity splitOrder)
         {
+            if (splitOrder.IsManual)
+            {
+                return;
+            }
+
             LemonStandOrderEntity order = (LemonStandOrderEntity) splitOrder;
             LemonStandOrderSearchEntity orderSearchEntity = order.LemonStandOrderSearch.AddNew();
 
