@@ -50,7 +50,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, string orderNumber, IOdbcFieldMap odbcFieldMap)
         {
-            throw new NotImplementedException();
+            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            IOdbcQuery orderNumberQuery = new OdbcOrderNumberDownloadQuery(downloadQuery, orderNumber, odbcFieldMap, dbProviderFactory, dataSource);
+
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, orderNumberQuery);
         }
 
         /// <summary>
