@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
@@ -41,10 +43,10 @@ namespace ShipWorks.Stores.Communication
         static readonly ILog log = LogManager.GetLogger(typeof(DownloadManager));
 
         // Downloading flag
-        static volatile bool isDownloading = false;
+        static volatile bool isDownloading;
 
         // The progress dlg currently displayed, or null if not displayed.
-        static ProgressDlg progressDlg = null;
+        static ProgressDlg progressDlg;
 
         // The busy token
         static ApplicationBusyToken busyToken;
@@ -54,7 +56,7 @@ namespace ShipWorks.Stores.Communication
 
         // The current queue of items to be downloaded and its locking features
         static List<PendingDownload> downloadQueue;
-        static object downloadQueueLock = new object();
+        static readonly object downloadQueueLock = new object();
 
         #region class PendingDownload
 
@@ -70,16 +72,16 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Raised when a download is about to start
         /// </summary>
-        static public event EventHandler DownloadStarting;
+        public static event EventHandler DownloadStarting;
 
         /// <summary>
         /// Raised after a download completes, regardless of the outcome
         /// </summary>
-        static public event DownloadCompleteEventHandler DownloadComplete;
+        public static event DownloadCompleteEventHandler DownloadComplete;
 
         // Data for controlling auto-download
         static Dictionary<long, DateTime?> lastDownloadTimesCache = null;
-        static object lastDownloadTimesLock = new object();
+        static readonly object lastDownloadTimesLock = new object();
         static DateTime lastAutoDownloadCheck;
 
         /// <summary>
@@ -158,6 +160,59 @@ namespace ShipWorks.Stores.Communication
             {
                 StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
             }
+        }
+
+        /// <summary>
+        /// Download from all stores by order number
+        /// </summary>
+        public static async Task<IResult> Download(string orderNumber)
+        {
+            using (DbConnection con = SqlSession.Current.OpenConnection())
+            {
+
+                try
+                {
+                    using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
+                    {
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            return await Download(orderNumber, con, lifetimeScope).ConfigureAwait(false);
+                        }
+                    }
+                }
+                catch (SqlAppResourceLockException)
+                {
+                    return Result.FromError("Someone else just scanned this order. Please scan again.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Download from all stores by order number
+        /// </summary>
+        private static async Task<IResult> Download(string orderNumber, DbConnection con, ILifetimeScope lifetimeScope)
+        {
+            List<StoreEntity> stores = StoreManager.GetEnabledStores();
+            bool errorThrown = false;
+            StringBuilder errorMessage = new StringBuilder("The following errors occurred when attempting to download the order:\r\n");
+
+            foreach (StoreEntity store in stores)
+            {
+                try
+                {
+                    DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
+                    IStoreDownloader downloader =
+                        lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                    await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    errorMessage.AppendLine(ex.Message);
+                    errorThrown = true;
+                }
+            }
+
+            return errorThrown ? Result.FromError(errorMessage.ToString()) : Result.FromSuccess();
         }
 
         /// <summary>
@@ -315,8 +370,8 @@ namespace ShipWorks.Stores.Communication
             // Keep going until there are no more stores to download for
             while (true)
             {
-                StoreEntity store = null;
-                ProgressItem progressItem = null;
+                StoreEntity store;
+                ProgressItem progressItem;
                 DownloadInitiatedBy initiatedBy;
 
                 bool releaseQueueLock = true;
