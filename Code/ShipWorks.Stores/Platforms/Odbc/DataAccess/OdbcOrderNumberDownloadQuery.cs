@@ -19,6 +19,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         private readonly IOdbcDataSource dataSource;
         private readonly string orderNumberColumnName;
 
+        // Since OrderNumberComplete is an nvarchar(50) this is the size of the sql parameter
+        private const int SizeOfOrderNumberParameter = 50;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,7 +53,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(orderNumberColumnName);
 
             // Generate the query
-            return $@"SELECT sub.* FROM({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} = ?";
+
+            return $"SELECT sub.* FROM ({downloadQuery.GenerateSql()}) sub WHERE {columnNameInQuotes} = ?";
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             command.ChangeCommandText(GenerateSql());
             string columnNameInQuotes = WrapColumnInQuoteIdentifier(orderNumberColumnName);
 
-            OdbcParameter param = new OdbcParameter(columnNameInQuotes, OdbcType.NVarChar, 50, ParameterDirection.Input, false, 1, 3, columnNameInQuotes, DataRowVersion.Current, orderNumber);
+            OdbcParameter param = new OdbcParameter(columnNameInQuotes, OdbcType.NVarChar, SizeOfOrderNumberParameter, ParameterDirection.Input, false, 1, 3, columnNameInQuotes, DataRowVersion.Current, orderNumber);
             command.AddParameter(param);
         }
 
