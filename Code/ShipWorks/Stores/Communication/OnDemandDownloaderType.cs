@@ -5,7 +5,7 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Used to get an IOnDemandDownloader via KeyedComponent
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum OnDemandDownloaderType
     {
         OnDemandDownloader,
