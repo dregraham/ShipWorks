@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
@@ -20,6 +19,7 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         private readonly DataContext context;
         private Mock<IOrderSplitUserInteraction> splitInteraction;
         private Mock<IOrderCombinationUserInteraction> combineInteraction;
+        private readonly IOrderSplitGateway orderSplitGateway;
 
         public CombineSplitHelpers(DataContext context, Mock<IOrderSplitUserInteraction> splitInteraction, 
             Mock<IOrderCombinationUserInteraction> combineInteraction)
@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
             this.context = context;
             this.splitInteraction = splitInteraction;
             this.combineInteraction = combineInteraction;
+            orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
         }
 
         /// <summary>
@@ -34,7 +35,6 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         /// </summary>
         public async Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order)
         {
-            var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
 
             splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
@@ -43,8 +43,38 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
                     order.OrderNumberComplete + "-1"));
 
             var result = await orchestrator.Split(order.OrderID);
-            var original = await dataProvider.GetEntityAsync<OrderEntity>(result.First());
-            var split = await dataProvider.GetEntityAsync<OrderEntity>(result.Last());
+            var original = await orderSplitGateway.LoadOrder(result.First());
+            var split = await orderSplitGateway.LoadOrder(result.Last());
+
+            return (original, split);
+        }
+
+
+        /// <summary>
+        /// Perform a split of the given order
+        /// </summary>
+        public async Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order, int itemsToMove, double itemQuantityToMove)
+        {
+            var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
+
+            Dictionary<long, decimal> items = new Dictionary<long, decimal>();
+            foreach (var item in order.OrderItems.Take(itemsToMove))
+            {
+                items.Add(item.OrderItemID, (decimal) itemQuantityToMove);
+            }
+
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(order,
+                items,
+                new Dictionary<long, decimal>(),
+                order.OrderNumberComplete + "-1");
+
+            splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
+                .ReturnsAsync(orderSplitDefinition);
+
+            var result = await orchestrator.Split(order.OrderID);
+
+            var original = await orderSplitGateway.LoadOrder(result.First());
+            var split = await orderSplitGateway.LoadOrder(result.Last());
 
             return (original, split);
         }
@@ -54,14 +84,13 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         /// </summary>
         public async Task<OrderEntity> PerformCombine(string orderNumber, params OrderEntity[] ordersToCombine)
         {
-            var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var combineOrchestrator = context.Mock.Container.Resolve<ICombineOrderOrchestrator>();
 
             combineInteraction.Setup(x => x.GetCombinationDetailsFromUser(It.IsAny<IEnumerable<IOrderEntity>>()))
                 .Returns(Tuple.Create(ordersToCombine.First().OrderID, orderNumber));
 
             var result = await combineOrchestrator.Combine(ordersToCombine.Select(x => x.OrderID));
-            return await dataProvider.GetEntityAsync<OrderEntity>(result.Value);
+            return await orderSplitGateway.LoadOrder(result.Value);
         }
     }
 }
