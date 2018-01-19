@@ -193,6 +193,7 @@
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
     <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSqlTest.cs" />
