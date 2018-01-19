@@ -195,12 +195,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override bool ShouldAutoDownload()
         {
-            if(odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
-            {
-                return false;
-            }
-
-            return true;
+            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.OnDemand;            
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Communication
                 return;
             }
 
-            IResult result = await downloadManager.Download(orderNumber);
+            IResult result = await downloadManager.Download(orderNumber).ConfigureAwait(false);
 
             if (result.Failure)
             {

@@ -9,7 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
     /// <summary>
-    /// OdbcOrderNumberDownloadQuery
+    /// Odbc downloading query for downloading a specific order number
     /// </summary>
     public class OdbcOrderNumberDownloadQuery : IOdbcQuery
     {
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Generates the Sql for the query
         /// </summary>
-        /// <exception cref="ShipWorksOdbcException">The Connection string is not valid</exception>
+        /// <exception cref="ShipWorksOdbcException">The Order Number column is not mapped</exception>
         public string GenerateSql()
         {
             // If the orderNumber column is not mapped we cannot generate the query

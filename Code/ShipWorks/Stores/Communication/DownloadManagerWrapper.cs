@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Communication
     public class DownloadManagerWrapper : IDownloadManager
     {
         /// <summary>
-        /// Download the order number from all stores
+        /// Initiate download using given orderNumber
         /// </summary>
         public Task<IResult> Download(string orderNumber)
         {

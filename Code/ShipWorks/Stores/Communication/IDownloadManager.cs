@@ -6,10 +6,10 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Interface that represents the DownloadManager
     /// </summary>
-    public  interface IDownloadManager
+    public interface IDownloadManager
     {
         /// <summary>
-        /// Download the order number from all stores
+        /// Initiate download using given orderNumber
         /// </summary>
         Task<IResult> Download(string orderNumber);
     }
