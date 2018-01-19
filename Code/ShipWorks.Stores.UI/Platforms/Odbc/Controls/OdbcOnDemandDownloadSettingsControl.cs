@@ -41,6 +41,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         }
 
         /// <summary>
+        /// Open the window to change the download policy for all computers
+        /// </summary>
+        private void OnConfigureDownloadPolicy(object sender, EventArgs e)
+        {
+            using (ComputerDownloadPolicyDlg dlg = new ComputerDownloadPolicyDlg(downloadPolicy, store.StoreName))
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    comboAllowDownload.LoadChoices(downloadPolicy.DefaultToYes);
+                    comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
+
+                    // If the default changed, and the default is selected, the UI needs updated
+                    OnChangeAllowDownloading(null, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
         /// Load the store
         /// </summary>
         public void LoadStore(StoreEntity store)

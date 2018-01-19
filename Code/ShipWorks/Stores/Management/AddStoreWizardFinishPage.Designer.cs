@@ -47,7 +47,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(278, 74);
+            this.label11.Location = new System.Drawing.Point(278, 63);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 23;
@@ -59,7 +59,7 @@
             this.linkGettingStarted.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkGettingStarted.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkGettingStarted.ForeColor = System.Drawing.Color.Blue;
-            this.linkGettingStarted.Location = new System.Drawing.Point(169, 74);
+            this.linkGettingStarted.Location = new System.Drawing.Point(169, 63);
             this.linkGettingStarted.Name = "linkGettingStarted";
             this.linkGettingStarted.Size = new System.Drawing.Size(111, 13);
             this.linkGettingStarted.TabIndex = 22;
@@ -69,7 +69,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 74);
+            this.label9.Location = new System.Drawing.Point(14, 63);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(159, 13);
             this.label9.TabIndex = 21;
@@ -80,7 +80,7 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
-            this.label7.Location = new System.Drawing.Point(0, 53);
+            this.label7.Location = new System.Drawing.Point(0, 42);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 20;
