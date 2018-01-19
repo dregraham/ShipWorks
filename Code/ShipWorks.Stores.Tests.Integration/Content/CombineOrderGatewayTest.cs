@@ -90,8 +90,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             Assert.Equal(expected, result);
         }
-
-
+        
         [Theory]
         [InlineData(false, true, StoreTypeCode.GenericModule)]
         [InlineData(false, true, StoreTypeCode.GeekSeller)]
