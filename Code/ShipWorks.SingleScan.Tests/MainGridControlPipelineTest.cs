@@ -23,6 +23,7 @@ namespace ShipWorks.SingleScan.Tests
         private readonly Mock<IMainGridControl> mainGridControl;
         private readonly TestScheduler scheduler;
         private readonly MainGridControlPipeline testObject;
+        private readonly UserSettingsEntity userSettings;
 
         public MainGridControlPipelineTest()
         {
@@ -43,7 +44,7 @@ namespace ShipWorks.SingleScan.Tests
             mainGridControl.SetupGet(g => g.Visible).Returns(true);
             mainGridControl.SetupGet(g => g.CanFocus).Returns(true);
 
-            var userSettings = new UserSettingsEntity()
+            userSettings = new UserSettingsEntity()
             { SingleScanSettings = (int)SingleScanSettings.Scan };
 
             var userSession = mock.Mock<IUserSession>();
@@ -60,6 +61,18 @@ namespace ShipWorks.SingleScan.Tests
             scheduler.Start();
 
             downloader.Verify(d => d.Download("foo"));
+        }
+
+        [Fact]
+        public void DownloadOnDemand_DoesNotDelegatesToOnDemandDownloader_WhenSingleScanIsDisabled()
+        {
+            userSettings.SingleScanSettings = (int)SingleScanSettings.Disabled;
+
+            testObject.Register(mainGridControl.Object);
+            testMessenger.Send(new ScanMessage(this, "  foo  ", IntPtr.Zero));
+            scheduler.Start();
+
+            downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
         }
 
         [Fact]

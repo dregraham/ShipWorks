@@ -109,11 +109,6 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private Task DownloadOnDemand(string searchString)
         {
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                return Task.CompletedTask;
-            }
-
             return onDemandDownloader.Download(searchString.Trim());
         }
 
