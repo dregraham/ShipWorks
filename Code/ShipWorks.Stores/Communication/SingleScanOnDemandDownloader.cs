@@ -11,16 +11,16 @@ namespace ShipWorks.Stores.Communication
     [KeyedComponent(typeof(IOnDemandDownloader), OnDemandDownloaderType.SingleScanOnDemandDownloader)]
     public class SingleScanOnDemandDownloader : IOnDemandDownloader
     {
-        private readonly ISingleScanOrderShortcut orderShortCut;
+        private readonly ISingleScanOrderShortcut orderShortcut;
         private readonly IOnDemandDownloader onDemandDownloader;
 
         /// <summary>
         /// Download order from SingleScan
         /// </summary>
         public SingleScanOnDemandDownloader(IIndex<OnDemandDownloaderType, IOnDemandDownloader> onDemandDownloader,
-            ISingleScanOrderShortcut orderShortCut)
+            ISingleScanOrderShortcut orderShortcut)
         {
-            this.orderShortCut = orderShortCut;
+            this.orderShortcut = orderShortcut;
             this.onDemandDownloader = onDemandDownloader[OnDemandDownloaderType.OnDemandDownloader];
         }
 
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public Task Download(string orderNumber)
         {
-            if (orderShortCut.AppliesTo(orderNumber))
+            if (orderShortcut.AppliesTo(orderNumber))
             {
                 return Task.CompletedTask;
             }

@@ -11,11 +11,12 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using System;
+using Autofac.Features.Indexed;
 using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
 {
-    public class MainGridControlPipelineTest
+    public class MainGridControlPipelineTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly TestMessenger testMessenger;
@@ -45,10 +46,14 @@ namespace ShipWorks.SingleScan.Tests
             mainGridControl.SetupGet(g => g.CanFocus).Returns(true);
 
             userSettings = new UserSettingsEntity()
-            { SingleScanSettings = (int)SingleScanSettings.Scan };
+            { SingleScanSettings = (int) SingleScanSettings.Scan };
 
             var userSession = mock.Mock<IUserSession>();
             userSession.SetupGet(s => s.Settings).Returns(userSettings);
+
+            var downloaderIndex = mock.CreateMock<IIndex<OnDemandDownloaderType, IOnDemandDownloader>>();
+            mock.Provide(downloaderIndex.Object);
+            downloaderIndex.Setup(i => i[OnDemandDownloaderType.SingleScanOnDemandDownloader]).Returns(downloader.Object);
 
             testObject = mock.Create<MainGridControlPipeline>();
         }
@@ -93,6 +98,12 @@ namespace ShipWorks.SingleScan.Tests
             scheduler.Start();
 
             mainGridControl.Verify(g => g.BeginInvoke((Action<string>)mainGridControl.Object.PerformBarcodeSearch, "foo"));
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
+            testMessenger.Dispose();
         }
     }
 }

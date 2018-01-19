@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Communication\OnDemandDownloaderTest.cs" />
+    <Compile Include="Communication\SingleScanOnDemandDownloaderTest.cs" />
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
     <Compile Include="Content\CombineOrderAuditTest.cs" />
     <Compile Include="Content\CombineOrdersGatewayTest.cs" />
