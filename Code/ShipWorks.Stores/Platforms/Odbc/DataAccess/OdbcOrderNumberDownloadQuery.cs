@@ -9,7 +9,7 @@ using ShipWorks.Stores.Platforms.Odbc.Mapping;
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
     /// <summary>
-    /// Odbc downloading query for downloading a specific order number
+    /// Odbc download query for downloading a specific order number
     /// </summary>
     public class OdbcOrderNumberDownloadQuery : IOdbcQuery
     {
