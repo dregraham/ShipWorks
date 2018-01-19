@@ -53,13 +53,33 @@ namespace ShipWorks.SingleScan.Tests
         }
 
         [Fact]
-        public void ScanMessageTextIsSentToDownloader()
+        public void DownloadOnDemand_DelegatesToOnDemandDownloaderWithSearchString()
         {
             testObject.Register(mainGridControl.Object);
             testMessenger.Send(new ScanMessage(this, "  foo  ", IntPtr.Zero));
             scheduler.Start();
 
             downloader.Verify(d => d.Download("foo"));
+        }
+
+        [Fact]
+        public void DownloadOnDemand_DoesNotDelegatesToOnDemandDownloaderWithSearchString_WhenStringIsEmpty()
+        {
+            testObject.Register(mainGridControl.Object);
+            testMessenger.Send(new ScanMessage(this, "    ", IntPtr.Zero));
+            scheduler.Start();
+
+            downloader.Verify(d => d.Download(It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public void PerformBarcodeSearchAsync_DelegatesToGridControlWithScannedBarcode()
+        {
+            testObject.Register(mainGridControl.Object);
+            testMessenger.Send(new ScanMessage(this, "foo", IntPtr.Zero));
+            scheduler.Start();
+
+            mainGridControl.Verify(g => g.BeginInvoke((Action<string>)mainGridControl.Object.PerformBarcodeSearch, "foo"));
         }
     }
 }
