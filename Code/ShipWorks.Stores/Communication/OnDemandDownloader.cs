@@ -1,14 +1,14 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Communication
 {
     /// <summary>
     /// Downloader for downloading a specific order
     /// </summary>
-    [Component]
+    [KeyedComponent(typeof(IOnDemandDownloader), OnDemandDownloaderType.OnDemandDownloader)]
     public class OnDemandDownloader : IOnDemandDownloader
     {
         private readonly IMessageHelper messageHelper;

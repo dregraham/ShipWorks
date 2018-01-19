@@ -1425,6 +1425,7 @@
     <Compile Include="Stores\Communication\IDownloadStartingPoint.cs" />
     <Compile Include="Stores\Communication\IOnDemandDownloader.cs" />
     <Compile Include="Stores\Communication\IStoreDownloader.cs" />
+    <Compile Include="Stores\Communication\OnDemandDownloaderType.cs" />
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberCompleteSearchProvider.cs" />
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderNumberSearchProvider.cs" />
     <Compile Include="Stores\Content\CombinedOrderSearchProviders\CombineOrderSearchBaseProvider.cs" />

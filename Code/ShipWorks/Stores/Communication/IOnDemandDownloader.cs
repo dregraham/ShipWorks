@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Communication
     public interface IOnDemandDownloader
     {
         /// <summary>
-        /// Download using an order number
+        /// Download order
         /// </summary>
         Task Download(string orderNumber);
     }

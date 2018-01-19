@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac.Features.AttributeFilters;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -42,13 +44,13 @@ namespace ShipWorks.ApplicationCore
             IMessenger messenger, 
             IUserSession userSession, 
             IMainForm mainForm, 
-            ISchedulerProvider schedulerProvider, 
-            IOnDemandDownloader onDemandDownloader)
+            ISchedulerProvider schedulerProvider,
+            IIndex<OnDemandDownloaderType, IOnDemandDownloader> onDemandDownloaderIndex)
         {
             this.messenger = messenger;
             this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
-            this.onDemandDownloader = onDemandDownloader;
+            onDemandDownloader = onDemandDownloaderIndex[OnDemandDownloaderType.SingleScanOnDemandDownloader];
             this.mainForm = mainForm;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
