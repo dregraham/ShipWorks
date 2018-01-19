@@ -63,13 +63,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 // Try to find an existing order
                 OrderEntity order = await FindOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
-                if (order != null)
+                if (order == null)
                 {
-                    return;
+                    IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                    await Download(downloadCommand).ConfigureAwait(false);
                 }
-
-                IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
-                await Download(downloadCommand).ConfigureAwait(false);
             }
             catch (ShipWorksOdbcException ex)
             {
