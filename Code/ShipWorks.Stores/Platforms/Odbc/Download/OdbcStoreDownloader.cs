@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
                 trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
 
-                await Download(downloadCommand);
+                await Download(downloadCommand).ConfigureAwait(false);
             }
             catch (ShipWorksOdbcException ex)
             {
