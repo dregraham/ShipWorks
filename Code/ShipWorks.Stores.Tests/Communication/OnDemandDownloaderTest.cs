@@ -7,6 +7,7 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Communication
 {
@@ -40,7 +41,41 @@ namespace ShipWorks.Stores.Tests.Communication
 
             messageHelper.Verify(m => m.ShowError("Error"));
         }
-        
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("  ")]
+        public async Task Download_DoesNotDelegateToDownload_WhenStringIsNullOrWhitespace(string blankOrderNumber)
+        {
+            var downloadManager = mock.Mock<IDownloadManager>();
+            await testObject.Download(blankOrderNumber);
+
+            downloadManager.Verify(m => m.Download(AnyString), Times.Never);
+        }
+
+        [Fact]
+        public async Task Download_DoesNotDelegateToDownload_WhenStringIsOverFiftyCharacters()
+        {
+            var downloadManager = mock.Mock<IDownloadManager>();
+            await testObject.Download(new string('1', 51));
+
+            
+            downloadManager.Verify(m => m.Download(AnyString), Times.Never);
+        }
+
+        [Fact]
+        public async Task Download_DelegatesToDownload_WhenStringIsFiftyCharacters()
+        {
+            var downloadManager = mock.Mock<IDownloadManager>();
+            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(Result.FromSuccess());
+
+            await testObject.Download(new string('1', 50));
+
+
+            downloadManager.Verify(m => m.Download(AnyString), Times.Once);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

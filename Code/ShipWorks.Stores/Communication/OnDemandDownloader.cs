@@ -28,12 +28,35 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         public async Task Download(string orderNumber)
         {
+            if (ShouldNotSearch(orderNumber))
+            {
+                return;
+            }
+
             IResult result = await downloadManager.Download(orderNumber);
 
             if (result.Failure)
             {
                 messageHelper.ShowError(result.Message);
             }
+        }
+
+        /// <summary>
+        /// If orderNumber is not a valid search term, return true.
+        /// </summary>
+        private static bool ShouldNotSearch(string orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber))
+            {
+                return true;
+            }
+
+            if (orderNumber.Length > 50)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
