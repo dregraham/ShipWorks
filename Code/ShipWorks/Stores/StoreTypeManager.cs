@@ -102,14 +102,7 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Check to see if the given StoreTypeCode is GenericModule based
         /// </summary>
-        public static bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode)
-        {
-            if (genericModuleStoreTypeMap.Value.Contains(storeTypeCode))
-            {
-                return true;
-            }
-
-            return false;
-        }
+        public static bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode) =>
+            genericModuleStoreTypeMap.Value.Contains(storeTypeCode);
     }
 }
