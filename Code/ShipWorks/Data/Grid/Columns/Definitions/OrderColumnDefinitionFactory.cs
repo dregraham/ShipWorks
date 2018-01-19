@@ -780,7 +780,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         private static bool ShowGenericModuleAmazonColumns(object data)
         {
-            return StoreManager.GetStoreTypeInstances().Any(s => typeof(GenericModuleStoreType).IsAssignableFrom(s.GetType()));
+            return StoreTypeManager.StoreTypes.Any(s => StoreTypeManager.IsStoreTypeCodeGenericModuleBased(s.TypeCode));
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Autofac;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores
 {
@@ -13,6 +14,9 @@ namespace ShipWorks.Stores
     /// </summary>
     public static class StoreTypeManager
     {
+        private static Lazy<Dictionary<StoreTypeCode, bool>> genericModuleStoreTypeMap =
+            new Lazy<Dictionary<StoreTypeCode, bool>>(LoadGenericModuleStoreTypeDictionary);
+
         /// <summary>
         /// Returns all store types in ShipWorks
         /// </summary>
@@ -80,6 +84,38 @@ namespace ShipWorks.Stores
             };
 
             return !disabledTypes.Contains(typeCode);
+        }
+
+        /// <summary>
+        /// Load the dictionary of StoreTypeCodes and whether or not they are GenericModuleBased
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<StoreTypeCode, bool> LoadGenericModuleStoreTypeDictionary()
+        {
+            Dictionary<StoreTypeCode, bool> result = new Dictionary<StoreTypeCode, bool>();
+            IEnumerable<EnumEntry<StoreTypeCode>> storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>();
+
+            Type genericModuleType = typeof(GenericModuleStoreType);
+
+            foreach (EnumEntry<StoreTypeCode> storeTypeCode in storeTypeCodes)
+            {
+                result.Add(storeTypeCode.Value, genericModuleType.IsAssignableFrom(GetType(storeTypeCode.Value).GetType()));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Check to see if the given StoreTypeCode is GenericModule based
+        /// </summary>
+        public static bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode)
+        {
+            if (genericModuleStoreTypeMap.Value.ContainsKey(storeTypeCode))
+            {
+                return genericModuleStoreTypeMap.Value[storeTypeCode];
+            }
+
+            return false;
         }
     }
 }

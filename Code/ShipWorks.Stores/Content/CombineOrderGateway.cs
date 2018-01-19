@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.Content
             IPredicate andWherePredicate = ShipmentFields.Processed == true;
 
             // If it is a Generic Module based store type use the GenericModule behavior 
-            if (typeof(GenericModuleStoreType).IsAssignableFrom(storeTypeManager.GetType(store.StoreID).GetType()))
+            if (storeTypeManager.IsStoreTypeCodeGenericModuleBased((StoreTypeCode) store.TypeCode))
             {
                 (shipmentsJoin, orPredicate) = GetGenericModuleSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
             }
