@@ -273,7 +273,7 @@ namespace ShipWorks.Stores.Communication
             }
 
             // Only download if store should AutoDownload
-            if (!StoreTypeManager.GetType(store).ShouldAutoDownload())
+            if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
             {
                 return false;
             }
@@ -299,7 +299,7 @@ namespace ShipWorks.Stores.Communication
 
             foreach (StoreEntity store in stores)
             {
-                if (oneStore || StoreTypeManager.GetType(store).ShouldAutoDownload())
+                if (oneStore || !StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
                 {
                     AddToDownloadedQueue(store, initiatedBy);
                 }

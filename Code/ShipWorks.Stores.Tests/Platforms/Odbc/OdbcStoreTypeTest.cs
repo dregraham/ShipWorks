@@ -157,23 +157,23 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         }
 
         [Fact]
-        public void ShouldAutoDownload_ReturnsTrue_WhenImportStrategyIsNotOnDemand()
+        public void IsOnDemandDownloadEnabled_ReturnsFalse_WhenImportStrategyIsNotOnDemand()
         {
             store.ImportStrategy = (int) OdbcImportStrategy.All;
 
             var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
 
-            Assert.True(testObject.ShouldAutoDownload());
+            Assert.False(testObject.IsOnDemandDownloadEnabled);
         }
 
         [Fact]
-        public void ShouldAutoDownload_ReturnsFalse_WhenImportStrategyIsOnDemand()
+        public void IsOnDemandDownloadEnabled_ReturnsTrue_WhenImportStrategyIsOnDemand()
         {
             store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
 
             var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
 
-            Assert.False(testObject.ShouldAutoDownload());
+            Assert.True(testObject.IsOnDemandDownloadEnabled);
         }
     }
 }

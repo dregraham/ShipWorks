@@ -132,6 +132,11 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public virtual bool IsOnDemandDownloadEnabled => false;
+
+        /// <summary>
         /// Creates a store-specific instance of a StoreEntity
         /// </summary>
         public abstract StoreEntity CreateStoreInstance();
@@ -642,14 +647,6 @@ namespace ShipWorks.Stores
             {
                 return scope.Resolve<IStoreWizardFinishPageControlFactory>().Create(store);
             }
-        }
-
-        /// <summary>
-        /// Should this store type auto download
-        /// </summary>
-        public virtual bool ShouldAutoDownload()
-        { 
-            return true;
         }
     }
 }

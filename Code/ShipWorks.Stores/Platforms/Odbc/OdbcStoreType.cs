@@ -140,6 +140,11 @@ namespace ShipWorks.Stores.Platforms.Odbc
         }
 
         /// <summary>
+        /// Should this store type auto download
+        /// </summary>
+        public override bool IsOnDemandDownloadEnabled => odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+
+        /// <summary>
         /// Creates the add store wizard online update action control.
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
@@ -188,14 +193,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         public override Control CreateWizardFinishPageControl()
         {
             return storeWizardFinishPageControlFactory[StoreTypeCode.Odbc].Create(odbcStore);
-        }
-
-        /// <summary>
-        /// Should this store type auto download
-        /// </summary>
-        public override bool ShouldAutoDownload()
-        {
-            return odbcStore.ImportStrategy != (int) OdbcImportStrategy.OnDemand;            
         }
     }
 }
