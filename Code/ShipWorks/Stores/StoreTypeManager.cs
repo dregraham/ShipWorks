@@ -95,7 +95,7 @@ namespace ShipWorks.Stores
         {
             return EnumHelper.GetEnumList<StoreTypeCode>()
                 .Select(x => x.Value)
-                .Where(x => GetType(x) is GenericModuleStoreType)
+                .Where(x => x != StoreTypeCode.Invalid && GetType(x) is GenericModuleStoreType)
                 .ToImmutableHashSet();
         }
 

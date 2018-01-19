@@ -4,6 +4,10 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.GeekSeller;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.OpenSky;
+using ShipWorks.Stores.Platforms.ZenCart;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -62,6 +66,52 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             store.StoreTypeCode = StoreTypeCode.GenericModule;
 
             Assert.False(testObject.CanCombine(store, new[] { context.Order.OrderID }));
+        }
+        
+        [Theory]
+        [InlineData(AmazonIsPrime.Yes, false, StoreTypeCode.GenericModule)]
+        [InlineData(AmazonIsPrime.Yes, false, StoreTypeCode.GeekSeller)]
+        [InlineData(AmazonIsPrime.No, true, StoreTypeCode.GenericModule)]
+        [InlineData(AmazonIsPrime.No, true, StoreTypeCode.ZenCart)]
+        [InlineData(AmazonIsPrime.Unknown, false, StoreTypeCode.GenericModule)]
+        [InlineData(AmazonIsPrime.Unknown, false, StoreTypeCode.OpenSky)]
+        public void CanCombine_QueriesPrime_FromGenericModuleBasedStore(AmazonIsPrime isPrime, bool expected, StoreTypeCode storeTypeCode)
+        {
+            var testObject = context.Mock.Create<CombineOrderGateway>();
+
+            var store = Create.Store<StoreEntity>(storeTypeCode).Save();
+
+            var order = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
+                .Set(x => x.IsPrime = isPrime)
+                .Set(x => x.IsFBA = false)
+                .Save();
+
+            var result = testObject.CanCombine(store, new[] { order.OrderID });
+
+            Assert.Equal(expected, result);
+        }
+
+
+        [Theory]
+        [InlineData(false, true, StoreTypeCode.GenericModule)]
+        [InlineData(false, true, StoreTypeCode.GeekSeller)]
+        [InlineData(true, false, StoreTypeCode.GenericModule)]
+        [InlineData(true, false, StoreTypeCode.ZenCart)]
+        [InlineData(false, true, StoreTypeCode.OpenSky)]
+        public void CanCombine_QueriesIsFBA_FromGenericModuleBasedStore(bool isFBA, bool expected, StoreTypeCode storeTypeCode)
+        {
+            var testObject = context.Mock.Create<CombineOrderGateway>();
+
+            var store = Create.Store<StoreEntity>(storeTypeCode).Save();
+
+            var order = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
+                .Set(x => x.IsFBA = isFBA)
+                .Set(x => x.IsPrime = AmazonIsPrime.No)
+                .Save();
+
+            var result = testObject.CanCombine(store, new[] { order.OrderID });
+
+            Assert.Equal(expected, result);
         }
 
         [Theory]
