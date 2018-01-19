@@ -115,20 +115,14 @@ namespace ShipWorks.Stores.Content
             // If it is a Generic Module based store type use the GenericModule behavior 
             if (typeof(GenericModuleStoreType).IsAssignableFrom(storeTypeManager.GetType(store.StoreID).GetType()))
             {
-                (IJoinOperand newJoin, IPredicate newPredicate) = GetGenericModuleSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
-
-                shipmentsJoin = newJoin;
-                orPredicate = newPredicate;
+                (shipmentsJoin, orPredicate) = GetGenericModuleSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
             }
 
             // we can override store specific behavior here
             Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)> getStoreSpecificSearch;
             if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
             {
-                (IJoinOperand newJoin, IPredicate newPredicate) = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
-
-                shipmentsJoin = newJoin;
-                orPredicate = newPredicate;
+                (shipmentsJoin, orPredicate) = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
             }
             
             return queryFactory.Create()
@@ -204,7 +198,7 @@ namespace ShipWorks.Stores.Content
 
             // Find orders that are prime or unknown OR FBA, these are the ones we dont now want to allow combining for
             IPredicate newPredicate = predicate
-                .Or(GenericModuleOrderFields.IsPrime.In((int)AmazonIsPrime.Yes, (int)AmazonIsPrime.Unknown))
+                .Or(GenericModuleOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(GenericModuleOrderFields.IsFBA.Equal(true));
 
             return (newJoin, newPredicate);
