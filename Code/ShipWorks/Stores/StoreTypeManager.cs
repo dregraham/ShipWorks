@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.Utility;
@@ -14,8 +15,8 @@ namespace ShipWorks.Stores
     /// </summary>
     public static class StoreTypeManager
     {
-        private static Lazy<Dictionary<StoreTypeCode, bool>> genericModuleStoreTypeMap =
-            new Lazy<Dictionary<StoreTypeCode, bool>>(LoadGenericModuleStoreTypeDictionary);
+        private static Lazy<ImmutableHashSet<StoreTypeCode>> genericModuleStoreTypeMap =
+            new Lazy<ImmutableHashSet<StoreTypeCode>>(LoadGenericModuleStoreTypeDictionary);
 
         /// <summary>
         /// Returns all store types in ShipWorks
@@ -87,22 +88,15 @@ namespace ShipWorks.Stores
         }
 
         /// <summary>
-        /// Load the dictionary of StoreTypeCodes and whether or not they are GenericModuleBased
+        /// Load the hashset of StoreTypeCodes that are GenericModule based
         /// </summary>
         /// <returns></returns>
-        private static Dictionary<StoreTypeCode, bool> LoadGenericModuleStoreTypeDictionary()
+        private static ImmutableHashSet<StoreTypeCode> LoadGenericModuleStoreTypeDictionary()
         {
-            Dictionary<StoreTypeCode, bool> result = new Dictionary<StoreTypeCode, bool>();
-            IEnumerable<EnumEntry<StoreTypeCode>> storeTypeCodes = EnumHelper.GetEnumList<StoreTypeCode>();
-
-            Type genericModuleType = typeof(GenericModuleStoreType);
-
-            foreach (EnumEntry<StoreTypeCode> storeTypeCode in storeTypeCodes)
-            {
-                result.Add(storeTypeCode.Value, genericModuleType.IsAssignableFrom(GetType(storeTypeCode.Value).GetType()));
-            }
-
-            return result;
+            return EnumHelper.GetEnumList<StoreTypeCode>()
+                .Select(x => x.Value)
+                .Where(x => GetType(x) is GenericModuleStoreType)
+                .ToImmutableHashSet();
         }
 
         /// <summary>
@@ -110,9 +104,9 @@ namespace ShipWorks.Stores
         /// </summary>
         public static bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode)
         {
-            if (genericModuleStoreTypeMap.Value.ContainsKey(storeTypeCode))
+            if (genericModuleStoreTypeMap.Value.Contains(storeTypeCode))
             {
-                return genericModuleStoreTypeMap.Value[storeTypeCode];
+                return true;
             }
 
             return false;
