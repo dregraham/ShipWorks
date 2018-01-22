@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.UI;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.Stores.Communication
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Factory for creating OnDemandDownloaders
     /// </summary>
+    [Component]
     public class OnDemandDownloaderFactory : IOnDemandDownloaderFactory
     {
         private readonly IMessageHelper messageHelper;
