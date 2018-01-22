@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Orders.Combine.Actions
         private async Task InsertSearchRecords<T>(Func<TEntity, T> orderCreator) where T : EntityBase2
         {
             IEnumerable<T> orderSearches = orders
-                .Where(x => !x.CombineSplitStatus.IsCombined())
+                .Where(x => !x.CombineSplitStatus.IsEither())
                 .Select(orderCreator);
 
             if (orderSearches.None())
@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Orders.Combine.Actions
         private async Task UpdateSearchRecords(EntityField2 orderIDField)
         {
             IEnumerable<long> preCombinedOrders = orders
-                .Where(x => x.CombineSplitStatus.IsCombined())
+                .Where(x => x.CombineSplitStatus.IsEither())
                 .Select(x => x.OrderID);
 
             if (preCombinedOrders.None())
