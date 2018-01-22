@@ -28,7 +28,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private const string GlobalPostBrowserDlgTitle = "Your GlobalPost Label";
 
         // Global Post Advantage Program stuff
-        private const string GlobalPostAdvantageProgramDisplayUrl = "https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png";
+        private const string StampsGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5174";
+        private const string EndiciaGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5175";
         private const string GlobalPostAdvantageProgramMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000114989";
         private const string GlobalPostAdvantageProgramBrowserDlgTitle = "Your First-Class International Envelope Label";
 
@@ -82,11 +83,24 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// </summary>
         private static (string urlToUse, string titleToUse, string moreInfo) GetDialogAssets(IShipmentEntity shipment)
         {
-            bool pureGlobalPost = PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
+            string urlToUse = GlobalPostDisplayUrl;
+            bool gapShipment = !PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
+            
+            if (gapShipment)
+            {
+                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
+                {
+                    urlToUse = EndiciaGlobalPostAdvantageProgramDisplayUrl;
+                }
 
-            string urlToUse = pureGlobalPost ? GlobalPostDisplayUrl : GlobalPostAdvantageProgramDisplayUrl;
-            string titleToUse = pureGlobalPost ? GlobalPostBrowserDlgTitle : GlobalPostAdvantageProgramBrowserDlgTitle;
-            string moreInfo = pureGlobalPost ? GlobalPostMoreInfoUrl : GlobalPostAdvantageProgramMoreInfoUrl;
+                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
+                {
+                    urlToUse = StampsGlobalPostAdvantageProgramDisplayUrl;
+                }
+            }
+     
+            string titleToUse = gapShipment ? GlobalPostAdvantageProgramBrowserDlgTitle : GlobalPostBrowserDlgTitle;
+            string moreInfo = gapShipment ? GlobalPostAdvantageProgramMoreInfoUrl : GlobalPostMoreInfoUrl;
 
             return (urlToUse, titleToUse, moreInfo);
         }
