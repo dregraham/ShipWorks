@@ -197,20 +197,29 @@ namespace ShipWorks.Stores.Communication
 
             foreach (StoreEntity store in stores)
             {
-                try
+                if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
                 {
-                    if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
+                    DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
+                    try
                     {
-                        DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
-                        IStoreDownloader downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+                        IStoreDownloader downloader =
+                            lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
 
                         await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
+
+                        downloadLog.Result = (int) DownloadResult.Success;
+
                     }
-                }
-                catch (Exception ex)
-                {
-                    errorMessage.AppendLine(ex.Message);
-                    errorThrown = true;
+                    catch (Exception ex)
+                    {
+                        errorMessage.AppendLine(ex.Message);
+                        errorThrown = true;
+
+                        downloadLog.Result = (int) DownloadResult.Error;
+                        downloadLog.ErrorMessage = ex.Message;
+                    }
+
+                    SaveDownloadLog(downloadLog);
                 }
             }
 
@@ -593,12 +602,7 @@ namespace ShipWorks.Stores.Communication
                             showDashboardError = true;
                         }
 
-                        // Save the updated log
-                        using (SqlAdapter adapter = new SqlAdapter())
-                        {
-                            downloadLog.Ended = DateTime.UtcNow;
-                            adapter.SaveAndRefetch(downloadLog);
-                        }
+                        SaveDownloadLog(downloadLog);
 
                         ActionDispatcher.DispatchDownloadFinished(store.StoreID, (DownloadResult) downloadLog.Result, downloadLog.QuantityNew);
                     }
@@ -618,6 +622,16 @@ namespace ShipWorks.Stores.Communication
                         }
                     }
                 }
+            }
+        }
+
+        private static void SaveDownloadLog(DownloadEntity downloadLog)
+        {
+            // Save the updated log
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                downloadLog.Ended = DateTime.UtcNow;
+                adapter.SaveAndRefetch(downloadLog);
             }
         }
 
