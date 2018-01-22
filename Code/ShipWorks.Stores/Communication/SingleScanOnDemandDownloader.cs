@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Communication
         private readonly IOnDemandDownloader onDemandDownloader;
 
         /// <summary>
-        /// Download order from SingleScan
+        /// Constructor
         /// </summary>
         public SingleScanOnDemandDownloader(IOnDemandDownloader onDemandDownloader,
             ISingleScanOrderShortcut orderShortcut)
@@ -23,15 +23,19 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
-        /// Download order
+        /// If order number is not a shortcut, we delegate order downloading to the onDemandDownloader
+        /// If it is an order shortcut, simply return CompletedTask
         /// </summary>
         public Task Download(string orderNumber)
         {
+            // Is the orderNumber a Singel Scan Order Shortcut?
             if (orderShortcut.AppliesTo(orderNumber))
             {
                 return Task.CompletedTask;
             }
 
+            // We know the order Number is not a shortcut, so attempt to download by
+            // delegating to the onDemandDownloader
             return onDemandDownloader.Download(orderNumber);
         }
     }
