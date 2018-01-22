@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         private Mock<IOrderCombinationUserInteraction> combineInteraction;
         private readonly IOrderSplitGateway orderSplitGateway;
 
-        public CombineSplitHelpers(DataContext context, Mock<IOrderSplitUserInteraction> splitInteraction, 
+        public CombineSplitHelpers(DataContext context, Mock<IOrderSplitUserInteraction> splitInteraction,
             Mock<IOrderCombinationUserInteraction> combineInteraction)
         {
             this.context = context;
@@ -33,12 +33,18 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
         /// <summary>
         /// Perform a split of the given order
         /// </summary>
-        public async Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order)
+        public Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order) =>
+            PerformSplit(order, new Dictionary<long, decimal>());
+
+        /// <summary>
+        /// Perform a split of the given order
+        /// </summary>
+        public async Task<(OrderEntity original, OrderEntity split)> PerformSplit(OrderEntity order, Dictionary<long, decimal> itemQuantities)
         {
             var orchestrator = context.Mock.Container.Resolve<IOrderSplitOrchestrator>();
 
             splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
-                .ReturnsAsync(new OrderSplitDefinition(order, new Dictionary<long, decimal>(),
+                .ReturnsAsync(new OrderSplitDefinition(order, itemQuantities,
                     new Dictionary<long, decimal>(),
                     order.OrderNumberComplete + "-1"));
 
@@ -48,7 +54,6 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
 
             return (original, split);
         }
-
 
         /// <summary>
         /// Perform a split of the given order

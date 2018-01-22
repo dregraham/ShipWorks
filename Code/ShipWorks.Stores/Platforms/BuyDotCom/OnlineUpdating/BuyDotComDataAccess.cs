@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -60,26 +61,26 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
 
             IEnumerable<IShipmentEntity> shipments = await GetShipmentsAsync(shipmentPredicate, factory).ConfigureAwait(false);
             IEnumerable<IOrderEntity> orders = await GetOrdersAsync(shipments.Select(x => x.OrderID), factory).ConfigureAwait(false);
-            var ordersByOriginalOrderID = await GetCombinedOrdersAsync(orders, factory);
+            var orderSearchRecordsByOrderID = await GetOrderSearchRecords(orders, factory);
             var itemsByOrder = await GetItemsAsync(orders, factory);
 
             return orders.LeftJoin(shipments, x => x.OrderID, y => y.OrderID)
                 .Where(x => x.Item2 != null)
-                .Select(x => CreateShipmentUpload(x.Item1, x.Item2, ordersByOriginalOrderID, itemsByOrder));
+                .Select(x => CreateShipmentUpload(x.Item1, x.Item2, orderSearchRecordsByOrderID, itemsByOrder));
         }
 
         /// <summary>
         /// Create shipment upload instance
         /// </summary>
         private BuyDotComShipmentUpload CreateShipmentUpload(IOrderEntity order, IShipmentEntity shipment,
-            IDictionary<long, IEnumerable<CombinedOrder>> ordersByOriginalOrderID,
+            IDictionary<long, IEnumerable<CombinedOrder>> orderSearchRecordsByOrderID,
             IDictionary<long, IEnumerable<IBuyDotComOrderItemEntity>> itemsByOrder)
         {
-            var newOrders = ordersByOriginalOrderID.ContainsKey(order.OrderID) ?
-                       ordersByOriginalOrderID[order.OrderID] :
-                       new[] { new CombinedOrder(order.OrderNumberComplete, order.IsManual, order.OrderID) };
+            var newOrders = orderSearchRecordsByOrderID.ContainsKey(order.OrderID) ?
+                       orderSearchRecordsByOrderID[order.OrderID] :
+                       new[] { new CombinedOrder(order.OrderNumberComplete, order.IsManual, order.OrderID, order.OrderID) };
 
-            var shipmentOrders = newOrders.Select(x => CreateShipmentUploadOrders(x, itemsByOrder));
+            var shipmentOrders = newOrders.Distinct(x => x.OriginalOrderID).Select(x => CreateShipmentUploadOrders(x, itemsByOrder));
 
             return new BuyDotComShipmentUpload(shipment, shipmentOrders);
         }
@@ -89,8 +90,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// </summary>
         private BuyDotComShipmentUploadOrder CreateShipmentUploadOrders(CombinedOrder orderDetail, IDictionary<long, IEnumerable<IBuyDotComOrderItemEntity>> itemsByOrder)
         {
-            var items = itemsByOrder.ContainsKey(orderDetail.OrderID) ?
-                        itemsByOrder[orderDetail.OrderID] :
+            var items = itemsByOrder.ContainsKey(orderDetail.OriginalOrderID) ?
+                        itemsByOrder[orderDetail.OriginalOrderID].Where(x => x.OrderID == orderDetail.OrderID) :
                         Enumerable.Empty<IBuyDotComOrderItemEntity>();
 
             return new BuyDotComShipmentUploadOrder(orderDetail.OrderNumberComplete, orderDetail.IsManual, items);
@@ -99,19 +100,19 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
         /// <summary>
         /// Combined order pieces
         /// </summary>
-        private async Task<IDictionary<long, IEnumerable<CombinedOrder>>> GetCombinedOrdersAsync(IEnumerable<IOrderEntity> orders, QueryFactory factory)
+        private async Task<IDictionary<long, IEnumerable<CombinedOrder>>> GetOrderSearchRecords(IEnumerable<IOrderEntity> orders, QueryFactory factory)
         {
-            var combinedOrderKeys = orders.Where(x => x.CombineSplitStatus.IsCombined()).Select(x => x.OrderID);
+            var combinedOrderKeys = orders.Where(x => x.CombineSplitStatus.IsEither()).Select(x => x.OrderID);
             if (combinedOrderKeys.None())
             {
                 return new Dictionary<long, IEnumerable<CombinedOrder>>();
             }
 
             var query = factory.OrderSearch
-                .Select(() => Tuple.Create(
-                    OrderSearchFields.OrderID.ToValue<long>(),
+                .Select(() => new CombinedOrder(
                     OrderSearchFields.OrderNumberComplete.ToValue<string>(),
                     OrderSearchFields.IsManual.ToValue<bool>(),
+                    OrderSearchFields.OrderID.ToValue<long>(),
                     OrderSearchFields.OriginalOrderID.ToValue<long>()
                     ))
                 .Where(OrderSearchFields.OrderID.In(combinedOrderKeys));
@@ -119,8 +120,8 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             using (var sqlAdapter = sqlAdapterFactory.Create())
             {
                 var orderPieces = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-                return orderPieces.GroupBy(x => x.Item1)
-                    .ToDictionary(x => x.Key, x => x.Select(y => new CombinedOrder(y.Item2, y.Item3, y.Item4)));
+                return orderPieces.GroupBy(x => x.OrderID)
+                    .ToDictionary(x => x.Key, x => x.Select(y => y));
             }
         }
 
@@ -206,11 +207,12 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             /// <summary>
             /// Constructor
             /// </summary>
-            public CombinedOrder(string orderNumberComplete, bool isManual, long orderID)
+            public CombinedOrder(string orderNumberComplete, bool isManual, long orderID, long originalOrderID)
             {
                 OrderNumberComplete = orderNumberComplete;
                 IsManual = isManual;
                 OrderID = orderID;
+                OriginalOrderID = originalOrderID;
             }
 
             /// <summary>
@@ -227,6 +229,11 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom.OnlineUpdating
             /// Order ID
             /// </summary>
             public long OrderID { get; }
+
+            /// <summary>
+            /// Original Order ID
+            /// </summary>
+            public long OriginalOrderID { get; }
         }
     }
 }

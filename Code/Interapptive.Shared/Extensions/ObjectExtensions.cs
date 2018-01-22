@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -32,7 +32,7 @@ namespace Interapptive.Shared.Extensions
         [SuppressMessage("ShipWorks", "SW0002")]
         public static GenericResult<T> ToResult<T>(this T value, Func<Exception> whenNull) where T : class =>
             value == null ? GenericResult.FromError<T>(whenNull()) : value;
-			
+
         /// <summary>
         /// Ensure a property has a value
         /// </summary>
