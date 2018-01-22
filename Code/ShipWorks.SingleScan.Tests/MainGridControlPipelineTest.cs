@@ -11,7 +11,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users;
 using System;
-using Autofac.Features.Indexed;
 using Xunit;
 
 namespace ShipWorks.SingleScan.Tests
@@ -39,7 +38,8 @@ namespace ShipWorks.SingleScan.Tests
             scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(scheduler);
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
 
-            downloader = mock.Mock<IOnDemandDownloader>();
+            downloader = mock.FromFactory<IOnDemandDownloaderFactory>()
+                .Mock(f => f.CreateSingleScanOnDemandDownloader());
 
             mainGridControl = mock.Mock<IMainGridControl>();
             mainGridControl.SetupGet(g => g.Visible).Returns(true);
@@ -50,10 +50,6 @@ namespace ShipWorks.SingleScan.Tests
 
             var userSession = mock.Mock<IUserSession>();
             userSession.SetupGet(s => s.Settings).Returns(userSettings);
-
-            var downloaderIndex = mock.CreateMock<IIndex<OnDemandDownloaderType, IOnDemandDownloader>>();
-            mock.Provide(downloaderIndex.Object);
-            downloaderIndex.Setup(i => i[OnDemandDownloaderType.SingleScanOnDemandDownloader]).Returns(downloader.Object);
 
             testObject = mock.Create<MainGridControlPipeline>();
         }

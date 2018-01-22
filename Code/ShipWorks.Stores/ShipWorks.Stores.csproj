@@ -159,6 +159,7 @@
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
     <Compile Include="Communication\OnDemandDownloader.cs" />
+    <Compile Include="Communication\OnDemandDownloaderFactory.cs" />
     <Compile Include="Communication\SingleScanOnDemandDownloader.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderMergeChargesAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderMoveValidatedAddressesAction.cs" />

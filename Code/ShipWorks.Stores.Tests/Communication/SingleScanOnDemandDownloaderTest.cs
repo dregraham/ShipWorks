@@ -22,10 +22,6 @@ namespace ShipWorks.Stores.Tests.Communication
 
             downloader = mock.Mock<IOnDemandDownloader>();
 
-            var downloaderIndex = mock.CreateMock<IIndex<OnDemandDownloaderType, IOnDemandDownloader>>();
-            mock.Provide(downloaderIndex.Object);
-            downloaderIndex.Setup(i => i[OnDemandDownloaderType.OnDemandDownloader]).Returns(downloader);
-
             testObject = mock.Create<SingleScanOnDemandDownloader>();
         }
 

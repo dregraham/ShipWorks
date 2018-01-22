@@ -8,7 +8,6 @@ namespace ShipWorks.Stores.Communication
     /// <summary>
     /// Downloader for downloading a specific order
     /// </summary>
-    [KeyedComponent(typeof(IOnDemandDownloader), OnDemandDownloaderType.OnDemandDownloader)]
     public class OnDemandDownloader : IOnDemandDownloader
     {
         private readonly IMessageHelper messageHelper;
