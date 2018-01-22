@@ -231,6 +231,7 @@
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOnlineUpdateCommandCreatorTest.UpdateShipment.cs" />
     <Compile Include="Platforms\NetworkSolutions\NetworkSolutionsOrderCombinationUserInteractionTest.cs" />
     <Compile Include="Platforms\Miva\MivaOnlineUpdateCommandCreatorTest.cs" />
+    <Compile Include="Platforms\Newegg\NeweggCombineAndSplitTest.cs" />
     <Compile Include="Platforms\Newegg\NeweggOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\Odbc\OdbcOnlineUpdateCommandCreatorTest.cs" />
     <Compile Include="Platforms\OrderIdentifierTest.cs" />

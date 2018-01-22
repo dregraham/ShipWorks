@@ -76,6 +76,7 @@ namespace ShipWorks.Tests.Shared.EntityBuilders
                     .Set(x => x.Description, orderNumber.ToString())
                     .Set(i2 => i2.Quantity, 2))
                 .Set(x => x.OrderNumber, orderNumber)
+                .Set(x => x.OrderNumberComplete, orderNumber.ToString())
                 .Set(x => x.IsManual, true)
                 .Save();
         }
