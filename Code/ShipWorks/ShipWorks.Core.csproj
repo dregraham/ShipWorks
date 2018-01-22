@@ -1213,6 +1213,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCarrierTermsAndConditionsNotAcceptedDialog.Designer.cs">
       <DependentUpon>AmazonCarrierTermsAndConditionsNotAcceptedDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingException.cs" />
     <Compile Include="Shipping\Carriers\Asendia\IAsendiaAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\IBrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\ICounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
@@ -1819,11 +1820,11 @@
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClient.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\IBuyDotComFtpClientFactory.cs" />
     <Compile Include="Stores\Platforms\BuyDotCom\OnlineUpdating\IBuyDotComShipmentDetailsUpdater.cs" />
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.cs">
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.Designer.cs">
-      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.Designer.cs">
+      <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -8148,8 +8149,8 @@
     <EmbeddedResource Include="Stores\Management\ActivationErrorWizardPage.resx">
       <DependentUpon>ActivationErrorWizardPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
-      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.resx">
+      <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>

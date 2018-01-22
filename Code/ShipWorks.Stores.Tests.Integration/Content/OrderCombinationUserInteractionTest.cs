@@ -33,10 +33,10 @@ namespace ShipWorks.Stores.Tests.Integration.Content
         private readonly ITestOutputHelper output;
         private Mock<IOrderCombinationUserInteraction> interaction;
         private readonly GenericModuleStoreEntity store;
-        private readonly OrderEntity order1;
-        private readonly OrderEntity order2;
-        private readonly OrderEntity order3;
-        private readonly Dictionary<long, OrderEntity> orders;
+        private readonly GenericModuleOrderEntity order1;
+        private readonly GenericModuleOrderEntity order2;
+        private readonly GenericModuleOrderEntity order3;
+        private readonly Dictionary<long, GenericModuleOrderEntity> orders;
 
         public OrderCombinationUserInteraction(DatabaseFixture db, ITestOutputHelper output)
         {
@@ -51,19 +51,19 @@ namespace ShipWorks.Stores.Tests.Integration.Content
                 .Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
-            Create.Order(store, context.Customer).Save();
+            Create.Order<GenericModuleOrderEntity>(store, context.Customer).Save();
 
-            order1 = Create.Order(store, context.Customer)
+            order1 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 10)
                 .Save();
-            order2 = Create.Order(store, context.Customer)
+            order2 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 20)
                 .Save();
-            order3 = Create.Order(store, context.Customer)
+            order3 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 30)
                 .Save();
 
-            orders = new Dictionary<long, OrderEntity> { { 1, order1 }, { 2, order2 }, { 3, order3 } };
+            orders = new Dictionary<long, GenericModuleOrderEntity> { { 1, order1 }, { 2, order2 }, { 3, order3 } };
         }
 
         [Theory]
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             }
 
             // Perform combines
-            OrderEntity initialCombinedOrder = await PerformCombine(firstSurviving, order1, order2);
+            GenericModuleOrderEntity initialCombinedOrder = await PerformCombine(firstSurviving, order1, order2);
             orders.Add(4, initialCombinedOrder);
 
             OrderEntity finalOrder = await PerformCombine(secondSurviving, order3, initialCombinedOrder);
@@ -118,7 +118,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
             }
         }
 
-        private async Task<OrderEntity> PerformCombine(int surviving, params IOrderEntity[] ordersToCombine)
+        private async Task<GenericModuleOrderEntity> PerformCombine(int surviving, params IOrderEntity[] ordersToCombine)
         {
             var dataProvider = context.Mock.Container.Resolve<IDataProvider>();
             var combineOrchestrator = context.Mock.Container.Resolve<ICombineOrderOrchestrator>();
@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
                 .Returns(GenericResult.FromSuccess(Tuple.Create(orders[surviving].OrderID, "1-C")));
 
             var result = await combineOrchestrator.Combine(ordersToCombine.Select(x => x.OrderID));
-            return await dataProvider.GetEntityAsync<OrderEntity>(result.Value);
+            return await dataProvider.GetEntityAsync<GenericModuleOrderEntity>(result.Value);
         }
 
         public void Dispose() => context.Dispose();

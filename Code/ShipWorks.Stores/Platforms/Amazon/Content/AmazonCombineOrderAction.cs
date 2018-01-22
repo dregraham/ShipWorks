@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -25,9 +26,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Content
             AmazonOrderEntity order = (AmazonOrderEntity) combinedOrder;
 
             order.IsPrime =
-                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonMwsIsPrime.No) ? 
-                    (int) AmazonMwsIsPrime.No : 
-                    (int) AmazonMwsIsPrime.Unknown;
+                orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.IsPrime == (int) AmazonIsPrime.No) ? 
+                    (int) AmazonIsPrime.No : 
+                    (int) AmazonIsPrime.Unknown;
 
             order.FulfillmentChannel = 
                 orders.Where(o => o is AmazonOrderEntity).Cast<AmazonOrderEntity>().All(o => o.FulfillmentChannel == (int) AmazonMwsFulfillmentChannel.MFN) ? 

@@ -3,6 +3,7 @@ using System.Linq;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 
@@ -55,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 amazon.SaveToEntity(caStore);
                 daysBack.SaveToEntity(caStore);
             }
-            catch (ChannelAdvisorException ex)
+            catch (Exception ex) when(ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonShippingException))
             {
                 MessageHelper.ShowError(this, ex.Message);
                 return false;

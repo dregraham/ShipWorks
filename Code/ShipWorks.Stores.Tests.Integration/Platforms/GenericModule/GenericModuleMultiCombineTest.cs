@@ -48,15 +48,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule
                 .Save();
 
             // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
-            Create.Order(store, context.Customer).Save();
+            Create.Order<GenericModuleOrderEntity>(store, context.Customer).Save();
 
-            order1 = Create.Order(store, context.Customer)
+            order1 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 10)
                 .Save();
-            order2 = Create.Order(store, context.Customer)
+            order2 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 20)
                 .Save();
-            order3 = Create.Order(store, context.Customer)
+            order3 = Create.Order<GenericModuleOrderEntity>(store, context.Customer)
                 .Set(x => x.OrderNumber, 30)
                 .Save();
 

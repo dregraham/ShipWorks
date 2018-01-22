@@ -74,6 +74,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("EtsyOrderItemEntity", "OrderItemEntity", new EtsyOrderItemRelations(), new EtsyOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("EtsyStoreEntity", "StoreEntity", new EtsyStoreRelations(), new EtsyStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("GenericFileStoreEntity", "StoreEntity", new GenericFileStoreRelations(), new GenericFileStoreEntityFactory(), 1-1);
+			this.AddEntityInfo("GenericModuleOrderEntity", "OrderEntity", new GenericModuleOrderRelations(), new GenericModuleOrderEntityFactory(), 1-1);
+			this.AddEntityInfo("GenericModuleOrderItemEntity", "OrderItemEntity", new GenericModuleOrderItemRelations(), new GenericModuleOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("GenericModuleStoreEntity", "StoreEntity", new GenericModuleStoreRelations(), new GenericModuleStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("GrouponOrderEntity", "OrderEntity", new GrouponOrderRelations(), new GrouponOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("GrouponOrderItemEntity", "OrderItemEntity", new GrouponOrderItemRelations(), new GrouponOrderItemEntityFactory(), 1-1);
