@@ -199,12 +199,11 @@ namespace ShipWorks.Stores.Communication
             {
                 try
                 {
-                    IStoreDownloader downloader =
-                        lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
                     if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
                     {
                         DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
-                        
+                        IStoreDownloader downloader = lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
+
                         await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
                     }
                 }

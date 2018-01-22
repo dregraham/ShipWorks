@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (ShouldSearch(orderNumber))
             {
-                IResult result = await downloadManager.Download(orderNumber).ConfigureAwait(false);
+                IResult result = await downloadManager.Download(orderNumber.Trim()).ConfigureAwait(false);
 
                 if (result.Failure)
                 {
@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         private static bool ShouldSearch(string orderNumber)
         {
-            return !string.IsNullOrWhiteSpace(orderNumber) && orderNumber.Length <= 50;
+            return !string.IsNullOrWhiteSpace(orderNumber) && orderNumber.Trim().Length <= 50;
         }
     }
 }
