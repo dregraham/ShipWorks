@@ -15,9 +15,6 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
     public class GlobalPostNotificationTest : IDisposable
     {
         private readonly AutoMock mock;
-        private const string DisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
-        private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
-        private const string BrowserDlgTitle = "Your GlobalPost Label";
 
         public GlobalPostNotificationTest()
         {
@@ -47,7 +44,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
         [Fact]
         public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsGlobalPost()
         {
-            Uri displayUri = new Uri(DisplayUrl);
+            Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/3782");
 
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             var dialog = mock.MockRepository.Create<IDialog>();
@@ -58,13 +55,13 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
             testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.GlobalPostEconomyIntl } });
 
-            viewModel.Verify(v => v.Load(displayUri, BrowserDlgTitle, MoreInfoUrl));
+            viewModel.Verify(v => v.Load(displayUri, "Your GlobalPost Label", "https://stamps.custhelp.com/app/answers/detail/a_id/3802"));
         }
 
         [Fact]
-        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsGAP()
+        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsUspsGAP()
         {
-            Uri displayUri = new Uri("https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png");
+            Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/5174");
 
             var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
             var dialog = mock.MockRepository.Create<IDialog>();
@@ -73,9 +70,26 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
 
             var testObject = mock.Create<GlobalPostLabelNotification>();
 
-            testObject.Show(new ShipmentEntity() { Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
+            testObject.Show(new ShipmentEntity() { ShipmentTypeCode = ShipmentTypeCode.Usps, Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
 
-            viewModel.Verify(v => v.Load(displayUri, BrowserDlgTitle, MoreInfoUrl));
+            viewModel.Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
+        }
+
+        [Fact]
+        public void Show_LoadsBrowserViewModelWithCorrectUrls_WhenShipmentIsEndiciaGAP()
+        {
+            Uri displayUri = new Uri("https://stamps.custhelp.com/app/answers/detail/a_id/5175");
+
+            var viewModel = mock.Mock<IDismissableWebBrowserDlgViewModel>();
+            var dialog = mock.MockRepository.Create<IDialog>();
+            dialog.Setup(d => d.DataContext).Returns(viewModel.Object);
+            mock.MockFunc<string, IDialog>(dialog);
+
+            var testObject = mock.Create<GlobalPostLabelNotification>();
+
+            testObject.Show(new ShipmentEntity() { ShipmentTypeCode = ShipmentTypeCode.Endicia, Postal = new PostalShipmentEntity() { Service = (int)PostalServiceType.InternationalFirst } });
+
+            viewModel.Verify(v => v.Load(displayUri, "Your First-Class International Envelope Label", "http://support.shipworks.com/support/solutions/articles/4000114989"));
         }
 
         [Fact]
