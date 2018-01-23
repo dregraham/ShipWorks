@@ -210,8 +210,9 @@ namespace ShipWorks.Stores.Communication
 
                         await downloader.Download(orderNumber, downloadLog.DownloadID, con).ConfigureAwait(false);
 
-                        downloadLog.Result = (int) DownloadResult.Success;
-
+                        downloadLog.QuantityTotal = downloader.QuantitySaved;
+                        downloadLog.QuantityNew = downloader.QuantityNew;
+                        downloadLog.Result = (int) DownloadResult.Success;                        
                     }
                     catch (Exception ex)
                     {
