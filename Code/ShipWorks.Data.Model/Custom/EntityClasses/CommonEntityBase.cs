@@ -71,11 +71,6 @@ namespace ShipWorks.Data.Model.EntityClasses
                         field.CurrentValue = "";
                     }
 
-                    if (field.DataType.IsEnum)
-                    {
-                        field.CurrentValue = 0;
-                    }
-
                     if (field.DataType == typeof(double) ||
                         field.DataType == typeof(float) ||
                         field.DataType == typeof(decimal) ||
