@@ -22,12 +22,14 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Common.Threading;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -217,6 +219,9 @@ namespace ShipWorks.Stores.Communication
 
                         downloadLog.Result = (int) DownloadResult.Error;
                         downloadLog.ErrorMessage = ex.Message;
+
+                        lifetimeScope.Resolve<IMessenger>().Send(new ShowPopupMessage(new object(), $"Error downloading {orderNumber}. See download log."));
+                        DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(true, false));
                     }
 
                     SaveDownloadLog(downloadLog);

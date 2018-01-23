@@ -123,21 +123,21 @@ namespace ShipWorks
         // if it failed.
         bool logonAsyncLoadSuccess = false;
 
-        ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
+        readonly ConcurrentQueue<Action> logonActions = new ConcurrentQueue<Action>();
 
         // We have to remember these so that we can restore them after blanking the UI
-        List<RibbonTab> ribbonTabs = new List<RibbonTab>();
+        readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
 
         // Used to manage the UI state of the online update commands
-        OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
+        readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
 
         // Used to keep ShipWorks "pumping" looking for data changes
-        UIHeartbeat heartBeat;
+        readonly UIHeartbeat heartBeat;
 
         // The FilterNode to restore if search is canceled
         long searchRestoreFilterNodeID = 0;
 
-        Lazy<DockControl> shipmentDock;
+        readonly Lazy<DockControl> shipmentDock;
         private ILifetimeScope menuCommandLifetimeScope;
 
         /// <summary>
@@ -995,6 +995,18 @@ namespace ShipWorks
         #endregion
 
         #region GUI \ Layout
+
+        /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                IPopupHandler popup = scope.Resolve<IPopupHandler>();
+                popup.ShowAction(message, this);
+            }
+        }
 
         /// <summary>
         /// Show the UI for when there is no connection or stores

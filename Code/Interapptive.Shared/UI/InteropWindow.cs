@@ -15,6 +15,14 @@ namespace Interapptive.Shared.UI
     /// <seealso cref="System.Windows.Forms.IWin32Window" />
     public class InteropWindow : Window, IDialog, IWin32Window
     {
+        private bool isInitialized = false;
+
+        /// <summary>
+        /// Constructor for the designer
+        /// </summary>
+        public InteropWindow()
+        { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InteropWindow"/> class.
         /// </summary>
@@ -55,34 +63,51 @@ namespace Interapptive.Shared.UI
 
             // Need HwndSource to get handle to owned window,
             // and the handle only exists when SourceInitialized has been raised
-            SourceInitialized += delegate
+            if (isInitialized)
             {
-                HwndSource source = HwndSource.FromHwnd(interopHelper.Handle);
-                
-                if (source?.CompositionTarget != null)
+                SetLocation(owner, interopHelper);
+            }
+            else
+            {
+                SourceInitialized += delegate
                 {
-                    // Get transform matrix to transform non-WPF owner window
-                    // size and location units into device-independent WPF size and location units
-                    Matrix matrix = source.CompositionTarget.TransformFromDevice;
+                    SetLocation(owner, interopHelper);
+                };
+            }
 
-                    NativeMethods.RECT rect;
-                    NativeMethods.GetWindowRect(owner.Handle, out rect);
+        }
 
-                    // Get WPF size and location for non-WPF owner window
-                    int ownerLeft = rect.left;
-                    int ownerTop = rect.top;
-                    int ownerWidth = rect.right - rect.left;
-                    int ownerHeight = rect.bottom - rect.top;
+        /// <summary>
+        /// Set location to the center of the owner window
+        /// </summary>
+        private void SetLocation(IWin32Window owner, WindowInteropHelper interopHelper)
+        {
+            isInitialized = true;
+            HwndSource source = HwndSource.FromHwnd(interopHelper.Handle);
 
-                    Point ownerPosition = matrix.Transform(new Point(ownerLeft, ownerTop));
-                    Point ownerSize = matrix.Transform(new Point(ownerWidth, ownerHeight));
+            if (source?.CompositionTarget != null)
+            {
+                // Get transform matrix to transform non-WPF owner window
+                // size and location units into device-independent WPF size and location units
+                Matrix matrix = source.CompositionTarget.TransformFromDevice;
 
-                    // Center WPF window
-                    WindowStartupLocation = WindowStartupLocation.Manual;
-                    Left = ownerPosition.X + (ownerSize.X - Width) / 2;
-                    Top = ownerPosition.Y + (ownerSize.Y - Height) / 2;
-                }
-            };
+                NativeMethods.RECT rect;
+                NativeMethods.GetWindowRect(owner.Handle, out rect);
+
+                // Get WPF size and location for non-WPF owner window
+                int ownerLeft = rect.left;
+                int ownerTop = rect.top;
+                int ownerWidth = rect.right - rect.left;
+                int ownerHeight = rect.bottom - rect.top;
+
+                Point ownerPosition = matrix.Transform(new Point(ownerLeft, ownerTop));
+                Point ownerSize = matrix.Transform(new Point(ownerWidth, ownerHeight));
+
+                // Center WPF window
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Left = ownerPosition.X + (ownerSize.X - Width) / 2;
+                Top = ownerPosition.Y + (ownerSize.Y - Height) / 2;
+            }
         }
     }
 }

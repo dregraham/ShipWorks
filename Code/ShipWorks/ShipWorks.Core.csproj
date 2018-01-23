@@ -1051,6 +1051,7 @@
     <Compile Include="Filters\Search\OrderQuickSearchDefinitionProvider.cs" />
     <Compile Include="Filters\Search\SingleScanSearchDefinitionProvider.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Messaging\Messages\Dialogs\ShowPopupMessage.cs" />
     <Compile Include="Messaging\Messages\KeyboardShortcutMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\DisableSingleScanInputFilterMessage.cs" />
     <Compile Include="Messaging\Messages\SingleScan\EnableSingleScanInputFilterMessage.cs" />
@@ -4130,6 +4131,7 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\IPopupHandler.cs" />
     <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">

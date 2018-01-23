@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
+using ShipWorks.Messaging.Messages.Dialogs;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -17,5 +18,10 @@ namespace ShipWorks.ApplicationCore
         /// Focus the control
         /// </summary>
         bool Focus();
+
+        /// <summary>
+        /// Briefly show a popup message
+        /// </summary>
+        void ShowPopup(string message);
     }
 }
