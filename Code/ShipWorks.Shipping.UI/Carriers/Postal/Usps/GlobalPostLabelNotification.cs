@@ -22,10 +22,16 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private readonly IUserSession userSession;
         private readonly IWin32Window owner;
 
+        // Global Post stuff 
         private const string GlobalPostDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3782";
-        private const string GlobalPostAdvantageProgramDisplayUrl = "https://secure.la.stamps.com/img/rnt_kb_files/RNTimages/globalpost/shipworksGAP.png";
-        private const string MoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
-        private const string BrowserDlgTitle = "Your GlobalPost Label";
+        private const string GlobalPostMoreInfoUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/3802";
+        private const string GlobalPostBrowserDlgTitle = "Your GlobalPost Label";
+
+        // Global Post Advantage Program stuff
+        private const string StampsGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5174";
+        private const string EndiciaGlobalPostAdvantageProgramDisplayUrl = "https://stamps.custhelp.com/app/answers/detail/a_id/5175";
+        private const string GlobalPostAdvantageProgramMoreInfoUrl = "http://support.shipworks.com/support/solutions/articles/4000114989";
+        private const string GlobalPostAdvantageProgramBrowserDlgTitle = "Your First-Class International Envelope Label";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalPostLabelNotification"/> class.
@@ -53,12 +59,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         /// </summary>
         public void Show(IShipmentEntity shipment)
         {
-            string urlToUse = PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service) ? 
-                GlobalPostDisplayUrl :
-                GlobalPostAdvantageProgramDisplayUrl;
+            (string urlToUse, string titleToUse, string moreInfo) = GetDialogAssets(shipment);
 
             Uri displayUri = new Uri(urlToUse);
-            browserViewModel.Load(displayUri, BrowserDlgTitle, MoreInfoUrl);
+            browserViewModel.Load(displayUri, titleToUse, moreInfo);
 
             IDialog webBrowserDlg = browserFactory("DismissableWebBrowserDlg");
             webBrowserDlg.LoadOwner(owner);
@@ -72,6 +76,33 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             userSession.User.Settings.NextGlobalPostNotificationDate = ((IDismissableWebBrowserDlgViewModel) webBrowserDlg.DataContext).Dismissed ?
                 SqlDateTime.MaxValue.Value :
                 DateTime.UtcNow.AddDays(1);
+        }
+
+        /// <summary>
+        /// Get the assets needed for displaying the dialog
+        /// </summary>
+        private static (string urlToUse, string titleToUse, string moreInfo) GetDialogAssets(IShipmentEntity shipment)
+        {
+            string urlToUse = GlobalPostDisplayUrl;
+            bool gapShipment = !PostalUtility.IsGlobalPost((PostalServiceType)shipment.Postal.Service);
+            
+            if (gapShipment)
+            {
+                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Endicia)
+                {
+                    urlToUse = EndiciaGlobalPostAdvantageProgramDisplayUrl;
+                }
+
+                if (shipment.ShipmentTypeCode == ShipmentTypeCode.Usps)
+                {
+                    urlToUse = StampsGlobalPostAdvantageProgramDisplayUrl;
+                }
+            }
+     
+            string titleToUse = gapShipment ? GlobalPostAdvantageProgramBrowserDlgTitle : GlobalPostBrowserDlgTitle;
+            string moreInfo = gapShipment ? GlobalPostAdvantageProgramMoreInfoUrl : GlobalPostMoreInfoUrl;
+
+            return (urlToUse, titleToUse, moreInfo);
         }
     }
 }
