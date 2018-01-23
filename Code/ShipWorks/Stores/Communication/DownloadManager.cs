@@ -224,7 +224,7 @@ namespace ShipWorks.Stores.Communication
                         DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(true, false));
                     }
 
-                    SaveDownloadLog(downloadLog);
+                    await SaveDownloadLog(downloadLog).ConfigureAwait(false);
                 }
             }
 
@@ -607,7 +607,7 @@ namespace ShipWorks.Stores.Communication
                             showDashboardError = true;
                         }
 
-                        SaveDownloadLog(downloadLog);
+                        await SaveDownloadLog(downloadLog).ConfigureAwait(false);
 
                         ActionDispatcher.DispatchDownloadFinished(store.StoreID, (DownloadResult) downloadLog.Result, downloadLog.QuantityNew);
                     }
@@ -630,13 +630,16 @@ namespace ShipWorks.Stores.Communication
             }
         }
 
-        private static void SaveDownloadLog(DownloadEntity downloadLog)
-        {
+        /// <summary>
+        /// Save Download Log
+        /// </summary>
+        private static Task SaveDownloadLog(DownloadEntity downloadLog)
+        { 
             // Save the updated log
-            using (SqlAdapter adapter = new SqlAdapter())
+            using (ISqlAdapter adapter = new SqlAdapter())
             {
                 downloadLog.Ended = DateTime.UtcNow;
-                adapter.SaveAndRefetch(downloadLog);
+                return adapter.SaveEntityAsync(downloadLog);
             }
         }
 
