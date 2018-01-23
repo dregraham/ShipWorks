@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SD.LLBLGen.Pro.QuerySpec;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
 {
@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         /// <summary>
         /// Constructor
         /// </summary>
-        public ThreeDCartOnlineUpdatingDataAccess(IDataProvider dataProvider, 
+        public ThreeDCartOnlineUpdatingDataAccess(IDataProvider dataProvider,
             IThreeDCartCombineOrderSearchProvider searchProvider,
             ISqlAdapterFactory sqlAdapterFactory)
         {
@@ -49,16 +49,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating
         {
             QueryFactory factory = new QueryFactory();
 
-            var from = factory.ThreeDCartOrderItem
+            var orderItems = factory.ThreeDCartOrderItem
                 .InnerJoin(factory.OrderItem)
                 .On(OrderItemFields.OrderItemID == ThreeDCartOrderItemFields.OrderItemID);
 
             var query = factory.Create()
-                .From(from)
+                .From(orderItems)
                 .Where(ThreeDCartOrderItemFields.OriginalOrderID == originalOrderID)
                 .Select<long>(() => ThreeDCartOrderItemFields.ThreeDCartShipmentID.ToValue<long>())
-                .Limit(1)
-                ;
+                .Limit(1);
 
             IEnumerable<long> items = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
             return items.FirstOrDefault();

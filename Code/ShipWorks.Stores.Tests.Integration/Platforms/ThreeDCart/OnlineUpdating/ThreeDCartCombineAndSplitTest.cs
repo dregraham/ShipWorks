@@ -6,13 +6,9 @@ using Autofac;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
-using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Content.Controls;
-using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
 using ShipWorks.Stores.Tests.Integration.Helpers;
@@ -224,7 +220,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
         public async Task CombineSplitWithBSurviving_WithOrderNumbers()
         {
             var orderB_1_C = await combineSplitHelpers.PerformCombine("10B-1-C", orderB, orderA);
-
             var (orderB_0, orderB_1) = await combineSplitHelpers.PerformSplit(orderB_1_C);
 
             // Get online identities
@@ -232,7 +227,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
             var identities_B_0 = await identityProvider.GetOrderIdentifiers(orderB_0);
             var identities_B_1 = await identityProvider.GetOrderIdentifiers(orderB_1);
-
 
             Assert.True(identities_B_0.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderB_0.IsManual)));
             Assert.True(identities_B_0.Any(i => IsMatchingShipmentUpload(i, 20, 2000, orderB_0.IsManual)));
@@ -318,7 +312,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
             Assert.True(identities_B_M_C.Any(i => IsMatchingShipmentUpload(i, 10, 1000, orderB_M_C.IsManual)));
         }
-        
+
         private bool IsMatchingShipmentUpload(ThreeDCartOnlineUpdatingOrderDetail orderDetail, long orderNumber, long threeDCartOrderID, bool isManual)
         {
             return orderDetail.OrderNumber == orderNumber && orderDetail.ThreeDCartOrderID == threeDCartOrderID && orderDetail.IsManual == isManual;
