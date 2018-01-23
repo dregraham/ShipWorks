@@ -60,5 +60,11 @@ namespace ShipWorks.Stores.Services
             StoreEntity store = storeManager.GetRelatedStore(shipment.ShipmentID);
             return StoreTypeManager.GetType(store.StoreTypeCode, store, lifetimeScope);
         }
+
+        /// <summary>
+        /// Check to see if the given StoreTypeCode is GenericModule based
+        /// </summary>
+        public bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode) => 
+            StoreTypeManager.IsStoreTypeCodeGenericModuleBased(storeTypeCode);
     }
 }

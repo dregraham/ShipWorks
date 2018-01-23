@@ -55,6 +55,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ModuleHttpExpect100Continue = source.ModuleHttpExpect100Continue;
             ModuleResponseEncoding = source.ModuleResponseEncoding;
             SchemaVersion = source.SchemaVersion;
+            AmazonMerchantID = source.AmazonMerchantID;
+            AmazonAuthToken = source.AmazonAuthToken;
+            AmazonApiRegion = source.AmazonApiRegion;
             
             
             
@@ -177,6 +180,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String SchemaVersion { get; }
+        /// <summary> The AmazonMerchantID property of the Entity GenericModuleStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleStore"."AmazonMerchantID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String AmazonMerchantID { get; }
+        /// <summary> The AmazonAuthToken property of the Entity GenericModuleStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleStore"."AmazonAuthToken"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String AmazonAuthToken { get; }
+        /// <summary> The AmazonApiRegion property of the Entity GenericModuleStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleStore"."AmazonApiRegion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String AmazonApiRegion { get; }
         
         
         

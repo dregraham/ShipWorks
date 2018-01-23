@@ -254,6 +254,12 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.Designer.cs">
+      <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Jet\JetStoreSetupControl.xaml.cs">
       <DependentUpon>JetStoreSetupControl.xaml</DependentUpon>
     </Compile>
@@ -542,6 +548,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.resx">
+      <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Jet\JetStoreSetupControlHost.resx">
       <DependentUpon>JetStoreSetupControlHost.cs</DependentUpon>

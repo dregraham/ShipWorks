@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Amazon;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -20,7 +20,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         bool IAmazonOrder.IsPrime
         {
-            get { return IsPrime == (int) ChannelAdvisorIsAmazonPrime.Yes; }
+            get { return IsPrime == (int)AmazonIsPrime.Yes; }
         }
 
         /// <summary>
