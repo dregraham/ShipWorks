@@ -997,18 +997,6 @@ namespace ShipWorks
         #region GUI \ Layout
 
         /// <summary>
-        /// Show a popup message
-        /// </summary>
-        public void ShowPopup(string message)
-        {
-            using (var scope = IoC.BeginLifetimeScope())
-            {
-                IPopupHandler popup = scope.Resolve<IPopupHandler>();
-                popup.ShowAction(message, this);
-            }
-        }
-
-        /// <summary>
         /// Show the UI for when there is no connection or stores
         /// </summary>
         private void ShowBlankUI()

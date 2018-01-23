@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.Threading;
+using ShipWorks.UI.Dialogs;
 using ShipWorks.Users;
 
 namespace ShipWorks.UI.Services
@@ -17,21 +18,27 @@ namespace ShipWorks.UI.Services
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
-        private readonly IPopupHandler popupHandler;
-        private readonly ICurrentUserSettings currentUserSettings;
+
+        private static readonly PopupViewModel viewModel;
+        private static readonly Popup popup;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        static MessageHelperWrapper()
+        {
+            viewModel = new PopupViewModel();
+            popup = new Popup() { DataContext = viewModel };
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MessageHelperWrapper(Func<Control> ownerFactory,
             ISchedulerProvider schedulerProvider,
-            ICurrentUserSettings currentUserSettings,
-            Func<IUserConditionalNotification> createUserConditionalNotification,
-            IPopupHandler popupHandler)
+            Func<IUserConditionalNotification> createUserConditionalNotification)
         {
-            this.currentUserSettings = currentUserSettings;
             this.createUserConditionalNotification = createUserConditionalNotification;
-            this.popupHandler = popupHandler;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -75,7 +82,7 @@ namespace ShipWorks.UI.Services
         /// </summary>
         public void ShowPopup(string message)
         {
-            var owner = ownerFactory();
+            Control owner = ownerFactory();
 
             if (owner.InvokeRequired)
             {
@@ -83,7 +90,14 @@ namespace ShipWorks.UI.Services
             }
             else
             {
-                popupHandler.ShowAction(message, ownerFactory());
+                // Sets the message
+                viewModel.Message = message;
+
+                // Positions the window to the center of the form
+                popup.LoadOwner(owner);
+
+                // Trigger the show action to actually show the window
+                popup.ShowAction();
             }
         }
 

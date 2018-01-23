@@ -4130,7 +4130,6 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\IPopupHandler.cs" />
     <Compile Include="UI\IWebBrowserFactory.cs" />
     <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">

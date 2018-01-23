@@ -216,7 +216,6 @@
     <Compile Include="Dialogs\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\PopupHandler.cs" />
     <Compile Include="Dialogs\PopupViewModel.cs" />
     <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
       <DependentUpon>MainOptions.xaml</DependentUpon>
