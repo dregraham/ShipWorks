@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                 {
                     // These retry intervals are not the specific BigCommerce quota intervals.  Just some rough guesses based on the BigCommerce intervals on how quickly to retry if we are throttled
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(30), BigCommerceWebClientApiCall.GetOrders),
-                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(5), BigCommerceWebClientApiCall.GetOrderCount),
+                    new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrderCount),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrder),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetCoupons),
                     new RequestThrottleQuotaDefinition<BigCommerceWebClientApiCall>(TimeSpan.FromSeconds(10), BigCommerceWebClientApiCall.GetOrderStatuses),

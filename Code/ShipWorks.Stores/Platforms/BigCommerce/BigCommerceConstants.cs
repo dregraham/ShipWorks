@@ -18,6 +18,9 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         // .Net doesn't have 509 as a supported Http Status Code, so needed our own constant
         public const int MaxRequestsPerHourLimitReachedStatusCode = 509;
 
+        // .Net doesn't have 429 as a supported Http Status Code, so needed our own constant
+        public const int TooManyRequests = 429;
+
         // Orders can be marked deleted on the website, and this comes through as a flag and not an actual status
         // So to support it, we will treat it as an online status.  This is it's name and code.
         public const string OnlineStatusDeletedName = "Deleted";

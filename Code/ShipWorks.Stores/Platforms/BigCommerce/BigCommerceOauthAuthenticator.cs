@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -25,6 +26,13 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// </summary>
         public void Authenticate(IRestClient client, IRestRequest request)
         {
+            // If the request has already been authenticated dont authenticate again
+            // this happens when we get throttled and have to resubmit
+            if (request.Parameters.Any(p => p.Name == "X-Auth-Token"))
+            {
+                return;
+            }
+
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Accept", "application/json");
             request.AddHeader("X-Auth-Client", store.OauthClientId);
