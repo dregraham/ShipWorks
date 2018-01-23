@@ -26,8 +26,8 @@ namespace ShipWorks.UI.Dialogs
         /// </summary>
         public string Message
         {
-            get => message;
-            set => handler.Set(nameof(Message), ref message, value);
+            get { return message; }
+            set { handler.Set(nameof(Message), ref message, value); }
         }
     }
 }
