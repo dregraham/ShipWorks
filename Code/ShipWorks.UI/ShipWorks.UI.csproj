@@ -214,6 +214,7 @@
     <Compile Include="Controls\Weight\WeightInput.cs" />
     <Compile Include="Controls\Weight\WeightValidationRule.cs" />
     <Compile Include="Dialogs\IPopup.cs" />
+    <Compile Include="Dialogs\IPopupViewModel.cs" />
     <Compile Include="Dialogs\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
