@@ -562,11 +562,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
             
             // Get the image with the corresponding variantID
             JToken image = images.FirstOrDefault(i => i.SelectToken("variant_ids").Values<long>().Contains(variantID));
-            if (image != null)
+
+            // We want to use the variant image when we can, otherwise use the main image
+            if (image == null)
             {
-                item.Image = image.GetValue<string>("src");
-                item.Thumbnail = item.Image;
+                image = shopifyProduct.SelectToken("product.image");
             }
+            
+            item.Image = image?.GetValue<string>("src");
+            item.Thumbnail = item.Image;  
         }
 
         /// <summary>
