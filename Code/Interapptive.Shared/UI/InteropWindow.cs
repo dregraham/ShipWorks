@@ -74,7 +74,6 @@ namespace Interapptive.Shared.UI
                     SetLocation(owner, interopHelper);
                 };
             }
-
         }
 
         /// <summary>

@@ -36,9 +36,6 @@ namespace ShipWorks.ApplicationCore
         private readonly IConnectableObservable<ScanMessage> scanMessages;
         private IDisposable scanMessagesConnection;
 
-        private readonly IConnectableObservable<ShowPopupMessage> showPopupMessages;
-        private IDisposable showPopupMessagesConnection;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -57,9 +54,6 @@ namespace ShipWorks.ApplicationCore
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
             scanMessagesConnection = scanMessages.Connect();
-
-            showPopupMessages = messenger.OfType<ShowPopupMessage>().Publish();
-            showPopupMessagesConnection = showPopupMessages.Connect();
         }
 
         /// <summary>
@@ -100,9 +94,6 @@ namespace ShipWorks.ApplicationCore
                     })
                     .Subscribe(_ => StartScanMessagesObservation()),
 
-                showPopupMessages.ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                  .Subscribe(m=>mainForm.ShowPopup(m.MessageText)),
-
                 // This class doesn't actually get disposed, so we need to include our cleanup here
                 Disposable.Create(() =>
                 {
@@ -110,9 +101,6 @@ namespace ShipWorks.ApplicationCore
                     // set it to null as well.
                     scanMessagesConnection?.Dispose();
                     scanMessagesConnection = null;
-
-                    showPopupMessagesConnection?.Dispose();
-                    showPopupMessagesConnection = null;
                 })
             );
         }

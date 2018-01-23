@@ -17,17 +17,21 @@ namespace ShipWorks.UI.Services
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
+        private readonly IPopupHandler popupHandler;
         private readonly ICurrentUserSettings currentUserSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public MessageHelperWrapper(Func<Control> ownerFactory, ISchedulerProvider schedulerProvider,
+        public MessageHelperWrapper(Func<Control> ownerFactory,
+            ISchedulerProvider schedulerProvider,
             ICurrentUserSettings currentUserSettings,
-            Func<IUserConditionalNotification> createUserConditionalNotification)
+            Func<IUserConditionalNotification> createUserConditionalNotification,
+            IPopupHandler popupHandler)
         {
             this.currentUserSettings = currentUserSettings;
             this.createUserConditionalNotification = createUserConditionalNotification;
+            this.popupHandler = popupHandler;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -64,6 +68,23 @@ namespace ShipWorks.UI.Services
         public DialogResult ShowQuestion(string message)
         {
             return MessageHelper.ShowQuestion(ownerFactory(), message);
+        }
+
+        /// <summary>
+        /// Show a popup message
+        /// </summary>
+        public void ShowPopup(string message)
+        {
+            var owner = ownerFactory();
+
+            if (owner.InvokeRequired)
+            {
+                owner.Invoke((Action<string>) ShowPopup, message);
+            }
+            else
+            {
+                popupHandler.ShowAction(message, ownerFactory());
+            }
         }
 
         /// <summary>

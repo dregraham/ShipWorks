@@ -12,6 +12,6 @@ namespace ShipWorks.UI
         /// </summary>
         /// <param name="message"></param>
         /// <param name="mainForm"></param>
-        void ShowAction(string message, Form mainForm);
+        void ShowAction(string message, IWin32Window mainForm);
     }
 }

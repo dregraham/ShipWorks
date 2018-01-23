@@ -12,6 +12,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -220,7 +221,8 @@ namespace ShipWorks.Stores.Communication
                         downloadLog.Result = (int) DownloadResult.Error;
                         downloadLog.ErrorMessage = ex.Message;
 
-                        lifetimeScope.Resolve<IMessenger>().Send(new ShowPopupMessage(new object(), $"Error downloading {orderNumber}. See download log."));
+                        lifetimeScope.Resolve<IMessageHelper>() 
+                            .ShowPopup($"Error downloading {orderNumber}. See download log.");
                         DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(true, false));
                     }
 
@@ -633,13 +635,13 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save Download Log
         /// </summary>
-        private static Task SaveDownloadLog(DownloadEntity downloadLog)
+        private static async Task SaveDownloadLog(DownloadEntity downloadLog)
         { 
             // Save the updated log
             using (ISqlAdapter adapter = new SqlAdapter())
             {
                 downloadLog.Ended = DateTime.UtcNow;
-                return adapter.SaveEntityAsync(downloadLog);
+                await adapter.SaveAndRefetchAsync(downloadLog);
             }
         }
 

@@ -24,7 +24,7 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Show the popup window with the appropriate message
         /// </summary>
-        public void ShowAction(string message, Form form)
+        public void ShowAction(string message, IWin32Window form)
         {
             // Sets the message
             viewModel.Message = message;
