@@ -18,27 +18,18 @@ namespace ShipWorks.UI.Services
         private readonly Func<Control> ownerFactory;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly Func<IUserConditionalNotification> createUserConditionalNotification;
-
-        private static readonly PopupViewModel viewModel;
-        private static readonly Popup popup;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        static MessageHelperWrapper()
-        {
-            viewModel = new PopupViewModel();
-            popup = new Popup() { DataContext = viewModel };
-        }
+        private readonly Func<IPopupViewModel> popupViewModelFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MessageHelperWrapper(Func<Control> ownerFactory,
             ISchedulerProvider schedulerProvider,
-            Func<IUserConditionalNotification> createUserConditionalNotification)
+            Func<IUserConditionalNotification> createUserConditionalNotification,
+            Func<IPopupViewModel> popupViewModelFactory)
         {
             this.createUserConditionalNotification = createUserConditionalNotification;
+            this.popupViewModelFactory = popupViewModelFactory;
             this.ownerFactory = ownerFactory;
             this.schedulerProvider = schedulerProvider;
         }
@@ -90,14 +81,7 @@ namespace ShipWorks.UI.Services
             }
             else
             {
-                // Sets the message
-                viewModel.Message = message;
-
-                // Positions the window to the center of the form
-                popup.LoadOwner(owner);
-
-                // Trigger the show action to actually show the window
-                popup.ShowAction();
+               popupViewModelFactory().Show(message, owner);
             }
         }
 

@@ -10,7 +10,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Stores.Communication;
