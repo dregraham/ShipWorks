@@ -20,6 +20,6 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Saves the view model to the data context
         /// </summary>
-        IPopupViewModel ViewModel { set; }
+        void SetViewModel(IPopupViewModel viewModel);
     }
 }

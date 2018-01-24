@@ -27,9 +27,9 @@ namespace ShipWorks.UI.Dialogs
         {
             popup = new Lazy<IPopup>(() =>
             {
-                IPopup popup = popupFactory();
-                popup.ViewModel = this;
-                return popup;
+                IPopup newPopup = popupFactory();
+                newPopup.SetViewModel(this);
+                return newPopup;
             });
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);

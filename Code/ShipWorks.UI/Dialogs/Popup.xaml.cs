@@ -37,11 +37,11 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// Sets the ViewModel to the DataContext
         /// </summary>
-        public IPopupViewModel ViewModel
+        public void SetViewModel(IPopupViewModel viewModel)
         {
-            set { DataContext = value; }
+            DataContext = viewModel;
         }
-
+        
         /// <summary>
         /// Once the storyboard completes, hide the control
         /// </summary>
