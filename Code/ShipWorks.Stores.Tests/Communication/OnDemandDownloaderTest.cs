@@ -5,6 +5,7 @@ using Moq;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Tests.Shared;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -26,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Communication
         public async Task Download_DelegatesToDownloadManager()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
-            downloadManager.Setup(m => m.Download("1")).ReturnsAsync(Result.FromSuccess());
+            downloadManager.Setup(m => m.Download("1")).ReturnsAsync(new List<Exception>());
             await testObject.Download("1");
 
             downloadManager.Verify(m => m.Download("1"));
@@ -58,7 +59,7 @@ namespace ShipWorks.Stores.Tests.Communication
         public async Task Download_DelegatesToDownload_WhenStringIsFiftyCharacters()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
-            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(Result.FromSuccess());
+            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new List<Exception>());
 
             await testObject.Download(new string('1', 50));
 

@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -23,14 +23,12 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.Common.Threading;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
@@ -168,23 +166,16 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download from all stores by order number
         /// </summary>
-        public static async Task<IResult> Download(string orderNumber)
+        public static async Task<IEnumerable<Exception>> Download(string orderNumber)
         {
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
-                try
+                using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
                 {
-                    using (new SqlAppResourceLock(con, $"DownloadOnDemand_{orderNumber}"))
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
-                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                        {
-                            return await Download(orderNumber, con, lifetimeScope).ConfigureAwait(false);
-                        }
+                        return await Download(orderNumber, con, lifetimeScope).ConfigureAwait(false);
                     }
-                }
-                catch (SqlAppResourceLockException)
-                {
-                    return Result.FromError("Someone else just scanned this order. Please scan again.");
                 }
             }
         }
@@ -192,12 +183,11 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download from all stores by order number
         /// </summary>
-        private static async Task<IResult> Download(string orderNumber, DbConnection con, ILifetimeScope lifetimeScope)
+        private static async Task<IEnumerable<Exception>> Download(string orderNumber, DbConnection con, ILifetimeScope lifetimeScope)
         {
             List<StoreEntity> stores = StoreManager.GetEnabledStores();
-            bool errorThrown = false;
-            StringBuilder errorMessage = new StringBuilder("The following errors occurred when attempting to download the order:\r\n");
-
+            List<Exception> caughtExceptions = new List<Exception>();
+            
             foreach (StoreEntity store in stores)
             {
                 if (StoreTypeManager.GetType(store).IsOnDemandDownloadEnabled)
@@ -214,24 +204,33 @@ namespace ShipWorks.Stores.Communication
                         downloadLog.QuantityNew = downloader.QuantityNew;
                         downloadLog.Result = (int) DownloadResult.Success;                        
                     }
-                    catch (Exception ex)
+                    catch (DownloadException ex)
                     {
-                        errorMessage.AppendLine(ex.Message);
-                        errorThrown = true;
-
+                        caughtExceptions.Add(ex);
                         downloadLog.Result = (int) DownloadResult.Error;
                         downloadLog.ErrorMessage = ex.Message;
-
-                        lifetimeScope.Resolve<IMessageHelper>() 
-                            .ShowPopup($"There was an error downloading '{orderNumber}.' Please see the download log for additional information.");
-                        DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(true, false));
                     }
-
                     await SaveDownloadLog(downloadLog).ConfigureAwait(false);
                 }
             }
 
-            return errorThrown ? Result.FromError(errorMessage.ToString()) : Result.FromSuccess();
+            DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(caughtExceptions.Any(), false));
+            return caughtExceptions;
+        }
+
+        /// <summary>
+        /// Only show the popup when the error is not a cast exception
+        /// </summary>
+        private static bool ShowPopup(Exception exception)
+        {
+            OdbcException odbcException = exception.GetBaseException() as OdbcException;
+
+            if (odbcException == null)
+            {
+                return true;
+            }
+
+            return odbcException.Errors.Cast<OdbcError>().None(e => e.SQLState == "22018");
         }
 
         /// <summary>

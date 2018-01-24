@@ -1,4 +1,6 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Runtime.Remoting.Messaging;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.Stores.Communication
@@ -11,22 +13,25 @@ namespace ShipWorks.Stores.Communication
     {
         private readonly IDownloadManager downloadManager;
         private readonly ISingleScanOrderShortcut orderShortcut;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OnDemandDownloaderFactory(IDownloadManager downloadManager,
-            ISingleScanOrderShortcut orderShortcut)
+            ISingleScanOrderShortcut orderShortcut,
+            IMessageHelper messageHelper)
         {
             this.downloadManager = downloadManager;
             this.orderShortcut = orderShortcut;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
         /// Create an OnDemandDownloader
         /// </summary>
         public IOnDemandDownloader CreateOnDemandDownloader() => 
-            new OnDemandDownloader(downloadManager);
+            new OnDemandDownloader(downloadManager, messageHelper);
 
         /// <summary>
         /// Create a SingleScanOnDemandDownloader

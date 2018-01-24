@@ -452,6 +452,7 @@
     <Compile Include="Platforms\Odbc\Download\IOdbcDownloaderExtraDependencies.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcDownloaderExtraDependencies.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcImportOrderItemStrategy.cs" />
+    <Compile Include="Platforms\Odbc\Download\OnDemandDownloadException.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />
