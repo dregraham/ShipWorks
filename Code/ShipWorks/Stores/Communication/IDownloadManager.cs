@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Initiate download using given orderNumber
         /// </summary>
-        Task<IResult> Download(string orderNumber);
+        Task<IEnumerable<Exception>> Download(string orderNumber);
     }
 }

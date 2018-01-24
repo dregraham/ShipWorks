@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.Odbc;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -71,8 +73,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
             catch (ShipWorksOdbcException ex)
             {
-                throw new DownloadException(ex.Message, ex);
+                throw new OnDemandDownloadException(IsCastException(ex), ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Return true if ODBC Cast Exception
+        /// </summary>
+        private bool IsCastException(ShipWorksOdbcException shipWorksOdbcException)
+        {
+            OdbcException odbcException = shipWorksOdbcException.GetBaseException() as OdbcException;
+            
+            return odbcException?.Errors.Cast<OdbcError>().None(error => error.SQLState == "22018") ?? true;
         }
 
         /// <summary>
