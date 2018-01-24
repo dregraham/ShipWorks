@@ -1,6 +1,4 @@
-﻿using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -9,15 +7,13 @@ namespace ShipWorks.Stores.Communication
     /// </summary>
     public class OnDemandDownloader : IOnDemandDownloader
     {
-        private readonly IMessageHelper messageHelper;
         private readonly IDownloadManager downloadManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnDemandDownloader(IMessageHelper messageHelper, IDownloadManager downloadManager)
+        public OnDemandDownloader(IDownloadManager downloadManager)
         {
-            this.messageHelper = messageHelper;
             this.downloadManager = downloadManager;
         }
 
@@ -28,12 +24,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (ShouldSearch(orderNumber))
             {
-                IResult result = await downloadManager.Download(orderNumber.Trim()).ConfigureAwait(false);
-
-                if (result.Failure)
-                {
-                    messageHelper.ShowError(result.Message);
-                }
+                await downloadManager.Download(orderNumber.Trim()).ConfigureAwait(false);
             }
         }
 

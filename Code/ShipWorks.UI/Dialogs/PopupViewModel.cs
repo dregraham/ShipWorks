@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.UI;
@@ -52,6 +53,7 @@ namespace ShipWorks.UI.Dialogs
         /// <summary>
         /// The actual message text we want to display
         /// </summary>
+        [Obfuscation(Exclude=true)]
         public string Message
         {
             get { return message; }

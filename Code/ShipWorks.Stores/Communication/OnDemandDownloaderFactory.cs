@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Communication
         /// Create an OnDemandDownloader
         /// </summary>
         public IOnDemandDownloader CreateOnDemandDownloader() => 
-            new OnDemandDownloader(messageHelper, downloadManager);
+            new OnDemandDownloader(downloadManager);
 
         /// <summary>
         /// Create a SingleScanOnDemandDownloader

@@ -223,7 +223,7 @@ namespace ShipWorks.Stores.Communication
                         downloadLog.ErrorMessage = ex.Message;
 
                         lifetimeScope.Resolve<IMessageHelper>() 
-                            .ShowPopup($"Error downloading {orderNumber}. See download log.");
+                            .ShowPopup($"There was an error downloading '{orderNumber}.' Please see the download log for additional information.");
                         DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(true, false));
                     }
 
