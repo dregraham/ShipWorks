@@ -997,7 +997,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the normalized text of the basic search box.
         /// </summary>
-        private string GetBasicSearchText()
+        public string GetBasicSearchText()
         {
             return searchBox.Text.Trim().Trim(',');
         }

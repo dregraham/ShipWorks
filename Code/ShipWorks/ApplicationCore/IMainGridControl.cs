@@ -39,6 +39,12 @@ namespace ShipWorks.ApplicationCore
         bool CanFocus { get; }
 
         /// <summary>
+        /// Get the normalized text of the basic search box.
+        /// </summary>
+        string GetBasicSearchText();
+
+
+        /// <summary>
         /// Performs the search.
         /// </summary>
         void PerformManualSearch();

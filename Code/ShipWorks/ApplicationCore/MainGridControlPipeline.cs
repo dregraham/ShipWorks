@@ -29,6 +29,7 @@ namespace ShipWorks.ApplicationCore
         private readonly IMessenger messenger;
         private readonly IUserSession userSession;
         private readonly ISchedulerProvider schedulerProvider;
+        private readonly IOnDemandDownloader singleScanOnDemandDownloader;
         private readonly IOnDemandDownloader onDemandDownloader;
 
         // Debouncing observables for searching
@@ -48,7 +49,8 @@ namespace ShipWorks.ApplicationCore
             this.messenger = messenger;
             this.userSession = userSession;
             this.schedulerProvider = schedulerProvider;
-            onDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
+            singleScanOnDemandDownloader = onDemandDownloaderFactory.CreateSingleScanOnDemandDownloader();
+            onDemandDownloader = onDemandDownloaderFactory.CreateOnDemandDownloader();
             this.mainForm = mainForm;
 
             scanMessages = messenger.OfType<ScanMessage>().Publish();
@@ -66,6 +68,7 @@ namespace ShipWorks.ApplicationCore
                     .Throttle(TimeSpan.FromMilliseconds(450))
                     .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                     .CatchAndContinue((Exception ex) => log.Error("Error occurred while debouncing quick search.", ex))
+                    .Do(x => PerformDownloadOnDemand(gridControl.GetBasicSearchText()))
                     .Subscribe(x => gridControl.PerformManualSearch()),
 
                 // Wire up observable for debouncing advanced search text box
@@ -81,7 +84,7 @@ namespace ShipWorks.ApplicationCore
                     .Do(_ => mainForm.Focus())
                     .Where(scanMsg => AllowBarcodeSearch(gridControl, scanMsg.ScannedText))
                     .Do(scanMsg => EndScanMessagesObservation())
-                    .SelectMany(scanMsg => Observable.FromAsync(() => DownloadOnDemand(scanMsg.ScannedText)).Select(_ => scanMsg))
+                    .SelectMany(scanMsg => Observable.FromAsync(() => PerformBarcodeDownloadOnDemand(scanMsg.ScannedText)).Select(_ => scanMsg))
                     .Do(scanMsg => PerformBarcodeSearchAsync(gridControl, scanMsg.ScannedText))
                     // Start listening for FilterCountsUpdatedMessages, and only continue after we receive one or the timeout has passed.
                     .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(), TimeSpan.FromSeconds(25), schedulerProvider.WindowsFormsEventLoop)
@@ -105,11 +108,19 @@ namespace ShipWorks.ApplicationCore
         }
 
         /// <summary>
-        /// Download on demand
+        /// Download order from quicksearch
         /// </summary>
-        private Task DownloadOnDemand(string searchString)
+        private Task PerformDownloadOnDemand(string searchText)
         {
-            return onDemandDownloader.Download(searchString.Trim());
+            return onDemandDownloader.Download(searchText);
+        }
+
+        /// <summary>
+        /// Download order from scan
+        /// </summary>
+        private Task PerformBarcodeDownloadOnDemand(string searchString)
+        {
+            return singleScanOnDemandDownloader.Download(searchString.Trim());
         }
 
         /// <summary>
