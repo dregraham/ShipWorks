@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 

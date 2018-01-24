@@ -195,6 +195,8 @@ namespace ShipWorks.Stores.Communication
                     DownloadEntity downloadLog = CreateDownloadLog(store, DownloadInitiatedBy.User);
                     try
                     {
+                        CheckLicense(store);
+
                         IStoreDownloader downloader =
                             lifetimeScope.ResolveKeyed<IStoreDownloader>(store.StoreTypeCode, TypedParameter.From(store));
 
@@ -204,7 +206,7 @@ namespace ShipWorks.Stores.Communication
                         downloadLog.QuantityNew = downloader.QuantityNew;
                         downloadLog.Result = (int) DownloadResult.Success;                        
                     }
-                    catch (DownloadException ex)
+                    catch (Exception ex)
                     {
                         caughtExceptions.Add(ex);
                         downloadLog.Result = (int) DownloadResult.Error;
@@ -216,21 +218,6 @@ namespace ShipWorks.Stores.Communication
 
             DownloadComplete?.Invoke(null, new DownloadCompleteEventArgs(caughtExceptions.Any(), false));
             return caughtExceptions;
-        }
-
-        /// <summary>
-        /// Only show the popup when the error is not a cast exception
-        /// </summary>
-        private static bool ShowPopup(Exception exception)
-        {
-            OdbcException odbcException = exception.GetBaseException() as OdbcException;
-
-            if (odbcException == null)
-            {
-                return true;
-            }
-
-            return odbcException.Errors.Cast<OdbcError>().None(e => e.SQLState == "22018");
         }
 
         /// <summary>
