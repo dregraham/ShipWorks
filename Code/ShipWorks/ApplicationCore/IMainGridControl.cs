@@ -42,8 +42,7 @@ namespace ShipWorks.ApplicationCore
         /// Get the normalized text of the basic search box.
         /// </summary>
         string GetBasicSearchText();
-
-
+        
         /// <summary>
         /// Performs the search.
         /// </summary>
