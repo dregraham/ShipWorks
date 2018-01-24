@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // MI only allows 35 characters for customs descriptions
                 if (UpsUtility.IsUpsMiService((UpsServiceType) ups.Service))
                 {
-                    customsDescription = customsDescription.Length <= 35 ? customsDescription : customsDescription.Substring(0, 35);
+                    customsDescription = customsDescription.Length <= 30 ? customsDescription : customsDescription.Substring(0, 30);
                 }
                 xmlWriter.WriteElementString("Description", customsDescription);
 

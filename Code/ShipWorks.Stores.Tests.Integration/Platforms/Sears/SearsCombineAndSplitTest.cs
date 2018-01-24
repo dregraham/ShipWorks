@@ -85,8 +85,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
             comparer = new SearsCombineOrderSearchProviderComparer();
         }
 
-
-
         [Fact]
         public async Task Split_WithOrderNumbers()
         {
@@ -354,18 +352,6 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
                 z.TrackingNumber == trackingNumber &&
                 z.ItemID == itemID &&
                 z.PoNumber == PoNumber);
-
-        //private Task<IEnumerable<ShipmentEntity>> GetShipmentData(params OrderEntity[] orders)
-        //{
-        //    foreach (var order in orders)
-        //    {
-        //        Create.Shipment(order).Save();
-        //    }
-
-        //    var identityProvider = context.Mock.Container.Resolve<SearsCombineOrderSearchProvider>();
-
-        //    return identityProvider.GetOrderIdentifiers(orders.Select(x => x.OrderID));
-        //}
 
         public void Dispose() => context.Dispose();
     }

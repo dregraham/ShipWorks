@@ -78,6 +78,19 @@ namespace ShipWorks.Tests.Stores.Content.SplitOrder
         }
 
         [Fact]
+        public void Validate_ReturnFailure_WhenStoreIsGroupon()
+        {
+            mock.Mock<IStoreManager>()
+                .Setup(x => x.GetRelatedStore(1006))
+                .Returns(new GrouponStoreEntity { StoreTypeCode = StoreTypeCode.Groupon });
+
+            var testObject = mock.Create<OrderSplitValidator>();
+            var result = testObject.Validate(new long[] { 1006 });
+
+            Assert.True(result.Failure);
+        }
+
+        [Fact]
         public void Validate_ReturnFalse_WhenOrderCanNotBeSplit()
         {
             mock.Mock<IOrderSplitGateway>()
