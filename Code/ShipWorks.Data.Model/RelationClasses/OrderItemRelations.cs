@@ -136,6 +136,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderItemEntity and GenericModuleOrderItemEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeGenericModuleOrderItemEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(OrderItemFields.OrderItemID, GenericModuleOrderItemFields.OrderItemID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between OrderItemEntity and GrouponOrderItemEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeGrouponOrderItemEntity
 		{
@@ -266,6 +277,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeEbayOrderItemEntity;
 				case "EtsyOrderItemEntity":
 					return this.RelationToSubTypeEtsyOrderItemEntity;
+				case "GenericModuleOrderItemEntity":
+					return this.RelationToSubTypeGenericModuleOrderItemEntity;
 				case "GrouponOrderItemEntity":
 					return this.RelationToSubTypeGrouponOrderItemEntity;
 				case "InfopiaOrderItemEntity":

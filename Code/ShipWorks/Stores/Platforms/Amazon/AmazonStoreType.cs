@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Order is Amazon Prime
             AmazonIsPrimeCondition primeCondition = new AmazonIsPrimeCondition();
             primeCondition.Operator = EqualityOperator.Equals;
-            primeCondition.Value = AmazonMwsIsPrime.Yes;
+            primeCondition.Value = AmazonIsPrime.Yes;
             definition.RootContainer.FirstGroup.Conditions.Add(primeCondition);
 
             // Order is fulfilled by seller
@@ -289,7 +289,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.AmazonOrderID = "";
             order.AmazonCommission = 0.0m;
             order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
-            order.IsPrime = (int) AmazonMwsIsPrime.Unknown;
+            order.IsPrime = (int) AmazonIsPrime.Unknown;
             order.PurchaseOrderNumber = "";
 
             return order;
@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
             outline.AddElement("Commission", () => order.Value.AmazonCommission);
             outline.AddElement("FulfilledBy", () => EnumHelper.GetDescription((AmazonMwsFulfillmentChannel) order.Value.FulfillmentChannel));
-            outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime) order.Value.IsPrime));
+            outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonIsPrime) order.Value.IsPrime));
             outline.AddElement("LatestDeliveryDate", () => order.Value.LatestExpectedDeliveryDate);
             outline.AddElement("EarliestDeliveryDate", () => order.Value.EarliestExpectedDeliveryDate);
             outline.AddElement("PurchaseOrderNumber", () => order.Value.PurchaseOrderNumber);

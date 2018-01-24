@@ -1,5 +1,5 @@
-﻿using ShipWorks.Filters.Content;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+﻿using Interapptive.Shared.Enums;
+using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Data.Model.HelperClasses;
@@ -11,14 +11,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
     /// </summary>
     [ConditionElement("Amazon Prime", "Amazon.IsPrime")]
     [ConditionStoreType(StoreTypeCode.Amazon)]
-    public class AmazonIsPrimeCondition : EnumCondition<AmazonMwsIsPrime>
+    public class AmazonIsPrimeCondition : EnumCondition<AmazonIsPrime>
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public AmazonIsPrimeCondition()
         {
-            Value = AmazonMwsIsPrime.Yes;
+            Value = AmazonIsPrime.Yes;
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Enums;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
@@ -12,6 +13,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using Xunit;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
@@ -229,7 +231,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             return ResponseWithServices(() => new[] { service });
         }
 
-        public ShipmentEntity SampleShipmentAmazonOrer(AmazonMwsIsPrime isPrime)
+        public ShipmentEntity SampleShipmentAmazonOrer(AmazonIsPrime isPrime)
         {
             return new ShipmentEntity()
             {

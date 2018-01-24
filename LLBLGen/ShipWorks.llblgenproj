@@ -85,6 +85,7 @@
   </Properties>
   <TypeShortcuts>
     <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AmazonIsPrime" Type="Interapptive.Shared.Enums.AmazonIsPrime, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -1448,8 +1449,24 @@
           <Field Name="XmlXsltFileName" Type="string" IsOptional="true" MaxLength="355" FieldIndex="16" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="GenericModuleOrder" ObjectID="7fac8cc7-084c-43fa-8529-52b0ccae879a" InheritanceType="2">
+        <Fields>
+          <Field Name="AmazonOrderID" Type="string" MaxLength="32" FieldIndex="0" />
+          <Field Name="IsFBA" Type="bool" FieldIndex="1" />
+          <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
+          <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="GenericModuleOrderItem" ObjectID="3f76a303-a9a3-4ede-a743-3d09e2c7e4ca" InheritanceType="2">
+        <Fields>
+          <Field Name="AmazonOrderItemCode" Type="string" MaxLength="64" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="GenericModuleStore" ObjectID="d4c52d5b-4dee-4ff1-81a0-2e148ef17414" InheritanceType="2">
         <Fields>
+          <Field Name="AmazonApiRegion" Type="string" MaxLength="2" FieldIndex="21" />
+          <Field Name="AmazonAuthToken" Type="string" MaxLength="100" FieldIndex="20" />
+          <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="19" />
           <Field Name="ModuleDeveloper" Type="string" MaxLength="50" FieldIndex="5" />
           <Field Name="ModuleDownloadPageSize" Type="int" FieldIndex="8" />
           <Field Name="ModuleDownloadStrategy" Type="int" FieldIndex="10" />
@@ -4166,6 +4183,8 @@
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":EtsyOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":EtsyStore" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericFileStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":GenericModuleOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":GenericModuleOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":GenericModuleStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":GrouponOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":GrouponOrderItem" />
@@ -4251,7 +4270,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-02T21:53:08.2078573Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2018-01-08T19:49:03.4721397Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6452,6 +6471,23 @@
                     <Field Name="FlatImportMap" Ordinal="20" DbType="11" Length="1073741823" />
                   </Fields>
                 </Table>
+                <Table Name="GenericModuleOrder">
+                  <PkConstraintName Name="PK_GenericModuleOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonOrderID" Ordinal="2" DbType="24" Length="32" />
+                    <Field Name="IsFBA" Ordinal="3" DbType="2" />
+                    <Field Name="IsPrime" Ordinal="4" DbType="8" Precision="10" />
+                    <Field Name="IsSameDay" Ordinal="5" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="GenericModuleOrderItem">
+                  <PkConstraintName Name="PK_GenericModuleOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AmazonOrderItemCode" Ordinal="2" DbType="12" Length="64" />
+                  </Fields>
+                </Table>
                 <Table Name="GenericModuleStore">
                   <PkConstraintName Name="PK_GenericModuleStore" />
                   <Fields>
@@ -6475,6 +6511,9 @@
                     <Field Name="ModuleHttpExpect100Continue" Ordinal="18" DbType="2" />
                     <Field Name="ModuleResponseEncoding" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="SchemaVersion" Ordinal="20" DbType="24" Length="20" />
+                    <Field Name="AmazonMerchantID" Ordinal="21" DbType="12" Length="50" />
+                    <Field Name="AmazonAuthToken" Ordinal="22" DbType="12" Length="100" />
+                    <Field Name="AmazonApiRegion" Ordinal="23" DbType="3" Length="2" />
                   </Fields>
                 </Table>
                 <Table Name="GridColumnFormat">
@@ -9549,6 +9588,16 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:GenericFileStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:GenericModuleOrder:FK_GenericModuleOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:GenericModuleOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:GenericModuleOrderItem:FK_GenericModuleOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:GenericModuleOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:GenericModuleStore:FK_GenericModuleStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:GenericModuleStore:StoreID" />
@@ -11538,8 +11587,26 @@
             <FieldMapping FieldName="XmlXsltFileName" TargetFieldName="XmlXsltFileName" />
           </FieldMappings>
         </EntityMapping>
+        <EntityMapping EntityName=":GenericModuleOrder" TargetName="ShipWorksLocal:dbo:GenericModuleOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonOrderID" TargetFieldName="AmazonOrderID" />
+            <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
+            <FieldMapping FieldName="IsPrime" TargetFieldName="IsPrime" />
+            <FieldMapping FieldName="IsSameDay" TargetFieldName="IsSameDay" />
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":GenericModuleOrderItem" TargetName="ShipWorksLocal:dbo:GenericModuleOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="AmazonOrderItemCode" TargetFieldName="AmazonOrderItemCode" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
         <EntityMapping EntityName=":GenericModuleStore" TargetName="ShipWorksLocal:dbo:GenericModuleStore">
           <FieldMappings>
+            <FieldMapping FieldName="AmazonApiRegion" TargetFieldName="AmazonApiRegion" />
+            <FieldMapping FieldName="AmazonAuthToken" TargetFieldName="AmazonAuthToken" />
+            <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
             <FieldMapping FieldName="ModuleDeveloper" TargetFieldName="ModuleDeveloper" />
             <FieldMapping FieldName="ModuleDownloadPageSize" TargetFieldName="ModuleDownloadPageSize" />
             <FieldMapping FieldName="ModuleDownloadStrategy" TargetFieldName="ModuleDownloadStrategy" />

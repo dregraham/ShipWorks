@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -16,6 +17,7 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Orders.Combine
 {
@@ -25,8 +27,8 @@ namespace ShipWorks.Stores.Orders.Combine
     [Component]
     public class CombineOrderGateway : ICombineOrderGateway
     {
-        private readonly Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>> storeSpecificSearches =
-            new Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>>>
+        private readonly Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)>> storeSpecificSearches =
+            new Dictionary<StoreTypeCode, Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)>>
             {
                 { StoreTypeCode.Amazon, GetAmazonSearch },
                 { StoreTypeCode.Ebay, GetEbaySearch },
@@ -35,13 +37,15 @@ namespace ShipWorks.Stores.Orders.Combine
 
         private readonly IOrderManager orderManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public CombineOrderGateway(IOrderManager orderManager, ISqlAdapterFactory sqlAdapterFactory)
+        public CombineOrderGateway(IOrderManager orderManager, ISqlAdapterFactory sqlAdapterFactory, IStoreTypeManager storeTypeManager)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.storeTypeManager = storeTypeManager;
             this.orderManager = orderManager;
         }
 
@@ -109,15 +113,19 @@ namespace ShipWorks.Stores.Orders.Combine
             IPredicate orPredicate = OrderFields.StoreID != store.StoreID;
             IPredicate andWherePredicate = ShipmentFields.Processed == true;
 
-            Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, Tuple<IJoinOperand, IPredicate>> getStoreSpecificSearch;
-            if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
+            // If it is a Generic Module based store type use the GenericModule behavior 
+            if (storeTypeManager.IsStoreTypeCodeGenericModuleBased((StoreTypeCode) store.TypeCode))
             {
-                Tuple<IJoinOperand, IPredicate> searchDetails = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
-
-                shipmentsJoin = searchDetails.Item1;
-                orPredicate = searchDetails.Item2;
+                (shipmentsJoin, orPredicate) = GetGenericModuleSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
             }
 
+            // we can override store specific behavior here
+            Func<QueryFactory, IEnumerable<long>, IJoinOperand, IPredicate, (IJoinOperand, IPredicate)> getStoreSpecificSearch;
+            if (storeSpecificSearches.TryGetValue((StoreTypeCode) store.TypeCode, out getStoreSpecificSearch))
+            {
+                (shipmentsJoin, orPredicate) = getStoreSpecificSearch(queryFactory, orderIDs, shipmentsJoin, orPredicate);
+            }
+            
             return queryFactory.Create()
                 .From(shipmentsJoin)
                 .Select(OrderFields.OrderID.Count())
@@ -128,22 +136,22 @@ namespace ShipWorks.Stores.Orders.Combine
         /// <summary>
         /// Get Amazon search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetAmazonSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
+        private static (IJoinOperand newJoin, IPredicate newPredicate) GetAmazonSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.AmazonOrderEntity);
 
             IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName));
             IPredicate newPredicate = predicate
-                .Or(AmazonOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(AmazonOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(AmazonOrderFields.FulfillmentChannel.In((int) AmazonMwsFulfillmentChannel.AFN, AmazonMwsFulfillmentChannel.Unknown));
 
-            return Tuple.Create(newJoin, newPredicate);
+            return (newJoin, newPredicate);
         }
 
         /// <summary>
         /// Get Ebay search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetEbaySearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
+        private static (IJoinOperand newJoin, IPredicate newPredicate) GetEbaySearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.EbayOrderEntity);
 
@@ -156,13 +164,13 @@ namespace ShipWorks.Stores.Orders.Combine
                     .Limit(1)
                     .Contains(EbayOrderFields.RollupEffectiveCheckoutStatus));
 
-            return Tuple.Create(newJoin, newPredicate);
+            return (newJoin, newPredicate);
         }
 
         /// <summary>
         /// Get ChannelAdvisor search pieces
         /// </summary>
-        private static Tuple<IJoinOperand, IPredicate> GetChannelAdvisorSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
+        private static (IJoinOperand newJoin, IPredicate newPredicate) GetChannelAdvisorSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
         {
             string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderEntity);
             string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.ChannelAdvisorOrderItemEntity);
@@ -171,10 +179,30 @@ namespace ShipWorks.Stores.Orders.Combine
                 .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
                 .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
             IPredicate newPredicate = predicate
-                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonMwsIsPrime.Yes, (int) AmazonMwsIsPrime.Unknown))
+                .Or(ChannelAdvisorOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
                 .Or(ChannelAdvisorOrderItemFields.IsFBA == true);
 
-            return Tuple.Create(newJoin, newPredicate);
+            return (newJoin, newPredicate);
+        }
+
+        /// <summary>
+        /// Get GenericModule search pieces
+        /// </summary>
+        private static (IJoinOperand newJoin, IPredicate newPredicate) GetGenericModuleSearch(QueryFactory factory, IEnumerable<long> orderIDs, IJoinOperand joins, IPredicate predicate)
+        {
+            string entityName = EntityTypeProvider.GetEntityTypeName(EntityType.GenericModuleOrderEntity);
+            string itemEntityName = EntityTypeProvider.GetEntityTypeName(EntityType.GenericModuleOrderItemEntity);
+
+            IJoinOperand newJoin = joins.LeftJoin(OrderEntity.Relations.GetSubTypeRelation(entityName))
+                .LeftJoin(OrderEntity.Relations.OrderItemEntityUsingOrderID)
+                .LeftJoin(OrderItemEntity.Relations.GetSubTypeRelation(itemEntityName));
+
+            // Find orders that are prime or unknown OR FBA, these are the ones we dont now want to allow combining for
+            IPredicate newPredicate = predicate
+                .Or(GenericModuleOrderFields.IsPrime.In((int) AmazonIsPrime.Yes, (int) AmazonIsPrime.Unknown))
+                .Or(GenericModuleOrderFields.IsFBA.Equal(true));
+
+            return (newJoin, newPredicate);
         }
     }
 }

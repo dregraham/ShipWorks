@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Filters.Content
@@ -12,22 +9,24 @@ namespace ShipWorks.Filters.Content
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class ConditionStoreTypeAttribute : Attribute
     {
-        StoreTypeCode storeType;
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ConditionStoreTypeAttribute()
+        {
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ConditionStoreTypeAttribute(StoreTypeCode storeType)
         {
-            this.storeType = storeType;
+            StoreType = storeType;
         }
 
         /// <summary>
         /// The StoreType that restricts the filter condition
         /// </summary>
-        public StoreTypeCode StoreType
-        {
-            get { return storeType; }
-        }
+        public StoreTypeCode StoreType { get; }
     }
 }

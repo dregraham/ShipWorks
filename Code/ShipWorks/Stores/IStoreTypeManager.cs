@@ -37,5 +37,10 @@ namespace ShipWorks.Stores
         /// Get the store type from the shipment
         /// </summary>
         StoreType GetType(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Check to see if the given StoreTypeCode is GenericModule based
+        /// </summary>
+        bool IsStoreTypeCodeGenericModuleBased(StoreTypeCode storeTypeCode);
     }
 }

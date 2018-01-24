@@ -1,8 +1,10 @@
 ﻿using System;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Constants;
 using log4net;
+using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -86,16 +88,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the prime status based on the shippingClass
         /// </summary>
-        public static ChannelAdvisorIsAmazonPrime GetIsPrime(string shippingClass, string carrier)
+        public static AmazonIsPrime GetIsPrime(string shippingClass, string carrier)
         {
             if (string.IsNullOrEmpty(shippingClass) || string.IsNullOrEmpty(carrier))
             {
-                return ChannelAdvisorIsAmazonPrime.Unknown;
+                return AmazonIsPrime.Unknown;
             }
 
             return shippingClass.IndexOf("Prime", StringComparison.OrdinalIgnoreCase) >= 0 &&
                    carrier.IndexOf("Amazon", StringComparison.OrdinalIgnoreCase) >= 0 ?
-                ChannelAdvisorIsAmazonPrime.Yes : ChannelAdvisorIsAmazonPrime.No;
+                AmazonIsPrime.Yes : AmazonIsPrime.No;
         }
 
         /// <summary>

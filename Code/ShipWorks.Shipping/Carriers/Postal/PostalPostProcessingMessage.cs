@@ -41,11 +41,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public void Show(IEnumerable<IShipmentEntity> processedShipments)
         {
-            bool showNotificationForShipment = processedShipments.Any(ShowNotifiactionForShipment);
+            IShipmentEntity gapShipment = processedShipments.FirstOrDefault(s => ShowNotifiactionForShipment(s));
 
-            if (showNotificationForShipment && globalPostNotification.AppliesToCurrentUser())
-            {
-                globalPostNotification.Show();
+            if (gapShipment != null && globalPostNotification.AppliesToCurrentUser())
+            { 
+                globalPostNotification.Show(gapShipment);
             }
         }
 
