@@ -32,16 +32,6 @@ namespace ShipWorks.Stores.Tests.Communication
             downloadManager.Verify(m => m.Download("1"));
         }
 
-        [Fact]
-        public async Task Download_DelegatesToMessageHelper_WhenDownloadFails()
-        {
-            mock.Mock<IDownloadManager>().Setup(m => m.Download("1")).ReturnsAsync(Result.FromError("Error"));
-            var messageHelper = mock.Mock<IMessageHelper>();
-            await testObject.Download("1");
-
-            messageHelper.Verify(m => m.ShowError("Error"));
-        }
-
         [Theory]
         [InlineData(null)]
         [InlineData("")]
