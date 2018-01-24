@@ -66,6 +66,11 @@ namespace ShipWorks.Stores.Orders.Split
                 return Result.FromError("Walmart orders cannot be split");
             }
 
+            if (store.StoreTypeCode == StoreTypeCode.Groupon)
+            {
+                return Result.FromError("Groupon orders cannot be split");
+            }
+
             return orderSplitGateway.CanSplit(firstId) == false ?
                 Result.FromError("Selected order cannot be split as it has a processed shipment") :
                 Result.FromSuccess();
