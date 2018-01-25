@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Communication
         public async Task Download_ShowsPopup_WhenGeneralExceptionFromDownloader()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
-            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new Exception() });
+            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new DownloadException() });
 
             await testObject.Download("blah");
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Communication
         public async Task Download_ShowsPopup_WhenOnDemandDownloadExceptionFromDownloader_AndShowPopupTrue()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
-            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new OnDemandDownloadException(true, "msg", new Exception()) });
+            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new OnDemandDownloadException(true, "msg", new DownloadException()) });
 
             await testObject.Download("blah");
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Communication
         public async Task Download_NoPopup_WhenOnDemandDownloadExceptionFromDownloader_AndShowPopupFalse()
         {
             var downloadManager = mock.Mock<IDownloadManager>();
-            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new OnDemandDownloadException(false, "msg", new Exception()) });
+            downloadManager.Setup(m => m.Download(AnyString)).ReturnsAsync(new[] { new OnDemandDownloadException(false, "msg", new DownloadException()) });
 
             await testObject.Download("blah");
 
