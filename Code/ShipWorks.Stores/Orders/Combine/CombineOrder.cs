@@ -91,8 +91,7 @@ namespace ShipWorks.Stores.Orders.Combine
             string newOrderNumber, IProgressUpdater progress)
         {
             GenericResult<long> result;
-            var order = new OrderEntity();
-            var originalCombineStatus = order.CombineSplitStatus;
+            CombineSplitStatusType originalCombineStatus = orders.First(o => o.OrderID == survivingOrderID).CombineSplitStatus;
 
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Combined"))
             {
@@ -126,7 +125,7 @@ namespace ShipWorks.Stores.Orders.Combine
                 IOrderEntity order = orders.First();
                 trackedDurationEvent.AddProperty("Orders.Combined.Result", result ? "Success" : "Failed");
                 trackedDurationEvent.AddProperty("Orders.Combined.Quantity", orders.Count().ToString());
-                trackedDurationEvent.AddProperty("OrderManagement.Orders.Combine.PreCombineStatus", EnumHelper.GetDescription(originalCombineStatus));
+                trackedDurationEvent.AddProperty("Orders.Combine.PreCombineStatus", EnumHelper.GetDescription(originalCombineStatus));
                 trackedDurationEvent.AddProperty("Orders.Combined.StoreType", storeTypeManager.GetType(order.StoreID).StoreTypeName);
                 trackedDurationEvent.AddProperty("Orders.Combined.StoreId", order.StoreID.ToString());
                 trackedDurationEvent.AddProperty("Orders.Combined.Strategy", "Standard");
