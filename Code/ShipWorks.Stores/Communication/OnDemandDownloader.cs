@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Communication
             {
                 try
                 {
-                    var exceptions = await downloadManager.Download(orderNumber.Trim()).ConfigureAwait(false);
+                    IEnumerable<Exception> exceptions = await downloadManager.Download(orderNumber.Trim()).ConfigureAwait(false);
                     ShowPopup(exceptions, orderNumber);
                 }
                 catch (SqlAppResourceLockException)
