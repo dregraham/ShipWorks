@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Communication
                 }
                 catch (SqlAppResourceLockException)
                 {
-                    messageHelper.ShowWarning("Someone else just scanned this order. Please scan again.");
+                    messageHelper.ShowWarning("Someone else just searched for this order. Please scan again.");
                 }
             }
         }

@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Tests.Communication
 
             await testObject.Download("blah");
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowWarning("Someone else just scanned this order. Please scan again."), Times.Once);
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowWarning("Someone else just searched for this order. Please scan again."), Times.Once);
         }
 
         [Fact]
