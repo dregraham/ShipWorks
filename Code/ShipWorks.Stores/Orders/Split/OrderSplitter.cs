@@ -7,6 +7,7 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -32,6 +33,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitAudit splitOrderAudit;
         private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
         private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
+        private readonly IStoreTypeManager storeTypeManager;
 
         /// <summary>
         /// Constructor
@@ -41,7 +43,8 @@ namespace ShipWorks.Stores.Orders.Split
             IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
             IOrderSplitAudit splitOrderAudit,
-            IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
+            IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter,
+            IStoreTypeManager storeTypeManager
             )
         {
             this.orderSplitGateway = orderSplitGateway;
@@ -49,6 +52,7 @@ namespace ShipWorks.Stores.Orders.Split
             this.orderDetailSplitters = orderDetailSplitters;
             this.splitOrderAudit = splitOrderAudit;
             this.storeSpecificOrderSplitter = storeSpecificOrderSplitter;
+            this.storeTypeManager = storeTypeManager;
         }
 
         /// <summary>
@@ -56,17 +60,46 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
         {
-            return await orderSplitGateway
-                .LoadOrder(definition.Order.OrderID)
-                .Map(order => PerformSplit(order, definition))
-                .Bind(x => SaveOrders(x.original, x.split, progressProvider))
-                .Bind(x => AuditOrders(x.original, x.split))
-                .Map(newOrder => new Dictionary<long, string>
-                {
-                    { definition.Order.OrderID, definition.Order.OrderNumberComplete },
-                    { newOrder.split.OrderID, newOrder.split.OrderNumberComplete}
-                })
-                .ConfigureAwait(false);
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Split"))
+            {
+                var originalSplitStatus = definition.Order.CombineSplitStatus;
+
+                var result = await orderSplitGateway
+                     .LoadOrder(definition.Order.OrderID)
+                     .Map(order => PerformSplit(order, definition))
+                     .Bind(x => SaveOrders(x.original, x.split, progressProvider))
+                     .Bind(x => AuditOrders(x.original, x.split))
+                     .Map(newOrder => new Dictionary<long, string>
+                     {
+                        {definition.Order.OrderID, definition.Order.OrderNumberComplete},
+                        {newOrder.split.OrderID, newOrder.split.OrderNumberComplete}
+                     })
+                     .ConfigureAwait(false);
+
+                AddTelemetryProperties(trackedDurationEvent, originalSplitStatus, definition.Order, definition.ToResult().Success);
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Add telemetry properties
+        /// </summary>
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, CombineSplitStatusType originalSplitStatus, OrderEntity order, bool result)
+        {
+            try
+            {
+                trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
+                trackedDurationEvent.AddProperty("OrderManagement.Orders.Split.PreSplitStatus", EnumHelper.GetDescription(originalSplitStatus));
+                trackedDurationEvent.AddProperty("Orders.Split.StoreType", storeTypeManager.GetType(order.StoreID).StoreTypeName);
+                trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
+                trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
+                trackedDurationEvent.AddProperty("Orders.Split.Strategy", "Standard");
+            }
+            catch
+            {
+                // Just continue...we don't want to stop the combine if telemetry has an issue.
+            }
         }
 
         /// <summary>
