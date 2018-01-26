@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Download the order with matching order number for the store
         /// </summary>
-        protected override async Task Download(string orderNumber, TrackedDurationEvent con)
+        protected override async Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent)
         {
             try
             {

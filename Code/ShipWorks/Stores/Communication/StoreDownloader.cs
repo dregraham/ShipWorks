@@ -1203,7 +1203,10 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// store specific download by order number
         /// </summary>
-        protected abstract Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent);
+        protected virtual Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent)
+        {
+            return Task.CompletedTask;
+        }
 
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
