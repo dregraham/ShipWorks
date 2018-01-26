@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split.Actions;
 using ShipWorks.Stores.Orders.Split.Errors;
+using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -55,40 +56,40 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public async Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
+        public Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
         {
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Split"))
-            {
-                CombineSplitStatusType originalSplitStatus = definition.Order.CombineSplitStatus;
+            return UsingAsync(
+                new TrackedDurationEvent("OrderManagement.Orders.Split"),
+                evt => SplitInternal(definition, progressProvider)
+                    .Do(_ => AddTelemetryProperties(evt, definition, true),
+                        _ => AddTelemetryProperties(evt, definition, false)));
+        }
 
-                Dictionary<long, string> result = await orderSplitGateway
-                     .LoadOrder(definition.Order.OrderID)
-                     .Map(order => PerformSplit(order, definition))
-                     .Bind(x => SaveOrders(x.original, x.split, progressProvider))
-                     .Bind(x => AuditOrders(x.original, x.split))
-                     .Map(newOrder => new Dictionary<long, string>
-                     {
-                        {definition.Order.OrderID, definition.Order.OrderNumberComplete},
-                        {newOrder.split.OrderID, newOrder.split.OrderNumberComplete}
-                     })
-                     .ConfigureAwait(false);
-
-                bool success = result.Count == 2 && result.Keys.ToArray()[1] > 0;
-                AddTelemetryProperties(trackedDurationEvent, originalSplitStatus, definition.Order, success);
-
-                return result;
-            }
+        /// <summary>
+        /// Split an order based on the definition
+        /// </summary>
+        private Task<IDictionary<long, string>> SplitInternal(OrderSplitDefinition definition, IProgressReporter progressProvider)
+        {
+            return orderSplitGateway
+                .LoadOrder(definition.Order.OrderID)
+                .Map(order => PerformSplit(order, definition))
+                .Bind(x => SaveOrders(x.original, x.split, progressProvider))
+                .Bind(x => AuditOrders(x.original, x.split))
+                .Map(newOrder => new[] { definition.Order, newOrder.split }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
+                .Map(x => x as IDictionary<long, string>);
         }
 
         /// <summary>
         /// Add telemetry properties
         /// </summary>
-        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, CombineSplitStatusType originalSplitStatus, OrderEntity order, bool result)
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, OrderSplitDefinition definition, bool result)
         {
+            var order = definition?.Order;
+
             try
             {
                 trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
-                trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(originalSplitStatus));
+                trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(order.CombineSplitStatus));
                 trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
                 trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
                 trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
