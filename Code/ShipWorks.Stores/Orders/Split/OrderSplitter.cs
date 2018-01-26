@@ -84,15 +84,18 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, OrderSplitDefinition definition, bool result)
         {
-            var order = definition?.Order;
-
             try
             {
-                trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
-                trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(order.CombineSplitStatus));
-                trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
-                trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
-                trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
+                OrderEntity order = definition?.Order;
+
+                if (order != null)
+                {
+                    trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
+                    trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(order.CombineSplitStatus));
+                    trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
+                    trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
+                    trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
+                }
             }
             catch
             {
