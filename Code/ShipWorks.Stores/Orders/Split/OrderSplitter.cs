@@ -59,9 +59,9 @@ namespace ShipWorks.Stores.Orders.Split
         {
             using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("OrderManagement.Orders.Split"))
             {
-                var originalSplitStatus = definition.Order.CombineSplitStatus;
+                CombineSplitStatusType originalSplitStatus = definition.Order.CombineSplitStatus;
 
-                var result = await orderSplitGateway
+                Dictionary<long, string> result = await orderSplitGateway
                      .LoadOrder(definition.Order.OrderID)
                      .Map(order => PerformSplit(order, definition))
                      .Bind(x => SaveOrders(x.original, x.split, progressProvider))
@@ -73,7 +73,8 @@ namespace ShipWorks.Stores.Orders.Split
                      })
                      .ConfigureAwait(false);
 
-                AddTelemetryProperties(trackedDurationEvent, originalSplitStatus, definition.Order, definition.ToResult().Success);
+                bool success = result.Count == 2 && result.Keys.ToArray()[1] > 0;
+                AddTelemetryProperties(trackedDurationEvent, originalSplitStatus, definition.Order, success);
 
                 return result;
             }
@@ -88,10 +89,9 @@ namespace ShipWorks.Stores.Orders.Split
             {
                 trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
                 trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(originalSplitStatus));
-                trackedDurationEvent.AddProperty("Orders.Split.StoreType", orderSplitGateway.GetStoreTypeName(order.StoreID));
+                trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
                 trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
                 trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
-                trackedDurationEvent.AddProperty("Orders.Split.Strategy", "Standard");
             }
             catch
             {

@@ -13,8 +13,6 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         Task<OrderEntity> LoadOrder(long orderID);
 
-        string GetStoreTypeName(long storeID);
-
         /// <summary>
         /// Get the next order ID that should be used for a split order
         /// </summary>
