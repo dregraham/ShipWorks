@@ -316,11 +316,7 @@ namespace ShipWorks.ApplicationCore
                     }
                 }
             }
-            catch (IOException ex)
-            {
-                log.Error("Failed during temp cleanup.", ex);
-            }
-            catch (UnauthorizedAccessException ex)
+            catch(Exception ex) when (ex is ArgumentOutOfRangeException || ex is IOException || ex is UnauthorizedAccessException)
             {
                 log.Error("Failed during temp cleanup.", ex);
             }

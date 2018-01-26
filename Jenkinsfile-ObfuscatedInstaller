@@ -1,0 +1,18 @@
+def BUILD_FOLDER = env.BRANCH_NAME.replaceAll('/', '-').replaceAll(' ', '-')
+
+pipeline {
+	agent {
+		node {
+			label 'windows'
+			customWorkspace "c:/jenkins-builds/SOI_${BUILD_FOLDER}"
+		}
+	}
+	stages {
+		stage('Build') {
+			steps {
+				bat 'bundle exec rake build:public_installer[0.0.0]'
+				archiveArtifacts artifacts: 'Artifacts/Distribute/*.*,Artifacts/Logs/*.*', fingerprint: true
+			}
+		}
+	}
+}
