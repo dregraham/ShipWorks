@@ -239,23 +239,42 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new DownloadException("Order number is empty in your ODBC data source.");
             }
 
-            string orderNumber = odbcFieldMapEntry.ShipWorksField.Value.ToString();
-            // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
-            // so in that case, we leave a single 0.
-            orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
-
-            GenericResult<OrderEntity> result = await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumber)).ConfigureAwait(false);
-            if (result.Failure)
+            string orderNumberToUse = odbcFieldMapEntry.ShipWorksField.Value.ToString();
+            GenericResult<OrderEntity> orderResultToUse =
+                await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(orderNumberToUse)).ConfigureAwait(false);
+            if (orderResultToUse.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
-                return result;
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumberToUse, orderResultToUse.Message);
+                return orderResultToUse;
             }
 
-            OrderEntity orderEntity = result.Value;
+            GenericResult<OrderEntity> resultWithTrimmedOrderNumber;
+            
+            if (orderResultToUse.Value.IsNew)
+            {
+
+                // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
+                // so in that case, we leave a single 0.
+                string trimmedOrderNumber = orderNumberToUse.All(n => n == '0') ? "0" : orderNumberToUse.TrimStart('0');
+
+                resultWithTrimmedOrderNumber = await InstantiateOrder(odbcStoreType.CreateOrderIdentifier(trimmedOrderNumber)).ConfigureAwait(false);
+                if (resultWithTrimmedOrderNumber.Failure)
+                {
+                    log.InfoFormat("Skipping order '{0}': {1}.", trimmedOrderNumber, resultWithTrimmedOrderNumber.Message);
+                    return resultWithTrimmedOrderNumber;
+                }
+                if (!resultWithTrimmedOrderNumber.Value.IsNew)
+                {
+                    orderResultToUse = resultWithTrimmedOrderNumber;
+                    orderNumberToUse = trimmedOrderNumber;
+                }
+            }
+           
+            OrderEntity orderEntity = orderResultToUse.Value;
 
             orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder);
 
-            orderEntity.ChangeOrderNumber(orderNumber);
+            orderEntity.ChangeOrderNumber(orderNumberToUse);
 
             return GenericResult.FromSuccess(orderEntity);
         }

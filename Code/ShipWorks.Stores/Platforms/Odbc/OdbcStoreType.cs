@@ -156,7 +156,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Create the download settings control
         /// </summary>
-        /// <returns></returns>
         public override IDownloadSettingsControl CreateDownloadSettingsControl()
         {
             if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
