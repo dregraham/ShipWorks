@@ -65,6 +65,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 if (order == null)
                 {
                     IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                    AddTelemetryData(trackedDurationEvent, downloadCommand);
                     await Download(downloadCommand).ConfigureAwait(false);
                 }
             }
@@ -102,7 +103,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             try
             {
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
-                AddTelemetryData(trackedDurationEvent);
+                AddTelemetryData(trackedDurationEvent, downloadCommand);
 
                 await Download(downloadCommand).ConfigureAwait(false);
             }
@@ -112,9 +113,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
         }
 
-        private static void AddTelemetryData(TrackedDurationEvent trackedDurationEvent)
+        /// <summary>
+        /// Add telemetry data to the TrackedDurationEvent
+        /// </summary>
+        private void AddTelemetryData(TrackedDurationEvent trackedDurationEvent, IOdbcCommand downloadCommand)
         {
             trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
+            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) store.ImportStrategy));
         }
 
         /// <summary>
