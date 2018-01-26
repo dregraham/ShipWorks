@@ -56,11 +56,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Download the order with matching order number for the store
         /// </summary>
-        public override async Task Download(string orderNumber, long downloadID, DbConnection con)
+        protected override async Task Download(string orderNumber, TrackedDurationEvent con)
         {
-            Progress = new ProgressItem("Download single order");
-            downloadLogID = downloadID;
-            connection = con;
             try
             {
                 // Try to find an existing order
@@ -105,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             try
             {
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
-                trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
+                AddTelemetryData(trackedDurationEvent);
 
                 await Download(downloadCommand).ConfigureAwait(false);
             }
@@ -113,6 +110,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        private static void AddTelemetryData(TrackedDurationEvent trackedDurationEvent)
+        {
+            trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
         }
 
         /// <summary>

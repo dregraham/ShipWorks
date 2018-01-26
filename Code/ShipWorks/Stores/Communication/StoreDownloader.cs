@@ -33,6 +33,7 @@ using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Stores.Communication
 {
@@ -1183,10 +1184,26 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download the order with matching order number for the store
         /// </summary>
-        public virtual Task Download(string orderNumber, long downloadID, DbConnection con)
+        public async virtual Task Download(string orderNumber, long downloadID, DbConnection con)
         {
-            return Task.CompletedTask;
+            Progress = new ProgressItem("Download single order");
+            downloadLogID = downloadID;
+            connection = con;
+            
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                await Download(orderNumber, trackedDurationEvent).ConfigureAwait(false);
+
+                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+            }
         }
+
+        /// <summary>
+        /// store specific download by order number
+        /// </summary>
+        protected abstract Task Download(string orderNumber, TrackedDurationEvent trackedDurationEvent);
 
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
