@@ -25,6 +25,8 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly ISecurityContext securityContext;
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IStoreManager storeManager;
+        private readonly IEnumerable<StoreTypeCode> storeTypeCodesNotAllowed = 
+            new[] {StoreTypeCode.Walmart, StoreTypeCode.Groupon, StoreTypeCode.NeweggMarketplace};
 
         /// <summary>
         /// Constructor
@@ -61,14 +63,10 @@ namespace ShipWorks.Stores.Orders.Split
             }
 
             var store = storeManager.GetRelatedStore(firstId);
-            if (store.StoreTypeCode == StoreTypeCode.Walmart)
-            {
-                return Result.FromError("Walmart orders cannot be split");
-            }
 
-            if (store.StoreTypeCode == StoreTypeCode.Groupon)
+            if (storeTypeCodesNotAllowed.Contains(store.StoreTypeCode))
             {
-                return Result.FromError("Groupon orders cannot be split");
+                return Result.FromError($"{ EnumHelper.GetDescription(store.StoreTypeCode)} orders cannot be split");
             }
 
             return orderSplitGateway.CanSplit(firstId) == false ?
