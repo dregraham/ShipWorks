@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -22,14 +21,16 @@ namespace ShipWorks.Stores.Orders.Split
     public class OrderSplitGateway : IOrderSplitGateway
     {
         private readonly IOrderManager orderManager;
+        private readonly IStoreTypeManager storeTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitGateway(IOrderManager orderManager, ISqlAdapterFactory sqlAdapterFactory)
+        public OrderSplitGateway(IOrderManager orderManager, IStoreTypeManager storeTypeManager, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.orderManager = orderManager;
+            this.storeTypeManager = storeTypeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
@@ -47,6 +48,11 @@ namespace ShipWorks.Stores.Orders.Split
                         Task.FromResult(x))
                     .ConfigureAwait(false);
             }
+        }
+
+        public string GetStoreTypeName(long storeID)
+        {
+            return storeTypeManager.GetType(storeID).StoreTypeName;
         }
 
         /// <summary>
