@@ -32,7 +32,6 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Common.Threading;
 
 namespace ShipWorks.Stores.Communication
@@ -167,10 +166,18 @@ namespace ShipWorks.Stores.Communication
             {
                 await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
-                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
-                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+                CollectDownloadTelemetry(trackedDurationEvent);
             }
+        }
+
+        /// <summary>
+        /// Collect the download telemetry
+        /// </summary>
+        private void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
+        {
+            trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
+            trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
+            trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
         }
 
         /// <summary>
@@ -1194,9 +1201,7 @@ namespace ShipWorks.Stores.Communication
             {
                 await Download(orderNumber, trackedDurationEvent).ConfigureAwait(false);
 
-                trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
-                trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
-                trackedDurationEvent.AddMetric("Orders.New", QuantityNew);
+                CollectDownloadTelemetry(trackedDurationEvent);
             }
         }
 
