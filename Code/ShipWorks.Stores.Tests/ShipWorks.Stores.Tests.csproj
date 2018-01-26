@@ -22,6 +22,9 @@
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Platforms\OrderSearchPrefetchPathTest.cs" />
+  </ItemGroup>
 
 
   <ItemGroup>

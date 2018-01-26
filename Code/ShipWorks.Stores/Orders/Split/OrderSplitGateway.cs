@@ -94,7 +94,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Create the pre-fetch path used to load an order
         /// </summary>
-        private static readonly Lazy<IEnumerable<IPrefetchPathElement2>> OrderSplitPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
+        public static readonly Lazy<IEnumerable<IPrefetchPathElement2>> OrderSplitPrefetchPath = new Lazy<IEnumerable<IPrefetchPathElement2>>(() =>
         {
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>();
 
