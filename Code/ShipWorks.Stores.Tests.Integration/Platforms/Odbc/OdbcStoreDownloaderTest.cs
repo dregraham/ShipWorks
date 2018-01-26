@@ -20,13 +20,14 @@ using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
     [Trait("Store", "Odbc")]
-    public class OdbcRestDownloaderTest : IDisposable
+    public class OdbcStoreDownloaderTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly DataContext context;
@@ -36,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         private OdbcRecord odbcRecord;
         private readonly OdbcStoreEntity store;
 
-        public OdbcRestDownloaderTest(DatabaseFixture db)
+        public OdbcStoreDownloaderTest(DatabaseFixture db)
         {
             DateTime utcNow = DateTime.UtcNow;
 
@@ -130,6 +131,50 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         }
 
         [Fact]
+        public async Task DownloadByOrderNumber_DownloadsNewOrder_WhenOrderNotFound()
+        {
+            odbcRecord = GetOdbcRecord("1", "Kevin");
+
+            Mock<IOdbcCommand> odbcCommand = mock.CreateMock<IOdbcCommand>();
+            odbcCommand.Setup(c => c.Execute())
+                .Returns(() => new[] { odbcRecord });
+
+            mock.Mock<IOdbcDownloadCommandFactory>()
+                .Setup(f => f.CreateDownloadCommand(It.IsAny<OdbcStoreEntity>(), AnyString, It.IsAny<IOdbcFieldMap>()))
+                .Returns(odbcCommand.Object);
+
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            await testObject.Download("1", downloadLogID, dbConnection);
+
+            odbcCommand.Verify(v => v.Execute(), Times.Once);
+        }
+
+        [Fact]
+        public async Task DownloadByOrderNumber_DoesNotDownloadExistingOrder()
+        {
+            odbcRecord = GetOdbcRecord("1", "Kevin");
+
+            Create.Order<OrderEntity>(store, context.Customer)
+                .Set(o => o.OrderNumber = 1)
+                .Save();
+
+            Mock<IOdbcCommand> odbcCommand = mock.CreateMock<IOdbcCommand>();
+            odbcCommand.Setup(c => c.Execute())
+                .Returns(() => new[] { odbcRecord });
+
+            mock.Mock<IOdbcDownloadCommandFactory>()
+                .Setup(f => f.CreateDownloadCommand(It.IsAny<OdbcStoreEntity>(), AnyString, It.IsAny<IOdbcFieldMap>()))
+                .Returns(odbcCommand.Object);
+
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+            await testObject.Download("1", downloadLogID, dbConnection);
+
+            odbcCommand.Verify(v => v.Execute(), Times.Never);
+        }
+
+        [Fact]
         public async Task Download_OrderNumberAndOrderNumberCompleteAreSet_WhenSingleOrderDownloaded()
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
@@ -147,6 +192,18 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             Assert.Equal("1", orders.Single().OrderNumberComplete);
             Assert.Equal("Kevin", orders.Single().ShipFirstName);
             Assert.Equal(1, orders.Single().OrderNumber);
+        }
+
+        [Fact]
+        public async Task Download_ThrowsDownloadException_WhenStoreImportStrategyIsOnDemand()
+        {
+            odbcRecord = GetOdbcRecord("001", "Kevin");
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            
+            var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
+
+            var exception = await Assert.ThrowsAsync<DownloadException>(() => testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection));
+            Assert.StartsWith("The store, Odbc Store, is set to download orders on order search only.", exception.Message);
         }
 
         [Fact]

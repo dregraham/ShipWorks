@@ -184,6 +184,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communication\OnDemandDownloaderTest.cs" />
+    <Compile Include="Communication\SingleScanOnDemandDownloaderTest.cs" />
     <Compile Include="Connection\DownloadStartingPointTest.cs" />
     <Compile Include="Content\CombineOrderAuditTest.cs" />
     <Compile Include="Content\CombineOrdersGatewayTest.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="OrderNoteTest.cs" />
     <Compile Include="Platforms\BigCommerce\BigCommerceOrderIdentifierTest.cs" />
     <Compile Include="Platforms\BuyDotCom\Actions\BuyDotComShipmentUploadTaskTest.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorDownloaderFactoryTest.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Content\ChannelAdvisorQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\ClickCartPro\ClickCartProStoreTypeTest.cs" />
     <Compile Include="Platforms\CommerceInterface\Content\CommerceInterfaceQuickSearchSqlTest.cs" />
@@ -200,6 +203,7 @@
     <Compile Include="Platforms\Groupon\GrouponStoreTypeTest.cs" />
     <Compile Include="Platforms\LemonStand\Content\LemonStandQuickSearchSqlTest.cs" />
     <Compile Include="Platforms\Magento\MagentoOrderIdentifierTest.cs" />
+    <Compile Include="Platforms\Odbc\Download\OdbcOrderNumberDownloadQueryTest.cs" />
     <Compile Include="Platforms\OrderNumberIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonOrderIdentifierTest.cs" />
     <Compile Include="Platforms\Amazon\AmazonStoreTypeTest.cs" />

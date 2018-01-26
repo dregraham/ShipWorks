@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
@@ -57,6 +58,19 @@ namespace ShipWorks.Stores.Tests.Platforms.MarketplaceAdvisor
             testObject.Download(progress, 1, dbConnection);
             mock.Mock<IMarketplaceAdvisorOmsDownloader>()
                 .Verify(x => x.Download(progress, 1, dbConnection));
+        }
+
+        [Fact]
+        public void DownloadWithOrderNumber_ReturnsCompletedTask()
+        {
+            StoreEntity store = new MarketplaceAdvisorStoreEntity();
+            var testObject = mock.Create<MarketplaceAdvisorDownloaderFactory>(TypedParameter.From(store));
+
+            var dbConnection = mock.Mock<DbConnection>().Object;
+
+            var task = testObject.Download("blah", 1, dbConnection);
+
+            Assert.Equal(Task.CompletedTask, task);
         }
 
         [SuppressMessage("SonarLint", "S1481: Unused local variables should be removed",

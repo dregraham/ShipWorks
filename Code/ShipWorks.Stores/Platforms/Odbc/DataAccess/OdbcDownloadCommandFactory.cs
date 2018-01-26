@@ -46,6 +46,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         }
 
         /// <summary>
+        /// Create a download command using orderNumber
+        /// </summary>
+        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, string orderNumber, IOdbcFieldMap odbcFieldMap)
+        {
+            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            IOdbcQuery orderNumberQuery = new OdbcOrderNumberDownloadQuery(downloadQuery, orderNumber, odbcFieldMap, dbProviderFactory, dataSource);
+
+            return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, orderNumberQuery);
+        }
+
+        /// <summary>
         /// Creates the download query used to retrieve orders.
         /// </summary>
         private static IOdbcQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)

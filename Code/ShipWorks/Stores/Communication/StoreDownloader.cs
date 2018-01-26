@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Communication
         private readonly IConfigurationEntity config;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderUtility orderUtility;
-        private long downloadLogID;
+        protected long downloadLogID;
         protected DbConnection connection;
         private string orderStatusText = string.Empty;
         private string itemStatusText = string.Empty;
@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// The progress reporting interface used to report progress and check cancellation.
         /// </summary>
-        public IProgressReporter Progress { get; private set; }
+        public IProgressReporter Progress { get; protected set; }
 
         /// <summary>
         /// How many orders have been saved so far.  Utility function intended for progress calculation convenience.
@@ -1180,6 +1180,14 @@ namespace ShipWorks.Stores.Communication
             return adapter.SaveEntityAsync(history);
         }
 
+        /// <summary>
+        /// Download the order with matching order number for the store
+        /// </summary>
+        public virtual Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
+
         #region Order Element Factory
         // Explicit implementation of the IOrderElementFactory, this allows dependencies to create order elements without
         // exposing the whole downloader to the dependency
@@ -1230,7 +1238,6 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
-
         #endregion
     }
 }

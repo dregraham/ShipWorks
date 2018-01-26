@@ -158,6 +158,9 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="Communication\DownloadStartingPoint.cs" />
+    <Compile Include="Communication\OnDemandDownloader.cs" />
+    <Compile Include="Communication\OnDemandDownloaderFactory.cs" />
+    <Compile Include="Communication\SingleScanOnDemandDownloader.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderMergeChargesAction.cs" />
     <Compile Include="Content\CombineOrderActions\CombineOrderMoveValidatedAddressesAction.cs" />
     <Compile Include="Content\CombineOrderAudit.cs" />
@@ -497,11 +500,13 @@
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcDownloadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\CoreExtensions\Actions\OdbcShipmentUploadTask.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\IOdbcUploadCommandFactory.cs" />
+    <Compile Include="Platforms\Odbc\DataAccess\OdbcOrderNumberDownloadQuery.cs" />
     <Compile Include="Platforms\Odbc\DataAccess\OdbcUploadCommandFactory.cs" />
     <Compile Include="Platforms\Odbc\DataSource\DsnInfo.cs" />
     <Compile Include="Platforms\Odbc\Download\IOdbcDownloaderExtraDependencies.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcDownloaderExtraDependencies.cs" />
     <Compile Include="Platforms\Odbc\Download\OdbcImportOrderItemStrategy.cs" />
+    <Compile Include="Platforms\Odbc\Download\OnDemandDownloadException.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcImportSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcSettingsFile.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcImportSettingsFile.cs" />

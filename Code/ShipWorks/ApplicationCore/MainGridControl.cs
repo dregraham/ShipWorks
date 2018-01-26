@@ -31,7 +31,7 @@ namespace ShipWorks.ApplicationCore
     /// <summary>
     /// The primary grid control which contains the search header and the grid
     /// </summary>
-    public partial class MainGridControl : UserControl
+    public partial class MainGridControl : UserControl, IMainGridControl
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(MainGridControl));
@@ -997,7 +997,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the normalized text of the basic search box.
         /// </summary>
-        private string GetBasicSearchText()
+        public string GetBasicSearchText()
         {
             return searchBox.Text.Trim().Trim(',');
         }

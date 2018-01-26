@@ -155,5 +155,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
             Assert.IsAssignableFrom<OnlineUpdateShipmentUpdateActionControl>(testObject.CreateAddStoreWizardOnlineUpdateActionControl());
         }
+
+        [Fact]
+        public void IsOnDemandDownloadEnabled_ReturnsFalse_WhenImportStrategyIsNotOnDemand()
+        {
+            store.ImportStrategy = (int) OdbcImportStrategy.All;
+
+            var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
+
+            Assert.False(testObject.IsOnDemandDownloadEnabled);
+        }
+
+        [Fact]
+        public void IsOnDemandDownloadEnabled_ReturnsTrue_WhenImportStrategyIsOnDemand()
+        {
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+
+            var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
+
+            Assert.True(testObject.IsOnDemandDownloadEnabled);
+        }
     }
 }

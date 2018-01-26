@@ -45,6 +45,11 @@ namespace Interapptive.Shared.UI
         DialogResult ShowQuestion(string text);
 
         /// <summary>
+        /// Show a popup message
+        /// </summary>
+        void ShowPopup(string message);
+
+        /// <summary>
         /// Show a dialog and get the results
         /// </summary>
         DialogResult ShowDialog(Func<IForm> createDialog);

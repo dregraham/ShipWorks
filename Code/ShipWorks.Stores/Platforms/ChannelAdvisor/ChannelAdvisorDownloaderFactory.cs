@@ -44,5 +44,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
             downloader.Download(progressItem, downloadID, con);
+
+        /// <summary>
+        /// ChannelAdvisor does not support downloading by OrderNumber
+        /// </summary>
+        public Task Download(string orderNumber, long downloadID, DbConnection con)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

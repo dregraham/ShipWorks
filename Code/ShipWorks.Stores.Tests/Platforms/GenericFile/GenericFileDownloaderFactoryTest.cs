@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
 using Autofac.Extras.Moq;
@@ -82,6 +83,19 @@ namespace ShipWorks.Stores.Tests.Platforms.GenericFile
             testObject.Download(progress, 1, dbConnection);
             mock.Mock<IGenericFileXmlDownloader>()
                 .Verify(x => x.Download(progress, 1, dbConnection));
+        }
+
+        [Fact]
+        public void DownloadWithOrderNumber_ReturnsCompletedTask()
+        {
+            StoreEntity store = new GenericFileStoreEntity { FileFormat = (int) GenericFileFormat.Xml };
+            var testObject = mock.Create<GenericFileDownloaderFactory>(TypedParameter.From(store));
+
+            var dbConnection = mock.Mock<DbConnection>().Object;
+
+            var task = testObject.Download("order", 1, dbConnection);
+
+            Assert.Equal(Task.CompletedTask, task);
         }
 
         [SuppressMessage("SonarLint", "S1481: Unused local variables should be removed",

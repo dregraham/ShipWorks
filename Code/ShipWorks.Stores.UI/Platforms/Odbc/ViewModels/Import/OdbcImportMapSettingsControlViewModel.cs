@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private bool columnSourceIsTable = true;
-        private bool downloadStrategyIsLastModified = true;
+        private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
         private readonly Func<string, IDialog> dialogFactory;
         private readonly IOdbcSampleDataCommand sampleDataCommand;
@@ -83,13 +83,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         }
 
         /// <summary>
-        /// Whether the download strategy is last modified.
+        /// The stores import strategy
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool DownloadStrategyIsLastModified
+        public OdbcImportStrategy ImportStrategy
         {
-            get { return downloadStrategyIsLastModified; }
-            set { Handler.Set(nameof(DownloadStrategyIsLastModified), ref downloadStrategyIsLastModified, value); }
+            get { return importStrategy; }
+            set { Handler.Set(nameof(ImportStrategy), ref importStrategy, value); }
         }
 
         /// <summary>
@@ -114,8 +114,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 GenericResult<JObject> openResults = importSettingsFile.Open(reader);
                 if (openResults.Success)
                 {
-                    DownloadStrategyIsLastModified = importSettingsFile.OdbcImportStrategy ==
-                                                     OdbcImportStrategy.ByModifiedTime;
+                    ImportStrategy = importSettingsFile.OdbcImportStrategy;
+
                     ColumnSourceIsTable = importSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
                     LoadAndSetColumnSource(importSettingsFile.ColumnSource);
                     MapName = importSettingsFile.OdbcFieldMap.Name;
@@ -135,9 +135,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public override void SaveMapSettings(OdbcStoreEntity store)
         {
-            store.ImportStrategy = DownloadStrategyIsLastModified ?
-                (int) OdbcImportStrategy.ByModifiedTime :
-                (int) OdbcImportStrategy.All;
+            store.ImportStrategy = (int) ImportStrategy;
 
             store.ImportColumnSourceType = ColumnSourceIsTable ?
                 (int) OdbcColumnSourceType.Table :
@@ -185,8 +183,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             fieldMap.Load(store.ImportMap);
             MapName = fieldMap.Name;
 
-            DownloadStrategyIsLastModified = store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime;
-
+            ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
+            
             ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
 
             importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
