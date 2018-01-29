@@ -8174,9 +8174,6 @@
     <EmbeddedResource Include="Stores\Management\DownloadSettingsControl.resx">
       <DependentUpon>DownloadSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAmazonSettingsControl.resx">
-      <DependentUpon>ChannelAdvisorAmazonSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShippingSettingsControl.resx">
       <DependentUpon>AmazonShippingSettingsControl.cs</DependentUpon>
     </EmbeddedResource>

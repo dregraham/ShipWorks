@@ -24,8 +24,8 @@
         <Storyboard x:Key="storyBoard" TargetProperty="Opacity" TargetName="This" Completed="OnStoryboardCompleted">
             <DoubleAnimationUsingKeyFrames>
                 <DiscreteDoubleKeyFrame Value=".6" KeyTime="0" />
-                <DiscreteDoubleKeyFrame Value=".6" KeyTime="0:0:2" />
-                <EasingDoubleKeyFrame Value="0" KeyTime="0:0:2.3">
+                <DiscreteDoubleKeyFrame Value=".6" KeyTime="0:0:4" />
+                <EasingDoubleKeyFrame Value="0" KeyTime="0:0:4.3">
                     <EasingDoubleKeyFrame.EasingFunction>
                         <QuadraticEase EasingMode="EaseIn"></QuadraticEase>
                     </EasingDoubleKeyFrame.EasingFunction>
@@ -41,7 +41,9 @@
             <TextBlock Foreground="White" 
                        Margin="4,0" 
                        FontSize="30"
-                       Text="{Binding Message}" />
+                       Text="{Binding Message}"
+                       TextWrapping="Wrap"
+                       MaxWidth="1000"/>
         </Grid>
     </Border>
 </ui:InteropWindow>
