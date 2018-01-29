@@ -7,14 +7,10 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography.X509Certificates;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Interapptive.Shared.Net
@@ -78,7 +74,7 @@ namespace Interapptive.Shared.Net
                 i++;
             }
             return true;
-        } 
+        }
 
         /// <summary>
         /// Decode PCKS8 private key
@@ -130,7 +126,7 @@ namespace Interapptive.Shared.Net
                     binr.ReadByte();
                 else
                     if (bt == 0x82)
-                        binr.ReadUInt16();
+                    binr.ReadUInt16();
                 //------ at this stage, the remaining sequence should be the RSA private key
 
                 byte[] rsaprivkey = binr.ReadBytes((int)(lenstream - mem.Position));
@@ -272,20 +268,20 @@ namespace Interapptive.Shared.Net
 
             //remove headers/footers, if present
             StringBuilder sb = new StringBuilder(pemstr);
-            sb.Replace(pemprivheader, "");  
+            sb.Replace(pemprivheader, "");
             sb.Replace(pemprivfooter, "");
 
             //get string after removing leading/trailing whitespace
-            String pvkstr = sb.ToString().Trim();	
+            String pvkstr = sb.ToString().Trim();
 
             try
-            {  
+            {
                 // if there are no PEM encryption info lines, this is an UNencrypted PEM private key
                 binkey = Convert.FromBase64String(pvkstr);
                 return binkey;
             }
             catch (FormatException)
-            {		
+            {
                 //if can't b64 decode, it must be an encrypted private key
                 return null;
             }
@@ -401,7 +397,7 @@ namespace Interapptive.Shared.Net
             }
             else
             {
-                throw new CryptographicException(string.Format("Unable to locate the certificate block {0}.", delimeter));
+                throw new CryptographicException(string.Format("Unable to locate the certificate block {0}.\n\n{1}", delimeter, certificate));
             }
         }
 
