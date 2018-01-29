@@ -45,73 +45,13 @@ namespace ShipWorks.Tests.Filters.Search
         }
 
         [Fact]
-        public void GetDefinition_ReturnsDefinitionWithOrderNumberCondition()
+        public void GetDefinition_ReturnsDefinitionWithSingleScanSearchCondition()
         {
             var definition = testObject.GetDefinition(numericOrderNumber);
 
-            Assert.IsAssignableFrom(typeof(OrderNumberCondition), definition.RootContainer.FirstGroup.Conditions.FirstOrDefault());
+            Assert.IsAssignableFrom(typeof(SingleScanSearchCondition), definition.RootContainer.FirstGroup.Conditions.FirstOrDefault());
         }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithNumericOrderNumberCondition_WhenQuickSearchIsNumber()
-        {
-            var definition = testObject.GetDefinition(numericOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition) definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.True(condition.IsNumeric);
-        }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithStringOrderNumberCondition_WhenQuickSearchIsNotNumber()
-        {
-            var definition = testObject.GetDefinition(stringOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.False(condition.IsNumeric);
-        }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithNumericOperatorEqual_WhenQuickSearchIsNumber()
-        {
-            var definition = testObject.GetDefinition(numericOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.Equal(NumericOperator.Equal, condition.Operator);
-        }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithNumericSearchValue_WhenQuickSearchIsNumber()
-        {
-            var definition = testObject.GetDefinition(numericOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition) definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.Equal(long.Parse(numericOrderNumber), condition.Value1);
-        }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithStringOperatorEquals_WhenQuickSearchIsNotNumber()
-        {
-            var definition = testObject.GetDefinition(stringOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition)definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.Equal(StringOperator.Equals, condition.StringOperator);
-        }
-
-        [Fact]
-        public void GetDefinition_ReturnsDefinitionWithSearchValue_WhenQuickSearchIsNotNumber()
-        {
-            var definition = testObject.GetDefinition(stringOrderNumber);
-
-            OrderNumberCondition condition = (OrderNumberCondition) definition.RootContainer.FirstGroup.Conditions.FirstOrDefault();
-
-            Assert.Equal(stringOrderNumber, condition.StringValue);
-        }
-
+        
         [Fact]
         public void GetDefinition_ReturnsOrderIDCondition_WhenQuickSearchIsSingleScan()
         {

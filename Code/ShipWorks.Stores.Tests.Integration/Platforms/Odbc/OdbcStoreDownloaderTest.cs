@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             }
 
             Assert.Equal(1, orders.Count);
-            Assert.Equal("1", orders.Single().OrderNumberComplete);
+            Assert.Equal("001", orders.Single().OrderNumberComplete);
             Assert.Equal("Kevin", orders.Single().ShipFirstName);
             Assert.Equal(1, orders.Single().OrderNumber);
         }
@@ -220,7 +220,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
                 downloadDetailEntities = new LinqMetaData(adapter).DownloadDetail.ToList();
             }
 
-            Assert.Equal("1", downloadDetailEntities.Single().ExtraStringData1);
+            Assert.Equal("001", downloadDetailEntities.Single().ExtraStringData1);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             }
 
             Assert.Equal(1, orders.Count);
-            Assert.Equal("1", orders.Single().OrderNumberComplete);
+            Assert.Equal("001", orders.Single().OrderNumberComplete);
             Assert.Equal("Alex", orders.Single().ShipFirstName);
         }
 
