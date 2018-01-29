@@ -397,7 +397,12 @@ namespace Interapptive.Shared.Net
             }
             else
             {
+#if DEBUG
+                // Trying to get more information to track down an intermittent unit test failures
                 throw new CryptographicException(string.Format("Unable to locate the certificate block {0}.\n\n{1}", delimeter, certificate));
+#else
+                throw new CryptographicException(string.Format("Unable to locate the certificate block {0}", delimeter));
+#endif
             }
         }
 
