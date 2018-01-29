@@ -4,7 +4,6 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Filters.Search;
 using ShipWorks.Tests.Shared;
@@ -18,7 +17,6 @@ namespace ShipWorks.Tests.Filters.Search
         readonly AutoMock mock;
         private readonly Mock<ISingleScanOrderShortcut> orderPrefix;
         private string numericOrderNumber = "12345";
-        private string stringOrderNumber = "X-12345-YYZ";
         private string singleScanOrderNumber = "SWO1006";
 
         public SingleScanSearchDefinitionProviderTest()
