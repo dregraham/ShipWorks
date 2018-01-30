@@ -575,7 +575,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 IsFBA = false,
                 IsPrime = AmazonIsPrime.No,
-                AmazonOrderID = "",
+                AmazonOrderID = string.Empty,
                 IsSameDay = false
             };
 
