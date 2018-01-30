@@ -79,6 +79,32 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.OnTrac
             Assert.Empty(dirtyEntities);
         }
 
+        [Fact]
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToOnTracShipmentInsurance()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsOnTrac()
+                .Set(x => x.Insurance, false)
+                .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
+                .Save();
+
+            shipment.OnTrac.Insurance = true;
+
+            var testObject = context.Mock.Create<OnTracShipmentType>();
+
+            // Make sure that the values going in are correct.
+            Assert.False(shipment.Insurance);
+            Assert.True(shipment.OnTrac.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+
+            // Now make sure shipment.Insurance is true and that shipment.OnTrac.Insurance is still true.
+            Assert.True(shipment.Insurance);
+            Assert.True(shipment.OnTrac.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }

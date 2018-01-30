@@ -82,6 +82,32 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Usps
             Assert.Empty(dirtyEntities);
         }
 
+        [Fact]
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToUspsShipmentInsurance()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsUsps())
+                .Set(x => x.Insurance, false)
+                .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
+                .Save();
+
+            shipment.Postal.Usps.Insurance = true;
+
+            var testObject = context.Mock.Create<UspsShipmentType>();
+
+            // Make sure that the values going in are correct.
+            Assert.False(shipment.Insurance);
+            Assert.True(shipment.Postal.Usps.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+
+            // Now make sure shipment.Insurance is true and that shipment.Postal.Usps.Insurance is still true.
+            Assert.True(shipment.Insurance);
+            Assert.True(shipment.Postal.Usps.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }

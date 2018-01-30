@@ -82,6 +82,32 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Endicia
             Assert.Empty(dirtyEntities);
         }
 
+        [Fact]
+        public void UpdateDynamicShipmentData_SetsShipmentInsurance_ToEndiciaShipmentInsurance()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsPostal(x => x.AsEndicia())
+                .Set(x => x.Insurance, false)
+                .Set(x => x.OriginOriginID, (int) ShipmentOriginSource.Other)
+                .Save();
+
+            shipment.Postal.Endicia.Insurance = true;
+
+            var testObject = context.Mock.Create<EndiciaShipmentType>();
+
+            // Make sure that the values going in are correct.
+            Assert.False(shipment.Insurance);
+            Assert.True(shipment.Postal.Endicia.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+
+            // Now make sure shipment.Insurance is true and that shipment.Postal.Endicia.Insurance is still true.
+            Assert.True(shipment.Insurance);
+            Assert.True(shipment.Postal.Endicia.Insurance);
+
+            testObject.UpdateDynamicShipmentData(shipment);
+        }
+
         public void Dispose() => context.Dispose();
     }
 }
