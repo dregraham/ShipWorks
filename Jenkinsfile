@@ -8,6 +8,11 @@ pipeline {
 		}
 	}
 	stages {
+		stage('Setup environment') {
+			steps {
+				bat 'bundle exec rake setup:registry[c:\\jenkins-builds\\SB_${BUILD_FOLDER}\\Artifacts\\Application]'
+			}
+		}
 		stage('Compile the solution') {
 			steps {
 				bat 'bundle exec rake rebuild[true]'

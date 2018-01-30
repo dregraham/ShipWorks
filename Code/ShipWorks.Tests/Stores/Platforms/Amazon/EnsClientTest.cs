@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Interapptive.Shared.Net;
+using ShipWorks.Tests.Shared;
+using System;
 using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Net;
-using System.Reflection;
-using Interapptive.Shared.Net;
 using Xunit;
 
 namespace ShipWorks.Tests.Stores.Amazon
@@ -20,19 +20,9 @@ namespace ShipWorks.Tests.Stores.Amazon
         /// </summary>
         private static void ExtractFile(string resource, string targetFile)
         {
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
-            {
-                if (stream == null)
-                {
-                    throw new FileNotFoundException(String.Format("Unable to locate resource '{0}'.", resource));
-                }
-
-                // dump the contents of the file to disk
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    File.WriteAllText(targetFile, reader.ReadToEnd());
-                }
-            }
+            // dump the contents of the file to disk
+            string contents = typeof(EnsClientTest).Assembly.GetEmbeddedResourceString(resource);
+            File.WriteAllText(targetFile, contents);
         }
 
         static EnsClientTest()
@@ -44,8 +34,8 @@ namespace ShipWorks.Tests.Stores.Amazon
             string certFile = Path.GetTempFileName();
             string keyFile = Path.GetTempFileName();
 
-            ExtractFile(@"ShipWorks.Tests.Stores.Platforms.Amazon.TestCerts.cert-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem", certFile);
-            ExtractFile(@"ShipWorks.Tests.Stores.Platforms.Amazon.TestCerts.pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem", keyFile);
+            ExtractFile(@"Stores.Platforms.Amazon.TestCerts.cert-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem", certFile);
+            ExtractFile(@"Stores.Platforms.Amazon.TestCerts.pk-QKORKMU6UWH23ZR63Q3ET4F5XFZKN4SU.pem", keyFile);
 
             clientCert = new ClientCertificate();
             clientCert.LoadFromPemFiles(certFile, keyFile);
